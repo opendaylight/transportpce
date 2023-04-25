@@ -115,7 +115,7 @@ public final class TopologyUtils {
             java.util.Optional<Link> link =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,linkIID.build()).get();
             if (link.isPresent()) {
-                LinkBuilder linkBuilder = new LinkBuilder(link.get());
+                LinkBuilder linkBuilder = new LinkBuilder(link.orElseThrow());
                 Link1Builder link1Builder = new Link1Builder(linkBuilder.augmentation(Link1.class));
                 linkBuilder.removeAugmentation(Link1.class);
                 linkBuilder.addAugmentation(link1Builder.build());

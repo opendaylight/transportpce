@@ -64,7 +64,7 @@ public class FrequenciesServiceTest extends AbstractTest {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(PATH_DESCRIPTION_FILE, StandardCharsets.UTF_8)) {
-            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).get();
+            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             pathDescription = (PathDescription) getDataStoreContextUtil()
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
                             .of(PathDescription.QNAME), normalizedNode).getValue();
@@ -132,7 +132,7 @@ public class FrequenciesServiceTest extends AbstractTest {
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
             if (optionalTerminationPoint.isPresent()) {
-                return optionalTerminationPoint.get();
+                return optionalTerminationPoint.orElseThrow();
             } else {
                 return null;
             }
@@ -154,7 +154,7 @@ public class FrequenciesServiceTest extends AbstractTest {
             Optional<Node1> optionalNode = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
             if (optionalNode.isPresent()) {
-                return optionalNode.get();
+                return optionalNode.orElseThrow();
             } else {
                 LOG.error("Unable to get network node for node id {}from topology {}", nodeId,
                         NetworkUtils.OVERLAY_NETWORK_ID);

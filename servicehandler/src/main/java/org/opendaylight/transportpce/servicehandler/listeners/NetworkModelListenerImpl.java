@@ -87,7 +87,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
             LOG.warn("Enable to retrieve service path list");
             return;
         }
-        ServicePathList servicePathList = servicePathListOptional.get();
+        ServicePathList servicePathList = servicePathListOptional.orElseThrow();
         for (ServicePaths servicePaths : servicePathList.getServicePaths().values()) {
             String serviceName = servicePaths.getServicePathName();
             PathDescription pathDescription = servicePaths.getPathDescription();
@@ -107,7 +107,7 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
                 LOG.error("Couldn't retrieve service");
                 continue;
             }
-            Services services = serviceOptional.get();
+            Services services = serviceOptional.orElseThrow();
             State newState;
             switch (services.getOperationalState()) {
                 case InService:

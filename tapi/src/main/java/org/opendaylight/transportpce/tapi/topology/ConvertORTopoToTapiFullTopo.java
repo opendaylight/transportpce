@@ -144,7 +144,7 @@ public class ConvertORTopoToTapiFullTopo {
                 .collect(Collectors.toList());
         if (!OpenroadmNodeType.TPDR.equals(this.ietfNodeType)) {
             this.oorOduSwitchingPool = ietfNode.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
-                .values().stream().findFirst().get();
+                .values().stream().findFirst().orElseThrow();
             this.oorClientPortList = ietfNode.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
                     .getTerminationPoint().values().stream()

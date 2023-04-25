@@ -45,7 +45,7 @@ public class MappingUtilsImplTest extends AbstractTest {
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader("src/test/resources/network.json", StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
-                    .transformIntoNormalizedNode(reader).get();
+                    .transformIntoNormalizedNode(reader).orElseThrow();
             Network network = (Network) getDataStoreContextUtil()
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
                             .of(Network.QNAME), normalizedNode).getValue();

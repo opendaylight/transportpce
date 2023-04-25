@@ -365,7 +365,7 @@ public class PceOpticalNode implements PceNode {
             return null;
         }
         LOG.debug("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
-        return client.get();
+        return client.orElseThrow();
     }
 
     @Override

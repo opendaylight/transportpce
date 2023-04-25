@@ -194,7 +194,7 @@ public class TapiRendererListenerImpl implements TransportpceRendererListener {
                 LOG.error("Connectivity service not found in tapi context");
                 return null;
             }
-            return optConnServ.get();
+            return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI connectivity", e);
             return null;
@@ -223,7 +223,7 @@ public class TapiRendererListenerImpl implements TransportpceRendererListener {
                 return;
             }
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
-                newConnection = new ConnectionBuilder(optConn.get()).setLifecycleState(LifecycleState.INSTALLED)
+                newConnection = new ConnectionBuilder(optConn.orElseThrow()).setLifecycleState(LifecycleState.INSTALLED)
                     .setOperationalState(OperationalState.ENABLED).build();
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID,

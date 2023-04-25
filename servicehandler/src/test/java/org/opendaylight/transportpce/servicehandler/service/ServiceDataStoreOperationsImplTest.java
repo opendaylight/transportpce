@@ -146,7 +146,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
         Optional<Services> optService = this.serviceDataStoreOperations.getService(createInput.getServiceName());
         assertTrue(optService.isPresent());
-        assertEquals(createInput.getServiceName(), optService.get().getServiceName());
+        assertEquals(createInput.getServiceName(), optService.orElseThrow().getServiceName());
     }
 
     @Test
@@ -194,7 +194,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> optService = this.serviceDataStoreOperations.getTempService(createInput.getCommonId());
         assertTrue(optService.isPresent());
-        assertEquals(createInput.getCommonId(), optService.get().getCommonId());
+        assertEquals(createInput.getCommonId(), optService.orElseThrow().getCommonId());
     }
 
     @Test

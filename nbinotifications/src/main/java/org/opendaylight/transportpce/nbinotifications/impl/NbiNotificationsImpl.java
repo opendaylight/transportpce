@@ -256,7 +256,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
                     .withError(ErrorType.APPLICATION,
                         "Notification subscription doesnt exist").buildFuture();
             }
-            NotifSubscription notifSubscription = optionalNotifSub.get();
+            NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID);
             this.networkTransactionService.commit().get();
             for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
@@ -354,7 +354,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
                     .withError(ErrorType.APPLICATION,
                         "Notification subscription doesnt exist").buildFuture();
             }
-            NotifSubscription notifSubscription = optionalNotifSub.get();
+            NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             List<Notification> notificationTapiList = new ArrayList<>();
             for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
                 if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
@@ -394,7 +394,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
                 LOG.error("Could not get TAPI notification context");
                 return null;
             }
-            return notificationContextOptional.get();
+            return notificationContextOptional.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Could not get TAPI notification context");
         }

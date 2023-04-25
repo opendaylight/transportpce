@@ -87,7 +87,7 @@ public final class MappingUtilsImpl implements MappingUtils {
             Optional<NodeInfo> nodeInfoObj =
                     readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
             if (nodeInfoObj.isPresent()) {
-                NodeInfo nodInfo = nodeInfoObj.get();
+                NodeInfo nodInfo = nodeInfoObj.orElseThrow();
                 switch (nodInfo.getOpenroadmVersion()) {
                     case _71:
                         return StringConstants.OPENROADM_DEVICE_VERSION_7_1;
@@ -122,7 +122,7 @@ public final class MappingUtilsImpl implements MappingUtils {
                     .get();
             if (nodePortMapObject.isPresent()) {
                 LOG.debug("Found node {}", nodeId);
-                Nodes node = nodePortMapObject.get();
+                Nodes node = nodePortMapObject.orElseThrow();
                 mcCapabilities.addAll(node.nonnullMcCapabilities().values());
             }
         } catch (ExecutionException e) {

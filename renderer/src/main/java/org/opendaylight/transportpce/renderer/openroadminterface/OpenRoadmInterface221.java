@@ -480,7 +480,7 @@ public class OpenRoadmInterface221 {
             LOG.info("xd {} not found !", xc);
             return false;
         }
-        RoadmConnections rc = crossconnection.get();
+        RoadmConnections rc = crossconnection.orElseThrow();
         LOG.info("xd {} found", xc);
         String supportedinter =
             interfaceName.contains("nmc")
@@ -508,7 +508,7 @@ public class OpenRoadmInterface221 {
             LOG.info("xc {} not found !", xc);
             return false;
         }
-        OduConnection oduXc = oduConnectionOpt.get();
+        OduConnection oduXc = oduConnectionOpt.orElseThrow();
         LOG.info("xc {} found", xc);
         if (oduXc.getSource().getSrcIf().equals(interfaceName)
                 || oduXc.getDestination().getDstIf().equals(interfaceName)) {

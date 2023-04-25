@@ -147,7 +147,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
                     rpcOutputQName.getLocalName(), rpcOutputQName.getNamespace().toString());
             xmlStreamWriter.writeDefaultNamespace(rpcOutputQName.getNamespace().toString());
             NormalizedNode rpcOutputNormalizedNode =
-                convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).get();
+                convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).orElseThrow();
             for (final NormalizedNode child : ((ContainerNode)rpcOutputNormalizedNode).body()) {
                 normalizedNodeWriter.write(child);
             }
@@ -181,7 +181,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
         }
 
         try (NormalizedNodeWriter normalizedNodeWriter = createWriterBackedNormalizedNodeWriter(writer)) {
-            normalizedNodeWriter.write(normalizedNode.get());
+            normalizedNodeWriter.write(normalizedNode.orElseThrow());
             normalizedNodeWriter.flush();
         } catch (IOException ioe) {
             throw new IllegalStateException(ioe);

@@ -38,7 +38,7 @@ public class TpceNetworkTest extends AbstractTest {
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("clli-network")));
         Network createdClli = getDataBroker().newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
+            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdClli, "Clli layer should be created and not null");
 
         Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
@@ -56,7 +56,7 @@ public class TpceNetworkTest extends AbstractTest {
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("openroadm-network")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
+            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "openroadm-network layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
@@ -67,7 +67,7 @@ public class TpceNetworkTest extends AbstractTest {
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("openroadm-topology")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
+            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "openroadm-logpology layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
@@ -78,7 +78,7 @@ public class TpceNetworkTest extends AbstractTest {
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("otn-topology")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
+            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "otn-logpology layer should be created and not null");
         commonNetworkAugmentationTest(createdOrdNetwork);
     }
@@ -89,7 +89,7 @@ public class TpceNetworkTest extends AbstractTest {
         InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId("toto")));
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().get();
+            .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "toto layer should be created and not null");
         assertNull(createdOrdNetwork.getNetworkTypes().augmentation(NetworkTypes1.class),
             "toto layer should not have any network-type augmentation");

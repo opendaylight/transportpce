@@ -138,7 +138,7 @@ public class CatalogUtils {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
                     return 0.0;
                 }
-                XponderPluggableOpenroadmOperationalMode orTspOM = omOptional.get();
+                XponderPluggableOpenroadmOperationalMode orTspOM = omOptional.orElseThrow();
                 maxRollOff = orTspOM.getMaxRollOff() == null ? 0 : orTspOM.getMaxRollOff().doubleValue();
                 baudRate = orTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
@@ -159,7 +159,7 @@ public class CatalogUtils {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
                     return 0.0;
                 }
-                SpecificOperationalMode speTspOM = somOptional.get();
+                SpecificOperationalMode speTspOM = somOptional.orElseThrow();
                 maxRollOff = speTspOM.getMaxRollOff() == null ? 0 : speTspOM.getMaxRollOff().doubleValue();
                 baudRate = speTspOM.getBaudRate().doubleValue();
             } catch (InterruptedException | ExecutionException e) {
@@ -216,7 +216,7 @@ public class CatalogUtils {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
                     return 0.0;
                 }
-                orTspOM = omOptional.get();
+                orTspOM = omOptional.orElseThrow();
                 LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orTspOM);
                 TXOOBOsnrKey key = new TXOOBOsnrKey(addDropMuxOperationalModeId);
                 if (orTspOM.getMinTXOsnr() != null) {
@@ -247,7 +247,7 @@ public class CatalogUtils {
                     LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
                     return 0.0;
                 }
-                speTspOM = somOptional.get();
+                speTspOM = somOptional.orElseThrow();
                 LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", speTspOM);
                 TXOOBOsnrKey key = new TXOOBOsnrKey(addDropMuxOperationalModeId);
                 if (speTspOM.getMinTXOsnr() != null) {
@@ -314,7 +314,7 @@ public class CatalogUtils {
                 Optional<XponderPluggableOpenroadmOperationalMode> omOptional = networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
                 if (omOptional.isPresent()) {
-                    orTspOM = omOptional.get();
+                    orTspOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orTspOM);
                     if (orTspOM.getMinRXOsnrTolerance() != null) {
                         rxOsnrdB = orTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
@@ -339,7 +339,7 @@ public class CatalogUtils {
                 Optional<SpecificOperationalMode> somOptional = networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
                 if (somOptional.isPresent()) {
-                    speTspOM = somOptional.get();
+                    speTspOM = somOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", speTspOM);
                     if (speTspOM.getMinRXOsnrTolerance() != null) {
                         rxOsnrdB = speTspOM.getMinRXOsnrTolerance().getValue().doubleValue();
@@ -488,7 +488,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
                     }
-                    var orAddOM = omOptional.get();
+                    var orAddOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
                     maxIntroducedCd = orAddOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
@@ -522,7 +522,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
                     }
-                    var orDropOM = omOptional.get();
+                    var orDropOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orDropOM);
                     maxIntroducedCd = orDropOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
@@ -567,7 +567,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
                     }
-                    var orExpressOM = omOptional.get();
+                    var orExpressOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orExpressOM);
                     maxIntroducedCd = orExpressOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
@@ -605,7 +605,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
                     }
-                    var orAmpOM = omOptional.get();
+                    var orAmpOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAmpOM);
                     maxIntroducedCd = orAmpOM.getMaxIntroducedCd().doubleValue();
                     // As per current OpenROADM Spec
@@ -714,7 +714,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return pout;
                     }
-                    var orAddOM = omOptional.get();
+                    var orAddOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orAddOM);
                     var mask = orAddOM.getMaskPowerVsPin();
                     for (Map.Entry<MaskPowerVsPinKey, MaskPowerVsPin> pw : mask.entrySet()) {
@@ -760,7 +760,7 @@ public class CatalogUtils {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return pout;
                     }
-                    var orExpressOM = omOptional.get();
+                    var orExpressOM = omOptional.orElseThrow();
                     LOG.debug("readMdSal: Operational Mode Catalog: omOptional.isPresent = true {}", orExpressOM);
                     var mask = orExpressOM.getMaskPowerVsPin();
                     for (Map.Entry<MaskPowerVsPinKey, MaskPowerVsPin> pw : mask.entrySet()) {

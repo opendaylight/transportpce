@@ -276,7 +276,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 // - Top Connection OTSiMC betwwen OTSiMC CEPs of extreme roadms
                 connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
                     edgeRoadm1, edgeRoadm2));
-                if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().get().getId()
+                if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
                         .contains("ROADM")) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
@@ -409,8 +409,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         // 1 top connection DSR between the CLIENT xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
-
+            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
+                    .orElseThrow();
             ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR,
                 LayerProtocolName.DSR);
             putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR, netCep1);
@@ -418,9 +418,9 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             cepMapDsr.put(netCep1.key(), netCep1);
         }
         String spcXpdr1 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().get();
+            .get(0))).findFirst().orElseThrow();
         String spcXpdr2 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().get();
+            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
 
         // DSR top connection between edge xpdr CLIENT DSR
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
@@ -451,8 +451,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         // 1 top connection between eODU and a top connection DSR between the CLIENT xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
-
+            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
+                    .orElseThrow();
             ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR,
                 LayerProtocolName.DSR);
             putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.DSR, netCep1);
@@ -479,9 +479,9 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         }
 
         String spcXpdr1 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().get();
+            .get(0))).findFirst().orElseThrow();
         String spcXpdr2 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().get();
+            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
 
         // eODU top connection between edge xpdr CLIENT eODU
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
@@ -520,8 +520,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         // connection iODU between the xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
-
+            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
+                    .orElseThrow();
             ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.I_ODU,
                 TapiStringConstants.DSR, LayerProtocolName.ODU);
             putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.DSR,
@@ -532,9 +532,9 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
 
         // ODU top connection between edge xpdr i_ODU
         String spcXpdr1 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().get();
+            .get(0))).findFirst().orElseThrow();
         String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().get();
+            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_ODU,
                 LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrPhtn);
@@ -560,7 +560,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         // create ceps and xc connections within xpdr
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().get();
+            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
+                .orElseThrow();
             // There should be 1 network tp per xpdr
             // TODO photonic media model should be updated to have the corresponding CEPs. I will just create
             //  3 different MC CEPs giving different IDs to show that they are different
@@ -593,9 +594,9 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         }
         // OTSi top connection between edge I_OTSI Xpdr
         String spcXpdr1 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().get();
+            .get(0))).findFirst().orElseThrow();
         String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().get();
+            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
             connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_OTSI,
                 LayerProtocolName.PHOTONICMEDIA, xcMap, this.topConnRdmRdm);
@@ -621,7 +622,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             LOG.info("Creating ceps and xc for roadm {}", roadm);
             if (roadm.equals(edgeRoadm1) || roadm.equals(edgeRoadm2)) {
                 LOG.info("EDGE ROADM, cross connections needed between SRG and DEG");
-                String spcRdmAD = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().get();
+                String spcRdmAD = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm)).findFirst()
+                    .orElseThrow();
                 LOG.info("AD port of ROADm {} = {}", roadm, spcRdmAD);
                 // There should be only 1 AD and 1 DEG per roadm
                 // TODO photonic media model should be updated to have the corresponding CEPs. I will just create
@@ -639,7 +641,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 cepMap.put(adCep2.key(), adCep2);
                 cepMap.put(adCep3.key(), adCep3);
 
-                String spcRdmDEG = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().get();
+                String spcRdmDEG = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().orElseThrow();
                 LOG.info("Degree port of ROADm {} = {}", roadm, spcRdmDEG);
 
                 ConnectionEndPoint degCep1 = createCepRoadm(spcRdmDEG, TapiStringConstants.PHTNC_MEDIA);
@@ -675,7 +677,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 xcLowerMap.put(conn2.key(), conn2);
             } else {
                 LOG.info("MIDDLE ROADM, cross connections needed between DEG and DEG");
-                String spcRdmDEG1 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().get();
+                String spcRdmDEG1 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().orElseThrow();
                 LOG.info("Degree 1 port of ROADm {} = {}", roadm, spcRdmDEG1);
 
                 ConnectionEndPoint deg1Cep1 = createCepRoadm(spcRdmDEG1, TapiStringConstants.PHTNC_MEDIA);
@@ -688,7 +690,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 cepMap.put(deg1Cep2.key(), deg1Cep2);
                 cepMap.put(deg1Cep3.key(), deg1Cep3);
 
-                String spcRdmDEG2 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).skip(1).findFirst().get();
+                String spcRdmDEG2 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).skip(1).findFirst()
+                    .orElseThrow();
                 LOG.info("Degree 2 port of ROADm {} = {}", roadm, spcRdmDEG2);
 
                 ConnectionEndPoint deg2Cep1 = createCepRoadm(spcRdmDEG2, TapiStringConstants.PHTNC_MEDIA);
@@ -725,8 +728,8 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             }
         }
         LOG.info("Going to create top connections between roadms");
-        String spcRdmAD1 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm1)).findFirst().get();
-        String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().get();
+        String spcRdmAD1 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm1)).findFirst().orElseThrow();
+        String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().orElseThrow();
         // MC top connection between edge roadms
         LOG.info("Going to created top connection between MC");
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection
@@ -778,11 +781,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             new org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(adCep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeEdgePointUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeEdgePointUuid())
                 .setTopologyUuid(adCep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getTopologyUuid())
+                    .values().stream().findFirst().orElseThrow().getTopologyUuid())
                 .setNodeUuid(adCep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeUuid())
                 .setConnectionEndPointUuid(adCep1.getUuid())
                 .build();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ConnectionEndPoint adCep2 =
@@ -797,11 +800,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             new org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(adCep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeEdgePointUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeEdgePointUuid())
                 .setTopologyUuid(adCep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getTopologyUuid())
+                    .values().stream().findFirst().orElseThrow().getTopologyUuid())
                 .setNodeUuid(adCep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeUuid())
                 .setConnectionEndPointUuid(adCep1.getUuid())
                 .build();
         Map<ConnectionEndPointKey, org.opendaylight.yang.gen.v1.urn
@@ -843,11 +846,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             new org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(cep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeEdgePointUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeEdgePointUuid())
                 .setTopologyUuid(cep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getTopologyUuid())
+                    .values().stream().findFirst().orElseThrow().getTopologyUuid())
                 .setNodeUuid(cep1.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeUuid())
                 .setConnectionEndPointUuid(cep1.getUuid())
                 .build();
         org.opendaylight.yang.gen.v1.urn
@@ -855,11 +858,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
             new org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(cep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeEdgePointUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeEdgePointUuid())
                 .setTopologyUuid(cep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getTopologyUuid())
+                    .values().stream().findFirst().orElseThrow().getTopologyUuid())
                 .setNodeUuid(cep2.getClientNodeEdgePoint()
-                    .values().stream().findFirst().get().getNodeUuid())
+                    .values().stream().findFirst().orElseThrow().getNodeUuid())
                 .setConnectionEndPointUuid(cep2.getUuid())
                 .build();
         Map<ConnectionEndPointKey, org.opendaylight.yang.gen.v1.urn
@@ -992,7 +995,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 LOG.error("ONEP is not present in datastore");
                 return;
             }
-            OwnedNodeEdgePoint onep = optionalOnep.get();
+            OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();
             LOG.info("ONEP found = {}", onep.toString());
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
@@ -1072,7 +1075,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 LOG.error("Connectivity service not found in tapi context");
                 return null;
             }
-            return optConnServ.get();
+            return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Connectivity service not found in tapi context. Error:", e);
             return null;
@@ -1145,11 +1148,11 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 LOG.error("Node is not present in datastore");
                 return null;
             }
-            if (optNode.get().augmentation(OwnedNodeEdgePoint1.class) == null) {
+            if (optNode.orElseThrow().augmentation(OwnedNodeEdgePoint1.class) == null) {
                 LOG.error("Node doesnt have ceps");
                 return null;
             }
-            return optNode.get().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+            return optNode.orElseThrow().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
                 .get(new org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey(cepUuid));
         } catch (InterruptedException | ExecutionException e) {
@@ -1185,7 +1188,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 if (!optNode.isPresent()) {
                     return null;
                 }
-                OpenroadmNodeType openroadmNodeType = OpenroadmNodeType.forName(optNode.get().getName().get(
+                OpenroadmNodeType openroadmNodeType = OpenroadmNodeType.forName(optNode.orElseThrow().getName().get(
                     new NameKey("Node Type")).getValue());
                 if (!openroadmNodeTypeList.contains(openroadmNodeType)) {
                     openroadmNodeTypeList.add(openroadmNodeType);
@@ -1218,7 +1221,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
                 if (!optMapping.isPresent()) {
                     LOG.error("Couldnt find mapping for port {} of node {}", tpId, nodeId);
                 }
-                Mapping mapping = optMapping.get();
+                Mapping mapping = optMapping.orElseThrow();
                 LOG.info("Mapping for node+port {}+{} = {}", nodeId, tpId, mapping);
                 String key = String.join("+", String.join("-", nodeId, tpId.split("\\-")[0]),
                     mapping.getConnectionMapLcp());

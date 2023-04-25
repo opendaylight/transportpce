@@ -252,8 +252,9 @@ public class TapiLinkImpl implements TapiLink {
                 LOG.error("One of the 2 neps doesnt exist in the datastore: {} OR {}", nepUuid, nep1Uuid);
                 return null;
             }
-            return optionalOnep.get().getOperationalState().equals(optionalOnep1.get().getOperationalState())
-                ? optionalOnep.get().getOperationalState().getName() : OperationalState.DISABLED.getName();
+            return optionalOnep.orElseThrow().getOperationalState().equals(
+                        optionalOnep1.orElseThrow().getOperationalState())
+                ? optionalOnep.orElseThrow().getOperationalState().getName() : OperationalState.DISABLED.getName();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
@@ -290,8 +291,10 @@ public class TapiLinkImpl implements TapiLink {
                 LOG.error("One of the 2 neps doesnt exist in the datastore: {} OR {}", nepUuid, nep1Uuid);
                 return null;
             }
-            return optionalOnep.get().getAdministrativeState().equals(optionalOnep1.get().getAdministrativeState())
-                ? optionalOnep.get().getAdministrativeState().getName() : AdministrativeState.UNLOCKED.getName();
+            return optionalOnep.orElseThrow().getAdministrativeState().equals(
+                        optionalOnep1.orElseThrow().getAdministrativeState())
+                ? optionalOnep.orElseThrow().getAdministrativeState().getName()
+                : AdministrativeState.UNLOCKED.getName();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;

@@ -62,14 +62,15 @@ public final class PceTestUtils {
         Optional<NormalizedNode> normalizedNode
                 = dataObjectConverter.transformIntoNormalizedNode(resourceAsStream);
         DataContainerChild next
-                = ((ContainerNode) normalizedNode.get()).body().iterator().next();
+                = ((ContainerNode) normalizedNode.orElseThrow()).body().iterator().next();
         MapEntryNode mapNode = ((MapNode) next).body().iterator().next();
         Optional<DataObject> dataObject = dataObjectConverter.getDataObject(mapNode, Network.QNAME);
         InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
-        dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, (Network) dataObject.get());
+        dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier,
+                (Network) dataObject.orElseThrow());
         dataWriteTransaction.commit().get();
     }
 

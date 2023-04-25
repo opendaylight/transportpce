@@ -105,7 +105,7 @@ public class PortMappingImpl implements PortMapping {
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
             if (mapObject.isPresent()) {
-                Mapping mapping = mapObject.get();
+                Mapping mapping = mapObject.orElseThrow();
                 LOG.info("Found mapping for {} - {}. Mapping: {}", nodeId, logicalConnPoint, mapping.toString());
                 return mapping;
             }
@@ -127,7 +127,7 @@ public class PortMappingImpl implements PortMapping {
                 LOG.warn("Could not get portMapping for node {}", nodeId);
                 return null;
             }
-            Map<MappingKey, Mapping> mappings = portMapppingOpt.get().getMapping();
+            Map<MappingKey, Mapping> mappings = portMapppingOpt.orElseThrow().getMapping();
             for (Mapping mapping : mappings.values()) {
                 if (circuitPackName.equals(mapping.getSupportingCircuitPackName())
                     && portName.equals(mapping.getSupportingPort())) {
@@ -167,7 +167,7 @@ public class PortMappingImpl implements PortMapping {
             Optional<McCapabilities> mcCapObject = readTx.read(LogicalDatastoreType.CONFIGURATION,
                 mcCapabilitiesIID).get();
             if (mcCapObject.isPresent()) {
-                McCapabilities mcCap = mcCapObject.get();
+                McCapabilities mcCap = mcCapObject.orElseThrow();
                 LOG.info("Found MC-cap for {} - {}. Mapping: {}", nodeId, mcLcp, mcCap.toString());
                 return mcCap;
             }
@@ -218,7 +218,7 @@ public class PortMappingImpl implements PortMapping {
             Optional<Nodes> nodePortMapObject =
                 readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
             if (nodePortMapObject.isPresent()) {
-                Nodes node = nodePortMapObject.get();
+                Nodes node = nodePortMapObject.orElseThrow();
                 LOG.info("Found node {} in portmapping.", nodeId);
                 return node;
             }
@@ -259,7 +259,7 @@ public class PortMappingImpl implements PortMapping {
                 LOG.warn("Could not get portMapping for node {}", nodeId);
                 return null;
             }
-            Map<MappingKey, Mapping> mappings = nodePortmapppingOpt.get().getMapping();
+            Map<MappingKey, Mapping> mappings = nodePortmapppingOpt.orElseThrow().getMapping();
             for (Mapping mapping : mappings.values()) {
                 if (interfName.equals(mapping.getSupportingOts())) {
                     return mapping;

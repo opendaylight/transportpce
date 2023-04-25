@@ -307,7 +307,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.error("Could not update TAPI links");
                 return;
             }
-            for (Link link : optTopology.get().nonnullLink().values()) {
+            for (Link link : optTopology.orElseThrow().nonnullLink().values()) {
                 List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
                         .map(NodeEdgePointRef::getNodeEdgePointUuid).collect(Collectors.toList());
                 if (!Collections.disjoint(changedOneps, linkNeps)) {
@@ -338,7 +338,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Optional<Node> optionalNode = this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL, nodeIID).get();
                 if (optionalNode.isPresent()) {
-                    Node node = optionalNode.get();
+                    Node node = optionalNode.orElseThrow();
                     List<OwnedNodeEdgePoint> oneps = node.getOwnedNodeEdgePoint().values().stream()
                             .filter(onep -> ((Name) onep.getName().values().toArray()[0]).getValue()
                                     .contains(mapping.getLogicalConnectionPoint())).collect(Collectors.toList());
@@ -550,7 +550,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.error("No topology object present. Error deleting node {}", nodeId);
                 return;
             }
-            topology = optTopology.get();
+            topology = optTopology.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read tapi topology from datastore", e);
         }
@@ -596,7 +596,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.error("No context object present in datastore.");
                 return;
             }
-            context = optContext.get();
+            context = optContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read tapi context from datastore", e);
         }
@@ -1495,7 +1495,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.error("Couldnt retrieve connectivity context from datastore");
                 return;
             }
-            connContext = optConnContext.get();
+            connContext = optConnContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read connectivity context from datastore", e);
         }

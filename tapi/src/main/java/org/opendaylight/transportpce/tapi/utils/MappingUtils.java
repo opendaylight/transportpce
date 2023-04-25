@@ -33,22 +33,26 @@ public final class MappingUtils {
         if (sep.getEndPoint().getServiceEndPointType().equals(EndPointType.Aend)) {
             ServiceAEnd sepG = ConnectivityUtils.buildServiceAEnd(sep.getEndPoint().getNodeId().getValue(),
                     sep.getEndPoint().getClli(),
-                    sep.getEndPoint().getTxDirection().values().stream().findFirst().get().getPort()
+                    sep.getEndPoint().getTxDirection().values().stream().findFirst().orElseThrow().getPort()
                         .getPortDeviceName(),
-                    sep.getEndPoint().getTxDirection().values().stream().findFirst().get().getPort().getPortName(),
-                    sep.getEndPoint().getRxDirection().values().stream().findFirst().get().getPort()
+                    sep.getEndPoint().getTxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortName(),
+                    sep.getEndPoint().getRxDirection().values().stream().findFirst().orElseThrow().getPort()
                         .getPortDeviceName(),
-                    sep.getEndPoint().getRxDirection().values().stream().findFirst().get().getPort().getPortName());
+                    sep.getEndPoint().getRxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortName());
             return new GenericServiceEndpoint(sepG, ServiceEndpointType.SERVICEAEND);
         } else {
             ServiceZEnd sepG = ConnectivityUtils.buildServiceZEnd(sep.getEndPoint().getNodeId().getValue(),
                     sep.getEndPoint().getClli(),
-                    sep.getEndPoint().getTxDirection().values().stream().findFirst().get().getPort()
+                    sep.getEndPoint().getTxDirection().values().stream().findFirst().orElseThrow().getPort()
                         .getPortDeviceName(),
-                    sep.getEndPoint().getTxDirection().values().stream().findFirst().get().getPort().getPortName(),
-                    sep.getEndPoint().getRxDirection().values().stream().findFirst().get().getPort()
+                    sep.getEndPoint().getTxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortName(),
+                    sep.getEndPoint().getRxDirection().values().stream().findFirst().orElseThrow().getPort()
                         .getPortDeviceName(),
-                    sep.getEndPoint().getRxDirection().values().stream().findFirst().get().getPort().getPortName());
+                    sep.getEndPoint().getRxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortName());
             return new GenericServiceEndpoint(sepG, ServiceEndpointType.SERVICEZEND);
         }
     }

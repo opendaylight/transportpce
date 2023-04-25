@@ -98,7 +98,7 @@ public class CrossConnectImpl221 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return Optional.empty();
@@ -132,13 +132,13 @@ public class CrossConnectImpl221 {
                 .openroadm.device.OduConnection> otnXc = getOtnCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
         if (xc.isPresent()) {
-            interfList.add(xc.get().getSource().getSrcIf());
-            interfList.add(xc.get().getDestination().getDstIf());
-            interfList.add(xc.get().getSource().getSrcIf().replace("nmc", "mc"));
-            interfList.add(xc.get().getDestination().getDstIf().replace("nmc", "mc"));
+            interfList.add(xc.orElseThrow().getSource().getSrcIf());
+            interfList.add(xc.orElseThrow().getDestination().getDstIf());
+            interfList.add(xc.orElseThrow().getSource().getSrcIf().replace("nmc", "mc"));
+            interfList.add(xc.orElseThrow().getDestination().getDstIf().replace("nmc", "mc"));
         } else if (otnXc.isPresent()) {
-            interfList.add(otnXc.get().getSource().getSrcIf());
-            interfList.add(otnXc.get().getDestination().getDstIf());
+            interfList.add(otnXc.orElseThrow().getSource().getSrcIf());
+            interfList.add(otnXc.orElseThrow().getDestination().getDstIf());
         } else {
             LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
             return null;
@@ -148,7 +148,7 @@ public class CrossConnectImpl221 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return null;
@@ -188,7 +188,7 @@ public class CrossConnectImpl221 {
         List<Ports> ports = null;
         MountPoint mountPoint;
         if (mountPointOpt.isPresent()) {
-            mountPoint = mountPointOpt.get();
+            mountPoint = mountPointOpt.orElseThrow();
         } else {
             LOG.error("Failed to obtain mount point for device {}!", nodeId);
             return Collections.emptyList();
@@ -197,7 +197,8 @@ public class CrossConnectImpl221 {
         if (!service.isPresent()) {
             LOG.error("Failed to get RpcService for node {}", nodeId);
         }
-        final OrgOpenroadmDeviceService rpcService = service.get().getRpcService(OrgOpenroadmDeviceService.class);
+        final OrgOpenroadmDeviceService rpcService = service.orElseThrow()
+            .getRpcService(OrgOpenroadmDeviceService.class);
         final GetConnectionPortTrailInputBuilder portTrainInputBuilder = new GetConnectionPortTrailInputBuilder();
         portTrainInputBuilder.setConnectionName(connectionName);
         final Future<RpcResult<GetConnectionPortTrailOutput>> portTrailOutput = rpcService.getConnectionPortTrail(
@@ -228,7 +229,7 @@ public class CrossConnectImpl221 {
     public boolean setPowerLevel(String deviceId, OpticalControlMode mode, Decimal64 powerValue, String ctName) {
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctName);
         if (rdmConnOpt.isPresent()) {
-            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
+            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
@@ -241,7 +242,7 @@ public class CrossConnectImpl221 {
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
                 if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
+                    deviceTx = deviceTxOpt.orElseThrow();
                 } else {
                     LOG.error("Transaction for device {} was not found!", deviceId);
                     return false;
@@ -317,7 +318,7 @@ public class CrossConnectImpl221 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return Optional.empty();

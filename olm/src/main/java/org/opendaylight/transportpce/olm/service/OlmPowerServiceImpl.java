@@ -330,7 +330,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             return Collections.emptyList();
         }
 
-        @Nullable Map<LinkKey, Link> networkLinks = networkOptional.get().getLink();
+        @Nullable Map<LinkKey, Link> networkLinks = networkOptional.orElseThrow().getLink();
         if ((networkLinks == null) || networkLinks.isEmpty()) {
             LOG.warn("Links are not present in {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
             return Collections.emptyList();
@@ -410,9 +410,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 Optional<Interface> interfaceObject;
                 interfaceObject = openRoadmInterfaces.getInterface(realNodeId, interfaceName);
                 if (interfaceObject.isPresent()) {
-                    InterfaceBuilder interfaceBuilder = new InterfaceBuilder(interfaceObject.get());
+                    InterfaceBuilder interfaceBuilder = new InterfaceBuilder(interfaceObject.orElseThrow());
                     OtsBuilder otsBuilder = new OtsBuilder();
-                    Interface intf = interfaceObject.get();
+                    Interface intf = interfaceObject.orElseThrow();
                     if (intf.augmentation(Interface1.class) != null
                         && intf.augmentation(Interface1.class).getOts() != null) {
                         Ots ots = intf.augmentation(Interface1.class).getOts();
@@ -453,13 +453,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.device
                         .rev181019.interfaces.grp.InterfaceBuilder interfaceBuilder =
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                            .rev181019.interfaces.grp.InterfaceBuilder(interfaceObject.get());
+                            .rev181019.interfaces.grp.InterfaceBuilder(interfaceObject.orElseThrow());
                     org.opendaylight.yang.gen.v1.http.org.openroadm.optical
                         .transport.interfaces.rev181019.ots.container.OtsBuilder otsBuilder =
                         new org.opendaylight.yang.gen.v1.http.org.openroadm
                             .optical.transport.interfaces.rev181019.ots.container.OtsBuilder();
                     org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface intf =
-                        interfaceObject.get();
+                        interfaceObject.orElseThrow();
                     if (intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
                         .transport.interfaces.rev181019.Interface1.class) != null
                             && intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport
@@ -584,12 +584,12 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             LOG.error("Error on getRealNodeId {} :", mappedNodeId, e);
             throw new IllegalStateException(e);
         }
-        if (!realNode.isPresent() || (realNode.get().getSupportingNode() == null)) {
+        if (!realNode.isPresent() || (realNode.orElseThrow().getSupportingNode() == null)) {
             LOG.error("supporting node is null");
             throw new IllegalArgumentException(
                 String.format("Could not find node %s, or supporting node is not present", mappedNodeId));
         }
-        List<SupportingNode> collect = realNode.get().nonnullSupportingNode().values().stream()
+        List<SupportingNode> collect = realNode.orElseThrow().nonnullSupportingNode().values().stream()
             .filter(node -> (node.getNetworkRef() != null)
                 && NetworkUtils.UNDERLAY_NETWORK_ID.equals(node.getNetworkRef().getValue())
                 && (node.getNodeRef() != null) && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))
@@ -614,7 +614,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             //TODO change to constant from Timeouts class when it will be merged.
             linkOptional = rtx.read(LogicalDatastoreType.CONFIGURATION, linkIID).get(Timeouts.DATASTORE_READ,
                 TimeUnit.MILLISECONDS);
-            return linkOptional.get();
+            return linkOptional.orElseThrow();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Read of {} topology failed", NetworkUtils.OVERLAY_NETWORK_ID);
             return null;

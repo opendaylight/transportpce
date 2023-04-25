@@ -137,7 +137,7 @@ public class PortMappingVersion221 {
             LOG.warn(PortMappingUtils.DEVICE_HAS_LOGMSG, nodeId, "no info", "subtree");
             return false;
         }
-        Info deviceInfo = deviceInfoOptional.get();
+        Info deviceInfo = deviceInfoOptional.orElseThrow();
         NodeInfo nodeInfo = createNodeInfo(deviceInfo);
         if (nodeInfo == null) {
             return false;
@@ -206,7 +206,7 @@ public class PortMappingVersion221 {
                             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
                             .build(),
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)
-                    .get(),
+                    .orElseThrow(),
                 oldMapping,
                 //otsInterface
                 oldMapping.getSupportingOts() == null
@@ -222,7 +222,7 @@ public class PortMappingVersion221 {
                                 .build(),
                             Timeouts.DEVICE_READ_TIMEOUT,
                             Timeouts.DEVICE_READ_TIMEOUT_UNIT)
-                        .get()
+                        .orElseThrow()
                 );
             LOG.debug(PortMappingUtils.UPDATE_MAPPING_LOGMSG,
                 nodeId, oldMapping, oldMapping.getLogicalConnectionPoint(), newMapping);
@@ -288,7 +288,7 @@ public class PortMappingVersion221 {
             LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return null;
         }
-        OrgOpenroadmDevice device = deviceObject.get();
+        OrgOpenroadmDevice device = deviceObject.orElseThrow();
         if (device.getCircuitPacks() == null) {
             LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, PortMappingUtils.FOUND);
             return null;
@@ -359,14 +359,14 @@ public class PortMappingVersion221 {
                 nodeId, circuitPackName);
             return null;
         }
-        Optional<Ports> portsList = cpList.get().nonnullPorts().values().stream()
+        Optional<Ports> portsList = cpList.orElseThrow().nonnullPorts().values().stream()
                 .filter(p -> p.getPortName().equals(portName)).findFirst();
         if (portsList.isEmpty()) {
             LOG.warn(PortMappingUtils.NO_ASSOC_FOUND_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
                 nodeId, portName, circuitPackName, "in the device");
             return null;
         }
-        return portsList.get();
+        return portsList.orElseThrow();
     }
 
     private List<SwitchingPoolLcp> getSwitchingPoolList(OrgOpenroadmDevice device,
@@ -445,8 +445,8 @@ public class PortMappingVersion221 {
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
-                srgCps.addAll(ordmSrgObject.get().nonnullCircuitPacks().values());
-                cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
+                srgCps.addAll(ordmSrgObject.orElseThrow().nonnullCircuitPacks().values());
+                cpPerSrg.put(ordmSrgObject.orElseThrow().getSrgNumber().toJava(), srgCps);
             }
         }
         LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG, deviceId, cpPerSrg.size(), "SRG");
@@ -527,13 +527,13 @@ public class PortMappingVersion221 {
             .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (port2Object.isEmpty()
-                || port2Object.get().getPortQual().getIntValue() != PortQual.RoadmExternal.getIntValue()) {
+                || port2Object.orElseThrow().getPortQual().getIntValue() != PortQual.RoadmExternal.getIntValue()) {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG + PortMappingUtils.PARTNERPORT_GET_ERROR_LOGMSG,
                 nodeId, port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName(),
                 port.getPortName(), circuitPackName);
             return null;
         }
-        Ports port2 = port2Object.get();
+        Ports port2 = port2Object.orElseThrow();
         if (!checkPartnerPort(circuitPackName, port, port2)) {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG + PortMappingUtils.PARTNERPORT_CONF_ERROR_LOGMSG,
                 nodeId, port2.getPortName(), port.getPartnerPort().getCircuitPackName(),
@@ -558,11 +558,11 @@ public class PortMappingVersion221 {
                 nodeId, circuitPackName);
             return new ArrayList<>();
         }
-        if (circuitPackObject.get().getPorts() == null) {
+        if (circuitPackObject.orElseThrow().getPorts() == null) {
             LOG.warn(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, PortMappingUtils.FOUND, circuitPackName);
             return new ArrayList<>();
         }
-        return new ArrayList<>(circuitPackObject.get().nonnullPorts().values());
+        return new ArrayList<>(circuitPackObject.orElseThrow().nonnullPorts().values());
     }
 
     private String createLogicalConnectionPort(Ports port, int index, int portIndex) {
@@ -594,7 +594,7 @@ public class PortMappingVersion221 {
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
-                degrees.put(degreeCounter, ordmDegreeObject.get());
+                degrees.put(degreeCounter, ordmDegreeObject.orElseThrow());
             }
         }
         LOG.info(PortMappingUtils.DEVICE_HAS_LOGMSG,
@@ -624,7 +624,7 @@ public class PortMappingVersion221 {
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
-                srgs.add(ordmSrgObject.get());
+                srgs.add(ordmSrgObject.orElseThrow());
 
             }
         }
@@ -640,12 +640,12 @@ public class PortMappingVersion221 {
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (protocolObject.isEmpty() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
+        if (protocolObject.isEmpty() || protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp() == null) {
             LOG.warn(PortMappingUtils.PROCESSING_DONE_LOGMSG, nodeId, PortMappingUtils.CANNOT_GET_LLDP_CONF_LOGMSG);
             return new HashMap<>();
         }
         Map<String, String> cpToInterfaceMap = new HashMap<>();
-        Lldp lldp = protocolObject.get().augmentation(Protocols1.class).getLldp();
+        Lldp lldp = protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp();
         for (PortConfig portConfig : lldp.nonnullPortConfig().values()) {
             if (!portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                 continue;
@@ -657,10 +657,10 @@ public class PortMappingVersion221 {
             Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
                 LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (interfaceObject.isEmpty() || interfaceObject.get().getSupportingCircuitPackName() == null) {
+            if (interfaceObject.isEmpty() || interfaceObject.orElseThrow().getSupportingCircuitPackName() == null) {
                 continue;
             }
-            String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
+            String supportingCircuitPackName = interfaceObject.orElseThrow().getSupportingCircuitPackName();
             cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
             InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
@@ -669,10 +669,10 @@ public class PortMappingVersion221 {
             Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (circuitPackObject.isEmpty() || circuitPackObject.get().getParentCircuitPack() == null) {
+            if (circuitPackObject.isEmpty() || circuitPackObject.orElseThrow().getParentCircuitPack() == null) {
                 continue;
             }
-            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack().getCircuitPackName(),
+            cpToInterfaceMap.put(circuitPackObject.orElseThrow().getParentCircuitPack().getCircuitPackName(),
                 portConfig.getIfName());
         }
         LOG.info(PortMappingUtils.PROCESSING_DONE_LOGMSG, nodeId, " - success");
@@ -867,8 +867,9 @@ public class PortMappingVersion221 {
                     nodeId, interfaces.getInterfaceName() + "- empty interface");
                 continue;
             }
-            InterfaceType interfaceType = openRoadmInterface.get().getType();
-            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG, nodeId, openRoadmInterface.get().getName(), interfaceType);
+            InterfaceType interfaceType = openRoadmInterface.orElseThrow().getType();
+            LOG.debug(PortMappingUtils.GOT_INTF_LOGMSG, nodeId, openRoadmInterface.orElseThrow().getName(),
+                    interfaceType);
             // Check if interface type is OMS or OTS
             // Switch/Case might be more indicated here but is not possible in jdk17 w/o enable-preview
             if (interfaceType.equals(OpenROADMOpticalMultiplex.VALUE)) {
@@ -967,7 +968,7 @@ public class PortMappingVersion221 {
             LOG.error(PortMappingUtils.MISSING_CP_LOGMSG, nodeId, port.getPartnerPort().getCircuitPackName());
             return null;
         }
-        Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
+        Optional<Ports> poOpt = cpOpt.orElseThrow().nonnullPorts().values().stream()
             .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName()))
             .findFirst();
         if (poOpt.isEmpty()) {
@@ -975,8 +976,8 @@ public class PortMappingVersion221 {
                 nodeId, port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName());
             return null;
         }
-        Ports port2 = poOpt.get();
-        circuitPackName2.append(cpOpt.get().getCircuitPackName());
+        Ports port2 = poOpt.orElseThrow();
+        circuitPackName2.append(cpOpt.orElseThrow().getCircuitPackName());
         if (!checkPartnerPort(circuitPackName, port, port2)) {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG,
                 nodeId, port2.getPortName(), circuitPackName2, port.getPortName(), circuitPackName);
@@ -1173,7 +1174,7 @@ public class PortMappingVersion221 {
             LOG.error(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, cp.getPortName(), cpName);
             return null;
         }
-        return portObject.get();
+        return portObject.orElseThrow();
     }
 
     private boolean checkPortQual(Ports port, String cpName, String nodeId) {

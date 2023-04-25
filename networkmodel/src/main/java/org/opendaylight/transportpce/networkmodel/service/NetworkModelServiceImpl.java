@@ -294,13 +294,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             openroadmTopology = this.networkTransactionService
                 .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OVERLAY_NETWORK_II)
-                .get().get();
+                .get().orElseThrow();
             if (openroadmTopology.augmentation(Network1.class) != null) {
                 openroadmTopologyLinks = openroadmTopology.augmentation(Network1.class).getLink();
             }
             otnTopology = this.networkTransactionService
                 .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OTN_NETWORK_II)
-                .get().get();
+                .get().orElseThrow();
             if (otnTopology.augmentation(Network1.class) != null) {
                 otnTopologyLinks = otnTopology.augmentation(Network1.class).getLink();
             }
@@ -683,7 +683,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (linkOptLf.isDone()) {
                 try {
                     if (linkOptLf.get().isPresent()) {
-                        links.add(linkOptLf.get().get());
+                        links.add(linkOptLf.get().orElseThrow());
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.error("Error retreiving OTN links from otn-topology", e);
@@ -753,8 +753,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
 
         if (tpAOpt.isPresent() && tpZOpt.isPresent()) {
-            tps.add(tpAOpt.get());
-            tps.add(tpZOpt.get());
+            tps.add(tpAOpt.orElseThrow());
+            tps.add(tpZOpt.orElseThrow());
         }
         return tps;
     }
@@ -775,7 +775,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 try {
                     tpOpt = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, iiTp).get();
                     if (tpOpt.isPresent()) {
-                        tps.add(tpOpt.get());
+                        tps.add(tpOpt.orElseThrow());
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     LOG.error("Error retreiving tp {} of node {} from otn-topology", tp, nodeId, e);
@@ -821,9 +821,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
         }
         List<Link> odu4links = null;
-        if (netw1Opt.isPresent() && netw1Opt.get().getLink() != null) {
+        if (netw1Opt.isPresent() && netw1Opt.orElseThrow().getLink() != null) {
             odu4links = netw1Opt
-                .get()
+                .orElseThrow()
                 .nonnullLink().values()
                 .stream().filter(lk -> lk.getLinkId().getValue()
                     .startsWith(Uint32.valueOf(100).equals(serviceRate) ? "ODUC4" : "ODTU4"))
@@ -838,12 +838,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
                 .append(tp.split("-")[0]).toString();
             Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
-                .equals(nodeId) && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst().get();
+                .equals(nodeId) && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst().orElseThrow();
             if (!links.contains(slink)) {
                 links.add(slink);
             }
             Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
-                .equals(nodeId) && lk.getDestination().getDestTp().getValue().equals(tp)).findFirst().get();
+                .equals(nodeId) && lk.getDestination().getDestTp().getValue().equals(tp)).findFirst().orElseThrow();
             if (!links.contains(dlink)) {
                 links.add(dlink);
             }
