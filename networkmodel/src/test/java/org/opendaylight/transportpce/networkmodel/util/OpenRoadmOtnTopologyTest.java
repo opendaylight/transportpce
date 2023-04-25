@@ -160,7 +160,7 @@ public class OpenRoadmOtnTopologyTest {
             tps.get(0).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
                     .getTpSupportedInterfaces().nonnullSupportedInterfaceCapability().values().stream().findFirst()
-                        .get().getIfCapType());
+                        .orElseThrow().getIfCapType());
         assertEquals(OpenroadmTpType.XPONDERCLIENT,tps.get(0).augmentation(TerminationPoint1.class).getTpType(),
             "first TP must be of type client");
         //tests network tp
@@ -176,8 +176,8 @@ public class OpenRoadmOtnTopologyTest {
             IfOCH.VALUE,
             tps.get(2).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                    .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst().get()
-                        .getIfCapType());
+                    .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst()
+                        .orElseThrow().getIfCapType());
         assertNull(
             tps.get(2).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                     .TerminationPoint1.class)
@@ -338,15 +338,16 @@ public class OpenRoadmOtnTopologyTest {
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool(),
             "after ODU4 creation, its termination point should contain a TpnPool list");
         assertEquals(
             80,
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool()
-                .size(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool().size(),
             "Tpn pool list should be full, with 80 trib ports");
     }
 
@@ -474,15 +475,16 @@ public class OpenRoadmOtnTopologyTest {
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool()
-                .size(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool().size(),
             "after 10G creation, 1 (over 80) trib port should be occupied");
         assertThat(
             "trib port 1 should no longer be present",
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool(),
             not(hasItem(Uint16.valueOf(1))));
 
         // tests update for 10G deletion
@@ -522,7 +524,7 @@ public class OpenRoadmOtnTopologyTest {
                 topoShard.getTps().get(0).augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                             .TerminationPoint1.class)
-                    .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get()
+                    .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
                     .getTpnPool().size(),
                 "after 10G deletion, trib port list should be full");
         assertThat(
@@ -530,7 +532,8 @@ public class OpenRoadmOtnTopologyTest {
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool(),
             hasItem(Uint16.valueOf(1)));
     }
 
@@ -583,15 +586,16 @@ public class OpenRoadmOtnTopologyTest {
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool()
-                .size(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool().size(),
             "after 1G creation, 1 (over 80) trib port should be occupied");
         assertThat(
             "trib port 1 should no longer be present in Trib port list",
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool(),
             not(hasItem(Uint16.valueOf(1))));
 
         // tests update for 1G deletion
@@ -633,15 +637,16 @@ public class OpenRoadmOtnTopologyTest {
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool()
-                .size(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool().size(),
             "after 1G deletion, trib port list should be full");
         assertThat(
             "after 1G deletion, trib port list should contain items 1",
             topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().get().getTpnPool(),
+                .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
+                .getTpnPool(),
             hasItem(Uint16.valueOf(1)));
     }
 
@@ -773,8 +778,8 @@ public class OpenRoadmOtnTopologyTest {
             tpList.get(4).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                         .TerminationPoint1.class)
-                .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst().get()
-                .getIfCapType(),
+                .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst()
+                .orElseThrow().getIfCapType(),
             "only IfOCHOTU4ODU4 interface capabitily expected");
         assertEquals(
             ODU4.VALUE,
@@ -785,14 +790,16 @@ public class OpenRoadmOtnTopologyTest {
             "the rate should be ODU4");
         assertEquals(
             "openroadm-topology",
-            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().get().getNetworkRef()
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().orElseThrow().getNetworkRef()
                 .getValue());
         assertEquals(
             "SPDR-SA1-XPDR" + xpdrNb,
-            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().get().getNodeRef().getValue());
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().orElseThrow().getNodeRef()
+                .getValue());
         assertEquals(
             "XPDR" + xpdrNb + "-NETWORK1",
-            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().get().getTpRef().getValue());
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst().orElseThrow().getTpRef()
+                .getValue());
         if (xpdrNb.equals(Uint16.valueOf(1))) {
             assertEquals(5, tpList.size(), "should contain 5 TPs");
             assertEquals("XPDR1-CLIENT1", tpList.get(0).getTpId().getValue());
@@ -861,8 +868,8 @@ public class OpenRoadmOtnTopologyTest {
                 tpList.get(5).augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev211210
                             .TerminationPoint1.class)
-                    .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst().get()
-                    .getIfCapType(),
+                    .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream().findFirst()
+                    .orElseThrow().getIfCapType(),
                 "only IfOCHOTU4ODU4 interface capabitily expected");
             assertEquals(
                 2,

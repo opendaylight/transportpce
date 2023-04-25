@@ -44,7 +44,7 @@ public class JsonStringConverterTest extends AbstractTest {
                                 JSONDataObjectConverter
                                     .createWithDataStoreUtil(getDataStoreContextUtil())
                                     .transformIntoNormalizedNode(reader)
-                                    .get())
+                                    .orElseThrow())
                             .getValue(),
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02),
                 "Should be a valid request");

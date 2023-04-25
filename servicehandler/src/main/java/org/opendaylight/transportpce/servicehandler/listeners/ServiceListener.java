@@ -171,7 +171,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
             LOG.warn("Service '{}' does not exist in datastore", serviceNameToReroute);
             return;
         }
-        Services service = serviceOpt.get();
+        Services service = serviceOpt.orElseThrow();
         ListenableFuture<RpcResult<ServiceDeleteOutput>> res = this.servicehandlerImpl.serviceDelete(
                 new ServiceDeleteInputBuilder()
                         .setSdncRequestHeader(new SdncRequestHeaderBuilder(service.getSdncRequestHeader())

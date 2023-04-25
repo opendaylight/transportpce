@@ -213,7 +213,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
                     .child(Services.class, new ServicesKey(serviceName));
-            Services services = new ServicesBuilder(readService.get())
+            Services services = new ServicesBuilder(readService.orElseThrow())
                 .setOperationalState(operationalState)
                 .setAdministrativeState(administrativeState)
                 .build();
@@ -245,7 +245,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                                 .temp.service.list.ServicesKey(serviceName));
             org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.Services services =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.ServicesBuilder(
-                    readService.get())
+                    readService.orElseThrow())
                 .setOperationalState(operationalState)
                 .setAdministrativeState(administrativeState)
                 .build();
@@ -359,18 +359,18 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<ServicePaths> iid = InstanceIdentifier.create(ServicePathList.class)
                     .child(ServicePaths.class, new ServicePathsKey(serviceName));
             ServicePaths servicePaths = new ServicePathsBuilder()
-                    .setServiceAEnd(readServicePath.get().getServiceAEnd())
-                    .setServiceHandlerHeader(readServicePath.get().getServiceHandlerHeader())
-                    .setServicePathName(readServicePath.get().getServicePathName())
-                    .setServiceZEnd(readServicePath.get().getServiceZEnd())
-                    .setSupportingServiceName(readServicePath.get().getSupportingServiceName())
-                    .setEquipmentSrgs(readServicePath.get().getEquipmentSrgs())
-                    .setFiberSpanSrlgs(readServicePath.get().getFiberSpanSrlgs())
-                    .setHardConstraints(readServicePath.get().getHardConstraints())
-                    .setLatency(readServicePath.get().getLatency())
+                    .setServiceAEnd(readServicePath.orElseThrow().getServiceAEnd())
+                    .setServiceHandlerHeader(readServicePath.orElseThrow().getServiceHandlerHeader())
+                    .setServicePathName(readServicePath.orElseThrow().getServicePathName())
+                    .setServiceZEnd(readServicePath.orElseThrow().getServiceZEnd())
+                    .setSupportingServiceName(readServicePath.orElseThrow().getSupportingServiceName())
+                    .setEquipmentSrgs(readServicePath.orElseThrow().getEquipmentSrgs())
+                    .setFiberSpanSrlgs(readServicePath.orElseThrow().getFiberSpanSrlgs())
+                    .setHardConstraints(readServicePath.orElseThrow().getHardConstraints())
+                    .setLatency(readServicePath.orElseThrow().getLatency())
                     .setPathDescription(pathDescription)
-                    .setPceRoutingMetric(readServicePath.get().getPceRoutingMetric())
-                    .setSoftConstraints(readServicePath.get().getSoftConstraints())
+                    .setPceRoutingMetric(readServicePath.orElseThrow().getPceRoutingMetric())
+                    .setSoftConstraints(readServicePath.orElseThrow().getSoftConstraints())
                     .build();
 
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicePaths);
@@ -447,7 +447,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
          */
         InstanceIdentifier<Services> iid =
                 InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
-        ServicesBuilder service = new ServicesBuilder(readService.get());
+        ServicesBuilder service = new ServicesBuilder(readService.orElseThrow());
         String action = null;
         switch (choice) {
             case 0 : /* Modify. */

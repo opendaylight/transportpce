@@ -142,7 +142,7 @@ public class TapiContext {
                 LOG.error("Tapi context is not present in datastore");
                 return null;
             }
-            return optionalContext.get();
+            return optionalContext.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read tapi context from datastore", e);
             return null;
@@ -233,7 +233,7 @@ public class TapiContext {
                 LOG.error("ONEP is not present in datastore");
                 return;
             }
-            OwnedNodeEdgePoint onep = optionalOnep.get();
+            OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();
             LOG.info("ONEP found = {}", onep);
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
@@ -274,7 +274,7 @@ public class TapiContext {
                 return null;
             }
             // TODO -> Need to remove CEPs from NEPs. If not error from get Topology details output
-            Node node = optNode.get();
+            Node node = optNode.orElseThrow();
             LOG.debug("NEPs of node before creating map to be returned to the getTapiNode function = {}",
                 node.getOwnedNodeEdgePoint().size());
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
@@ -327,7 +327,7 @@ public class TapiContext {
                 LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
-            return optNode.get();
+            return optNode.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read NEP in topology", e);
             return null;
@@ -347,7 +347,7 @@ public class TapiContext {
                 LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
-            return optLink.get();
+            return optLink.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read link in topology", e);
             return null;
@@ -367,7 +367,7 @@ public class TapiContext {
                 LOG.error("Topology context is not present in datastore");
                 return null;
             }
-            return optTopoContext.get().getTopology();
+            return optTopoContext.orElseThrow().getTopology();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read topology context", e);
             return null;
@@ -390,7 +390,7 @@ public class TapiContext {
                 LOG.error("Connectivity service not found in tapi context");
                 return null;
             }
-            return optConnServ.get();
+            return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Connectivity service not found in tapi context. Error:", e);
             return null;
@@ -542,7 +542,7 @@ public class TapiContext {
                 LOG.error("Connection not found in tapi context");
                 return null;
             }
-            return optConn.get();
+            return optConn.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Connection not found in tapi context. Error:", e);
             return null;
@@ -567,7 +567,7 @@ public class TapiContext {
                 LOG.error("Connectivity context not found in tapi context");
                 return null;
             }
-            return optConnContext.get().getConnectivityService();
+            return optConnContext.orElseThrow().getConnectivityService();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Connectivity context not found in tapi context. Error:", e);
             return null;
@@ -588,11 +588,11 @@ public class TapiContext {
                 LOG.error(NODE_NOT_PRESENT);
                 return null;
             }
-            if (optNode.get().augmentation(OwnedNodeEdgePoint1.class) == null) {
+            if (optNode.orElseThrow().augmentation(OwnedNodeEdgePoint1.class) == null) {
                 LOG.error("Node doesnt have ceps");
                 return null;
             }
-            return optNode.get().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+            return optNode.orElseThrow().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
                 .get(new ConnectionEndPointKey(cepUuid));
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldnt read node in topology", e);

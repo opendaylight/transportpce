@@ -186,7 +186,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 LOG.error("Could not update TAPI connectivity services");
                 return;
             }
-            ConnectivityContext connContext = optConnContext.get();
+            ConnectivityContext connContext = optConnContext.orElseThrow();
             Map<Uuid, EnumTypeObject[]> states = new HashMap<>();
             if (connContext.getConnectivityService() == null) {
                 return;
@@ -254,9 +254,9 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 LOG.error("Could not get state for a TAPI connection");
                 continue;
             }
-            LOG.info("State of connection {} of connectivity service {} = {}", optConn.get().getUuid().getValue(),
-                connService.getUuid().getValue(), optConn.get().getOperationalState().getName());
-            if (optConn.get().getOperationalState() == OperationalState.DISABLED) {
+            LOG.info("State of connection {} of connectivity service {} = {}", optConn.orElseThrow().getUuid()
+                .getValue(), connService.getUuid().getValue(), optConn.orElseThrow().getOperationalState().getName());
+            if (optConn.orElseThrow().getOperationalState() == OperationalState.DISABLED) {
                 adminState = AdministrativeState.LOCKED;
                 operState = OperationalState.DISABLED;
             }
@@ -283,13 +283,13 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
                 return;
             }
-            if (optConnContext.get().getConnectivityService() == null) {
+            if (optConnContext.orElseThrow().getConnectivityService() == null) {
                 LOG.info("No TAPI connectivity service to update");
                 return;
             }
             // TODO: order services from lower layer to upper layer
             Map<ConnectivityServiceKey, ConnectivityService> connServMap
-                    = optConnContext.get().getConnectivityService();
+                    = optConnContext.orElseThrow().getConnectivityService();
             if (connServMap == null) {
                 LOG.info("No connections to update");
                 return;
@@ -315,7 +315,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                         LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
                         continue;
                     }
-                    Connection newConn = optConn.get();
+                    Connection newConn = optConn.orElseThrow();
                     // Check LowerConnection states and if any of the lower connection is disabled then we can put
                     // the connection out of service. And based on the connection previous state we decide
                     // the update necessary
@@ -381,7 +381,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                     LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
-                Connection newConn = optConn.get(); // Current state of connection
+                Connection newConn = optConn.orElseThrow(); // Current state of connection
                 if (newConn.getLowerConnection() != null) {
                     // TODO: we can receive disable here because the lower connection haven been yet looped through and
                     //  therefore it is disabled but it has to be changed to enable before returning disable.
@@ -441,17 +441,17 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                 InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
                     .augmentation(Context1.class).child(TopologyContext.class)
                     .child(Topology.class, new TopologyKey(tapiTopoUuid))
-                    .child(Node.class, new NodeKey(ocep.get().getNodeUuid()))
+                    .child(Node.class, new NodeKey(ocep.orElseThrow().getNodeUuid()))
                     .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(connectionNep))
                     .build();
                 Optional<OwnedNodeEdgePoint> onep =
                     this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
-                if (onep.isEmpty() || onep.get().augmentation(OwnedNodeEdgePoint1.class) == null
-                        || onep.get().augmentation(OwnedNodeEdgePoint1.class).getCepList() == null) {
+                if (onep.isEmpty() || onep.orElseThrow().augmentation(OwnedNodeEdgePoint1.class) == null
+                        || onep.orElseThrow().augmentation(OwnedNodeEdgePoint1.class).getCepList() == null) {
                     continue;
                 }
-                if (onep.get().getOperationalState() == OperationalState.DISABLED
-                        && !changedOneps.contains(onep.get().getUuid())) {
+                if (onep.orElseThrow().getOperationalState() == OperationalState.DISABLED
+                        && !changedOneps.contains(onep.orElseThrow().getUuid())) {
                     return OperationalState.DISABLED;
                 }
             }
@@ -482,7 +482,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                     LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
-                Connection newConn = optConn.get(); // Current state of connection
+                Connection newConn = optConn.orElseThrow(); // Current state of connection
                 // updated connection state if it contains a nep that has changed
                 if (newConn.getOperationalState().equals(OperationalState.DISABLED)) {
                     LOG.info("LowerConnection state is disable");
@@ -526,7 +526,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                     LOG.error("Could not update TAPI connectivity service");
                     continue;
                 }
-                ConnectivityService newConnService = optNewConnService.get();
+                ConnectivityService newConnService = optNewConnService.orElseThrow();
                 if (supportedConnService.getServiceLevel() != null
                         && supportedConnService.getServiceLevel().equals(supportingConnService.getValue())
                         && newConnService.getAdministrativeState() != AdministrativeState.LOCKED

@@ -112,7 +112,7 @@ public class INode121 {
             LOG.warn("Could not get device info from DataBroker");
             return false;
         }
-        deviceInfo = infoOpt.get();
+        deviceInfo = infoOpt.orElseThrow();
         boolean sqlResult = false;
         String query = Queries.getQuery().deviceInfoInsert().get();
         LOG.info("Running {} query ", query);
@@ -211,7 +211,7 @@ public class INode121 {
         if (!deviceObject.isPresent()) {
             return;
         }
-        Map<ShelvesKey, Shelves> shelvesMap = deviceObject.get().nonnullShelves();
+        Map<ShelvesKey, Shelves> shelvesMap = deviceObject.orElseThrow().nonnullShelves();
         LOG.info("Shelves size {}", shelvesMap.size());
         try (Connection connection = requireNonNull(dataSource.getConnection())) {
             for (Map.Entry<ShelvesKey, Shelves> shelveEntry : shelvesMap.entrySet()) {
@@ -243,7 +243,7 @@ public class INode121 {
             LOG.warn("Device object {} was not found", nodeId);
             return;
         }
-        Map<CircuitPacksKey, CircuitPacks> circuitPacksMap = deviceObject.get().nonnullCircuitPacks();
+        Map<CircuitPacksKey, CircuitPacks> circuitPacksMap = deviceObject.orElseThrow().nonnullCircuitPacks();
         LOG.info("Circuit pack size {}", circuitPacksMap.size());
 
         try (Connection connection = requireNonNull(dataSource.getConnection())) {
@@ -1043,7 +1043,7 @@ public class INode121 {
         if (!deviceObject.isPresent()) {
             return;
         }
-        Map<InterfaceKey, Interface> interfaceMap = deviceObject.get().nonnullInterface();
+        Map<InterfaceKey, Interface> interfaceMap = deviceObject.orElseThrow().nonnullInterface();
         for (Map.Entry<InterfaceKey, Interface> interfaceEntrySet : interfaceMap.entrySet()) {
             Interface deviceInterface = interfaceEntrySet.getValue();
             Object[] parameters = prepareDevInterfaceParameters(nodeId, deviceInterface, connection);
@@ -1071,16 +1071,16 @@ public class INode121 {
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
+        if (!protocolObject.isPresent() || protocolObject.orElseThrow().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
         }
-        String adminstatusEnu = protocolObject.get().augmentation(Protocols1.class).getLldp().getGlobalConfig()
+        String adminstatusEnu = protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp().getGlobalConfig()
             .getAdminStatus().getName();
-        String msgTxtInterval = protocolObject.get().augmentation(Protocols1.class).getLldp().getGlobalConfig()
+        String msgTxtInterval = protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp().getGlobalConfig()
             .getMsgTxInterval().toString();
-        String mxgTxHoldMultiplier = protocolObject.get().augmentation(Protocols1.class).getLldp().getGlobalConfig()
-            .getMsgTxHoldMultiplier().toString();
+        String mxgTxHoldMultiplier = protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp()
+            .getGlobalConfig().getMsgTxHoldMultiplier().toString();
         String startTimestamp = getCurrentTimestamp();
         persistDevProtocolLldpPortConfig(nodeId, connection);
         persistDevProtocolLldpNbrList(nodeId, connection);
@@ -1116,13 +1116,13 @@ public class INode121 {
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
+        if (!protocolObject.isPresent() || protocolObject.orElseThrow().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<PortConfigKey, PortConfig> portConfigMap = protocolObject.get()
+        Map<PortConfigKey, PortConfig> portConfigMap = protocolObject.orElseThrow()
             .augmentation(Protocols1.class).getLldp().nonnullPortConfig();
         for (Map.Entry<PortConfigKey, PortConfig> entry : portConfigMap.entrySet()) {
             PortConfig portConfig = entry.getValue();
@@ -1165,18 +1165,18 @@ public class INode121 {
             LOG.error("Protocols is missing");
             return;
         }
-        if (protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList() == null) {
+        if (protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp().getNbrList() == null) {
             protocolObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, protocolsIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList() == null) {
+            if (protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp().getNbrList() == null) {
                 LOG.error("LLDP nbrlist subtree is missing for {}", nodeId);
                 return;
             }
         }
         String startTimestamp = getCurrentTimestamp();
         Map<IfNameKey, IfName> ifNameMap =
-                protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList().nonnullIfName();
+                protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp().getNbrList().nonnullIfName();
         for (Map.Entry<IfNameKey, IfName> ifNameEntry : ifNameMap.entrySet()) {
 
             IfName ifNameObj = ifNameEntry.getValue();
@@ -1228,16 +1228,16 @@ public class INode121 {
         if (!deviceObject.isPresent()) {
             return;
         }
-        if (deviceObject.get().getInternalLink() == null) {
+        if (deviceObject.orElseThrow().getInternalLink() == null) {
             deviceObject = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
                     deviceIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (deviceObject.get().getInternalLink() == null) {
+            if (deviceObject.orElseThrow().getInternalLink() == null) {
                 LOG.info("External links not found for {}", nodeId);
                 return;
             }
         }
         @NonNull
-        Map<InternalLinkKey, InternalLink> internalLinkMap = deviceObject.get().nonnullInternalLink();
+        Map<InternalLinkKey, InternalLink> internalLinkMap = deviceObject.orElseThrow().nonnullInternalLink();
         String startTimestamp = getCurrentTimestamp();
         for (Map.Entry<InternalLinkKey, InternalLink> internalLinkEntry: internalLinkMap.entrySet()) {
             InternalLink internalLink = internalLinkEntry.getValue();
@@ -1275,17 +1275,17 @@ public class INode121 {
         if (!deviceObject.isPresent()) {
             return;
         }
-        if (deviceObject.get().getExternalLink() == null) {
+        if (deviceObject.orElseThrow().getExternalLink() == null) {
             deviceObject = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
                     deviceIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-            if (deviceObject.get().getExternalLink() == null) {
+            if (deviceObject.orElseThrow().getExternalLink() == null) {
                 LOG.info("External links not found for {}", nodeId);
                 return;
             }
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<ExternalLinkKey, ExternalLink> externalLinkMap = deviceObject.get().nonnullExternalLink();
+        Map<ExternalLinkKey, ExternalLink> externalLinkMap = deviceObject.orElseThrow().nonnullExternalLink();
         for (Map.Entry<ExternalLinkKey, ExternalLink> externalLinkEntry: externalLinkMap.entrySet()) {
             ExternalLink externalLink = externalLinkEntry.getValue();
             String externalLinkName = externalLink.getExternalLinkName();
@@ -1326,7 +1326,7 @@ public class INode121 {
             LOG.error("No device with node Id {}", nodeId);
             return;
         }
-        if (deviceObject.get().getPhysicalLink() == null) {
+        if (deviceObject.orElseThrow().getPhysicalLink() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1334,7 +1334,7 @@ public class INode121 {
                 LOG.error("No device with node Id {}", nodeId);
                 return;
             }
-            if (deviceObject.get().getPhysicalLink() == null) {
+            if (deviceObject.orElseThrow().getPhysicalLink() == null) {
                 LOG.info("Physical links not found for {}", nodeId);
                 return;
             }
@@ -1342,7 +1342,7 @@ public class INode121 {
 
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<PhysicalLinkKey, PhysicalLink> physicalLinkMap = deviceObject.get().nonnullPhysicalLink();
+        Map<PhysicalLinkKey, PhysicalLink> physicalLinkMap = deviceObject.orElseThrow().nonnullPhysicalLink();
         for (Map.Entry<PhysicalLinkKey, PhysicalLink> physicalLinkEntry : physicalLinkMap.entrySet()) {
             PhysicalLink physicalLink = physicalLinkEntry.getValue();
             String physicalLinkName = physicalLink.getPhysicalLinkName();
@@ -1397,7 +1397,7 @@ public class INode121 {
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<DegreeKey, Degree> degreeMap = deviceObject.get().nonnullDegree();
+        Map<DegreeKey, Degree> degreeMap = deviceObject.orElseThrow().nonnullDegree();
         for (Map.Entry<DegreeKey, Degree> degreeEntry : degreeMap.entrySet()) {
             Degree degree = degreeEntry.getValue();
             String degreeNumber = degree.getDegreeNumber().toString();
@@ -1522,7 +1522,7 @@ public class INode121 {
             return;
         }
 
-        if (deviceObject.get().getSharedRiskGroup() == null) {
+        if (deviceObject.orElseThrow().getSharedRiskGroup() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1533,7 +1533,8 @@ public class INode121 {
         }
 
         @NonNull
-        Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = deviceObject.get().nonnullSharedRiskGroup();
+        Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = deviceObject.orElseThrow()
+            .nonnullSharedRiskGroup();
         if (sharedRiskGroupMap.isEmpty()) {
             LOG.info("no srg found for node {} ", nodeId);
             return;
@@ -1634,7 +1635,7 @@ public class INode121 {
             LOG.error("No device found in operational datastore for node {}", nodeId);
             return;
         }
-        if (deviceObject.get().getRoadmConnections() == null) {
+        if (deviceObject.orElseThrow().getRoadmConnections() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -1645,7 +1646,8 @@ public class INode121 {
         }
 
         @NonNull
-        Map<RoadmConnectionsKey, RoadmConnections> connectionsMap = deviceObject.get().nonnullRoadmConnections();
+        Map<RoadmConnectionsKey, RoadmConnections> connectionsMap = deviceObject.orElseThrow()
+            .nonnullRoadmConnections();
         if (connectionsMap.isEmpty()) {
             LOG.info("ROADM Dev Connections not found!! for {}", nodeId);
             return;
@@ -1703,7 +1705,7 @@ public class INode121 {
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<ConnectionMapKey, ConnectionMap> connectionsMap = deviceObject.get().nonnullConnectionMap();
+        Map<ConnectionMapKey, ConnectionMap> connectionsMap = deviceObject.orElseThrow().nonnullConnectionMap();
         for (Map.Entry<ConnectionMapKey, ConnectionMap> entry : connectionsMap.entrySet()) {
             ConnectionMap connectionMap = entry.getValue();
             String connectionMapNumber = connectionMap.getConnectionMapNumber().toString();
@@ -1749,7 +1751,8 @@ public class INode121 {
 
         String startTimestamp = getCurrentTimestamp();
         @NonNull
-        Map<WavelengthsKey, Wavelengths> wavelengthsMap = deviceObject.get().getWavelengthMap().nonnullWavelengths();
+        Map<WavelengthsKey, Wavelengths> wavelengthsMap = deviceObject.orElseThrow().getWavelengthMap()
+            .nonnullWavelengths();
         for (Map.Entry<WavelengthsKey, Wavelengths> entry : wavelengthsMap.entrySet()) {
             Wavelengths wavelengths = entry.getValue();
             String wavelengthNumber = wavelengths.getWavelengthNumber().toString();

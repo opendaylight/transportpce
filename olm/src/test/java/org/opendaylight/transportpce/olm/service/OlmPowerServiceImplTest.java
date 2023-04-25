@@ -76,10 +76,10 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
             result.getGranularity());
         assertEquals(
             PmNamesEnum.OpticalPowerInput.toString(),
-            result.getMeasurements().stream().findFirst().get().getPmparameterName());
+            result.getMeasurements().stream().findFirst().orElseThrow().getPmparameterName());
         assertEquals(
             String.valueOf(3.0),
-            result.getMeasurements().stream().findFirst().get().getPmparameterValue());
+            result.getMeasurements().stream().findFirst().orElseThrow().getPmparameterValue());
         assertEquals(
             "ots-deg1",
             result.getResourceIdentifier().getResourceName());

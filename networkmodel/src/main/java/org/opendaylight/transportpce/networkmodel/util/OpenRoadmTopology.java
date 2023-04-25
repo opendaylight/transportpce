@@ -426,13 +426,13 @@ public final class OpenRoadmTopology {
                                 .ietf.network.topology.rev180226.Node1.class)
                         .nonnullTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get().getTpId().getValue();
+                        .findFirst().orElseThrow().getTpId().getValue();
                 destTp = nodes.get(j)
                         .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                                 .ietf.network.topology.rev180226.Node1.class)
                         .nonnullTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get().getTpId().getValue();
+                        .findFirst().orElseThrow().getTpId().getValue();
                 Link1Builder ocnAzLinkBldr = new Link1Builder();
                 Link1Builder ocnZaLinkBldr = new Link1Builder();
                 int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http
@@ -460,7 +460,7 @@ public final class OpenRoadmTopology {
                             .ietf.network.topology.rev180226.Node1.class)
                         .getTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get()
+                        .findFirst().orElseThrow()
                         .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
                             .TerminationPoint1.class)
                         .getOperationalState();
@@ -469,7 +469,7 @@ public final class OpenRoadmTopology {
                             .ietf.network.topology.rev180226.Node1.class)
                         .getTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get()
+                        .findFirst().orElseThrow()
                         .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
                             .TerminationPoint1.class)
                         .getOperationalState();
@@ -526,7 +526,7 @@ public final class OpenRoadmTopology {
                 LOG.error("No link found for given LinkId: {}", linkId);
                 return false;
             }
-            LinkBuilder linkBuilder = new LinkBuilder(link.get());
+            LinkBuilder linkBuilder = new LinkBuilder(link.orElseThrow());
             networkTransactionService.merge(
                 LogicalDatastoreType.CONFIGURATION,
                 linkIID.build(),

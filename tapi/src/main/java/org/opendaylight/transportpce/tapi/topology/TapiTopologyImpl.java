@@ -226,7 +226,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         FluentFuture<Optional<Network>> topologyFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, networkIID);
         try {
-            topology = topologyFuture.get().get();
+            topology = topologyFuture.get().orElseThrow();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
@@ -263,7 +263,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
                 .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
                 .findFirst()
-                .get().getNodeRef().getValue();
+                .orElseThrow().getNodeRef().getValue();
             List<String> networkPortList = new ArrayList<>();
             for (TerminationPoint tp: entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
                 if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
@@ -424,7 +424,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         Mapping mapping = null;
         if (mappingOpt.isDone()) {
             try {
-                mapping = mappingOpt.get().get();
+                mapping = mappingOpt.get().orElseThrow();
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Error getting mapping for {}", networkLcp, e);
                 return false;

@@ -133,35 +133,35 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1")));
         FluentFuture<Optional<Node>> muxAFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, muxAIID);
-        otnMuxA = muxAFuture.get().get();
+        otnMuxA = muxAFuture.get().orElseThrow();
         KeyedInstanceIdentifier<Node, NodeKey> muxCIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("otn-topology")))
             .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")));
         FluentFuture<Optional<Node>> muxCFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, muxCIID);
-        muxCFuture.get().get();
+        muxCFuture.get().orElseThrow();
         KeyedInstanceIdentifier<Node, NodeKey> switchIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("otn-topology")))
             .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")));
         FluentFuture<Optional<Node>> switchFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, switchIID);
-        otnSwitch = switchFuture.get().get();
+        otnSwitch = switchFuture.get().orElseThrow();
         KeyedInstanceIdentifier<Node, NodeKey> roadmaIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("openroadm-network")))
             .child(Node.class, new NodeKey(new NodeId("ROADM-A1")));
         FluentFuture<Optional<Node>> roadmaFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, roadmaIID);
-        roadmA = roadmaFuture.get().get();
+        roadmA = roadmaFuture.get().orElseThrow();
         KeyedInstanceIdentifier<Node, NodeKey> roadmcIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("openroadm-network")))
             .child(Node.class, new NodeKey(new NodeId("ROADM-C1")));
         FluentFuture<Optional<Node>> roadmcFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, roadmcIID);
-        roadmC = roadmcFuture.get().get();
+        roadmC = roadmcFuture.get().orElseThrow();
 
         KeyedInstanceIdentifier<Node, NodeKey> tpdrIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -169,7 +169,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")));
         FluentFuture<Optional<Node>> tpdrFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, tpdrIID);
-        tpdr100G = tpdrFuture.get().get();
+        tpdr100G = tpdrFuture.get().orElseThrow();
 
         InstanceIdentifier<Network1> linksIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -177,7 +177,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .augmentation(Network1.class);
         FluentFuture<Optional<Network1>> linksFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, linksIID);
-        linksFuture.get().get().getLink();
+        linksFuture.get().orElseThrow().getLink();
 
         InstanceIdentifier<Network1> links1IID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -185,14 +185,14 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .augmentation(Network1.class);
         FluentFuture<Optional<Network1>> links1Future = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, links1IID);
-        ortopoLinks = links1Future.get().get().getLink();
+        ortopoLinks = links1Future.get().orElseThrow().getLink();
 
         InstanceIdentifier<Network> ortopo1IID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
                 .class, new NetworkKey(new NetworkId("openroadm-topology")));
         FluentFuture<Optional<Network>> ortopoFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, ortopo1IID);
-        openroadmNet = ortopoFuture.get().get();
+        openroadmNet = ortopoFuture.get().orElseThrow();
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
@@ -763,7 +763,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(OperationalState.ENABLED, node.getOperationalState(), "operational state should be ENABLED");
         assertEquals(1, node.getLayerProtocolName().size(),
             "otsi node should manage a single protocol layer : PHOTONIC_MEDIA");
-        assertEquals(LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().stream().findFirst().get(),
+        assertEquals(LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().stream().findFirst().orElseThrow(),
             "otsi node should manage a single protocol layer : PHOTONIC_MEDIA");
 
         switch (otsiNodeType) {
@@ -1236,7 +1236,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(linkUuid, link.getUuid(), "bad uuid for link");
         assertEquals(
             LayerProtocolName.PHOTONICMEDIA.getName(),
-            link.getLayerProtocolName().stream().findFirst().get().getName(),
+            link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
             "oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA");
         assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection(),"otn tapi link should be BIDIRECTIONAL");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
@@ -1268,7 +1268,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(linkUuid, link.getUuid(), "bad uuid for link");
         assertEquals(
             LayerProtocolName.PHOTONICMEDIA.getName(),
-            link.getLayerProtocolName().stream().findFirst().get().getName(),
+            link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
             "oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA");
         assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection(),
             "otn tapi link should be BIDIRECTIONAL");

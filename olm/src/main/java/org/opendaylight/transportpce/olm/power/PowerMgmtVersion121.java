@@ -75,7 +75,7 @@ public final class PowerMgmtVersion121 {
                 deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
-            Ports port = portObject.get();
+            Ports port = portObject.orElseThrow();
             if (port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
                 powerRangeMap.put("MaxTx", port.getTransponderPort().getPortPowerCapabilityMaxTx().getValue()
                         .doubleValue());
@@ -120,7 +120,7 @@ public final class PowerMgmtVersion121 {
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
-            Ports port = portObject.get();
+            Ports port = portObject.orElseThrow();
             if (port.getRoadmPort() != null) {
                 LOG.debug("Port found on the node ID");
                 powerRangeMap.put("MinRx", port.getRoadmPort()
@@ -171,7 +171,7 @@ public final class PowerMgmtVersion121 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error("Transaction for device {} was not found during transponder"
                         + " power setup for Node:", nodeId);
@@ -226,7 +226,7 @@ public final class PowerMgmtVersion121 {
         @SuppressWarnings("unchecked") Optional<RoadmConnections> rdmConnOpt =
             (Optional<RoadmConnections>) crossConnect.getCrossConnect(deviceId, connectionNumber);
         if (rdmConnOpt.isPresent()) {
-            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
+            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
             rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
@@ -238,7 +238,7 @@ public final class PowerMgmtVersion121 {
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
                 if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
+                    deviceTx = deviceTxOpt.orElseThrow();
                 } else {
                     LOG.error("Transaction for device {} was not found!", deviceId);
                     return false;

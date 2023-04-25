@@ -220,21 +220,21 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     return ModelMappingUtils
                         .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                 }
-                PathDescription pathDescription = pathDescriptionOpt.get();
+                PathDescription pathDescription = pathDescriptionOpt.orElseThrow();
                 String serviceType =
                     ServiceTypes.getServiceType(
                         service.getServiceAEnd().getServiceFormat().getName(),
                         service.getServiceAEnd().getServiceRate(),
                         service.getServiceAEnd().getTxDirection() == null
-                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().get()
+                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
                                     .getPort() == null
-                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().get()
+                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
                                     .getPort().getPortName() == null
                             ? null
                             : portMapping.getMapping(
                                     service.getServiceAEnd().getNodeId().getValue(),
-                                    service.getServiceAEnd().getTxDirection().values().stream().findFirst().get()
-                                        .getPort().getPortName()));
+                                    service.getServiceAEnd().getTxDirection().values().stream().findFirst()
+                                        .orElseThrow().getPort().getPortName()));
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:

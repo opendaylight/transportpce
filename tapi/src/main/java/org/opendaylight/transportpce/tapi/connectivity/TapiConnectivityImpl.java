@@ -128,10 +128,10 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                     .withError(ErrorType.RPC, "SIP list is empty")
                     .buildFuture();
             }
-            if (sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst().get()
-                    .getServiceInterfacePoint().getServiceInterfacePointUuid()))
+            if (sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst()
+                        .orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))
                     && sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
-                    .findFirst().get().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
+                        .findFirst().orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
                 LOG.info("SIPs found in sipMap");
                 // TODO: differentiate between OTN service and GbE service in TAPI
                 ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);

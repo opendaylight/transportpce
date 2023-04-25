@@ -260,7 +260,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 this.crossConnect.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
                         if (connectionNameOpt.isPresent()) {
                             nodesProvisioned.add(nodeId);
-                            createdConnections.add(connectionNameOpt.get());
+                            createdConnections.add(connectionNameOpt.orElseThrow());
                         } else {
                             processErrorMessage("Unable to post Roadm-connection for node " + nodeId, forkJoinPool,
                                     results);
@@ -631,7 +631,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
         if (services.isPresent()) {
             LOG.info("service {} already exists", name);
-            servicesBuilder = new ServicesBuilder(services.get()).setTopology(topo);
+            servicesBuilder = new ServicesBuilder(services.orElseThrow()).setTopology(topo);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);

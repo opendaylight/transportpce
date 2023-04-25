@@ -148,7 +148,7 @@ public class PceGraphTest extends AbstractTest {
         try (Reader reader = new FileReader(CATALOG_FILE, StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
                 .transformIntoNormalizedNode(reader)
-                .get();
+                .orElseThrow();
             omCatalog = (OperationalModeCatalog) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()
                 .fromNormalizedNode(
@@ -167,7 +167,7 @@ public class PceGraphTest extends AbstractTest {
         }
         // The mapping corresponding to the topology is directly populated from a file in the Dta Store
         try (Reader reader = new FileReader(MAPPING_FILE, StandardCharsets.UTF_8)) {
-            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).get();
+            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
                     .transportpce.portmapping.rev220922.Network) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()

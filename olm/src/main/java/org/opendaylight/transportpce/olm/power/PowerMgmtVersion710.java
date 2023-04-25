@@ -79,7 +79,7 @@ public final class PowerMgmtVersion710 {
         if (!portObject.isPresent()) {
             return new HashMap<>();
         }
-        Ports port = portObject.get();
+        Ports port = portObject.orElseThrow();
         if (port.getTransponderPort() == null || port.getTransponderPort().getPortPowerCapabilityMaxTx() == null) {
             LOG.warn("Logical Connection Point value missing for {} {}", circuitPackName, port.getPortName());
             return new HashMap<>();
@@ -124,7 +124,7 @@ public final class PowerMgmtVersion710 {
             LOG.info("Port not found");
             return new HashMap<>();
         }
-        Ports port = portObject.get();
+        Ports port = portObject.orElseThrow();
         if (port.getRoadmPort() == null) {
             LOG.warn("Roadm ports power value is missing for {} {}", circuitPackName, port.getPortName());
             return new HashMap<>();
@@ -167,7 +167,7 @@ public final class PowerMgmtVersion710 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error("Transaction for device {} was not found during transponder power setup for Node:", nodeId);
                 return false;
@@ -222,7 +222,7 @@ public final class PowerMgmtVersion710 {
             LOG.warn("Roadm-Connection is null in set power level ({})", connectionNumber);
             return false;
         }
-        RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
+        RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
         rdmConnBldr.setOpticalControlMode(mode);
         if (powerValue != null) {
             rdmConnBldr.setTargetOutputPower(new PowerDBm(Decimal64.valueOf(powerValue)));
@@ -236,7 +236,7 @@ public final class PowerMgmtVersion710 {
                 LOG.error("Transaction for device {} was not found!", deviceId);
                 return false;
             }
-            deviceTx = deviceTxOpt.get();
+            deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Unable to get transaction for device {}!", deviceId, e);
             return false;

@@ -62,7 +62,7 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
             Optional<ServiceNodelist> serviceListObject =
                     rtx.read(LogicalDatastoreType.OPERATIONAL, serviceNodeListIID).get();
             if (serviceListObject.isPresent()) {
-                for (Nodelist nodelist : serviceListObject.get().nonnullNodelist().values()) {
+                for (Nodelist nodelist : serviceListObject.orElseThrow().nonnullNodelist().values()) {
                     allNodeList.addAll(nodelist.nonnullNodes().values());
                 }
             }
@@ -130,71 +130,71 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
             case CircuitPack:
                 Optional<CircuitPack> circuitPackOptional = tryCastToParticularResource(CircuitPack.class, resource);
                 if (circuitPackOptional.isPresent()) {
-                    circuitPack = circuitPackOptional.get().getCircuitPackName();
+                    circuitPack = circuitPackOptional.orElseThrow().getCircuitPackName();
                 }
                 break;
 
             case Connection:
                 Optional<Connection> connectionOptional = tryCastToParticularResource(Connection.class, resource);
                 if (connectionOptional.isPresent()) {
-                    connection = connectionOptional.get().getConnectionName();
+                    connection = connectionOptional.orElseThrow().getConnectionName();
                 }
                 break;
 
             case Degree:
                 Optional<Degree> degreeOptional = tryCastToParticularResource(Degree.class, resource);
                 if (degreeOptional.isPresent()) {
-                    degree = degreeOptional.get().getDegreeNumber().toString();
+                    degree = degreeOptional.orElseThrow().getDegreeNumber().toString();
                 }
                 break;
 
             case Interface:
                 Optional<Interface> interfaceOptional = tryCastToParticularResource(Interface.class, resource);
                 if (interfaceOptional.isPresent()) {
-                    iface = interfaceOptional.get().getInterfaceName();
+                    iface = interfaceOptional.orElseThrow().getInterfaceName();
                 }
                 break;
 
             case InternalLink:
                 Optional<InternalLink> internalLinkOptional = tryCastToParticularResource(InternalLink.class, resource);
                 if (internalLinkOptional.isPresent()) {
-                    internalLink = internalLinkOptional.get().getInternalLinkName();
+                    internalLink = internalLinkOptional.orElseThrow().getInternalLinkName();
                 }
                 break;
 
             case PhysicalLink:
                 Optional<PhysicalLink> physicalLinkOptional = tryCastToParticularResource(PhysicalLink.class, resource);
                 if (physicalLinkOptional.isPresent()) {
-                    physicalLink = physicalLinkOptional.get().getPhysicalLinkName();
+                    physicalLink = physicalLinkOptional.orElseThrow().getPhysicalLinkName();
                 }
                 break;
 
             case Service:
                 Optional<Service> serviceOptional = tryCastToParticularResource(Service.class, resource);
                 if (serviceOptional.isPresent()) {
-                    service = serviceOptional.get().getServiceName();
+                    service = serviceOptional.orElseThrow().getServiceName();
                 }
                 break;
 
             case Shelf:
                 Optional<Shelf> shelfOptional = tryCastToParticularResource(Shelf.class, resource);
                 if (shelfOptional.isPresent()) {
-                    shelf = shelfOptional.get().getShelfName();
+                    shelf = shelfOptional.orElseThrow().getShelfName();
                 }
                 break;
 
             case SharedRiskGroup:
                 Optional<Srg> sharedRiskGroupOptional = tryCastToParticularResource(Srg.class, resource);
                 if (sharedRiskGroupOptional.isPresent()) {
-                    sharedRiskGroup = sharedRiskGroupOptional.get().getSrgNumber().toString();
+                    sharedRiskGroup = sharedRiskGroupOptional.orElseThrow().getSrgNumber().toString();
                 }
                 break;
 
             case Port:
                 Optional<Port> portContainerOptional = tryCastToParticularResource(Port.class, resource);
                 if (portContainerOptional.isPresent()) {
-                    port = portContainerOptional.get().getPort().getPortName();
-                    portCircuitPack = portContainerOptional.get().getPort().getCircuitPackName();
+                    port = portContainerOptional.orElseThrow().getPort().getPortName();
+                    portCircuitPack = portContainerOptional.orElseThrow().getPort().getCircuitPackName();
                 }
                 break;
 

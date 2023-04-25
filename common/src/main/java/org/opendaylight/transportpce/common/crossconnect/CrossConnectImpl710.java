@@ -87,7 +87,7 @@ public class CrossConnectImpl710 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error("Device transaction for device {} was not found!", deviceId);
                 return Optional.empty();
@@ -118,8 +118,8 @@ public class CrossConnectImpl710 {
             .container.org.openroadm.device.OduConnection> otnXc = getOtnCrossConnect(deviceId, connectionName);
 
         if (otnXc.isPresent()) {
-            interfList.add(otnXc.get().getSource().getSrcIf());
-            interfList.add(otnXc.get().getDestination().getDstIf());
+            interfList.add(otnXc.orElseThrow().getSource().getSrcIf());
+            interfList.add(otnXc.orElseThrow().getDestination().getDstIf());
         } else {
             LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
             return null;
@@ -129,7 +129,7 @@ public class CrossConnectImpl710 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 LOG.error("Device transaction for device {} was not found!", deviceId);
                 return null;
