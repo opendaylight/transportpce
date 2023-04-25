@@ -83,7 +83,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
             if (!directChild.isPresent()) {
                 throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
             }
-            normalizedNode = directChild.get();
+            normalizedNode = directChild.orElseThrow();
         }
         YangInstanceIdentifier rootNodeYangInstanceIdentifier = YangInstanceIdentifier.of(rootNode);
 

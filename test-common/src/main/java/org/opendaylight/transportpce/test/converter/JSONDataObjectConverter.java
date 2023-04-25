@@ -108,7 +108,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
                 jsonCodecFactory, rootNode, EffectiveModelContext.NAME.getNamespace(), jsonWriter);
         try (NormalizedNodeWriter normalizedNodeWriter = NormalizedNodeWriter.forStreamWriter(create);) {
             normalizedNodeWriter
-                    .write(convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).get());
+                    .write(convertType.toNormalizedNodes(dataObjectClass.cast(object), dataObjectClass).orElseThrow());
         } catch (IOException ioe) {
             throw new IllegalStateException(ioe);
         }

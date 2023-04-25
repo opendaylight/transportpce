@@ -148,13 +148,15 @@ public final class ModelMappingUtils {
                         new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                                 .service.endpoint.sp.TxDirectionBuilder()
                             .setPort(
-                                input.getServiceAEnd().getTxDirection().values().stream().findFirst().get().getPort())
+                                input.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
                             .build())
                     .setRxDirection(
                         new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                                 .service.endpoint.sp.RxDirectionBuilder()
                             .setPort(
-                                input.getServiceAEnd().getRxDirection().values().stream().findFirst().get().getPort())
+                                input.getServiceAEnd().getRxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
                             .build())
                     .build())
             .setServiceZEnd(
@@ -170,13 +172,15 @@ public final class ModelMappingUtils {
                         new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                                 .service.endpoint.sp.TxDirectionBuilder()
                             .setPort(
-                                input.getServiceZEnd().getTxDirection().values().stream().findFirst().get().getPort())
+                                input.getServiceZEnd().getTxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
                             .build())
                     .setRxDirection(
                         new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
                                 .service.endpoint.sp.RxDirectionBuilder()
                             .setPort(
-                                input.getServiceZEnd().getRxDirection().values().stream().findFirst().get().getPort())
+                                input.getServiceZEnd().getRxDirection().values().stream().findFirst().orElseThrow()
+                                    .getPort())
                             .build())
                     .build())
             .setConnectionType(input.getConnectionType())
@@ -258,10 +262,10 @@ public final class ModelMappingUtils {
         return new ServiceAEndBuilder()
             .setClli(serviceAEnd.getClli())
             .setNodeId(serviceAEnd.getNodeId().getValue())
-            .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().get()))
+            .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
             .setServiceFormat(serviceAEnd.getServiceFormat())
             .setServiceRate(serviceAEnd.getServiceRate())
-            .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().get()))
+            .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
             .build();
     }
 
@@ -271,10 +275,12 @@ public final class ModelMappingUtils {
                 .path.computation.reroute.request.input.ServiceAEndBuilder()
                 .setClli(serviceAEnd.getClli())
                 .setNodeId(serviceAEnd.getNodeId().getValue())
-                .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().get()))
+                .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst()
+                        .orElseThrow()))
                 .setServiceFormat(serviceAEnd.getServiceFormat())
                 .setServiceRate(serviceAEnd.getServiceRate())
-                .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().get()))
+                .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst()
+                        .orElseThrow()))
                 .build();
     }
 
@@ -282,10 +288,10 @@ public final class ModelMappingUtils {
         return new ServiceZEndBuilder()
             .setClli(serviceZEnd.getClli())
             .setNodeId(serviceZEnd.getNodeId().getValue())
-            .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().get()))
+            .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
             .setServiceFormat(serviceZEnd.getServiceFormat())
             .setServiceRate(serviceZEnd.getServiceRate())
-            .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().get()))
+            .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
             .build();
     }
 
@@ -295,10 +301,12 @@ public final class ModelMappingUtils {
                 .path.computation.reroute.request.input.ServiceZEndBuilder()
                 .setClli(serviceZEnd.getClli())
                 .setNodeId(serviceZEnd.getNodeId().getValue())
-                .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().get()))
+                .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst()
+                        .orElseThrow()))
                 .setServiceFormat(serviceZEnd.getServiceFormat())
                 .setServiceRate(serviceZEnd.getServiceRate())
-                .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().get()))
+                .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst()
+                        .orElseThrow()))
                 .build();
     }
 
@@ -557,7 +565,7 @@ public final class ModelMappingUtils {
                                         .service.endpoint.sp.TxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceAEnd().getTxDirection()
-                                        .values().stream().findFirst().get().getPort())
+                                        .values().stream().findFirst().orElseThrow().getPort())
                                 .build())
                         .setRxDirection(
                             new org.opendaylight.yang.gen.v1
@@ -565,7 +573,7 @@ public final class ModelMappingUtils {
                                         .service.endpoint.sp.RxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceAEnd().getRxDirection()
-                                        .values().stream().findFirst().get().getPort())
+                                        .values().stream().findFirst().orElseThrow().getPort())
                                 .build())
                         .build())
                 .setServiceZEnd(
@@ -581,7 +589,7 @@ public final class ModelMappingUtils {
                                         .service.endpoint.sp.TxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceZEnd().getTxDirection()
-                                        .values().stream().findFirst().get().getPort())
+                                        .values().stream().findFirst().orElseThrow().getPort())
                                 .build())
                         .setRxDirection(
                             new org.opendaylight.yang.gen.v1
@@ -589,7 +597,7 @@ public final class ModelMappingUtils {
                                         .service.endpoint.sp.RxDirectionBuilder()
                                 .setPort(
                                     serviceInput.getServiceZEnd().getRxDirection()
-                                        .values().stream().findFirst().get().getPort())
+                                        .values().stream().findFirst().orElseThrow().getPort())
                                 .build())
                         .build())
                 .setServicePathName(serviceInput.getServiceName())

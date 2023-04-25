@@ -273,7 +273,7 @@ public class PceCalculation {
             Optional<Network> nwOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
             if (nwOptional.isPresent()) {
-                nw = nwOptional.get();
+                nw = nwOptional.orElseThrow();
                 LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
             }
         } catch (InterruptedException | ExecutionException e) {

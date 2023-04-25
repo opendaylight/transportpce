@@ -189,8 +189,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                     }
                     // TODO can it be return false rather than continue?
                     // in that case, mappingObjectOptional could be moved inside method getSpanLossTx()
-                    LOG.info("Dest point is Degree {}", mappingObjectOptional.get());
-                    BigDecimal spanLossTx = getSpanLossTx(mappingObjectOptional.get().getSupportingOts(),
+                    LOG.info("Dest point is Degree {}", mappingObjectOptional.orElseThrow());
+                    BigDecimal spanLossTx = getSpanLossTx(mappingObjectOptional.orElseThrow().getSupportingOts(),
                         destTpId, nodeId, openroadmVersion.getIntValue());
 
                     LOG.info("Spanloss TX is {}", spanLossTx);
@@ -248,8 +248,8 @@ public class PowerMgmtImpl implements PowerMgmt {
             // TODO Align protections with getSRGRxPowerRangeMap
         }
 
-        String circuitPackName = mappingObject.get().getSupportingCircuitPackName();
-        String portName = mappingObject.get().getSupportingPort();
+        String circuitPackName = mappingObject.orElseThrow().getSupportingCircuitPackName();
+        String portName = mappingObject.orElseThrow().getSupportingPort();
         switch (openroadmVersion) {
             case 1:
                 return PowerMgmtVersion121.getXponderPowerRange(circuitPackName, portName,
@@ -281,8 +281,8 @@ public class PowerMgmtImpl implements PowerMgmt {
             // FIXME shouldn't it lead to a return false in setPower() ?
         }
 
-        String circuitPackName = mappingObject.get().getSupportingCircuitPackName();
-        String portName = mappingObject.get().getSupportingPort();
+        String circuitPackName = mappingObject.orElseThrow().getSupportingCircuitPackName();
+        String portName = mappingObject.orElseThrow().getSupportingPort();
         switch (rdmOpenroadmVersion) {
             case 1:
                 return PowerMgmtVersion121.getSRGRxPowerRange(nodeId, srgId,
@@ -311,12 +311,12 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.error(INTERFACE_NOT_PRESENT, supportingOts, nodeId);
                         return null;
                     }
-                    if (interfaceOpt.get().augmentation(Interface1.class).getOts()
+                    if (interfaceOpt.orElseThrow().augmentation(Interface1.class).getOts()
                             .getSpanLossTransmit() == null) {
-                        LOG.error("interface {} has no spanloss value", interfaceOpt.get().getName());
+                        LOG.error("interface {} has no spanloss value", interfaceOpt.orElseThrow().getName());
                         return null;
                     }
-                    return interfaceOpt.get()
+                    return interfaceOpt.orElseThrow()
                             .augmentation(Interface1.class)
                             .getOts().getSpanLossTransmit().getValue().decimalValue();
                 case 2:
@@ -327,13 +327,13 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.error(INTERFACE_NOT_PRESENT, supportingOts, nodeId);
                         return null;
                     }
-                    if (interfaceOpt1.get().augmentation(org.opendaylight.yang.gen.v1.http.org
+                    if (interfaceOpt1.orElseThrow().augmentation(org.opendaylight.yang.gen.v1.http.org
                             .openroadm.optical.transport.interfaces.rev181019.Interface1.class).getOts()
                                 .getSpanLossTransmit() == null) {
-                        LOG.error("interface {} has no spanloss value", interfaceOpt1.get().getName());
+                        LOG.error("interface {} has no spanloss value", interfaceOpt1.orElseThrow().getName());
                         return null;
                     }
-                    return interfaceOpt1.get()
+                    return interfaceOpt1.orElseThrow()
                             .augmentation(org.opendaylight.yang.gen.v1.http.org
                                 .openroadm.optical.transport.interfaces.rev181019.Interface1.class)
                             .getOts().getSpanLossTransmit().getValue().decimalValue();
@@ -513,7 +513,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         return false;
                     }
                     powerSetupResult = PowerMgmtVersion121.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional121.get());
+                            txPower, deviceTransactionManager, interfaceOptional121.orElseThrow());
                     break;
                 case 2:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp
@@ -524,7 +524,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         return false;
                     }
                     powerSetupResult = PowerMgmtVersion221.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional221.get());
+                            txPower, deviceTransactionManager, interfaceOptional221.orElseThrow());
                     break;
                 case 3:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp
@@ -535,7 +535,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         return false;
                     }
                     powerSetupResult = PowerMgmtVersion710.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional710.get());
+                            txPower, deviceTransactionManager, interfaceOptional710.orElseThrow());
                     break;
                 default:
                     LOG.error("Unrecognized OpenRoadm version");

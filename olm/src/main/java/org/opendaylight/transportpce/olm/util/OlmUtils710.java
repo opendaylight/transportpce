@@ -95,7 +95,7 @@ final class OlmUtils710 {
                 LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (currentPmListOpt.isPresent()) {
-            CurrentPmList  currentPmList = currentPmListOpt.get();
+            CurrentPmList  currentPmList = currentPmListOpt.orElseThrow();
             @NonNull
             Map<CurrentPmEntryKey, CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
             LOG.info("Current PM list exists for node {} and contains {} entries.", input.getNodeId(),

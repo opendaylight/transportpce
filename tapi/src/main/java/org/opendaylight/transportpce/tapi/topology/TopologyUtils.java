@@ -87,7 +87,7 @@ public final class TopologyUtils {
         ListenableFuture<Optional<Network>> topologyFuture =
                 this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
         try {
-            topology = topologyFuture.get().get();
+            topology = topologyFuture.get().orElseThrow();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
@@ -138,7 +138,7 @@ public final class TopologyUtils {
                 String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
                     .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
                     .findFirst()
-                    .get().getNodeRef().getValue();
+                    .orElseThrow().getNodeRef().getValue();
                 List<String> networkPortList = new ArrayList<>();
                 for (TerminationPoint tp: entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
                     // TODO -> why are we checking with respect to XPDR links?? Is there a real purpose on doing that?
@@ -238,7 +238,7 @@ public final class TopologyUtils {
         Mapping mapping = null;
         if (mappingOpt.isDone()) {
             try {
-                mapping = mappingOpt.get().get();
+                mapping = mappingOpt.get().orElseThrow();
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Error getting mapping for {}", networkLcp,e);
                 return false;

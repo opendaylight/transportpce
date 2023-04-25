@@ -117,7 +117,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             Optional<DataBroker> deviceDataBrokerOpt = getDeviceDataBroker(deviceId);
             DataBroker deviceDataBroker;
             if (deviceDataBrokerOpt.isPresent()) {
-                deviceDataBroker = deviceDataBrokerOpt.get();
+                deviceDataBroker = deviceDataBrokerOpt.orElseThrow();
             } else {
                 newLock.countDown();
                 return Optional.empty();
@@ -133,7 +133,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
                 // if time will run out and transaction was not closed then it will be cancelled (and unlocked)
                 checkingExecutor.schedule(() -> {
                     if (deviceTransactionOptional.isPresent()) {
-                        DeviceTransaction deviceTx = deviceTransactionOptional.get();
+                        DeviceTransaction deviceTx = deviceTransactionOptional.orElseThrow();
                         LOG.debug("Timeout to submit transaction run out! Transaction was {} submitted or canceled.",
                                 deviceTx.wasSubmittedOrCancelled().get() ? "" : "not");
                         if (!deviceTx.wasSubmittedOrCancelled().get()) {
@@ -164,7 +164,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     private Optional<DataBroker> getDeviceDataBroker(String deviceId) {
         Optional<MountPoint> netconfNode = getDeviceMountPoint(deviceId);
         if (netconfNode.isPresent()) {
-            return netconfNode.get().getService(DataBroker.class);
+            return netconfNode.orElseThrow().getService(DataBroker.class);
         } else {
             LOG.error("Device mount point not found for : {}", deviceId);
             return Optional.empty();
@@ -189,7 +189,7 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
             return Optional.empty();
         }
         if (deviceTxOpt.isPresent()) {
-            DeviceTransaction deviceTx = deviceTxOpt.get();
+            DeviceTransaction deviceTx = deviceTxOpt.orElseThrow();
             try {
                 return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {

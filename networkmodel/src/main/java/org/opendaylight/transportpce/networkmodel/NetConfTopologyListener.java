@@ -100,8 +100,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                             return;
                         }
                         this.networkModelService
-                            .createOpenRoadmNode(nodeId, deviceCapabilityOpt.get().getCapability());
-                        onDeviceConnected(nodeId, deviceCapabilityOpt.get().getCapability());
+                            .createOpenRoadmNode(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
+                        onDeviceConnected(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
                         LOG.info("Device {} correctly connected to controller", nodeId);
                     }
                     if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
@@ -123,7 +123,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             LOG.error("Failed to get mount point for node {}", nodeId);
             return;
         }
-        MountPoint mountPoint = mountPointOpt.get();
+        MountPoint mountPoint = mountPointOpt.orElseThrow();
         final Optional<NotificationService> notificationService = mountPoint.getService(NotificationService.class);
         if (notificationService.isEmpty()) {
             LOG.error(RPC_SERVICE_FAILED, nodeId);
@@ -131,7 +131,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         }
         NodeRegistration nodeRegistration =
             new NodeRegistration(
-                nodeId, openRoadmVersion, notificationService.get(), this.dataBroker, this.portMapping);
+                nodeId, openRoadmVersion, notificationService.orElseThrow(), this.dataBroker, this.portMapping);
         nodeRegistration.registerListeners();
         registrations.put(nodeId, nodeRegistration);
 
@@ -148,7 +148,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         if (service.isEmpty()) {
             return false;
         }
-        final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
+        final NotificationsService rpcService = service.orElseThrow().getRpcService(NotificationsService.class);
         if (rpcService == null) {
             LOG.error(RPC_SERVICE_FAILED, nodeId);
             return false;
@@ -199,13 +199,13 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         Optional<Streams> ordmInfoObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, streamsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (ordmInfoObject == null || ordmInfoObject.isEmpty() || ordmInfoObject.get().getStream().isEmpty()) {
+        if (ordmInfoObject == null || ordmInfoObject.isEmpty() || ordmInfoObject.orElseThrow().getStream().isEmpty()) {
             LOG.error("List of streams supports by device is not present");
             return List.of("OPENROADM","NETCONF");
         }
         List<String> streams = new ArrayList<>();
         List<String> netconfStreams = new ArrayList<>();
-        for (Stream strm : ordmInfoObject.get().getStream().values()) {
+        for (Stream strm : ordmInfoObject.orElseThrow().getStream().values()) {
             LOG.debug("Streams are {}", strm);
             if ("OPENROADM".equalsIgnoreCase(strm.getName().getValue())) {
                 streams.add(strm.getName().getValue());

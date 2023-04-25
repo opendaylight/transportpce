@@ -98,7 +98,7 @@ public class DeviceTransactionManagerTest {
         try {
             Future<java.util.Optional<DeviceTransaction>> firstDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
-            DeviceTransaction firstDeviceTx = firstDeviceTxFuture.get().get();
+            DeviceTransaction firstDeviceTx = firstDeviceTxFuture.get().orElseThrow();
 
             Future<java.util.Optional<DeviceTransaction>> secondDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
@@ -119,14 +119,14 @@ public class DeviceTransactionManagerTest {
                     transactionManager.getDeviceTransaction("another-id");
             Thread.sleep(50);
             assertTrue(anotherDeviceTxFuture.isDone());
-            anotherDeviceTxFuture.get().get().commit(defaultTimeout, defaultTimeUnit);
+            anotherDeviceTxFuture.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
 
             firstDeviceTx.commit(defaultTimeout, defaultTimeUnit);
             Thread.sleep(200);
             assertTrue(secondDeviceTxFuture.isDone());
             assertFalse(thirdDeviceTxFuture.isDone());
 
-            DeviceTransaction secondDeviceTx = secondDeviceTxFuture.get().get();
+            DeviceTransaction secondDeviceTx = secondDeviceTxFuture.get().orElseThrow();
             secondDeviceTx.put(defaultDatastore, defaultIid, defaultData);
             assertFalse(thirdDeviceTxFuture.isDone());
 
@@ -134,7 +134,7 @@ public class DeviceTransactionManagerTest {
             Thread.sleep(200);
             assertTrue(thirdDeviceTxFuture.isDone());
 
-            DeviceTransaction thirdDeviceTx = thirdDeviceTxFuture.get().get();
+            DeviceTransaction thirdDeviceTx = thirdDeviceTxFuture.get().orElseThrow();
             thirdDeviceTx.put(defaultDatastore, defaultIid, defaultData);
             thirdDeviceTx.commit(defaultTimeout, defaultTimeUnit);
 
@@ -157,7 +157,7 @@ public class DeviceTransactionManagerTest {
 
         try {
             for (Future<java.util.Optional<DeviceTransaction>> futureTx : deviceTransactionFutures) {
-                DeviceTransaction deviceTx = futureTx.get().get();
+                DeviceTransaction deviceTx = futureTx.get().orElseThrow();
                 deviceTx.commit(defaultTimeout, defaultTimeUnit);
                 deviceTransactions.add(deviceTx);
             }
@@ -177,7 +177,8 @@ public class DeviceTransactionManagerTest {
 
         try {
             for (int i = 0; i < numberOfTxs; i++) {
-                deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get().get());
+                deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get()
+                    .orElseThrow());
             }
         } catch (InterruptedException | ExecutionException e) {
             fail("Exception catched! " + e);
@@ -197,7 +198,8 @@ public class DeviceTransactionManagerTest {
 
         try {
             for (int i = 0; i < numberOfTxs; i++) {
-                deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get().get());
+                deviceTransactions.add(transactionManager.getDeviceTransaction(defaultDeviceId + " " + i).get()
+                    .orElseThrow());
             }
         } catch (InterruptedException | ExecutionException e) {
             fail("Exception catched! " + e);
@@ -305,7 +307,7 @@ public class DeviceTransactionManagerTest {
             LogicalDatastoreType store, InstanceIdentifier<T> path, T data)
             throws ExecutionException, InterruptedException {
         Future<java.util.Optional<DeviceTransaction>> deviceTxFuture = deviceTxManager.getDeviceTransaction(deviceId);
-        DeviceTransaction deviceTx = deviceTxFuture.get().get();
+        DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow();
         deviceTx.put(store, path, data);
         deviceTx.commit(defaultTimeout, defaultTimeUnit);
     }

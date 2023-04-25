@@ -219,7 +219,7 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
             LOG.error("PCE cancel returned an unknown RpcStatusEx code !");
             return;
         }
-        Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+        Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
         PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
             new PublishNotificationProcessServiceBuilder()
                 .setServiceName(service.getServiceName())

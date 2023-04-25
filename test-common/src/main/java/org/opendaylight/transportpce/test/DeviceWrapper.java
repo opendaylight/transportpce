@@ -131,13 +131,13 @@ public final class DeviceWrapper {
         LOG.debug("Input data converted into normalizedNodes");
 
         YangInstanceIdentifier initialDataIi = YangInstanceIdentifier.of(dataQName);
-        LOG.debug("Searching for {} inside {}", initialDataIi, initialDataNormalizedNodes.get());
+        LOG.debug("Searching for {} inside {}", initialDataIi, initialDataNormalizedNodes.orElseThrow());
         Optional<NormalizedNode> dataNormalizedNodes =
-                NormalizedNodes.findNode(initialDataNormalizedNodes.get(), initialDataIi);
+                NormalizedNodes.findNode(initialDataNormalizedNodes.orElseThrow(), initialDataIi);
         Preconditions.checkArgument(dataNormalizedNodes.isPresent());
         LOG.info("Initial data was successfully stored into ds");
         DOMDataTreeWriteTransaction writeOnlyTransaction = domDataBroker.newWriteOnlyTransaction();
-        writeOnlyTransaction.put(LogicalDatastoreType.OPERATIONAL, initialDataIi, dataNormalizedNodes.get());
+        writeOnlyTransaction.put(LogicalDatastoreType.OPERATIONAL, initialDataIi, dataNormalizedNodes.orElseThrow());
         try {
             writeOnlyTransaction.commit().get();
         } catch (InterruptedException | ExecutionException e) {

@@ -59,7 +59,7 @@ public class OpenRoadmInterfacesImpl710 {
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
+                deviceTx = deviceTxOpt.orElseThrow();
             } else {
                 throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
                     nodeId));
@@ -133,7 +133,7 @@ public class OpenRoadmInterfacesImpl710 {
                 interfaceName, nodeId), e);
         }
         if (intf2DeleteOpt.isPresent()) {
-            Interface intf2Delete = intf2DeleteOpt.get();
+            Interface intf2Delete = intf2DeleteOpt.orElseThrow();
             // set the name and set the type. Having these two lines will post the interface with just
             // name, type and admin-state, without all the default values such as maint-testsignal
             //  delete the interfaces successfully
@@ -163,7 +163,7 @@ public class OpenRoadmInterfacesImpl710 {
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
                 if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
+                    deviceTx = deviceTxOpt.orElseThrow();
                 } else {
                     throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
                         nodeId));
@@ -211,7 +211,7 @@ public class OpenRoadmInterfacesImpl710 {
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         CircuitPacks cp = null;
         if (cpOpt.isPresent()) {
-            cp = cpOpt.get();
+            cp = cpOpt.orElseThrow();
         } else {
             throw new OpenRoadmInterfaceException(String.format(
                 "Could not find CircuitPack %s in equipment config datastore for node %s", circuitPackName, nodeId));
@@ -236,7 +236,7 @@ public class OpenRoadmInterfacesImpl710 {
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
                 if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
+                    deviceTx = deviceTxOpt.orElseThrow();
                 } else {
                     throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
                         nodeId));
@@ -263,7 +263,7 @@ public class OpenRoadmInterfacesImpl710 {
         try {
             supInterfOpt = getInterface(nodeId, interf);
             if (supInterfOpt.isPresent()) {
-                return supInterfOpt.get().getSupportingInterfaceList().stream().findFirst().get();
+                return supInterfOpt.orElseThrow().getSupportingInterfaceList().stream().findFirst().orElseThrow();
             } else {
                 return null;
             }
@@ -280,7 +280,7 @@ public class OpenRoadmInterfacesImpl710 {
             .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()))
             .build();
         Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-            portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).get();
+            portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).orElseThrow();
         if (port.getInterfaces() == null) {
             return false;
         }

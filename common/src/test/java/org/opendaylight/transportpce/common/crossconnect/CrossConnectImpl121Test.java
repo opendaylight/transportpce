@@ -89,7 +89,7 @@ public class CrossConnectImpl121Test {
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);
-        assertEquals(res.get(), "srcTp-destTp-761:768");
+        assertEquals(res.orElseThrow(), "srcTp-destTp-761:768");
     }
 
     @Test

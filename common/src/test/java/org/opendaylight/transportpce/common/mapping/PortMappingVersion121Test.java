@@ -459,7 +459,7 @@ public class PortMappingVersion121Test {
         try {
             Optional<Network> optionalNetwork = rr.read(LogicalDatastoreType.CONFIGURATION, mappingIID).get();
             if (optionalNetwork.isPresent()) {
-                network = optionalNetwork.get();
+                network = optionalNetwork.orElseThrow();
             }
 
         } catch (ExecutionException | InterruptedException e) {
@@ -627,7 +627,7 @@ public class PortMappingVersion121Test {
         try {
             Optional<Network> optionalNetwork = rr.read(LogicalDatastoreType.CONFIGURATION, mappingIID).get();
             if (optionalNetwork.isPresent()) {
-                network = optionalNetwork.get();
+                network = optionalNetwork.orElseThrow();
             }
 
         } catch (ExecutionException | InterruptedException e) {

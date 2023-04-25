@@ -142,8 +142,8 @@ public class GnpyTopoImpl {
             throw new GnpyException("In gnpyTopoImpl: openRoadmNet or openRoadmTopo is not present");
         }
         // Create the list of nodes
-        Collection<Node> openRoadmNetNodeList = openRoadmNet.get().nonnullNode().values();
-        Collection<Node> openRoadmTopoNodeList = openRoadmTopo.get().nonnullNode().values();
+        Collection<Node> openRoadmNetNodeList = openRoadmNet.orElseThrow().nonnullNode().values();
+        Collection<Node> openRoadmTopoNodeList = openRoadmTopo.orElseThrow().nonnullNode().values();
 
         if (openRoadmTopoNodeList.isEmpty() || openRoadmNetNodeList.isEmpty()) {
             throw new GnpyException("In gnpyTopoImpl: no nodes in the openradm topology or openroadm network");
@@ -204,7 +204,7 @@ public class GnpyTopoImpl {
         if (!openRoadmTopo.isPresent()) {
             throw new GnpyException("In gnpyTopoImpl: openroadmTopo is not present");
         }
-        Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
+        Network1 nw1 = openRoadmTopo.orElseThrow().augmentation(Network1.class);
         Collection<Link> linksList = nw1.nonnullLink().values();
         // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
         // 4:ROADM-To-ROADM  5:XPONDER-INPUT  6:XPONDER-OUTPUT

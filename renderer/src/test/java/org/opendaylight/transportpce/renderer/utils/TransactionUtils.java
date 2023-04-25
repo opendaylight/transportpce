@@ -40,7 +40,7 @@ public final class TransactionUtils {
         if (!deviceTxFuture.get().isPresent()) {
             return false;
         }
-        DeviceTransaction deviceTx = deviceTxFuture.get().get();
+        DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow();
         deviceTx.merge(logicalDatastoreType, instanceIdentifier, object);
         deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT).get();
         return true;
@@ -53,16 +53,10 @@ public final class TransactionUtils {
             throws ExecutionException, InterruptedException {
         Future<Optional<DeviceTransaction>> deviceTxFuture =
                 deviceTransactionManager.getDeviceTransaction(nodeId);
-        if (!deviceTxFuture.get().isPresent()) {
-            return null;
-        }
-        DeviceTransaction deviceTx = deviceTxFuture.get().get();
+        DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow(null);
         Optional<? extends DataObject> readOpt
                 = deviceTx.read(logicalDatastoreType, instanceIdentifier).get();
-        if (!readOpt.isPresent()) {
-            return null;
-        }
-        return readOpt.get();
+        return readOpt.orElseThrow(null);
     }
 
 }

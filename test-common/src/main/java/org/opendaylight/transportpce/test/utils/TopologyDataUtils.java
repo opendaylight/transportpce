@@ -50,11 +50,11 @@ public final class TopologyDataUtils {
                         "Could not transform the input %s into normalized nodes", fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .getDataObject(transformIntoNormalizedNode.get(), Networks.QNAME);
+                    .getDataObject(transformIntoNormalizedNode.orElseThrow(), Networks.QNAME);
                 if (!dataObject.isPresent()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
-                    networks = (Networks) dataObject.get();
+                    networks = (Networks) dataObject.orElseThrow();
                 }
             } catch (IOException e) {
                 LOG.error("An error occured while reading file {}", file, e);
@@ -66,7 +66,7 @@ public final class TopologyDataUtils {
             throw new IllegalStateException("Network is null cannot write it to datastore");
         }
         FluentFuture<? extends CommitInfo> commitFuture = writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
-                networks.nonnullNetwork().values().stream().findFirst().get());
+                networks.nonnullNetwork().values().stream().findFirst().orElseThrow());
         commitFuture.get();
         LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
@@ -97,11 +97,11 @@ public final class TopologyDataUtils {
                         "Could not transform the input %s into normalized nodes", fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .getDataObject(transformIntoNormalizedNode.get(), Network.QNAME);
+                    .getDataObject(transformIntoNormalizedNode.orElseThrow(), Network.QNAME);
                 if (!dataObject.isPresent()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
-                    result = (Network) dataObject.get();
+                    result = (Network) dataObject.orElseThrow();
                 }
             } catch (IOException e) {
                 LOG.error("An error occured while reading file {}", file, e);

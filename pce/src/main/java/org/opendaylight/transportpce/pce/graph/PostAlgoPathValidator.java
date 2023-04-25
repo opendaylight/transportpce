@@ -304,7 +304,7 @@ public class PostAlgoPathValidator {
             if (commonEdgeTpnPool.isEmpty()) {
                 continue;
             }
-            Integer startTribSlot = tribSlotMap.values().stream().findFirst().get().get(0).toJava();
+            Integer startTribSlot = tribSlotMap.values().stream().findFirst().orElseThrow().get(0).toJava();
             Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
             for (Uint16 commonTribPort : commonEdgeTpnPool) {
                 if (tribPort.equals(commonTribPort.toJava())) {
@@ -818,7 +818,7 @@ public class PostAlgoPathValidator {
                     currentNode.getXponderOperationalMode(
                         networkTransactionService
                                 .read(LogicalDatastoreType.CONFIGURATION, nwTpIid)
-                                .get().get().getXpdrNetworkAttributes()),
+                                .get().orElseThrow().getXpdrNetworkAttributes()),
                     // Operational mode is found as an attribute of the network TP
                     opMode);
                     // Operational mode is retrieved from the service Type assuming it is supported

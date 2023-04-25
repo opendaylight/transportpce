@@ -136,7 +136,7 @@ public class ConvertORTopoToTapiTopo {
             .collect(Collectors.toList());
         if (!OpenroadmNodeType.TPDR.equals(this.ietfNodeType)) {
             this.oorOduSwitchingPool = ietfNode.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
-                .values().stream().findFirst().get();
+                .values().stream().findFirst().orElseThrow();
             this.oorClientPortList = ietfNode.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
                 .getTerminationPoint().values().stream()
@@ -318,7 +318,8 @@ public class ConvertORTopoToTapiTopo {
             prunedTapiPhotonicNodes = new ArrayList<>();
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiPhotonicNodes
             = this.tapiNodes.values().stream()
-            .filter(n -> LayerProtocolName.PHOTONICMEDIA.equals(n.getLayerProtocolName().stream().findFirst().get()))
+            .filter(n -> LayerProtocolName.PHOTONICMEDIA.equals(n.getLayerProtocolName().stream().findFirst()
+                    .orElseThrow()))
             .collect(Collectors.toList());
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node
             : tapiPhotonicNodes) {
@@ -344,7 +345,8 @@ public class ConvertORTopoToTapiTopo {
                 String nodeUuid = node.getUuid().getValue();
                 String nepUuid = nep.getUuid().getValue();
                 String nodeName = node.getName().get(new NameKey("otsi node name")).getValue();
-                String nepName = nep.getName().get(new NameKey(nep.getName().keySet().stream().findFirst().get()))
+                String nepName = nep.getName().get(new NameKey(nep.getName().keySet().stream().findFirst()
+                        .orElseThrow()))
                     .getValue();
                 uuidNameMap.put(String.join("--", nodeUuid, nepUuid), String.join("--", nodeName, nepName));
             }

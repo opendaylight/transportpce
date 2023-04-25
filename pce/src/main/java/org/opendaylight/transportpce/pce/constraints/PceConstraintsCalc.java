@@ -170,11 +170,11 @@ public class PceConstraintsCalc {
             ServiceApplicability serviceApplicability = serviceIdentifier.getServiceApplicability();
             Optional<PathDescription> serviceOpt = getPathDescriptionFromDatastore(serviceId);
             if (serviceOpt.isPresent()) {
-                List<String> serviceNodes = getAToZNodeList(serviceOpt.get());
+                List<String> serviceNodes = getAToZNodeList(serviceOpt.orElseThrow());
                 if (serviceApplicability.getNode() && !serviceNodes.isEmpty()) {
                     constraints.setExcludeNodes(serviceNodes);
                 }
-                List<String> serviceLinks = getSRLGList(serviceOpt.get());
+                List<String> serviceLinks = getSRLGList(serviceOpt.orElseThrow());
                 if (serviceApplicability.getLink() && !serviceLinks.isEmpty()) {
                     constraints.setExcludeSrlgLinks(serviceLinks);
                 }
@@ -235,7 +235,7 @@ public class PceConstraintsCalc {
             LOG.info("PCE diversity constraints: Getting path description for service {}", serviceName);
             ServicePaths servicePaths =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).get();
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).orElseThrow();
             if (servicePaths != null) {
                 PathDescription path = servicePaths.getPathDescription();
                 if (path != null) {
