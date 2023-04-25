@@ -51,7 +51,7 @@ public class CatalogUtilsTest extends AbstractTest {
             .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(CATALOG_FILE, StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
-                .transformIntoNormalizedNode(reader).get();
+                .transformIntoNormalizedNode(reader).orElseThrow();
             omCatalog = (OperationalModeCatalog) getDataStoreContextUtil()
                 .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
                     .of(OperationalModeCatalog.QNAME), normalizedNode)

@@ -86,7 +86,7 @@ final class OlmUtils121 {
             //PmNamesEnum pmName = null;
             List<org.opendaylight.yang.gen.v1.http
                     .org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements> measurements =
-                extractWantedMeasurements(currentPmList.get(),
+                extractWantedMeasurements(currentPmList.orElseThrow(),
                     ResourceTypeEnum.forValue(input.getResourceType().getIntValue()),
                     input.getResourceIdentifier(),
                     PmGranularity.forValue(input.getGranularity().getIntValue()),

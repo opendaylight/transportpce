@@ -105,7 +105,7 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
                 break;
             case Failed:
                 LOG.error("Renderer service delete failed !");
-                Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+                Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
                 sendNbiNotification(new PublishNotificationProcessServiceBuilder()
                         .setServiceName(service.getServiceName())
                         .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
@@ -236,7 +236,7 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
      */
     private void onFailedServiceImplementation(String serviceName) {
         LOG.error("Renderer implementation failed !");
-        Services service = serviceDataStoreOperations.getService(input.getServiceName()).get();
+        Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
         sendNbiNotification(new PublishNotificationProcessServiceBuilder()
                 .setServiceName(service.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())

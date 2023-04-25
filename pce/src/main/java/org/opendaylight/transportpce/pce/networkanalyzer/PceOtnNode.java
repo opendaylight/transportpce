@@ -255,7 +255,7 @@ public class PceOtnNode implements PceNode {
         }
         List<NonBlockingList> nblList = new ArrayList<>(
                 node1.getSwitchingPools().nonnullOduSwitchingPools()
-                        .values().stream().findFirst().get()
+                        .values().stream().findFirst().orElseThrow()
                                 .getNonBlockingList().values());
         netwTps.sort(Comparator.comparing(TpId::getValue));
 
@@ -336,7 +336,7 @@ public class PceOtnNode implements PceNode {
                 || portConAttr.getOdtuTpnPool() == null) {
             return false;
         }
-        return checkFirstOdtuTpn(portConAttr.getOdtuTpnPool().values().stream().findFirst().get());
+        return checkFirstOdtuTpn(portConAttr.getOdtuTpnPool().values().stream().findFirst().orElseThrow());
     }
 
     private boolean checkFirstOdtuTpn(OdtuTpnPool otPool) {
@@ -428,7 +428,7 @@ public class PceOtnNode implements PceNode {
             XpdrTpPortConnectionAttributes portConAttr =
                 tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes();
             if (portConAttr != null && portConAttr.getOdtuTpnPool() != null) {
-                OdtuTpnPool otPool = portConAttr.getOdtuTpnPool().values().stream().findFirst().get();
+                OdtuTpnPool otPool = portConAttr.getOdtuTpnPool().values().stream().findFirst().orElseThrow();
                 if (checkFirstOdtuTpn(otPool)) {
                     tpAvailableTribPort.put(tp.getTpId().getValue(), new ArrayList<>(otPool.getTpnPool()));
                 }

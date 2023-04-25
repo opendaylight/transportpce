@@ -156,7 +156,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                      nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
-            return optionalNode.get();
+            return optionalNode.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting network node for node id {} from {} topology",
                     nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
@@ -188,7 +188,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                         nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
-            return optionalNode.get();
+            return optionalNode.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting common network node for node id {} from {} topology",
                     nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
@@ -227,7 +227,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
                     .read(LogicalDatastoreType.CONFIGURATION, tpIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
-            return optionalTerminationPoint.isEmpty() ? null : optionalTerminationPoint.get();
+            return optionalTerminationPoint.isEmpty() ? null : optionalTerminationPoint.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
                     tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
@@ -260,7 +260,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                         tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 return null;
             }
-            return optionalTerminationPoint.get();
+            return optionalTerminationPoint.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting common-network termination {} for node id {} point from {} topology",
                     tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);

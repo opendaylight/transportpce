@@ -302,7 +302,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
-        service = serviceOpt.get();
+        service = serviceOpt.orElseThrow();
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
@@ -434,7 +434,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName));
         }
 
-        Services service = servicesObject.get();
+        Services service = servicesObject.orElseThrow();
         State state = service.getOperationalState();
 
         if (state == State.InService) {
@@ -524,7 +524,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.serviceNotInDS(serviceName),
                     ResponseCodes.RESPONSE_FAILED);
         }
-        Services service = servicesObject.get();
+        Services service = servicesObject.orElseThrow();
         Optional<ServicePaths> servicePathsObject = this.serviceDataStoreOperations.getServicePath(serviceName);
         if (servicePathsObject.isEmpty()) {
             LOG.warn("serviceReroute: {}", LogMessages.servicePathNotInDS(serviceName));
@@ -533,7 +533,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     LogMessages.servicePathNotInDS(serviceName),
                     ResponseCodes.RESPONSE_FAILED);
         }
-        ServicePaths servicePaths = servicePathsObject.get();
+        ServicePaths servicePaths = servicePathsObject.orElseThrow();
         // serviceInput for later use maybe...
         ServiceInput serviceInput = new ServiceInput(input);
         serviceInput.setServiceAEnd(service.getServiceAEnd());

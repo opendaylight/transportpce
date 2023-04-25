@@ -67,7 +67,7 @@ public class TapiInitialORMapping {
             LOG.error("Couldnt obtain OR services from datastore");
             return;
         }
-        ServiceList orServices = optOrServices.get();
+        ServiceList orServices = optOrServices.orElseThrow();
         if (orServices.getServices() == null) {
             LOG.info("No services in datastore. No mapping needed");
             return;

@@ -400,9 +400,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     // Take the first and last value in the list of OpucnTribSlot (assuming SH would provide
                     // min and max value only, size two)
                     OpucnTribSlotDef minOpucnTs = input.getOpucnTribSlots().stream()
-                        .min((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).get();
+                        .min((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).orElseThrow();
                     OpucnTribSlotDef maxOpucnTs = input.getOpucnTribSlots().stream()
-                        .max((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).get();
+                        .max((ts1, ts2) -> ts1.getValue().compareTo(ts2.getValue())).orElseThrow();
                     if (node.getClientTp() != null) {
                         createdEthInterfaces.add(openRoadmInterfaceFactory.createOpenRoadmEth100GInterface(
                             node.getNodeId(), node.getClientTp()));
@@ -439,7 +439,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             Set<String> createdConnections = new HashSet<>();
             if (!createdOduInterfaces.isEmpty()) {
                 Optional<String> connectionNameOpt = postCrossConnect(new ArrayList<>(createdOduInterfaces), node);
-                createdConnections.add(connectionNameOpt.get());
+                createdConnections.add(connectionNameOpt.orElseThrow());
                 LOG.info("Created cross connects");
             }
             nodeInterfaces.add(new NodeInterfaceBuilder()
@@ -503,7 +503,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             Set<String> createdConnections = new HashSet<>();
             if (createdOduInterfaces.size() == 2) {
                 Optional<String> connectionNameOpt = postCrossConnect(new ArrayList<>(createdOduInterfaces), node);
-                createdConnections.add(connectionNameOpt.get());
+                createdConnections.add(connectionNameOpt.orElseThrow());
                 LOG.info("Created cross connects");
             }
             nodeInterfaces.add(new NodeInterfaceBuilder()

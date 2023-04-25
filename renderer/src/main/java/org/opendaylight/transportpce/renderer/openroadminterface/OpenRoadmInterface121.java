@@ -329,7 +329,7 @@ public class OpenRoadmInterface121 {
             LOG.info("xd {} not found !", xc);
             return false;
         }
-        RoadmConnections rc = crossconnection.get();
+        RoadmConnections rc = crossconnection.orElseThrow();
         LOG.info("xd {} found", xc);
         if (rc.getSource().getSrcIf().equals(interfaceName)
                 || rc.getDestination().getDstIf().equals(interfaceName)) {

@@ -76,7 +76,8 @@ public class R2RTapiLinkDiscovery {
                     return new HashMap<>();
                 }
                 // get neighbor list
-                NbrList nbr121List = protocol121Object.get().augmentation(Protocols1.class).getLldp().getNbrList();
+                NbrList nbr121List = protocol121Object.orElseThrow().augmentation(Protocols1.class).getLldp()
+                    .getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr121List.getIfName().size());
                 // try to create rdm2rdm link
                 return rdm2rdmLinkCreatev121(nodeId, tapiTopoUuid, nbr121List);
@@ -98,7 +99,7 @@ public class R2RTapiLinkDiscovery {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return new HashMap<>();
                 }
-                var nbr221List = protocol221Object.get().augmentation(
+                var nbr221List = protocol221Object.orElseThrow().augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
                     .getLldp().getNbrList();
                 LOG.info("LLDP subtree is present. Device has {} neighbours", nbr221List.getIfName().size());
@@ -115,21 +116,21 @@ public class R2RTapiLinkDiscovery {
 
     private boolean hasNoNeighbor121(Optional<Protocols> protocol121Object) {
         return protocol121Object.isEmpty()
-                || protocol121Object.get().augmentation(Protocols1.class) == null
-                || protocol121Object.get().augmentation(Protocols1.class).getLldp() == null
-                || protocol121Object.get().augmentation(Protocols1.class).getLldp().getNbrList() == null;
+                || protocol121Object.orElseThrow().augmentation(Protocols1.class) == null
+                || protocol121Object.orElseThrow().augmentation(Protocols1.class).getLldp() == null
+                || protocol121Object.orElseThrow().augmentation(Protocols1.class).getLldp().getNbrList() == null;
     }
 
     private boolean hasNoNeighbor221(Optional<
             org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
                     .openroadm.device.Protocols> protocol221Object) {
         return protocol221Object.isEmpty()
-                || protocol221Object.get().augmentation(
+                || protocol221Object.orElseThrow().augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class) == null
-                || protocol221Object.get().augmentation(
+                || protocol221Object.orElseThrow().augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
                     .getLldp() == null
-                || protocol221Object.get().augmentation(
+                || protocol221Object.orElseThrow().augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1.class)
                     .getLldp().getNbrList() == null;
     }
@@ -263,12 +264,12 @@ public class R2RTapiLinkDiscovery {
 
             Optional<Nodes> nodesObject = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
                 nodesIID).get();
-            if (nodesObject.isEmpty() || (nodesObject.get().getCpToDegree() == null)) {
+            if (nodesObject.isEmpty() || (nodesObject.orElseThrow().getCpToDegree() == null)) {
                 LOG.warn("Could not find mapping for Interface {} for nodeId {}", interfaceName,
                     nodeId.getValue());
                 return null;
             }
-            Collection<CpToDegree> cpToDeg = nodesObject.get().nonnullCpToDegree().values();
+            Collection<CpToDegree> cpToDeg = nodesObject.orElseThrow().nonnullCpToDegree().values();
             Stream<CpToDegree> cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
                 .filter(cp -> cp.getInterfaceName().equals(interfaceName));
             if (cpToDegStream != null) {
@@ -277,8 +278,8 @@ public class R2RTapiLinkDiscovery {
                     LOG.debug("Not found so returning nothing");
                     return null;
                 }
-                LOG.debug("Found and returning {}",firstCpToDegree.get().getDegreeNumber().intValue());
-                return firstCpToDegree.get().getDegreeNumber().intValue();
+                LOG.debug("Found and returning {}",firstCpToDegree.orElseThrow().getDegreeNumber().intValue());
+                return firstCpToDegree.orElseThrow().getDegreeNumber().intValue();
             } else {
                 LOG.warn("CircuitPack stream couldnt find anything for nodeId: {} and interfaceName: {}",
                     nodeId.getValue(),interfaceName);
@@ -295,8 +296,8 @@ public class R2RTapiLinkDiscovery {
         try {
             Optional<Nodes> nodesObject = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
                 nodesIID).get();
-            if (nodesObject.isPresent() && (nodesObject.get().getMapping() != null)) {
-                Collection<Mapping> mappingList = nodesObject.get().nonnullMapping().values();
+            if (nodesObject.isPresent() && (nodesObject.orElseThrow().getMapping() != null)) {
+                Collection<Mapping> mappingList = nodesObject.orElseThrow().nonnullMapping().values();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
                     + degreeCounter)).collect(Collectors.toList());
                 if (mappingList.size() == 1) {

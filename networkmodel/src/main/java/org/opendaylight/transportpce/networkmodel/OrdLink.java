@@ -116,7 +116,7 @@ final class OrdLink {
                 Optional<TerminationPoint> tpOpt;
                 tpOpt = tpFf.get();
                 if (tpOpt.isPresent()) {
-                    return tpOpt.get();
+                    return tpOpt.orElseThrow();
                 }
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,

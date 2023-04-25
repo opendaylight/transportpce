@@ -140,9 +140,9 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         FluentFuture<Optional<Node>> switchFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, switchIID);
 
-        otnMuxA = muxAFuture.get().get();
-        otnMuxC = muxCFuture.get().get();
-        otnSwitch = switchFuture.get().get();
+        otnMuxA = muxAFuture.get().orElseThrow();
+        otnMuxC = muxCFuture.get().orElseThrow();
+        otnSwitch = switchFuture.get().orElseThrow();
 
         KeyedInstanceIdentifier<Node, NodeKey> tpdrIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -150,7 +150,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")));
         FluentFuture<Optional<Node>> tpdrFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, tpdrIID);
-        tpdr100G = tpdrFuture.get().get();
+        tpdr100G = tpdrFuture.get().orElseThrow();
 
         InstanceIdentifier<Network1> linksIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -158,7 +158,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .augmentation(Network1.class);
         FluentFuture<Optional<Network1>> linksFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, linksIID);
-        otnLinks = linksFuture.get().get().getLink();
+        otnLinks = linksFuture.get().orElseThrow().getLink();
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
@@ -816,7 +816,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("otsi node name")));
         assertEquals(1, node.getLayerProtocolName().size(),
             "otsi node should manage a single protocol layer : PHOTONIC_MEDIA");
-        assertEquals(LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().stream().findFirst().get(),
+        assertEquals(LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().stream().findFirst().orElseThrow(),
             "otsi node should manage a single protocol layer : PHOTONIC_MEDIA");
         List<OwnedNodeEdgePoint> nepsI = node.nonnullOwnedNodeEdgePoint().values().stream()
             .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint")))
@@ -1269,12 +1269,12 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         if ("OTU4".equals(prefix)) {
             assertEquals(
                 LayerProtocolName.PHOTONICMEDIA.getName(),
-                link.getLayerProtocolName().stream().findFirst().get().getName(),
+                link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
                 "otn link should be between 2 nodes of protocol layers PHOTONIC_MEDIA");
         } else if ("ODTU4".equals(prefix)) {
             assertEquals(
                 LayerProtocolName.ODU.getName(),
-                link.getLayerProtocolName().stream().findFirst().get().getName(),
+                link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
                 "otn link should be between 2 nodes of protocol layers ODU");
         }
         assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection(), "otn tapi link should be BIDIRECTIONAL");
@@ -1307,7 +1307,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         assertEquals(linkUuid, link.getUuid(), "bad uuid for link");
         assertEquals(
             LayerProtocolName.PHOTONICMEDIA.getName(),
-            link.getLayerProtocolName().stream().findFirst().get().getName(),
+            link.getLayerProtocolName().stream().findFirst().orElseThrow().getName(),
             "oms link should be between 2 nodes of protocol layers PHOTONIC_MEDIA");
         assertEquals(ForwardingDirection.BIDIRECTIONAL, link.getDirection(), "otn tapi link should be BIDIRECTIONAL");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
