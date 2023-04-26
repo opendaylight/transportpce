@@ -22,6 +22,30 @@
       },
       "revId": "a5674b310f25344ead7c1202aabd5e79205104f5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7126b17d_7ab4e816",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T07:18:30Z",
+      "side": 1,
+      "message": "Closely related not.\nBut components removal strongly affected the structure of this file as noticed in https://git.opendaylight.org/gerrit/c/transportpce/+/104974\nwhat indirectly induced the need of a deeper refactoring.",
+      "parentUuid": "b5184b0e_5acabe37",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "a5674b310f25344ead7c1202aabd5e79205104f5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
