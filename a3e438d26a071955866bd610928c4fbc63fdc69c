@@ -34,6 +34,24 @@
       "parentUuid": "f9f55486_ad06e175",
       "revId": "a3e438d26a071955866bd610928c4fbc63fdc69c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d41738_a4f0add6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-26T07:46:08Z",
+      "side": 1,
+      "message": "OK, I\u0027ll come up with a new PS with an alternate code style.\nRegarding the issue of code readability, I clearly prefer to prioritize real human developers contributing or considering contributing to transportpce over the git tool.",
+      "parentUuid": "300f56f5_428bf30f",
+      "revId": "a3e438d26a071955866bd610928c4fbc63fdc69c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
