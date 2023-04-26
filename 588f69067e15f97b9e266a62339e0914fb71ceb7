@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14bfddbe_44558d48",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121Test.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T11:10:24Z",
+      "side": 1,
+      "message": "since we do not need anymore to sort them, I think we can remove the testsMappings and mappings intermediate variables",
+      "revId": "588f69067e15f97b9e266a62339e0914fb71ceb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b475c7cb_87627226",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T11:10:24Z",
+      "side": 1,
+      "message": "why not here too?\n\nAlso I suspect this needs to be mutable... Please can you confirm it needn\u0027t ?",
+      "revId": "588f69067e15f97b9e266a62339e0914fb71ceb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69b3aef8_1c3cb8a3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T11:10:24Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "588f69067e15f97b9e266a62339e0914fb71ceb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68285f03_7fff2434",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T11:10:24Z",
+      "side": 1,
+      "message": "are we sure this list size will be \u003c\u003d 10 ?",
+      "revId": "588f69067e15f97b9e266a62339e0914fb71ceb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7c5bb5f_3edeb291",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T11:10:24Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "588f69067e15f97b9e266a62339e0914fb71ceb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
