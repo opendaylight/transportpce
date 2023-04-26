@@ -16,6 +16,24 @@
       "message": "Personally, I\u0027m not at all keen on this kind of code style, where each method parameter, or variable affectation is in a new line. I would prefer we keep what has been generally done untils now (except few changes from you), wrapping lines with adequat indendatation when necessary.",
       "revId": "a3e438d26a071955866bd610928c4fbc63fdc69c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "300f56f5_428bf30f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-04-26T07:28:48Z",
+      "side": 1,
+      "message": "Please, feel free to propose anything you may find more suitable.\nIMO the worm was already in the fruit before this change because of long methods prototype with many arguments (convention over configuration issue).\nhttps://softwareengineering.stackexchange.com/questions/368021/is-too-many-parameters-a-visual-or-a-logical-issue\n\nIn that case, it is more conveninent to rely on a vertical parameters separation with one or very few per line.\nAs noticed in https://git.opendaylight.org/gerrit/c/transportpce/+/105516\nGit automatic conflict resolution is based on a diff per line and not per word strategy.",
+      "parentUuid": "f9f55486_ad06e175",
+      "revId": "a3e438d26a071955866bd610928c4fbc63fdc69c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
