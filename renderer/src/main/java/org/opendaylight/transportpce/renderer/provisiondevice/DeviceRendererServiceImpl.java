@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -166,7 +165,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         // Split the string based on # pass the last element as the supported Interface
                         // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
                         String[] listOfSuppOchInf = supportingOchInterface.split("#");
-                        List<String> createdOchInf = Arrays.asList(listOfSuppOchInf);
+                        List<String> createdOchInf = List.of(listOfSuppOchInf);
                         createdOchInterfaces.addAll(createdOchInf);
                         LOG.info("DEST all otsi interfaces {}", createdOchInterfaces);
                         // Taking the last element
@@ -211,7 +210,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         // Split the string based on # pass the last element as the supported Interface
                         // This is needed for 7.1 device models with B100G, we have OTSI, OTSI-group combined as OCH
                         String[] listOfSuppOchInf = supportingOchInterface.split("#");
-                        List<String> tmpCreatedOchInterfaces = Arrays.asList(listOfSuppOchInf);
+                        List<String> tmpCreatedOchInterfaces = List.of(listOfSuppOchInf);
                         createdOchInterfaces.addAll(tmpCreatedOchInterfaces);
                         // Taking the last element
                         supportingOchInterface = tmpCreatedOchInterfaces.get(tmpCreatedOchInterfaces.size() - 1);

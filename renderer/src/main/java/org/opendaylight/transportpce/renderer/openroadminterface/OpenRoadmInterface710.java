@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -198,7 +197,7 @@ public class OpenRoadmInterface710 {
                     .setOtsiRate(R100GOtsi.VALUE)
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic14.VALUE)
-                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1))))
+                        .setIid(new ArrayList<>(List.of(Uint8.valueOf(1))))
                         .build());
                 break;
             case 200:

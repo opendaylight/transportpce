@@ -18,7 +18,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
@@ -76,7 +76,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         spectrumInformation.setCenterFrequency(BigDecimal.valueOf(195.8));
         assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation));
         assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation),
-            Arrays.asList(logicalConnPoint + "-nmc-761:768"));
+            List.of(logicalConnPoint + "-nmc-761:768"));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         spectrumInformation.setMaxFrequency(BigDecimal.valueOf(195.825));
         assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint,spectrumInformation));
         assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation),
-            Arrays.asList(logicalConnPoint + "-mc-761:768", logicalConnPoint + "-nmc-761:768"));
+            List.of(logicalConnPoint + "-mc-761:768", logicalConnPoint + "-nmc-761:768"));
     }
 
     @Test

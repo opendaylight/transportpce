@@ -16,7 +16,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -113,31 +113,31 @@ public class PortMappingVersion121Test {
         // mock node info
         final Info info = getInfo2();
 
-        List<Interfaces> interfacesList = Arrays.asList(getInterfaces("i1"), getInterfaces("i2"));
+        List<Interfaces> interfacesList = List.of(getInterfaces("i1"), getInterfaces("i2"));
 
         // mock 1 bidirectional port for degree
         Ports ports = getPortsWithInterfaces(interfacesList, "p1");
-        List<Ports> portsList = Arrays.asList(ports);
+        List<Ports> portsList = List.of(ports);
 
         // mock 2 unidirectional ports for degree
         Ports ports2 = getPorts("p2", Port.PortQual.RoadmExternal, "c3", "p3", Direction.Rx);
         Ports ports3 = getPorts("p3", Port.PortQual.RoadmExternal, "c3", "p2", Direction.Tx);
-        List<Ports> portsList2 = Arrays.asList(ports2, ports3);
+        List<Ports> portsList2 = List.of(ports2, ports3);
 
         // mock 2 unidirectional ports for degree, reverse direction
         Ports ports22 = getPorts("p22", Port.PortQual.RoadmExternal, "c5", "p33", Direction.Tx);
         Ports ports33 = getPorts("p33", Port.PortQual.RoadmExternal, "c5", "p22", Direction.Rx);
-        List<Ports> portsList22 = Arrays.asList(ports22, ports33);
+        List<Ports> portsList22 = List.of(ports22, ports33);
 
         // mock 2 unidirectional ports for srg
         Ports ports4 = getPorts("p4", Port.PortQual.RoadmExternal, "c4", "p5", Direction.Rx);
         Ports ports5 = getPorts("p5", Port.PortQual.RoadmExternal, "c4", "p4", Direction.Tx);
-        List<Ports> portsList4 = Arrays.asList(ports4, ports5);
+        List<Ports> portsList4 = List.of(ports4, ports5);
 
         // mock 2 unidirectional ports for srg, reverse direction
         Ports ports44 = getPorts("p44", Port.PortQual.RoadmExternal, "c6", "p55", Direction.Tx);
         Ports ports55 = getPorts("p55", Port.PortQual.RoadmExternal, "c6", "p44", Direction.Rx);
-        List<Ports> portsList44 = Arrays.asList(ports44, ports55);
+        List<Ports> portsList44 = List.of(ports44, ports55);
 
         // mock 6 circuit packs
         final CircuitPacks circuitPackObject = getCircuitPacks(portsList, "c1", "pc1");
@@ -466,28 +466,25 @@ public class PortMappingVersion121Test {
             LOG.error("Failed to read mapping.", e);
             fail();
         }
-        List<String> testMappings = Arrays.asList("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
-                "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX");
-        List<String> mappings = new ArrayList<>();
-        List<Nodes> nodes = new ArrayList<>(network.nonnullNodes().values());
-        List<Mapping> mappingValues = new ArrayList<>(nodes.get(0).nonnullMapping().values());
-        for (int i = 0; i < testMappings.size(); i++) {
-            mappings.add(mappingValues.get(i).getLogicalConnectionPoint());
-        }
-        Collections.sort(testMappings);
-        Collections.sort(mappings);
+        List<String> testMappings = List.of("DEG1-TTP-TXRX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX",
+            "SRG1-PP1-TXRX", "SRG2-PP1-RX", "SRG2-PP1-TX", "SRG3-PP1-RX", "SRG3-PP1-TX");
+        List<String> mappings = network.nonnullNodes().values().stream().findFirst().orElseThrow()
+            .nonnullMapping().values().stream()
+            .map(Mapping::getLogicalConnectionPoint)
+            .sorted()
+            .collect(Collectors.toList());
         assertEquals(testMappings, mappings, "test mapping are equals to mapping");
 
+        Mapping mapping = network.nonnullNodes().values().stream().findFirst().orElseThrow()
+            .nonnullMapping().values().stream().findFirst().orElseThrow();
         // test updateMapping
-        assertTrue(portMappingVersion121.updateMapping("node", mappingValues.get(0)),
-            "update mapping for node returns true");
+        assertTrue(portMappingVersion121.updateMapping("node", mapping), "update mapping for node returns true");
 
         // test createMapping for non-existent roadm node
         assertFalse(portMappingVersion121.createMappingData("node2"), "create non existed roadm node returns false");
 
         // test updateMapping for null roadm node
-        assertFalse(portMappingVersion121.updateMapping(null, mappingValues.get(0)),
-            "updating null roadm node returns false");
+        assertFalse(portMappingVersion121.updateMapping(null, mapping), "updating null roadm node returns false");
 
     }
 

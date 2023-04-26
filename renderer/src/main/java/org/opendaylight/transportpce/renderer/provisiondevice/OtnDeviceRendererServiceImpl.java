@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -305,13 +304,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
     private String getConnectionNumber(Nodes node, String networkTp, String oduType) {
         List<String> list1 = new ArrayList<>();
-        List<String> list2 = new ArrayList<>(Arrays.asList("x"));
+        List<String> list2 = new ArrayList<>(List.of("x"));
         if (node.getClientTp() != null) {
-            list1.addAll(Arrays.asList(node.getClientTp(), oduType));
-            list2.addAll(Arrays.asList(networkTp, oduType));
+            list1.addAll(List.of(node.getClientTp(), oduType));
+            list2.addAll(List.of(networkTp, oduType));
         } else if (node.getNetwork2Tp() != null) {
-            list1.addAll(Arrays.asList(networkTp, oduType));
-            list2.addAll(Arrays.asList(node.getNetwork2Tp(), oduType));
+            list1.addAll(List.of(networkTp, oduType));
+            list2.addAll(List.of(node.getNetwork2Tp(), oduType));
         } else {
             return "";
         }

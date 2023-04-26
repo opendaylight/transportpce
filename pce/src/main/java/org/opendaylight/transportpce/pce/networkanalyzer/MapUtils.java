@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public final class MapUtils {
 
             if (excNodes.contains(node.getNodeId().getValue())) {
                 LOG.debug("mapDiversityConstraints setExcludeSupNodes for node {}", node.getNodeId().getValue());
-                pceHardConstraints.setExcludeSupNodes(Arrays.asList(getSupNetworkNode(node)));
+                pceHardConstraints.setExcludeSupNodes(List.of(getSupNetworkNode(node)));
             }
         }
 
