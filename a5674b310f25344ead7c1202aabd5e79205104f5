@@ -46,6 +46,30 @@
       },
       "revId": "a5674b310f25344ead7c1202aabd5e79205104f5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e23f0dc1_12fbee8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-04-26T07:39:50Z",
+      "side": 1,
+      "message": "If you had re-opened the change you mention, it would have been relevant because the commit message clearly states that. But, here, for anyone looking at this isolated change, the relationship is not understandable.",
+      "parentUuid": "7126b17d_7ab4e816",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "a5674b310f25344ead7c1202aabd5e79205104f5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
