@@ -5,13 +5,12 @@ module transportpce-pathDescription {
   import org-openroadm-common-optical-channel-types {
     prefix org-openroadm-common-optical-channel-types;
   }
-
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
     revision-date 2019-11-29;
   }
-  import org-openroadm-otn-common-types {
-    prefix org-openroadm-otn-common-types;
+  import transportpce-common-types {
+    prefix transportpce-common-types;
   }
 
   organization
@@ -49,6 +48,10 @@ module transportpce-pathDescription {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2023-05-01 {
+      description
+        "Version 1.7. Add central frequency and spectral width parameters";
+    }
   revision 2021-07-05 {
     description
       "Version 1.6.4. To add a list of trib-slots and complex-trib-slots
@@ -134,26 +137,7 @@ module transportpce-pathDescription {
          description
          "Maximum frequency in THz.";
       }
-      leaf min-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Minimum trib slots in the form of 'A.B',
-              where A and B correspond to port-number and trib-slots respectively";
-      }
-      leaf max-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Maximum trib slots in the form of 'A.B',
-              where A and B correspond to port-number and trib-slots respectively";
-      }
-      leaf rate {
-        type uint32;
-        mandatory true;
-      }
-      leaf modulation-format {
-        type string;
-        // enum ?
-      }
+      uses transportpce-common-types:service-result-rpc-common-parameters;
       list aToZ {
         key "id";
         leaf id {
@@ -178,26 +162,7 @@ module transportpce-pathDescription {
          description
          "Maximum frequency in THz.";
       }
-      leaf min-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Minimum trib slots in the form of 'A.B',
-              where A and B correspond to port-number and trib-slots respectively";
-      }
-      leaf max-trib-slot {
-          type org-openroadm-otn-common-types:opucn-trib-slot-def;
-          description
-              "Maximum trib slots in the form of 'A.B',
-              where A and B correspond to port-number and trib-slots respectively";
-      }
-      leaf rate {
-        type uint32;
-        mandatory true;
-      }
-      leaf modulation-format {
-        type string;
-        // enum ?
-      }
+      uses transportpce-common-types:service-result-rpc-common-parameters;
       list zToA {
         key "id";
         leaf id {

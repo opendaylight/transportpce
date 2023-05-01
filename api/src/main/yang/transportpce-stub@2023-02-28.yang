@@ -5,7 +5,7 @@ module transportpce-stub {
 
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2021-07-05;
+    revision-date 2023-05-01;
   }
 
 

@@ -56,9 +56,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.a
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev211210.xpdr.port.connection.attributes.WavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev210705.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;

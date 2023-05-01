@@ -10,6 +10,15 @@ module transportpce-common-types {
     prefix org-openroadm-common-types;
     revision-date 2018-10-19;
   }
+  import org-openroadm-common-link-types {
+      prefix org-openroadm-common-link-types;
+  }
+  import org-openroadm-common-optical-channel-types {
+      prefix org-openroadm-common-optical-channel-types;
+  }
+  import org-openroadm-otn-common-types {
+      prefix org-openroadm-otn-common-types;
+  }
 
   revision 2022-09-26 {
     description
@@ -691,4 +700,62 @@ module transportpce-common-types {
          the destination";
     }
   }
+
+  grouping service-result-rpc-common-parameters {
+          leaf central-frequency {
+                type org-openroadm-common-optical-channel-types:frequency-THz;
+                description
+                    "Assigned central-frquency in THz";
+          }
+          leaf width {
+                type org-openroadm-common-optical-channel-types:frequency-GHz;
+                description
+                    "Assigned frequency width (transponder/NMC)";
+          }
+          leaf optical-operational-mode {
+                type string;
+                description
+                    "Operation mode ID selected by the PCE";
+          }
+          leaf rx-estimated-osnr {
+                type org-openroadm-common-link-types:ratio-dB;
+                description
+                     "Estimated OSNR for the path";
+          }
+          leaf rx-estimated-gsnr {
+                type org-openroadm-common-link-types:ratio-dB;
+                description
+                     "Estimated Generalized SNR (including non linear impairments) for the path";
+          }
+          leaf max-output-power {
+                type org-openroadm-common-link-types:ratio-dB;
+                description
+                  "Maximum output-power";
+          }
+          leaf min-output-power {
+            type org-openroadm-common-link-types:ratio-dB;
+            description
+              "Minimum output-power";
+          }
+          leaf min-trib-slot {
+              type org-openroadm-otn-common-types:opucn-trib-slot-def;
+              description
+                  "Minimum trib slots in the form of 'A.B',
+                  where A and B correspond to port-number and trib-slots respectively";
+          }
+          leaf max-trib-slot {
+              type org-openroadm-otn-common-types:opucn-trib-slot-def;
+              description
+                  "Maximum trib slots in the form of 'A.B',
+                  where A and B correspond to port-number and trib-slots respectively";
+          }
+          leaf rate {
+            type uint32;
+            mandatory true;
+          }
+          leaf modulation-format {
+            type string;
+            // enum ?
+          }
+    }
 }
