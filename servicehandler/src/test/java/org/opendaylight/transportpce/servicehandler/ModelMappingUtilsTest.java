@@ -146,13 +146,6 @@ public class ModelMappingUtilsTest extends AbstractTest {
     }
 
     @Test
-    //TODO : is this unit test relevant ?
-    void mappingServicesNullServiceCreateInput() {
-        Services services = ModelMappingUtils.mappingServices(null, null);
-        assertEquals(new ServicesBuilder().withKey(new ServicesKey("unknown")).build(), services);
-    }
-
-    @Test
     void mappingServiceNotNullServiceReconfigureInput() {
         Services services = ModelMappingUtils.mappingServices(null, buildServiceConfigurationInput());
         assertEquals("service 1", services.getServiceName());
