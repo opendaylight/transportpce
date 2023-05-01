@@ -14,6 +14,7 @@ import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
@@ -87,10 +88,11 @@ public class PcePathDescription {
      * @return a builder for AtoZDirection object
      */
     private AToZDirectionBuilder buildAtoZDirection(Map<AToZKey, AToZ> atozMap) {
+        ModulationFormat modulationFormat = GridConstant.RATE_MODULATION_FORMAT_MAP
+                .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk);
         AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
             .setRate(Uint32.valueOf(rc.getRate()))
-            .setModulationFormat(GridConstant.RATE_MODULATION_FORMAT_MAP
-                    .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
+            .setModulationFormat(modulationFormat.getName())
             .setAToZ(atozMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
@@ -99,9 +101,22 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())));
-                atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())));
+                atoZDirectionBldr.setAToZMaxFrequency(new FrequencyTHz(
+                        Decimal64.valueOf(
+                                rc.getMaxFreq())
+                ));
+                atoZDirectionBldr.setAToZMinFrequency(new FrequencyTHz(
+                        Decimal64.valueOf(
+                                rc.getMinFreq())
+                ));
                 atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
+                // Used precision 5 to get the exact decimal values of the frequency
+                atoZDirectionBldr.setCentralFrequency(new FrequencyTHz(
+                        GridUtils.getCentralFrequencyWithPrecision(rc.getMinFreq(),
+                                rc.getMaxFreq(), 5).getValue()
+                        ));
+                atoZDirectionBldr.setWidth(GridUtils.getWidthFromRateAndModulationFormat(
+                        Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -135,9 +150,10 @@ public class PcePathDescription {
      * @return a builder for ZtoADirection object
      */
     private ZToADirectionBuilder buildZtoADirection(Map<ZToAKey, ZToA> ztoaMap) {
+        ModulationFormat modulationFormat = GridConstant.RATE_MODULATION_FORMAT_MAP
+                .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk);
         ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder().setRate(Uint32.valueOf(rc.getRate()))
-                .setModulationFormat(GridConstant.RATE_MODULATION_FORMAT_MAP
-                        .getOrDefault(Uint32.valueOf(rc.getRate()), ModulationFormat.DpQpsk).getName())
+                .setModulationFormat(modulationFormat.getName())
                 .setZToA(ztoaMap);
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
@@ -146,9 +162,21 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())));
-                ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())));
+                ztoADirectionBldr.setZToAMaxFrequency(new FrequencyTHz(
+                        Decimal64.valueOf(
+                                rc.getMaxFreq())
+                ));
+                ztoADirectionBldr.setZToAMinFrequency(new FrequencyTHz(
+                        Decimal64.valueOf(
+                                rc.getMinFreq())
+                ));
                 ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
+                ztoADirectionBldr.setCentralFrequency(new FrequencyTHz(
+                        GridUtils.getCentralFrequencyWithPrecision(rc.getMinFreq(),
+                                rc.getMaxFreq(), 4).getValue()
+                ));
+                ztoADirectionBldr.setWidth(GridUtils.getWidthFromRateAndModulationFormat(
+                        Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
