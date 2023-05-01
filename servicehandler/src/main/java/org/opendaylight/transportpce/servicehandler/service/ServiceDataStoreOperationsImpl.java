@@ -276,7 +276,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
-    public OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput) {
+    public OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
+                                             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce
+                                                     .rev220808.service.path.rpc.result.PathDescription pathDescription
+    ) {
         LOG.debug("Writing '{}' Temp Service", tempServiceCreateInput.getCommonId());
         try {
             InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
@@ -285,7 +288,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                             .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp
                                 .service.list.ServicesKey(tempServiceCreateInput.getCommonId()));
             org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
-                .Services service = ModelMappingUtils.mappingServices(tempServiceCreateInput);
+                .Services service = ModelMappingUtils.mappingServices(tempServiceCreateInput, pathDescription);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);

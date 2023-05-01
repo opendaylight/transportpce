@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -182,14 +183,16 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     void createTempServiceShouldBeSuccessForValidInput() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        OperationResult result = this.serviceDataStoreOperations.createTempService(createInput);
+        PathDescription pathDescription = ServiceDataUtils.createPathDescription(0,1, 0, 1);
+        OperationResult result = this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         assertTrue(result.isSuccess());
     }
 
     @Test
     void getTempServiceShouldReturnTheCorrectTempServiceForTheCreatedService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        PathDescription pathDescription = ServiceDataUtils.createPathDescription(0,1, 0, 1);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
 
         Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
                 .Services> optService = this.serviceDataStoreOperations.getTempService(createInput.getCommonId());
@@ -200,7 +203,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     void deleteTempServiceShouldBeSuccessfulForDeletingTempService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        PathDescription pathDescription = ServiceDataUtils.createPathDescription(0,1, 0, 1);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.deleteTempService(createInput.getCommonId());
         assertTrue(result.isSuccess());
     }
@@ -208,7 +212,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     void modifyTempServiceIsSuccessfulForPresentTempService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        PathDescription pathDescription = ServiceDataUtils.createPathDescription(0,1, 0, 1);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.modifyTempService(
             createInput.getCommonId(), State.InService, AdminStates.InService);
         assertTrue(result.isSuccess());
