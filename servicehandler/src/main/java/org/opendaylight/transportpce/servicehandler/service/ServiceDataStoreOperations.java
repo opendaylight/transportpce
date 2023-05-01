@@ -124,9 +124,12 @@ public interface ServiceDataStoreOperations {
      *
      * @param tempServiceCreateInput tempServiceCreateInput data for creation of
      *                               service
+     * @param pathDescription data to update the transport-assignment of the service
      * @return result of createTempService operation
      */
-    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput);
+    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
+                                      org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce
+                                              .rev220808.service.path.rpc.result.PathDescription pathDescription);
 
     Optional<ServicePathList> getServicePaths();
 

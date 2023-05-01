@@ -96,6 +96,7 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
     private void onPathComputationResult(ServicePathRpcResult notification) {
         LOG.info("PCE '{}' Notification received : {}", servicePathRpcResult.getNotificationType().getName(),
                 notification);
+
         if (!checkStatus(notification)) {
             return;
         }
@@ -119,7 +120,8 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
         }
         OperationResult operationResult = null;
         if (tempService) {
-            operationResult = this.serviceDataStoreOperations.createTempService(input.getTempServiceCreateInput());
+            operationResult = this.serviceDataStoreOperations.createTempService(input.getTempServiceCreateInput(),
+                    pathDescription);
             if (!operationResult.isSuccess()) {
                 LOG.error("Temp Service not created in datastore !");
             }

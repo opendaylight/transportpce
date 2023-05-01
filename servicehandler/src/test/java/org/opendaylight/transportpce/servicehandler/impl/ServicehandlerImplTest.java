@@ -46,6 +46,7 @@ import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogInputBuilder;
@@ -104,6 +105,8 @@ public class ServicehandlerImplTest extends AbstractTest {
     @Mock
     private NetworkListener networkModelListenerImpl;
 
+    @Mock
+    private PathDescription pathDescription;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private CatalogDataStoreOperations catalogDataStoreOperations;
     private ServiceCreateInput serviceCreateInput;
@@ -127,6 +130,7 @@ public class ServicehandlerImplTest extends AbstractTest {
         serviceReconfigureInput = ServiceDataUtils.buildServiceReconfigureInput();
         serviceRestorationInput = ServiceDataUtils.buildServiceRestorationInput();
         serviceRerouteInput = ServiceDataUtils.buildServiceRerouteInput();
+        pathDescription = ServiceDataUtils.createPathDescription(0,1,0,1);
     }
 
     @Test
@@ -498,13 +502,13 @@ public class ServicehandlerImplTest extends AbstractTest {
         when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create temp service to delete in the temp delete action
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        serviceDataStoreOperations.createTempService(createInput);
+        serviceDataStoreOperations.createTempService(createInput, pathDescription);
         ListenableFuture<RpcResult<TempServiceDeleteOutput>> result =
-            new ServicehandlerImpl(
-                    pathComputationService, rendererServiceOperations, notificationPublishService,
-                    pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                    serviceDataStoreOperations, catalogDataStoreOperations)
-                .tempServiceDelete(ServiceDataUtils.buildTempServiceDeleteInput(createInput.getCommonId()));
+                new ServicehandlerImpl(
+                        pathComputationService, rendererServiceOperations, notificationPublishService,
+                        pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                        serviceDataStoreOperations, catalogDataStoreOperations)
+                    .tempServiceDelete(ServiceDataUtils.buildTempServiceDeleteInput(createInput.getCommonId()));
         result.addListener(() -> endSignal.countDown(), executorService);
         endSignal.await();
         assertEquals(
