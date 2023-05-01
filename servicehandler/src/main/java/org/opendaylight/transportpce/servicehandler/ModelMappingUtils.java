@@ -9,6 +9,8 @@ package org.opendaylight.transportpce.servicehandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.HashMap;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceAEndBuilder;
@@ -22,6 +24,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev2105
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.response.parameters.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.hierarchy.TransportAssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.hierarchy.transport.assignment.McTtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.hierarchy.transport.assignment.NmcCtp;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.hierarchy.transport.assignment.NmcCtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.hierarchy.transport.assignment.NmcCtpKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.LifecycleState;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -79,6 +86,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.services.SupportingServiceHierarchy;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.services.SupportingServiceHierarchyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.services.SupportingServiceHierarchyKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirection;
@@ -517,7 +527,35 @@ public final class ModelMappingUtils {
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
-            .temp.service.list.Services mappingServices(TempServiceCreateInput tempServiceCreateInput) {
+            .temp.service.list.Services mappingServices(TempServiceCreateInput tempServiceCreateInput,
+                                                        PathDescription pathDescription) {
+        Map<SupportingServiceHierarchyKey, SupportingServiceHierarchy> supportingServiceHierarchyMap = new HashMap<>();
+        Map<NmcCtpKey, NmcCtp> nmcCtpMap = new HashMap<>();
+        SupportingServiceHierarchyKey supportingServiceHierarchyKey = new SupportingServiceHierarchyKey(
+                tempServiceCreateInput.getCommonId());
+        // TODO: here we assume the A-Z and Z-A has parameters
+        LOG.info("Min and Max frequencies are {} {}", pathDescription.getAToZDirection().getAToZMinFrequency(),
+                pathDescription.getAToZDirection().getAToZMinFrequency());
+        nmcCtpMap.put(
+            new NmcCtpKey("1"),
+            new NmcCtpBuilder()
+                .setId("1")
+                .setFrequency(pathDescription.getAToZDirection().getCentralFrequency())
+                .setWidth(pathDescription.getAToZDirection().getWidth())
+                .build());
+        supportingServiceHierarchyMap.put(
+            supportingServiceHierarchyKey,
+            new SupportingServiceHierarchyBuilder().setServiceIdentifier(tempServiceCreateInput.getCommonId())
+                .setTransportAssignment(
+                    new TransportAssignmentBuilder()
+                        .setMcTtp(
+                            new McTtpBuilder()
+                                .setMaxFreq(pathDescription.getAToZDirection().getAToZMaxFrequency())
+                                .setMinFreq(pathDescription.getAToZDirection().getAToZMinFrequency())
+                                .build())
+                        .setNmcCtp(nmcCtpMap)
+                        .build())
+                .build());
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
                 .temp.service.list.ServicesBuilder()
             .setServiceName(tempServiceCreateInput.getCommonId())
@@ -537,6 +575,7 @@ public final class ModelMappingUtils {
             .setServiceZEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210
                     .service.ServiceZEndBuilder(tempServiceCreateInput.getServiceZEnd()).build())
+            .setSupportingServiceHierarchy(supportingServiceHierarchyMap)
             .build();
     }
 
