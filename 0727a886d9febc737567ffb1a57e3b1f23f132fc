@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6272009_cec1a02f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "thanks Bala.  this part of the code definitely needed to be refreshed.\nHere are a few remarks.\n\nHope this helps\nGuillaume",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d4c5351_bfb2771d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "setters could be cascaded here IMO",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee83063_657a67b8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "I am not sure we need this intermediate variable.",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18eef873_f52dea3d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "setters could probably be cascaded here IMO",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363d5de8_df1c4b87",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "LF after the comma would ease reading IMO",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "368cbf68_97591760",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "a few misleading LF here",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4e363e_c4d6caff",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "LF after equal instead of comma would ease reading IMO",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a4b1b91_a97abf73",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "NS revision date split here",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e14545_4daf1f29",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "NS rev date split here",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70e171d1_bf527755",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:46:47Z",
+      "side": 1,
+      "message": "I think it is better to simply remove it if it is no more relevant.\nOtherwise, prefer @skip or @ignore decorators",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
