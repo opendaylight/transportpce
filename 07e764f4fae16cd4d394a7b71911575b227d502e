@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba30ee86_d518bff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:36:43Z",
+      "side": 1,
+      "message": "LGTM\nI noticed a few issues not really related to this change.\nI am fine to fix them separately in another one.",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52499b54_fb321ba5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:36:43Z",
+      "side": 1,
+      "message": "LF after rev230501 would be more indicated IMO",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a5c29d_c4605ccb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:36:43Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee162288_3be5e9dd",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:36:43Z",
+      "side": 1,
+      "message": "I can\u0027t see any possible confusion with any other Node here.\nSo I am not sure we still need the whole NS here.",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "905bcfdf_61bf89c7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-05T14:36:43Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
