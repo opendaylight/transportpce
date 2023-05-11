@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb62663_c31d5fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-05-11T08:49:42Z",
+      "side": 1,
+      "message": "Hi Bala. Same generic comment as for the change regarding the path-description. The temp service-list is gonna include not only the transport assignement details, but also some information about the path computation results (notably osnr) and the settings required on the end-terminals (power/operational-mode). This information will be required in the temp-service-list and will also be used to feed the body of the notification service-rpc-result (4a in the workflow) when the path computation is successful (setting and performance). So my suggestion is to complete the path description with suggested parameters in a first step, and then complete your code to feed in the temp-service-list the computation-results container of the aToZ and zToA list of the topology describing the temp-service. Will put a presentation attached to the Jira Ticket corresponding to your work. Thanks!",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d4c5351_bfb2771d",
