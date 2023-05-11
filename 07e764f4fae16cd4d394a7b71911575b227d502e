@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02644a54_975f602b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-05-11T08:25:47Z",
+      "side": 1,
+      "message": "Thanks Bala for this change. Central frequency and spectral width are needed in the path description if you want to handle the alien wavelength use case, and you did it. Don\u0027t know how far you want to go handling this complex use case. I would suggest to complete your change with additional parameters in the path description that you may need at a time to fully handle it according to the service models 10.1, and 11.1 that we may need to migrate to. Indeed, the parameter you add will probably allow you to handle a PoC, but if you want to handle the full use case, you need to handle the parameters that qualify the results of the path computation and provides the settings required for alien transponder/pluggable. This include : \n_optical-operational-mode\n_rx estimated-osnr\n_rx-estimated-gsnr\n_max-output-power\n_min-output -power  \nEven if we may not be able in a first step to populate all of them (rx-estimated-gsnr, min/max-output power) from the result of the path computation, we can make some modification later to address the full use case. As your change is including a lot of imports refresh due to the modification of path description, even if it adds some work at the end, it seems reasonable to include all what\u0027s needed at the end rather than having to build a new version of the path description... You are on the good track! ;-)",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52499b54_fb321ba5",
