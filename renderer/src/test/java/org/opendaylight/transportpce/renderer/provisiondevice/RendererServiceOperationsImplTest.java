@@ -102,7 +102,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -114,7 +115,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
         doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService).servicePowerSetup(any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -125,7 +127,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -136,7 +139,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -147,7 +151,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -167,7 +172,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         for (String tpToken : interfaceTokens) {
             ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(tpToken);
-            ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input)
+            ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                            false)
                 .get();
             assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
         }
@@ -179,7 +185,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
 //        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService).servicePowerSetup(any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -197,7 +204,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .setMeasurements(measurementsList)
                 .build();
         doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService).getPm(any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -216,7 +224,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .build();
 
         when(this.olmService.getPm(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -241,7 +250,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -254,7 +264,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -267,7 +278,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -289,7 +301,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
@@ -308,7 +321,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .build();
 
         doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService).getPm(any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
+                false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
     }
 
