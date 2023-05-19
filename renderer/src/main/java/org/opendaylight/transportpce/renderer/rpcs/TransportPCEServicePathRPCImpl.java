@@ -56,7 +56,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
         LOG.info("Calling RPC service impl request {}", serviceName);
         ServiceImplementationRequestOutput output = null;
         try {
-            output = this.rendererServiceOperations.serviceImplementation(input).get();
+            output = this.rendererServiceOperations.serviceImplementation(input, false).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC service implementation failed !", e);
         }
