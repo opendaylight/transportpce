@@ -16,7 +16,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
 
 public interface RendererServiceOperations {
 
-    ListenableFuture<ServiceImplementationRequestOutput> serviceImplementation(ServiceImplementationRequestInput input);
+    ListenableFuture<ServiceImplementationRequestOutput> serviceImplementation(ServiceImplementationRequestInput input,
+                                                                               boolean isTempService);
 
     ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input, Services service);
 }

@@ -126,8 +126,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     @Override
     public ListenableFuture<ServiceImplementationRequestOutput>
-            serviceImplementation(ServiceImplementationRequestInput input) {
+            serviceImplementation(ServiceImplementationRequestInput input, boolean isTempService) {
         LOG.info("Calling service impl request {}", input.getServiceName());
+        LOG.debug("Check if it is temp-service {}", isTempService);
         return executor.submit(new Callable<ServiceImplementationRequestOutput>() {
 
             @Override
@@ -163,7 +164,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_OTUC2:
                     case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
-                        if (!manageServicePathCreation(input, serviceType)) {
+                        LOG.debug("Check temp service {}", isTempService);
+                        if (!manageServicePathCreation(input, serviceType, isTempService)) {
                             return ModelMappingUtils
                                 .createServiceImplResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                         }
@@ -477,31 +479,35 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private void olmPowerSetup(
             RollbackProcessor rollbackProcessor,
             ServicePowerSetupInput powerSetupInputAtoZ,
-            ServicePowerSetupInput powerSetupInputZtoA) {
+            ServicePowerSetupInput powerSetupInputZtoA, boolean isTempService) {
 
         //TODO olmPowerSetupFutureAtoZ & olmPowerSetupFutureZtoA & olmFutures used only once
         //     Do notifications & LOG.info deserve this ?
         //TODO use constants for LOG.info & notifications common messages
+        // if the service create is a temp-service, OLM will be skipped
+        if (isTempService) {
+            LOG.info("For temp-service create OLM is not computed and skipped");
+            return;
+        }
         LOG.info("Olm power setup A-Z");
         sendNotifications(
-            ServicePathNotificationTypes.ServiceImplementationRequest,
-            powerSetupInputAtoZ.getServiceName(),
-            RpcStatusEx.Pending,
-            "Olm power setup A-Z");
+                ServicePathNotificationTypes.ServiceImplementationRequest,
+                powerSetupInputAtoZ.getServiceName(),
+                RpcStatusEx.Pending,
+                "Olm power setup A-Z");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureAtoZ =
-            this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputAtoZ));
+                this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputAtoZ));
 
         LOG.info("OLM power setup Z-A");
         sendNotifications(
-            ServicePathNotificationTypes.ServiceImplementationRequest,
-            powerSetupInputAtoZ.getServiceName(),
-            RpcStatusEx.Pending,
-            "Olm power setup Z-A");
+                ServicePathNotificationTypes.ServiceImplementationRequest,
+                powerSetupInputAtoZ.getServiceName(),
+                RpcStatusEx.Pending,
+                "Olm power setup Z-A");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureZtoA =
-            this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputZtoA));
-
+                this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputZtoA));
         ListenableFuture<List<OLMRenderingResult>> olmFutures =
-            Futures.allAsList(olmPowerSetupFutureAtoZ, olmPowerSetupFutureZtoA);
+                Futures.allAsList(olmPowerSetupFutureAtoZ, olmPowerSetupFutureZtoA);
 
         List<OLMRenderingResult> olmResults;
         try {
@@ -510,29 +516,28 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn(OLM_ROLL_BACK_MSG, e);
             sendNotifications(
-                ServicePathNotificationTypes.ServiceImplementationRequest,
-                powerSetupInputAtoZ.getServiceName(),
-                RpcStatusEx.Pending,
-                OLM_ROLL_BACK_MSG);
+                    ServicePathNotificationTypes.ServiceImplementationRequest,
+                    powerSetupInputAtoZ.getServiceName(),
+                    RpcStatusEx.Pending,
+                    OLM_ROLL_BACK_MSG);
             rollbackProcessor.addTask(
-                new OlmPowerSetupRollbackTask("AtoZOLMTask", true, this.olmService, powerSetupInputAtoZ));
+                    new OlmPowerSetupRollbackTask("AtoZOLMTask", true, this.olmService, powerSetupInputAtoZ));
             rollbackProcessor.addTask(
-                new OlmPowerSetupRollbackTask("ZtoAOLMTask", true, this.olmService, powerSetupInputZtoA));
+                    new OlmPowerSetupRollbackTask("ZtoAOLMTask", true, this.olmService, powerSetupInputZtoA));
             return;
         }
-
         rollbackProcessor.addTask(
-            new OlmPowerSetupRollbackTask(
-                "AtoZOLMTask",
-                ! olmResults.get(0).isSuccess(),
-                this.olmService,
-                powerSetupInputAtoZ));
+                new OlmPowerSetupRollbackTask(
+                        "AtoZOLMTask",
+                        !olmResults.get(0).isSuccess(),
+                        this.olmService,
+                        powerSetupInputAtoZ));
         rollbackProcessor.addTask(
-            new OlmPowerSetupRollbackTask(
-                "ZtoAOLMTask",
-                ! olmResults.get(1).isSuccess(),
-                this.olmService,
-                powerSetupInputZtoA));
+                new OlmPowerSetupRollbackTask(
+                        "ZtoAOLMTask",
+                        !olmResults.get(1).isSuccess(),
+                        this.olmService,
+                        powerSetupInputZtoA));
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
@@ -621,7 +626,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
-    private boolean manageServicePathCreation(ServiceImplementationRequestInput input, String serviceType) {
+    private boolean manageServicePathCreation(ServiceImplementationRequestInput input, String serviceType,
+                                              boolean isTempService) {
         ServicePathInputData servicePathInputDataAtoZ =
             ModelMappingUtils
                 .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription(), Action.Create);
@@ -645,7 +651,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             //olmPowerSetupInputAtoZ,
             ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
             //olmPowerSetupInputZtoA
-            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input));
+            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input), isTempService);
         if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
