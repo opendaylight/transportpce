@@ -244,6 +244,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         }
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
+        this.pceListenerImpl.setTempService(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));

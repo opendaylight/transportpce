@@ -153,7 +153,8 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
         ServiceImplementationRequestInput serviceImplementationRequest =
             ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
         LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
-        this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
+        LOG.debug("Temp-service value is {}", tempService);
+        this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest, tempService);
     }
 
     /**
