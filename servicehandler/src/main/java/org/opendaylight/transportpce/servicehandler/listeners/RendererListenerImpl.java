@@ -28,7 +28,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.serviceha
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.ServiceRpcResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.PathComputationResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.path.computation.result.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.path.computation.result.ZToABuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
@@ -169,7 +174,6 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         }
 
         updateOtnTopology(notification, false);
-
         PublishNotificationProcessServiceBuilder nbiNotificationBuilder = new PublishNotificationProcessServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
@@ -182,6 +186,7 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
             operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             serviceTemp = "Temp ";
+            LOG.info("Sending notification to the service-RPC-result");
         } else {
             operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
@@ -194,6 +199,9 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
                     .build());
             if (!tempService) {
                 sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
+            } else {
+                LOG.info("For the Temp service, sending notification on service-result-rpc");
+                sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
             }
         } else {
             LOG.warn("{}Service status not updated in datastore !", serviceTemp);
@@ -229,6 +237,57 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
             Thread.currentThread().interrupt();
         }
     }
+
+    private void sendServiceRpcResultNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+        try {
+            ServiceRpcResult serviceRpcResult = new ServiceRpcResultBuilder()
+                    .setServiceName(notification.getServiceName())
+                    .setNotificationType(type)
+                    .setStatusMessage(notification.getStatusMessage())
+                            .setCommonId(notification.getCommonId())
+                                    .setPathComputationResult(
+                                            new PathComputationResultBuilder()
+                                                    .setAToZ(new AToZBuilder()
+                                                            .setFrequency(notification
+                                                                            .getAToZDirection()
+                                                                            .getCentralFrequency()
+                                                            )
+                                                            .setWidth(notification
+                                                                    .getAToZDirection()
+                                                                    .getWidth()
+                                                            )
+                                                            // TODO: here the optical operational mode should be set
+                                                            // TODO: also set the GNSR, OSNR, power values
+                                                            .setOpticalOperationalMode("test")
+                                                            .build()
+                                                    )
+                                                    .setZToA(new ZToABuilder()
+                                                            .setFrequency(notification
+                                                                    .getZToADirection()
+                                                                    .getCentralFrequency()
+                                                            )
+                                                            .setWidth(notification
+                                                                    .getZToADirection()
+                                                                    .getWidth()
+                                                            )
+                                                            // TODO: here the optical operational mode should be set
+                                                            // TODO: also set the GNSR, OSNR, power values
+                                                            .setOpticalOperationalMode("test")
+                                                            .build()
+                                                    )
+
+                    .build()).build();
+            LOG.info("Sending the notification for service-rpc-result {}", serviceRpcResult);
+            notificationPublishService.putNotification(
+                    serviceRpcResult);
+        } catch (InterruptedException e) {
+            LOG.warn("Something went wrong while sending notification for service {}",
+                    serviceRpcResultSp.getServiceName(), e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
 
     /**
      * Process failed service implementation for serviceName.
