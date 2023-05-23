@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1602a591_ae953890",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-05-23T12:20:27Z",
+      "side": 1,
+      "message": "Thanks Olivier for great suggestions! I have added the requested parameters to the path-description model. Here is how it looks (same for ZToA direction):\n\n       +--ro aToZ-direction\n       |  +--ro aToZ-wavelength-number?     uint32\n       |  +--ro aToZ-min-frequency?         org-openroadm-common-optical-channel-types:frequency-THz\n       |  +--ro aToZ-max-frequency?         org-openroadm-common-optical-channel-types:frequency-THz\n       |  +--ro central-frequency?          org-openroadm-common-optical-channel-types:frequency-THz\n       |  +--ro width?                      org-openroadm-common-optical-channel-types:frequency-GHz\n       |  +--ro optical-operational-mode?   string\n       |  +--ro rx-estimated-osnr?          org-openroadm-common-link-types:ratio-dB\n       |  +--ro rx-estimated-gsnr?          org-openroadm-common-link-types:ratio-dB\n       |  +--ro max-output-power?           org-openroadm-common-link-types:ratio-dB\n       |  +--ro min-output-power?           org-openroadm-common-link-types:ratio-dB\n       |  +--ro min-trib-slot?              org-openroadm-otn-common-types:opucn-trib-slot-def\n       |  +--ro max-trib-slot?              org-openroadm-otn-common-types:opucn-trib-slot-def\n       ........",
+      "parentUuid": "02644a54_975f602b",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52499b54_fb321ba5",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-05T14:36:43Z",
       "side": 1,
       "message": "LF after rev230501 would be more indicated IMO",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6837fd71_78d2fa4e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-05-23T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52499b54_fb321ba5",
       "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -69,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e33d2a09_2b582178",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-05-23T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10a5c29d_c4605ccb",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee162288_3be5e9dd",
@@ -86,6 +140,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a57fef_21f50365",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-05-23T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee162288_3be5e9dd",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "905bcfdf_61bf89c7",
@@ -99,6 +171,24 @@
       "writtenOn": "2023-05-05T14:36:43Z",
       "side": 1,
       "message": "idem",
+      "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82bfd3e2_7eea7138",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-05-23T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "905bcfdf_61bf89c7",
       "revId": "07e764f4fae16cd4d394a7b71911575b227d502e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
