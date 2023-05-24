@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51058e2c_7f50631d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-24T21:27:30Z",
+      "side": 1,
+      "message": "actually you removed some intermediate variables, which is good, but you didn\u0027t cascade the setters.\n\nWhat about this ?\n\n                atoZDirectionBldr\n                    .setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())\n                ))\n                    .setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq());\n                  ....\n                    .setWidth(GridUtils.getWidthFromRateAndModulationFormat(\n                        Uint32.valueOf(rc.getRate()), modulationFormat));",
+      "parentUuid": "eb8554ec_01c8301c",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aee83063_657a67b8",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
         "patchSetId": 2
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "18eef873_f52dea3d",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "347bdd7c_a6d7c391",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PcePathDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-24T21:27:30Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "8da744b1_0397d4c8",
       "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -311,6 +347,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "51e14545_4daf1f29",
+      "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e94e5961_5a87ee9c",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-24T21:27:30Z",
+      "side": 1,
+      "message": "nope\n\nWhat about this ?\n\n    public OperationResult createTempService(\n            TempServiceCreateInput tempServiceCreateInput,\n            org.opendaylight. ... .rev220808\n                .service.path.rpc.result.PathDescription pathDescription) {",
+      "parentUuid": "77ca02a5_c4d5e558",
       "revId": "0727a886d9febc737567ffb1a57e3b1f23f132fc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
