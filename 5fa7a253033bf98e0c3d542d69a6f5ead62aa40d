@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c3cb5b2_7978d532",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-05-25T08:46:16Z",
+      "side": 1,
+      "message": "Thanks Bala for your modification. Next step, (not expected in this change!) will be to derive the operational modes from the mode that have been specified in the requesting-interface-properties container of the temp-service-create (if we want to handle priorities, this may imply to rework a bit the PCE algo, but maybe in a first step we can just select the mode of highest priority). Min and max output power could also be populated extracting from the openroadm part of the catalog, in the Roedm/Add part, the per-channel-Pin-min/max. This could be done adding a method (catalog-primitive) to do so, and calling this primitive in the PCE algo (when connection-type \u003d optical-tunnel) to populate the corresponding attributes in the service path.",
+      "revId": "5fa7a253033bf98e0c3d542d69a6f5ead62aa40d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5235b2a8_2970c393",
