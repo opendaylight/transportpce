@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8088b5c_ec68942a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-25T14:19:47Z",
+      "side": 1,
+      "message": "IMO positive condition w/ a guard clause is more indicated here\n        if (isTempService) {\n            LOG.info(\"For temp-service create OLM is not computed and skipped\");\n            return;\n        }",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9f34db_c086aa56",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-25T14:19:47Z",
+      "side": 1,
+      "message": "intermediate variable not needed IMO",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d6ac27_cf0dc3fa",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-25T14:19:47Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4cac572_7a43a300",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-25T14:19:47Z",
+      "side": 1,
+      "message": "LF after \u003d would be more readable IMO",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5c3ff54_06eb1d51",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-25T14:19:47Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
