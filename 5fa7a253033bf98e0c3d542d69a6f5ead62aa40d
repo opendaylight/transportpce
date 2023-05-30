@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4558b3e_6a78e513",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-05-30T07:27:48Z",
+      "side": 1,
+      "message": "This whole block logic should be reviewed IMO.\ntempService condition is checked twice.",
+      "revId": "5fa7a253033bf98e0c3d542d69a6f5ead62aa40d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5235b2a8_2970c393",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 3
