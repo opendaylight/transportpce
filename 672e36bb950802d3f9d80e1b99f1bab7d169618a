@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b372713_2e9f34dc",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-06-02T18:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8088b5c_ec68942a",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f9f34db_c086aa56",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-25T14:19:47Z",
       "side": 1,
       "message": "intermediate variable not needed IMO",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25cd4f13_68b94b92",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-06-02T18:58:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure how to handle this. I tried, but there were compilation errors.",
+      "parentUuid": "2f9f34db_c086aa56",
       "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4cc6910_7c19fb5a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-06-02T18:58:28Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "50d6ac27_cf0dc3fa",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4cac572_7a43a300",
         "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImplTest.java",
         "patchSetId": 2
@@ -65,6 +119,24 @@
       "writtenOn": "2023-05-25T14:19:47Z",
       "side": 1,
       "message": "LF after \u003d would be more readable IMO",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e510fcc0_f4bd9545",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-06-02T18:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4cac572_7a43a300",
       "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -82,6 +154,24 @@
       "writtenOn": "2023-05-25T14:19:47Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14e1469f_51890375",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-06-02T18:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5c3ff54_06eb1d51",
       "revId": "672e36bb950802d3f9d80e1b99f1bab7d169618a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
