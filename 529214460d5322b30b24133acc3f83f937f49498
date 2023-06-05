@@ -16,6 +16,24 @@
       "message": "setters should not be at te same indentation level thant the builder IMO",
       "revId": "529214460d5322b30b24133acc3f83f937f49498",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ec3764_dbfb9557",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-05T07:53:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2dda0c7_ad1437b2",
+      "revId": "529214460d5322b30b24133acc3f83f937f49498",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
