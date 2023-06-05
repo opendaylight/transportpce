@@ -172,45 +172,48 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
             LOG.debug("serviceDataStoreOperations is null");
             return;
         }
-
         updateOtnTopology(notification, false);
-        PublishNotificationProcessServiceBuilder nbiNotificationBuilder = new PublishNotificationProcessServiceBuilder()
+        PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
+            new PublishNotificationProcessServiceBuilder()
                 .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
                 .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
                 .setPublisherName(PUBLISHER);
-        OperationResult operationResult;
         String serviceTemp = "";
         if (tempService) {
-            operationResult = this.serviceDataStoreOperations.modifyTempService(
+            OperationResult operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             serviceTemp = "Temp ";
-            LOG.info("Sending notification to the service-RPC-result");
+            if (operationResult.isSuccess()) {
+                sendNbiNotification(nbiNotificationBuilder
+                    .setResponseFailed("")
+                    .setMessage("Temp Service implemented !")
+                    .setOperationalState(State.InService)
+                    .build());
+                LOG.debug("For the Temp service, sending notification on service-result-rpc");
+                sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
+                return;
+            }
         } else {
-            operationResult = this.serviceDataStoreOperations.modifyService(
+            OperationResult operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
-        }
-        if (operationResult.isSuccess()) {
-            sendNbiNotification(nbiNotificationBuilder
+            if (operationResult.isSuccess()) {
+                sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
                     .setMessage("Service implemented !")
                     .setOperationalState(State.InService)
                     .build());
-            if (!tempService) {
                 sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
-            } else {
-                LOG.info("For the Temp service, sending notification on service-result-rpc");
-                sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
+                return;
             }
-        } else {
-            LOG.warn("{}Service status not updated in datastore !", serviceTemp);
-            sendNbiNotification(nbiNotificationBuilder
-                    .setResponseFailed(serviceTemp + "Service status not updated in datastore !")
-                    .setMessage("ServiceCreate request failed ...")
-                    .setOperationalState(State.OutOfService)
-                    .build());
         }
+        LOG.warn("{}Service status not updated in datastore !", serviceTemp);
+        sendNbiNotification(nbiNotificationBuilder
+            .setResponseFailed(serviceTemp + "Service status not updated in datastore !")
+            .setMessage("ServiceCreate request failed ...")
+            .setOperationalState(State.OutOfService)
+            .build());
     }
 
     /**
