@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceData;
@@ -36,9 +37,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev200529.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
@@ -154,24 +159,47 @@ public final class PowerMgmtVersion710 {
      * @return true/false based on status of operation
      */
     public static boolean setTransponderPower(String nodeId, String interfaceName, BigDecimal txPower,
-            DeviceTransactionManager deviceTransactionManager,
-            Interface interfaceObj) {
+            DeviceTransactionManager deviceTransactionManager, Interface interfaceObj, Mapping portMap) {
         LOG.debug("Setting target-power for transponder nodeId: {} InterfaceName: {}",
                 nodeId, interfaceName);
-        InterfaceBuilder otsiInterfaceBuilder = new InterfaceBuilder(interfaceObj);
-        OtsiBuilder otsiBuilder = new OtsiBuilder(otsiInterfaceBuilder.augmentation(Interface1.class).getOtsi());
-        otsiBuilder.setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)));
-        otsiInterfaceBuilder.addAugmentation(new Interface1Builder().setOtsi(otsiBuilder.build()).build());
+        // Transponder port can have a port-capability of 100 or 400G
+        // from port-mapping check if has OCH-OTU-ODU cap or OTSI cap
+        // need to set power for OCH port
+        InterfaceBuilder ochOtsiInterfaceBuilder = new InterfaceBuilder(interfaceObj);
+        if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)
+                || portMap.getSupportedInterfaceCapability().contains(IfOCH.VALUE)) {
+            ochOtsiInterfaceBuilder
+                .addAugmentation(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev200529
+                            .Interface1Builder()
+                        .setOch(
+                            new OchBuilder(
+                                    ochOtsiInterfaceBuilder
+                                        .augmentation(org.opendaylight.yang.gen.v1.http
+                                            .org.openroadm.optical.channel.interfaces.rev200529.Interface1.class)
+                                        .getOch())
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)))
+                                .build())
+                        .build());
+        } else if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
+            ochOtsiInterfaceBuilder
+                .addAugmentation(
+                    new Interface1Builder()
+                        .setOtsi(
+                            new OtsiBuilder(ochOtsiInterfaceBuilder.augmentation(Interface1.class).getOtsi())
+                                .setTransmitPower(new PowerDBm(Decimal64.valueOf(txPower)))
+                                .build())
+                        .build());
+        }
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.orElseThrow();
-            } else {
+            if (deviceTxOpt.isEmpty()) {
                 LOG.error("Transaction for device {} was not found during transponder power setup for Node:", nodeId);
                 return false;
             }
+            deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Unable to get transaction for device {} during transponder power setup!", nodeId, e);
             return false;
@@ -180,7 +208,7 @@ public final class PowerMgmtVersion710 {
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
-        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, otsiInterfaceBuilder.build());
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochOtsiInterfaceBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
