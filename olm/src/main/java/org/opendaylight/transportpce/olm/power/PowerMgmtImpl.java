@@ -11,10 +11,12 @@ package org.opendaylight.transportpce.olm.power;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -534,8 +536,19 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.error(INTERFACE_NOT_PRESENT, interfaceName, nodeId);
                         return false;
                     }
+                    // Check the support-interface-cap type
+                    // Get the logical connection point name from the interface-name, by splitting it by "-"
+                    // and discard the last part. For instance XPDR1-NETWORK1-xxx:xxx
+                    String logicalConnectionPoint = Arrays.stream(interfaceName.split("-", 3)).limit(2)
+                            .collect(Collectors.joining("-"));
+                    LOG.info("Logical connection point {} for Interface {}", logicalConnectionPoint, interfaceName);
+                    Mapping portMap = portMapping.getMapping(nodeId, logicalConnectionPoint);
+                    if (portMap == null) {
+                        throw new OpenRoadmInterfaceException(
+                                OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnectionPoint));
+                    }
                     powerSetupResult = PowerMgmtVersion710.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional710.orElseThrow());
+                            txPower, deviceTransactionManager, interfaceOptional710.orElseThrow(), portMap);
                     break;
                 default:
                     LOG.error("Unrecognized OpenRoadm version");
