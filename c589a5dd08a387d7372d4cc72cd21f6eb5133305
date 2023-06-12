@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "588afde5_e2766860",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-12T13:34:39Z",
+      "side": 1,
+      "message": "typo transponder",
+      "revId": "c589a5dd08a387d7372d4cc72cd21f6eb5133305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bc815cf_7e74c1d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-12T13:34:39Z",
+      "side": 1,
+      "message": "no sign-off -\u003e verified -1 in tox",
+      "revId": "c589a5dd08a387d7372d4cc72cd21f6eb5133305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "362751f9_57df1cf6",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-12T13:34:39Z",
+      "side": 1,
+      "message": "this setter can be cascaded",
+      "revId": "c589a5dd08a387d7372d4cc72cd21f6eb5133305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1eaa415_1ab096a4",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-12T13:34:39Z",
+      "side": 1,
+      "message": "ochBuilder intermediate variable is not needed IMO",
+      "revId": "c589a5dd08a387d7372d4cc72cd21f6eb5133305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f26448c_cac96ab7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-12T13:34:39Z",
+      "side": 1,
+      "message": "same remarks applies to this block too.",
+      "revId": "c589a5dd08a387d7372d4cc72cd21f6eb5133305",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
