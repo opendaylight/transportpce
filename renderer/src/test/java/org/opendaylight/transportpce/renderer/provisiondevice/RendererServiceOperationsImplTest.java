@@ -48,8 +48,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.MeasurementsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -74,6 +77,10 @@ public class RendererServiceOperationsImplTest {
     private ServicePowerTurndown servicePowerTurndown;
     @Mock
     private GetPm getPm;
+    @Mock
+    private Nodes node;
+    @Mock
+    private NodeInfo nodeInfo;
     private RendererServiceOperationsImpl rendererServiceOperations;
 
 
@@ -99,6 +106,10 @@ public class RendererServiceOperationsImplTest {
                 .buildFuture()).when(servicePowerSetup).invoke(any());
         doReturn(RpcResultBuilder.success(new GetPmOutputBuilder().setNodeId("node id").build()).buildFuture())
                 .when(getPm).invoke(any());
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
+
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
                 .get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
@@ -149,7 +160,9 @@ public class RendererServiceOperationsImplTest {
                 .buildFuture()).when(servicePowerSetup).invoke(any());
         doReturn(RpcResultBuilder.success(new GetPmOutputBuilder().setNodeId("node id").build()).buildFuture())
                 .when(getPm).invoke(any());
-
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
         String[] interfaceTokens = { StringConstants.NETWORK_TOKEN, StringConstants.CLIENT_TOKEN,
             StringConstants.TTP_TOKEN, StringConstants.PP_TOKEN };
         for (String tpToken : interfaceTokens) {
@@ -239,6 +252,11 @@ public class RendererServiceOperationsImplTest {
                 .buildFuture()).when(servicePowerSetup).invoke(any());
         GetPmOutput getPmOutput1 = null;
         when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput1).buildFuture());
+
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
+
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
                 .get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
@@ -261,6 +279,9 @@ public class RendererServiceOperationsImplTest {
                 new MeasurementsBuilder().setPmparameterName("preFECCorrectedErrors").setPmparameterValue("1").build());
         GetPmOutput getPmOutput = new GetPmOutputBuilder().setNodeId("node1").setMeasurements(measurementsList).build();
         when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
 
         ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
@@ -285,6 +306,10 @@ public class RendererServiceOperationsImplTest {
                 .setPmparameterValue("112000000000d").build());
         GetPmOutput getPmOutput = new GetPmOutputBuilder().setNodeId("node1").setMeasurements(measurementsList).build();
         when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        when(portMapping.getNode(any())).thenReturn(node);
+        when(node.getNodeInfo()).thenReturn(nodeInfo);
+        when(nodeInfo.getNodeType()).thenReturn(NodeTypes.Xpdr);
+        when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
         doReturn(RpcResultBuilder
                 .success(new ServicePowerTurndownOutputBuilder()
                         .setResult("result")
