@@ -537,6 +537,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             justification = "call in call() method")
     private boolean isServiceActivated(String nodeId, String tpId) {
         LOG.info("Starting service activation test on node {} and tp {}", nodeId, tpId);
+        if (!NodeTypes.Xpdr.equals(portMapping.getNode(nodeId).getNodeInfo().getNodeType())) {
+            LOG.info("Device {} is not xponder, can't verify PreFEC", nodeId);
+            return true;
+        }
         for (int i = 0; i < 3; i++) {
             List<Measurements> measurements = getMeasurements(nodeId, tpId);
             if (measurements == null) {
