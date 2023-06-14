@@ -10,16 +10,16 @@ package org.opendaylight.transportpce.nbinotifications.listener;
 import java.util.Map;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.NbiNotificationsUtils;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NbiNotificationsListener;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +55,9 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
                 .setServiceAEnd(notification.getServiceAEnd())
                 .setServiceName(notification.getServiceName())
                 .setServiceZEnd(notification.getServiceZEnd())
+                // This is only needed for temp-service
+                .setAToZ(notification.getAToZ())
+                .setZToA(notification.getZToA())
                         .build(), notification.getConnectionType().getName());
     }
 
