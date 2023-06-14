@@ -63,6 +63,30 @@
       },
       "revId": "f9530419f1c06bb4da9ef5b03afe7dc068efd8ec",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bdde48f_a4357f7c",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-14T07:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee048826_39ffb576",
+      "range": {
+        "startLine": 161,
+        "startChar": 46,
+        "endLine": 163,
+        "endChar": 85
+      },
+      "revId": "f9530419f1c06bb4da9ef5b03afe7dc068efd8ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
