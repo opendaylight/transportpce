@@ -99,6 +99,25 @@
     "operational-state": "inService",
     "common-id": "commond-id",
     "response-failed": "",
-    "service-name": "service1"
+    "is-temp-service": true,
+    "service-name": "service1",
+    "aToZ": {
+      "frequency": "196.125",
+      "width": "87.5",
+      "optical-operational-mode": "test",
+      "rx-estimated-osnr": "23.5",
+      "rx-estimated-gsnr": "23.5",
+      "max-output-power": "0.5",
+      "min-output-power": "0.5"
+    },
+    "zToA": {
+      "frequency": "196.125",
+      "width": "87.5",
+      "optical-operational-mode": "test",
+      "rx-estimated-osnr": "23.5",
+      "rx-estimated-gsnr": "23.5",
+      "max-output-power": "0.5",
+      "min-output-power": "0.5"
+    }
   }
 }

@@ -94,6 +94,25 @@
         },
         "service-name": "service1",
         "message": "message",
-        "response-failed": ""
+        "response-failed": "",
+        "is-temp-service": true,
+        "aToZ": {
+            "frequency": 196.125,
+            "width": 87.5,
+            "optical-operational-mode": "test",
+            "rx-estimated-osnr": 23.5,
+            "rx-estimated-gsnr": 23.5,
+            "max-output-power": 0.5,
+            "min-output-power": 0.5
+        },
+        "zToA": {
+            "frequency": 196.125,
+            "width": 87.5,
+            "optical-operational-mode": "test",
+            "rx-estimated-osnr": 23.5,
+            "rx-estimated-gsnr": 23.5,
+            "max-output-power": 0.5,
+            "min-output-power": 0.5
+        }
     }
 }
