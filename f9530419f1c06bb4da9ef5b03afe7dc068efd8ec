@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2212a64e_3f204af9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-14T07:29:09Z",
+      "side": 1,
+      "message": "@committers CI is failing because we need jdk17 now. Please can you push an update on releng/builder to bump the jdk version used ?\nI prefer not to take care of it because of releng/builder NACR policy.\n\n18:53:14 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:3.3.0:enforce (enforce-maven) on project transportpce-artifacts: \n18:53:14 [ERROR] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion failed with message:\n18:53:14 [ERROR] Detected JDK version 11.0.18 (JAVA_HOME\u003d/usr/lib/jvm/java-11-openjdk-11.0.18.0.9-0.3.ea.el8.x86_64) is not in the allowed range [17,).\n18:53:14 [ERROR] -\u003e [Help 1]\n18:53:14 org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:3.3.0:enforce (enforce-maven) on project transportpce-artifacts: \n18:53:14 Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion failed with message:\n18:53:14 Detected JDK version 11.0.18 (JAVA_HOME\u003d/usr/lib/jvm/java-11-openjdk-11.0.18.0.9-0.3.ea.el8.x86_64) is not in the allowed range [17,).",
+      "revId": "f9530419f1c06bb4da9ef5b03afe7dc068efd8ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "239933f1_6625b0b9",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-06-14T06:28:44Z",
       "side": 1,
       "message": "I would prefer we keep the previous code style for method parameters, to keep the code consistent.",
+      "range": {
+        "startLine": 161,
+        "startChar": 46,
+        "endLine": 163,
+        "endChar": 85
+      },
+      "revId": "f9530419f1c06bb4da9ef5b03afe7dc068efd8ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee048826_39ffb576",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-06-14T07:29:09Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "239933f1_6625b0b9",
       "range": {
         "startLine": 161,
         "startChar": 46,
