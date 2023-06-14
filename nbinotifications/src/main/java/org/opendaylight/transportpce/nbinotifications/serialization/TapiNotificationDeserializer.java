@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
@@ -56,7 +56,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         }
         String value = new String(data, StandardCharsets.UTF_8);
         // The message published is
-        // org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService
+        // org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService
         // we have to map it to
         // org.opendaylight.yang.gen.v1
         // .urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.Notification
@@ -73,7 +73,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         LOG.info("Transforming TAPI notification for getNotificationList rpc");
         Map<AdditionalInfoKey, AdditionalInfo> addInfoMap = new HashMap<>();
         if (mappedString.getAdditionalInfo() != null) {
-            for (org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.tapi.service.AdditionalInfo
+            for (org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.AdditionalInfo
                     addInfo:mappedString.getAdditionalInfo().values()) {
                 AdditionalInfo transAddInfo = new AdditionalInfoBuilder()
                     .setValue(addInfo.getValue())
@@ -85,7 +85,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         Map<ChangedAttributesKey, ChangedAttributes> changedAttMap = new HashMap<>();
         if (mappedString.getChangedAttributes() != null) {
             for (org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev211013.notification.tapi.service.ChangedAttributes changedAtt:mappedString
+                    .nbi.notifications.rev230726.notification.tapi.service.ChangedAttributes changedAtt:mappedString
                         .getChangedAttributes().values()) {
                 ChangedAttributes transChangedAtt = new ChangedAttributesBuilder(changedAtt).build();
                 changedAttMap.put(transChangedAtt.key(), transChangedAtt);
@@ -101,7 +101,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         Map<TargetObjectNameKey, TargetObjectName> targetObjNameMap = new HashMap<>();
         if (mappedString.getTargetObjectName() != null) {
             for (org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev211013.notification.tapi.service.TargetObjectName
+                    .nbi.notifications.rev230726.notification.tapi.service.TargetObjectName
                         targetObjectName:mappedString.getTargetObjectName().values()) {
                 TargetObjectName transTargetObjName = new TargetObjectNameBuilder(targetObjectName).build();
                 targetObjNameMap.put(transTargetObjName.key(), transTargetObjName);
