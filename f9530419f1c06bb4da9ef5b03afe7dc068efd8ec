@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "239933f1_6625b0b9",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-06-14T06:28:44Z",
+      "side": 1,
+      "message": "I would prefer we keep the previous code style for method parameters, to keep the code consistent.",
+      "range": {
+        "startLine": 161,
+        "startChar": 46,
+        "endLine": 163,
+        "endChar": 85
+      },
+      "revId": "f9530419f1c06bb4da9ef5b03afe7dc068efd8ec",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
