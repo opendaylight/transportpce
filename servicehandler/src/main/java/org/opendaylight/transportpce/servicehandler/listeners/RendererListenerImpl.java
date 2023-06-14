@@ -175,29 +175,37 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         updateOtnTopology(notification, false);
         PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
             new PublishNotificationProcessServiceBuilder()
-                .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
                 .setPublisherName(PUBLISHER);
         String serviceTemp = "";
         if (tempService) {
+            nbiNotificationBuilder.setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType());
+            if (input.getServiceName() != null) {
+                nbiNotificationBuilder.setServiceName(input.getServiceName());
+            }
             OperationResult operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             serviceTemp = "Temp ";
             if (operationResult.isSuccess()) {
+                ServiceRpcResult serviceRpcResult = sendServiceRpcResultNotification(notification,
+                        ServiceNotificationTypes.ServiceCreateResult);
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
-                    .setMessage("Temp Service implemented !")
+                    .setMessage("Temp Service implemented, with this result " + serviceRpcResult.toString())
                     .setOperationalState(State.InService)
                     .build());
                 LOG.debug("For the Temp service, sending notification on service-result-rpc");
-                sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
+
                 return;
             }
         } else {
             OperationResult operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
+            nbiNotificationBuilder.setServiceName(input.getServiceName());
+            if (input.getCommonId() != null) {
+                nbiNotificationBuilder.setCommonId(input.getCommonId());
+            }
             if (operationResult.isSuccess()) {
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
@@ -241,7 +249,8 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         }
     }
 
-    private void sendServiceRpcResultNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+    private ServiceRpcResult sendServiceRpcResultNotification(
+            RendererRpcResultSp notification, ServiceNotificationTypes type) {
         try {
             ServiceRpcResult serviceRpcResult = new ServiceRpcResultBuilder()
                     .setServiceName(notification.getServiceName())
@@ -276,11 +285,13 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
             LOG.info("Sending the notification for service-rpc-result {}", serviceRpcResult);
             notificationPublishService.putNotification(
                     serviceRpcResult);
+            return serviceRpcResult;
         } catch (InterruptedException e) {
             LOG.warn("Something went wrong while sending notification for service {}",
                     serviceRpcResultSp.getServiceName(), e);
             Thread.currentThread().interrupt();
         }
+        return null;
     }
 
 
