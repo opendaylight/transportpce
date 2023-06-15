@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793084ff_4d4d319f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-06-15T13:36:08Z",
+      "side": 1,
+      "message": "keep the current code style for parameters on new line (indent +4)",
+      "range": {
+        "startLine": 252,
+        "startChar": 62,
+        "endLine": 253,
+        "endChar": 91
+      },
+      "revId": "13036a8c539693677104db553c76c041f71006d5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
