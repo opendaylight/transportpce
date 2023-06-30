@@ -20,12 +20,13 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.reroute.request.input.Endpoints;
+//import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute
+//.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.termination.point.XpdrNetworkAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 //import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
 //import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
 //import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
@@ -33,12 +34,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.O
 //import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node;
 import org.opendaylight.yangtools.yang.common.Uint16;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.end.point.*;
 import org.slf4j.Logger;
@@ -68,14 +69,14 @@ public class PceTapiOpticalNode implements PceNode {
     private String version;
     private BigDecimal slotWidthGranularity;
     private BigDecimal centralFreqGranularity;
-    private Endpoints endpoints;
+//    private Endpoints endpoints;
 
 //    private Map<Name, Uuid> availableAddDropNep = new TreeMap<>();
 //    private Map<Name, Uuid> availableAddDropNepPp = new TreeMap<>();
 //    private Map<Uuid, Uuid> availableDegreeNepTtp = new TreeMap<>();
 //    private Map<Name, Uuid> usedXpndrNWTps = new TreeMap<>();
     private List<String> availableXpndrNWTps = new ArrayList<>();
-    private List<String> outgoingInternalLinks = new ArrayList<>();
+//    private List<String> outgoingInternalLinks = new ArrayList<>();
 
 
     private List<BasePceNep> listOfNep = new ArrayList<>();
@@ -90,6 +91,8 @@ public class PceTapiOpticalNode implements PceNode {
 
         this.serviceType = serviceType;
         this.node = node;
+        this.nodeName = node.getName().entrySet().iterator().next().getValue();
+        this.nodeType = nodeType;
         this.nodeUuid = nodeId.entrySet().iterator().next().getKey();
         this.deviceNodeId = deviceNodeId;
         this.version = version;
@@ -108,10 +111,10 @@ public class PceTapiOpticalNode implements PceNode {
             return;
         }
         LOG.debug("initSrgTpList for Tapi: getting SRG tps from ROADM for node : {}, Uuid : {}",
-            this.nodeName.toString(), this.nodeUuid);
+            this.nodeName, this.nodeUuid);
         if (listOfNep.isEmpty()) {
             LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node : {}, Uuid : {}",
-                 this.nodeName.toString(), this.nodeUuid);
+                 this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
@@ -132,7 +135,7 @@ public class PceTapiOpticalNode implements PceNode {
 
         if (this.availableSrgPp.isEmpty() || this.availableSrgCp.isEmpty()) {
             LOG.error("initSrgTpList: ROADM SRG TerminationPoint list is empty for node : {}, Uuid : {}",
-                this.nodeName.toString(), this.nodeUuid);
+                this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
@@ -190,13 +193,13 @@ public class PceTapiOpticalNode implements PceNode {
     }
 
     public void initXndrTps(ServiceFormat serviceFormat) {
-        LOG.debug("PceTapiOticalNode: initXndrTps for node : {}, Uuid : {}", this.nodeName.toString(), this.nodeUuid);
+        LOG.debug("PceTapiOticalNode: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
         if (!isValid()) {
             return;
         }
         if (listOfNep.isEmpty()) {
             LOG.error("PceTapiOticalNode/initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
-                 this.nodeName.toString(), this.nodeUuid);
+                 this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
@@ -220,7 +223,7 @@ public class PceTapiOpticalNode implements PceNode {
     @Override
     public String getRdmSrgClient(String tp, String direction) {
         LOG.debug("TapiOpticalNode/getRdmSrgClient: Getting PP client for tp '{}' on node : {}, Uuid : {}",
-            tp, this.nodeName.toString(), this.nodeUuid);
+            tp, this.nodeName, this.nodeUuid);
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
             LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list", tp);
@@ -234,7 +237,7 @@ public class PceTapiOpticalNode implements PceNode {
         LOG.debug("TapiOpticalNode/getRdmSrgClient:  Getting client PP for CP '{}'", tp);
         if (ppList.isEmpty()) {
             LOG.error("TapiOpticalNode/getRdmSrgClient: SRG TerminationPoint PP list is not available for node : {},"
-                + " Uuid : {}", this.nodeName.toString(), this.nodeUuid);
+                + " Uuid : {}", this.nodeName, this.nodeUuid);
             return null;
         }
         OpenroadmTpType srgType = null;
@@ -309,7 +312,7 @@ public class PceTapiOpticalNode implements PceNode {
 
         if (supportedOM == null || supportedOM.isEmpty()) {
             LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared ",
-                nepUuid, this.nodeName.toString(), this.nodeUuid);
+                nepUuid, this.nodeName, this.nodeUuid);
             return StringConstants.UNKNOWN_MODE;
         }
         for (String operationalMode : supportedOM) {
@@ -317,13 +320,13 @@ public class PceTapiOpticalNode implements PceNode {
                 .get(this.serviceType).toCanonicalString())) {
                 LOG.info(
                     "getOperationalMode: NetworkPort {} of Node {}  with Uuid {}  has {} operational mode declared",
-                    nepUuid, this.nodeName.toString(), this.nodeUuid, operationalMode);
+                    nepUuid, this.nodeName, this.nodeUuid, operationalMode);
                 return operationalMode;
             }
         }
         LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared"
             + "compatible with service type {}. Supported modes are : {} ",
-            nepUuid, this.nodeName.toString(), this.nodeUuid, this.serviceType, supportedOM.toString());
+            nepUuid, this.nodeName, this.nodeUuid, this.serviceType, supportedOM.toString());
         return StringConstants.UNKNOWN_MODE;
     }
 
@@ -475,7 +478,7 @@ public class PceTapiOpticalNode implements PceNode {
         return this.listOfNep;
     }
 
-    public void setEndpoints(Endpoints endpoints) {
-        this.endpoints = endpoints;
-    }
+//    public void setEndpoints(Endpoints endpoints) {
+//        this.endpoints = endpoints;
+//    }
 }
