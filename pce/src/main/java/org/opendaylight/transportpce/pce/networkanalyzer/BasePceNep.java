@@ -13,15 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.PortDirection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.OtsConnectionEndPointSpec;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OmsConnectionEndPointSpec;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OtsMediaConnectionEndPointSpec;
 
 public class BasePceNep {
 
@@ -40,21 +40,21 @@ public class BasePceNep {
     private List<Uuid> nodeRuleGroupUuid = new ArrayList<>();
     private Uuid cepOtsUuid;
     private Uuid cepOmsUuid;
-    // shall be changed to the one following when 2.4 model available
-    private OtsConnectionEndPointSpec otsSpec;
-// To be activated when 2.4 models available
-//    private OtsMediaConnectionEndPointSpec otsMediaSpec;
-//    private OmsConnectionEndPointSpec omsSpec;
+    private OtsMediaConnectionEndPointSpec otsSpec;
+    private OmsConnectionEndPointSpec omsSpec;
+    // private Uuid subNodeUuid;
     /*
-     * Basic NEP object used in various list to describe OMS and OTS Logical connection points
+     * Basic NEP object used in various list to describe OMS and OTS Logical
+     * connection points
      */
 
     public BasePceNep(Uuid uuid, Map<NameKey, Name> name) {
         this.nepCepUuid = uuid;
         this.nepCepName = name;
-//        TODO: retrieve direction, available spectrum, op/adminStates & connected link
-//        from topology, when 2.4 models available
-//        compute frequenciesBitset from util compileBitSetFromSpectrum
+        // TODO: retrieve direction, available spectrum, op/adminStates &
+        // connected link
+        // from topology, when 2.4 models available
+        // compute frequenciesBitset from util compileBitSetFromSpectrum
 
     }
 
@@ -86,22 +86,17 @@ public class BasePceNep {
         this.cepOmsUuid = uuid;
     }
 
-    public void setCepOtsSpec(OtsConnectionEndPointSpec otsCepSpec) {
+    public void setCepOtsSpec(OtsMediaConnectionEndPointSpec otsCepSpec) {
         this.otsSpec = otsCepSpec;
+    }
+
+    public void setCepOmsSpec(OmsConnectionEndPointSpec oces) {
+        this.omsSpec = oces;
     }
 
     public void setLpn(LayerProtocolName lpname) {
         this.lpn = lpname;
     }
-
-//
-//    public void setCepOmsSpec(OmsConnectionEndPointSpec omsCepSpec) {
-//        this.omsSpec = omsCepSpec;
-//    }
-//
-//    public void setCepOtsSpec(OtsMediaConnectionEndPointSpec otsCepSpec) {
-//        this.otsSpec = otsCepSpec;
-//    }
 
     public void setAdminState(AdministrativeState as) {
         this.adminState = as;
@@ -183,15 +178,12 @@ public class BasePceNep {
         return this.cepOmsUuid;
     }
 
-    public OtsConnectionEndPointSpec getCepOtsSpec() {
+    public OtsMediaConnectionEndPointSpec getCepOtsSpec() {
         return this.otsSpec;
     }
-//
-//    public OmsConnectionEndPointSpec getCepOmsSpec() {
-//        return this.omsSpec;
-//    }
-//
-//    public OtsMediaConnectionEndPointSpec getCepOtsSpec() {
-//        return this.otsSpec;
-//    }
+
+    public OmsConnectionEndPointSpec getCepOmsSpec() {
+        return this.omsSpec;
+    }
+
 }
