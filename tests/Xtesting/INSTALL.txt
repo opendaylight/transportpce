@@ -1,0 +1,7 @@
+sudo docker build -t tpce0 .
+virtualenv xtesting
+. xtesting/bin/activate
+pip install ansible
+ansible-galaxy collection install ansible.posix community.general community.grafana community.kubernetes
+ansible-playbook site.yml -e 'ansible_python_interpreter=/usr/bin/python3'
+deactivate
