@@ -1,0 +1,18 @@
+## required steps on a brand new debian 12 system
+# apt-get install git sudo
+# adduser opnfv
+# adduser opnfv sudo
+# su - opnfv
+git clone https://git.opendaylight.org/gerrit/transportpce
+cd transportpce/tests/Xtesting
+sudo apt-get install virtualenv
+virtualenv xtesting -p python3 --system-site-packages
+. xtesting/bin/activate
+pip install ansible
+ansible-galaxy install collivier.xtesting
+ansible-galaxy collection install ansible.posix community.general community.grafana community.kubernetes community.docker community.postgresql
+ansible-playbook site.yml
+deactivate
+sudo docker build -t 127.0.0.1:5000/tpce0 .
+sudo docker run -d -p 5000:5000 --restart=always --name registry registry:2
+sudo docker push 127.0.0.1:5000/tpce0
