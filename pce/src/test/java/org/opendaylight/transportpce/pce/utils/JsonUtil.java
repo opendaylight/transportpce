@@ -11,12 +11,14 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.mdsal.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.mdsal.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
 import org.opendaylight.yangtools.yang.common.QName;
@@ -64,11 +66,9 @@ public final class JsonUtil {
                     JSONCodecFactorySupplier.RFC7951.getShared(schemaCtx));) {
             jsonParser.parse(reader);
             YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-            if (bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult()) != null) {
-                return bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult()).getValue();
-            } else {
-                return null;
-            }
+            Entry<InstanceIdentifier<?>, DataObject> entry =
+                bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult());
+            return entry == null ? null : entry.getValue();
         } catch (IOException | IllegalArgumentException e) {
             LOG.error("Cannot deserialize JSON ", e);
             return null;
