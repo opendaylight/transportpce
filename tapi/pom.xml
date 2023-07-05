@@ -167,14 +167,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>org.osgi.service.component.annotations</artifactId>
     </dependency>
 
-    <!-- Sodium bump: javax.annotation.Nullable and friends -->
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>3.0.2</version>
-      <optional>true</optional>
-    </dependency>
-
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>

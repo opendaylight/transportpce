@@ -135,13 +135,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>mdsal-binding-generator</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>3.0.2</version>
-      <scope>test</scope>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <build>
