@@ -72,7 +72,7 @@ final class Rdm2XpdrLink {
             return false;
         }
         Network network = networkBldr.build();
-        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
+        InstanceIdentifier.Builder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
@@ -105,7 +105,7 @@ final class Rdm2XpdrLink {
             return false;
         }
         Network network = networkBldr.build();
-        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
+        InstanceIdentifier.Builder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();

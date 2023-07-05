@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -640,7 +641,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    @SuppressFBWarnings(
         value = "SLF4J_FORMAT_SHOULD_BE_CONST",
         justification = "Log messages content needs to be formatted before"
             + "since they are used in the returned object")
