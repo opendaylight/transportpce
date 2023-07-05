@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.pce;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -17,7 +18,7 @@ import java.util.Comparator;
  *
  */
 @SuppressWarnings("serial")
-@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+@SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class SortPortsByName implements Comparator<String>, Serializable {

@@ -32,7 +32,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamW
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
-import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
+import org.opendaylight.yangtools.yang.data.impl.schema.NormalizationResultHolder;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
@@ -76,7 +76,7 @@ public class JsonStringConverter<T extends DataObject> {
             NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter
                 .createExclusiveWriter(codecFactory, rootNode, EffectiveModelContext.NAME.getNamespace(), jsonWriter);
             try (NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(jsonStreamWriter)) {
-                nodeWriter.write(bindingDOMCodecServices.toNormalizedNode(id, dataObject).getValue());
+                nodeWriter.write(bindingDOMCodecServices.toNormalizedDataObject(id, dataObject).node());
                 nodeWriter.flush();
             }
             JsonObject asJsonObject = JsonParser.parseString(writer.toString()).getAsJsonObject();
@@ -116,7 +116,7 @@ public class JsonStringConverter<T extends DataObject> {
     private T createDataObjectFromReader(YangInstanceIdentifier path, Reader inputReader,
                                          JSONCodecFactorySupplier supplier) {
 
-        NormalizedNodeResult result = new NormalizedNodeResult();
+        NormalizationResultHolder result = new NormalizationResultHolder();
         try (JsonReader reader = new JsonReader(inputReader);
              NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
              JsonParserStream jsonParser = JsonParserStream
@@ -125,7 +125,7 @@ public class JsonStringConverter<T extends DataObject> {
                              supplier.getShared(bindingDOMCodecServices
                                      .getRuntimeContext().getEffectiveModelContext()))) {
             jsonParser.parse(reader);
-            return (T) bindingDOMCodecServices.fromNormalizedNode(path, result.getResult()).getValue();
+            return (T) bindingDOMCodecServices.fromNormalizedNode(path, result.getResult().data()).getValue();
         } catch (IOException e) {
             LOG.warn("An error occured during parsing input reader", e);
             return null;
