@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -654,7 +655,7 @@ public class PortMappingVersion710 {
         return mcCapabilityProfiles;
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    @SuppressFBWarnings(
         value = "SLF4J_UNKNOWN_ARRAY",
         justification = "False positive")
     private Map<Integer, Degree> getDegreesMap(String deviceId, Info ordmInfo) {

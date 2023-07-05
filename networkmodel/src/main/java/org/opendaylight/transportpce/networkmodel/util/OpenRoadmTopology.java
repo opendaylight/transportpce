@@ -63,7 +63,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -516,7 +515,7 @@ public final class OpenRoadmTopology {
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
-            InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+            InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .augmentation(Network1.class)
                 .child(Link.class, new LinkKey(linkId));
@@ -554,7 +553,7 @@ public final class OpenRoadmTopology {
      * @param tpId String
      * @return InstanceIdentifierBuilder
      */
-    public static InstanceIdentifierBuilder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+    public static InstanceIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
             .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
         return InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))

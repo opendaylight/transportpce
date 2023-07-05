@@ -109,7 +109,7 @@ public final class TopologyUtils {
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
-            InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+            InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
             java.util.Optional<Link> link =
