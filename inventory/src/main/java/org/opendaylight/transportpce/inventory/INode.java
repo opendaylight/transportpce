@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.inventory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+@SuppressFBWarnings(
     value = "SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING",
     justification = "TODO review the SQL statement generation process")
 public class INode {
