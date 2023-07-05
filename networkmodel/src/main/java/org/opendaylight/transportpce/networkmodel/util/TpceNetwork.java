@@ -26,7 +26,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NetworkTypesBuilder;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +47,7 @@ public class TpceNetwork {
     public void createLayer(String networkId) {
         try {
             Network network = createNetwork(networkId);
-            InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
+            InstanceIdentifier.Builder<Network> nwIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(networkId)));
             networkTransactionService.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
