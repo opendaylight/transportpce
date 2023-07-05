@@ -82,7 +82,7 @@ final class OrdLink {
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
 
         // Building link instance identifier
-        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
 
