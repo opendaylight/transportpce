@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.servicehandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
@@ -660,7 +661,7 @@ public final class ModelMappingUtils {
     }
 
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    @SuppressFBWarnings(
         value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
         justification = "not relevant to return and zero length array as we need real pos")
     public static int[] findTheLongestSubstring(String s1, String s2) {
