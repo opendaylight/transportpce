@@ -30,7 +30,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
-import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
+import org.opendaylight.yangtools.yang.data.impl.schema.NormalizationResultHolder;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
@@ -129,7 +129,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      */
     private Optional<NormalizedNode> parseInputJSON(
             JsonReader reader) {
-        NormalizedNodeResult result = new NormalizedNodeResult();
+        NormalizationResultHolder result = new NormalizationResultHolder();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
             JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
                 JSONCodecFactorySupplier.RFC7951.getShared(getSchemaContext()))) {
@@ -138,7 +138,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
             LOG.warn("An error occured during parsing Json input stream", e);
             return Optional.empty();
         }
-        return Optional.ofNullable(result.getResult());
+        return Optional.ofNullable(result.getResult().data());
     }
 
 }

@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.test.converter;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
@@ -113,9 +112,8 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @SuppressWarnings({"rawtypes","unchecked"})
     public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
             Class dataObjectClass) {
-        Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =
-                codecRegistry.toNormalizedNode(InstanceIdentifier.create(dataObjectClass), object);
-        return Optional.ofNullable(normalizedNode.getValue());
+        return Optional.of(codecRegistry.toNormalizedDataObject(InstanceIdentifier.create(dataObjectClass), object)
+            .node());
     }
 
     @Override
