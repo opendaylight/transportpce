@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +45,8 @@ public abstract class AbstractDeviceTest {
      * @param intialDataQName {@link QName} of initial simulator data
      * @return device simulator (wrapper)
      */
-    public DeviceWrapper createDeviceWrapper(@Nonnull String key, @Nonnull InputStream initialDataXmlInputStream,
-            @Nonnull QName intialDataQName) {
+    public DeviceWrapper createDeviceWrapper(@NonNull String key, @NonNull InputStream initialDataXmlInputStream,
+            @NonNull QName intialDataQName) {
         DeviceWrapper deviceWrapper =
                 DeviceWrapper.createDeviceWrapper(key, initialDataXmlInputStream, intialDataQName);
         LOG.info("Creating a new device wrapper {}, {}", key, deviceWrapper);
@@ -60,7 +60,7 @@ public abstract class AbstractDeviceTest {
      * @param deviceIdentifier identifier of device simulator
      * @return stored device or null if not found
      */
-    public DeviceWrapper getDevice(@Nonnull String deviceIdentifier) {
+    public DeviceWrapper getDevice(@NonNull String deviceIdentifier) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(deviceIdentifier));
         return internalStorage.get(deviceIdentifier);
     }

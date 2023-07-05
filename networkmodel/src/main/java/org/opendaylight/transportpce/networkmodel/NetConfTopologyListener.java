@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
@@ -69,7 +68,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.portMapping = portMapping;
     }
 
-    public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
+    @Override
+    public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();

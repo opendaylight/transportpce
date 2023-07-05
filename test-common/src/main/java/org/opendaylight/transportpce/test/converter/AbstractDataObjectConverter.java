@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.test.converter;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -72,8 +72,8 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @Override
     @SuppressWarnings("unchecked")
     public <T extends DataObject> Optional<T> getDataObject(
-            @Nonnull NormalizedNode normalizedNode,
-            @Nonnull QName rootNode) {
+            @NonNull NormalizedNode normalizedNode,
+            @NonNull QName rootNode) {
         //Preconditions.checkNotNull(normalizedNode);
         if (normalizedNode instanceof ContainerNode) {
             YangInstanceIdentifier.PathArgument directChildIdentifier =
@@ -97,7 +97,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends DataObject> Optional<T> getDataObjectFromRpc(@Nonnull NormalizedNode normalizedNode) {
+    public <T extends DataObject> Optional<T> getDataObjectFromRpc(@NonNull NormalizedNode normalizedNode) {
 
         if (! (normalizedNode instanceof ContainerNode)) {
             LOG.error("converting normalized node is not ContainerNode. It's actual type is {}",
@@ -111,7 +111,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
 
     @Override
     @SuppressWarnings({"rawtypes","unchecked"})
-    public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object,
+    public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@NonNull T object,
             Class dataObjectClass) {
         Entry<YangInstanceIdentifier, NormalizedNode> normalizedNode =
                 codecRegistry.toNormalizedNode(InstanceIdentifier.create(dataObjectClass), object);

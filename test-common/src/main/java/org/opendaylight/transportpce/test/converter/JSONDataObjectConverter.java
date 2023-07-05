@@ -17,7 +17,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -53,7 +53,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      * @param dataStoreContextUtil datastore context util used to extract codec and schema context
      * @return {@link AbstractDataObjectConverter}
      */
-    public static DataObjectConverter createWithDataStoreUtil(@Nonnull DataStoreContext dataStoreContextUtil) {
+    public static DataObjectConverter createWithDataStoreUtil(@NonNull DataStoreContext dataStoreContextUtil) {
         return new JSONDataObjectConverter(dataStoreContextUtil.getSchemaContext(),
                 dataStoreContextUtil.getBindingDOMCodecServices());
     }
@@ -65,8 +65,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      * @param codecRegistry codec registry used for converting
      * @return converter
      */
-    public static DataObjectConverter createWithSchemaContext(@Nonnull EffectiveModelContext schemaContext,
-            @Nonnull BindingNormalizedNodeSerializer codecRegistry) {
+    public static DataObjectConverter createWithSchemaContext(@NonNull EffectiveModelContext schemaContext,
+            @NonNull BindingNormalizedNodeSerializer codecRegistry) {
         return new JSONDataObjectConverter(schemaContext, codecRegistry);
     }
 
@@ -78,26 +78,26 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      */
     @Override
     public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull InputStream inputStream) {
+        @   NonNull InputStream inputStream) {
         JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         return parseInputJSON(reader);
     }
 
     @Override
     public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader, SchemaNode parentSchema) {
+            @NonNull Reader inputReader, SchemaNode parentSchema) {
         throw new UnsupportedOperationException("Not Implemented yet");
     }
 
     @Override
     public Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader) {
+            @NonNull Reader inputReader) {
         JsonReader reader = new JsonReader(inputReader);
         return parseInputJSON(reader);
     }
 
     @Override
-    public <T extends DataObject> Writer writerFromDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    public <T extends DataObject> Writer writerFromDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType) {
         Writer writer = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(writer);
@@ -116,7 +116,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
     }
 
     @Override
-    public <T extends DataObject> Writer writerFromRpcDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    public <T extends DataObject> Writer writerFromRpcDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName) {
         return null;
     }
