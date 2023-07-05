@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Optional;
-import javax.annotation.Nonnull;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.Notification;
@@ -22,29 +22,29 @@ import org.opendaylight.yangtools.yang.model.api.SchemaNode;
 public interface DataObjectConverter {
 
     <T extends DataObject> Optional<T> getDataObject(
-            @Nonnull NormalizedNode normalizedNode,
-            @Nonnull QName rootNode);
+            @NonNull NormalizedNode normalizedNode,
+            @NonNull QName rootNode);
 
     <T extends DataObject> Optional<T> getDataObjectFromRpc(
-            @Nonnull NormalizedNode normalizedNode);
+            @NonNull NormalizedNode normalizedNode);
 
     Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull InputStream inputStream);
+            @NonNull InputStream inputStream);
 
     Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader, SchemaNode parentSchema);
+            @NonNull Reader inputReader, SchemaNode parentSchema);
 
     Optional<NormalizedNode> transformIntoNormalizedNode(
-            @Nonnull Reader inputReader);
+            @NonNull Reader inputReader);
 
-    <T extends DataObject> Writer writerFromDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    <T extends DataObject> Writer writerFromDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType);
 
-    <T extends DataObject> Writer writerFromRpcDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    <T extends DataObject> Writer writerFromRpcDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName);
 
     @SuppressWarnings("rawtypes")
-    <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@Nonnull T object, Class dataObjectClass);
+    <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@NonNull T object, Class dataObjectClass);
 
     interface ConvertType<T> {
         Optional<NormalizedNode> toNormalizedNodes(T object, Class<T> clazz);

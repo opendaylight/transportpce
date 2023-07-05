@@ -5,11 +5,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.opendaylight.transportpce.test.stub;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.api.BindingService;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -43,7 +41,6 @@ public class MountPointStub implements MountPoint {
         return Optional.empty();
     }
 
-    @Nonnull
     @Override
     public InstanceIdentifier<?> getIdentifier() {
         throw new UnsupportedOperationException();

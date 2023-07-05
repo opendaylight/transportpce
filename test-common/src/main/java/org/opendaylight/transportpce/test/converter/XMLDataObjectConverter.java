@@ -14,7 +14,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -22,6 +21,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -70,7 +70,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param dataStoreContextUtil datastore context util used to extract codec and schema context
      * @return {@link AbstractDataObjectConverter}
      */
-    public static XMLDataObjectConverter createWithDataStoreUtil(@Nonnull DataStoreContext dataStoreContextUtil) {
+    public static XMLDataObjectConverter createWithDataStoreUtil(@NonNull DataStoreContext dataStoreContextUtil) {
         BindingNormalizedNodeSerializer bindingToNormalizedNodeCodec =
                 dataStoreContextUtil.getBindingDOMCodecServices();
         return new XMLDataObjectConverter(dataStoreContextUtil.getSchemaContext(), bindingToNormalizedNodeCodec);
@@ -83,8 +83,8 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param codecRegistry codec registry used for converting
      * @return new {@link XMLDataObjectConverter}
      */
-    public static XMLDataObjectConverter createWithSchemaContext(@Nonnull EffectiveModelContext schemaContext,
-            @Nonnull BindingNormalizedNodeSerializer codecRegistry) {
+    public static XMLDataObjectConverter createWithSchemaContext(@NonNull EffectiveModelContext schemaContext,
+            @NonNull BindingNormalizedNodeSerializer codecRegistry) {
         return new XMLDataObjectConverter(schemaContext, codecRegistry);
     }
 
@@ -95,7 +95,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @return {@link Optional} instance of {@link NormalizedNode}.
      */
     @Override
-    public Optional<NormalizedNode> transformIntoNormalizedNode(@Nonnull InputStream inputStream) {
+    public Optional<NormalizedNode> transformIntoNormalizedNode(@NonNull InputStream inputStream) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputStream);
             return parseInputXML(reader);
@@ -106,7 +106,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
     }
 
     @Override
-    public Optional<NormalizedNode> transformIntoNormalizedNode(@Nonnull Reader inputReader) {
+    public Optional<NormalizedNode> transformIntoNormalizedNode(@NonNull Reader inputReader) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
             return parseInputXML(reader);
@@ -127,7 +127,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param inputReader of the given XML
      * @return {@link Optional} instance of {@link NormalizedNode}.
      */
-    public Optional<NormalizedNode> transformInschemaContexttoNormalizedNode(@Nonnull Reader inputReader) {
+    public Optional<NormalizedNode> transformInschemaContexttoNormalizedNode(@NonNull Reader inputReader) {
         try {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
             return parseInputXML(reader);
@@ -138,7 +138,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
     }
 
     @Override
-    public <T extends DataObject> Writer writerFromRpcDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    public <T extends DataObject> Writer writerFromRpcDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType, QName rpcOutputQName, String rpcName) {
         Writer writer = new StringWriter();
         XMLStreamWriter xmlStreamWriter = createXmlStreamWriter(writer);
@@ -169,7 +169,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      *
      */
     @Override
-    public <T extends DataObject> Writer writerFromDataObject(@Nonnull DataObject object, Class<T> dataObjectClass,
+    public <T extends DataObject> Writer writerFromDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType) {
 
         Writer writer = new StringWriter();

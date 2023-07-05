@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.util.Collection;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
@@ -30,7 +29,8 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
         this.tapiNetworkModelService = tapiNetworkModelService;
     }
 
-    public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
+    @Override
+    public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();
