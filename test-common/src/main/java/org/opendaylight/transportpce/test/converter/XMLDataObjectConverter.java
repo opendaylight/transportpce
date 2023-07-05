@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URISyntaxException;
 import java.util.Optional;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.FactoryConfigurationError;
@@ -33,7 +32,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeWrit
 import org.opendaylight.yangtools.yang.data.codec.xml.XMLStreamNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.xml.XmlParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
-import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
+import org.opendaylight.yangtools.yang.data.impl.schema.NormalizationResultHolder;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.EffectiveStatementInference;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
@@ -41,7 +40,6 @@ import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack.Inference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
 
@@ -194,17 +192,17 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
     }
 
     private Optional<NormalizedNode> parseInputXML(XMLStreamReader reader, SchemaNode parentSchemaNode) {
-        NormalizedNodeResult result = new NormalizedNodeResult();
+        NormalizationResultHolder result = new NormalizationResultHolder();
         EffectiveStatementInference schema = SchemaInferenceStack.of(getSchemaContext()).toInference();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
                 XmlParserStream xmlParser = XmlParserStream
                     .create(streamWriter, schema)) {
             xmlParser.parse(reader);
-        } catch (XMLStreamException | URISyntaxException | IOException | SAXException e) {
+        } catch (XMLStreamException | IOException e) {
             LOG.warn("An error occured during parsing XML input stream", e);
             return Optional.empty();
         }
-        return Optional.ofNullable(result.getResult());
+        return Optional.ofNullable(result.getResult().data());
     }
 
     private NormalizedNodeWriter createWriterBackedNormalizedNodeWriter(Writer backingWriter) {
