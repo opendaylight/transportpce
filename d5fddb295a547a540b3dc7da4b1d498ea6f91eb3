@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5da54ab_f3a56b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-07-06T06:17:12Z",
+      "side": 1,
+      "message": "docs-linkcheck false positive and Xtesting local tests OK\n\n18:53:49   buildcontroller: OK (275.36\u003dsetup[5.79]+cmd[269.56] seconds)\n18:53:49   testsPCE: OK (304.52\u003dsetup[86.98]+cmd[217.54] seconds)\n18:53:49   sims121: OK (11.49\u003dsetup[9.10]+cmd[2.39] seconds)\n18:53:49   build_karaf_tests121: OK (69.00\u003dsetup[9.19]+cmd[59.81] seconds)\n18:53:49   tests121: OK (2389.65\u003dsetup[4.33]+cmd[2385.32] seconds)\n18:53:49   sims221: OK (12.75\u003dsetup[9.11]+cmd[3.64] seconds)\n18:53:49   build_karaf_tests221: OK (79.80\u003dsetup[6.01]+cmd[73.79] seconds)\n18:53:49   tests_tapi: OK (926.48\u003dsetup[14.14]+cmd[912.35] seconds)\n18:53:49   tests221: OK (3325.45\u003dsetup[3.87]+cmd[3321.58] seconds)\n18:53:49   sims71: OK (7.68\u003dsetup[6.02]+cmd[1.66] seconds)\n18:53:49   build_karaf_tests71: OK (77.17\u003dsetup[6.82]+cmd[70.35] seconds)\n18:53:49   tests71: OK (478.97\u003dsetup[4.11]+cmd[474.86] seconds)\n18:53:49   build_karaf_tests_hybrid: OK (84.72\u003dsetup[24.15]+cmd[60.57] seconds)\n18:53:49   tests_hybrid: OK (898.75\u003dsetup[4.10]+cmd[894.65] seconds)\n18:53:49   buildlighty: OK (46.12\u003dsetup[4.09]+cmd[42.03] seconds)\n18:53:49   docs: OK (40.79\u003dsetup[38.92]+cmd[1.87] seconds)\n18:53:49   docs-linkcheck: FAIL code 1 (42.20\u003dsetup[38.88]+cmd[3.33] seconds)\n18:53:49   checkbashisms: OK (53.83\u003dsetup[2.62]+cmd[50.52,0.70] seconds)\n18:53:49   pre-commit: OK (34.49\u003dsetup[3.73]+cmd[22.29,8.48] seconds)\n18:53:49   pylint: OK (33.19\u003dsetup[4.28]+cmd[28.91] seconds)\n18:53:49   evaluation failed :( (6042.59 seconds)",
+      "revId": "d5fddb295a547a540b3dc7da4b1d498ea6f91eb3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
