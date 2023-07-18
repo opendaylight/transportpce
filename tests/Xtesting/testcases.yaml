@@ -1,0 +1,19 @@
+---
+tiers:
+    -
+        name: transportpce
+        order: 1
+        description: ''
+        testcases:
+            -
+                case_name: pre-commit
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e pre-commit'
+                        console: true
