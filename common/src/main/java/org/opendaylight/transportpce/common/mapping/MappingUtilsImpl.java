@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1G
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -49,6 +50,8 @@ public final class MappingUtilsImpl implements MappingUtils {
     private static final ImmutableMap<String, SupportedIfCapability> CAP_TYPE_MAP =
         ImmutableMap.<String, SupportedIfCapability>builder()
             .put("If400GE{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-400GE}", If400GE.VALUE)
+            .put("IfOTU4ODU4{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-OTU4-ODU4}",
+                    IfOTU4ODU4.VALUE)
             .put("IfOtsiOtsigroup{qname=(http://org/openroadm/port/types?revision=2020-03-27)if-otsi-otsigroup}",
                 IfOtsiOtsigroup.VALUE)
             .put("IfOCH{qname=(http://org/openroadm/port/types?revision=2018-10-19)if-OCH}", IfOCH.VALUE)
