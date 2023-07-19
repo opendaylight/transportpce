@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04547476_266278cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-07-19T15:00:43Z",
+      "side": 1,
+      "message": "TPCE functional tests fail due to netconf-node-topology:connection-status that stays in \"connecting\" state and no longer change to \"connected\" when we connect controller to Honeynode sims via netconf.\nI hope the problem is not with the sims...",
+      "revId": "4b871714a8eaf6a1bc36b80eaf2b35e10761cc72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
