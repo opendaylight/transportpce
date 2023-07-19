@@ -1054,7 +1054,11 @@ public class PortMappingVersion710 {
             Set<String> regenProfiles = new HashSet<>();
             SupportedInterfaceCapability sic1 = null;
             for (SupportedInterfaceCapability sic : supIntfCapaList) {
-                supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
+                // Here it could add null values and cause a null pointer exception
+                // Especially when the MappingUtilsImpl does not contain required supported-if-cap
+                if (MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()) != null) {
+                    supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
+                }
                 LOG.debug("This the xpdr-type {}", xpdrNodeType.getName());
                 // Here we use both types of Regen (bi/uni). Though initial support is only for bi-directional regen
                 if (xpdrNodeType == XpdrNodeTypes.Regen || xpdrNodeType == XpdrNodeTypes.RegenUni) {
