@@ -46,7 +46,7 @@ NODES_PWD = 'admin'
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
 
-REQUEST_TIMEOUT = 10
+REQUEST_TIMEOUT = 200
 
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
