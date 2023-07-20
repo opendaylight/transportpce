@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95b3ce66_76dddeed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-07-20T13:48:21Z",
+      "side": 1,
+      "message": "wording issue",
+      "range": {
+        "startLine": 11,
+        "startChar": 60,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "5e65af055105f8c4c14039a09f16937f1013cf90",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77b68645_c7638b89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-07-20T13:48:21Z",
+      "side": 1,
+      "message": "Add a JIRA ticket",
+      "revId": "5e65af055105f8c4c14039a09f16937f1013cf90",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
