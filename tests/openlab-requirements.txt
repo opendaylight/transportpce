@@ -1,0 +1,2 @@
+ncclient>=0.6.13 # Apache-2.0 license
+xmltodict>=0.13.0 # MIT License (MIT)
