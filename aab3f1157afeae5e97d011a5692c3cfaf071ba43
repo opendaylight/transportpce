@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca356d68_6f30196e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-07-21T09:23:14Z",
+      "side": 1,
+      "message": "From a functional point of view, no regression detected in Potassium:\n  buildcontroller: OK (292.08\u003dsetup[6.18]+cmd[285.91] seconds)\n  testsPCE: OK (310.46\u003dsetup[83.27]+cmd[227.19] seconds)\n  sims121: OK (8.71\u003dsetup[6.96]+cmd[1.75] seconds)\n  build_karaf_tests121: OK (71.18\u003dsetup[6.96]+cmd[64.22] seconds)\n  tests121: OK (2358.31\u003dsetup[4.12]+cmd[2354.18] seconds)\n  sims221: OK (8.87\u003dsetup[6.79]+cmd[2.08] seconds)\n  build_karaf_tests221: OK (69.97\u003dsetup[8.32]+cmd[61.65] seconds)\n  tests_tapi: OK (930.33\u003dsetup[10.11]+cmd[920.22] seconds)\n  tests221: OK (3287.38\u003dsetup[4.01]+cmd[3283.37] seconds)\n  sims71: OK (10.20\u003dsetup[8.53]+cmd[1.67] seconds)\n  build_karaf_tests71: OK (95.35\u003dsetup[6.96]+cmd[88.40] seconds)\n  tests71: OK (470.70\u003dsetup[4.07]+cmd[466.63] seconds)\n  build_karaf_tests_hybrid: OK (80.53\u003dsetup[5.47]+cmd[75.05] seconds)\n  tests_hybrid: OK (894.07\u003dsetup[4.05]+cmd[890.02] seconds)\n  buildlighty: FAIL code 9 (38.05\u003dsetup[4.23]+cmd[33.82] seconds)\n  docs: OK (48.32\u003dsetup[46.30]+cmd[2.02] seconds)\n  docs-linkcheck: OK (49.95\u003dsetup[46.56]+cmd[3.39] seconds)\n  checkbashisms: OK (57.56\u003dsetup[2.56]+cmd[54.41,0.60] seconds)\n  pre-commit: FAIL code 1 (37.51\u003dsetup[5.82]+cmd[25.42,6.27] seconds)\n  pylint: OK (40.52\u003dsetup[11.33]+cmd[29.19] seconds)\n",
+      "revId": "aab3f1157afeae5e97d011a5692c3cfaf071ba43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
