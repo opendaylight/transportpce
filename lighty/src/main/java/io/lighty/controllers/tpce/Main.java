@@ -26,8 +26,8 @@ import io.lighty.modules.southbound.netconf.impl.NetconfSBPlugin;
 import io.lighty.modules.southbound.netconf.impl.NetconfTopologyPluginBuilder;
 import io.lighty.modules.southbound.netconf.impl.config.NetconfConfiguration;
 import io.lighty.modules.southbound.netconf.impl.util.NetconfConfigUtils;
+import io.lighty.openapi.OpenApiLighty;
 import io.lighty.server.LightyServerBuilder;
-import io.lighty.swagger.SwaggerLighty;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
@@ -163,7 +163,7 @@ public class Main {
                 new InetSocketAddress(restConfConfiguration.getInetAddress(), restConfConfiguration.getHttpPort()));
         CommunityRestConfBuilder communityRestConfBuilder = CommunityRestConfBuilder.from(
                 RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()));
-        SwaggerLighty swagger = new SwaggerLighty(restConfConfiguration, jettyServerBuilder,
+        OpenApiLighty swagger = new OpenApiLighty(restConfConfiguration, jettyServerBuilder,
                 lightyController.getServices());
         swagger.start().get();
 
