@@ -242,11 +242,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.serviceInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
+        // TODO: Here we also have to check if there is an associated temp-service.
+        // TODO: If there is one, delete it from the temp-service-list??
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        // This ensures that the temp-service boolean is false, especially, when
+        // service-create is initiated after the temp-service-create
+        this.rendererListenerImpl.setTempService(false);
         this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         LOG.debug(SERVICE_CREATE_MSG, LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
