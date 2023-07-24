@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "534795bb0ae26e969639d4f0e1cf74658ec2146e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80024b65_2ea68500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-07-24T07:21:05Z",
+      "side": 1,
+      "message": "  docs-linkcheck: FAIL code 1 (161.24\u003dsetup[37.81]+cmd[123.43] seconds)",
+      "revId": "534795bb0ae26e969639d4f0e1cf74658ec2146e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
