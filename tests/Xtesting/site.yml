@@ -11,10 +11,11 @@
       suites:
         - container: tpce0
           tests:
-            - linters
-            - build
-            - PCE
-            - 121
-            - 221
-            - 71
-            - hybrid
+            - combined
+#            - linters
+#            - build
+#            - PCE
+#            - 121
+#            - 221
+#            - 71
+#            - hybrid

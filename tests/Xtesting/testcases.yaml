@@ -89,3 +89,20 @@ tiers:
                     args:
                         cmd: 'cd /src/transportpce && tox -e buildcontroller,build_karaf_tests_hybrid,tests_hybrid'
                         console: true
+    -
+        name: combined
+        order: 0
+        description: 'combine all transportPCE tests'
+        testcases:
+            -
+                case_name: combined
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run all transportPCE tests in parallell with tox'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && git apply tests/Xtesting/patch.diff && tox -o -p auto'
+                        console: true
