@@ -4,6 +4,8 @@ ARG BRANCH=master
 
 RUN apk --update add \
         build-base \
+        checkbashisms \
+        curl \
         linux-headers \
         git \
         gcc \
@@ -11,6 +13,7 @@ RUN apk --update add \
         libxslt-dev \
         maven \
         openjdk17-jdk \
+        openssl-dev \
         python3 \
         python3-dev \
         py3-pip \

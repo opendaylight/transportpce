@@ -1,19 +1,91 @@
 ---
 tiers:
     -
-        name: transportpce
-        order: 1
-        description: ''
+        name: suites
+        order: 0
+        description: 'transportPCE tests by category'
         testcases:
             -
-                case_name: pre-commit
+                case_name: linters
                 project_name: transportpce
                 criteria: 100
                 blocking: true
                 clean_flag: false
-                description: ''
+                description: 'linters suite'
                 run:
                     name: 'bashfeature'
                     args:
-                        cmd: 'cd /src/transportpce && tox -e pre-commit'
+                        cmd: 'cd /src/transportpce && tox -o -p auto -e docs,docs-linkcheck,pre-commit,checkbashisms,pylint'
+                        console: true
+            -
+                case_name: build
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'build transportpce with karaf and lighty.io'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,buildlighty'
+                        console: true
+            -
+                case_name: PCE
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run PCE tests'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,testsPCE'
+                        console: true
+            -
+                case_name: 121
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run OpenROADM device 1.2.1 tests suite'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,build_karaf_tests121,sims121,tests121'
+                        console: true
+            -
+                case_name: 221
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run OpenROADM device 2.2.1 tests suite'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,build_karaf_tests221,sims221,tests221'
+                        console: true
+            -
+                case_name: 71
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run OpenROADM device 7.1 tests suite'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,build_karaf_tests71,sims71,tests71'
+                        console: true
+            -
+                case_name: hybrid
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: 'run OpenROADM device mixed versions tests suite'
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'cd /src/transportpce && tox -e buildcontroller,build_karaf_tests_hybrid,tests_hybrid'
                         console: true
