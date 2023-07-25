@@ -26,9 +26,9 @@ import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -99,7 +99,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
             .setConfigurationResponseCommon(configurationResponseCommon).build();
         ListenableFuture<ServiceDeleteOutput> response = ServiceDataUtils.returnFuture(output);
         when(this.rendererServiceOperationsMock.serviceDelete(any(
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInput
                     .class), any()))
             .thenReturn(response);
         ServiceDeleteInput input = ServiceDataUtils.buildServiceDeleteInput();
@@ -114,7 +114,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
             "Renderer service delete in progress",
             rendereResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.rendererServiceOperationsMock).serviceDelete(any(
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInput
                     .class), any());
     }
 
@@ -128,7 +128,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
             .setConfigurationResponseCommon(configurationResponseCommon).build();
         ListenableFuture<ServiceDeleteOutput> response = ServiceDataUtils.returnFuture(output);
         when(this.rendererServiceOperationsMock.serviceDelete(any(
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInput
                     .class), any()))
             .thenReturn(response);
         TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput();
@@ -142,7 +142,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
             "Renderer service delete in progress",
             rendereResponse.getConfigurationResponseCommon().getResponseMessage());
         verify(this.rendererServiceOperationsMock).serviceDelete(any(
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInput
                     .class), any());
     }
 }

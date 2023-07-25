@@ -157,7 +157,7 @@ public final class OpenRoadmOtnTopology {
     }
 
     public static TopologyShard createOtnLinks(
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp
                 .Link notifLink,
             OtnLinkType linkType) {
 
@@ -171,7 +171,7 @@ public final class OpenRoadmOtnTopology {
     }
 
     public static TopologyShard createOtnLinks(
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp
                 .Link notifLink,
             List<Link> supportedOtu4links, List<TerminationPoint> supportedTPs, OtnLinkType linkType) {
 

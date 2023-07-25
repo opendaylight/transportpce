@@ -404,7 +404,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     @Override
     public void createOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link
         notifLink, List<String> suppLinks, OtnLinkType linkType) {
 
         TopologyShard otnTopologyShard;
@@ -472,7 +472,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     @Override
     public void deleteOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link
         notifLink, List<String> suppLinks, OtnLinkType linkType) {
 
         TopologyShard otnTopologyShard;
@@ -562,7 +562,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     @Override
     public void updateOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link
             notifLink, List<String> suppLinks, Uint32 serviceRate, Short tribPortNb, Short minTribSoltNb,
             Short maxTribSlotNb, boolean isDeletion) {
 

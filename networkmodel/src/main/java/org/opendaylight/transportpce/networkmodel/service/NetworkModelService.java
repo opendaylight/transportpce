@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel.service;
 import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev221225.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -73,7 +73,7 @@ public interface NetworkModelService {
      *     OtnLinkType, as OTU4, ODTU, etc
      */
     void createOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link
         notifLink, List<String> suppLinks, OtnLinkType linkType);
 
     /**
@@ -88,7 +88,7 @@ public interface NetworkModelService {
      *     OtnLinkType, as OTU4, ODTU, etc
      */
     void deleteOtnLinks(
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link
         notifLink, List<String> suppLinks, OtnLinkType linkType);
 
     /**

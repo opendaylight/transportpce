@@ -53,6 +53,11 @@ module transportpce-renderer {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2023-07-25 {
+        description
+          "Version 1.6.5.
+           Add common-Id to the service implementation request";
+      }
   revision 2021-09-15 {
       description
         "Version 1.6.4.
@@ -111,6 +116,11 @@ module transportpce-renderer {
         description
           "Identifier for the service to be created in
            the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
+      }
+      leaf common-id {
+          type string;
+          description
+            "common-id of the service that may be associated to the considered service in temp-service-list";
       }
       leaf connection-type {
         type org-openroadm-common-service-types:connection-type;

@@ -49,16 +49,16 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.link._for.notif.ATerminationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.link._for.notif.ZTerminationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.LinkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.link._for.notif.ATerminationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.link._for.notif.ZTerminationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
@@ -136,6 +136,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(
                     ServicePathNotificationTypes.ServiceImplementationRequest,
                     input.getServiceName(),
+                    input.getCommonId(),
                     RpcStatusEx.Pending,
                     "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
@@ -205,6 +206,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(
                     ServicePathNotificationTypes.ServiceDelete,
                     serviceName,
+                    null,
                     RpcStatusEx.Pending,
                     "Service compliant, submitting service delete Request ...");
                 // Obtain path description
@@ -217,6 +219,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     sendNotifications(
                         ServicePathNotificationTypes.ServiceDelete,
                         serviceName,
+                        null,
                         RpcStatusEx.Failed,
                         "Unable to get path description for service");
                     return ModelMappingUtils
@@ -367,6 +370,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             servicePathDataAtoZ.getServicePathInput().getServiceName(),
+            null,
             RpcStatusEx.Pending,
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<DeviceRenderingResult> atozrenderingFuture =
@@ -377,6 +381,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             servicePathDataZtoA.getServicePathInput().getServiceName(),
+            null,
             RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<DeviceRenderingResult> ztoarenderingFuture =
@@ -395,6 +400,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 servicePathDataAtoZ.getServicePathInput().getServiceName(),
+                null,
                 RpcStatusEx.Pending,
                 DEVICE_RENDERING_ROLL_BACK_MSG);
             //FIXME we can't do rollback here, because we don't have rendering results.
@@ -430,6 +436,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             otnServicePathAtoZ.getServiceName(),
+            null,
             RpcStatusEx.Pending,
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<OtnDeviceRenderingResult> atozrenderingFuture =
@@ -440,6 +447,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             otnServicePathZtoA.getServiceName(),
+            null,
             RpcStatusEx.Pending,
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<OtnDeviceRenderingResult> ztoarenderingFuture =
@@ -457,6 +465,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 otnServicePathAtoZ.getServiceName(),
+                null,
                 RpcStatusEx.Pending,
                 DEVICE_RENDERING_ROLL_BACK_MSG);
             //FIXME we can't do rollback here, because we don't have rendering results.
@@ -493,6 +502,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),
+                null,
                 RpcStatusEx.Pending,
                 "Olm power setup A-Z");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureAtoZ =
@@ -502,6 +512,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),
+                null,
                 RpcStatusEx.Pending,
                 "Olm power setup Z-A");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureZtoA =
@@ -518,6 +529,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                     ServicePathNotificationTypes.ServiceImplementationRequest,
                     powerSetupInputAtoZ.getServiceName(),
+                    null,
                     RpcStatusEx.Pending,
                     OLM_ROLL_BACK_MSG);
             rollbackProcessor.addTask(
@@ -642,6 +654,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
+                input.getCommonId(),
                 RpcStatusEx.Failed,
                 DEVICE_RENDERING_ROLL_BACK_MSG);
             return false;
@@ -656,6 +669,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
+                input.getCommonId(),
                 RpcStatusEx.Failed,
                 OLM_ROLL_BACK_MSG);
             return false;
@@ -684,6 +698,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
+                input.getCommonId(),
                 RpcStatusEx.Failed,
                 "Service activation test failed.");
             return false;
@@ -691,6 +706,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotificationsWithPathDescription(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             input.getServiceName(),
+            input.getCommonId(),
             RpcStatusEx.Successful,
             OPERATION_SUCCESSFUL,
             input.getPathDescription(),
@@ -718,6 +734,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceDelete,
                 serviceName,
+                null,
                 RpcStatusEx.Pending,
                 TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
             // TODO add some flag rather than string
@@ -728,6 +745,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(
                     ServicePathNotificationTypes.ServiceDelete,
                     serviceName,
+                    null,
                     RpcStatusEx.Failed,
                     "Service power turndown failed on A-to-Z path for service");
                 return false;
@@ -736,6 +754,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceDelete,
                 serviceName,
+                null,
                 RpcStatusEx.Pending,
                 "Turning down power on Z-to-A path");
             // TODO add some flag rather than string
@@ -746,6 +765,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 sendNotifications(
                     ServicePathNotificationTypes.ServiceDelete,
                     serviceName,
+                    null,
                     RpcStatusEx.Failed,
                     "Service power turndown failed on Z-to-A path for service");
                 return false;
@@ -759,11 +779,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
             ServicePathNotificationTypes.ServiceDelete,
             serviceName,
+            null,
             RpcStatusEx.Pending,
             "Deleting service path via renderer");
         sendNotificationsWithPathDescription(
             ServicePathNotificationTypes.ServiceDelete,
             serviceName,
+            null,
             RpcStatusEx.Successful,
             OPERATION_SUCCESSFUL,
             pathDescription,
@@ -816,6 +838,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
+                input.getCommonId(),
                 RpcStatusEx.Failed,
                 DEVICE_RENDERING_ROLL_BACK_MSG);
             return false;
@@ -823,6 +846,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotificationsWithPathDescription(
             ServicePathNotificationTypes.ServiceImplementationRequest,
             input.getServiceName(),
+            input.getCommonId(),
             RpcStatusEx.Successful, OPERATION_SUCCESSFUL,
             input.getPathDescription(),
             createLinkForNotif(
@@ -848,6 +872,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotifications(
                 ServicePathNotificationTypes.ServiceDelete,
                 serviceName,
+                null,
                 RpcStatusEx.Pending,
                 "Deleting otn-service path via renderer");
         List<OtnDeviceRenderingResult> renderingResults =
@@ -875,6 +900,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         sendNotificationsWithPathDescription(
             ServicePathNotificationTypes.ServiceDelete,
             serviceName,
+            null,
             RpcStatusEx.Successful,
             OPERATION_SUCCESSFUL,
             pathDescription,
@@ -899,10 +925,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private void sendNotifications(
             ServicePathNotificationTypes servicePathNotificationTypes,
             String serviceName,
+            String commonId,
             RpcStatusEx rpcStatusEx,
             String message) {
         send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
+            buildNotification(servicePathNotificationTypes, serviceName, commonId, rpcStatusEx, message,
                 null, null, null, null));
     }
 
@@ -917,6 +944,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private void sendNotificationsWithPathDescription(
             ServicePathNotificationTypes servicePathNotificationTypes,
             String serviceName,
+            String commonId,
             RpcStatusEx rpcStatusEx,
             String message,
             PathDescription pathDescription,
@@ -924,7 +952,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             Set<String> supportedLinks,
             String serviceType) {
         send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
+            buildNotification(servicePathNotificationTypes, serviceName, commonId, rpcStatusEx, message,
                 pathDescription, notifLink, supportedLinks, serviceType));
     }
 
@@ -940,6 +968,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private RendererRpcResultSp buildNotification(
             ServicePathNotificationTypes servicePathNotificationTypes,
             String serviceName,
+            String commonId,
             RpcStatusEx rpcStatusEx,
             String message,
             PathDescription pathDescription,
@@ -948,7 +977,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             String serviceType) {
         RendererRpcResultSpBuilder builder =
             new RendererRpcResultSpBuilder()
-                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)
+                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setCommonId(commonId)
+                .setStatus(rpcStatusEx)
                 .setStatusMessage(message)
                 .setServiceType(serviceType);
         if (pathDescription != null) {

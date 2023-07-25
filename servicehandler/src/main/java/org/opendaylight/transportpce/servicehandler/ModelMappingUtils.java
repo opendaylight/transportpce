@@ -17,9 +17,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.path.computation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.ServiceImplementationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -145,8 +145,9 @@ public final class ModelMappingUtils {
                 input.isServiceReconfigure()
                     ? input.getNewServiceName()
                     : input.getServiceName())
+            .setCommonId(input.getCommonId())
             .setServiceAEnd(
-                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
                         .service.implementation.request.input.ServiceAEndBuilder()
                     .setServiceFormat(input.getServiceAEnd().getServiceFormat())
                     .setServiceRate(input.getServiceAEnd().getServiceRate())
@@ -170,7 +171,7 @@ public final class ModelMappingUtils {
                             .build())
                     .build())
             .setServiceZEnd(
-                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
                         .service.implementation.request.input.ServiceZEndBuilder()
                     .setServiceFormat(input.getServiceZEnd().getServiceFormat())
                     .setServiceRate(input.getServiceZEnd().getServiceRate())
@@ -197,7 +198,7 @@ public final class ModelMappingUtils {
             .setServiceHandlerHeader(
                 new ServiceHandlerHeaderBuilder().setRequestId(input.getSdncRequestHeader().getRequestId()).build())
             .setPathDescription(
-                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
                         .service.implementation.request.input.PathDescriptionBuilder()
                     .setAToZDirection(pathDescription.getAToZDirection())
                     .setZToADirection(pathDescription.getZToADirection())
@@ -221,7 +222,7 @@ public final class ModelMappingUtils {
         return OTU_RATE_MAP.get(otuServiceRate.toString());
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
             .ServiceDeleteInput createServiceDeleteInput(ServiceInput serviceInput) {
         return new ServiceDeleteInputBuilder()
             .setServiceName(serviceInput.getServiceName())
@@ -232,7 +233,7 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
             .ServiceDeleteInput createServiceDeleteInput(
                 ServiceRerouteInput serviceRerouteinput,
                 Services services) {
@@ -245,7 +246,7 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
             .ServiceDeleteInput createServiceDeleteInput(
                 ServiceRestorationInput serviceRestorationInput,
                 Services services) {
@@ -258,7 +259,7 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725
             .ServiceDeleteInput createServiceDeleteInput(ServiceReconfigureInput serviceReconfigureInput) {
         String serviceName = serviceReconfigureInput.getServiceName();
         return new ServiceDeleteInputBuilder()

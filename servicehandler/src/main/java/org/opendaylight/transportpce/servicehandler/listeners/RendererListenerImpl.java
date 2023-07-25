@@ -20,9 +20,9 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev230725.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
@@ -198,6 +198,16 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         } else {
             OperationResult operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
+            // Here the service is implemented and the tempService has to be deleted if present
+            String commonId = serviceRpcResultSp.getCommonId();
+            if (commonId != null) {
+                if (this.serviceDataStoreOperations.getTempService(commonId).isPresent()) {
+                    LOG.info("Temp-service exists with the common-Id {}", commonId);
+                    // Delete the common-id from this temp-service-list here
+                    OperationResult tempServiceListDelete = serviceDataStoreOperations.deleteTempService(commonId);
+                    LOG.info("Result for temp-service-list with {} is {}", commonId, tempServiceListDelete);
+                }
+            }
             if (operationResult.isSuccess()) {
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
