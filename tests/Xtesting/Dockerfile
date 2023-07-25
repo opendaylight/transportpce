@@ -4,6 +4,7 @@ ARG BRANCH=master
 
 RUN apk --update add \
         build-base \
+        checkbashisms \
         linux-headers \
         git \
         gcc \
