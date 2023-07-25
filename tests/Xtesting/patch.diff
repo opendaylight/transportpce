@@ -1,0 +1,31 @@
+diff --git a/tox.ini b/tox.ini
+index 7cae5c70..dd44b57a 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -94,7 +94,7 @@ commands =
+   ./build_karaf_for_tests.sh
+ 
+ [testenv:tests121]
+-depends = buildcontroller,build_karaf_tests121,sims121,testsPCE
++depends = buildcontroller,build_karaf_tests121,sims121
+ # testsPCE dependency is only here to chain tests in the gate and avoid resources starvation
+ allowlist_externals = launch_tests.sh
+ passenv = LAUNCHER, USE_LIGHTY, NO_ODL_STARTUP, USE_ODL_RESTCONF_VERSION
+@@ -127,7 +127,7 @@ commands =
+   ./build_karaf_for_tests.sh
+ 
+ [testenv:tests221]
+-depends = buildcontroller,build_karaf_tests221,sims221,tests71
++depends = buildcontroller,build_karaf_tests221,sims221,tests_tapi
+ # tests71 dependency is only here to chain tests in the gate and avoid ressources starvation
+ allowlist_externals = launch_tests.sh
+ passenv = LAUNCHER, USE_LIGHTY, NO_ODL_STARTUP, USE_ODL_RESTCONF_VERSION
+@@ -152,7 +152,7 @@ commands =
+   ./build_karaf_for_tests.sh
+ 
+ [testenv:tests71]
+-depends = buildcontroller,build_karaf_tests71,sims71,tests_tapi
++depends = buildcontroller,build_karaf_tests71,sims71
+ allowlist_externals = launch_tests.sh
+ passenv = LAUNCHER, USE_LIGHTY, NO_ODL_STARTUP, USE_ODL_RESTCONF_VERSION
+ setenv =
