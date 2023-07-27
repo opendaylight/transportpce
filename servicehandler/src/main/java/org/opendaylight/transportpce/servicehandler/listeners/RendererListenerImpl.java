@@ -198,6 +198,17 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         } else {
             OperationResult operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
+            // Here the service is implemented and the tempService has to be deleted if present
+            String commonId = input.getCommonId();
+            if (commonId != null) {
+                if (this.serviceDataStoreOperations.getTempService(commonId).isPresent()) {
+                    LOG.info("Temp-service exists with the common-Id {}", commonId);
+                    // Delete the common-id from this temp-service-list here
+                    OperationResult tempServiceListDelete = serviceDataStoreOperations.deleteTempService(commonId);
+                    LOG.info("Result for temp-service-list with {} is {}", commonId, tempServiceListDelete);
+                }
+            }
+
             if (operationResult.isSuccess()) {
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
