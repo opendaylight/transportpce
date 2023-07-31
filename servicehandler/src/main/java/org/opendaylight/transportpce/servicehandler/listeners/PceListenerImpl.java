@@ -223,26 +223,45 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
             LOG.error("PCE cancel returned an unknown RpcStatusEx code !");
             return;
         }
-        Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
-        PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
-            new PublishNotificationProcessServiceBuilder()
-                .setServiceName(service.getServiceName())
-                .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
-                .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
-                .setCommonId(service.getCommonId())
-                .setConnectionType(service.getConnectionType())
-                .setPublisherName(PUBLISHER);
+        PublishNotificationProcessServiceBuilder nbiNotificationBuilder;
+        State serviceOpState;
+        if (tempService) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list.Services
+                    tempServiceList = serviceDataStoreOperations.getTempService(input.getServiceName()).orElseThrow();
+            serviceOpState = tempServiceList.getOperationalState();
+            nbiNotificationBuilder =
+                    new PublishNotificationProcessServiceBuilder()
+                            .setServiceAEnd(new ServiceAEndBuilder(tempServiceList.getServiceAEnd()).build())
+                            .setServiceZEnd(new ServiceZEndBuilder(tempServiceList.getServiceZEnd()).build())
+                            .setCommonId(tempServiceList.getCommonId())
+                            .setConnectionType(tempServiceList.getConnectionType())
+                            .setPublisherName(PUBLISHER);
+        } else {
+            Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
+            serviceOpState = service.getOperationalState();
+            nbiNotificationBuilder =
+                    new PublishNotificationProcessServiceBuilder()
+                            .setServiceName(service.getServiceName())
+                            .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
+                            .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
+                            .setCommonId(service.getCommonId())
+                            .setConnectionType(service.getConnectionType())
+                            .setPublisherName(PUBLISHER);
+
+        }
+
         if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
             LOG.info("PCE cancel resource failed !");
             sendNbiNotification(
                 nbiNotificationBuilder
                     .setResponseFailed("PCE cancel resource failed !")
                     .setMessage("ServiceDelete request failed ...")
-                    .setOperationalState(service.getOperationalState())
+                    .setOperationalState(serviceOpState)
                     .build());
             return;
         }
         LOG.info("PCE cancel resource done OK !");
+        // Here the input refers to the transportPCE API and the serviceName will be commonId for temp-service
         OperationResult deleteServicePathOperationResult =
                 this.serviceDataStoreOperations.deleteServicePath(input.getServiceName());
         if (!deleteServicePathOperationResult.isSuccess()) {
@@ -260,7 +279,7 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
             sendNbiNotification(
                 nbiNotificationBuilder
                     .setResponseFailed("")
-                    .setMessage("Service deleted !")
+                    .setMessage("{}Service deleted !")
                     .setOperationalState(State.Degraded)
                     .build());
         } else {
@@ -269,9 +288,10 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
                 nbiNotificationBuilder
                     .setResponseFailed(serviceType + "Service was not removed from datastore !")
                     .setMessage("ServiceDelete request failed ...")
-                    .setOperationalState(service.getOperationalState())
+                    .setOperationalState(serviceOpState)
                     .build());
         }
+        // should we re-initialize the temp-service boolean to false?
         /**
          * if it was an RPC serviceReconfigure, re-launch PCR.
          */

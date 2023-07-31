@@ -25,8 +25,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.serviceha
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.TempServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeader;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
@@ -72,16 +75,52 @@ public class RendererServiceWrapper {
         }
     }
 
+
+    // TODO: Here is where the  we are sending null values for the service and that is causing issues
+    // We are performing renderer using null values
     public ServiceDeleteOutput performRenderer(TempServiceDeleteInput tempServiceDeleteInput,
-            ServiceNotificationTypes notifType) {
+            ServiceNotificationTypes notifType, org.opendaylight.yang.gen.v1.http
+                                                       .org.openroadm.service.rev211210.temp.service.list
+                                                       .Services tempService) {
         String commonId = tempServiceDeleteInput.getCommonId();
         if (validateParams(commonId, null, true)) {
             ServiceHandlerHeader serviceHandler = new ServiceHandlerHeaderBuilder().setRequestId(commonId).build();
-            return performRenderer(tempServiceDeleteInput.getCommonId(), serviceHandler,
-                    ServiceNotificationTypes.ServiceDeleteResult, null);
+            return performRenderer(tempServiceDeleteInput, serviceHandler,
+                    ServiceNotificationTypes.ServiceDeleteResult, tempService);
         } else {
             return returnRendererFailed();
         }
+    }
+
+    private ServiceDeleteOutput performRenderer(TempServiceDeleteInput tempServiceDeleteInput,
+                                                ServiceHandlerHeader serviceHandlerHeader,
+                                                ServiceNotificationTypes notifType, org.opendaylight.yang.gen.v1.http
+                                                        .org.openroadm.service.rev211210.temp.service.list
+                                                        .Services tempService) {
+        String serviceName = tempServiceDeleteInput.getCommonId();
+        notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
+                .setStatus(RpcStatusEx.Pending)
+                .setStatusMessage("Service compliant, submitting temp service delete Request ...").build();
+        sendNotifications(notification);
+        FutureCallback<ServiceDeleteOutput> rendererCallback =
+                new ServiceDeleteOutputFutureCallback(notifType, serviceName);
+        ServiceDeleteInput serviceDeleteInput = createRendererRequestInput(serviceName, serviceHandlerHeader);
+        // Here build the regular service-list container from the temp-service-list
+        Services service = new ServicesBuilder().setServiceName(tempService.getCommonId())
+                .setServiceAEnd(new ServiceAEndBuilder(tempService.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(tempService.getServiceZEnd()).build())
+                .setCommonId(tempService.getCommonId())
+                .build();
+
+        ListenableFuture<ServiceDeleteOutput> renderer =
+                this.rendererServiceOperations.serviceDelete(serviceDeleteInput, service);
+        Futures.addCallback(renderer, rendererCallback, executor);
+        ConfigurationResponseCommon value =
+                new ConfigurationResponseCommonBuilder().setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                        .setRequestId(serviceDeleteInput.getServiceHandlerHeader().getRequestId())
+                        .setResponseCode(ResponseCodes.RESPONSE_OK)
+                        .setResponseMessage("Renderer temp-service delete in progress").build();
+        return new ServiceDeleteOutputBuilder().setConfigurationResponseCommon(value).build();
     }
 
     private ServiceDeleteOutput performRenderer(String serviceName, ServiceHandlerHeader serviceHandlerHeader,

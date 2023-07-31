@@ -205,6 +205,8 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
                     LOG.info("Temp-service exists with the common-Id {}", commonId);
                     // Delete the common-id from this temp-service-list here
                     OperationResult tempServiceListDelete = serviceDataStoreOperations.deleteTempService(commonId);
+                    //TODO: Also need to delete the service-path from the transportpce-service-path list
+                    this.serviceDataStoreOperations.deleteServicePath(commonId);
                     LOG.info("Result for temp-service-list with {} is {}", commonId, tempServiceListDelete);
                 }
             }
