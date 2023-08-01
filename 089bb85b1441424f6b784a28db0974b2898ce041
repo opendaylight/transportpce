@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdfeb878_4e0dff52",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "017f43f6_e92ddfd1",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cbe9c02_0630c631",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-01T07:13:27Z",
       "side": 1,
       "message": "is this a TODO comment ? or a comment to address ? shouldn\u0027t it preferably be in Gerrit ?",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b70292_83ce9647",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cbe9c02_0630c631",
       "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6ac1615_bb3ce525",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93659333_a1c1d8fa",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87066b31_1eb2294a",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-08-01T07:13:27Z",
       "side": 1,
       "message": "IMO removing servicehandler intermediate variable and ternary operator use with only one return statement is more indicated here.\n\n        return validateParams(commonId, null, true) \n            ? performRenderer(\n                tempServiceDeleteInput,\n                new ServiceHandlerHeaderBuilder().setRequestId(commonId).build(),\n                ServiceNotificationTypes.ServiceDeleteResult,\n                tempService)\n            : returnRendererFailed();",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09204153_c499be22",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87066b31_1eb2294a",
       "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +158,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62cd77b6_be2d0796",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df7677bd_795b9ddd",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18d46fe9_4db48940",
@@ -99,6 +189,24 @@
       "writtenOn": "2023-08-01T07:13:27Z",
       "side": 1,
       "message": "I would use one setter per line and LF before build for style coherency here",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b451352_3beff867",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18d46fe9_4db48940",
       "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -120,6 +228,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07bdb926_2d364cb0",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ecaad3e_156066cb",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fd1ce5a_44318f74",
@@ -137,6 +263,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68947343_6236f6c6",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fd1ce5a_44318f74",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e51e952_238e40d6",
@@ -150,6 +294,24 @@
       "writtenOn": "2023-08-01T07:13:27Z",
       "side": 1,
       "message": "value is only used here and does not deserver an intermediate variable IMO",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de2db543_23b7c5f8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e51e952_238e40d6",
       "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
