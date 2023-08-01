@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b318bfdd_f534ed4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T16:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "431b5301_78971912",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 52
+      },
+      "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20f9a53f_0fb82278",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-08-01T07:33:44Z",
       "side": 1,
       "message": "indenting  +4 the line here and -4 setters lines below is usually more convenient IMO",
+      "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b8e1327_95456cf5",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T16:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20f9a53f_0fb82278",
       "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -58,6 +100,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab340a70_ef680fcc",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T16:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b7d449b_1461bcd4",
+      "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50a1f153_3929fb8f",
@@ -71,6 +131,24 @@
       "writtenOn": "2023-07-27T14:26:50Z",
       "side": 1,
       "message": "this line would be preferably above the commonId declaration",
+      "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4a9953_a956fe8f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-08-01T16:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50a1f153_3929fb8f",
       "revId": "9bd18c1eef310f5e422a65f5d6298f7d88e893bf",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
