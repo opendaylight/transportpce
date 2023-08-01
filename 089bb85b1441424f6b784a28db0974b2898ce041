@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "017f43f6_e92ddfd1",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "this declaration is useless if the guard clause below is met.\nThis line should preferably be merged with the related allocation at line 635",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cbe9c02_0630c631",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "is this a TODO comment ? or a comment to address ? shouldn\u0027t it preferably be in Gerrit ?",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93659333_a1c1d8fa",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "vertical notations with one argument per line is more indicated here IMO\n\n    public ServiceDeleteOutput performRenderer(\n            TempServiceDeleteInput tempServiceDeleteInput,\n            ServiceNotificationTypes notifType,\n            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210\n                .temp.service.list.Services tempService) {",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87066b31_1eb2294a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "IMO removing servicehandler intermediate variable and ternary operator use with only one return statement is more indicated here.\n\n        return validateParams(commonId, null, true) \n            ? performRenderer(\n                tempServiceDeleteInput,\n                new ServiceHandlerHeaderBuilder().setRequestId(commonId).build(),\n                ServiceNotificationTypes.ServiceDeleteResult,\n                tempService)\n            : returnRendererFailed();",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df7677bd_795b9ddd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "idem line 84",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d46fe9_4db48940",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "I would use one setter per line and LF before build for style coherency here",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ecaad3e_156066cb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "idem line 103",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd1ce5a_44318f74",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "idem line 103",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e51e952_238e40d6",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-01T07:13:27Z",
+      "side": 1,
+      "message": "value is only used here and does not deserver an intermediate variable IMO",
+      "revId": "089bb85b1441424f6b784a28db0974b2898ce041",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
