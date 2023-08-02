@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c494953d_a89f98a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-02T13:00:32Z",
+      "side": 1,
+      "message": "thanks Bala, just a minor correction",
+      "revId": "0559dabd2e93a57d3d26e1422b7ae7162ef3fc0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebdcd7b8_7114e137",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-02T13:00:32Z",
+      "side": 1,
+      "message": "I think .build() should preferably be at the same indentation level than setters",
+      "revId": "0559dabd2e93a57d3d26e1422b7ae7162ef3fc0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6795684e_a5f9d640",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-02T13:00:32Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0559dabd2e93a57d3d26e1422b7ae7162ef3fc0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
