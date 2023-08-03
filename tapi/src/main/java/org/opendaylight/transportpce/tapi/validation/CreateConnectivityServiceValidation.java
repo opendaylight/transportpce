@@ -9,17 +9,19 @@ package org.opendaylight.transportpce.tapi.validation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.tapi.validation.checks.ConnConstraintCheck;
 import org.opendaylight.transportpce.tapi.validation.checks.EndPointCheck;
 import org.opendaylight.transportpce.tapi.validation.checks.ResilienceConstraintCheck;
 import org.opendaylight.transportpce.tapi.validation.checks.TopoConstraintCheck;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.ConnectivityConstraint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.EndPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.ResilienceConstraint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.TopologyConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.ConnectivityConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.ResilienceConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,12 +67,14 @@ public final class CreateConnectivityServiceValidation {
         }
 
         LOG.info("checking TopoConstraint...");
-        TopologyConstraint topoConstraint = input.getTopologyConstraint();
-        ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint);
-        if (topoConstraintCheckResult.hasPassed()) {
-            LOG.info("create-connectivity-service topo constraints compliant !");
-        } else {
-            return OperationResult.failed(topoConstraintCheckResult.getMessage());
+        Map<TopologyConstraintKey, TopologyConstraint> topoConstraintMap = input.getTopologyConstraint();
+        for (Map.Entry<TopologyConstraintKey, TopologyConstraint> topoConstraint: topoConstraintMap.entrySet()) {
+            ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint.getValue());
+            if (!topoConstraintCheckResult.hasPassed()) {
+                return OperationResult.failed(topoConstraintCheckResult.getMessage());
+            } else {
+                LOG.info("create-connectivity-service topo constraints compliant !");
+            }
         }
         return OperationResult.ok("Validation successful.");
     }
