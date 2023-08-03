@@ -8,50 +8,54 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.nio.charset.Charset;
+//import java.util.ArrayList;
 import java.util.HashMap;
+//import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1Builder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1Builder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnectionKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.context.NotificationContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.NwTopologyServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.LowerConnection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.LowerConnectionKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point
+//.SupportedCepLayerProtocolQualifierInstances;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.NwTopologyServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,8 +92,8 @@ public class TapiContext {
                     .setValueName("Network Topo Service Name")
                     .build();
 
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1 topologyContext
-                = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1Builder()
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1 topologyContext
+                = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1Builder()
                     .setTopologyContext(new TopologyContextBuilder()
                         .setNwTopologyService(new NwTopologyServiceBuilder()
                             .setTopology(new HashMap<>())
@@ -103,8 +107,8 @@ public class TapiContext {
                         .build())
                     .build();
 
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1 notificationContext
-                = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1Builder()
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1 notificationContext
+                = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1Builder()
                     .setNotificationContext(new NotificationContextBuilder()
                         .setNotification(new HashMap<>())
                         .setNotifSubscription(new HashMap<>())
@@ -163,7 +167,7 @@ public class TapiContext {
                     .build();
             InstanceIdentifier<TopologyContext> topologycontextIID =
                     InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+                            .onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                             .child(TopologyContext.class)
                             .build();
             // merge in datastore
@@ -195,16 +199,16 @@ public class TapiContext {
                                           Map<ConnectionKey, Connection> connectionFullMap) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext
                 connectivityContext = new ConnectivityContextBuilder()
                 .setConnectivityService(connServMap)
                 .setConnection(connectionFullMap)
                 .build();
             InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> connectivitycontextIID =
+                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> connectivitycontextIID =
                     InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                            .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                         .build();
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID,
@@ -219,10 +223,10 @@ public class TapiContext {
     public void updateTopologyWithCep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, ConnectionEndPoint cep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
                     new NodeKey(nodeUuid))
             .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
             .build();
@@ -261,10 +265,10 @@ public class TapiContext {
 
     public Node getTapiNode(Uuid topoUuid, Uuid nodeUuid) {
         InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
                         new NodeKey(nodeUuid)).build();
         try {
             Optional<Node> optNode = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID)
@@ -287,13 +291,14 @@ public class TapiContext {
                     .setUuid(onep.getUuid())
                     .setLayerProtocolName(onep.getLayerProtocolName())
                     .setName(onep.getName())
-                    .setSupportedCepLayerProtocolQualifier(onep.getSupportedCepLayerProtocolQualifier())
+                    .setSupportedCepLayerProtocolQualifierInstances(
+                        onep.getSupportedCepLayerProtocolQualifierInstances())
                     .setAdministrativeState(onep.getAdministrativeState())
                     .setOperationalState(onep.getOperationalState())
                     .setLifecycleState(onep.getLifecycleState())
-                    .setTerminationDirection(onep.getTerminationDirection())
-                    .setTerminationState(onep.getTerminationState())
-                    .setLinkPortDirection(onep.getLinkPortDirection())
+//                    .setTerminationDirection(onep.getTerminationDirection())
+//                    .setTerminationState(onep.getTerminationState())
+                    .setDirection(onep.getDirection())
                     .setLinkPortRole(onep.getLinkPortRole());
                 if (onep.getMappedServiceInterfacePoint() != null) {
                     newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
@@ -314,10 +319,10 @@ public class TapiContext {
 
     public OwnedNodeEdgePoint getTapiNEP(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid) {
         InstanceIdentifier<OwnedNodeEdgePoint> nepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
                 new NodeKey(nodeUuid)).child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid)).build();
         try {
             Optional<OwnedNodeEdgePoint> optNode = this.networkTransactionService
@@ -336,8 +341,8 @@ public class TapiContext {
 
     public Link getTapiLink(Uuid topoUuid, Uuid linkUuid) {
         InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
             .child(Link.class, new LinkKey(linkUuid)).build();
         try {
@@ -357,7 +362,7 @@ public class TapiContext {
     public Map<TopologyKey, Topology> getTopologyContext() {
         InstanceIdentifier<TopologyContext> topologycontextIID =
                 InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.Context1.class)
+                        .onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                         .child(TopologyContext.class)
                         .build();
         try {
@@ -380,7 +385,7 @@ public class TapiContext {
             InstanceIdentifier<ConnectivityService> connectivityServIID =
                 InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                        .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(serviceUuid))
                     .build();
 
@@ -405,14 +410,14 @@ public class TapiContext {
             return;
         }
         for (org.opendaylight.yang.gen.v1
-                .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.Connection connection:
+                .urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.Connection connection:
                     connectivityService.getConnection().values()) {
-            deleteConnection(connection.getConnectionUuid(), serviceUuid, connectivityService.getServiceLayer());
+            deleteConnection(connection.getConnectionUuid(), serviceUuid, connectivityService.getLayerProtocolName());
         }
         InstanceIdentifier<ConnectivityService> connectivityServIID =
                 InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn
-                                .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                         .child(ConnectivityService.class, new ConnectivityServiceKey(serviceUuid))
                         .build();
         try {
@@ -427,14 +432,14 @@ public class TapiContext {
     private void deleteConnection(Uuid connectionUuid, Uuid serviceUuid, LayerProtocolName serviceLayer) {
         // First read connectivity service with service uuid and update info
         InstanceIdentifier<org.opendaylight.yang.gen.v1
-            .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection> connectionIID =
+            .urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection> connectionIID =
             InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                    .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                 .child(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection.class,
+                        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection.class,
                     new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey(
+                        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey(
                         connectionUuid))
                 .build();
         Connection connection = getConnection(connectionUuid);
@@ -500,7 +505,7 @@ public class TapiContext {
             }
             if (connService.getConnection().containsKey(
                     new org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.ConnectionKey(
+                        .urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectionKey(
                             connection.getUuid()))) {
                 LOG.info("isNotUsedByOtherService: Connection {} is in used by service {}. Cannot remove it from "
                         + "context", connection.getUuid().getValue(), connService.getUuid().getValue());
@@ -508,7 +513,7 @@ public class TapiContext {
             }
             LOG.info("isNotUsedByOtherService: Going to check lower connections");
             for (org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.Connection
+                        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.Connection
                     conn:connService.getConnection().values()) {
                 Connection connection1 = getConnection(conn.getConnectionUuid());
                 if (connection1 == null || connection1.getLowerConnection() == null) {
@@ -532,7 +537,7 @@ public class TapiContext {
             InstanceIdentifier<Connection> connIID =
                 InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                        .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(Connection.class, new ConnectionKey(connectionUuid))
                     .build();
 
@@ -553,14 +558,14 @@ public class TapiContext {
         try {
             // First read connectivity service with service uuid and update info
             InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> connectivityContextIID =
+                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> connectivityContextIID =
                 InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                        .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .build();
 
             Optional<org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> optConnContext =
+                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> optConnContext =
                     this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivityContextIID)
                         .get();
             if (!optConnContext.isPresent()) {
@@ -576,10 +581,10 @@ public class TapiContext {
 
     public ConnectionEndPoint getTapiCEP(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, Uuid cepUuid) {
         InstanceIdentifier<OwnedNodeEdgePoint> nepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node.class,
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
                 new NodeKey(nodeUuid)).child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid)).build();
         try {
             Optional<OwnedNodeEdgePoint> optNode = this.networkTransactionService
