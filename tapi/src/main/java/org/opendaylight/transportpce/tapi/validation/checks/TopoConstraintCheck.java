@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.validation.checks;
 
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.TopologyConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +23,14 @@ public final class TopoConstraintCheck {
         return ((value != null) && (!value.isEmpty()));
     }
 
-    public static ComplianceCheckResult check(TopologyConstraint tc) {
+    public static ComplianceCheckResult check(TopologyConstraint topoConstraint) {
         boolean result = true;
         String message = "";
-        LOG.info("tc = {}", tc);
-        if (checkNull(tc)) {
+        LOG.info("tc = {}", topoConstraint);
+        if (checkNull(topoConstraint)) {
             LOG.info("tc is null");
             message = "Topology constraints are not managet yet";
-        } else if (checkEmpty(tc)) {
+        } else if (checkEmpty(topoConstraint)) {
             result = false;
             message = "Topology constraints are not managet yet";
         }
@@ -42,7 +42,7 @@ public final class TopoConstraintCheck {
         if (tc == null) {
             return true;
         }
-        if (tc.getAvoidTopology() == null) {
+        if (tc.getExcludeTopology() == null) {
             return true;
         }
         if (tc.getExcludeLink() == null) {
@@ -75,7 +75,7 @@ public final class TopoConstraintCheck {
         if (tc == null) {
             return true;
         }
-        if (tc.getAvoidTopology() != null && tc.getAvoidTopology().isEmpty()) {
+        if (tc.getExcludeTopology() != null && tc.getExcludeTopology().isEmpty()) {
             return true;
         }
         if (tc.getExcludeLink() != null && tc.getExcludeLink().isEmpty()) {
@@ -99,7 +99,8 @@ public final class TopoConstraintCheck {
         if (tc.getIncludeTopology() != null && tc.getIncludeTopology().isEmpty()) {
             return true;
         }
-        return tc.getPreferredTransportLayer() != null && tc.getPreferredTransportLayer().isEmpty();
+        //TODO: check this changes : do not understand the rational of this class
+        return tc.getPreferredTransportLayer() != null && tc.getPreferredTransportLayer() == null;
 
     }
 }
