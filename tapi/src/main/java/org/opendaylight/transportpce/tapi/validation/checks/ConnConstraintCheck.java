@@ -8,8 +8,8 @@
 package org.opendaylight.transportpce.tapi.validation.checks;
 
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ServiceType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.ConnectivityConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ServiceType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.ConnectivityConstraint;
 
 public final class ConnConstraintCheck {
 
