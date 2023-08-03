@@ -24,6 +24,8 @@ public final class TapiStringConstants {
     public static final String E_OTSI = "eOTSi";
     public static final String I_OTSI = "iOTSi";
     public static final String PHTNC_MEDIA = "PHOTONIC_MEDIA";
+    public static final String PHTNC_MEDIA_OTS = "PHOTONIC_MEDIA_OTS";
+    public static final String PHTNC_MEDIA_OMS = "PHOTONIC_MEDIA_OMS";
     public static final String MC = "MEDIA_CHANNEL";
     public static final String OTSI_MC = "OTSi_MEDIA_CHANNEL";
     public static final String RDM_INFRA = "ROADM-infra";

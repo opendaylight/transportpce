@@ -34,10 +34,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.PathComputationResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.path.computation.result.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.service.rpc.result.path.computation.result.ZToABuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceZEndBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
