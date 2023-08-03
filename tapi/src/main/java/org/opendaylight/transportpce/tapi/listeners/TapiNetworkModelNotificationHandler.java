@@ -29,44 +29,49 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.DateAndTime;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.LowerConnection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectionKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NameAndValueChange;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Notification;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.NodeEdgePointRef;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.context.TopologyContext;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.DateAndTime;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.LowerConnection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.EventNotification;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPEATTRIBUTEVALUECHANGE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NameAndValueChange;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Notification;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.TapiNotificationListener;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.ObjectType;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.TapiNotificationListener;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributesKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.NodeEdgePointRef;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.EnumTypeObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
@@ -103,16 +108,15 @@ public class TapiNetworkModelNotificationHandler {
 
     private void onNotification(Notification notification) {
         LOG.info("Received network model notification {}", notification);
-        if (notification.getNotificationType() == NotificationType.ATTRIBUTEVALUECHANGE
-                && notification.getTargetObjectType() == ObjectType.NODEEDGEPOINT) {
+        if (notification.getNotificationType().equals(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
+                && notification.getTargetObjectType().equals(OBJECTTYPETAPICONTEXT.VALUE)) {
             if (notification.getChangedAttributes() == null) {
                 return;
             }
             // TODO: need to re-think this to update first the connections from roadm to roadm and then the others
             updateConnections(notification.getChangedAttributes().keySet().stream()
                     .map(changedAttributesKey -> new Uuid(changedAttributesKey.getValueName()))
-                    .collect(Collectors.toList()),
-                notification.getChangedAttributes().values().stream()
+                    .collect(Collectors.toList()), notification.getChangedAttributes().values().stream()
                     .map(NameAndValueChange::getNewValue)
                     .collect(Collectors.toList()));
             updateConnectivityServices();
@@ -121,6 +125,12 @@ public class TapiNetworkModelNotificationHandler {
                 sendNbiNotification(createNbiNotification(connService));
             }
         }
+    }
+
+    @Override
+    public void onEventNotification(EventNotification notification) {
+        LOG.info("Received network model notification {}", notification);
+        //TODO: see if implementation needed as this is declared as obsolete
     }
 
     private PublishTapiNotificationService createNbiNotification(ConnectivityService connService) {
@@ -159,12 +169,12 @@ public class TapiNetworkModelNotificationHandler {
             .setUuid(new Uuid(UUID.randomUUID().toString()))
             .setTopic(connService.getUuid().getValue())
             .setTargetObjectIdentifier(connService.getUuid())
-            .setNotificationType(NotificationType.ATTRIBUTEVALUECHANGE)
+            .setNotificationType(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
             .setChangedAttributes(changedStates)
             .setEventTimeStamp(datetime)
             .setTargetObjectName(targetObjectNames)
-            .setTargetObjectType(ObjectType.CONNECTIVITYSERVICE)
-            .setLayerProtocolName(connService.getServiceLayer())
+            .setTargetObjectType(OBJECTTYPETAPICONTEXT.VALUE)
+            .setLayerProtocolName(connService.getLayerProtocolName())
             .build();
     }
 
@@ -182,7 +192,7 @@ public class TapiNetworkModelNotificationHandler {
             this.connectivityServiceChanges.clear();
             InstanceIdentifier<ConnectivityContext> connectivityContextIID =
                 InstanceIdentifier.builder(Context.class).augmentation(
-                        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .build();
             Optional<ConnectivityContext> optConnContext =
@@ -205,7 +215,7 @@ public class TapiNetworkModelNotificationHandler {
 
                 InstanceIdentifier<ConnectivityService> connServIID = InstanceIdentifier
                     .builder(Context.class).augmentation(org.opendaylight.yang.gen.v1
-                                .urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                                .urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(connService.getUuid()))
                     .build();
@@ -245,11 +255,11 @@ public class TapiNetworkModelNotificationHandler {
             LOG.info("No connections on service = {}", connService);
             return new EnumTypeObject[]{null, null};
         }
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.service.Connection connection : connService.getConnection().values()) {
             InstanceIdentifier<Connection> connIID =
                 InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                        .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .child(Connection.class, new ConnectionKey(connection.getConnectionUuid()))
                     .build();
@@ -275,14 +285,14 @@ public class TapiNetworkModelNotificationHandler {
         try {
             //should it return a list of connections?
             InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> connectivityContextIID =
+                    .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> connectivityContextIID =
                 InstanceIdentifier.builder(Context.class).augmentation(
-                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn
-                                .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                         .build();
             Optional<org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext> optConnContext =
+                    .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivityContextIID).get();
             if (optConnContext.isEmpty()) {
                 LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
@@ -305,13 +315,13 @@ public class TapiNetworkModelNotificationHandler {
                 if (connService.getConnection() == null) {
                     continue;
                 }
-                for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
+                for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.service.Connection connection : connService.getConnection().values()) {
                     InstanceIdentifier<Connection> connIID =
                         InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                            .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                                 .child(org.opendaylight.yang.gen.v1.urn
-                                        .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                                        .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                                 .child(Connection.class, new ConnectionKey(connection.getConnectionUuid()))
                                 .build();
                     Optional<Connection> optConn =
@@ -355,7 +365,7 @@ public class TapiNetworkModelNotificationHandler {
         Map<ConnectivityServiceKey, ConnectivityService> orderedServiceMap = new HashMap<>();
         for (LayerProtocolName lpn:this.orderedServiceLayerList) {
             for (ConnectivityService connServ:connServMap.values()) {
-                if (connServ.getServiceLayer().equals(lpn)) {
+                if (connServ.getLayerProtocolName().equals(lpn)) {
                     LOG.info("Layer of service is equal to entry of lpn = {}", lpn);
                     orderedServiceMap.put(connServ.key(), connServ);
                 }
@@ -375,9 +385,9 @@ public class TapiNetworkModelNotificationHandler {
             for (LowerConnection lowerConn:lowerConnections) {
                 InstanceIdentifier<Connection> connIID =
                     InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                        .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn
-                                    .onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                                    .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                             .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
                             .build();
                 Optional<Connection> optConn =
@@ -436,7 +446,7 @@ public class TapiNetworkModelNotificationHandler {
             LOG.info("Didnt transform correctly the states");
             for (Uuid connectionNep : connectionNeps) {
                 Optional<org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev181210.connection.ConnectionEndPoint> ocep
+                        .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint> ocep
                     = conn.getConnectionEndPoint().values().stream()
                         .filter(connectionEndPoint -> connectionEndPoint.getNodeEdgePointUuid() == connectionNep)
                         .findFirst();
@@ -475,9 +485,9 @@ public class TapiNetworkModelNotificationHandler {
             for (LowerConnection lowerConn:lowerConnections) {
                 InstanceIdentifier<Connection> connIID =
                     InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                            .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev181210.context
+                            .onf.otcc.yang.tapi.connectivity.rev221121.context
                             .ConnectivityContext.class)
                         .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
                         .build();
@@ -515,14 +525,14 @@ public class TapiNetworkModelNotificationHandler {
             for (ConnectivityService supportedConnService : connServices) {
                 // TODO currently supporting service uuid is saved in service layer, replace with name as soon
                 // as name is implemented
-                if (supportedConnService.getServiceLayer() != layer) {
+                if (supportedConnService.getLayerProtocolName() != layer) {
                     continue;
                 }
                 InstanceIdentifier<ConnectivityService> supportedConnServIID = InstanceIdentifier
                     .builder(Context.class).augmentation(org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.connectivity.rev181210.Context1.class)
+                        .urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.connectivity.rev181210.context.ConnectivityContext.class)
+                        .urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(supportedConnService.getUuid()))
                     .build();
                 Optional<ConnectivityService> optNewConnService = this.networkTransactionService.read(
@@ -532,8 +542,9 @@ public class TapiNetworkModelNotificationHandler {
                     continue;
                 }
                 ConnectivityService newConnService = optNewConnService.orElseThrow();
-                if (supportedConnService.getServiceLevel() != null
-                        && supportedConnService.getServiceLevel().equals(supportingConnService.getValue())
+                if (supportedConnService.getConnectivityConstraint().getServiceLevel() != null
+                        && supportedConnService.getConnectivityConstraint().getServiceLevel()
+                        .equals(supportingConnService.getValue())
                         && newConnService.getAdministrativeState() != AdministrativeState.LOCKED
                         && newConnService.getOperationalState() != OperationalState.DISABLED) {
 
