@@ -82,7 +82,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>tapi-2.1.1</artifactId>
+      <artifactId>tapi-2.4.0</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

@@ -1,5 +1,5 @@
 module nbi-notifications {
-  yang-version 1;
+  yang-version 1.1;
   namespace "nbi-notifications";
   prefix nbinotifications;
 
@@ -12,13 +12,16 @@ module nbi-notifications {
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
   }
+  import org-openroadm-resource {
+    prefix org-openroadm-resource;
+  }
   import tapi-common {
     prefix tapi-common;
-    revision-date 2018-12-10;
+    revision-date 2022-11-21;
    }
   import tapi-notification {
     prefix tapi-notification;
-    revision-date 2018-12-10;
+    revision-date 2022-11-21;
   }
 
   organization
@@ -28,6 +31,16 @@ module nbi-notifications {
   description
     "YANG definitions for using REST API in NBI notifications module. Copyright
      (c) 2020 ORANGE and others. All rights reserved.";
+
+  revision "2023-07-28" {
+    description
+      "Migration towards TAPI 2.4";
+  }
+
+  revision 2023-07-26 {
+      description
+        "Adding service-rpc-result data details to the publish-notification-process-service";
+  }
 
   revision 2021-10-13 {
     description
@@ -90,6 +103,15 @@ module nbi-notifications {
       description
         "Operational State: Actual state of service";
     }
+    // TODO: here I need to add the service-rpc-result details
+    container aToZ {
+      uses org-openroadm-resource:common-och-otsi-attributes;
+      uses org-openroadm-resource:path-computation-outputs;
+    }
+    container zToA {
+      uses org-openroadm-resource:common-och-otsi-attributes;
+      uses org-openroadm-resource:path-computation-outputs;
+    }
   }
 
   grouping notification-alarm-service {
@@ -124,7 +146,7 @@ module nbi-notifications {
         description "none";
       }
       leaf target-object-type {
-        type tapi-notification:object-type;
+        type tapi-common:object-type;
         description "none";
       }
       leaf target-object-identifier {
@@ -155,6 +177,11 @@ module nbi-notifications {
         type tapi-common:layer-protocol-name;
         description "none";
       }
+      leaf layer-protocol-qualifier {
+        type tapi-common:layer-protocol-qualifier;
+        config false;
+        description "none";
+        }
       list changed-attributes {
         key 'value-name';
         uses tapi-notification:name-and-value-change;
@@ -169,15 +196,7 @@ module nbi-notifications {
         type string;
         description "none";
       }
-      container tca-info {
-        uses tapi-notification:tca-info;
-        description "none";
-      }
-      container alarm-info {
-        uses tapi-notification:alarm-info;
-        description "none";
-      }
-      uses tapi-common:resource-spec;
+      uses tapi-common:global-class;
       description "none";
     }
 
