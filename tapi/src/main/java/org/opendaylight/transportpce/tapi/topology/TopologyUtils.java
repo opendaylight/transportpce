@@ -39,28 +39,36 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.OwnedNodeEdgePoint1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
@@ -99,6 +107,34 @@ public final class TopologyUtils {
             return null;
         }
         return topology;
+    }
+
+    public List<String> readTopologyName(Uuid topoUuid) throws TapiTopologyException {
+        Topology topology = null;
+        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(
+            Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.topology.rev221121.Context1.class).child(TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid)).build();
+
+        ListenableFuture<Optional<Topology>> topologyFuture =
+                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, topoIID);
+        try {
+            topology = topologyFuture.get().orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException("Unable to get from mdsal topology: " + topoIID
+                    .firstKeyOf(Topology.class).getUuid().getValue(), e);
+        } catch (ExecutionException e) {
+            throw new TapiTopologyException("Unable to get from mdsal topology: " + topoIID
+                .firstKeyOf(Topology.class).getUuid().getValue(), e);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+        List<String> nameList = new ArrayList<>();
+        for (Map.Entry<NameKey, Name> entry : topology.getName().entrySet()) {
+            nameList.add(entry.getValue().getValueName());
+        }
+        return nameList;
     }
 
     public Topology createFullOtnTopology() throws TapiTopologyException {
@@ -152,9 +188,9 @@ public final class TopologyUtils {
                     networkPortMap.put(entry.getKey().getValue(), networkPortList);
                 }
             }
-            Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+            Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
                 tapiNodeList = new HashMap<>();
-            Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
+            Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
                 tapiLinkList = new HashMap<>();
             ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid, this.tapiLink);
             Iterator<Map.Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
@@ -273,11 +309,11 @@ public final class TopologyUtils {
         }
     }
 
-    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.details.output.Topology
             transformTopology(Topology topology) {
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
             .get.topology.details.output.TopologyBuilder topologyBuilder =
-                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
             .get.topology.details.output.TopologyBuilder()
                 .setUuid(topology.getUuid())
                 .setName(topology.getName())
@@ -302,13 +338,14 @@ public final class TopologyUtils {
                         .setUuid(onep.getUuid())
                         .setLayerProtocolName(onep.getLayerProtocolName())
                         .setName(onep.getName())
-                        .setSupportedCepLayerProtocolQualifier(onep.getSupportedCepLayerProtocolQualifier())
+                        .setSupportedCepLayerProtocolQualifierInstances(onep
+                            .getSupportedCepLayerProtocolQualifierInstances())
                         .setAdministrativeState(onep.getAdministrativeState())
                         .setOperationalState(onep.getOperationalState())
                         .setLifecycleState(onep.getLifecycleState())
-                        .setTerminationDirection(onep.getTerminationDirection())
-                        .setTerminationState(onep.getTerminationState())
-                        .setLinkPortDirection(onep.getLinkPortDirection())
+//                        .setTerminationDirection(onep.getTerminationDirection())
+//                        .setTerminationState(onep.getTerminationState())
+                        .setDirection(onep.getDirection())
                         .setLinkPortRole(onep.getLinkPortRole());
                 if (onep.getMappedServiceInterfacePoint() != null) {
                     newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
