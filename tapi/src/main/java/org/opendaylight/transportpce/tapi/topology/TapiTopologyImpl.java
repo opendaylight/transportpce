@@ -11,10 +11,11 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,72 +50,65 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.GetServiceInterfacePointListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TapiCommonService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.UpdateServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.UpdateServiceInterfacePointInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.UpdateServiceInterfacePointOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.Sip;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.SipBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.get.service._interface.point.list.output.SipKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.Context1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetLinkDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetNodeEdgePointDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.link.details.output.LinkBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.node.edge.point.details.output.NodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.TopologyBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroupBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroupKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.TapiCommonService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.UpdateServiceInterfacePointInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.UpdateServiceInterfacePointOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.list.output.Sip;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.list.output.SipBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.list.output.SipKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.ForwardingRule;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetLinkDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetLinkDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetLinkDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeEdgePointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeEdgePointDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetNodeEdgePointDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TapiTopologyService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.link.details.output.LinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.node.edge.point.details.output.NodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.details.output.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.details.output.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
@@ -158,10 +152,10 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     public ListenableFuture<RpcResult<GetNodeDetailsOutput>> getNodeDetails(GetNodeDetailsInput input) {
         // TODO Auto-generated method stub
         // TODO -> maybe we get errors when having CEPs?
-        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
+        Uuid topoUuid = input.getTopologyId();
         // Node id: if roadm -> ROADM+PHOTONIC_MEDIA. if xpdr -> XPDR-XPDR+DSR/OTSi
-        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node = this.tapiContext
+        Uuid nodeUuid = input.getNodeId();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node = this.tapiContext
                 .getTapiNode(topoUuid, nodeUuid);
         if (node == null) {
             LOG.error("Invalid TAPI node name");
@@ -169,34 +163,39 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .withError(ErrorType.RPC, "Invalid Tapi Node name")
                 .buildFuture();
         }
-        return RpcResultBuilder
-            .success(new GetNodeDetailsOutputBuilder()
-                .setNode(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
-                        .get.node.details.output.NodeBuilder(node)
-                    .build())
-                .build())
-            .buildFuture();
+        return RpcResultBuilder.success(new GetNodeDetailsOutputBuilder()
+                .setNode(new org.opendaylight.yang.gen.v1.urn
+                        .onf.otcc.yang.tapi.topology.rev221121.get.node.details.output.NodeBuilder(node).build())
+                .build()).buildFuture();
     }
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         // TODO -> Add check for Full T0 Multilayer
-        if (!TapiStringConstants.T0_MULTILAYER.equals(input.getTopologyIdOrName())
-            && !TapiStringConstants.TPDR_100G.equals(input.getTopologyIdOrName())) {
-            if (TapiStringConstants.T0_FULL_MULTILAYER.equals(input.getTopologyIdOrName())) {
-                Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(input.getTopologyIdOrName()
-                    .getBytes(Charset.forName("UTF-8"))).toString());
+        List<String> topoNameList = null;
+        try {
+            topoNameList = topologyUtils.readTopologyName(input.getTopologyId());
+        } catch (TapiTopologyException e) {
+            LOG.error("Topology {} not found in datastore", input.getTopologyId());
+            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Invalid Topology name")
+                .buildFuture();
+        }
+        if (!topoNameList.contains(TapiStringConstants.T0_MULTILAYER)
+            && !topoNameList.contains(TapiStringConstants.TPDR_100G)) {
+            if (topoNameList.contains(TapiStringConstants.T0_FULL_MULTILAYER)) {
+                Uuid topoUuid = input.getTopologyId();
                 Context context = this.tapiContext.getTapiContext();
                 Map<TopologyKey,
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology>
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
                     topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
                 if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topoUuid)))) {
-                    LOG.error("Topology {} not found in datastore", input.getTopologyIdOrName());
+                    LOG.error("Topology {} not found in datastore", input.getTopologyId());
                     return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                         .withError(ErrorType.RPC, "Invalid Topology name")
                         .buildFuture();
                 }
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
                     topology = topologyMap.get(new TopologyKey(topoUuid));
                 return RpcResultBuilder
                     .success(new GetTopologyDetailsOutputBuilder()
@@ -209,10 +208,12 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .withError(ErrorType.RPC, "Invalid Topology name")
                 .buildFuture();
         }
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
+            Charset.forName("UTF-8"))).toString());
         try {
-            LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyIdOrName());
+            LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
             Topology topology = createAbstractedOtnTopology();
-            if (TapiStringConstants.TPDR_100G.equals(input.getTopologyIdOrName())) {
+            if (topologyUuid.equals(input.getTopologyId())) {
                 topology = createAbstracted100GTpdrTopology(topology);
             }
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().setTopology(topology).build())
@@ -350,12 +351,12 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     }
 
     private Topology createAbstracted100GTpdrTopology(Topology topology) {
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> dsrNodes =
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> dsrNodes =
             topology.nonnullNode().values().stream()
                 .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
                 .collect(Collectors.toList());
         List<OwnedNodeEdgePoint> nep100GTpdrList = new ArrayList<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node2: dsrNodes) {
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node2: dsrNodes) {
             List<OwnedNodeEdgePoint> nepList = node2.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))).collect(Collectors.toList());
             nep100GTpdrList.addAll(nepList);
@@ -364,7 +365,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .setValueName("TAPI Topology Name").build();
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
             TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8"))).toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node =
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             createTapiNode(nep100GTpdrList, topoUuid);
         return new TopologyBuilder()
             .setName(Map.of(topoName.key(), topoName))
@@ -428,9 +429,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 networkPortMap.put(entry.getKey().getValue(), networkPortList);
             }
         }
-        Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+        Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
             tapiNodeList = new HashMap<>();
-        Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
+        Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
             tapiLinkList = new HashMap<>();
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
@@ -472,7 +473,74 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .setLink(tapiLinkList).build();
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
+    @Override
+    public ListenableFuture<RpcResult<GetNodeEdgePointDetailsOutput>> getNodeEdgePointDetails(
+            GetNodeEdgePointDetailsInput input) {
+        // TODO Auto-generated method stub
+        // TODO -> maybe we get errors when having CEPs?
+        Uuid topoUuid = input.getTopologyId();
+        // Node id: if roadm -> ROADMid+PHOTONIC_MEDIA. if xpdr -> XPDRid-XPDRnbr+DSR/OTSi
+        Uuid nodeUuid = input.getNodeId();
+        // NEP id: if roadm -> ROADMid+PHOTONIC_MEDIA/MC/OTSiMC+TPid.
+        // if xpdr -> XPDRid-XPDRnbr+DSR/eODU/iODU/iOTSi/eOTSi/PHOTONIC_MEDIA+TPid
+        Uuid nepUuid = input.getNodeEdgePointId();
+        OwnedNodeEdgePoint nep = this.tapiContext.getTapiNEP(topoUuid, nodeUuid, nepUuid);
+        if (nep == null) {
+            LOG.error("Invalid TAPI nep name");
+            return RpcResultBuilder.<GetNodeEdgePointDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Invalid NEP name")
+                .buildFuture();
+        }
+        return RpcResultBuilder.success(new GetNodeEdgePointDetailsOutputBuilder()
+                .setNodeEdgePoint(new NodeEdgePointBuilder(nep).build()).build()).buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetLinkDetailsOutput>> getLinkDetails(GetLinkDetailsInput input) {
+        // TODO Auto-generated method stub
+        Uuid topoUuid = input.getTopologyId();
+        // Link id: same as OR link id
+        Uuid linkUuid = input.getLinkId();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link = this.tapiContext
+                .getTapiLink(topoUuid, linkUuid);
+        if (link == null) {
+            LOG.error("Invalid TAPI link name");
+            return RpcResultBuilder.<GetLinkDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Invalid Link name")
+                .buildFuture();
+        }
+        return RpcResultBuilder.success(new GetLinkDetailsOutputBuilder().setLink(new LinkBuilder(link).build())
+                .build()).buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetTopologyListOutput>> getTopologyList(GetTopologyListInput input) {
+        // TODO Auto-generated method stub
+        // TODO -> maybe we get errors when having CEPs?
+        Map<TopologyKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
+                topologyMap = this.tapiContext.getTopologyContext();
+        if (topologyMap.isEmpty()) {
+            LOG.error("No topologies exist in tapi context");
+            return RpcResultBuilder.<GetTopologyListOutput>failed()
+                .withError(ErrorType.APPLICATION, "No topologies exist in tapi context")
+                .buildFuture();
+        }
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology>
+                newTopoMap = new HashMap<>();
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+                topo:topologyMap.values()) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology
+                newTopo = new org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder(topo).build();
+            newTopoMap.put(newTopo.key(), newTopo);
+        }
+        return RpcResultBuilder.success(new GetTopologyListOutputBuilder().setTopology(newTopoMap).build())
+                .buildFuture();
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
             createTapiNode(List<OwnedNodeEdgePoint> nepList, Uuid topoUuid) {
         Name name = new NameBuilder().setValueName("Tpdr100g node name").setValue("Tpdr100g over WDM node").build();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
@@ -557,26 +625,27 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupFor100gTpdrNode(Uuid topoUuid, Uuid nodeUuid,
             Collection<OwnedNodeEdgePoint> onepl) {
 
-        Map<
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint> nepMap
-                = new HashMap<>();
-        for (OwnedNodeEdgePoint onep : onepl) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint nep =
-                    new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
-                .setTopologyUuid(topoUuid)
-                .setNodeUuid(nodeUuid)
-                .setNodeEdgePointUuid(onep.key().getUuid())
-                .build();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
+            nepMap = new HashMap<>();
+        for (OwnedNodeEdgePoint onep: onepl) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint nep =
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
+                    .NodeEdgePointBuilder()
+                        .setTopologyUuid(topoUuid)
+                        .setNodeUuid(nodeUuid)
+                        .setNodeEdgePointUuid(onep.key().getUuid())
+                        .build();
             nepMap.put(nep.key(), nep);
         }
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         Map<RuleKey, Rule> ruleList = new HashMap<>();
+        Set<RuleType> ruleTypes = new HashSet<>();
+        ruleTypes.add(RuleType.FORWARDING);
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
-            .setForwardingRule(ForwardingRule.MAYFORWARDACROSSGROUP)
-            .setRuleType(RuleType.FORWARDING)
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(ruleTypes)
             .build();
         ruleList.put(rule.key(), rule);
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
@@ -589,14 +658,56 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         return nodeRuleGroupMap;
     }
 
-    private Uuid getUuidFromIput(String serviceIdOrName) {
-        try {
-            UUID.fromString(serviceIdOrName);
-            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
-            return new Uuid(serviceIdOrName);
-        } catch (IllegalArgumentException e) {
-            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
-            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
+    @Override
+    public ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>>
+            getServiceInterfacePointDetails(GetServiceInterfacePointDetailsInput input) {
+        Uuid sipUuid = input.getUuid();
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
+            this.tapiContext.getTapiContext().getServiceInterfacePoint();
+        if (sips == null || sips.isEmpty()) {
+            return RpcResultBuilder.<GetServiceInterfacePointDetailsOutput>failed()
+                .withError(ErrorType.RPC, "No sips in datastore")
+                .buildFuture();
         }
+        if (!sips.containsKey(new ServiceInterfacePointKey(sipUuid))) {
+            return RpcResultBuilder.<GetServiceInterfacePointDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Sip doesnt exist in datastore")
+                .buildFuture();
+        }
+        org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.details.output.Sip outSip =
+                new org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.details.output.SipBuilder(
+                        sips.get(new ServiceInterfacePointKey(sipUuid)))
+                    .build();
+        return RpcResultBuilder.success(new GetServiceInterfacePointDetailsOutputBuilder().setSip(outSip).build())
+            .buildFuture();
     }
+
+    @Override
+    public ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>>
+            getServiceInterfacePointList(GetServiceInterfacePointListInput input) {
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
+            this.tapiContext.getTapiContext().getServiceInterfacePoint();
+        if (sips == null || sips.isEmpty()) {
+            return RpcResultBuilder.<GetServiceInterfacePointListOutput>failed()
+                .withError(ErrorType.RPC, "No sips in datastore")
+                .buildFuture();
+        }
+        Map<SipKey, Sip> outSipMap = new HashMap<>();
+        for (ServiceInterfacePoint sip : sips.values()) {
+            Sip si = new SipBuilder(sip).build();
+            outSipMap.put(si.key(), si);
+        }
+        return RpcResultBuilder.success(new GetServiceInterfacePointListOutputBuilder().setSip(outSipMap).build())
+            .buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<UpdateServiceInterfacePointOutput>>
+            updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
+        // TODO --> not yet implemented
+        return null;
+    }
+
 }
