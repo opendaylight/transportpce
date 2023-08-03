@@ -13,9 +13,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.endpoint.TxDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.lgx.Lgx;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.port.Port;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceAEnd;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceZEnd;
 
 //This class is a temporary workaround while waiting jackson
 //support in yang tools https://git.opendaylight.org/gerrit/c/yangtools/+/94852
