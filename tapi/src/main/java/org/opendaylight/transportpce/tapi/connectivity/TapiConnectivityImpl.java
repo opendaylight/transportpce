@@ -9,13 +9,19 @@ package org.opendaylight.transportpce.tapi.connectivity;
 
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
@@ -29,61 +35,57 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.delete.input.ServiceDeleteReqInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.delete.input.ServiceDeleteReqInfoBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.ForwardingDirection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.BandwidthProfileBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.TotalSizeBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.CreateConnectivityServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.DeleteConnectivityServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionEndPointDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionEndPointDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionEndPointDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectionEndPointDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceListInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceListOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.GetConnectivityServiceListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ServiceType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.UpdateConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.UpdateConnectivityServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.UpdateConnectivityServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.cep.list.ConnectionEndPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.Connection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.context.ConnectivityServiceKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.CapacityBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.ServiceInterfacePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.output.ServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connection.details.output.ConnectionBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connection.end.point.details.output.ConnectionEndPointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.Service;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.ServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.BandwidthProfileBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.TotalSizeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectionDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectionDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectionDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectionEndPointDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectionEndPointDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.GetConnectivityServiceListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ServiceType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.TapiConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.UpdateConnectivityServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.UpdateConnectivityServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectivityConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectivityConstraintBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.EndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.EndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.EndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.CapacityBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.output.ServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connection.details.output.ConnectionBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.Service;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceKey;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.ErrorTag;
 import org.opendaylight.yangtools.yang.common.ErrorType;
@@ -96,7 +98,7 @@ import org.slf4j.LoggerFactory;
  * Top level service interface providing main TAPI Connectivity services.
  */
 public class TapiConnectivityImpl implements TapiConnectivityService {
-
+    private final NetworkTransactionService networkTransactionService;
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImpl.class);
 
     private OrgOpenroadmServiceService serviceHandler;
@@ -107,13 +109,15 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
 
     public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler, TapiContext tapiContext,
                                 ConnectivityUtils connectivityUtils, TapiPceNotificationHandler pceListenerImpl,
-                                TapiRendererNotificationHandler rendererListenerImpl) {
+                                TapiRendererNotificationHandler rendererListenerImpl,
+                                NetworkTransactionService nts) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
         this.tapiContext = tapiContext;
         this.connectivityUtils = connectivityUtils;
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
+        this.networkTransactionService = nts;
     }
 
     @Override
@@ -187,15 +191,18 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             .setValueName("Connectivity Service Name")
             .setValue(serviceUuid.getValue())
             .build();
+        ConnectivityConstraint conConstr = new ConnectivityConstraintBuilder()
+            .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY)
+            .setServiceLevel(input.getConnectivityConstraint().getServiceLevel()).build();
+
         ConnectivityService service = new ConnectivityServiceBuilder()
             .setUuid(serviceUuid)
             .setAdministrativeState(AdministrativeState.LOCKED)
             .setOperationalState(OperationalState.DISABLED)
             .setLifecycleState(LifecycleState.PLANNED)
-            .setServiceLayer(input.getConnectivityConstraint().getServiceLayer())
-            .setServiceLevel(input.getConnectivityConstraint().getServiceLevel())
-            .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY)
-            .setConnectivityDirection(ForwardingDirection.BIDIRECTIONAL)
+            .setLayerProtocolName(input.getLayerProtocolName())
+            .setConnectivityConstraint(conConstr)
+            .setDirection(ForwardingDirection.BIDIRECTIONAL)
             .setName(Map.of(name.key(), name))
             .setConnection(new HashMap<>())
             .setEndPoint(endPointList)
@@ -208,22 +215,21 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             .setService(new ServiceBuilder(service).build()).build()).buildFuture();
     }
 
-
     @Override
     public ListenableFuture<RpcResult<GetConnectivityServiceDetailsOutput>> getConnectivityServiceDetails(
             GetConnectivityServiceDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid serviceUuid = getUuidFromIput(input.getServiceIdOrName());
+        Uuid serviceUuid = input.getUuid();
         ConnectivityService service = this.tapiContext.getConnectivityService(serviceUuid);
         if (service == null) {
-            LOG.error("Service {} doesnt exist in tapi context", input.getServiceIdOrName());
+            LOG.error("Service {} doesnt exist in tapi context", input.getUuid());
             return RpcResultBuilder.<GetConnectivityServiceDetailsOutput>failed()
                 .withError(ErrorType.RPC, "Service doesnt exist in datastore")
                 .buildFuture();
         }
         return RpcResultBuilder.success(new GetConnectivityServiceDetailsOutputBuilder().setService(
             new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.details.output.ServiceBuilder(
+                .onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.details.output.ServiceBuilder(
                     service).build()).build()).buildFuture();
     }
 
@@ -240,10 +246,10 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<GetConnectionDetailsOutput>> getConnectionDetails(
             GetConnectionDetailsInput input) {
         // TODO Auto-generated method stub
-        Uuid connectionUuid = getUuidFromIput(input.getConnectionIdOrName());
+        Uuid connectionUuid = input.getUuid();
         Connection connection = this.tapiContext.getConnection(connectionUuid);
         if (connection == null) {
-            LOG.error("Connection {} doesnt exist in tapi context", input.getConnectionIdOrName());
+            LOG.error("Connection {} doesnt exist in tapi context", input.getUuid());
             return RpcResultBuilder.<GetConnectionDetailsOutput>failed()
                 .withError(ErrorType.RPC, "Connection doesnt exist in datastore")
                 .buildFuture();
@@ -257,14 +263,23 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             DeleteConnectivityServiceInput input) {
         //TODO Auto-generated method stub
         // TODO add try
-        if (input.getServiceIdOrName() != null) {
+        String serviceName = null;
+        try {
+            serviceName = getNameFromUuid(input.getUuid(), "Service").iterator().next();
+        } catch (ExecutionException e) {
+            LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
+            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "Failed to delete Service")
+                .buildFuture();
+        }
+        if (input.getUuid() != null) {
             try {
-                Uuid serviceUuid = getUuidFromIput(input.getServiceIdOrName());
+                Uuid serviceUuid = input.getUuid();
                 this.tapiContext.deleteConnectivityService(serviceUuid);
                 ListenableFuture<RpcResult<ServiceDeleteOutput>> output =
                     this.serviceHandler.serviceDelete(new ServiceDeleteInputBuilder()
                         .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                            .setServiceName(input.getServiceIdOrName())
+                            .setServiceName(serviceName)
                             .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
                             .build())
                         .setSdncRequestHeader(new SdncRequestHeaderBuilder()
@@ -305,7 +320,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         Map<ServiceKey, Service> serviceMap = new HashMap<>();
         for (ConnectivityService connectivityService: connMap.values()) {
             Service service = new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.ServiceBuilder(
+                .onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceBuilder(
                     connectivityService).build();
             serviceMap.put(service.key(), service);
         }
@@ -316,20 +331,22 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     @Override
     public ListenableFuture<RpcResult<GetConnectionEndPointDetailsOutput>> getConnectionEndPointDetails(
             GetConnectionEndPointDetailsInput input) {
-        // TODO Auto-generated method stub
-        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
-        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
-        Uuid nepUuid = getUuidFromIput(input.getNepIdOrName());
-        Uuid cepUuid = getUuidFromIput(input.getCepIdOrName());
-        ConnectionEndPoint cep = this.tapiContext.getTapiCEP(topoUuid, nodeUuid, nepUuid, cepUuid);
-        if (cep == null) {
-            LOG.error("Cep doesnt exist in tapi context");
-            return RpcResultBuilder.<GetConnectionEndPointDetailsOutput>failed()
-                .withError(ErrorType.RPC, "No cep with given Uuid exists in datastore")
-                .buildFuture();
-        }
-        return RpcResultBuilder.success(new GetConnectionEndPointDetailsOutputBuilder().setConnectionEndPoint(
-            new ConnectionEndPointBuilder(cep).build()).build()).buildFuture();
+// TODO:  Leveraging previous code, provide TAPI2.4 compliant implementation for this function 
+//        Uuid topoUuid = getUuidFromIput(input.getTopologyIdOrName());
+//        Uuid nodeUuid = getUuidFromIput(input.getNodeIdOrName());
+//        Uuid nepUuid = getUuidFromIput(input.getNepIdOrName());
+//        Uuid cepUuid = getUuidFromIput(input.getCepIdOrName());
+//        ConnectionEndPoint cep = this.tapiContext.getTapiCEP(topoUuid, nodeUuid, nepUuid, cepUuid);
+//        if (cep == null) {
+//            LOG.error("Cep doesnt exist in tapi context");
+//            return RpcResultBuilder.<GetConnectionEndPointDetailsOutput>failed()
+//                .withError(ErrorType.RPC, "No cep with given Uuid exists in datastore")
+//                .buildFuture();
+//        }
+        LOG.error("Method getConnectionEndPointDetails not currently implemented");
+        return null;
+//        return RpcResultBuilder.success(new GetConnectionEndPointDetailsOutputBuilder().setConnectionEndPoint(
+//            new ConnectionEndPointBuilder(cep).build()).build()).buildFuture();
     }
 
     public ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
@@ -345,12 +362,12 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     }
 
     private Map<EndPointKey, EndPoint> createEndPoints(
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPointKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint> endPoints) {
         Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint ep: endPoints.values()) {
             EndPoint endpoint = new EndPointBuilder()
                 .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
@@ -365,7 +382,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
              // TODO: implement bandwidth profile
                 .setCapacity(new CapacityBuilder()
                     .setTotalSize(new TotalSizeBuilder().build())
-                    .setBandwidthProfile(new BandwidthProfileBuilder().build())
+//                  .setBandwidthProfile(new BandwidthProfileBuilder().build())
                     .build())
                 .setProtectionRole(ep.getProtectionRole())
                 .setRole(ep.getRole())
@@ -376,14 +393,34 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
         return endPointMap;
     }
 
-    private Uuid getUuidFromIput(String serviceIdOrName) {
-        try {
-            UUID.fromString(serviceIdOrName);
-            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
-            return new Uuid(serviceIdOrName);
-        } catch (IllegalArgumentException e) {
-            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
-            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
+    public List<String> getNameFromUuid(Uuid uuid, String typeOfNode) throws ExecutionException {
+        Map<NameKey, Name> nameMap = new HashMap<>();
+        if ("service".equals(typeOfNode)) {
+            ConnectivityService conServ = null;
+            InstanceIdentifier<ConnectivityService> nodeIID = InstanceIdentifier.builder(
+                Context.class).augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity
+                .rev221121.Context1.class).child(ConnectivityContext.class)
+                .child(ConnectivityService.class, new ConnectivityServiceKey(uuid)).build();
+            ListenableFuture<Optional<ConnectivityService>> conServFuture =
+                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID);
+            try {
+                conServ = conServFuture.get().orElseThrow();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                //TODO: investigate on how to throw Interrupted exception (generate a check violation error)
+            } catch (ExecutionException e) {
+                throw new ExecutionException("Unable to get from mdsal service: " + nodeIID
+                    .firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+            } catch (NoSuchElementException e) {
+                return null;
+            }
+            nameMap = conServ.getName();
         }
+
+        List<String> nameList = new ArrayList<>();
+        for (Map.Entry<NameKey, Name> entry : nameMap.entrySet()) {
+            nameList.add(entry.getValue().getValueName());
+        }
+        return nameList;
     }
 }

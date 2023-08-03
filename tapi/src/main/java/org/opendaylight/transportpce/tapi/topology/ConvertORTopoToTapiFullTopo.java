@@ -36,58 +36,59 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LAYERPROTOCOLQUALIFIER;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.LifecycleState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.PortDirection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.PortRole;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TerminationDirection;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TerminationState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.pac.AvailableCapacityBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.capacity.pac.TotalPotentialCapacityBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE100GigE;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPE10GigELAN;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.DIGITALSIGNALTYPEGigE;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU0;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU2E;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.ODUTYPEODU4;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROMS;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.PHOTONICLAYERQUALIFIEROTSi;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroupBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroupKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePoint;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.edge.point.MappedServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.RuleKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.risk.parameter.pac.RiskCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.LinkKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.cost.pac.CostCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.cost.pac.CostCharacteristicBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.timing.pac.LatencyCharacteristic;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.transfer.timing.pac.LatencyCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacityBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.TotalPotentialCapacityBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU4;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +104,7 @@ public class ConvertORTopoToTapiFullTopo {
     private List<TerminationPoint> oorNetworkPortList;
     private OduSwitchingPools oorOduSwitchingPool;
     private Uuid tapiTopoUuid;
-    private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+    private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
@@ -167,48 +168,29 @@ public class ConvertORTopoToTapiFullTopo {
             this.oorClientPortList.forEach(tp -> LOG.info("tp = {}", tp.getTpId()));
         }
 
-        // node creation [DSR/ODU]
+        // node creation XPDR ([DSR/ODU] and OTSI merged in R 2.4.X
         LOG.info("creation of a DSR/ODU node for {}", this.ietfNodeId);
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
-            TapiStringConstants.DSR)).getBytes(Charset.forName("UTF-8"))).toString());
-        this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.DSR), nodeUuid);
+            TapiStringConstants.XPDR)).getBytes(Charset.forName("UTF-8"))).toString());
+        this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.XPDR), nodeUuid);
         Name nameDsrNode = new NameBuilder().setValueName("dsr/odu node name").setValue(
             String.join("+", this.ietfNodeId, TapiStringConstants.DSR)).build();
+//        Name nameOtsiNode =  new NameBuilder().setValueName("otsi node name").setValue(
+//            String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(this.ietfNodeType.getName()).build();
-        Set<LayerProtocolName> dsrLayerProtocols = Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU);
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
+        Set<LayerProtocolName> dsrLayerProtocols = Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU,
+            LayerProtocolName.PHOTONICMEDIA);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology
             .Node dsrNode = createTapiNode(Map.of(nameDsrNode.key(), nameDsrNode, nameNodeType.key(), nameNodeType),
             dsrLayerProtocols);
-        LOG.info("DSR Node {} should have {} NEPs and {} SIPs", this.ietfNodeId,
-            this.oorClientPortList.size() + 2 * this.oorNetworkPortList.size(),
+        LOG.info("XPDR Node {} should have {} NEPs and {} SIPs", this.ietfNodeId,
+            this.oorClientPortList.size() + this.oorNetworkPortList.size(),
             this.oorClientPortList.size() + this.oorNetworkPortList.size());
-        LOG.info("DSR Node {} has {} NEPs and {} SIPs", this.ietfNodeId,
+        LOG.info("XPDR Node {} has {} NEPs and {} SIPs", this.ietfNodeId,
             dsrNode.getOwnedNodeEdgePoint().values().size(), dsrNode.getOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getMappedServiceInterfacePoint() != null).count());
         tapiNodes.put(dsrNode.key(), dsrNode);
-
-        // node creation [otsi]
-        LOG.info("creation of an OTSi node for {}", this.ietfNodeId);
-        nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiStringConstants.OTSI))
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        this.uuidMap.put(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI), nodeUuid);
-        Name nameOtsiNode =  new NameBuilder().setValueName("otsi node name").setValue(
-            String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)).build();
-        Set<LayerProtocolName> otsiLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
-            .Node otsiNode = createTapiNode(Map.of(nameOtsiNode.key(), nameOtsiNode, nameNodeType.key(), nameNodeType),
-            otsiLayerProtocols);
-        LOG.info("OTSi Node {} should have {} NEPs and {} SIPs", this.ietfNodeId, 3 * this.oorNetworkPortList.size(),
-            this.oorNetworkPortList.size());
-        LOG.info("OTSi Node {} has {} NEPs and {} SIPs", this.ietfNodeId,
-            otsiNode.getOwnedNodeEdgePoint().values().size(), otsiNode.getOwnedNodeEdgePoint().values().stream()
-                .filter(nep -> nep.getMappedServiceInterfacePoint() != null).count());
-        tapiNodes.put(otsiNode.key(), otsiNode);
-
-        // transitional link cration between network nep of DSR/ODU node and iNep of otsi node
-        LOG.info("creation of transitional links between DSR/ODU and OTSi nodes");
-        createTapiTransitionalLinks();
     }
 
     public void convertRdmToRdmLinks(List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
@@ -308,9 +290,11 @@ public class ConvertORTopoToTapiFullTopo {
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Degree port List: {}", degPortList);
                     // TODO: deg port could be sip. e.g. MDONS
-                    oneplist.putAll(populateNepsForRdmNode(degPortList, false));
-                    // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), degPortList, false));
-                    numNeps += degPortList.size() * 3;
+                    oneplist.putAll(populateNepsForRdmNode(degPortList, false, TapiStringConstants.PHTNC_MEDIA_OTS));
+                    oneplist.putAll(populateNepsForRdmNode(degPortList, false, TapiStringConstants.PHTNC_MEDIA_OMS));
+                    // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), degPortList, false
+                    //, TapiStringConstants.PHTNC_MEDIA_OTS));
+                    numNeps += degPortList.size() * 2;
                     break;
                 case 12:
                     LOG.info("SRG node");
@@ -325,13 +309,14 @@ public class ConvertORTopoToTapiFullTopo {
                         .collect(Collectors.toList());
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Srg port List: {}", srgPortList);
-                    oneplist.putAll(populateNepsForRdmNode(srgPortList, true));
-                    // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), srgPortList, true));
-                    numNeps += srgPortList.size() * 3;
+                    oneplist.putAll(populateNepsForRdmNode(srgPortList, true, TapiStringConstants.PHTNC_MEDIA_OTS));
+                    // oneplist.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), srgPortList, true
+                    // TapiStringConstants.PHTNC_MEDIA_OTS));
+                    numNeps += srgPortList.size();
                     numSips += srgPortList.size();
                     break;
                 default:
-                    LOG.error("Node {} tyoe not supported", nodeType.getName());
+                    LOG.error("Node {} type not supported", nodeType.getName());
             }
         }
         // create tapi Node
@@ -347,7 +332,7 @@ public class ConvertORTopoToTapiFullTopo {
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology
             .Node roadmNode = createRoadmTapiNode(nodeUuid,
             Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist);
         // TODO add states corresponding to device config
@@ -384,16 +369,18 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
             createTapiNode(Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
         Map<RuleKey, Rule> ruleList = new HashMap<>();
+        Set<RuleType> ruleTypes = new HashSet<>();
+        ruleTypes.add(RuleType.FORWARDING);
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
-            .setForwardingRule(ForwardingRule.MAYFORWARDACROSSGROUP)
-            .setRuleType(RuleType.FORWARDING)
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(ruleTypes)
             .build();
         ruleList.put(rule.key(), rule);
         if (layerProtocols.contains(LayerProtocolName.DSR)) {
@@ -412,7 +399,7 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
             .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
             .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
             .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
@@ -437,7 +424,7 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
                 createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
                         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist) {
         // Empty random creation of mandatory fields for avoiding errors....
@@ -448,7 +435,7 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
             .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
             .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
             .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
@@ -545,11 +532,11 @@ public class ConvertORTopoToTapiFullTopo {
         int count = 1;
         LOG.info("OTSi switching pool = {}", this.oorOduSwitchingPool.nonnullNonBlockingList().values());
         for (TerminationPoint tp : this.oorNetworkPortList) {
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
+            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
                 nepList = new HashMap<>();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                .NodeEdgePoint inep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
+                .NodeEdgePoint inep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                 .node.rule.group.NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)))
@@ -557,8 +544,8 @@ public class ConvertORTopoToTapiFullTopo {
                     this.uuidMap.get(String.join("+", this.ietfNodeId, TapiStringConstants.I_OTSI,
                         tp.getTpId().getValue())))
                 .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
-                .NodeEdgePoint enep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
+                .NodeEdgePoint enep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                 .node.rule.group.NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI)))
@@ -576,7 +563,7 @@ public class ConvertORTopoToTapiFullTopo {
                 .build();
             LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
                 .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-                .setQueingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+                .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
                 .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
                 .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
                 .setTrafficPropertyName("FIXED_LATENCY")
@@ -673,8 +660,8 @@ public class ConvertORTopoToTapiFullTopo {
         int count = 1;
         LOG.info("ODU switching pool = {}", this.oorOduSwitchingPool.nonnullNonBlockingList().values());
         for (NonBlockingList nbl : this.oorOduSwitchingPool.nonnullNonBlockingList().values()) {
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
+            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
                 nepList = new HashMap<>();
             LOG.info("UUidMap={}", this.uuidMap.keySet());
             LOG.info("TP list = {}", nbl.getTpList());
@@ -686,18 +673,18 @@ public class ConvertORTopoToTapiFullTopo {
                             TapiStringConstants.E_ODU, tp.getValue()))
                         && this.uuidMap.containsKey(String.join("+", this.ietfNodeId,
                             TapiStringConstants.DSR, tp.getValue()))) {
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
                         nep1 = new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
+                        .onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointBuilder()
                         .setTopologyUuid(tapiTopoUuid)
                         .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId,
                             TapiStringConstants.DSR)))
                         .setNodeEdgePointUuid(this.uuidMap.get(String.join(
                             "+", this.ietfNodeId, TapiStringConstants.DSR, tp.getValue())))
                         .build();
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
                         nep2 = new org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointBuilder()
+                        .onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointBuilder()
                         .setTopologyUuid(tapiTopoUuid)
                         .setNodeUuid(this.uuidMap.get(String.join("+", this.ietfNodeId,
                             TapiStringConstants.DSR)))
@@ -716,7 +703,7 @@ public class ConvertORTopoToTapiFullTopo {
                 .build();
             LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
                 .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-                .setQueingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+                .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
                 .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
                 .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
                 .setTrafficPropertyName("FIXED_LATENCY")
@@ -761,19 +748,20 @@ public class ConvertORTopoToTapiFullTopo {
             operState = this.tapiLink.setTapiOperationalState(oorTp.augmentation(TerminationPoint1.class)
                 .getOperationalState().getName());
         }
-        onepBldr.setSupportedCepLayerProtocolQualifier(createSupportedLayerProtocolQualifier(oorTp, nepProtocol))
-            .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
+        onepBldr.setSupportedCepLayerProtocolQualifierInstances(createSupportedLayerProtocolQualifier(oorTp,
+                nepProtocol))
+            .setDirection(Direction.BIDIRECTIONAL)
             .setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState)
             .setOperationalState(operState)
-            .setLifecycleState(LifecycleState.INSTALLED)
-            .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-            .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
+            .setLifecycleState(LifecycleState.INSTALLED);
+//            .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+//            .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
         return onepBldr.build();
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(List<TerminationPoint> tpList,
-                                                                                  boolean withSip) {
+            boolean withSip, String nepPhotonicSublayer) {
         // create neps for MC and OTSiMC and Photonic Media
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         for (TerminationPoint tp:tpList) {
@@ -784,92 +772,104 @@ public class ConvertORTopoToTapiFullTopo {
             LOG.info("PHOTO NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA,
                 tp.getTpId().getValue()));
             Name nepName = new NameBuilder()
-                .setValueName(TapiStringConstants.PHTNC_MEDIA + "NodeEdgePoint")
-                .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA,
+                .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
+                .setValue(String.join("+", this.ietfNodeId, nepPhotonicSublayer,
                     tp.getTpId().getValue()))
                 .build();
 
+            List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
+            if (TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)) {
+                sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE)
+                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .build());
+            } else {
+                sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .build());
+            }
             OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
-                    TapiStringConstants.PHTNC_MEDIA, tp.getTpId().getValue()))
+                    nepPhotonicSublayer, tp.getTpId().getValue()))
                     .getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
-                .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
+                .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
+                .setDirection(Direction.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
                 .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
                 .setLifecycleState(LifecycleState.INSTALLED)
-                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
+//                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+//                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
                 .build();
             onepMap.put(onep.key(), onep);
-
-            // MC nep
-            LOG.info("MC NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.MC,
-                tp.getTpId().getValue()));
-            Name nepName1 = new NameBuilder()
-                .setValueName(TapiStringConstants.MC + "NodeEdgePoint")
-                .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.MC, tp.getTpId().getValue()))
-                .build();
-            OwnedNodeEdgePointBuilder onepBldr1 = new OwnedNodeEdgePointBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
-                    TapiStringConstants.MC, tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName1.key(), nepName1))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
-                .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
-                .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
-                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
-                .setLifecycleState(LifecycleState.INSTALLED)
-                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
-            if (withSip) {
-                onepBldr1.setMappedServiceInterfacePoint(createMSIP(1, LayerProtocolName.PHOTONICMEDIA,
-                    tp, String.join("+", this.ietfNodeId, TapiStringConstants.MC)));
-            }
-            OwnedNodeEdgePoint onep1 = onepBldr1.build();
-            onepMap.put(onep1.key(), onep1);
-
-            // OTSiMC nep
-            LOG.info("OTSi NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.OTSI_MC,
-                tp.getTpId().getValue()));
-            Name nepName2 = new NameBuilder()
-                .setValueName(TapiStringConstants.OTSI_MC + "NodeEdgePoint")
-                .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI_MC,
-                    tp.getTpId().getValue()))
-                .build();
-
-            OwnedNodeEdgePoint onep2 = new OwnedNodeEdgePointBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
-                        TapiStringConstants.OTSI_MC, tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8")))
-                    .toString()))
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName2.key(), nepName2))
-                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
-                .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
-                .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
-                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
-                .setLifecycleState(LifecycleState.INSTALLED)
-                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
-                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
-                .build();
-            onepMap.put(onep2.key(), onep2);
+//
+//            // MC nep
+//            LOG.info("MC NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.MC,
+//                tp.getTpId().getValue()));
+//            Name nepName1 = new NameBuilder()
+//                .setValueName(TapiStringConstants.MC + "NodeEdgePoint")
+//                .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.MC, tp.getTpId().getValue()))
+//                .build();
+//            OwnedNodeEdgePointBuilder onepBldr1 = new OwnedNodeEdgePointBuilder()
+//                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
+//                    TapiStringConstants.MC, tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8"))).toString()))
+//                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+//                .setName(Map.of(nepName1.key(), nepName1))
+//                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
+//                .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
+//                .setLinkPortRole(PortRole.SYMMETRIC)
+//                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
+//                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
+//                .setLifecycleState(LifecycleState.INSTALLED)
+//                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+//                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL);
+//            if (withSip) {
+//                onepBldr1.setMappedServiceInterfacePoint(createMSIP(1, LayerProtocolName.PHOTONICMEDIA,
+//                    tp, String.join("+", this.ietfNodeId, TapiStringConstants.MC)));
+//            }
+//            OwnedNodeEdgePoint onep1 = onepBldr1.build();
+//            onepMap.put(onep1.key(), onep1);
+//
+//            // OTSiMC nep
+//            LOG.info("OTSi NEP = {}", String.join("+", this.ietfNodeId, TapiStringConstants.OTSI_MC,
+//                tp.getTpId().getValue()));
+//            Name nepName2 = new NameBuilder()
+//                .setValueName(TapiStringConstants.OTSI_MC + "NodeEdgePoint")
+//                .setValue(String.join("+", this.ietfNodeId, TapiStringConstants.OTSI_MC,
+//                    tp.getTpId().getValue()))
+//                .build();
+//
+//            OwnedNodeEdgePoint onep2 = new OwnedNodeEdgePointBuilder()
+//                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId,
+//                        TapiStringConstants.OTSI_MC, tp.getTpId().getValue())).getBytes(Charset.forName("UTF-8")))
+//                    .toString()))
+//                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+//                .setName(Map.of(nepName2.key(), nepName2))
+//                .setSupportedCepLayerProtocolQualifier(Set.of(PHOTONICLAYERQUALIFIEROMS.VALUE))
+//                .setLinkPortDirection(PortDirection.BIDIRECTIONAL)
+//                .setLinkPortRole(PortRole.SYMMETRIC)
+//                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
+//                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
+//                .setLifecycleState(LifecycleState.INSTALLED)
+//                .setTerminationDirection(TerminationDirection.BIDIRECTIONAL)
+//                .setTerminationState(TerminationState.TERMINATEDBIDIRECTIONAL)
+//                .build();
+//            onepMap.put(onep2.key(), onep2);
         }
         return onepMap;
     }
 
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(Uuid nodeUuid,
                                                                                Collection<OwnedNodeEdgePoint> onepl) {
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePointKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint>
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
             nepMap = new HashMap<>();
         for (OwnedNodeEdgePoint onep : onepl) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint
-                nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
+                nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
                 .NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(nodeUuid)
@@ -879,10 +879,12 @@ public class ConvertORTopoToTapiFullTopo {
         }
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         Map<RuleKey, Rule> ruleList = new HashMap<>();
+        Set<RuleType> ruleTypes = new HashSet<>();
+        ruleTypes.add(RuleType.FORWARDING);
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
-            .setForwardingRule(ForwardingRule.MAYFORWARDACROSSGROUP)
-            .setRuleType(RuleType.FORWARDING)
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(ruleTypes)
             .build();
         ruleList.put(rule.key(), rule);
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
@@ -941,22 +943,31 @@ public class ConvertORTopoToTapiFullTopo {
             .setLifecycleState(LifecycleState.INSTALLED)
             .setAvailableCapacity(new AvailableCapacityBuilder().build())
             .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().build())
-            .setSupportedLayerProtocolQualifier(createSupportedLayerProtocolQualifier(tp, layerProtocol))
+            .setSupportedCepLayerProtocolQualifierInstances(createSipSupportedLayerProtocolQualifier(
+                tp, layerProtocol))
             .build();
     }
 
-    private Set<LAYERPROTOCOLQUALIFIER> createSupportedLayerProtocolQualifier(TerminationPoint tp,
-                                                                              LayerProtocolName lpn) {
-        Set<LAYERPROTOCOLQUALIFIER> sclpqSet = new HashSet<>();
+    private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+            .service._interface.point.SupportedCepLayerProtocolQualifierInstances>
+            createSipSupportedLayerProtocolQualifier(TerminationPoint tp,
+            LayerProtocolName lpn) {
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+            .service._interface.point.SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
+        sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE)
+            .setNumberOfCepInstances(Uint64.valueOf(1))
+            .build());
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.TerminationPoint1 tp1 =
             tp.augmentation(org.opendaylight.yang.gen.v1.http
                 .org.openroadm.otn.network.topology.rev230526.TerminationPoint1.class);
         if (tp1 == null) {
-            return new HashSet<>(sclpqSet);
+            return new ArrayList<>(sclpqiList);
         }
         if (tp1.getTpSupportedInterfaces() == null) {
             LOG.warn("Tp supported interface doesnt exist on TP {}", tp.getTpId().getValue());
-            return new HashSet<>(sclpqSet);
+            return new ArrayList<>(sclpqiList);
         }
         Collection<SupportedInterfaceCapability> sicList = tp1.getTpSupportedInterfaces()
             .getSupportedInterfaceCapability().values();
@@ -968,30 +979,74 @@ public class ConvertORTopoToTapiFullTopo {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqSet.add(ODUTYPEODU0.VALUE);
-                            sclpqSet.add(DIGITALSIGNALTYPEGigE.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPEGigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.VALUE);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If10GEODU2":
-                            sclpqSet.add(ODUTYPEODU2.VALUE);
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If10GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If100GEODU4":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
-                            sclpqSet.add(ODUTYPEODU4.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If100GE":
-                            sclpqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -1003,20 +1058,36 @@ public class ConvertORTopoToTapiFullTopo {
                         // TODO: it may be needed to add more cases clauses if the interface capabilities of a
                         //  port are extended in the config file
                         case "If1GEODU0":
-                            sclpqSet.add(ODUTYPEODU0.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If10GEODU2e":
-                            sclpqSet.add(ODUTYPEODU2E.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If10GEODU2":
                         case "If10GE":
-                            sclpqSet.add(ODUTYPEODU2.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         case "If100GEODU4":
                         case "If100GE":
                         case "IfOCHOTU4ODU4":
                         case "IfOCH":
-                            sclpqSet.add(ODUTYPEODU4.VALUE);
+                            sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                    .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
                             break;
                         default:
                             LOG.error("IfCapability type not managed");
@@ -1025,8 +1096,16 @@ public class ConvertORTopoToTapiFullTopo {
                     break;
                 case "PHOTONIC_MEDIA":
                     if (ifCapType.equals("IfOCHOTU4ODU4") || ifCapType.equals("IfOCH")) {
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROTSi.VALUE);
-                        sclpqSet.add(PHOTONICLAYERQUALIFIEROMS.VALUE);
+                        sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                                .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
+                            .setNumberOfCepInstances(Uint64.valueOf(0))
+                            .build());
+                        sclpqiList.add(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                            .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE)
+                            .setNumberOfCepInstances(Uint64.valueOf(0))
+                            .build());
                     }
                     break;
                 default:
@@ -1034,19 +1113,154 @@ public class ConvertORTopoToTapiFullTopo {
                     break;
             }
         }
-        return sclpqSet;
+        return sclpqiList;
     }
 
-    private void createTapiTransitionalLinks() {
-        for (TerminationPoint tp : this.oorNetworkPortList) {
-            Link transiLink = tapiLink.createTapiLink(this.ietfNodeId, tp.getTpId().getValue(), this.ietfNodeId,
-                tp.getTpId().getValue(), TapiStringConstants.TRANSITIONAL_LINK, TapiStringConstants.DSR,
-                TapiStringConstants.OTSI, TapiStringConstants.I_ODU, TapiStringConstants.I_OTSI,
-                "inService", "inService", Set.of(LayerProtocolName.ODU, LayerProtocolName.PHOTONICMEDIA),
-                Set.of(LayerProtocolName.ODU.getName(), LayerProtocolName.PHOTONICMEDIA.getName()),
-                this.tapiTopoUuid);
-            this.tapiLinks.put(transiLink.key(), transiLink);
+    private List<SupportedCepLayerProtocolQualifierInstances> createSupportedLayerProtocolQualifier(TerminationPoint tp,
+            LayerProtocolName lpn) {
+        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
+        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE)
+            .setNumberOfCepInstances(Uint64.valueOf(1))
+            .build());
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.TerminationPoint1 tp1 =
+            tp.augmentation(org.opendaylight.yang.gen.v1.http
+                .org.openroadm.otn.network.topology.rev230526.TerminationPoint1.class);
+        if (tp1 == null) {
+            return new ArrayList<>(sclpqiList);
         }
+        if (tp1.getTpSupportedInterfaces() == null) {
+            LOG.warn("Tp supported interface doesnt exist on TP {}", tp.getTpId().getValue());
+            return new ArrayList<>(sclpqiList);
+        }
+        Collection<SupportedInterfaceCapability> sicList = tp1.getTpSupportedInterfaces()
+            .getSupportedInterfaceCapability().values();
+        for (SupportedInterfaceCapability sic : sicList) {
+            String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
+            switch (lpn.getName()) {
+                case "DSR":
+                    switch (ifCapType) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPEGigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If10GEODU2e":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If10GEODU2":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If10GE":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If100GEODU4":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If100GE":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "IfOCHOTU4ODU4":
+                        case "IfOCH":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        default:
+                            LOG.error("IfCapability type not managed");
+                            break;
+                    }
+                    break;
+                case "ODU":
+                    switch (ifCapType) {
+                        // TODO: it may be needed to add more cases clauses if the interface capabilities of a
+                        //  port are extended in the config file
+                        case "If1GEODU0":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If10GEODU2e":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If10GEODU2":
+                        case "If10GE":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        case "If100GEODU4":
+                        case "If100GE":
+                        case "IfOCHOTU4ODU4":
+                        case "IfOCH":
+                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
+                                .setNumberOfCepInstances(Uint64.valueOf(0))
+                                .build());
+                            break;
+                        default:
+                            LOG.error("IfCapability type not managed");
+                            break;
+                    }
+                    break;
+                case "PHOTONIC_MEDIA":
+                    if (ifCapType.equals("IfOCHOTU4ODU4") || ifCapType.equals("IfOCH")) {
+                        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
+                            .setNumberOfCepInstances(Uint64.valueOf(0))
+                            .build());
+                        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE)
+                            .setNumberOfCepInstances(Uint64.valueOf(0))
+                            .build());
+                    }
+                    break;
+                default:
+                    LOG.error("Layer Protocol Name is unknown");
+                    break;
+            }
+        }
+        return sclpqiList;
     }
 
     public void convertXpdrToRdmLinks(List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
@@ -1114,7 +1328,7 @@ public class ConvertORTopoToTapiFullTopo {
         }
     }
 
-    public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+    public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
             getTapiNodes() {
         return tapiNodes;
     }

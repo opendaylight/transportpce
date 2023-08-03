@@ -35,10 +35,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.PathComputationResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.path.computation.result.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.path.computation.result.ZToABuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceZEndBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -200,7 +200,7 @@ public class RendererNotificationHandler implements RendererListener {
                     .setResponseFailed("")
                     .setMessage("Temp Service implemented")
                     .setAToZ(
-                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service
+                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service
                                 .AToZBuilder()
                             .setFrequency(serviceRpcResult.getPathComputationResult().getAToZ().getFrequency())
                             .setWidth(serviceRpcResult.getPathComputationResult().getAToZ().getWidth())
@@ -209,7 +209,7 @@ public class RendererNotificationHandler implements RendererListener {
                             // TODO: add GNSR, OSNR, min/max output powers
                             .build())
                     .setZToA(
-                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service
+                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service
                                 .ZToABuilder()
                             .setFrequency(serviceRpcResult.getPathComputationResult().getZToA().getFrequency())
                             .setWidth(serviceRpcResult.getPathComputationResult().getZToA().getWidth())
@@ -264,7 +264,8 @@ public class RendererNotificationHandler implements RendererListener {
      * @param notification RendererRpcResultSp
      * @param type ServiceNotificationTypes
      */
-    private void sendServiceHandlerNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+    private void sendServiceHandlerNotification(
+            RendererRpcResultSp notification, ServiceNotificationTypes type) {
         try {
             ServiceRpcResultSh serviceHandlerNotification = new ServiceRpcResultShBuilder()
                     .setAToZDirection(notification.getAToZDirection())
