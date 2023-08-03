@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19af67f8_05a0a0aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-08-03T08:28:28Z",
+      "side": 1,
+      "message": "Thanks for your contribution. Looks good to me! Just need now to solve the failure on the tests.",
+      "revId": "0559dabd2e93a57d3d26e1422b7ae7162ef3fc0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebdcd7b8_7114e137",
