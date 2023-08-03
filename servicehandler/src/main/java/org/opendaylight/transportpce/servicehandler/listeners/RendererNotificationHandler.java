@@ -35,10 +35,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.PathComputationResultBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.path.computation.result.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.rpc.result.path.computation.result.ZToABuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service.ServiceZEndBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -179,32 +179,55 @@ public class RendererNotificationHandler implements RendererListener {
         updateOtnTopology(notification, false);
         PublishNotificationProcessServiceBuilder nbiNotificationBuilder =
             new PublishNotificationProcessServiceBuilder()
-                .setServiceName(input.getServiceName())
                 .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
                 .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                .setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType())
                 .setPublisherName(PUBLISHER);
         String serviceTemp = "";
         if (tempService) {
+            nbiNotificationBuilder.setCommonId(input.getCommonId()).setConnectionType(input.getConnectionType());
+            if (input.getServiceName() != null) {
+                nbiNotificationBuilder.setServiceName(input.getServiceName());
+            }
             OperationResult operationResult = this.serviceDataStoreOperations.modifyTempService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             serviceTemp = "Temp ";
             if (operationResult.isSuccess()) {
+                ServiceRpcResult serviceRpcResult =
+                    sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
-                    .setMessage("Temp Service implemented !")
+                    .setMessage("Temp Service implemented")
+                    .setAToZ(
+                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service
+                                .AToZBuilder()
+                            .setFrequency(serviceRpcResult.getPathComputationResult().getAToZ().getFrequency())
+                            .setWidth(serviceRpcResult.getPathComputationResult().getAToZ().getWidth())
+                            .setOpticalOperationalMode(serviceRpcResult.getPathComputationResult()
+                                        .getAToZ().getOpticalOperationalMode())
+                            // TODO: add GNSR, OSNR, min/max output powers
+                            .build())
+                    .setZToA(
+                        new org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.process.service
+                                .ZToABuilder()
+                            .setFrequency(serviceRpcResult.getPathComputationResult().getZToA().getFrequency())
+                            .setWidth(serviceRpcResult.getPathComputationResult().getZToA().getWidth())
+                            .setOpticalOperationalMode(serviceRpcResult.getPathComputationResult()
+                                        .getZToA().getOpticalOperationalMode())
+                            // TODO: add GNSR, OSNR, min/max output powers
+                        .build())
                     .setOperationalState(State.InService)
                     .build());
                 LOG.debug("For the Temp service, sending notification on service-result-rpc");
-                sendServiceRpcResultNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
                 return;
             }
         } else {
             OperationResult operationResult = this.serviceDataStoreOperations.modifyService(
                     serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
             // Here the service is implemented and the tempService has to be deleted if present
+            nbiNotificationBuilder.setServiceName(input.getServiceName());
             String commonId = input.getCommonId();
             if (commonId != null) {
+                nbiNotificationBuilder.setCommonId(commonId);
                 if (this.serviceDataStoreOperations.getTempService(commonId).isPresent()) {
                     LOG.info("Temp-service exists with the common-Id {}", commonId);
                     // Delete the common-id from this temp-service-list here
@@ -214,7 +237,6 @@ public class RendererNotificationHandler implements RendererListener {
                     LOG.info("Result for temp-service-list with {} is {}", commonId, tempServiceListDelete);
                 }
             }
-
             if (operationResult.isSuccess()) {
                 sendNbiNotification(nbiNotificationBuilder
                     .setResponseFailed("")
@@ -238,7 +260,8 @@ public class RendererNotificationHandler implements RendererListener {
      * @param notification RendererRpcResultSp
      * @param type ServiceNotificationTypes
      */
-    private void sendServiceHandlerNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+    private void sendServiceHandlerNotification(
+        RendererRpcResultSp notification, ServiceNotificationTypes type) {
         try {
             ServiceRpcResultSh serviceHandlerNotification = new ServiceRpcResultShBuilder()
                     .setAToZDirection(notification.getAToZDirection())
@@ -249,8 +272,7 @@ public class RendererNotificationHandler implements RendererListener {
                     .setNotificationType(type)
                     .build();
             LOG.debug("Service update in datastore OK, sending notification {}", serviceHandlerNotification);
-            notificationPublishService.putNotification(
-                    serviceHandlerNotification);
+            notificationPublishService.putNotification(serviceHandlerNotification);
         } catch (InterruptedException e) {
             LOG.warn("Something went wrong while sending notification for service {}",
                     serviceRpcResultSp.getServiceName(), e);
@@ -258,7 +280,8 @@ public class RendererNotificationHandler implements RendererListener {
         }
     }
 
-    private void sendServiceRpcResultNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+    private ServiceRpcResult sendServiceRpcResultNotification(
+            RendererRpcResultSp notification, ServiceNotificationTypes type) {
         try {
             ServiceRpcResult serviceRpcResult = new ServiceRpcResultBuilder()
                     .setServiceName(notification.getServiceName())
@@ -291,13 +314,14 @@ public class RendererNotificationHandler implements RendererListener {
                             .build())
                     .build();
             LOG.info("Sending the notification for service-rpc-result {}", serviceRpcResult);
-            notificationPublishService.putNotification(
-                    serviceRpcResult);
+            notificationPublishService.putNotification(serviceRpcResult);
+            return serviceRpcResult;
         } catch (InterruptedException e) {
             LOG.warn("Something went wrong while sending notification for service {}",
                     serviceRpcResultSp.getServiceName(), e);
             Thread.currentThread().interrupt();
         }
+        return null;
     }
 
 
