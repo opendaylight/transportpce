@@ -13,22 +13,20 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.AdditionalInfo;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.AdditionalInfoBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.AdditionalInfoKey;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.AlarmInfoBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.ChangedAttributes;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.ChangedAttributesBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.ChangedAttributesKey;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.TargetObjectName;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.TargetObjectNameBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.TargetObjectNameKey;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.tapi.service.TcaInfoBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.AdditionalInfo;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.AdditionalInfoBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.AdditionalInfoKey;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.ChangedAttributesKey;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.TargetObjectName;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.TargetObjectNameBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.TargetObjectNameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,9 +68,9 @@ public final class NbiNotificationsUtils {
                         e -> new TargetObjectNameKey(e.getValueName()),
                         e -> new TargetObjectNameBuilder(e).build()));
         LOG.info("Notification uuid = {}", notification.getUuid());
+
         return new NotificationTapiServiceBuilder()
-                .setAlarmInfo(notification.getAlarmInfo() == null ? null
-                        : new AlarmInfoBuilder(notification.getAlarmInfo()).build())
+                .setAlarmInfo(notification.getAlarmInfo())
                 .setAdditionalText(notification.getAdditionalText())
                 .setAdditionalInfo(addInfoMap)
                 .setNotificationType(notification.getNotificationType())
@@ -85,8 +83,7 @@ public final class NbiNotificationsUtils {
                 .setTargetObjectIdentifier(notification.getTargetObjectIdentifier())
                 .setTargetObjectName(targetObjNameMap)
                 .setTargetObjectType(notification.getTargetObjectType())
-                .setTcaInfo(notification.getTcaInfo() == null ? null
-                        : new TcaInfoBuilder(notification.getTcaInfo()).build())
+                .setTcaInfo(notification.getTcaInfo())
                 .setUuid(notification.getUuid())
                 .build();
     }
