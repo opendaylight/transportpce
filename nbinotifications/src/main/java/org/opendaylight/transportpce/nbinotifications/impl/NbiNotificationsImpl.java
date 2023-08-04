@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.nbinotifications.impl;
 
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,65 +28,73 @@ import org.opendaylight.transportpce.nbinotifications.serialization.Notification
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.TapiNotificationDeserializer;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessServiceInput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NbiNotificationsService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.get.notifications.alarm.service.output.NotificationsAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.get.notifications.process.service.output.NotificationsProcessService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetails;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceList;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypes;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionServiceInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.context.NotificationContext;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.context.NotificationContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.output.SubscriptionService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.output.SubscriptionServiceBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.Notification;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.NotificationKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.subscription.service.list.output.SubscriptionServiceKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.context.NotifSubscription;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.context.NotifSubscriptionBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.context.NotifSubscriptionKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.subscription.service.SubscriptionFilter;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.subscription.service.SubscriptionFilterBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessServiceInput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NbiNotificationsService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.get.notifications.alarm.service.output.NotificationsAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPEPROFILE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPESERVICEINTERFACEPOINT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.DeleteNotificationSubscriptionService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.DeleteNotificationSubscriptionServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.DeleteNotificationSubscriptionServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.DeleteNotificationSubscriptionServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetails;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetailsInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetSupportedNotificationTypes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetSupportedNotificationTypesInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetSupportedNotificationTypesOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetSupportedNotificationTypesOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPEATTRIBUTEVALUECHANGE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPEOBJECTCREATION;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.NOTIFICATIONTYPEOBJECTDELETION;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.ObjectType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.TapiNotificationService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.UpdateNotificationSubscriptionService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.UpdateNotificationSubscriptionServiceInput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.UpdateNotificationSubscriptionServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.create.notification.subscription.service.output.SubscriptionService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.create.notification.subscription.service.output.SubscriptionServiceBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.list.output.Notification;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.list.output.NotificationKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscription;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscriptionBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscriptionKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilter;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.ErrorTag;
@@ -160,21 +168,36 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
                 .withError(ErrorType.APPLICATION, "Couldnt get Notification Context from Datastore")
                 .buildFuture();
         }
-        if (notificationContext.getNotifSubscription() == null) {
-            return RpcResultBuilder.success(new GetSupportedNotificationTypesOutputBuilder()
-                .setSupportedNotificationTypes(new HashSet<>())
-                .setSupportedObjectTypes(new HashSet<>()).build()).buildFuture();
-        }
-        Set<NotificationType> notificationTypeList = new HashSet<>();
-        Set<ObjectType> objectTypeList = new HashSet<>();
-        for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
-            if (notifSubscription.getSupportedNotificationTypes() != null) {
-                notificationTypeList.addAll(notifSubscription.getSupportedNotificationTypes());
-            }
-            if (notifSubscription.getSupportedObjectTypes() != null) {
-                objectTypeList.addAll(notifSubscription.getSupportedObjectTypes());
-            }
-        }
+        //TAPI 2.4 removes supported notification types from notif-subscription list and notification-context
+        //No way to store what notification types are supported
+        //Considers that by default all notification are supported
+        Set<NOTIFICATIONTYPE> notificationTypeList = new HashSet<>();
+        notificationTypeList.add(NOTIFICATIONTYPEOBJECTCREATION.VALUE);
+        notificationTypeList.add(NOTIFICATIONTYPEOBJECTDELETION.VALUE);
+        notificationTypeList.add(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE);
+//
+//        if (notificationContext.getNotifSubscription() == null) {
+//            return RpcResultBuilder.success(new GetSupportedNotificationTypesOutputBuilder()
+//                .setSupportedNotificationTypes(new HashSet<>())
+//                .setSupportedObjectTypes(new HashSet<>()).build()).buildFuture();
+//        }
+//        Set<NOTIFICATIONTYPE> notificationTypeList = new HashSet<>();
+
+        //TAPI 2.4 removes supported object types from notif-subscription list and notification-context
+        //No way to store what object types are supported
+        //Considers that by default all object are supported
+        Set<OBJECTTYPE> objectTypeList = new HashSet<>();
+        objectTypeList.add(OBJECTTYPESERVICEINTERFACEPOINT.VALUE);
+        objectTypeList.add(OBJECTTYPETAPICONTEXT.VALUE);
+        objectTypeList.add(OBJECTTYPEPROFILE.VALUE);
+//        for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
+//            if (notifSubscription.getSupportedNotificationTypes() != null) {
+//                notificationTypeList.addAll(notifSubscription.getSupportedNotificationTypes());
+//            }
+//            if (notifSubscription.getSupportedObjectTypes() != null) {
+//                objectTypeList.addAll(notifSubscription.getSupportedObjectTypes());
+//            }
+//        }
         return RpcResultBuilder.success(new GetSupportedNotificationTypesOutputBuilder()
             .setSupportedNotificationTypes(notificationTypeList)
             .setSupportedObjectTypes(objectTypeList).build()).buildFuture();
@@ -197,25 +220,22 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
             .setRequestedObjectTypes(input.getSubscriptionFilter().getRequestedObjectTypes())
             .build();
         Uuid notifSubscriptionUuid = new Uuid(UUID.randomUUID().toString());
+        Map<SubscriptionFilterKey, SubscriptionFilter> sfmap = new HashMap<>();
+        sfmap.put(subscriptionFilter.key(), subscriptionFilter);
         SubscriptionService subscriptionService = new SubscriptionServiceBuilder()
-            .setSubscriptionFilter(subscriptionFilter)
+            .setSubscriptionFilter(sfmap)
             .setSubscriptionState(input.getSubscriptionState())
             .setUuid(notifSubscriptionUuid)
             .build();
 
         NotifSubscriptionKey notifSubscriptionKey = new NotifSubscriptionKey(notifSubscriptionUuid);
-        Set<NotificationType> notificationTypes = (subscriptionFilter.getRequestedNotificationTypes() != null)
-            ? subscriptionFilter.getRequestedNotificationTypes()
-            : new HashSet<>(List.of(NotificationType.ALARMEVENT));
-        Set<ObjectType> objectTypes = (subscriptionFilter.getRequestedObjectTypes() != null)
-            ? subscriptionFilter.getRequestedObjectTypes()
-            : new HashSet<>(List.of(ObjectType.CONNECTIVITYSERVICE));
         NotifSubscription notifSubscription = new NotifSubscriptionBuilder()
             .setSubscriptionState(subscriptionService.getSubscriptionState())
             .setSubscriptionFilter(subscriptionService.getSubscriptionFilter())
             .setUuid(notifSubscriptionUuid)
-            .setSupportedNotificationTypes(notificationTypes)
-            .setSupportedObjectTypes(objectTypes)
+//            Following 2 items are no more in notification-context with T-API 2.4
+//            .setSupportedNotificationTypes(notificationTypes)
+//            .setSupportedObjectTypes(objectTypes)
             .setName(subscriptionService.getName())
             .build();
         NotificationContext notificationContext = getNotificationContext();
@@ -253,12 +273,12 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
     public ListenableFuture<RpcResult<DeleteNotificationSubscriptionServiceOutput>>
             deleteNotificationSubscriptionService(DeleteNotificationSubscriptionServiceInput input) {
         try {
-            if (input == null || input.getSubscriptionIdOrName() == null) {
+            if (input == null || input.getUuid() == null) {
                 LOG.warn("Missing mandatory params for input {}", input);
                 return RpcResultBuilder.<DeleteNotificationSubscriptionServiceOutput>failed()
                     .withError(ErrorType.RPC, "Missing input parameters").buildFuture();
             }
-            Uuid notifSubsUuid = getUuidFromIput(input.getSubscriptionIdOrName());
+            Uuid notifSubsUuid = input.getUuid();
             InstanceIdentifier<NotifSubscription> notifSubscriptionIID = InstanceIdentifier.builder(Context.class)
                 .augmentation(Context1.class).child(NotificationContext.class).child(NotifSubscription.class,
                     new NotifSubscriptionKey(notifSubsUuid)).build();
@@ -273,9 +293,15 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
             NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID);
             this.networkTransactionService.commit().get();
-            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
-                this.topicManager.deleteTapiTopic(objectUuid.getValue());
+            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry : notifSubscription
+                    .getSubscriptionFilter().entrySet()) {
+                for (Uuid objectUuid:sfEntry.getValue().getRequestedObjectIdentifier()) {
+                    this.topicManager.deleteTapiTopic(objectUuid.getValue());
+                }
             }
+//            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
+//                this.topicManager.deleteTapiTopic(objectUuid.getValue());
+//            }
             return RpcResultBuilder.success(new DeleteNotificationSubscriptionServiceOutputBuilder().build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
@@ -289,12 +315,12 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
     @Override
     public ListenableFuture<RpcResult<GetNotificationSubscriptionServiceDetailsOutput>>
             getNotificationSubscriptionServiceDetails(GetNotificationSubscriptionServiceDetailsInput input) {
-        if (input == null || input.getSubscriptionIdOrName() == null) {
+        if (input == null || input.getUuid() == null) {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
                 .withError(ErrorType.RPC, "Missing input parameters").buildFuture();
         }
-        Uuid notifSubsUuid = getUuidFromIput(input.getSubscriptionIdOrName());
+        Uuid notifSubsUuid = input.getUuid();
         NotificationContext notificationContext = getNotificationContext();
         if (notificationContext == null) {
             return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
@@ -304,7 +330,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
         if (notificationContext.getNotifSubscription() == null) {
             return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
                 .setSubscriptionService(new org.opendaylight.yang.gen.v1
-                    .urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.subscription.service
+                    .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
                         .details.output.SubscriptionServiceBuilder().build()).build()).buildFuture();
         }
         if (!notificationContext.getNotifSubscription().containsKey(new NotifSubscriptionKey(notifSubsUuid))) {
@@ -314,7 +340,7 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
         }
         return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
             .setSubscriptionService(new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.notification.rev181210.get.notification.subscription.service.details.output
+                .onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.details.output
                 .SubscriptionServiceBuilder(notificationContext.getNotifSubscription().get(
                     new NotifSubscriptionKey(notifSubsUuid))).build()).build()).buildFuture();
     }
@@ -333,13 +359,13 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
                 .setSubscriptionService(new HashMap<>()).build()).buildFuture();
         }
         Map<SubscriptionServiceKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-            .tapi.notification.rev181210.get.notification.subscription.service.list.output.SubscriptionService>
+            .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService>
                 notifSubsMap = new HashMap<>();
         for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-                .tapi.notification.rev181210.get.notification.subscription.service.list.output.SubscriptionService
+                .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService
                     subscriptionService = new org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.subscription.service
+                        .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
                             .list.output.SubscriptionServiceBuilder(notifSubscription).build();
             notifSubsMap.put(subscriptionService.key(), subscriptionService);
         }
@@ -351,12 +377,12 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
     public ListenableFuture<RpcResult<GetNotificationListOutput>> getNotificationList(GetNotificationListInput input) {
         try {
             LOG.info("RPC getNotificationList received");
-            if (input == null || input.getSubscriptionIdOrName() == null) {
+            if (input == null || input.getSubscriptionId() == null) {
                 LOG.warn("Missing mandatory params for input {}", input);
                 return RpcResultBuilder.<GetNotificationListOutput>failed().withError(ErrorType.RPC,
                     "Missing input parameters").buildFuture();
             }
-            Uuid notifSubsUuid = getUuidFromIput(input.getSubscriptionIdOrName());
+            Uuid notifSubsUuid = input.getSubscriptionId();
             InstanceIdentifier<NotifSubscription> notifSubscriptionIID = InstanceIdentifier.builder(Context.class)
                 .augmentation(Context1.class).child(NotificationContext.class).child(NotifSubscription.class,
                     new NotifSubscriptionKey(notifSubsUuid)).build();
@@ -370,17 +396,31 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
             }
             NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             List<Notification> notificationTapiList = new ArrayList<>();
-            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
-                if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
-                    LOG.warn("Topic doesnt exist for {}", objectUuid.getValue());
-                    continue;
+            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry : notifSubscription
+                    .getSubscriptionFilter().entrySet()) {
+                for (Uuid objectUuid:sfEntry.getValue().getRequestedObjectIdentifier()) {
+                    if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
+                        LOG.warn("Topic doesnt exist for {}", objectUuid.getValue());
+                        continue;
+                    }
+                    LOG.info("Going to get notifications for topic {}", objectUuid.getValue());
+                    Subscriber<NotificationTapiService, Notification> subscriber = new Subscriber<>(
+                        objectUuid.getValue(), objectUuid.getValue(), server, converterTapiService,
+                        TapiNotificationDeserializer.class);
+                    notificationTapiList.addAll(subscriber.subscribe(objectUuid.getValue(), Notification.QNAME));
                 }
-                LOG.info("Going to get notifications for topic {}", objectUuid.getValue());
-                Subscriber<NotificationTapiService, Notification> subscriber = new Subscriber<>(
-                    objectUuid.getValue(), objectUuid.getValue(), server, converterTapiService,
-                    TapiNotificationDeserializer.class);
-                notificationTapiList.addAll(subscriber.subscribe(objectUuid.getValue(), Notification.QNAME));
             }
+//            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
+//                if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
+//                    LOG.warn("Topic doesnt exist for {}", objectUuid.getValue());
+//                    continue;
+//                }
+//                LOG.info("Going to get notifications for topic {}", objectUuid.getValue());
+//                Subscriber<NotificationTapiService, Notification> subscriber = new Subscriber<>(
+//                    objectUuid.getValue(), objectUuid.getValue(), server, converterTapiService,
+//                    TapiNotificationDeserializer.class);
+//                notificationTapiList.addAll(subscriber.subscribe(objectUuid.getValue(), Notification.QNAME));
+//            }
             LOG.info("TAPI notifications = {}", notificationTapiList);
             Map<NotificationKey, Notification> notificationMap = new HashMap<>();
             for (Notification notif:notificationTapiList) {
@@ -444,14 +484,14 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
         return false;
     }
 
-    private Uuid getUuidFromIput(String serviceIdOrName) {
-        try {
-            UUID.fromString(serviceIdOrName);
-            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
-            return new Uuid(serviceIdOrName);
-        } catch (IllegalArgumentException e) {
-            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
-            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
-        }
-    }
+//    private Uuid getUuidFromIput(String serviceIdOrName) {
+//        try {
+//            UUID.fromString(serviceIdOrName);
+//            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
+//            return new Uuid(serviceIdOrName);
+//        } catch (IllegalArgumentException e) {
+//            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
+//            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
+//        }
+//    }
 }
