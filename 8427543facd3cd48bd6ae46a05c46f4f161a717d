@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac417d06_756b2fcb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:54:17Z",
+      "side": 1,
+      "message": "indent +8 to separate method declaration from its body",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55653c1c_a9e17586",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:54:17Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
