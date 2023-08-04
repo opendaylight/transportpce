@@ -33,13 +33,13 @@ import org.opendaylight.transportpce.nbinotifications.serialization.TapiNotifica
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.input.SubscriptionFilter;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.create.notification.subscription.service.input.SubscriptionFilterBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.create.notification.subscription.service.input.SubscriptionFilter;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.create.notification.subscription.service.input.SubscriptionFilterBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 

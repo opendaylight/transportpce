@@ -329,7 +329,7 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     @Override
     public ListenableFuture<RpcResult<GetConnectionEndPointDetailsOutput>> getConnectionEndPointDetails(
             GetConnectionEndPointDetailsInput input) {
-// TODO:  Leveraging previous code, provide TAPI2.4 compliant implementation for this function 
+// TODO:  Leveraging previous code, provide TAPI2.4 compliant implementation for this function
         LOG.error("Method getConnectionEndPointDetails not currently implemented");
         return null;
     }
