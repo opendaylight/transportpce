@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "750805bb_1676db1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T09:14:36Z",
+      "side": 1,
+      "message": "line length \u003e72 characters\ncf pre-commit failure in tox",
+      "revId": "8646f6e45d72ca192be903d15b9e52f30996a427",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "42d0486a_4106bccd",
@@ -14,6 +31,40 @@
       "writtenOn": "2023-08-02T12:20:59Z",
       "side": 1,
       "message": "recheck",
+      "revId": "8646f6e45d72ca192be903d15b9e52f30996a427",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a87d1b47_f9dd6d54",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T09:14:36Z",
+      "side": 1,
+      "message": "tempsService.getCommonId() is consumed twice.\nI think it would make sense here to add a variable or to reuse String serviceName (same purpose for tempServiceDeleteInput.getCommonId() )",
+      "revId": "8646f6e45d72ca192be903d15b9e52f30996a427",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "138dd701_8a67dfe8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T09:14:36Z",
+      "side": 1,
+      "message": "The variable \"service\" seems only used here and does not deserve an intermediate variable IMO",
       "revId": "8646f6e45d72ca192be903d15b9e52f30996a427",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
