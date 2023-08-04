@@ -23,6 +23,10 @@ module nbi-notifications {
     prefix tapi-notification;
     revision-date 2022-11-21;
   }
+  import tapi-fm {
+    prefix tapi-fm;
+    revision-date 2022-11-21;
+  }
 
   organization
     "transportPCE";
@@ -157,6 +161,17 @@ module nbi-notifications {
     }
   }
 
+  grouping alarm-tca-info {
+    container alarm-info {
+      uses tapi-fm:alarm-info;
+      description "none";
+    }
+    container tca-info {
+      uses tapi-fm:tca-info;
+      description "none";
+    }
+  }
+
   grouping notification-tapi-service {
       leaf notification-type {
         type tapi-notification:notification-type;
@@ -213,6 +228,7 @@ module nbi-notifications {
         type string;
         description "none";
       }
+      uses alarm-tca-info;
       uses tapi-common:global-class;
       description "none";
     }
@@ -323,6 +339,7 @@ module nbi-notifications {
       description
         "Topic where to send the notification service";
     }
+    uses alarm-tca-info;
     uses tapi-notification:notification;
   }
 }
