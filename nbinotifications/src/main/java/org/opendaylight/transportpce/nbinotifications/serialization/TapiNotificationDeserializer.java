@@ -12,23 +12,21 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.Notification;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.NotificationBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.AdditionalInfo;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.AdditionalInfoBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.AdditionalInfoKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.AlarmInfoBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TargetObjectNameKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.TcaInfoBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.list.output.Notification;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.list.output.NotificationBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.AdditionalInfo;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.AdditionalInfoBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.AdditionalInfoKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributes;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributesBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.ChangedAttributesKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectName;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameKey;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
@@ -56,10 +54,10 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         }
         String value = new String(data, StandardCharsets.UTF_8);
         // The message published is
-        // org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService
+        // org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService
         // we have to map it to
         // org.opendaylight.yang.gen.v1
-        // .urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.Notification
+        // .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.list.output.Notification
         NotificationTapiService mappedString = converter.createDataObjectFromJsonString(
             YangInstanceIdentifier.of(NotificationTapiService.QNAME), value, JSONCodecFactorySupplier.RFC7951);
         if (mappedString == null) {
@@ -73,7 +71,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         LOG.info("Transforming TAPI notification for getNotificationList rpc");
         Map<AdditionalInfoKey, AdditionalInfo> addInfoMap = new HashMap<>();
         if (mappedString.getAdditionalInfo() != null) {
-            for (org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.tapi.service.AdditionalInfo
+            for (org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.AdditionalInfo
                     addInfo:mappedString.getAdditionalInfo().values()) {
                 AdditionalInfo transAddInfo = new AdditionalInfoBuilder()
                     .setValue(addInfo.getValue())
@@ -85,7 +83,7 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         Map<ChangedAttributesKey, ChangedAttributes> changedAttMap = new HashMap<>();
         if (mappedString.getChangedAttributes() != null) {
             for (org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev211013.notification.tapi.service.ChangedAttributes changedAtt:mappedString
+                    .nbi.notifications.rev230728.notification.tapi.service.ChangedAttributes changedAtt:mappedString
                         .getChangedAttributes().values()) {
                 ChangedAttributes transChangedAtt = new ChangedAttributesBuilder(changedAtt).build();
                 changedAttMap.put(transChangedAtt.key(), transChangedAtt);
@@ -101,16 +99,18 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
         Map<TargetObjectNameKey, TargetObjectName> targetObjNameMap = new HashMap<>();
         if (mappedString.getTargetObjectName() != null) {
             for (org.opendaylight.yang.gen.v1
-                    .nbi.notifications.rev211013.notification.tapi.service.TargetObjectName
+                    .nbi.notifications.rev230728.notification.tapi.service.TargetObjectName
                         targetObjectName:mappedString.getTargetObjectName().values()) {
                 TargetObjectName transTargetObjName = new TargetObjectNameBuilder(targetObjectName).build();
                 targetObjNameMap.put(transTargetObjName.key(), transTargetObjName);
             }
         }
+
+//       In TAPI 2.4 get-notifcation-list, there is no more alarm-info and Tca-info
         LOG.info("Notification uuid = {}", mappedString.getUuid().getValue());
         return new NotificationBuilder()
-            .setAlarmInfo(mappedString.getAlarmInfo() == null ? null
-                : new AlarmInfoBuilder(mappedString.getAlarmInfo()).build())
+//            .setAlarmInfo(mappedString.getAlarmInfo() == null ? null
+//                : new AlarmInfoBuilder(mappedString.getAlarmInfo()).build())
             .setAdditionalText(mappedString.getAdditionalText())
             .setAdditionalInfo(addInfoMap)
             .setNotificationType(mappedString.getNotificationType())
@@ -123,8 +123,8 @@ public class TapiNotificationDeserializer implements Deserializer<Notification> 
             .setTargetObjectIdentifier(mappedString.getTargetObjectIdentifier())
             .setTargetObjectName(targetObjNameMap)
             .setTargetObjectType(mappedString.getTargetObjectType())
-            .setTcaInfo(mappedString.getTcaInfo() == null ? null
-                : new TcaInfoBuilder(mappedString.getTcaInfo()).build())
+//            .setTcaInfo(mappedString.getTcaInfo() == null ? null
+//                : new TcaInfoBuilder(mappedString.getTcaInfo()).build())
             .setUuid(mappedString.getUuid())
             .build();
     }
