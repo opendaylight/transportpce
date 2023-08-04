@@ -22,17 +22,17 @@ import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceD
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsAlarmServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.GetNotificationsProcessServiceOutput;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsAlarmServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotificationsProcessServiceOutput;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -104,8 +104,8 @@ public class NbiNotificationsImplTest extends AbstractTest {
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
             nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
         GetNotificationListInputBuilder builder1 = new GetNotificationListInputBuilder()
-            .setTimePeriod("Time Period")
-            .setSubscriptionIdOrName(result.get().getResult().getSubscriptionService().getUuid().getValue());
+            .setTimeRange(null)
+            .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid());
         ListenableFuture<RpcResult<GetNotificationListOutput>> result1 =
             nbiNotificationsImpl.getNotificationList(builder1.build());
         assertNull(result1.get().getResult().getNotification(), "Should be null");
