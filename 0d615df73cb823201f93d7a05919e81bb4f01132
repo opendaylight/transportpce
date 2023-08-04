@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c46186bb_9f3fcfe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:58:42Z",
+      "side": 1,
+      "message": "here are possible improvement since we are in the area",
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c8eaf4a_53a387f1",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:58:42Z",
+      "side": 1,
+      "message": "most of intermediate variables here are superfluous IMO",
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "144225b1_c90c1733",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:58:42Z",
+      "side": 1,
+      "message": "indentation issues here\n\n        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1 topologyContext \u003d\n            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1Builder()\n                .setTopologyContext(new TopologyContextBuilder()\n                    .setNwTopologyService(new NwTopologyServiceBuilder()\n                        .setTopology(new HashMap\u003c\u003e())\n                        .setUuid(\n                            new Uuid(\n                                UUID.nameUUIDFromBytes(\"Network Topo Service\".getBytes(Charset.forName(\"UTF-8\")))\n                                    .toString()))\n                        .setName(Map.of(nwTopoServiceName.key(), nwTopoServiceName))\n                        .build())\n                    .setTopology(new HashMap\u003c\u003e())\n                    .build())\n                .build();",
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b880479e_c2201017",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-04T17:58:42Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
