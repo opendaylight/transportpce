@@ -252,6 +252,22 @@ def shutdown_process(process):
             child.wait()
         process.send_signal(signal.SIGINT)
 
+
+def start_lightynode(log_file: str, sim):
+    executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                              '..', '..', 'lightynode', 'lightynode-openroadm-device', 'start-device.sh')
+    sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                    '..', '..', 'sample_configs', 'openroadm', sim[1])
+
+    if os.path.isfile(executable):
+        with open(log_file, 'w', encoding='utf-8') as outfile:
+            return subprocess.Popen(
+                [executable, "-v" + sim[1], "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory,
+                                                                                          SIMS[sim]['configfile'])],
+                stdout=outfile, stderr=outfile)
+    return None
+
+
 def wait_until_log_contains(log_file, regexp, time_to_wait=60):
     # pylint: disable=lost-exception
     # pylint: disable=consider-using-with
