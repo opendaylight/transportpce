@@ -17,6 +17,7 @@
 import json
 import unittest
 import time
+from netconf_client.connect import connect_ssh
 import requests
 # pylint: disable=wrong-import-order
 import sys
@@ -811,50 +812,89 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Degrade ROADM-A1-ROADM-C1 link
     def test_14_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "set",
-                "pm-to-be-set-or-created": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx",
-                                    "measurement": [
-                                        {
-                                            "granularity": "15min",
-                                            "pmParameterValue": -30,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        },
-                                        {
-                                            "granularity": "24Hour",
-                                            "pmParameterValue": -21.3,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+        # url = "{}/operations/pm-handling:pm-interact"
+        # body = {
+        #     "input": {
+        #         "rpc-action": "set",
+        #         "pm-to-be-set-or-created": {
+        #             "current-pm-entry": [
+        #                 {
+        #                     "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+        #                                             ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+        #                     "pm-resource-type": "interface",
+        #                     "pm-resource-type-extension": "",
+        #                     "current-pm": [
+        #                         {
+        #                             "type": "opticalPowerInput",
+        #                             "extension": "",
+        #                             "location": "nearEnd",
+        #                             "direction": "rx",
+        #                             "measurement": [
+        #                                 {
+        #                                     "granularity": "15min",
+        #                                     "pmParameterValue": -30,
+        #                                     "pmParameterUnit": "dBm",
+        #                                     "validity": "complete"
+        #                                 },
+        #                                 {
+        #                                     "granularity": "24Hour",
+        #                                     "pmParameterValue": -21.3,
+        #                                     "pmParameterUnit": "dBm",
+        #                                     "validity": "complete"
+        #                                 }
+        #                             ]
+        #                         }
+        #                     ]
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # }
+        # response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+        # self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+
+        xml_body_OMS = '''
+            <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+                 xmlns:honeynode-simulator-pm-handling="http://honeynode-simulator/pm-handling"
+                 message-id="1">
+              <pm-interact xmlns="http://honeynode-simulator/pm-handling">
+                <rpc-action>set</rpc-action>
+                <pm-to-be-set-or-created>
+                  <current-pm-entry>
+                    <pm-resource-instance xmlns:a="http://org/openroadm/device">/a:org-openroadm-device/a:interface[a:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>
+                    <pm-resource-type>interface</pm-resource-type>
+                    <pm-resource-type-extension></pm-resource-type-extension>
+                    <retrieval-time>1361-75-87T22:56:02.0+86:01</retrieval-time>
+                    <current-pm>
+                      <type>opticalPowerInput</type>
+                      <extension></extension>
+                      <location>nearEnd</location>
+                      <direction>rx</direction>
+                      <measurement>
+                        <granularity>15min</granularity>
+                        <pmParameterValue>-30</pmParameterValue>
+                        <pmParameterUnit>dBm</pmParameterUnit>
+                        <validity>complete</validity>
+                      </measurement>
+                      <measurement>
+                        <granularity>24Hour</granularity>
+                        <pmParameterValue>-21.3</pmParameterValue>
+                        <pmParameterUnit>dBm</pmParameterUnit>
+                        <validity>complete</validity>
+                      </measurement>
+                    </current-pm>
+                  </current-pm-entry>
+                </pm-to-be-set-or-created>
+              </pm-interact>
+            </rpc> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            session.send_rpc(bytes(xml_body_OMS, 'utf-8'))
+        session.close()
         time.sleep(2)
 
     def test_15_get_eth_service1(self):
@@ -891,36 +931,62 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Restore ROADM-A1-ROADM-C1 link
     def test_17_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "clear",
-                "pm-to-get-clear-or-delete": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+        # url = "{}/operations/pm-handling:pm-interact"
+        # body = {
+        #     "input": {
+        #         "rpc-action": "clear",
+        #         "pm-to-get-clear-or-delete": {
+        #             "current-pm-entry": [
+        #                 {
+        #                     "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+        #                                             ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+        #                     "pm-resource-type": "interface",
+        #                     "pm-resource-type-extension": "",
+        #                     "current-pm": [
+        #                         {
+        #                             "type": "opticalPowerInput",
+        #                             "extension": "",
+        #                             "location": "nearEnd",
+        #                             "direction": "rx"
+        #                         }
+        #                     ]
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # }
+        # response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+        # self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+
+        xml_body_OMS = '''
+            <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+                 xmlns:honeynode-simulator-pm-handling="http://honeynode-simulator/pm-handling"
+                 message-id="1">
+              <pm-interact xmlns="http://honeynode-simulator/pm-handling">
+                <rpc-action>clear</rpc-action>
+                <pm-to-get-clear-or-delete>
+                  <current-pm-entry>
+                    <pm-resource-instance xmlns:a="http://org/openroadm/device">/a:org-openroadm-device/a:interface[a:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>
+                    <pm-resource-type>interface</pm-resource-type>
+                    <pm-resource-type-extension></pm-resource-type-extension>
+                    <current-pm>
+                      <type>opticalPowerInput</type>
+                      <extension></extension>
+                      <location>nearEnd</location>
+                      <direction>rx</direction>
+                    </current-pm>
+                  </current-pm-entry>
+                </pm-to-get-clear-or-delete>
+              </pm-interact>
+            </rpc> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            session.send_rpc(bytes(xml_body_OMS, 'utf-8'))
+        session.close()
         time.sleep(2)
 
     def test_18_get_eth_service1(self):
@@ -1137,50 +1203,76 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Degrade ROADM-A1-ROADM-C1 link
     def test_36_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "set",
-                "pm-to-be-set-or-created": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx",
-                                    "measurement": [
-                                        {
-                                            "granularity": "15min",
-                                            "pmParameterValue": -30,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        },
-                                        {
-                                            "granularity": "24Hour",
-                                            "pmParameterValue": -21.3,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+        # url = "{}/operations/pm-handling:pm-interact"
+        # body = {
+        #     "input": {
+        #         "rpc-action": "set",
+        #         "pm-to-be-set-or-created": {
+        #             "current-pm-entry": [
+        #                 {
+        #                     "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+        #                                             ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+        #                     "pm-resource-type": "interface",
+        #                     "pm-resource-type-extension": "",
+        #                     "current-pm": [
+        #                         {
+        #                             "type": "opticalPowerInput",
+        #                             "extension": "",
+        #                             "location": "nearEnd",
+        #                             "direction": "rx",
+        #                             "measurement": [
+        #                                 {
+        #                                     "granularity": "15min",
+        #                                     "pmParameterValue": -30,
+        #                                     "pmParameterUnit": "dBm",
+        #                                     "validity": "complete"
+        #                                 },
+        #                                 {
+        #                                     "granularity": "24Hour",
+        #                                     "pmParameterValue": -21.3,
+        #                                     "pmParameterUnit": "dBm",
+        #                                     "validity": "complete"
+        #                                 }
+        #                             ]
+        #                         }
+        #                     ]
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # }
+        # response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+        # self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+
+        xml_body_OMS = '''
+            <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+                 xmlns:honeynode-simulator-pm-handling="http://honeynode-simulator/pm-handling"
+                 message-id="1">
+              <pm-interact xmlns="http://honeynode-simulator/pm-handling">
+                <rpc-action>clear</rpc-action>
+                <pm-to-get-clear-or-delete>
+                  <current-pm-entry>
+                    <pm-resource-instance xmlns:a="http://org/openroadm/device">/a:org-openroadm-device/a:interface[a:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>
+                    <pm-resource-type>interface</pm-resource-type>
+                    <pm-resource-type-extension></pm-resource-type-extension>
+                    <current-pm>
+                      <type>opticalPowerInput</type>
+                      <extension></extension>
+                      <location>nearEnd</location>
+                      <direction>rx</direction>
+                    </current-pm>
+                  </current-pm-entry>
+                </pm-to-get-clear-or-delete>
+              </pm-interact>
+            </rpc> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            session.send_rpc(bytes(xml_body_OMS, 'utf-8'))
+        session.close()
         time.sleep(self.WAITING * 2)
 
     def test_37_get_eth_service1(self):
@@ -1244,36 +1336,62 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Restore ROADM-A1-ROADM-C1 link
     def test_41_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "clear",
-                "pm-to-get-clear-or-delete": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+        # url = "{}/operations/pm-handling:pm-interact"
+        # body = {
+        #     "input": {
+        #         "rpc-action": "clear",
+        #         "pm-to-get-clear-or-delete": {
+        #             "current-pm-entry": [
+        #                 {
+        #                     "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+        #                                             ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+        #                     "pm-resource-type": "interface",
+        #                     "pm-resource-type-extension": "",
+        #                     "current-pm": [
+        #                         {
+        #                             "type": "opticalPowerInput",
+        #                             "extension": "",
+        #                             "location": "nearEnd",
+        #                             "direction": "rx"
+        #                         }
+        #                     ]
+        #                 }
+        #             ]
+        #         }
+        #     }
+        # }
+        # response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+        # self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+
+        xml_body_OMS = '''
+            <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+                 xmlns:honeynode-simulator-pm-handling="http://honeynode-simulator/pm-handling"
+                 message-id="1">
+              <pm-interact xmlns="http://honeynode-simulator/pm-handling">
+                <rpc-action>clear</rpc-action>
+                <pm-to-get-clear-or-delete>
+                  <current-pm-entry>
+                    <pm-resource-instance xmlns:a="http://org/openroadm/device">/a:org-openroadm-device/a:interface[a:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>
+                    <pm-resource-type>interface</pm-resource-type>
+                    <pm-resource-type-extension></pm-resource-type-extension>
+                    <current-pm>
+                      <type>opticalPowerInput</type>
+                      <extension></extension>
+                      <location>nearEnd</location>
+                      <direction>rx</direction>
+                    </current-pm>
+                  </current-pm-entry>
+                </pm-to-get-clear-or-delete>
+              </pm-interact>
+            </rpc> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            session.send_rpc(bytes(xml_body_OMS, 'utf-8'))
+        session.close()
         time.sleep(2)
 
     def test_42_get_eth_service1(self):
