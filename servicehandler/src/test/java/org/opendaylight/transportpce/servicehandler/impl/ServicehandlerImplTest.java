@@ -532,6 +532,31 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
+    void tempServiceCreateShouldBeFailedWithServiceAlreadyExist() throws ExecutionException, InterruptedException {
+        final ServiceDataStoreOperations serviceDSOperations = mock(ServiceDataStoreOperations.class);
+        when(serviceDSOperations.getTempService(any()))
+            .thenReturn(Optional.of(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.temp.service.list
+                            .ServicesBuilder()
+                        .setCommonId("bad_commonId")
+                        .build()));
+        ListenableFuture<RpcResult<TempServiceCreateOutput>> result =
+            new ServicehandlerImpl(
+                    pathComputationService, rendererServiceOperations, notificationPublishService,
+                    pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                    serviceDSOperations, catalogDataStoreOperations)
+                .tempServiceCreate(ServiceDataUtils.buildTempServiceCreateInput());
+        result.addListener(() -> endSignal.countDown(), executorService);
+        endSignal.await();
+        assertEquals(
+            ResponseCodes.RESPONSE_FAILED,
+            result.get().getResult().getConfigurationResponseCommon().getResponseCode());
+        assertEquals(
+            "Service 'Temp (commonId)' already exists in datastore",
+            result.get().getResult().getConfigurationResponseCommon().getResponseMessage());
+    }
+
+    @Test
     void tempServiceCreateShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
         when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));

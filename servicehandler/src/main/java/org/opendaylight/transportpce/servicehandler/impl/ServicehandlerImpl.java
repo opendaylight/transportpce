@@ -666,6 +666,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
 
+        //Check any presence of temp-service with the same commonId
+        String commonId = input.getCommonId();
+        if (this.serviceDataStoreOperations.getTempService(commonId).isPresent()) {
+            LOG.warn(TEMP_SERVICE_CREATE_MSG, LogMessages.serviceInDS("Temp (" + commonId + ")"));
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.serviceInDS("Temp (" + commonId + ")"), ResponseCodes.RESPONSE_FAILED);
+        }
+
         // Starting service create operation
         LOG.debug(TEMP_SERVICE_CREATE_MSG, LogMessages.PCE_CALLING);
         this.pceListenerImpl.setInput(new ServiceInput(input));
