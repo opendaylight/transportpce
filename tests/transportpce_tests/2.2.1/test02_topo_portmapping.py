@@ -98,5 +98,4 @@ class TransportPCEtesting(unittest.TestCase):
 
 if __name__ == "__main__":
     # logging.basicConfig(filename='./transportpce_tests/log/response.log',filemode='w',level=logging.DEBUG)
-    #logging.debug('I am there')
     unittest.main(verbosity=2)
