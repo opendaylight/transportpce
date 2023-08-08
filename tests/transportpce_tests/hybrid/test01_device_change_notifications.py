@@ -10,9 +10,11 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
-import json
+# import json
 import unittest
 import time
+from netconf_client.connect import connect_ssh
+from netconf_client.ncclient import Manager
 import requests
 # pylint: disable=wrong-import-order
 import sys
@@ -198,19 +200,42 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_13_change_status_line_port_xpdra(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
-            "port-name": "1",
-            "logical-connection-point": "XPDR1-NETWORK1",
-            "port-type": "CFP2",
-            "circuit-id": "XPDRA-NETWORK",
-            "administrative-state": "outOfService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        # body = {"ports": [{
+        #     "port-name": "1",
+        #     "logical-connection-point": "XPDR1-NETWORK1",
+        #     "port-type": "CFP2",
+        #     "circuit-id": "XPDRA-NETWORK",
+        #     "administrative-state": "outOfService",
+        #     "port-qual": "xpdr-network"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
+                  <ports>
+                    <port-name>1</port-name>
+                    <port-type>CFP2</port-type>
+                    <administrative-state>outOfService</administrative-state>
+                    <circuit-id>XPDRA-NETWORK</circuit-id>
+                    <port-qual>xpdr-network</port-qual>
+                    <logical-connection-point>XPDR1-NETWORK1</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17830, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_14_check_update_portmapping(self):
@@ -272,19 +297,41 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_17_restore_status_line_port_xpdra(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
-            "port-name": "1",
-            "logical-connection-point": "XPDR1-NETWORK1",
-            "port-type": "CFP2",
-            "circuit-id": "XPDRA-NETWORK",
-            "administrative-state": "inService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        # body = {"ports": [{
+        #     "port-name": "1",
+        #     "logical-connection-point": "XPDR1-NETWORK1",
+        #     "port-type": "CFP2",
+        #     "circuit-id": "XPDRA-NETWORK",
+        #     "administrative-state": "inService",
+        #     "port-qual": "xpdr-network"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8130/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
+                  <ports>
+                    <port-name>1</port-name>
+                    <port-type>CFP2</port-type>
+                    <administrative-state>inService</administrative-state>
+                    <circuit-id>XPDRA-NETWORK</circuit-id>
+                    <port-qual>xpdr-network</port-qual>
+                    <logical-connection-point>XPDR1-NETWORK1</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17830, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_18_check_update_portmapping_ok(self):
@@ -320,19 +367,42 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_21_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
-            "port-name": "C1",
-            "logical-connection-point": "SRG1-PP1",
-            "port-type": "client",
-            "circuit-id": "SRG1",
-            "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        # body = {"ports": [{
+        #     "port-name": "C1",
+        #     "logical-connection-point": "SRG1-PP1",
+        #     "port-type": "client",
+        #     "circuit-id": "SRG1",
+        #     "administrative-state": "outOfService",
+        #     "port-qual": "roadm-external"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>3/0</circuit-pack-name>
+                  <ports>
+                    <port-name>C1</port-name>
+                    <port-type>client</port-type>
+                    <administrative-state>outOfService</administrative-state>
+                    <circuit-id>SRG1</circuit-id>
+                    <port-qual>roadm-external</port-qual>
+                    <logical-connection-point>SRG1-PP1</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_22_check_update_portmapping(self):
@@ -387,19 +457,42 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
-            "port-name": "C1",
-            "logical-connection-point": "SRG1-PP1",
-            "port-type": "client",
-            "circuit-id": "SRG1",
-            "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
+        # body = {"ports": [{
+        #     "port-name": "C1",
+        #     "logical-connection-point": "SRG1-PP1",
+        #     "port-type": "client",
+        #     "circuit-id": "SRG1",
+        #     "administrative-state": "inService",
+        #     "port-qual": "roadm-external"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>3/0</circuit-pack-name>
+                  <ports>
+                    <port-name>C1</port-name>
+                    <port-type>client</port-type>
+                    <administrative-state>inService</administrative-state>
+                    <circuit-id>SRG1</circuit-id>
+                    <port-qual>roadm-external</port-qual>
+                    <logical-connection-point>SRG1-PP1</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_25_check_update_portmapping_ok(self):
@@ -412,19 +505,42 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_28_change_status_line_port_roadma_deg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
-        body = {"ports": [{
-            "port-name": "L1",
-            "logical-connection-point": "DEG2-TTP-TXRX",
-            "port-type": "LINE",
-            "circuit-id": "1",
-            "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
+        # body = {"ports": [{
+        #     "port-name": "L1",
+        #     "logical-connection-point": "DEG2-TTP-TXRX",
+        #     "port-type": "LINE",
+        #     "circuit-id": "1",
+        #     "administrative-state": "outOfService",
+        #     "port-qual": "roadm-external"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>2/0</circuit-pack-name>
+                  <ports>
+                    <port-name>L1</port-name>
+                    <port-type>LINE</port-type>
+                    <administrative-state>outOfService</administrative-state>
+                    <circuit-id>1</circuit-id>
+                    <port-qual>roadm-external</port-qual>
+                    <logical-connection-point>DEG2-TTP-TXRX</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_29_check_update_portmapping(self):
@@ -478,20 +594,43 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
         time.sleep(1)
 
-    def test_31_restore_status_line_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
-        body = {"ports": [{
-            "port-name": "L1",
-            "logical-connection-point": "DEG2-TTP-TXRX",
-            "port-type": "LINE",
-            "circuit-id": "1",
-            "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+    def test_31_restore_status_line_port_roadma_deg(self):
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
+        # body = {"ports": [{
+        #     "port-name": "L1",
+        #     "logical-connection-point": "DEG2-TTP-TXRX",
+        #     "port-type": "LINE",
+        #     "circuit-id": "1",
+        #     "administrative-state": "inService",
+        #     "port-qual": "roadm-external"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>2/0</circuit-pack-name>
+                  <ports>
+                    <port-name>L1</port-name>
+                    <port-type>LINE</port-type>
+                    <administrative-state>inService</administrative-state>
+                    <circuit-id>1</circuit-id>
+                    <port-qual>roadm-external</port-qual>
+                    <logical-connection-point>DEG2-TTP-TXRX</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_32_check_update_portmapping_ok(self):
@@ -504,17 +643,38 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_35_change_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
-            "port-name": "1",
-            "port-type": "CFP2",
-            "administrative-state": "outOfService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        # body = {"ports": [{
+        #     "port-name": "1",
+        #     "port-type": "CFP2",
+        #     "administrative-state": "outOfService",
+        #     "port-qual": "xpdr-network"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
+                  <ports>
+                    <port-name>1</port-name>
+                    <port-type>CFP2</port-type>
+                    <administrative-state>outOfService</administrative-state>
+                    <port-qual>xpdr-network</port-qual>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17854, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_36_check_update_portmapping(self):
@@ -569,17 +729,38 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_restore_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
-            "port-name": "1",
-            "port-type": "CFP2",
-            "administrative-state": "inService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
+        # body = {"ports": [{
+        #     "port-name": "1",
+        #     "port-type": "CFP2",
+        #     "administrative-state": "inService",
+        #     "port-qual": "xpdr-network"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8154/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
+                  <ports>
+                    <port-name>1</port-name>
+                    <port-type>CFP2</port-type>
+                    <administrative-state>inService</administrative-state>
+                    <port-qual>xpdr-network</port-qual>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17854, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_39_check_update_portmapping_ok(self):
@@ -592,19 +773,42 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_42_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
-        body = {"ports": [{
-            "port-name": "C2",
-            "logical-connection-point": "SRG1-PP2",
-            "port-type": "client",
-            "circuit-id": "SRG1",
-            "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+        # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
+        # body = {"ports": [{
+        #     "port-name": "C2",
+        #     "logical-connection-point": "SRG1-PP2",
+        #     "port-type": "client",
+        #     "circuit-id": "SRG1",
+        #     "administrative-state": "outOfService",
+        #     "port-qual": "roadm-external"}]}
+        # response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
+        #                             data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+        #                             auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
+        #                             timeout=test_utils.REQUEST_TIMEOUT)
+        # self.assertEqual(response.status_code, requests.codes.ok)
+
+        xml_body_OMS = '''
+            <config>
+              <org-openroadm-device xmlns="http://org/openroadm/device">
+                <circuit-packs>
+                  <circuit-pack-name>3/0</circuit-pack-name>
+                  <ports>
+                    <port-name>C2</port-name>
+                    <port-type>client</port-type>
+                    <administrative-state>outOfService</administrative-state>
+                    <circuit-id>SRG1</circuit-id>
+                    <port-qual>roadm-external</port-qual>
+                    <logical-connection-point>SRG1-PP2</logical-connection-point>
+                  </ports>
+                </circuit-packs>
+              </org-openroadm-device>
+            </config> '''
+
+        with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+            mgr = Manager(session, timeout=120)
+            mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+            mgr.commit(True)
+        session.close()
         time.sleep(2)
 
     def test_43_check_update_portmapping(self):
