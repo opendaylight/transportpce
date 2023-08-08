@@ -133,7 +133,7 @@
         <port-name>C1</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -144,7 +144,7 @@
         <port-name>C2</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -155,7 +155,7 @@
         <port-name>C3</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -166,7 +166,7 @@
         <port-name>C4</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -177,7 +177,7 @@
         <port-name>C5</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -188,7 +188,7 @@
         <port-name>C6</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -199,7 +199,7 @@
         <port-name>C7</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -210,7 +210,7 @@
         <port-name>C8</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -221,7 +221,7 @@
         <port-name>C9</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -232,7 +232,7 @@
         <port-name>L1</port-name>
         <port-type>LINE</port-type>
         <port-qual>roadm-external</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -255,7 +255,7 @@
         <port-name>LOG1</port-name>
         <port-type>Logical</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -264,7 +264,7 @@
         <port-name>OSC-DEMUX</port-name>
         <port-type>OSC</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -297,7 +297,7 @@
         <port-name>OSC-PORT</port-name>
         <port-type>1GEX</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -329,7 +329,7 @@
         <port-name>ETH-PLUG</port-name>
         <port-type>1GEX</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -367,7 +367,7 @@
         <port-name>C1</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -378,7 +378,7 @@
         <port-name>C2</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -389,7 +389,7 @@
         <port-name>C3</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -400,7 +400,7 @@
         <port-name>C4</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -411,7 +411,7 @@
         <port-name>C5</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -422,7 +422,7 @@
         <port-name>C6</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -433,7 +433,7 @@
         <port-name>C7</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -444,7 +444,7 @@
         <port-name>C8</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -455,7 +455,7 @@
         <port-name>C9</port-name>
         <port-type>Client</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -466,7 +466,7 @@
         <port-name>L1</port-name>
         <port-type>LINE</port-type>
         <port-qual>roadm-external</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <circuit-id>1</circuit-id>
         <administrative-state>inService</administrative-state>
@@ -483,7 +483,7 @@
         <port-name>LOG1</port-name>
         <port-type>Logical</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -492,7 +492,7 @@
         <port-name>OSC-DEMUX</port-name>
         <port-type>OSC</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -525,7 +525,7 @@
         <port-name>OSC-PORT</port-name>
         <port-type>1GEX</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -557,7 +557,7 @@
         <port-name>ETH-PLUG</port-name>
         <port-type>1GEX</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -836,7 +836,7 @@
         <port-name>AD-DEG1</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -846,7 +846,7 @@
         <port-name>AD-DEG2</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -856,7 +856,7 @@
         <port-name>AD-DEG3</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -866,7 +866,7 @@
         <port-name>AD-DEG4</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -1150,7 +1150,7 @@
         <port-name>AD-DEG1</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -1160,7 +1160,7 @@
         <port-name>AD-DEG2</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -1170,7 +1170,7 @@
         <port-name>AD-DEG3</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
@@ -1180,7 +1180,7 @@
         <port-name>AD-DEG4</port-name>
         <port-type>Edge</port-type>
         <port-qual>roadm-internal</port-qual>
-        <port-wavelength-type>multi-wavelength</port-wavelength-type>
+        <port-wavelength-type>multi-wavelegnth</port-wavelength-type>
         <port-direction>bidirectional</port-direction>
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
