@@ -29,6 +29,7 @@ import simulators
 SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
+LIGHTYNODE_OK_START_MSG = 'Data tree change listeners registered'
 KARAF_OK_START_MSG = "Transportpce controller started"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
@@ -137,8 +138,8 @@ def start_sims(sims_list):
     for sim in sims_list:
         print('starting simulator ' + sim[0] + ' in OpenROADM device version ' + sim[1] + '...')
         log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
-        process = start_honeynode(log_file, sim)
-        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+        process = start_lightynode(log_file, sim)
+        if wait_until_log_contains(log_file, LIGHTYNODE_OK_START_MSG, 100):
             print('simulator for ' + sim[0] + ' started')
         else:
             print('simulator for ' + sim[0] + ' failed to start')
@@ -215,15 +216,17 @@ def shutdown_process(process):
         process.send_signal(signal.SIGINT)
 
 
-def start_honeynode(log_file: str, sim):
+def start_lightynode(log_file: str, sim):
     executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                              '..', '..', 'honeynode', sim[1], 'honeynode-simulator', 'honeycomb-tpce')
+                              '..', '..', 'lightynode', 'lightynode-openroadm-device', 'start-device.sh')
     sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     '..', '..', 'sample_configs', 'openroadm', sim[1])
+
     if os.path.isfile(executable):
         with open(log_file, 'w', encoding='utf-8') as outfile:
             return subprocess.Popen(
-                [executable, SIMS[sim]['port'], os.path.join(sample_directory, SIMS[sim]['configfile'])],
+                [executable, "-v" + sim[1], "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory,
+                                                                                          SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
     return None
 
