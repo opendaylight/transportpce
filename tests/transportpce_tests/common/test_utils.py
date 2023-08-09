@@ -231,9 +231,7 @@ def start_honeynode(log_file: str, sim):
 
 def start_lightynode(log_file: str, sim):
     executable = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                              '..', '..', 'lightynode', 'lightynode-simulator', 'start-device.sh')
-    print("executable :")
-    print(executable)
+                              '..', '..', 'lightynode', sim[1], 'lighty-openroadm-device', 'start-device.sh')
     sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     '..', '..', 'sample_configs', 'openroadm', sim[1])
 

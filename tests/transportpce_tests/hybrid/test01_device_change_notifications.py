@@ -10,9 +10,11 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
-import json
+# import json
 import unittest
 import time
+from netconf_client.connect import connect_ssh
+from netconf_client.ncclient import Manager
 import requests
 # pylint: disable=wrong-import-order
 import sys
@@ -21,8 +23,6 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=import-error
 import test_utils  # nopep8
 
-from netconf_client.connect import connect_ssh
-from netconf_client.ncclient import Manager
 
 class TransportPCEFulltesting(unittest.TestCase):
 
@@ -594,7 +594,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
         time.sleep(1)
 
-    def test_31_restore_status_line_port_roadma_srg(self):
+    def test_31_restore_status_line_port_roadma_deg(self):
         # url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
         # body = {"ports": [{
         #     "port-name": "L1",
