@@ -10,9 +10,11 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
-import json
+# import json
 import unittest
 import time
+from netconf_client.connect import connect_ssh
+from netconf_client.ncclient import Manager
 import requests
 # pylint: disable=wrong-import-order
 import sys
@@ -21,8 +23,6 @@ sys.path.append('transportpce_tests/common/')
 # pylint: disable=import-error
 import test_utils  # nopep8
 
-from netconf_client.connect import connect_ssh
-from netconf_client.ncclient import Manager
 
 class TransportPCEFulltesting(unittest.TestCase):
 
