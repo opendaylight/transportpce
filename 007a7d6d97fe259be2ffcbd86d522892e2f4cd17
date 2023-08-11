@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41e0bab7_2b91fb9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2023-08-11T14:29:37Z",
+      "side": 1,
+      "message": "16:22:59   buildcontroller: OK (271.29\u003dsetup[5.60]+cmd[265.69] seconds)\n16:22:59   testsPCE: OK (317.86\u003dsetup[124.01]+cmd[193.85] seconds)\n16:22:59   sims121: OK (8.37\u003dsetup[5.42]+cmd[2.95] seconds)\n16:22:59   build_karaf_tests121: OK (69.10\u003dsetup[5.35]+cmd[63.75] seconds)\n16:22:59   tests121: OK (2140.07\u003dsetup[4.27]+cmd[2135.80] seconds)\n16:22:59   sims221: OK (9.04\u003dsetup[5.40]+cmd[3.65] seconds)\n16:22:59   build_karaf_tests221: OK (113.22\u003dsetup[8.21]+cmd[105.01] seconds)\n16:22:59   tests_tapi: FAIL code 1 (502.11\u003dsetup[8.18]+cmd[493.93] seconds)\n16:22:59   tests221: OK (2880.13\u003dsetup[5.26]+cmd[2874.87] seconds)\n16:22:59   sims71: OK (9.67\u003dsetup[6.98]+cmd[2.69] seconds)\n16:22:59   build_karaf_tests71: OK (100.41\u003dsetup[7.10]+cmd[93.31] seconds)\n16:22:59   tests71: FAIL code 1 (197.89\u003dsetup[4.50]+cmd[193.39] seconds)\n16:22:59   build_karaf_tests_hybrid: OK (113.32\u003dsetup[8.15]+cmd[105.18] seconds)\n16:22:59   tests_hybrid: FAIL code 1 (4.36\u003dsetup[4.04]+cmd[0.32] seconds)\n16:22:59   buildlighty: OK (48.71\u003dsetup[3.94]+cmd[44.77] seconds)\n16:22:59   docs: OK (41.24\u003dsetup[39.22]+cmd[2.02] seconds)\n16:22:59   docs-linkcheck: OK (42.46\u003dsetup[39.22]+cmd[3.24] seconds)\n16:22:59   checkbashisms: OK (47.36\u003dsetup[2.45]+cmd[44.13,0.78] seconds)\n16:22:59   pre-commit: OK (34.34\u003dsetup[3.63]+cmd[24.23,6.48] seconds)\n16:22:59   pylint: FAIL code 1 (32.36\u003dsetup[4.31]+cmd[28.05] seconds)",
+      "revId": "007a7d6d97fe259be2ffcbd86d522892e2f4cd17",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
