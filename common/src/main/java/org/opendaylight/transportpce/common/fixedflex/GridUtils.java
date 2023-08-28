@@ -14,12 +14,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMaps;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -108,7 +108,7 @@ public final class GridUtils {
      * @param modulationFormat ModulationFormat
      * @return spectrum width in GHz compatible with models 10.1
      */
-    public static FrequencyGHz getWidthFromRateAndModulationFormatToModel101(Uint32 rate,
+    public static FrequencyGHz getWidthFromRateAndModulationFormat(Uint32 rate,
             ModulationFormat modulationFormat) {
         String width = GridConstant.FREQUENCY_WIDTH_TABLE.get(rate, modulationFormat);
         if (width == null) {
@@ -120,43 +120,13 @@ public final class GridUtils {
     }
 
     /**
-     * Get the spectrum width for rate and modulation format.
-     * @param rate Uint32
-     * @param modulationFormat ModulationFormat
-     * @return spectrum width in GHz compatible with models 13.1
-     */
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz
-            getWidthFromRateAndModulationFormatToModel131(Uint32 rate, ModulationFormat modulationFormat) {
-        String width = GridConstant.FREQUENCY_WIDTH_TABLE.get(rate, modulationFormat);
-        if (width == null) {
-            LOG.warn("No width found for service rate {} and modulation format {}, set width to 40", rate,
-                    modulationFormat);
-            width = String.valueOf(GridConstant.WIDTH_40);
-        }
-        return org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz
-                .getDefaultInstance(width);
-    }
-
-    /**
      * Get central frequency of spectrum.
      * @param minFrequency BigDecimal
      * @param maxFrequency BigDecimal
      * @return central frequency in THz compatible with models 10.1
      */
-    public static FrequencyTHz getCentralFrequencyToModel101(BigDecimal minFrequency, BigDecimal maxFrequency) {
+    public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
         return new FrequencyTHz(Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)));
-    }
-
-    /**
-     * Get central frequency of spectrum.
-     * @param minFrequency BigDecimal
-     * @param maxFrequency BigDecimal
-     * @return central frequency in THz compatible with models 13.1
-     */
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz
-            getCentralFrequencyToModel131(BigDecimal minFrequency, BigDecimal maxFrequency) {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz(
-                Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)));
     }
 
     /**
@@ -234,7 +204,7 @@ public final class GridUtils {
         if (input.getCenterFreq() != null) {
             spectrumInformation.setCenterFrequency(input.getCenterFreq().getValue().decimalValue());
         } else {
-            spectrumInformation.setCenterFrequency(GridUtils.getCentralFrequencyToModel101(
+            spectrumInformation.setCenterFrequency(GridUtils.getCentralFrequency(
                     spectrumInformation.getMinFrequency(),
                     spectrumInformation.getMaxFrequency()).getValue().decimalValue());
         }
