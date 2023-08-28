@@ -62,6 +62,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-13.1.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-device-1.2.1</artifactId>
     </dependency>
     <dependency>
@@ -78,7 +82,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-service-10.1.0</artifactId>
+      <artifactId>openroadm-service-13.1.0</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
