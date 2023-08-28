@@ -110,7 +110,7 @@
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-10.1.0</artifactId>
+      <artifactId>openroadm-common-13.1.0</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

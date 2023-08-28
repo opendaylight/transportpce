@@ -108,7 +108,7 @@ public class PcePathDescription {
                         // Used precision 5 to get the exact decimal values of the frequency
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel131(
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
@@ -161,7 +161,7 @@ public class PcePathDescription {
                         .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 4).getValue()))
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel131(
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
