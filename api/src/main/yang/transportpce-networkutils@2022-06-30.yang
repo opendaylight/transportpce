@@ -13,7 +13,7 @@ module transportpce-networkutils {
   }
   import org-openroadm-common-network {
     prefix cnet;
-    revision-date 2021-12-10;
+    revision-date 2023-05-26;
   }
 
   revision 2022-06-30 {

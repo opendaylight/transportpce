@@ -27,19 +27,19 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.DegreeAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.SrgAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.networks.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.DegreeAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.SrgAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -211,7 +211,7 @@ public final class OpenRoadmTopology {
                 .withKey((new NodeKey(new NodeId(nodeIdtopo))))
                 .addAugmentation(
                     // Create openroadm-network-topo augmentation to set node type to Xponder
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1Builder()
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1Builder()
                         .setNodeType(OpenroadmNodeType.XPONDER)
                         .setAdministrativeState(AdminStates.InService)
                         .setOperationalState(State.InService)
@@ -225,8 +225,8 @@ public final class OpenRoadmTopology {
             if (isOtn && m.getPortQual().equals("xpdr-client")) {
                 continue;
             }
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder
-                    ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder
+                    ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                     .TerminationPoint1Builder()
                     .setTpType(PORTQUAL_ORD_TYPE_MAP.get(m.getPortQual()))
                     .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
@@ -260,7 +260,7 @@ public final class OpenRoadmTopology {
             }
             TerminationPoint ietfTp =  createTpBldr(m.getLogicalConnectionPoint())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                             .TerminationPoint1Builder()
                         .setTpType(PORTDIR_ORD_TYPE_MAP.get(m.getPortDirection()).get(0))
                         .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
@@ -272,7 +272,7 @@ public final class OpenRoadmTopology {
         // Add CTP to tp-list + added states. TODO: same comment as before with the relation between states
         TerminationPoint ietfTp = createTpBldr(degNb + "-CTP-TXRX")
                 .addAugmentation(new org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev211210.TerminationPoint1Builder()
+                    .org.openroadm.common.network.rev230526.TerminationPoint1Builder()
                          .setTpType(OpenroadmTpType.DEGREETXRXCTP)
                          .setAdministrativeState(AdminStates.InService)
                          .setOperationalState(State.InService)
@@ -294,7 +294,7 @@ public final class OpenRoadmTopology {
                 .withKey((new NodeKey(new NodeId(nodeIdtopo))))
                 .addAugmentation(new Node1Builder().setDegreeAttributes(degAtt).build())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                             .Node1Builder()
                         .setNodeType(OpenroadmNodeType.DEGREE)
                         .setAdministrativeState(AdminStates.InService)
@@ -319,7 +319,7 @@ public final class OpenRoadmTopology {
             TerminationPoint ietfTp = createTpBldr(m.getLogicalConnectionPoint())
                 .addAugmentation(
                     // Add openroadm-common-network tp type augmentations
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                             .TerminationPoint1Builder()
                         .setTpType(PORTDIR_ORD_TYPE_MAP.get(m.getPortDirection()).get(1))
                         .setAdministrativeState(TopologyUtils.setNetworkAdminState(m.getPortAdminState()))
@@ -331,7 +331,7 @@ public final class OpenRoadmTopology {
         // Add CP to tp-list + added states. TODO: same comment as before with the relation between states
         TerminationPoint ietfTp = createTpBldr(srgNb + "-CP-TXRX")
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                         .TerminationPoint1Builder()
                     .setTpType(OpenroadmTpType.SRGTXRXCP)
                     .setAdministrativeState(AdminStates.InService)
@@ -353,7 +353,7 @@ public final class OpenRoadmTopology {
             .withKey((new NodeKey(new NodeId(nodeIdtopo))))
             .addAugmentation(new Node1Builder().setSrgAttributes(srgAttr).build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                         .Node1Builder()
                     .setNodeType(OpenroadmNodeType.SRG)
                     .setAdministrativeState(AdminStates.InService)
@@ -435,9 +435,9 @@ public final class OpenRoadmTopology {
                 Link1Builder ocnAzLinkBldr = new Link1Builder();
                 Link1Builder ocnZaLinkBldr = new Link1Builder();
                 int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.network.rev211210.Node1.class).getNodeType().getIntValue();
+                        .org.openroadm.common.network.rev230526.Node1.class).getNodeType().getIntValue();
                 int destNodeType = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.common.network.rev211210.Node1.class).getNodeType().getIntValue();
+                        .org.openroadm.common.network.rev230526.Node1.class).getNodeType().getIntValue();
 
                 if (srcNodeType == 11 && destNodeType == 11) {
                     ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
@@ -460,7 +460,7 @@ public final class OpenRoadmTopology {
                         .getTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
                         .findFirst().orElseThrow()
-                        .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                        .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                             .TerminationPoint1.class)
                         .getOperationalState();
                 State destTpState = nodes.get(j)
@@ -469,7 +469,7 @@ public final class OpenRoadmTopology {
                         .getTerminationPoint().values().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
                         .findFirst().orElseThrow()
-                        .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                        .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                             .TerminationPoint1.class)
                         .getOperationalState();
                 if (State.InService.equals(srcTpState) && State.InService.equals(destTpState)) {
@@ -532,9 +532,9 @@ public final class OpenRoadmTopology {
                 linkBuilder
                     .removeAugmentation(Link1.class)
                     .addAugmentation(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
                             .Link1Builder(linkBuilder
-                                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210
+                                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
                                     .Link1.class))
                                 .build())
                     .build());
@@ -553,7 +553,7 @@ public final class OpenRoadmTopology {
      * @param tpId String
      * @return InstanceIdentifierBuilder
      */
-    public static InstanceIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+    public static InstanceIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
         return InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
@@ -565,7 +565,7 @@ public final class OpenRoadmTopology {
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                         .networks.network.node.TerminationPoint.class,
                     new TerminationPointKey(new TpId(tpId)))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                         .TerminationPoint1.class);
     }
 
@@ -588,14 +588,14 @@ public final class OpenRoadmTopology {
      * @param nodeId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210
+    public static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .Node1> createCommonNetworkNodeIID(String nodeId) {
         return InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1.class)
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
                 .build();
     }
 }

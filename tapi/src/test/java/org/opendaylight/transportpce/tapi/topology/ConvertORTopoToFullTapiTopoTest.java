@@ -31,7 +31,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -44,13 +43,13 @@ import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -101,7 +100,6 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Disabled("Disabled until network models migration to 13.1 - deserialisation issue with SupportedIfCapability")
 public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToFullTapiTopoTest.class);
 
@@ -977,10 +975,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
                 "each node-rule-group should contain 2 NEP for muxponder DSR");
         }
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(2).nonnullNodeEdgePoint().values());
-        assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(1).nonnullNodeEdgePoint().values());
         assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
