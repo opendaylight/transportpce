@@ -17,7 +17,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
@@ -108,7 +108,7 @@ public class PcePathDescription {
                         // Used precision 5 to get the exact decimal values of the frequency
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel131(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
@@ -161,7 +161,7 @@ public class PcePathDescription {
                         .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 4).getValue()))
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel131(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:

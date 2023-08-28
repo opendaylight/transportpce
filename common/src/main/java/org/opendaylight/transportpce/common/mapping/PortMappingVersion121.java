@@ -651,7 +651,7 @@ public class PortMappingVersion121 {
 
     private Mapping createNewXpdrMapping(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp) {
-        Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability> supportedIntf =
+        Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability> supportedIntf =
             new HashSet<>();
         for (String sup: getSupIfCapList(port)) {
             if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {

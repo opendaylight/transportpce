@@ -22,16 +22,16 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.Constraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.service.applicability.g.ServiceApplicability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.Constraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service.constraints.ServiceIdentifierList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service.constraints.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.service.applicability.g.ServiceApplicability;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.Link;
@@ -166,7 +166,7 @@ public class PceConstraintsCalc {
         Map<ServiceIdentifierListKey, ServiceIdentifierList> serviceIdList = diversity.getServiceIdentifierList();
         Collection<ServiceIdentifierList> services = serviceIdList.values();
         for (ServiceIdentifierList serviceIdentifier : services) {
-            String serviceId = serviceIdentifier.getServiceIndentifier();
+            String serviceId = serviceIdentifier.getServiceIdentifier();
             ServiceApplicability serviceApplicability = serviceIdentifier.getServiceApplicability();
             Optional<PathDescription> serviceOpt = getPathDescriptionFromDatastore(serviceId);
             if (serviceOpt.isPresent()) {
