@@ -36,11 +36,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -290,9 +290,12 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             tapiNodeList.putAll(tapiFactory.getTapiNodes());
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
         }
-        if (openroadmTopo.nonnullNode().values().stream().filter(nt ->
-                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1.class)
-                    .getNodeType().equals(OpenroadmNodeType.SRG)).count() > 0) {
+        if (openroadmTopo.nonnullNode().values().stream()
+                .filter(nt ->nt
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
+                    .getNodeType()
+                    .equals(OpenroadmNodeType.SRG))
+                .count() > 0) {
             tapiFactory.convertRoadmInfrastructure();
             tapiNodeList.putAll(tapiFactory.getTapiNodes());
             tapiLinkList.putAll(tapiFactory.getTapiLinks());
@@ -409,8 +412,8 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         String networkLcp;
         if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
             networkLcp = tp.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1.class)
-                    .getAssociatedConnectionMapTp().iterator().next().getValue();
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1.class)
+                .getAssociatedConnectionMapTp().iterator().next().getValue();
         } else {
             networkLcp = tp.getTpId().getValue();
         }

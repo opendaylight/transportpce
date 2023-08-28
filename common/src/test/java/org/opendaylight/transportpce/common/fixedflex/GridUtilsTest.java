@@ -20,11 +20,11 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev211210.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMaps;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -92,8 +92,7 @@ public class GridUtilsTest {
     void getWidthFromRateAndModulationFormatTest() {
         assertEquals(
             new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_75)),
-            GridUtils.getWidthFromRateAndModulationFormatToModel101(ServiceRateConstant.RATE_400,
-                    ModulationFormat.DpQam16),
+            GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_400, ModulationFormat.DpQam16),
             "Width should be 75");
     }
 
@@ -101,8 +100,7 @@ public class GridUtilsTest {
     void getWidthFromRateAndModulationFormatNotFoundTest() {
         assertEquals(
             new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)),
-            GridUtils.getWidthFromRateAndModulationFormatToModel101(ServiceRateConstant.RATE_100,
-                    ModulationFormat.DpQam16),
+            GridUtils.getWidthFromRateAndModulationFormat(ServiceRateConstant.RATE_100, ModulationFormat.DpQam16),
             "As not found width should be 40");
     }
 
@@ -110,7 +108,7 @@ public class GridUtilsTest {
     void getCentralFrequencyTest() {
         assertEquals(
             new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(191.35).setScale(3))),
-            GridUtils.getCentralFrequencyToModel101(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375)),
+            GridUtils.getCentralFrequency(BigDecimal.valueOf(191.325), BigDecimal.valueOf(191.375)),
             "Central frequency should be 191.350");
     }
 
