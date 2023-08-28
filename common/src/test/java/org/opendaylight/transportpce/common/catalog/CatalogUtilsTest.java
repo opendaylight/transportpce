@@ -30,7 +30,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.OperationalModeCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 public class CatalogUtilsTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(CatalogUtilsTest.class);
-    private static final String CATALOG_FILE = "src/test/resources/apidocCatalog10_1OptSpecV5_1.json";
+    private static final String CATALOG_FILE = "src/test/resources/apidocCatalog12_0-OptSpecV5_1.json";
 
     private static OperationalModeCatalog omCatalog;
     private static Map<String, Double> outputImpairments = new HashMap<>();

@@ -8,10 +8,10 @@
 
 package org.opendaylight.transportpce.servicehandler;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddOpenroadmOperationalModesToCatalogInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.AddSpecificOperationalModesToCatalogInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class CatalogInput {
     private SdncRequestHeader sdncRequestHeader;
     private OperationalModeInfo operationalModeInfo;
 
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.specific.operational.modes
             .to.catalog.input.OperationalModeInfo operationalModeInfoSpecific;
 
     public CatalogInput(AddOpenroadmOperationalModesToCatalogInput addORToCatalogInput) {
@@ -52,13 +52,13 @@ public class CatalogInput {
         this.operationalModeInfo = operationalModeInfo;
     }
 
-    public org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210.add.specific.operational.modes
+    public org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.specific.operational.modes
             .to.catalog.input.OperationalModeInfo getOperationalModeInfoSpecific() {
         return operationalModeInfoSpecific;
     }
 
     public void setOperationalModeInfoSpecific(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev211210
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                     .add.specific.operational.modes.to.catalog.input.OperationalModeInfo
                 operationalModeInfoSpecific) {
         this.operationalModeInfoSpecific = operationalModeInfoSpecific;

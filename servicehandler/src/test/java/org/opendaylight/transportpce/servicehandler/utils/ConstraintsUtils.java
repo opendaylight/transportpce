@@ -8,32 +8,33 @@
 package org.opendaylight.transportpce.servicehandler.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.DiversityConstraints.DiversityType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.common.constraints.LinkIdentifier;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.common.constraints.LinkIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.DistanceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.DiversityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.ExcludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.HopCountBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.LatencyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.TEMetricBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co.routing.ServiceIdentifierListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.equipment.EquipmentBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.service.applicability.g.ServiceApplicabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.DiversityConstraints.DiversityType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.common.constraints.LinkIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.common.constraints.LinkIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.DistanceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.DiversityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.ExcludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.HopCountBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.LatencyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.TEMetricBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co.routing.ServiceIdentifierList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co.routing.ServiceIdentifierListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service.constraints.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.equipment.EquipmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.service.applicability.g.ServiceApplicabilityBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
@@ -105,12 +106,12 @@ public final class ConstraintsUtils {
                                                       String maxDistance, String coRoutingServiceId) {
 
         Map<ServiceIdentifierListKey,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
+            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service
                     .constraints.ServiceIdentifierList>
                 serviceIdList = new HashMap<>();
         if (diversityServiceList != null) {
             for (String serviceId : diversityServiceList) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service
+                org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service
                         .constraints.ServiceIdentifierList sil = createServiceIdentifierListForDiversity(serviceId);
                 serviceIdList.put(sil.key(), sil);
             }
@@ -170,11 +171,11 @@ public final class ConstraintsUtils {
             .build();
     }
 
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing
             .service.constraints.ServiceIdentifierList createServiceIdentifierListForDiversity(String serviceId) {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing
                     .service.constraints.ServiceIdentifierListBuilder()
-            .setServiceIndentifier(serviceId)
+            .setServiceIdentifier(serviceId)
             .setServiceApplicability(new ServiceApplicabilityBuilder()
                 .setLink(true)
                 .setNode(true)
@@ -193,27 +194,27 @@ public final class ConstraintsUtils {
         excludeHashMap.put(
             "link1",
             new ExcludeBuilder()
-                .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
+                .setLinkIdentifier(List.of(linkId1))
                 .build());
         excludeHashMap.put(
             "node",
             new ExcludeBuilder()
-                .setNodeId(Set.of(new NodeIdType("node-id-2")))
+                .setNodeId(List.of(new NodeIdType("node-id-2")))
                 .build());
         excludeHashMap.put(
             "service",
             new ExcludeBuilder()
-                .setSupportingServiceName(Set.of("supported-service-1", "supported-service-5"))
+                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
                 .build());
         excludeHashMap.put(
             "fiber1",
             new ExcludeBuilder()
-                .setFiberBundle(Set.of("fiber-1", "fiber-2"))
+                .setFiberBundle(List.of("fiber-1", "fiber-2"))
                 .build());
         excludeHashMap.put(
             "fiber2",
             new ExcludeBuilder()
-                .setFiberBundle(Set.of("fiber-2", "fiber-3"))
+                .setFiberBundle(List.of("fiber-2", "fiber-3"))
                 .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")
@@ -226,7 +227,7 @@ public final class ConstraintsUtils {
         excludeHashMap.put(
             "link2",
             new ExcludeBuilder()
-                .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
+                .setLinkIdentifier(List.of(linkId2, linkId3))
                 .build());
         return excludeHashMap;
     }
@@ -240,27 +241,27 @@ public final class ConstraintsUtils {
         includeHashMap.put(
             "link1",
             new IncludeBuilder()
-                .setLinkIdentifier(Map.of(linkId1.key(), linkId1))
+                .setLinkIdentifier(List.of(linkId1))
                 .build());
         includeHashMap.put(
             "node",
             new IncludeBuilder()
-                .setNodeId(Set.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
+                .setNodeId(List.of(new NodeIdType("node-id-1"), new NodeIdType("node-id-3")))
                 .build());
         includeHashMap.put(
             "service",
             new IncludeBuilder()
-                .setSupportingServiceName(Set.of("supported-service-1", "supported-service-5"))
+                .setSupportingServiceName(List.of("supported-service-1", "supported-service-5"))
                 .build());
         includeHashMap.put(
             "fiber1",
             new IncludeBuilder()
-                .setFiberBundle(Set.of("fiber-1", "fiber-2"))
+                .setFiberBundle(List.of("fiber-1", "fiber-2"))
                 .build());
         includeHashMap.put(
             "fiber2",
             new IncludeBuilder()
-                .setFiberBundle(Set.of("fiber-2", "fiber-3"))
+                .setFiberBundle(List.of("fiber-2", "fiber-3"))
                 .build());
         LinkIdentifier linkId2 = new LinkIdentifierBuilder()
             .setLinkId("link-id 2")
@@ -273,7 +274,7 @@ public final class ConstraintsUtils {
         includeHashMap.put(
             "link2",
             new IncludeBuilder()
-                .setLinkIdentifier(Map.of(linkId2.key(), linkId2, linkId3.key(), linkId3))
+                .setLinkIdentifier(List.of(linkId2, linkId3))
                 .build());
         return includeHashMap;
     }
