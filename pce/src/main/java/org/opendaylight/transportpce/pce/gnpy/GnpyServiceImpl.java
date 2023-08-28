@@ -345,8 +345,7 @@ public class GnpyServiceImpl {
                 mformat = ModulationFormat.DpQpsk;
             }
             spacing = GridConstant.FREQUENCY_SLOT_WIDTH_TABLE.get(Uint32.valueOf(rate), mformat);
-            FrequencyTHz centralFrequency = GridUtils.getCentralFrequencyToModel131(
-                    minFrequency.getValue().decimalValue(),
+            FrequencyTHz centralFrequency = GridUtils.getCentralFrequency(minFrequency.getValue().decimalValue(),
                     maxFrequency.getValue().decimalValue());
             int centralFrequencyBitSetIndex = GridUtils.getIndexFromFrequency(centralFrequency.getValue());
             mvalue = (int) Math.ceil(spacing.doubleValue() / (GridConstant.GRANULARITY));

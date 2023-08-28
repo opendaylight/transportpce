@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import com.google.common.collect.ImmutableMap;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,26 +35,15 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev201211.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.If400GE;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -1293,8 +1281,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.info("SIC list = {}", sicList);
         for (SupportedIfCapability supInterCapa : sicList) {
             SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
-                    .withKey(new SupportedInterfaceCapabilityKey(convertSupIfCapa(supInterCapa.toString())))
-                    .setIfCapType(convertSupIfCapa(supInterCapa.toString()))
+                    .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
+                    .setIfCapType(supInterCapa)
                     .build();
             supIfMap.put(supIfCapa.key(), supIfCapa);
         }
@@ -1576,36 +1564,4 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.error("Error committing into datastore", e);
         }
     }
-
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability
-            convertSupIfCapa(String ifCapType) {
-        ImmutableMap<String, org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability>
-                capTypeMap = ImmutableMap.<String,
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability>builder()
-                .put("If400GE{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-400GE}", If400GE.VALUE)
-                .put("IfOTU4ODU4{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-OTU4-ODU4}",
-                        IfOTU4ODU4.VALUE)
-                .put("IfOtsiOtsigroup{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-otsi-otsigroup}",
-                    IfOtsiOtsigroup.VALUE)
-                .put("IfOCH{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-OCH}", IfOCH.VALUE)
-                .put("IfOCHOTU4ODU4{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-OCH-OTU4-ODU4}",
-                    IfOCHOTU4ODU4.VALUE)
-                .put("If1GEODU0{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-1GE-ODU0}",
-                    If1GEODU0.VALUE)
-                .put("If10GE{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-10GE}", If10GE.VALUE)
-                .put("If10GEODU2{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-10GE-ODU2}",
-                    If10GEODU2.VALUE)
-                .put("If10GEODU2e{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-10GE-ODU2e}",
-                    If10GEODU2e.VALUE)
-                .put("If100GE{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-100GE}", If100GE.VALUE)
-                .put("If100GEODU4{qname=(http://org/openroadm/port/types?revision=2023-05-26)if-100GE-ODU4}",
-                    If100GEODU4.VALUE)
-                .build();
-        if (!capTypeMap.containsKey(ifCapType)) {
-            LOG.error("supported-if-capability {} not supported", ifCapType);
-            return null;
-        }
-        return capTypeMap.get(ifCapType);
-    }
-
 }
