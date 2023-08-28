@@ -42,15 +42,15 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev211210.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -214,7 +214,7 @@ public class OpenRoadmTopologyTest {
         String srcTp = "DEG1-CTP-TXRX";
         String destTp = "SRG1-CP-TXRX";
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Link1 link1 =
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1 link1 =
             new Link1Builder().build();
         Link link = new LinkBuilder()
             .setLinkId(linkId)
@@ -300,10 +300,10 @@ public class OpenRoadmTopologyTest {
         assertEquals(OpenroadmNodeType.DEGREE, node.augmentation(Node1.class).getNodeType());
         assertEquals(
             Uint16.valueOf(nodeNb),
-            node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1.class)
+            node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1.class)
                 .getDegreeAttributes().getDegreeNumber());
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1.class)
             .getDegreeAttributes().getAvailFreqMaps().values());
         assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
@@ -333,7 +333,7 @@ public class OpenRoadmTopologyTest {
         assertEquals("ROADMA01", supportingNodes.get(1).getNodeRef().getValue());
         assertEquals(OpenroadmNodeType.SRG, node.augmentation(Node1.class).getNodeType());
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev211210.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1.class)
             .getSrgAttributes().getAvailFreqMaps().values());
         assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
