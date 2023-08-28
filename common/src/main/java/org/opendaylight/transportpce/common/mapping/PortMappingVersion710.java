@@ -1050,7 +1050,7 @@ public class PortMappingVersion710 {
         }
         Collection<SupportedInterfaceCapability> supIntfCapaList = getSupIntfCapaList(port);
         if (supIntfCapaList != null) {
-            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability>
+            Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability>
                     supportedIntf = new HashSet<>();
             Set<String> regenProfiles = new HashSet<>();
             SupportedInterfaceCapability sic1 = null;

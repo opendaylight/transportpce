@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -22,12 +23,12 @@ import java.util.Set;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.DiversityConstraints.DiversityType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.common.constraints.LinkIdentifierKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.diversity.existing.service.constraints.ServiceIdentifierListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.DiversityConstraints.DiversityType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.common.constraints.LinkIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.diversity.existing.service.constraints.ServiceIdentifierListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
 
 /**
  * Class to test downgrading and updating Constraints .
@@ -171,12 +172,12 @@ public class DowngradeConstraintsTest {
             initialHardConstraints, initialSoftConstraints);
         assertThat("updated soft constraints should contain exclude with 3 links",
             generatedSoftConstraints.getExclude().getLinkIdentifier().size(), is(3));
-        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 1", "openroadm-topology")));
-        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 2", "openroadm-topology")));
-        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 3", "openroadm-topology")));
+        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+            .setLinkId("link-id 1").setLinkNetworkId("openroadm-topology").build()));
+        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+            .setLinkId("link-id 2").setLinkNetworkId("openroadm-topology").build()));
+        assertThat(generatedSoftConstraints.getExclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+            .setLinkId("link-id 3").setLinkNetworkId("openroadm-topology").build()));
     }
 
     @Test
@@ -231,12 +232,12 @@ public class DowngradeConstraintsTest {
             initialHardConstraints, initialSoftConstraints);
         assertThat("updated soft constraints should contain include with 3 links",
             generatedSoftConstraints.getInclude().getLinkIdentifier().size(), is(3));
-        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 1", "openroadm-topology")));
-        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 2", "openroadm-topology")));
-        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(),
-            IsMapContaining.hasKey(new LinkIdentifierKey("link-id 3", "openroadm-topology")));
+        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+                .setLinkId("link-id 1").setLinkNetworkId("openroadm-topology").build()));
+        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+                .setLinkId("link-id 2").setLinkNetworkId("openroadm-topology").build()));
+        assertThat(generatedSoftConstraints.getInclude().getLinkIdentifier(), hasItems(new LinkIdentifierBuilder()
+                .setLinkId("link-id 3").setLinkNetworkId("openroadm-topology").build()));
     }
 
     @Test
@@ -387,19 +388,19 @@ public class DowngradeConstraintsTest {
         assertEquals(2, generatedSoftConstraints.getCoRouting().getServiceIdentifierList().size(),
             "updated soft constraints should contain 2 co-routed services");
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                     .routing.ServiceIdentifierListKey("service 1"))
             .getServiceApplicability().getEquipment().getRoadmSrg());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 1"))
             .getServiceApplicability().getLink());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 2"))
             .getServiceApplicability().getEquipment());
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                     .routing.ServiceIdentifierListKey("service 2"))
             .getServiceApplicability().getLink());
 
@@ -414,11 +415,11 @@ public class DowngradeConstraintsTest {
         assertEquals(1, generatedSoftConstraints.getCoRouting().getServiceIdentifierList().size(),
             "updated soft constraints should contain 1 co-routed service");
         assertTrue(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 3"))
             .getServiceApplicability().getSite());
         assertNull(generatedSoftConstraints.getCoRouting().getServiceIdentifierList()
-            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+            .get(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 3"))
             .getServiceApplicability().getLink());
 
@@ -431,15 +432,15 @@ public class DowngradeConstraintsTest {
             "updated soft constraints should contain 3 co-routed service");
         assertThat(generatedSoftConstraints.getCoRouting().getServiceIdentifierList(),
             IsMapContaining.hasKey(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 1")));
         assertThat(generatedSoftConstraints.getCoRouting().getServiceIdentifierList(),
             IsMapContaining.hasKey(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 2")));
         assertThat(generatedSoftConstraints.getCoRouting().getServiceIdentifierList(),
             IsMapContaining.hasKey(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.co
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co
                         .routing.ServiceIdentifierListKey("service 3")));
     }
 
@@ -480,12 +481,12 @@ public class DowngradeConstraintsTest {
         assertTrue(genSoftConstraints.getCustomerCode().contains("customer-code 1"));
         assertTrue(genSoftConstraints.getCustomerCode().contains("customer-code 2"));
         assertNotNull(genSoftConstraints.getExclude(), "generated soft constraints should contain exclude constraint");
-        assertEquals(1, genSoftConstraints.getExclude().getLinkIdentifier().values().size(),
+        assertEquals(1, genSoftConstraints.getExclude().getLinkIdentifier().size(),
             "generated soft constraints should contain exclude constraint with one link-id");
         assertEquals("link-id 1",
-            genSoftConstraints.getExclude().getLinkIdentifier().values().stream().findAny().orElseThrow().getLinkId());
+            genSoftConstraints.getExclude().getLinkIdentifier().stream().findAny().orElseThrow().getLinkId());
         assertEquals("openroadm-topology",
-            genSoftConstraints.getExclude().getLinkIdentifier().values().stream().findAny().orElseThrow()
+            genSoftConstraints.getExclude().getLinkIdentifier().stream().findAny().orElseThrow()
                 .getLinkNetworkId());
         assertNotNull(genSoftConstraints.getInclude(), "generated soft constraints should contain include constraint");
         assertEquals(2, genSoftConstraints.getInclude().getNodeId().size(),

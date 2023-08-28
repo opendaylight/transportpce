@@ -322,7 +322,7 @@
                         "openroadm-operational-mode-id": "OR-W-300G-oFEC-63.1Gbd",
                         "baud-rate": "63.1",
                         "line-rate": "378.8",
-                        "modulation-format": "dp-qam16",
+                        "modulation-format": "dp-qam8",
                         "min-TX-osnr": "37.000",
                         "TX-OOB-osnr": {
                             "WR-openroadm-operational-mode-id": "MW-WR-core",
@@ -407,7 +407,7 @@
                         "openroadm-operational-mode-id": "OR-W-400G-oFEC-63.1Gbd",
                         "baud-rate": "63.1",
                         "line-rate": "505.1",
-                        "modulation-format": "dp-qam8",
+                        "modulation-format": "dp-qam16",
                         "min-TX-osnr": "37.000",
                         "TX-OOB-osnr": {
                             "WR-openroadm-operational-mode-id": "MW-WR-core",
@@ -604,23 +604,6 @@
             },
             "amplifiers": {
                 "Amplifier": {
-                    "min-gain": "0.000",
-                    "max-gain": "27.000",
-                    "max-extended-gain": "31.000",
-                    "mask-gain-ripple-vs-tilt": [
-                        {
-                            "lower-boundary": "-4",
-                            "upper-boundary": "-1",
-                            "C": "-0.50",
-                            "D": "1.00"
-                        },
-                        {
-                            "lower-boundary": "-1",
-                            "upper-boundary": "0",
-                            "C": "0.50",
-                            "D": "2.00"
-                        }
-                    ],
                     "openroadm-operational-mode": [
                         {
                             "openroadm-operational-mode-id": "MWi-standard",
@@ -635,8 +618,53 @@
                                 "C": "-1.07100000",
                                 "D": "28.99000000"
                             },
-                            "per-channel-Pout-min": "-9.000",
-                            "per-channel-Pout-max": "2.000"
+                            "mask-power-vs-pin": [
+                                {
+                                    "lower-boundary": "0",
+                                    "upper-boundary": "6",
+                                    "C": "1.00000000",
+                                    "D": "-9.00000000",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "6",
+                                    "upper-boundary": "8",
+                                    "C": "-0.00000000",
+                                    "D": "-3.00000000",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "8",
+                                    "upper-boundary": "23",
+                                    "C": "0.33333334",
+                                    "D": "-5.66666667",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "23",
+                                    "upper-boundary": "31",
+                                    "C": "0.00000000",
+                                    "D": "2.00000000",
+                                    "fiber-type": "smf"
+                                }
+                            ],
+                            "min-gain": "0.000",
+                            "max-gain": "27.000",
+                            "max-extended-gain": "31.000",
+                             "mask-gain-ripple-vs-tilt": [
+                                {
+                                    "lower-boundary": "-4",
+                                    "upper-boundary": "-1",
+                                    "C": "-0.50",
+                                    "D": "1.00"
+                                },
+                                {
+                                    "lower-boundary": "-1",
+                                    "upper-boundary": "0",
+                                    "C": "0.50",
+                                    "D": "2.00"
+                                }
+                            ]
                         },
                         {
                             "openroadm-operational-mode-id": "MWi-low-noise",
@@ -651,8 +679,53 @@
                                 "C": "-0.58890000",
                                 "D": "37.62000000"
                             },
-                            "per-channel-Pout-min": "-9.000",
-                            "per-channel-Pout-max": "2.000"
+                            "mask-power-vs-pin": [
+                                {
+                                    "lower-boundary": "0",
+                                    "upper-boundary": "6",
+                                    "C": "1.00000000",
+                                    "D": "-9.00000000",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "6",
+                                    "upper-boundary": "8",
+                                    "C": "-0.00000000",
+                                    "D": "-3.00000000",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "8",
+                                    "upper-boundary": "23",
+                                    "C": "0.33333334",
+                                    "D": "-5.66666667",
+                                    "fiber-type": "smf"
+                                },
+                                {
+                                    "lower-boundary": "23",
+                                    "upper-boundary": "31",
+                                    "C": "0.00000000",
+                                    "D": "2.00000000",
+                                    "fiber-type": "smf"
+                                }
+                            ],
+                            "min-gain": "0.000",
+                            "max-gain": "27.000",
+                            "max-extended-gain": "31.000",
+                             "mask-gain-ripple-vs-tilt": [
+                                {
+                                    "lower-boundary": "-4",
+                                    "upper-boundary": "-1",
+                                    "C": "-0.50",
+                                    "D": "1.00"
+                                },
+                                {
+                                    "lower-boundary": "-1",
+                                    "upper-boundary": "0",
+                                    "C": "0.50",
+                                    "D": "2.00"
+                                }
+                            ]
                         }
                     ]
                 }

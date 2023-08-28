@@ -10,9 +10,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.explicit.route.hop.type.NumUnnumHop;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.path.properties.PathMetric;
@@ -21,10 +19,10 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.Response;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCase;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.constraints.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev211210.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraintsBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +105,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        Set<NodeIdType> nodeIdList = new HashSet<>();
+        List<NodeIdType> nodeIdList = new ArrayList<>();
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
                 NumUnnumHop numUnnumHop = (NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
