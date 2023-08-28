@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22b548b6_4e446c3d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-28T05:27:55Z",
+      "side": 1,
+      "message": "yes the most common style is to put .build() at the same indentation level than setters.",
+      "parentUuid": "4ba35514_16882623",
+      "revId": "0559dabd2e93a57d3d26e1422b7ae7162ef3fc0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6795684e_a5f9d640",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 6
