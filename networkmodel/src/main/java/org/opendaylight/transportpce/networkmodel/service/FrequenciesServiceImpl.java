@@ -492,9 +492,9 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             .setWavelength(
                 used
                     ? new WavelengthBuilder()
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel101(rate, modulationFormat))
                         .setFrequency(
-                            GridUtils.getCentralFrequency(
+                            GridUtils.getCentralFrequencyToModel101(
                                 atozMinFrequency.decimalValue(),
                                 atozMaxFrequency.decimalValue()))
                         .build()
@@ -525,9 +525,9 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             .setWavelength(
                 used
                     ? new WavelengthBuilder()
-                        .setWidth(GridUtils.getWidthFromRateAndModulationFormat(rate, modulationFormat))
+                        .setWidth(GridUtils.getWidthFromRateAndModulationFormatToModel101(rate, modulationFormat))
                         .setFrequency(
-                            GridUtils.getCentralFrequency(
+                            GridUtils.getCentralFrequencyToModel101(
                                 atozMinFrequency.decimalValue(),
                                 atozMaxFrequency.decimalValue()))
                         .build()

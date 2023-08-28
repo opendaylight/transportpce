@@ -11,21 +11,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.Topology;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.service.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.DeviceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.ResourceTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev210924.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.Hop.HopType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToABuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev211210.topology.ZToAKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.DeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.ResourceTypeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.resource.resource.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev220325.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.Hop.HopType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToAKey;
 
 public class ServiceListTopology {
 
@@ -36,58 +36,30 @@ public class ServiceListTopology {
 
     public void updateAtoZTopologyList(List<Ports> ports, String nodeId) {
 
-        String circuitPackName = "";
-        String portName = "";
-
         int id = this.a2zTopologyList.size();
-
-        DeviceBuilder deviceBldr = new DeviceBuilder();
-        deviceBldr.setNodeId(new NodeIdType(nodeId));
-
-
         for (Ports port : ports) {
-
             id = id + 1;
-
-            //Get circuitpack name
-            circuitPackName = port.getCircuitPackName();
-
-            //Get port name
-            portName = port.getPortName();
-
-            AToZBuilder a2zBldr = new AToZBuilder();
-
-            //Set Resource Id
-            a2zBldr.setId(Integer.toString(id));
-
-            //Set device Node-id
-            a2zBldr.setDevice(deviceBldr.build());
-
-            //Set hop type to internal
-            a2zBldr.setHopType(HopType.NodeInternal);
-
-            //Set Resource Type to port
-            ResourceTypeBuilder rsrcTypeBldr = new ResourceTypeBuilder();
-            rsrcTypeBldr.setType(ResourceTypeEnum.Port);
-            a2zBldr.setResourceType(rsrcTypeBldr.build());
-
-            //building port resource
-            PortBuilder portBldr = new PortBuilder();
-            portBldr.setCircuitPackName(circuitPackName);
-            portBldr.setPortName(portName);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
-                .PortBuilder portCase =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
-                    .PortBuilder();
-            portCase.setPort(portBldr.build());
-            ResourceBuilder rsrcBldr = new ResourceBuilder();
-            rsrcBldr.setResource(portCase.build());
-            a2zBldr.setResource(rsrcBldr.build());
-
             //Add port resource to the list
-            AToZ a2z = a2zBldr.build();
-            this.a2zTopologyList.put(a2z.key(),a2z);
-
+            AToZ a2z = new AToZBuilder()
+                .setId(Integer.toString(id))
+                .setDevice(new DeviceBuilder()
+                    .setNodeId(new NodeIdType(nodeId))
+                    .build())
+                .setHopType(HopType.NodeInternal)
+                .setResourceType(new ResourceTypeBuilder()
+                    .setType(ResourceTypeEnum.Port)
+                    .build())
+                .setResource(new ResourceBuilder()
+                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526
+                            .resource.resource.resource.PortBuilder()
+                        .setPort(new PortBuilder()
+                            .setCircuitPackName(port.getCircuitPackName())
+                            .setPortName(port.getPortName())
+                            .build())
+                        .build())
+                    .build())
+                .build();
+            this.a2zTopologyList.put(a2z.key(), a2z);
         }
 
         //update Topology
@@ -97,57 +69,31 @@ public class ServiceListTopology {
 
     public void updateZtoATopologyList(List<Ports> ports, String nodeId) {
 
-        String circuitPackName = "";
-        String portName = "";
-
         int id = this.z2aTopologyList.size();
 
-        DeviceBuilder deviceBldr = new DeviceBuilder();
-        deviceBldr.setNodeId(new NodeIdType(nodeId));
-
         for (Ports port : ports) {
-
             id = id + 1;
-
-            //Get circuitpack name
-            circuitPackName = port.getCircuitPackName();
-
-            //Get port name
-            portName = port.getPortName();
-
-            ZToABuilder z2aBldr = new ZToABuilder();
-
-            //Set Resource Id
-            z2aBldr.setId(Integer.toString(id));
-
-            //Set device Node-id
-            z2aBldr.setDevice(deviceBldr.build());
-
-            //Set hop type to internal
-            z2aBldr.setHopType(HopType.NodeInternal);
-
-            //Set Resource Type to port
-            ResourceTypeBuilder rsrcTypeBldr = new ResourceTypeBuilder();
-            rsrcTypeBldr.setType(ResourceTypeEnum.Port);
-            z2aBldr.setResourceType(rsrcTypeBldr.build());
-
-            //building port resource
-            PortBuilder portBldr = new PortBuilder();
-            portBldr.setCircuitPackName(circuitPackName);
-            portBldr.setPortName(portName);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
-                .PortBuilder portCase =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev211210.resource.resource.resource
-                    .PortBuilder();
-            portCase.setPort(portBldr.build());
-            ResourceBuilder rsrcBldr = new ResourceBuilder();
-            rsrcBldr.setResource(portCase.build());
-            z2aBldr.setResource(rsrcBldr.build());
-
             //Add port resource to the list
-            ZToA z2a = z2aBldr.build();
+            ZToA z2a = new ZToABuilder()
+                .setId(Integer.toString(id))
+                .setDevice(new DeviceBuilder()
+                    .setNodeId(new NodeIdType(nodeId))
+                    .build())
+                .setHopType(HopType.NodeInternal)
+                .setResourceType(new ResourceTypeBuilder()
+                    .setType(ResourceTypeEnum.Port)
+                    .build())
+                .setResource(new ResourceBuilder()
+                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526
+                            .resource.resource.resource.PortBuilder()
+                        .setPort(new PortBuilder()
+                            .setCircuitPackName(port.getCircuitPackName())
+                            .setPortName(port.getPortName())
+                            .build())
+                        .build())
+                    .build())
+                .build();
             this.z2aTopologyList.put(z2a.key(),z2a);
-
         }
 
         //update Topology
