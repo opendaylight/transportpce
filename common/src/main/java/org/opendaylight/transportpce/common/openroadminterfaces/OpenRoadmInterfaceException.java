@@ -8,8 +8,10 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 @SuppressWarnings("serial")
-@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+@SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class OpenRoadmInterfaceException extends Exception {
