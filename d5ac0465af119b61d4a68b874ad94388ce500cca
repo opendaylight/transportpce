@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ce54117_831aed9c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-29T13:38:03Z",
+      "side": 1,
+      "message": "I am not convinced the import of SuppressFBWarnings is linked to the GA migration itself. This probably deserves a separate change that could be backported to Argon.",
+      "revId": "d5ac0465af119b61d4a68b874ad94388ce500cca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdacd8c5_cddd9fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-29T13:38:03Z",
+      "side": 1,
+      "message": "LGTM. Thanks for the good work. Just a minor remark about annotations.",
+      "revId": "d5ac0465af119b61d4a68b874ad94388ce500cca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
