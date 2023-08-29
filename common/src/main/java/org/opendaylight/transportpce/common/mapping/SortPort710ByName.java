@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.util.Comparator;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.Port;
@@ -18,7 +19,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.Port;
  *
  */
 @SuppressWarnings("serial")
-@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+@SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class SortPort710ByName implements Comparator<Port>, Serializable {

@@ -13,6 +13,7 @@ import static org.opendaylight.transportpce.inventory.utils.StringUtils.getCurre
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareDashString;
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareEmptyString;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,7 +84,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+@SuppressFBWarnings(
     value = "SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING",
     justification = "TODO review the SQL statement generation process")
 public class INode121 {
