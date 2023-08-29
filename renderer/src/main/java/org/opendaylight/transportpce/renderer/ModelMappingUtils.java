@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.renderer;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -390,7 +391,7 @@ public final class ModelMappingUtils {
         }
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    @SuppressFBWarnings(
         value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"},
         justification = "loop when value is not always null - "
                 + "TODO: check if something exists in Java lib")
