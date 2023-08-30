@@ -1,0 +1,16 @@
+---
+roles:
+  - name: collivier.xtesting
+    src: https://github.com/collivier/ansible-role-xtesting
+    version: master
+  # to use xtesting GitHub repo master branch until a version > 4.2.0
+  # is published in ansible catalog to bring the following fix
+  # https://github.com/collivier/ansible-role-xtesting/pull/19
+
+collections:
+  - name: ansible.posix
+  - name: community.general
+  - name: community.grafana
+  - name: community.kubernetes
+  - name: community.docker
+  - name: community.postgresql

@@ -9,11 +9,7 @@ sudo apt-get install virtualenv
 virtualenv xtesting -p python3 --system-site-packages
 . xtesting/bin/activate
 pip install ansible
-ansible-galaxy install collivier.xtesting
-## Until https://github.com/collivier/ansible-role-xtesting/pull/19 is fixed, the following command
-## or any equivalent must be performed so that the playbook correctly performs Jenkins configuration
-## sed -i_ 's/port\:{/port: {/' ~/.ansible/roles/collivier.xtesting/templates/run.yaml.j2
-ansible-galaxy collection install ansible.posix community.general community.grafana community.kubernetes community.docker community.postgresql
+ansible-galaxy install -r requirements.yml
 ansible-playbook site.yml
 deactivate
 sudo docker build -t 127.0.0.1:5000/tpce0 .
