@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fb6bc8a_3a843cbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "as soon as -\u003e would you mean \"since\" instead ?",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ed6efc4_8c019c4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "thanks for the good work. a few minor remarks",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6a84175_4216894f",
+        "filename": "tests/transportpce_tests/1.2.1/test02_topo_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "I think we can put away this modification from this change and maybe use a more relevant debug message by the way.",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "157db85a_5fdcc411",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "not related to this change IMO",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db2409f8_77aaf6b1",
+        "filename": "tests/transportpce_tests/2.2.1/test02_topo_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f551eccb_092caa85",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "do we still need this method ?",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa749be9_45fe2908",
+        "filename": "tests/transportpce_tests/hybrid/test01_device_change_notifications.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "I think we can remove this code rather than comment it out.",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b78f5a53_947a1286",
+        "filename": "tests/transportpce_tests/hybrid/test03_autonomous_reroute.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd9c9ca0_146f9ce4",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:04:42Z",
+      "side": 1,
+      "message": "I suspect we don\u0027t need this line since it is in requirements.txt already.",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
