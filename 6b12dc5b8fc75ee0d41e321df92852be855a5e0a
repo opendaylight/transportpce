@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65178035_3f9a6a5c",
+        "filename": "tests/install_lightynode.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-30T15:30:48Z",
+      "side": 1,
+      "message": "these folders do not exist on git\nwhat about adding an else clause to line 25 with the following command ?\nmkdir -p $INSTALL_DIR",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6a84175_4216894f",
         "filename": "tests/transportpce_tests/1.2.1/test02_topo_portmapping.py",
         "patchSetId": 3
