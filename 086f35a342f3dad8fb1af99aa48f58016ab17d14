@@ -33,6 +33,227 @@
       "message": "Could not pass the gate since change removing common models 10.1 on transportpce/models has been merged.",
       "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d72de6_cc4c9b87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "LGTM\nI spotted style issues here and I propose we fix them in a separate change",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a83c5f9_e846a193",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "LF after revision date at line 599 would allow to align both arguments to ease reading",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12b7b414_ba9c2955",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/test/NetworkmodelTestUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "oneliner ?",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e7bd5c_6e7003b5",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "LF after revision date would be more readable IMO",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8793700_22733396",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6d1e2b0_545bcc4b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d273469c_8162d33b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38393385_accf491a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2152ff1c_39cfb741",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/servicepath/ServiceListTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "indent +4 here",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c347b962_3d951f62",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/servicepath/ServiceListTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555c4a35_ee49c212",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "many misleading indentations here and below IMO",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc68e730_de05dbad",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ServiceDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "misleading indentations here and below",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95f8b5c5_44eca4d4",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/utils/ServiceDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-08-31T09:06:08Z",
+      "side": 1,
+      "message": "indent +4 here and below",
+      "revId": "086f35a342f3dad8fb1af99aa48f58016ab17d14",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
