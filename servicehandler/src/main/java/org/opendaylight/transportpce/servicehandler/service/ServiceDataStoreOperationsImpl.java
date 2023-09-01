@@ -135,10 +135,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public Optional<ServiceList> getServices() {
         try {
             ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
-            InstanceIdentifier<ServiceList> iid =
-                    InstanceIdentifier.create(ServiceList.class);
-            Future<java.util.Optional<ServiceList>> future =
-                    readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
+            InstanceIdentifier<ServiceList> iid = InstanceIdentifier.create(ServiceList.class);
+            Future<java.util.Optional<ServiceList>> future = readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
             return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading services failed:", e);
@@ -151,14 +149,17 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             getTempService(String serviceName) {
         try {
             ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
-                .Services> iid = InstanceIdentifier.create(TempServiceList.class).child(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.Services.class,
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.ServicesKey(
-                        serviceName));
-            FluentFuture<Optional<
-                org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.Services>> future
-                = readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                    .temp.service.list.Services> iid =
+                InstanceIdentifier.create(TempServiceList.class)
+                    .child(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.Services.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.ServicesKey(serviceName));
+            FluentFuture<
+                    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                        .temp.service.list.Services>> future = readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
             return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading service {} failed:", serviceName, e);
@@ -187,11 +188,14 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         LOG.debug(DELETING_SERVICE_MSG, commonId);
         try {
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
-                .Services> iid = InstanceIdentifier.create(TempServiceList.class).child(org.opendaylight.yang.gen.v1
-                        .http.org.openroadm.service.rev230526.temp.service.list.Services.class,
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
-                            .ServicesKey(commonId));
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                    .temp.service.list.Services> iid =
+                InstanceIdentifier.create(TempServiceList.class)
+                    .child(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.Services.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.ServicesKey(commonId));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -238,14 +242,16 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         }
         try {
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
-                .Services> iid = InstanceIdentifier.create(TempServiceList.class)
-                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
-                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
-                                .temp.service.list.ServicesKey(serviceName));
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.Services services =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.ServicesBuilder(
-                    readService.orElseThrow())
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                    .temp.service.list.Services> iid =
+                InstanceIdentifier.create(TempServiceList.class)
+                    .child(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.Services.class,
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                            .temp.service.list.ServicesKey(serviceName));
+            var services = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                    .temp.service.list.ServicesBuilder(readService.orElseThrow())
                 .setOperationalState(operationalState)
                 .setAdministrativeState(administrativeState)
                 .build();
