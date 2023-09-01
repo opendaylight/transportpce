@@ -51,6 +51,24 @@
       "message": "lighty-openroadm-device -\u003e lightynode-openroadm-device",
       "revId": "1e5ede880151fcd584dc940c3341923476112cee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eb9e8f0_61c47d02",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T10:23:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e71b7267_24b7276a",
+      "revId": "1e5ede880151fcd584dc940c3341923476112cee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
