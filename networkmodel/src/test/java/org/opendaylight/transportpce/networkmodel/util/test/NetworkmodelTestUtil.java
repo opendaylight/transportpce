@@ -193,8 +193,8 @@ public final class NetworkmodelTestUtil {
             .addAugmentation(otnTp1)
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder()
-                .setTpType(OpenroadmTpType.XPONDERNETWORK)
-                .build())
+                    .setTpType(OpenroadmTpType.XPONDERNETWORK)
+                    .build())
             .build();
         SupportingTerminationPoint supTermPointZ = new SupportingTerminationPointBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
@@ -209,8 +209,8 @@ public final class NetworkmodelTestUtil {
             .addAugmentation(otnTp1)
             .addAugmentation(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder()
-                .setTpType(OpenroadmTpType.XPONDERNETWORK)
-                .build())
+                    .setTpType(OpenroadmTpType.XPONDERNETWORK)
+                    .build())
             .build();
         List<TerminationPoint> tps = new ArrayList<>();
         tps.add(tpA);
