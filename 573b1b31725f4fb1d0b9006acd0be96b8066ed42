@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5285e537_69142e06",
+        "filename": "tests/transportpce_tests/hybrid/test01_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T12:52:15Z",
+      "side": 1,
+      "message": "this line and related commented-out code can simply be removed IMO",
+      "revId": "573b1b31725f4fb1d0b9006acd0be96b8066ed42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b8d647_a5973164",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T12:52:15Z",
+      "side": 1,
+      "message": "pylint issue\n\n************* Module test03_tapi_device_change_notifications\ntransportpce_tests/tapi/test03_tapi_device_change_notifications.py:1:0: C0302: Too many lines in module (1133/1000) (too-many-lines)",
+      "revId": "573b1b31725f4fb1d0b9006acd0be96b8066ed42",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
