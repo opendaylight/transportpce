@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea89b86_2f55713e",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T15:44:38Z",
+      "side": 1,
+      "message": "Preferable to keep these arguments on the previous line",
+      "range": {
+        "startLine": 90,
+        "startChar": 12,
+        "endLine": 90,
+        "endChar": 73
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1929dce6_464c9f6b",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T15:44:38Z",
+      "side": 1,
+      "message": "Preferable to keep as much as possible the builder on the same line as the variable name when there is no necessity to wrap it.",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 42
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
