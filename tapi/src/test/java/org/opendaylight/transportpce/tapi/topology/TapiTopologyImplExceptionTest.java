@@ -75,7 +75,7 @@ public class TapiTopologyImplExceptionTest {
         }
     }
 
-    private class ReadTransactionMock implements ReadTransaction {
+    private final class ReadTransactionMock implements ReadTransaction {
 
         @Override
         public @NonNull Object getIdentifier() {
