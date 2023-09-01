@@ -70,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5318128a_440e46b2",
+        "filename": "tests/install_lightynode.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T10:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0621696d_6553c35a",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6a84175_4216894f",
@@ -138,6 +156,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8890705c_0d1a3f62",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T10:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f551eccb_092caa85",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa749be9_45fe2908",
@@ -185,6 +221,24 @@
       "writtenOn": "2023-09-01T08:34:17Z",
       "side": 1,
       "message": "there is no argument to  ./install_lightynode.sh script\nthere should be only one sims profile now IMO",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d50b44a_d8d6c348",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T10:23:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ea20e3f_b603a39f",
       "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
