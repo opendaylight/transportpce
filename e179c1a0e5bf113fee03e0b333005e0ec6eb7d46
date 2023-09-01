@@ -69,6 +69,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71a837b2_a83fdbd3",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/fixedflex/GridUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d0a55d_984f9df7",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f070b63_22a634be",
@@ -86,6 +104,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23fc24ff_8e439f0d",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/fixedflex/GridUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f070b63_22a634be",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0598e04b_1c41894d",
@@ -99,6 +135,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "many misleading indentation in this block IMO",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f7379a_468e8028",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0598e04b_1c41894d",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -154,6 +208,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99c6dcf0_95d5408d",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4da3603_8b06d8a5",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac7efc3b_3e5e1b6f",
@@ -167,6 +239,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "can be oneliner",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72539d1_36c2513d",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac7efc3b_3e5e1b6f",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -188,6 +278,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db70a0a7_432a75ee",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8c45630_bf7978a5",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83f86f80_d1919eeb",
@@ -201,6 +309,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "idem",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1fa9e90_68a78396",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83f86f80_d1919eeb",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -222,6 +348,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d86ba78_545aa30e",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/TransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d566fa8_bb2e3164",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e28e95a8_b9ffa66c",
@@ -235,6 +379,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "previous style was better IMO",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5726ce24_90b0080b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e28e95a8_b9ffa66c",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -256,6 +418,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57576ab5_4cdb08cb",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce802656_460eecc6",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "148305f9_6a579b7e",
@@ -269,6 +449,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "I link GNU style but I think it would be more coherent to align this declaration with line 236-237 + 271-272 style",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a55dfc9c_0453117b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "148305f9_6a579b7e",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -290,6 +488,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4954005b_d08371ef",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4338712_86bd342e",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "313535db_6c9c51ac",
@@ -303,6 +519,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "many misleading indentation in this block IMO",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edfd973f_521c097c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313535db_6c9c51ac",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -324,6 +558,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "804f494c_f738b4b8",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed97747_c88239d2",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb4c796f_71138354",
@@ -337,6 +589,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "LF not needed",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e0f8acb_2ba1409c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb4c796f_71138354",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -358,6 +628,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46f04279_cc728ab2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8667e16e_0b2892a6",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abf07a65_8bf6d914",
@@ -371,6 +659,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "what about this ?\n\n        if (openroadmTopo.nonnullNode().values().stream()\n                .filter(nt -\u003e nt\n                    .augmentation(\n                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)\n                    .getNodeType()\n                    .equals(OpenroadmNodeType.SRG))\n                .count() \u003e 0) {",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8f52951_57b8acc1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abf07a65_8bf6d914",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -392,6 +698,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b3b095a_444dbf91",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd5b3755_a0b6798b",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e1ac6f8_19e9bed2",
@@ -405,6 +729,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "cf previous proposal",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79cab90c_8679b86e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e1ac6f8_19e9bed2",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -426,6 +768,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c374f0f5_02f7e03e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08f9890a_376dc71f",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c3185aa_fd3f5331",
@@ -439,6 +799,24 @@
       "writtenOn": "2023-08-31T08:54:12Z",
       "side": 1,
       "message": "indent -4 here",
+      "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9cbebd5_960d153c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c3185aa_fd3f5331",
       "revId": "e179c1a0e5bf113fee03e0b333005e0ec6eb7d46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

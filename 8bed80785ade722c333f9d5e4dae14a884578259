@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd6b4caa_76ded330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-01T09:25:41Z",
+      "side": 1,
+      "message": "Thanks for your review. I applied most of your code style proposals.",
+      "revId": "8bed80785ade722c333f9d5e4dae14a884578259",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
