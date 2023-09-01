@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c57cbfe9_d82ea38f",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T21:15:34Z",
+      "side": 1,
+      "message": "they don\u0027t fit all (line length \u003e123 char)",
+      "parentUuid": "0ea89b86_2f55713e",
+      "range": {
+        "startLine": 90,
+        "startChar": 12,
+        "endLine": 90,
+        "endChar": 73
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1929dce6_464c9f6b",
         "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-01T15:44:38Z",
       "side": 1,
       "message": "Preferable to keep as much as possible the builder on the same line as the variable name when there is no necessity to wrap it.",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 42
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88bff59e_876e6af0",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-01T21:15:34Z",
+      "side": 1,
+      "message": "actually, this eases copy/paste when removing intermediate variables.",
+      "parentUuid": "1929dce6_464c9f6b",
       "range": {
         "startLine": 101,
         "startChar": 12,
