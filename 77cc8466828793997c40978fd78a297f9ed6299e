@@ -48,6 +48,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c63fe6a_1580d1fe",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-04T07:49:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c57cbfe9_d82ea38f",
+      "range": {
+        "startLine": 90,
+        "startChar": 12,
+        "endLine": 90,
+        "endChar": 73
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1929dce6_464c9f6b",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "actually, this eases copy/paste when removing intermediate variables.",
       "parentUuid": "1929dce6_464c9f6b",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 42
+      },
+      "revId": "77cc8466828793997c40978fd78a297f9ed6299e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec27767_4784c6a1",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-04T07:49:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88bff59e_876e6af0",
       "range": {
         "startLine": 101,
         "startChar": 12,
