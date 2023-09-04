@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c71636f3_c3793f4e",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-04T08:20:10Z",
+      "side": 1,
+      "message": "since device notifications are still failing with lighty sims, I wonder whether it wouldn\u0027t make more sense to keep both lighty and honeynode sims support in a first attempt and to manage it with an environment variable.\n\nThe we could use the @unittest.skipIf() decorator to skip devices notifications tests when lighty sims are used.",
+      "revId": "71e8a136594d293c2692ecb2625d9393a3965a7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
