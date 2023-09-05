@@ -16,6 +16,23 @@
       "message": "gate KO",
       "revId": "b7ab02038a80a9e11059ad8c26257db002afebe3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e674db73_4fc1d762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T08:10:57Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "b7ab02038a80a9e11059ad8c26257db002afebe3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
