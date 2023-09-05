@@ -164,18 +164,17 @@ def start_lightynode(log_file: str, sim):
 def start_sims(sims_list):
     if 'USE_SIMS' in os.environ:
         sims_to_use = os.environ['USE_SIMS']
-        print(os.environ['USE_SIMS'] + ' ' + sims_to_use)
+        print("Using SIMS " + sims_to_use)
     else:
-        sims_to_use = 'honeynode'
+        sims_to_use = 'lightynode'
     if sims_to_use == 'None':
         return None
-    if sims_to_use == 'lightynode':
-        start_msg = LIGHTYNODE_OK_START_MSG
-        start_method = start_lightynode
-        print("lightynode used")
-    else:
+    if sims_to_use == 'honeynode':
         start_msg = HONEYNODE_OK_START_MSG
         start_method = start_honeynode
+    else:
+        start_msg = LIGHTYNODE_OK_START_MSG
+        start_method = start_lightynode
     for sim in sims_list:
         print('starting simulator ' + sim[0] + ' in OpenROADM device version ' + sim[1] + '...')
         log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
