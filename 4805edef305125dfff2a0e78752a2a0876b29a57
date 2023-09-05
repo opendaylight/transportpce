@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adda0ffb_ca44da6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T13:57:15Z",
+      "side": 1,
+      "message": "JIRA: TRNSPRTPCE-754",
+      "revId": "4805edef305125dfff2a0e78752a2a0876b29a57",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
