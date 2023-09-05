@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "b7ab02038a80a9e11059ad8c26257db002afebe3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0313a52b_7fdffcba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T10:26:40Z",
+      "side": 1,
+      "message": "TAPI UT and functests are KO\n\n11:43:53   buildcontroller: OK (270.86\u003dsetup[6.01]+cmd[264.84] seconds)\n11:43:53   testsPCE: OK (305.48\u003dsetup[82.17]+cmd[223.31] seconds)\n11:43:53   sims121: OK (11.24\u003dsetup[10.24]+cmd[1.00] seconds)\n11:43:53   build_karaf_tests121: OK (77.42\u003dsetup[10.57]+cmd[66.85] seconds)\n11:43:53   tests121: OK (2289.40\u003dsetup[4.05]+cmd[2285.35] seconds)\n11:43:53   sims221: OK (14.96\u003dsetup[10.38]+cmd[4.58] seconds)\n11:43:53   build_karaf_tests221: OK (72.11\u003dsetup[9.20]+cmd[62.91] seconds)\n11:43:53   tests_tapi: FAIL code 1 (320.03\u003dsetup[7.64]+cmd[312.39] seconds)\n11:43:53   tests221: OK (3235.11\u003dsetup[4.89]+cmd[3230.23] seconds)\n11:43:53   sims71: OK (10.89\u003dsetup[8.87]+cmd[2.02] seconds)\n11:43:53   build_karaf_tests71: OK (98.33\u003dsetup[6.16]+cmd[92.17] seconds)\n11:43:53   tests71: OK (482.49\u003dsetup[4.01]+cmd[478.47] seconds)\n11:43:53   build_karaf_tests_hybrid: OK (82.14\u003dsetup[12.35]+cmd[69.79] seconds)\n11:43:53   tests_hybrid: OK (898.40\u003dsetup[4.14]+cmd[894.26] seconds)\n11:43:53   buildlighty: OK (103.51\u003dsetup[4.23]+cmd[99.28] seconds)\n11:43:53   docs: OK (50.14\u003dsetup[48.35]+cmd[1.79] seconds)\n11:43:53   docs-linkcheck: OK (51.40\u003dsetup[48.17]+cmd[3.22] seconds)\n11:43:53   checkbashisms: OK (52.55\u003dsetup[2.51]+cmd[49.30,0.74] seconds)\n11:43:53   pre-commit: OK (33.15\u003dsetup[4.13]+cmd[21.02,8.00] seconds)\n11:43:53   pylint: OK (33.01\u003dsetup[4.73]+cmd[28.29] seconds)",
+      "revId": "b7ab02038a80a9e11059ad8c26257db002afebe3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
