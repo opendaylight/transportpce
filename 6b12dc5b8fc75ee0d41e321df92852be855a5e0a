@@ -158,6 +158,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "474ddd6f_f3048f5b",
+        "filename": "tests/transportpce_tests/1.2.1/test05_olm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T14:47:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "157db85a_5fdcc411",
+      "revId": "6b12dc5b8fc75ee0d41e321df92852be855a5e0a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db2409f8_77aaf6b1",
