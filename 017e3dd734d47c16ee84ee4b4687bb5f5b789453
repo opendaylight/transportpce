@@ -16,6 +16,24 @@
       "message": "JIRA: TRNSPRTPCE-754",
       "revId": "017e3dd734d47c16ee84ee4b4687bb5f5b789453",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd13889_97c709e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T14:43:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba0f2022_92be7381",
+      "revId": "017e3dd734d47c16ee84ee4b4687bb5f5b789453",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
