@@ -4,10 +4,10 @@
 
 cd $(dirname $0)
 
-if [ "$USE_SIMS" = "lightynode" ];then
-    ./install_lightynode.sh
-else
+if [ "$USE_SIMS" = "honeynode" ];then
     ./install_honeynode.sh $@
+else
+    ./install_lightynode.sh
 fi
 
 exit
