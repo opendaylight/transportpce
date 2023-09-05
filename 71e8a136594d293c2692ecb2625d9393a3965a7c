@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53b1e59e_c5740777",
+        "filename": "tests/test-requirements.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-05T09:56:25Z",
+      "side": 1,
+      "message": "This line is already in requirements.txt",
+      "revId": "71e8a136594d293c2692ecb2625d9393a3965a7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c71636f3_c3793f4e",
         "filename": "tests/transportpce_tests/common/test_utils.py",
         "patchSetId": 6
