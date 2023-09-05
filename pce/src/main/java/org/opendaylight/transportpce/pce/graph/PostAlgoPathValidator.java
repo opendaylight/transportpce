@@ -370,7 +370,7 @@ public class PostAlgoPathValidator {
 
     private List<OpucnTribSlotDef> getMinMaxTpTs(Map<String, Uint16> tribPort, Map<String, List<Uint16>> tribSlot) {
         String tribport = tribPort.values().toArray()[0].toString();
-        List<Uint16> tsList = (List<Uint16>) tribSlot.values().toArray()[0];
+        @SuppressWarnings("unchecked") List<Uint16> tsList = (List<Uint16>) tribSlot.values().toArray()[0];
         return new ArrayList<>(List.of(
             OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(0).toString())),
             OpucnTribSlotDef.getDefaultInstance(String.join(".", tribport, tsList.get(tsList.size() - 1).toString()))));
