@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e98714c_18fa79f1",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-06T12:09:23Z",
+      "side": 1,
+      "message": "17:05:09 ************* Module common.test_utils\n17:05:09 transportpce_tests/common/test_utils.py:366:0: C0301: Line too long (182/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:367:0: C0301: Line too long (177/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:382:0: C0301: Line too long (191/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:383:0: C0301: Line too long (188/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:398:0: C0301: Line too long (191/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:399:0: C0301: Line too long (186/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:412:0: C0301: Line too long (173/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:413:0: C0301: Line too long (183/120) (line-too-long)\n17:05:09 transportpce_tests/common/test_utils.py:167:4: R1705: Unnecessary \"else\" after \"return\", remove the \"else\" and de-indent the code inside it (no-else-return)\n17:05:09 transportpce_tests/common/test_utils.py:288:8: W0150: return statement in finally block may swallow exception (lost-exception)\n17:05:09 transportpce_tests/common/test_utils.py:303:23: W0622: Redefining built-in \u0027type\u0027 (redefined-builtin)\n17:05:09 transportpce_tests/common/test_utils.py:652:10: C0209: Formatting a regular string which could be a f-string (consider-using-f-string)",
+      "revId": "40c4dea2937aed35ac6272264d700d00c304acc5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
