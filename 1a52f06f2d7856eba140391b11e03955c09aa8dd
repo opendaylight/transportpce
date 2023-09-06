@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ef76dc8_8ab0514e",
+        "filename": "tox.ini",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-06T16:08:12Z",
+      "side": 1,
+      "message": "the use of this environment variable should be documented",
+      "range": {
+        "startLine": 29,
+        "startChar": 5,
+        "endLine": 29,
+        "endChar": 13
+      },
+      "revId": "1a52f06f2d7856eba140391b11e03955c09aa8dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
