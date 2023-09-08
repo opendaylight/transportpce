@@ -133,7 +133,7 @@ public final class OlmPowerServiceRpcImplUtil {
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network
             .Nodes getMappingNodeTpdr(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
-        Map<MappingKey, Mapping> mappings = new HashMap();
+        Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
             Mapping mapping = new MappingBuilder()
                     .setLogicalConnectionPoint(lcp)
@@ -155,7 +155,7 @@ public final class OlmPowerServiceRpcImplUtil {
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network
             .Nodes getMappingNodeRdm(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
-        Map<MappingKey, Mapping> mappings = new HashMap();
+        Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
             MappingBuilder mappingBldr = new MappingBuilder()
                     .setLogicalConnectionPoint(lcp)
