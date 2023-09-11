@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "6bbb8509db885516adf04f2f45715c9dc45cc36b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "968e0927_c4a30bf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-11T07:07:19Z",
+      "side": 1,
+      "message": "I suspect the reason some func tests did not pass anymore is that error messages format have been reworked...\n\nhttps://git.opendaylight.org/gerrit/q/project:netconf+errors",
+      "revId": "6bbb8509db885516adf04f2f45715c9dc45cc36b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
