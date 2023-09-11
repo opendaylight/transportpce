@@ -19,6 +19,9 @@ for VERSION in $VERSIONS_LIST
 do
     case "$VERSION" in
         "1.2.1") PLUGIN_VERSION=1.0.9
+        #update 1.2.1 openroadm device configuration samples to be compliant with honeynode
+        #device models ("multi-wavelegnth" instead of "multi-wavelength" whose typo has been solved with 2.2.1 device models)
+        sed -i_ 's/multi-wavelegnth/multi-wavelength/g' $(dirname $0)/sample_configs/openroadm/1.2.1/oper-ROADM*.xml
         ;;
         "2.2.1") PLUGIN_VERSION=2.0.10
         ;;
