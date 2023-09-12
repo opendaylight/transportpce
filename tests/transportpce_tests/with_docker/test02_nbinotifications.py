@@ -12,7 +12,6 @@
 # pylint: disable=too-many-public-methods
 
 import os
-import json
 # pylint: disable=wrong-import-order
 import sys
 import unittest
@@ -262,20 +261,15 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                          'The service is now inService')
 
     def test_18_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+                                                       {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+            "port-qual": "roadm-external"
+        }))
 
     def test_19_get_notifications_alarm_service1(self):
         response = test_utils.transportpce_api_rpc_request(
@@ -288,20 +282,15 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                          'The service is now outOfService')
 
     def test_20_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+                                                       {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(2)
+            "port-qual": "roadm-external"
+        }))
 
     def test_21_get_notifications_alarm_service1(self):
         self.test_17_get_notifications_alarm_service1()
