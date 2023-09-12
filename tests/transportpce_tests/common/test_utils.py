@@ -386,12 +386,8 @@ def check_node_attribute_request(node: str, attribute: str, attribute_value: str
                   'draft-bierman02': attribute}
     if return_key[RESTCONF_VERSION] in res.keys():
         response_attribute = res[return_key[RESTCONF_VERSION]]
-    elif 'errors' in res.keys():
-        response_attribute = res['errors']['error'][0]
     else:
-        # status code 400 invalid request
-        response_attribute = res['message'] + ' ' + res['url']
-        print(response_attribute)
+        response_attribute = res['errors']['error'][0]
     return {'status_code': response.status_code,
             attribute: response_attribute}
 
