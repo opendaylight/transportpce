@@ -266,7 +266,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(1, len(response["output"]["topology"]["node"][0]["node-rule-group"]),
                          'node should contain 1 node rule group')
 
-    def test_11_connect_xprda_n1_to_roadma_pp1(self):
+    def test_11_connect_xpdra_n1_to_roadma_pp1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '1',
@@ -319,7 +319,7 @@ class TransportTapitesting(unittest.TestCase):
         response = test_utils.mount_device("XPDR-C1", ('xpdrc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_16_connect_xprdc_n1_to_roadmc_pp1(self):
+    def test_16_connect_xpdrc_n1_to_roadmc_pp1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C1', 'xpdr-num': '1', 'network-num': '1',

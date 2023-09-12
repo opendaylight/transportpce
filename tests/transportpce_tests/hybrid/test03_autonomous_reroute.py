@@ -726,7 +726,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_06_connect_xprda2_1_N1_to_roadma_PP1(self):
+    def test_06_connect_xpdra2_1_N1_to_roadma_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '1', 'network-num': '1',
@@ -742,7 +742,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
-    def test_08_connect_xprdc2_1_N1_to_roadmc_PP1(self):
+    def test_08_connect_xpdrc2_1_N1_to_roadmc_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '1', 'network-num': '1',
@@ -926,7 +926,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_18_get_eth_service1(self):
         self.test_13_get_eth_service1()
 
-    def test_19_connect_xprda2_3_N1_to_roadma_PP2(self):
+    def test_19_connect_xpdra2_3_N1_to_roadma_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '3', 'network-num': '1',
@@ -944,7 +944,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_21_connect_xprdc2_3_N1_to_roadmc_PP2(self):
+    def test_21_connect_xpdrc2_3_N1_to_roadmc_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '3', 'network-num': '1',

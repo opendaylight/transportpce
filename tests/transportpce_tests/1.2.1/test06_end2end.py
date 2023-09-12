@@ -106,7 +106,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.mount_device("ROADMC01", ('roadmc-full', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_05_connect_xprdA_N1_to_roadmA_PP1(self):
+    def test_05_connect_xpdrA_N1_to_roadmA_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '1',
@@ -124,7 +124,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_07_connect_xprdC_N1_to_roadmC_PP1(self):
+    def test_07_connect_xpdrC_N1_to_roadmC_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '1',
@@ -282,7 +282,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
         time.sleep(1)
 
-    def test_18_connect_xprdA_N2_to_roadmA_PP2(self):
+    def test_18_connect_xpdrA_N2_to_roadmA_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRA01', 'xpdr-num': '1', 'network-num': '2',
@@ -300,7 +300,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_20_connect_xprdC_N2_to_roadmC_PP2(self):
+    def test_20_connect_xpdrC_N2_to_roadmC_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDRC01', 'xpdr-num': '1', 'network-num': '2',

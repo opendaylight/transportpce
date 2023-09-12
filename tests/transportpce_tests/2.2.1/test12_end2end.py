@@ -167,7 +167,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_05_connect_xprdA_N1_to_roadmA_PP1(self):
+    def test_05_connect_xpdrA_N1_to_roadmA_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '1',
@@ -185,7 +185,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_07_connect_xprdC_xpdr1_N1_to_roadmC_PP1(self):
+    def test_07_connect_xpdrC_xpdr1_N1_to_roadmC_PP1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C1', 'xpdr-num': '1', 'network-num': '1',
@@ -194,7 +194,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_08_connect_roadmC_PP1_to_xpdrC_xprd1_N1(self):
+    def test_08_connect_roadmC_PP1_to_xpdrC_xpdr1_N1(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDR-C1', 'xpdr-num': '1', 'network-num': '1',
@@ -203,7 +203,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_09_connect_xprdA_N2_to_roadmA_PP2(self):
+    def test_09_connect_xpdrA_N2_to_roadmA_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '2',
@@ -221,7 +221,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
         time.sleep(2)
 
-    def test_11_connect_xprdC_xpdr2_N1_to_roadmC_PP2(self):
+    def test_11_connect_xpdrC_xpdr2_N1_to_roadmC_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C1', 'xpdr-num': '2', 'network-num': '1',
