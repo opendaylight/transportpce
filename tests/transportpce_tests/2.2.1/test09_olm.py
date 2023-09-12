@@ -64,7 +64,7 @@ class TransportOlmTesting(unittest.TestCase):
         response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_05_connect_xprdA_to_roadmA(self):
+    def test_05_connect_xpdrA_to_roadmA(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '1',
@@ -78,7 +78,7 @@ class TransportOlmTesting(unittest.TestCase):
                              'rdm-node': 'ROADM-A1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
 
-    def test_07_connect_xprdC_to_roadmC(self):
+    def test_07_connect_xpdrC_to_roadmC(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C1', 'xpdr-num': '1', 'network-num': '1',
@@ -469,7 +469,7 @@ class TransportOlmTesting(unittest.TestCase):
 
    # """to test case where SRG where the xpdr is connected to has no optical range data"""
 
-    def test_31_connect_xprdA_to_roadmA(self):
+    def test_31_connect_xpdrA_to_roadmA(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A1', 'xpdr-num': '1', 'network-num': '2',
