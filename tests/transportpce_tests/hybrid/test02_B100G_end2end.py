@@ -175,7 +175,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
-    def test_05_connect_xprda2_2_N1_to_roadma_PP2(self):
+    def test_05_connect_xpdra2_2_N1_to_roadma_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '2', 'network-num': '1',
@@ -191,7 +191,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
-    def test_07_connect_xprdc2_2_N1_to_roadmc_PP2(self):
+    def test_07_connect_xpdrc2_2_N1_to_roadmc_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '2', 'network-num': '1',
@@ -1036,7 +1036,7 @@ class TransportPCEtesting(unittest.TestCase):
         links = response['network'][0]['ietf-network-topology:link']
         self.assertEqual(22, len(links), 'Topology should contain 22 links')
 
-    def test_68_connect_xprda2_1_N1_to_roadma_PP2(self):
+    def test_68_connect_xpdra2_1_N1_to_roadma_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-A2', 'xpdr-num': '1', 'network-num': '1',
@@ -1052,7 +1052,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
-    def test_70_connect_xprdc2_1_N1_to_roadmc_PP2(self):
+    def test_70_connect_xpdrc2_1_N1_to_roadmc_PP2(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '1', 'network-num': '1',
