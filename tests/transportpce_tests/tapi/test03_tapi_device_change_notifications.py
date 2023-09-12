@@ -503,19 +503,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_13_get_connectivity_service_Ethernet()
 
     def test_28_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+                                                       {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_29_check_update_portmapping(self):
@@ -618,19 +614,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_20_check_update_connectivity_service_Ethernet()
 
     def test_35_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+                                                       {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_36_check_update_portmapping_ok(self):
@@ -672,19 +664,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_13_get_connectivity_service_Ethernet()
 
     def test_42_change_status_line_port_roadma_deg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2%2F0', 'L1',
+                                                       {
             "port-name": "L1",
             "logical-connection-point": "DEG2-TTP-TXRX",
             "port-type": "LINE",
             "circuit-id": "1",
             "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_43_check_update_portmapping(self):
@@ -788,19 +776,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_20_check_update_connectivity_service_Ethernet()
 
     def test_49_restore_status_line_port_roadma_deg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/2%2F0/ports/L1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2%2F0', 'L1',
+                                                       {
             "port-name": "L1",
             "logical-connection-point": "DEG2-TTP-TXRX",
             "port-type": "LINE",
             "circuit-id": "1",
             "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_50_check_update_portmapping_ok(self):
@@ -822,19 +806,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_13_get_connectivity_service_Ethernet()
 
     def test_56_change_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C2',
+                                                       {
             "port-name": "C2",
             "logical-connection-point": "SRG1-PP2",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "outOfService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_57_check_update_portmapping(self):
@@ -964,19 +944,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_69_restore_status_port_roadma_srg(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/3%2F0/ports/C2"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C2',
+                                                       {
             "port-name": "C2",
             "logical-connection-point": "SRG1-PP2",
             "port-type": "client",
             "circuit-id": "SRG1",
             "administrative-state": "inService",
-            "port-qual": "roadm-external"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "roadm-external"
+        }))
         time.sleep(2)
 
     def test_70_clean_openroadm_topology(self):

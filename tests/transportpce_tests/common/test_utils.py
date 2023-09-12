@@ -676,3 +676,24 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
             return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'output': return_output}
+
+#
+# simulators datastore operations
+#
+
+
+def sims_update_cp_port(sim: tuple, circuitpack: str, port: str, payload: dict):
+    # pylint: disable=consider-using-f-string
+    url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/{}/ports/{}".format(
+        "http://127.0.0.1:8141/restconf", circuitpack, port)
+    #    SIMS[sim]['restconf_baseurl'], circuitpack, port)
+    body = {"ports": [payload]}
+    print(sim)
+    print(url)
+    response = requests.request("PUT",
+                                url,
+                                data=json.dumps(body),
+                                headers=TYPE_APPLICATION_JSON,
+                                auth=(ODL_LOGIN, ODL_PWD),
+                                timeout=REQUEST_TIMEOUT)
+    return response.status_code == requests.codes.ok
