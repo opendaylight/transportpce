@@ -24,6 +24,9 @@ import psutil
 import requests
 import urllib.parse
 
+from netconf_client.connect import connect_ssh
+from netconf_client.ncclient import Manager
+
 # pylint: disable=import-error
 import simulators
 
@@ -85,6 +88,19 @@ if 'USE_LIGHTY' in os.environ and os.environ['USE_LIGHTY'] == 'True':
     TPCE_LOG = 'odl-' + str(os.getpid()) + '.log'
 else:
     TPCE_LOG = KARAF_LOG
+
+if 'USE_SIMS' not in os.environ:
+    SIMS_TO_USE = 'lightynode'
+    SIMS_TYPE = 'lightynode'
+else:
+    SIMS_TO_USE = os.environ['USE_SIMS']
+    print("Forcing to use SIMS " + SIMS_TO_USE)
+    if SIMS_TO_USE != 'None' or 'SIMS_TYPE' not in os.environ:
+        SIMS_TYPE = SIMS_TO_USE
+    else:
+        SIMS_TYPE = os.environ['SIMS_TYPE']
+        print("Forcing to use SIMS type" + SIMS_TYPE)
+
 
 #
 # Basic HTTP operations
@@ -163,14 +179,9 @@ def start_lightynode(log_file: str, sim):
 
 
 def start_sims(sims_list):
-    if 'USE_SIMS' in os.environ:
-        sims_to_use = os.environ['USE_SIMS']
-        print("Using SIMS " + sims_to_use)
-    else:
-        sims_to_use = 'lightynode'
-    if sims_to_use == 'None':
+    if SIMS_TO_USE == 'None':
         return None
-    if sims_to_use == 'honeynode':
+    if SIMS_TO_USE == 'honeynode':
         start_msg = HONEYNODE_OK_START_MSG
         start_method = start_honeynode
     else:
@@ -682,16 +693,20 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
 # simulators datastore operations
 #
 
-
 def sims_update_cp_port(sim: tuple, circuitpack: str, port: str, payload: dict):
+    if SIMS_TYPE == 'lightynode':
+        return sims_update_cp_port_ntcf(sim, circuitpack, port, payload)
+    if SIMS_TYPE == 'honeynode':
+        return sims_update_cp_port_rest(sim, circuitpack, port, payload)
+    return False
+
+def sims_update_cp_port_rest(sim: tuple, circuitpack: str, port: str, payload: dict):
     # pylint: disable=consider-using-f-string
     url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/{}/ports/{}".format(
         SIMS[sim]['restconf_baseurl'],
         urllib.parse.quote(circuitpack, safe=''),
         urllib.parse.quote(port, safe=''))
     body = {"ports": [payload]}
-    print(sim)
-    print(url)
     response = requests.request("PUT",
                                 url,
                                 data=json.dumps(body),
@@ -699,3 +714,27 @@ def sims_update_cp_port(sim: tuple, circuitpack: str, port: str, payload: dict):
                                 auth=(ODL_LOGIN, ODL_PWD),
                                 timeout=REQUEST_TIMEOUT)
     return response.status_code == requests.codes.ok
+
+def sims_update_cp_port_ntcf(sim: tuple, circuitpack: str, port: str, payload: dict):
+    xml_body_OMS = '''
+        <config>
+          <org-openroadm-device xmlns="http://org/openroadm/device">
+            <circuit-packs>
+              <circuit-pack-name>3/0</circuit-pack-name>
+              <ports>
+                <port-name>C1</port-name>
+                <port-type>client</port-type>
+                <administrative-state>outOfService</administrative-state>
+                <circuit-id>SRG1</circuit-id>
+                <port-qual>roadm-external</port-qual>
+                <logical-connection-point>SRG1-PP1</logical-connection-point>
+              </ports>
+            </circuit-packs>
+          </org-openroadm-device>
+        </config> '''
+    with connect_ssh(host='127.0.0.1', port=17841, username='admin', password='admin') as session:
+        mgr = Manager(session, timeout=120)
+        mgr.edit_config(xml_body_OMS, target="candidate", default_operation="merge")
+        mgr.commit(True)
+    session.close()
+    return False
