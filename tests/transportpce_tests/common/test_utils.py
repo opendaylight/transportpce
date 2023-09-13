@@ -22,6 +22,7 @@ import time
 
 import psutil
 import requests
+import urllib.parse
 
 # pylint: disable=import-error
 import simulators
@@ -685,7 +686,9 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
 def sims_update_cp_port(sim: tuple, circuitpack: str, port: str, payload: dict):
     # pylint: disable=consider-using-f-string
     url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/{}/ports/{}".format(
-        SIMS[sim]['restconf_baseurl'], circuitpack, port)
+        SIMS[sim]['restconf_baseurl'],
+        urllib.parse.quote(circuitpack, safe=''),
+        urllib.parse.quote(port, safe=''))
     body = {"ports": [payload]}
     print(sim)
     print(url)

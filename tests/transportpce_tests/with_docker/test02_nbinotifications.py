@@ -261,7 +261,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                          'The service is now inService')
 
     def test_18_change_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
@@ -282,7 +282,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
                          'The service is now outOfService')
 
     def test_20_restore_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",

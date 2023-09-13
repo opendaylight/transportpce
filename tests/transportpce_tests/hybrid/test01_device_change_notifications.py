@@ -197,7 +197,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_13_change_status_line_port_xpdra(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1%2F0%2F1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "logical-connection-point": "XPDR1-NETWORK1",
@@ -267,7 +267,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_17_restore_status_line_port_xpdra(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1%2F0%2F1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdra', self.NODE_VERSION_121), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "logical-connection-point": "XPDR1-NETWORK1",
@@ -311,7 +311,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_21_change_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
@@ -374,7 +374,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_restore_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
@@ -395,7 +395,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_28_change_status_line_port_roadma_deg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2%2F0', 'L1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2/0', 'L1',
                                                        {
             "port-name": "L1",
             "logical-connection-point": "DEG2-TTP-TXRX",
@@ -458,7 +458,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_31_restore_status_line_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2%2F0', 'L1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '2/0', 'L1',
                                                        {
             "port-name": "L1",
             "logical-connection-point": "DEG2-TTP-TXRX",
@@ -479,7 +479,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_35_change_status_line_port_xpdrc(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_71), '1%2F0%2F1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_71), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "port-type": "CFP2",
@@ -540,7 +540,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_restore_status_line_port_xpdrc(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_71), '1%2F0%2F1-PLUG-NET', '1',
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_71), '1/0/1-PLUG-NET', '1',
                                                        {
             "port-name": "1",
             "port-type": "CFP2",
@@ -559,7 +559,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_12_get_eth_service1()
 
     def test_42_change_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C2',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C2',
                                                        {
             "port-name": "C2",
             "logical-connection-point": "SRG1-PP2",

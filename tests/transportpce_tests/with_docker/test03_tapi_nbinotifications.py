@@ -330,7 +330,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         time.sleep(2)
 
     def test_15_change_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
@@ -352,7 +352,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         time.sleep(2)
 
     def test_17_restore_status_port_roadma_srg(self):
-        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3%2F0', 'C1',
+        self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C1',
                                                        {
             "port-name": "C1",
             "logical-connection-point": "SRG1-PP1",
