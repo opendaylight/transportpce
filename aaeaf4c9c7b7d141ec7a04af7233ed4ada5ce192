@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1460f18_f84255ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-14T09:09:32Z",
+      "side": 1,
+      "message": "17:59:34   buildcontroller: OK (339.94\u003dsetup[16.34]+cmd[323.60] seconds)\n17:59:34   testsPCE: OK (348.41\u003dsetup[116.39]+cmd[232.02] seconds)\n17:59:34   sims121: OK (24.98\u003dsetup[21.37]+cmd[3.61] seconds)\n17:59:34   build_karaf_tests121: OK (95.32\u003dsetup[22.13]+cmd[73.19] seconds)\n17:59:34   tests121: OK (2167.81\u003dsetup[8.49]+cmd[2159.31] seconds)\n17:59:34   sims221: OK (24.93\u003dsetup[21.40]+cmd[3.53] seconds)\n17:59:34   build_karaf_tests221: OK (79.20\u003dsetup[21.81]+cmd[57.39] seconds)\n17:59:34   tests_tapi: OK (951.47\u003dsetup[12.83]+cmd[2.41,936.23] seconds)\n17:59:34   tests221: OK (2905.55\u003dsetup[10.06]+cmd[2895.48] seconds)\n17:59:34   sims71: OK (22.99\u003dsetup[19.99]+cmd[3.00] seconds)\n17:59:34   build_karaf_tests71: OK (106.86\u003dsetup[15.90]+cmd[90.96] seconds)\n17:59:34   tests71: OK (484.33\u003dsetup[7.95]+cmd[1.28,475.10] seconds)\n17:59:34   build_karaf_tests_hybrid: OK (90.73\u003dsetup[15.55]+cmd[75.18] seconds)\n17:59:34   tests_hybrid: OK (919.39\u003dsetup[8.36]+cmd[3.85,907.19] seconds)\n17:59:34   buildlighty: OK (130.67\u003dsetup[8.02]+cmd[122.64] seconds)\n17:59:34   docs: OK (91.02\u003dsetup[88.90]+cmd[2.12] seconds)\n17:59:34   docs-linkcheck: OK (92.27\u003dsetup[88.99]+cmd[3.28] seconds)\n17:59:34   checkbashisms: OK (65.93\u003dsetup[2.97]+cmd[62.25,0.71] seconds)\n17:59:34   pre-commit: FAIL code 1 (41.21\u003dsetup[13.15]+cmd[28.06] seconds)\n17:59:34   pylint: FAIL code 1 (36.26\u003dsetup[7.96]+cmd[28.30] seconds)\n17:59:34   evaluation failed :( (5835.66 seconds)",
+      "revId": "aaeaf4c9c7b7d141ec7a04af7233ed4ada5ce192",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
