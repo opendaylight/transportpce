@@ -87,7 +87,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 String destTp = link.getDestination().getDestTp().getValue();
                 putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
                     TapiStringConstants.OMS_XPDR_RDM_LINK, getQual(srcNode), getQual(destNode),
-                    TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
+                    TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
                     link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
                     Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                     tapiTopoUuid));
@@ -96,7 +96,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private void putTapiLinkInTopology(
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
         LOG.info("Creating tapi link in TAPI topology context");
         InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
@@ -121,7 +121,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         if (node.contains("ROADM")) {
             return TapiStringConstants.PHTNC_MEDIA;
         }
-        return TapiStringConstants.OTSI;
+        return TapiStringConstants.XPDR;
     }
 
     private boolean oppositeLinkExists(LinkId oppositeLink) {

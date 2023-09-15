@@ -343,7 +343,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public final ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceDeleteReqInfo().getServiceName();
         LOG.info("RPC serviceDelete request received for {}", serviceName);
-
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
          * header compliance are verified.
@@ -358,7 +357,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.SERVICE_NON_COMPLIANT, ResponseCodes.RESPONSE_FAILED);
         }
-
         //Check presence of service to be deleted
         Optional<Services> serviceOpt = this.serviceDataStoreOperations.getService(serviceName);
         Services service;
@@ -383,7 +381,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput output =
             this.rendererServiceWrapper.performRenderer(
                 serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, service);
-
         if (output == null) {
             LOG.error(SERVICE_DELETE_MSG, LogMessages.RENDERER_DELETE_FAILED);
             sendNbiNotification(new PublishNotificationProcessServiceBuilder()
