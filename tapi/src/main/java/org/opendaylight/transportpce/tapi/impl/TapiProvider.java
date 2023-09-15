@@ -52,7 +52,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.TapiCommonService;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.TapiConnectivityService;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.TapiNotificationListener;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.ServiceInterfacePoints;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
@@ -125,8 +124,9 @@ public class TapiProvider {
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
 
-        TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
-                pceListenerImpl, rendererListenerImpl, networkTransactionService);
+        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(this.serviceHandler, tapiContext,
+                connectivityUtils, pceListenerImpl, rendererListenerImpl, networkTransactionService);
+        rpcRegistrations.add(rpcProviderService.registerRpcImplementations(tapiConnectivity.registerRPCs()));
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils, tapiLink);
         rpcRegistrations.add(rpcProviderService.registerRpcImplementations(topo.registerRPCs()));
 

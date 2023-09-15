@@ -266,7 +266,7 @@ public class RendererNotificationHandler implements RendererListener {
      * @param type ServiceNotificationTypes
      */
     private void sendServiceHandlerNotification(
-        RendererRpcResultSp notification, ServiceNotificationTypes type) {
+            RendererRpcResultSp notification, ServiceNotificationTypes type) {
         try {
             ServiceRpcResultSh serviceHandlerNotification = new ServiceRpcResultShBuilder()
                     .setAToZDirection(notification.getAToZDirection())

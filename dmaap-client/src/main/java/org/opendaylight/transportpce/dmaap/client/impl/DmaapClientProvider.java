@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.dmaap.client.impl;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.dmaap.client.listener.NbiNotificationsHandler;
 //import org.opendaylight.transportpce.dmaap.client.listener.NbiNotificationsListenerImpl;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NbiNotificationsListener;
 //import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
