@@ -87,7 +87,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 String destTp = link.getDestination().getDestTp().getValue();
                 putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
                     TapiStringConstants.OMS_XPDR_RDM_LINK, getQual(srcNode), getQual(destNode),
-                    TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
+                    TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
                     link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
                     Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                     tapiTopoUuid));
@@ -121,7 +121,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         if (node.contains("ROADM")) {
             return TapiStringConstants.PHTNC_MEDIA;
         }
-        return TapiStringConstants.OTSI;
+        return TapiStringConstants.XPDR;
     }
 
     private boolean oppositeLinkExists(LinkId oppositeLink) {

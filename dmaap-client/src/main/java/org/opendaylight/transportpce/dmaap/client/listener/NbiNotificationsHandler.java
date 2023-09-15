@@ -19,7 +19,6 @@ import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApi;
 import org.opendaylight.transportpce.dmaap.client.resource.config.JsonConfigurator;
 import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationService;
