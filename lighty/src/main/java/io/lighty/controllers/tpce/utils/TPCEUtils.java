@@ -269,19 +269,19 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.$YangModuleInfoImpl.getInstance(),
 
             // tapi models
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.oam.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.oam.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.path.computation.rev181210.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.path.computation.rev221121.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.eth.rev181210.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.eth.rev221121.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.$YangModuleInfoImpl
                     .getInstance(),
 
             // API models / opendaylight
@@ -295,7 +295,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004
                     .$YangModuleInfoImpl.getInstance(),
@@ -335,7 +335,7 @@ public final class TPCEUtils {
                      .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206
                      .$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.$YangModuleInfoImpl
                     .getInstance());
