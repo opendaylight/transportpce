@@ -188,6 +188,7 @@ public class TapiLinkImpl implements TapiLink {
             .build();
     }
 
+    @Override
     public AdministrativeState setTapiAdminState(String adminState) {
         if (adminState == null) {
             return null;
@@ -197,6 +198,7 @@ public class TapiLinkImpl implements TapiLink {
                 : AdministrativeState.LOCKED;
     }
 
+    @Override
     public AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2) {
         if (adminState1 == null || adminState2 == null) {
             return null;
@@ -206,6 +208,7 @@ public class TapiLinkImpl implements TapiLink {
             ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
+    @Override
     public OperationalState setTapiOperationalState(String operState) {
         if (operState == null) {
             return null;
@@ -214,6 +217,7 @@ public class TapiLinkImpl implements TapiLink {
             ? OperationalState.ENABLED : OperationalState.DISABLED;
     }
 
+    @Override
     public OperationalState setTapiOperationalState(State operState1, State operState2) {
         if (operState1 == null || operState2 == null) {
             return null;
@@ -222,6 +226,7 @@ public class TapiLinkImpl implements TapiLink {
             ? OperationalState.ENABLED : OperationalState.DISABLED;
     }
 
+    @Override
     public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
@@ -261,6 +266,7 @@ public class TapiLinkImpl implements TapiLink {
         }
     }
 
+    @Override
     public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());

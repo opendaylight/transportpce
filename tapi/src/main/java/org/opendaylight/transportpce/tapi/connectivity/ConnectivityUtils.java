@@ -132,8 +132,8 @@ public final class ConnectivityUtils {
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiContext tapiContext;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
-    private final Map<org.opendaylight.yang.gen.v1.urn
-        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
+    private final Map<
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection>
         connectionFullMap; // this variable is for complete connection objects
     private final NetworkTransactionService networkTransactionService;
@@ -309,8 +309,9 @@ public final class ConnectivityUtils {
         // Connection creation
         Map<ConnectionKey, Connection> connMap =
             createConnectionsFromService(serviceAEnd, serviceZEnd, pathDescription);
-        ConnectivityConstraint conConstr = new ConnectivityConstraintBuilder()
-            .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).build();
+        ConnectivityConstraint conConstr =
+            new
+            ConnectivityConstraintBuilder().setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).build();
         // TODO: full connectivity service?? With constraints and the rest of fields...
         return new ConnectivityServiceBuilder()
             .setAdministrativeState(AdministrativeState.UNLOCKED)
@@ -1402,9 +1403,9 @@ public final class ConnectivityUtils {
         ConnectionType connType = null;
         ServiceFormat serviceFormat = null;
         String nodeAid = String.join("+", endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.DSR);
+            TapiStringConstants.XPDR);
         String nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.DSR);
+            TapiStringConstants.XPDR);
         LOG.debug("Node a = {}", nodeAid);
         LOG.debug("Node z = {}", nodeZid);
         //switch (constraint.getServiceLayer().getIntValue()) {
