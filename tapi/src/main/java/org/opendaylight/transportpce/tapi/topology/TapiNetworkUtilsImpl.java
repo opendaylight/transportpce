@@ -94,7 +94,7 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
         String destTp = input.getDegZTp();
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
             TapiStringConstants.OMS_RDM_RDM_LINK, TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
-            TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
+            TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
@@ -122,7 +122,7 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
         String sourceTp = input.getNetworkTp();
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
             TapiStringConstants.OMS_XPDR_RDM_LINK, TapiStringConstants.OTSI, TapiStringConstants.PHTNC_MEDIA,
-            TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
+            TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
