@@ -128,8 +128,9 @@ public final class TopologyUtils {
         }
         List<String> nameList = new ArrayList<>();
         for (Map.Entry<NameKey, Name> entry : topology.getName().entrySet()) {
-            nameList.add(entry.getValue().getValueName());
+            nameList.add(entry.getValue().getValue());
         }
+        LOG.debug("Topology nameList {} = ", nameList.toString());
         return nameList;
     }
 
