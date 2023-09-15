@@ -266,25 +266,29 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     @Override
     public ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> deleteConnectivityService(
             DeleteConnectivityServiceInput input) {
-        // TODO Auto-generated method stub
-        // TODO add try
-        String serviceName = null;
-        try {
-            serviceName = getNameFromUuid(input.getUuid(), "Service").iterator().next();
-        } catch (ExecutionException e) {
-            LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
-            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-                .withError(ErrorType.RPC, "Failed to delete Service")
-                .buildFuture();
-        }
+        List<String> serviceName = null;
         if (input.getUuid() != null) {
+            try {
+                serviceName = getNameFromUuid(input.getUuid(), "Service");
+            } catch (ExecutionException e) {
+                LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
+                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service")
+                    .buildFuture();
+            } catch (NoSuchElementException e) {
+                LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
+                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service")
+                    .buildFuture();
+            }
+            LOG.debug("The service {}, of name {} has been found in the DS", input.getUuid().toString(), serviceName);
             try {
                 Uuid serviceUuid = input.getUuid();
                 this.tapiContext.deleteConnectivityService(serviceUuid);
                 ListenableFuture<RpcResult<ServiceDeleteOutput>> output =
                     this.serviceHandler.serviceDelete(new ServiceDeleteInputBuilder()
                         .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                            .setServiceName(serviceName)
+                            .setServiceName(input.getUuid().getValue())
                             .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
                             .build())
                         .setSdncRequestHeader(new SdncRequestHeaderBuilder()
@@ -303,10 +307,13 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
                 LOG.error("Failed to delete service. Deletion process failed");
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Failed to delete service.", e);
+                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service")
+                    .buildFuture();
             }
         }
         return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-            .withError(ErrorType.RPC, "Failed to delete Service")
+            .withError(ErrorType.RPC, "Failed to delete Service, service uuid in input is null")
             .buildFuture();
     }
 
@@ -353,41 +360,10 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             .build();
     }
 
-    private Map<EndPointKey, EndPoint> createEndPoints(
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                .create.connectivity.service.input.EndPointKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                .create.connectivity.service.input.EndPoint> endPoints) {
-        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                .create.connectivity.service.input.EndPoint ep: endPoints.values()) {
-            EndPoint endpoint = new EndPointBuilder()
-                .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
-                    .setServiceInterfacePointUuid(ep.getServiceInterfacePoint().getServiceInterfacePointUuid())
-                    .build())
-                .setName(ep.getName())
-                .setAdministrativeState(ep.getAdministrativeState())
-                .setDirection(ep.getDirection())
-                .setLifecycleState(ep.getLifecycleState())
-                .setOperationalState(ep.getOperationalState())
-                .setLayerProtocolName(ep.getLayerProtocolName())
-             // TODO: implement bandwidth profile
-                .setCapacity(new CapacityBuilder()
-                    .setTotalSize(new TotalSizeBuilder().build())
-//                  .setBandwidthProfile(new BandwidthProfileBuilder().build())
-                    .build())
-                .setProtectionRole(ep.getProtectionRole())
-                .setRole(ep.getRole())
-                .setLocalId(ep.getLocalId())
-                .build();
-            endPointMap.put(endpoint.key(), endpoint);
-        }
-        return endPointMap;
-    }
-
-    public List<String> getNameFromUuid(Uuid uuid, String typeOfNode) throws ExecutionException {
+    public List<String> getNameFromUuid(Uuid uuid, String typeOfNode) throws ExecutionException,
+            NoSuchElementException {
         Map<NameKey, Name> nameMap = new HashMap<>();
-        if ("service".equals(typeOfNode)) {
+        if ("Service".equals(typeOfNode)) {
             ConnectivityService conServ = null;
             InstanceIdentifier<ConnectivityService> nodeIID = InstanceIdentifier.builder(Context.class)
                 .augmentation(
@@ -400,21 +376,61 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
             try {
                 conServ = conServFuture.get().orElseThrow();
             } catch (InterruptedException e) {
+                LOG.error("GetNamefromUuid Interrupt exception: Service not in Datastore, Interruption of the process");
                 Thread.currentThread().interrupt();
                 //TODO: investigate on how to throw Interrupted exception (generate a check violation error)
             } catch (ExecutionException e) {
                 throw new ExecutionException("Unable to get from mdsal service: " + nodeIID
                     .firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
             } catch (NoSuchElementException e) {
-                return null;
+                throw new NoSuchElementException("Unable to get from mdsal service: " + nodeIID
+                    .firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+                //return null;
             }
             nameMap = conServ.getName();
         }
 
         List<String> nameList = new ArrayList<>();
         for (Map.Entry<NameKey, Name> entry : nameMap.entrySet()) {
-            nameList.add(entry.getValue().getValueName());
+            nameList.add(entry.getValue().getValue());
         }
+        LOG.debug("The service name of service {}, is {}", uuid.toString(), nameList.toString());
         return nameList;
     }
+
+    private Map<EndPointKey, EndPoint> createEndPoints(
+            Map<org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointKey,
+                org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint> endPoints) {
+        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
+        for (org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint ep:
+                endPoints.values()) {
+            EndPoint endpoint = new EndPointBuilder()
+                .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
+                    .setServiceInterfacePointUuid(ep.getServiceInterfacePoint().getServiceInterfacePointUuid())
+                    .build())
+                .setName(ep.getName())
+                .setAdministrativeState(ep.getAdministrativeState())
+                .setDirection(ep.getDirection())
+                .setLifecycleState(ep.getLifecycleState())
+                .setOperationalState(ep.getOperationalState())
+                .setLayerProtocolName(ep.getLayerProtocolName())
+                // TODO: implement bandwidth profile
+                .setCapacity(new CapacityBuilder()
+                    .setTotalSize(new TotalSizeBuilder().build())
+//                    .setBandwidthProfile(new BandwidthProfileBuilder().build()) // TODO: implement bandwidth profile
+                    .build())
+                .setProtectionRole(ep.getProtectionRole())
+                .setRole(ep.getRole())
+                .setLocalId(ep.getLocalId())
+                .build();
+            endPointMap.put(endpoint.key(), endpoint);
+        }
+        return endPointMap;
+    }
+
+
+
 }

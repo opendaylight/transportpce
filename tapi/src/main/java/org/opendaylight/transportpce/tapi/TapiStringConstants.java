@@ -31,7 +31,8 @@ public final class TapiStringConstants {
     public static final String RDM_INFRA = "ROADM-infra";
     public static final String CLIENT = "-CLIENT";
     public static final String NETWORK = "-NETWORK";
-    public static final String XPDR = "-XPDR";
+    public static final String XPDR = "XPONDER";
+    public static final String XXPDR = "-XPDR";
     public static final String TP = "TerminationPoint";
     public static final String NODE = "Node";
     public static final String LGX_PORT_NAME = "Some lgx-port-name";

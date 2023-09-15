@@ -141,19 +141,6 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         this.tapiLink = tapiLink;
     }
 
-    public ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
-        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(GetNodeDetails.class, this::getNodeDetails)
-            .put(GetTopologyDetails.class, this::getTopologyDetails)
-            .put(GetNodeEdgePointDetails.class, this::getNodeEdgePointDetails)
-            .put(GetLinkDetails.class, this::getLinkDetails)
-            .put(GetTopologyList.class, this::getTopologyList)
-            .put(GetServiceInterfacePointDetails.class, this::getServiceInterfacePointDetails)
-            .put(GetServiceInterfacePointList.class, this::getServiceInterfacePointList)
-            .put(UpdateServiceInterfacePoint.class, this::updateServiceInterfacePoint)
-            .build();
-    }
-
     @Override
     public ListenableFuture<RpcResult<GetNodeDetailsOutput>> getNodeDetails(GetNodeDetailsInput input) {
         // TODO Auto-generated method stub
@@ -178,43 +165,27 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         // TODO -> Add check for Full T0 Multilayer
-        List<String> topoNameList = null;
-        try {
-            topoNameList = topologyUtils.readTopologyName(input.getTopologyId());
-        } catch (TapiTopologyException e) {
-            LOG.error("Topology {} not found in datastore", input.getTopologyId());
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Invalid Topology name")
-                .buildFuture();
-        }
-        if (!topoNameList.contains(TapiStringConstants.T0_MULTILAYER)
-                && !topoNameList.contains(TapiStringConstants.TPDR_100G)) {
-            if (topoNameList.contains(TapiStringConstants.T0_FULL_MULTILAYER)) {
-                Uuid topoUuid = input.getTopologyId();
-                Context context = this.tapiContext.getTapiContext();
-                Map<TopologyKey,
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
-                    topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
-                if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topoUuid)))) {
-                    LOG.error("Topology {} not found in datastore", input.getTopologyId());
-                    return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                        .withError(ErrorType.RPC, "Invalid Topology name")
-                        .buildFuture();
-                }
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-                    topology = topologyMap.get(new TopologyKey(topoUuid));
-                return RpcResultBuilder
-                    .success(new GetTopologyDetailsOutputBuilder()
-                        .setTopology(this.topologyUtils.transformTopology(topology))
-                        .build())
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        if (input.getTopologyId().equals(topologyUuid)) {
+            Context context = this.tapiContext.getTapiContext();
+            Map<TopologyKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
+                topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
+            if (topologyMap == null || !topologyMap.containsKey(new TopologyKey(topologyUuid))) {
+                LOG.error("Topology {} not found in datastore", input.getTopologyId());
+                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                    .withError(ErrorType.RPC, "Invalid Topology name")
                     .buildFuture();
             }
-            LOG.error("Invalid TAPI topology name");
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Invalid Topology name")
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+                topology = topologyMap.get(new TopologyKey(topologyUuid));
+            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                    .setTopology(this.topologyUtils.transformTopology(topology))
+                    .build())
                 .buildFuture();
         }
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
+        topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
             Charset.forName("UTF-8"))).toString());
         try {
             LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
@@ -230,6 +201,61 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .withError(ErrorType.RPC, "Error building topology")
                 .buildFuture();
         }
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetTopologyListOutput>> getTopologyList(GetTopologyListInput input) {
+        // TODO Auto-generated method stub
+        // TODO -> maybe we get errors when having CEPs?
+        Map<TopologyKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
+                topologyMap = this.tapiContext.getTopologyContext();
+        if (topologyMap.isEmpty()) {
+            LOG.error("No topologies exist in tapi context");
+            return RpcResultBuilder.<GetTopologyListOutput>failed()
+                .withError(ErrorType.APPLICATION, "No topologies exist in tapi context")
+                .buildFuture();
+        }
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology>
+                newTopoMap = new HashMap<>();
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+                topo:topologyMap.values()) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology
+                newTopo = new org.opendaylight.yang.gen.v1.urn
+                    .onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder(topo).build();
+            newTopoMap.put(newTopo.key(), newTopo);
+        }
+        return RpcResultBuilder.success(new GetTopologyListOutputBuilder().setTopology(newTopoMap).build())
+                .buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>>
+            getServiceInterfacePointList(GetServiceInterfacePointListInput input) {
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
+            this.tapiContext.getTapiContext().getServiceInterfacePoint();
+        if (sips == null || sips.isEmpty()) {
+            return RpcResultBuilder.<GetServiceInterfacePointListOutput>failed()
+                .withError(ErrorType.RPC, "No sips in datastore")
+                .buildFuture();
+        }
+        Map<SipKey, Sip> outSipMap = new HashMap<>();
+        for (ServiceInterfacePoint sip : sips.values()) {
+            Sip si = new SipBuilder(sip).build();
+            outSipMap.put(si.key(), si);
+        }
+        return RpcResultBuilder
+            .success(new GetServiceInterfacePointListOutputBuilder().setSip(outSipMap).build())
+            .buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<UpdateServiceInterfacePointOutput>>
+            updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
+        return RpcResultBuilder.<UpdateServiceInterfacePointOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -268,35 +294,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .withError(ErrorType.RPC, "Invalid Link name")
                 .buildFuture();
         }
+        LOG.info("debug link is : {}", link.getName().toString());
         return RpcResultBuilder.success(new GetLinkDetailsOutputBuilder().setLink(new LinkBuilder(link).build())
                 .build()).buildFuture();
-    }
-
-    @Override
-    public ListenableFuture<RpcResult<GetTopologyListOutput>> getTopologyList(GetTopologyListInput input) {
-        // TODO Auto-generated method stub
-        // TODO -> maybe we get errors when having CEPs?
-        Map<TopologyKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
-                topologyMap = this.tapiContext.getTopologyContext();
-        if (topologyMap.isEmpty()) {
-            LOG.error("No topologies exist in tapi context");
-            return RpcResultBuilder.<GetTopologyListOutput>failed()
-                .withError(ErrorType.APPLICATION, "No topologies exist in tapi context")
-                .buildFuture();
-        }
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology>
-                newTopoMap = new HashMap<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-                topo:topologyMap.values()) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology
-                newTopo = new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder(topo).build();
-            newTopoMap.put(newTopo.key(), newTopo);
-        }
-        return RpcResultBuilder.success(new GetTopologyListOutputBuilder().setTopology(newTopoMap).build())
-                .buildFuture();
     }
 
     @Override
@@ -325,32 +325,17 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .buildFuture();
     }
 
-    @Override
-    public ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>>
-            getServiceInterfacePointList(GetServiceInterfacePointListInput input) {
-        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
-            this.tapiContext.getTapiContext().getServiceInterfacePoint();
-        if (sips == null || sips.isEmpty()) {
-            return RpcResultBuilder.<GetServiceInterfacePointListOutput>failed()
-                .withError(ErrorType.RPC, "No sips in datastore")
-                .buildFuture();
-        }
-        Map<SipKey, Sip> outSipMap = new HashMap<>();
-        for (ServiceInterfacePoint sip : sips.values()) {
-            Sip si = new SipBuilder(sip).build();
-            outSipMap.put(si.key(), si);
-        }
-        return RpcResultBuilder
-            .success(new GetServiceInterfacePointListOutputBuilder().setSip(outSipMap).build())
-            .buildFuture();
-    }
-
-    @Override
-    public ListenableFuture<RpcResult<UpdateServiceInterfacePointOutput>>
-            updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
-        return RpcResultBuilder.<UpdateServiceInterfacePointOutput>failed()
-            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
-            .buildFuture();
+    public ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
+        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(GetNodeDetails.class, this::getNodeDetails)
+            .put(GetTopologyDetails.class, this::getTopologyDetails)
+            .put(GetNodeEdgePointDetails.class, this::getNodeEdgePointDetails)
+            .put(GetLinkDetails.class, this::getLinkDetails)
+            .put(GetTopologyList.class, this::getTopologyList)
+            .put(GetServiceInterfacePointDetails.class, this::getServiceInterfacePointDetails)
+            .put(GetServiceInterfacePointList.class, this::getServiceInterfacePointList)
+            .put(UpdateServiceInterfacePoint.class, this::updateServiceInterfacePoint)
+            .build();
     }
 
     private Topology createAbstracted100GTpdrTopology(Topology topology) {
