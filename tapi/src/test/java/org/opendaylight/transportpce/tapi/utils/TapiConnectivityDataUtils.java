@@ -63,6 +63,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraintBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.TopologyConstraintKey;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
@@ -80,12 +83,13 @@ public final class TapiConnectivityDataUtils {
             .setEndPoint(endPointMap)
             .setLayerProtocolName(LayerProtocolName.DSR)
             .setConnectivityConstraint(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                    .create.connectivity.service.input.ConnectivityConstraintBuilder()
+                        .create.connectivity.service.input.ConnectivityConstraintBuilder()
                     .setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).setServiceLevel("some service-level")
-            .setRequestedCapacity(new RequestedCapacityBuilder()
+                    .setRequestedCapacity(new RequestedCapacityBuilder()
                     .setTotalSize(new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE)
                         .setValue(Decimal64.valueOf("10")).build()).build()).build())
             .setState(AdministrativeState.UNLOCKED)
+            .setTopologyConstraint(getTopoConstraintMap())
             .build();
     }
 
@@ -173,6 +177,14 @@ public final class TapiConnectivityDataUtils {
                 .setLgxPortShelf("lgx port shelf").build())
             .setIndex(Uint8.ZERO)
             .build());
+    }
+
+    private static Map<TopologyConstraintKey, TopologyConstraint> getTopoConstraintMap() {
+        Map<TopologyConstraintKey, TopologyConstraint> topoConstraintMap = new HashMap<>();
+        TopologyConstraint topoConstraint = new TopologyConstraintBuilder()
+            .setLocalId("localIdTopoConstraint").build();
+        topoConstraintMap.put(topoConstraint.key(), topoConstraint);
+        return topoConstraintMap;
     }
 
     public static Map<ConnectivityServiceKey, ConnectivityService> createConnService() {

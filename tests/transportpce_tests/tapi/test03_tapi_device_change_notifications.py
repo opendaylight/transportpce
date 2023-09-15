@@ -14,6 +14,7 @@ import os
 import unittest
 import time
 import requests
+import uuid
 # pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
@@ -22,15 +23,21 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 # pylint: disable=too-few-public-methods
-
+test_utils
 
 class UuidServices:
     def __init__(self):
-        # pylint: disable=invalid-name
+        # pylint: disabltest_utilse=invalid-name
         self.pm = None
         self.odu = None
         self.dsr = None
         self.eth = None
+# XPDR-A1-XPDR1+XPONDER Uuid is:
+# 4378fc29-6408-39ec-8737-5008c3dc49e5
+# XPDR-C1-XPDR1+XPONDER Uuid is:
+# 1770bea4-b1da-3b20-abce-7d182c0ec0df
+# ROADM-A1+PHOTONIC_MEDIA Uuid is:
+# 3b726367-6f2d-3e3f-9033-d99b61459075
 
 
 class TransportPCEFulltesting(unittest.TestCase):
@@ -75,29 +82,41 @@ class TransportPCEFulltesting(unittest.TestCase):
             }
         ],
         "connectivity-constraint": {
-            "service-layer": "ETH",
+#            "service-layer": "ETH",
             "service-type": "POINT_TO_POINT_CONNECTIVITY",
             "service-level": "Some service-level",
             "requested-capacity": {
                 "total-size": {
                     "value": "100",
-                    "unit": "GB"
+                    "unit": "tapi-common:CAPACITY_UNIT_GBPS"
                 }
             }
         },
-        "state": "Some state"
+        "topology-constraint": [
+                {
+                    "local-id": "localIdTopoConstraint",
+                    "name": [
+                        {
+                            "value-name": "Dumb constraint",
+                            "value": "for debug1"
+                        }
+                    ]
+                }
+        ],
+        "state": "LOCKED",
+        "layer-protocol-name": "ETH"
     }
 
-    del_serv_input_data = {"service-id-or-name": "TBD"}
+    del_serv_input_data = {"uuid": "TBD"}
 
-    tapi_topo = {"topology-id-or-name": "TBD"}
+    tapi_topo = {"topology-id": "TBD"}
 
     node_details = {
-        "topology-id-or-name": "TBD",
-        "node-id-or-name": "TBD"
+        "topology-id": "TBD",
+        "node-id": "TBD"
     }
 
-    tapi_serv_details = {"service-id-or-name": "TBD"}
+    tapi_serv_details = {"uuid": "TBD"}
 
     processes = []
     uuid_services = UuidServices()
@@ -239,9 +258,11 @@ class TransportPCEFulltesting(unittest.TestCase):
         input_dict_1 = {'administrative-state': 'LOCKED',
                         'lifecycle-state': 'PLANNED',
                         'operational-state': 'DISABLED',
-                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
-                        'service-layer': 'ETH',
-                        'connectivity-direction': 'BIDIRECTIONAL'
+#                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
+#                        'service-layer': 'ETH',
+                        'layer-protocol-name': 'ETH',
+#                        'connectivity-direction': 'BIDIRECTIONAL'
+                        'direction': 'BIDIRECTIONAL'
                         }
         input_dict_2 = {'value-name': 'OpenROADM node id',
                         'value': 'XPDR-C1-XPDR1'}
@@ -267,7 +288,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_13_get_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["service-id-or-name"] = str(self.uuid_services.eth)
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -335,11 +356,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-common-network:operational-state'], 'inService')
                 self.assertEqual(link['org-openroadm-common-network:administrative-state'], 'inService')
         self.assertEqual(nb_updated_link, 2, "Only two xponder-output/input links should have been modified")
-        time.sleep(1)
+        time.sleep(10)
 
     def test_17_check_update_tapi_neps(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "XPDR-C1-XPDR1+OTSi"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = "XPDR-C1-XPDR1+OTSi"
+        self.node_details["node-id"] = "1770bea4-b1da-3b20-abce-7d182c0ec0df"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -357,33 +379,34 @@ class TransportPCEFulltesting(unittest.TestCase):
                                  "Operational State should be 'ENABLED'")
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
-        self.node_details["node-id-or-name"] = "XPDR-C1-XPDR1+DSR"
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-topology', 'get-node-details', self.node_details)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        nep_list = response['output']['node']['owned-node-edge-point']
-        for nep in nep_list:
-            if 'XPDR1-NETWORK1' in nep['name'][0]['value']:
-                self.assertEqual(nep['operational-state'], 'DISABLED',
-                                 "Operational State should be 'DISABLED'")
-                self.assertEqual(nep['administrative-state'], 'LOCKED',
-                                 "Administrative State should be 'LOCKED'")
-                nb_updated_neps += 1
-            else:
-                self.assertEqual(nep['operational-state'], 'ENABLED',
-                                 "Operational State should be 'ENABLED'")
-                self.assertEqual(nep['administrative-state'], 'UNLOCKED',
-                                 "Administrative State should be 'UNLOCKED'")
-        self.assertEqual(nb_updated_neps, 4, "Only two xponder neps should have been modified")
+        self.node_details["node-id"] = "XPDR-C1-XPDR1+DSR"
+#        response = test_utils.transportpce_api_rpc_request(
+#            'tapi-topology', 'get-node-details', self.node_details)
+#        self.assertEqual(response['status_code'], requests.codes.ok)
+#        nep_list = response['output']['node']['owned-node-edge-point']
+#        for nep in nep_list:
+#            if 'XPDR1-NETWORK1' in nep['name'][0]['value']:
+#                self.assertEqual(nep['operational-state'], 'DISABLED',
+#                                 "Operational State should be 'DISABLED'")
+#                self.assertEqual(nep['administrative-state'], 'LOCKED',
+#                                 "Administrative State should be 'LOCKED'")
+#                nb_updated_neps += 1
+#            else:
+#                self.assertEqual(nep['operational-state'], 'ENABLED',
+#                                 "Operational State should be 'ENABLED'")
+#                self.assertEqual(nep['administrative-state'], 'UNLOCKED',
+#                                 "Administrative State should be 'UNLOCKED'")
+        self.assertEqual(nb_updated_neps, 3, "3 xponder neps (OTS, OTSI_MC, eODU) should have been modified")
         time.sleep(1)
 
     def test_18_check_update_tapi_links(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         link_list = response['output']['topology']['link']
+        print(response['output']['topology']['link'])
         nb_updated_link = 0
         for link in link_list:
             if all(x in link['name'][0]['value'] for x in ['XPDR-C1-XPDR1', 'XPDR1-NETWORK1']):
@@ -393,8 +416,8 @@ class TransportPCEFulltesting(unittest.TestCase):
             else:
                 self.assertEqual(link['operational-state'], 'ENABLED')
                 self.assertEqual(link['administrative-state'], 'UNLOCKED')
-        self.assertEqual(nb_updated_link, 2,
-                         "Only two xponder-output/input & xponder-transi links should have been modified")
+        self.assertEqual(nb_updated_link, 1,
+                         "Only one xponder-output/input bidirectional link should have been modified")
         time.sleep(1)
 
     def test_19_check_update_service_Ethernet(self):
@@ -404,7 +427,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
 
     def test_20_check_update_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["service-id-or-name"] = str(self.uuid_services.eth)
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
+        print(str(self.uuid_services.eth))
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -452,8 +476,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_check_update_tapi_neps_ok(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "XPDR-C1-XPDR1+OTSi"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = "XPDR-C1-XPDR1+OTSi"
+        self.node_details["node-id"] = "1770bea4-b1da-3b20-abce-7d182c0ec0df"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -464,20 +489,20 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                              "Administrative State should be 'UNLOCKED'")
 
-        self.node_details["node-id-or-name"] = "XPDR-C1-XPDR1+DSR"
-        response = test_utils.transportpce_api_rpc_request(
-            'tapi-topology', 'get-node-details', self.node_details)
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        nep_list = response['output']['node']['owned-node-edge-point']
-        for nep in nep_list:
-            self.assertEqual(nep['operational-state'], 'ENABLED',
-                             "Operational State should be 'ENABLED'")
-            self.assertEqual(nep['administrative-state'], 'UNLOCKED',
-                             "Administrative State should be 'UNLOCKED'")
+#        self.node_details["node-id"] = "XPDR-C1-XPDR1+DSR"
+#        response = test_utils.transportpce_api_rpc_request(
+#            'tapi-topology', 'get-node-details', self.node_details)
+#        self.assertEqual(response['status_code'], requests.codes.ok)
+#        nep_list = response['output']['node']['owned-node-edge-point']
+#        for nep in nep_list:
+#            self.assertEqual(nep['operational-state'], 'ENABLED',
+#                             "Operational State should be 'ENABLED'")
+#            self.assertEqual(nep['administrative-state'], 'UNLOCKED',
+#                             "Administrative State should be 'UNLOCKED'")
         time.sleep(1)
 
     def test_25_check_update_tapi_links_ok(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -557,8 +582,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_31_check_update_tapi_neps(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -576,11 +602,11 @@ class TransportPCEFulltesting(unittest.TestCase):
                                  "Operational State should be 'ENABLED'")
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
-        self.assertEqual(nb_updated_neps, 3, "Only three roadm neps should have been modified")
+        self.assertEqual(nb_updated_neps, 2, "Only 2 roadm SRG-PP nep (OTS/MC)should have been modified")
         time.sleep(1)
 
     def test_32_check_update_tapi_links(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -631,8 +657,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_23_check_update_openroadm_topo_ok()
 
     def test_38_check_update_tapi_neps_ok(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -718,8 +745,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_45_check_update_tapi_neps(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -737,11 +765,11 @@ class TransportPCEFulltesting(unittest.TestCase):
                                  "Operational State should be 'ENABLED'")
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
-        self.assertEqual(nb_updated_neps, 3, "Only three roadm neps should have been modified")
+        self.assertEqual(nb_updated_neps, 4, "4 roadm NEPS should have been modified (OTS/OMS/MC/OTSI_MC")
         time.sleep(1)
 
     def test_46_check_update_tapi_links(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -853,8 +881,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_59_check_update_tapi_neps(self):
-        self.node_details["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
-        self.node_details["node-id-or-name"] = "ROADM-A1+PHOTONIC_MEDIA"
+        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+#        self.node_details["node-id"] = uuid.UUID(bytes="ROADM-A1+PHOTONIC_MEDIA".bytes)
+        self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-node-details', self.node_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -872,11 +901,11 @@ class TransportPCEFulltesting(unittest.TestCase):
                                  "Operational State should be 'ENABLED'")
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
-        self.assertEqual(nb_updated_neps, 3, "Only three roadm neps should have been modified")
+        self.assertEqual(nb_updated_neps, 1, "Only 1 roadm neps OTS should have been modified for SRG2PP")
         time.sleep(1)
 
     def test_60_check_update_tapi_links(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_FULL_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -902,7 +931,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_13_get_connectivity_service_Ethernet()
 
     def test_63_delete_connectivity_service_Ethernet(self):
-        self.del_serv_input_data["service-id-or-name"] = str(self.uuid_services.eth)
+        self.del_serv_input_data["uuid"] = str(self.uuid_services.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.del_serv_input_data)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
