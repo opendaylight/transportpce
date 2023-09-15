@@ -50,6 +50,12 @@ import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommonBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev211210.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInput;
@@ -176,7 +182,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         }, executorService);
 
         endSignal.await();
-
+        LOG.info("INPUT= {}", input.toString());
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
         assertTrue(rpcResult.isSuccessful());
     }
@@ -211,7 +217,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl, networkTransactionService);
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
@@ -231,7 +236,15 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     @Test
     void deleteConnServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
-        when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
+        ConfigurationResponseCommon crc = new ConfigurationResponseCommonBuilder()
+            .setRequestId("request 1")
+            .setResponseCode("OK")
+            .setAckFinalIndicator("requestProcessed").build();
+        ServiceDeleteOutput sdo = new ServiceDeleteOutputBuilder()
+            .setConfigurationResponseCommon(crc)
+            .build();
+        when(rendererServiceOperations.serviceDelete(any(), any()))
+            .thenReturn(Futures.immediateFuture(sdo));
 
         OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
@@ -239,11 +252,9 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
             tapipceListenerImpl, tapirendererListenerImpl, networkTransactionService);
-
         ServiceCreateInput createInput = TapiConnectivityDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
         tapiContext.updateConnectivityContext(TapiConnectivityDataUtils.createConnService(), new HashMap<>());
-
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput();
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
             tapiConnectivity.deleteConnectivityService(input);
@@ -255,7 +266,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         }, executorService);
 
         endSignal.await();
-
+        LOG.debug("RESULT = {}", result.toString());
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
         assertTrue(rpcResult.isSuccessful());
     }
