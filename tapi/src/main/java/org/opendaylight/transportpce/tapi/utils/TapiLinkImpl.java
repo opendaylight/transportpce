@@ -188,6 +188,7 @@ public class TapiLinkImpl implements TapiLink {
             .build();
     }
 
+    @Override
     public AdministrativeState setTapiAdminState(String adminState) {
         if (adminState == null) {
             return null;
@@ -197,6 +198,7 @@ public class TapiLinkImpl implements TapiLink {
                 : AdministrativeState.LOCKED;
     }
 
+    @Override
     public AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2) {
         if (adminState1 == null || adminState2 == null) {
             return null;
@@ -206,6 +208,7 @@ public class TapiLinkImpl implements TapiLink {
             ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
+    @Override
     public OperationalState setTapiOperationalState(String operState) {
         if (operState == null) {
             return null;
@@ -214,6 +217,7 @@ public class TapiLinkImpl implements TapiLink {
             ? OperationalState.ENABLED : OperationalState.DISABLED;
     }
 
+    @Override
     public OperationalState setTapiOperationalState(State operState1, State operState2) {
         if (operState1 == null || operState2 == null) {
             return null;
@@ -222,13 +226,14 @@ public class TapiLinkImpl implements TapiLink {
             ? OperationalState.ENABLED : OperationalState.DISABLED;
     }
 
+    @Override
     public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
             TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
+            TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
         InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
@@ -237,7 +242,7 @@ public class TapiLinkImpl implements TapiLink {
         Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
             TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
+            TapiStringConstants.PHTNC_MEDIA_OTS, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
         InstanceIdentifier<OwnedNodeEdgePoint> onep1IID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(node1Uuid))
@@ -261,13 +266,14 @@ public class TapiLinkImpl implements TapiLink {
         }
     }
 
+    @Override
     public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
             TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
+            TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
         InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
@@ -276,7 +282,7 @@ public class TapiLinkImpl implements TapiLink {
         Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
             TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
         Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
+            TapiStringConstants.PHTNC_MEDIA_OTS, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
         InstanceIdentifier<OwnedNodeEdgePoint> onep1IID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(node1Uuid))

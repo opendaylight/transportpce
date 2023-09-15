@@ -138,7 +138,7 @@ class TransportTapitesting(unittest.TestCase):
             "tail-retention": "no"}
     }
 
-    tapi_topo = {"topology-id-or-name": "TBD"}
+    tapi_topo = {"topology-id": "TBD"}
 
     @classmethod
     def setUpClass(cls):
@@ -184,9 +184,10 @@ class TransportTapitesting(unittest.TestCase):
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_get_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
+        print(response)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response["output"]["topology"]["node"]), 1, 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
@@ -200,7 +201,7 @@ class TransportTapitesting(unittest.TestCase):
                          'node should contain 1 node rule group')
 
     def test_02_get_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -212,14 +213,14 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_check_tapi_topos(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response["output"]["topology"]["node"]), 1, 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
 
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -235,7 +236,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_07_check_tapi_topos(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -252,15 +253,21 @@ class TransportTapitesting(unittest.TestCase):
 
     def test_10_check_tapi_topos(self):
         self.test_01_get_tapi_topology_T100G()
-
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(1, len(response["output"]["topology"]["node"]), 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
-        self.assertEqual("ROADM-infra", response["output"]["topology"]["node"][0]["name"][0]["value"],
+#        self.assertEqual("ROADM-infra", response["output"]["topology"]["node"][0]["name"][0]["value"],
+#                        'node name should be: ROADM-infra')
+        nodes = response["output"]["topology"]["node"]
+        self.assertEqual("ROADM-infra",
+                         response["output"]["topology"]["node"][0]["name"][count_position_name_from_value_name(
+                             response["output"]["topology"]["node"][0]["name"], "otsi node name")]["value"],
                          'node name should be: ROADM-infra')
+        self.assertEqual(1, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
+                         'Topology should contain 1 otsi nodes')
         self.assertIn("PHOTONIC_MEDIA", response["output"]["topology"]["node"][0]["layer-protocol-name"],
                       'Node layer protocol should contain PHOTONIC_MEDIA')
         self.assertEqual(1, len(response["output"]["topology"]["node"][0]["node-rule-group"]),
@@ -287,7 +294,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_check_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -298,22 +305,20 @@ class TransportTapitesting(unittest.TestCase):
                          'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_14_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(3, len(nodes), 'Topology should contain 3 nodes')
-        self.assertEqual(2, len(links), 'Topology should contain 2 links')
+        self.assertEqual(2, len(nodes), 'Topology should contain 2 nodes')
+        self.assertEqual(1, len(links), 'Topology should contain 1 link')
         self.assertEqual(2, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
                          'Topology should contain 2 otsi nodes')
         self.assertEqual(1, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
                          'Topology should contain 1 dsr node')
-        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 1 transitional link')
-        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 1 oms link')
+        self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 1 ots link')
 
     def test_15_connect_xpdrc(self):
         response = test_utils.mount_device("XPDR-C1", ('xpdrc', self.NODE_VERSION))
@@ -340,7 +345,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_18_check_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -354,22 +359,20 @@ class TransportTapitesting(unittest.TestCase):
                          'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_19_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(5, len(nodes), 'Topology should contain 5 nodes')
-        self.assertEqual(4, len(links), 'Topology should contain 4 links')
+        self.assertEqual(3, len(nodes), 'Topology should contain 3 nodes')
+        self.assertEqual(2, len(links), 'Topology should contain 2 links')
         self.assertEqual(3, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
                          'Topology should contain 3 otsi nodes')
         self.assertEqual(2, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
                          'Topology should contain 2 dsr nodes')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 2 transitional links')
-        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 2 oms links')
+        self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 2 ots links')
 
     def test_20_connect_spdr_sa1(self):
         response = test_utils.mount_device("SPDR-SA1", ('spdra', self.NODE_VERSION))
@@ -431,22 +434,20 @@ class TransportTapitesting(unittest.TestCase):
         self.test_18_check_tapi_topology_T100G()
 
     def test_29_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(9, len(nodes), 'Topology should contain 9 nodes')
-        self.assertEqual(8, len(links), 'Topology should contain 8 links')
+        self.assertEqual(5, len(nodes), 'Topology should contain 5 nodes')
+        self.assertEqual(4, len(links), 'Topology should contain 4 links')
         self.assertEqual(5, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
                          'Topology should contain 5 otsi nodes')
         self.assertEqual(4, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
                          'Topology should contain 4 dsr nodes')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 4 transitional links')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 4 oms links')
+        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 4 ots links')
 
     def test_30_add_oms_attributes(self):
         # Config ROADMA-ROADMC oms-attributes
@@ -488,27 +489,25 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_32_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(9, len(nodes), 'Topology should contain 9 nodes')
-        self.assertEqual(9, len(links), 'Topology should contain 9 links')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 4 transitional links')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 4 oms links')
+        self.assertEqual(5, len(nodes), 'Topology should contain 5 nodes')
+        self.assertEqual(5, len(links), 'Topology should contain 5 links')
+        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 4 ots links')
         self.assertEqual(1, count_object_with_double_key(links, "name", "value-name", "otn link name"),
                          'Topology should contain 1 otn link')
         for link in links:
             if link["name"][0]["value"] == "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
                 self.assertEqual(100000, int(link["available-capacity"]["total-size"]["value"]),
                                  'OTU4 link should have an available capacity of 100 000 Mbps')
-            elif link["name"][0]["value-name"] == "transitional link name":
-                self.assertEqual(100, int(link["available-capacity"]["total-size"]["value"]),
-                                 'link should have an available capacity of 100 Gbps')
+#            elif link["name"][0]["value-name"] == "transitional link name":
+#                self.assertEqual(100, int(link["available-capacity"]["total-size"]["value"]),
+#                                 'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
 
     def test_33_create_ODU4_service(self):
@@ -529,18 +528,16 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_34_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(9, len(nodes), 'Topology should contain 9 nodes')
-        self.assertEqual(10, len(links), 'Topology should contain 10 links')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 4 transitional links')
-        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 4 oms links')
+        self.assertEqual(5, len(nodes), 'Topology should contain 5 nodes')
+        self.assertEqual(6, len(links), 'Topology should contain 6 links')
+        self.assertEqual(4, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 4 ots links')
         self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
                          'Topology should contain 2 otn links')
         for link in links:
@@ -550,9 +547,9 @@ class TransportTapitesting(unittest.TestCase):
             elif link["name"][0]["value"] == "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1":
                 self.assertEqual(100000, int(link["available-capacity"]["total-size"]["value"]),
                                  'ODU4 link should have an available capacity of 100 000 Mbps')
-            elif link["name"][0]["value-name"] == "transitional link name":
-                self.assertEqual(100, int(link["available-capacity"]["total-size"]["value"]),
-                                 'link should have an available capacity of 100 Gbps')
+#            elif link["name"][0]["value-name"] == "transitional link name":
+#                self.assertEqual(100, int(link["available-capacity"]["total-size"]["value"]),
+#                                 'link should have an available capacity of 100 Gbps')
             self.assertEqual(2, len(link["node-edge-point"]), 'link should have 2 neps')
 
     def test_35_connect_sprda_2_n2_to_roadma_pp3(self):
@@ -576,24 +573,22 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_37_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(11, len(nodes), 'Topology should contain 11 nodes')
-        self.assertEqual(12, len(links), 'Topology should contain 12 links')
+        self.assertEqual(6, len(nodes), 'Topology should contain 6 nodes')
+        self.assertEqual(7, len(links), 'Topology should contain 7 links')
         self.assertEqual(6, count_object_with_double_key(nodes, "name", "value-name", "otsi node name"),
                          'Topology should contain 6 otsi nodes')
-        self.assertEqual(5, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
-                         'Topology should contain 5 dsr nodes')
-        self.assertEqual(5, count_object_with_double_key(links, "name", "value-name", "transitional link name"),
-                         'Topology should contain 5 transitional links')
-        self.assertEqual(5, count_object_with_double_key(links, "name", "value-name", "OMS link name"),
-                         'Topology should contain 5 oms links')
+        self.assertEqual(5, count_object_with_double_key(links, "name", "value-name", "OTS link name"),
+                         'Topology should contain 5 ots links')
         self.assertEqual(2, count_object_with_double_key(links, "name", "value-name", "otn link name"),
                          'Topology should contain 2 otn links')
+        self.assertEqual(5, count_object_with_double_key(nodes, "name", "value-name", "dsr/odu node name"),
+                         'Topology should contain 5 dsr nodes')
 
     def test_38_delete_ODU4_service(self):
         self.del_serv_input_data["service-delete-req-info"]["service-name"] = "service1-ODU4"
@@ -616,14 +611,14 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_40_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         nodes = response["output"]["topology"]["node"]
         links = response["output"]["topology"]["link"]
-        self.assertEqual(11, len(nodes), 'Topology should contain 11 nodes')
-        self.assertEqual(10, len(links), 'Topology should contain 10 links')
+        self.assertEqual(6, len(nodes), 'Topology should contain 6 nodes')
+        self.assertEqual(5, len(links), 'Topology should contain 5 links')
         self.assertEqual(0, count_object_with_double_key(links, "name", "value-name", "otn link name"),
                          'Topology should contain 0 otn link')
 
@@ -638,17 +633,21 @@ class TransportTapitesting(unittest.TestCase):
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_42_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T0_MULTILAYER_TOPO
+        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(1, len(response["output"]["topology"]["node"]), 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
-        self.assertEqual("ROADM-infra", response["output"]["topology"]["node"][0]["name"][0]["value"],
+#        self.assertEqual("ROADM-infra", response["output"]["topology"]["node"][0]["name"][0]["value"],
+#                         'node name should be: ROADM-infra')
+        self.assertEqual("ROADM-infra",
+                         response["output"]["topology"]["node"][0]["name"][count_position_name_from_value_name(
+                             response["output"]["topology"]["node"][0]["name"], "otsi node name")]["value"],
                          'node name should be: ROADM-infra')
 
     def test_43_get_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id-or-name"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -686,13 +685,30 @@ class TransportTapitesting(unittest.TestCase):
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
+#def count_object_with_double_key(list_dicts, key1, key2, value):
+#    nb = 0
+#    for dictio in list_dicts:
+#        print(dictio)
+#        if dictio[key1][0][key2] == value:
+#            nb += 1
+#    return nb
+
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
     for dictio in list_dicts:
-        if dictio[key1][0][key2] == value:
-            nb += 1
+        for name in dictio[key1]:
+            if name[key2] == value:
+                nb += 1
     return nb
 
+def count_position_name_from_value_name(name, valuename):
+    nb = 0
+    index = 0
+    for names in name:
+        if names["value-name"] == valuename:
+            index = nb
+        nb += 1
+    return index
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
