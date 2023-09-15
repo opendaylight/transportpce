@@ -56,7 +56,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Laye
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPE;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPEPROFILE;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.TerminationDirection;
@@ -112,6 +111,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Co
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.NodeEdgePointRef;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPENODEEDGEPOINT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupBuilder;
@@ -286,7 +286,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setNotificationType(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
 //            .setTargetObjectType(ObjectType.NODEEDGEPOINT)
             //TODO: Change this : modification in Models 2.4 does not provide for Object type Node EdgePoint
-            .setTargetObjectType(OBJECTTYPETAPICONTEXT.VALUE)
+            .setTargetObjectType(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE)
             .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
             .setUuid(tapiTopoUuid)
             .build();
