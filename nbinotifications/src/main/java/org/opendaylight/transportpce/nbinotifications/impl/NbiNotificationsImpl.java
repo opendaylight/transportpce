@@ -48,6 +48,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJE
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPESERVICEINTERFACEPOINT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTION;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTIONENDPOINT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInput;
@@ -95,6 +99,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPEINTERRULEGROUP;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPELINK;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPENODE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPENODEEDGEPOINT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPENODERULEGROUP;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.ErrorTag;
@@ -190,6 +199,15 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
         objectTypeList.add(OBJECTTYPESERVICEINTERFACEPOINT.VALUE);
         objectTypeList.add(OBJECTTYPETAPICONTEXT.VALUE);
         objectTypeList.add(OBJECTTYPEPROFILE.VALUE);
+        objectTypeList.add(TOPOLOGYOBJECTTYPENODE.VALUE);
+        objectTypeList.add(TOPOLOGYOBJECTTYPELINK.VALUE);
+        objectTypeList.add(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE);
+        objectTypeList.add(TOPOLOGYOBJECTTYPENODERULEGROUP.VALUE);
+        objectTypeList.add(TOPOLOGYOBJECTTYPEINTERRULEGROUP.VALUE);
+        objectTypeList.add(CONNECTIVITYOBJECTTYPE.VALUE);
+        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.VALUE);
+        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTIONENDPOINT.VALUE);
+        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTION.VALUE);
 //        for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
 //            if (notifSubscription.getSupportedNotificationTypes() != null) {
 //                notificationTypeList.addAll(notifSubscription.getSupportedNotificationTypes());
