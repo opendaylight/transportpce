@@ -33,11 +33,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Admi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.LowerConnection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
@@ -63,6 +63,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.NodeEdgePointRef;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TOPOLOGYOBJECTTYPENODEEDGEPOINT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
@@ -103,7 +104,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
     public void onNotification(Notification notification) {
         LOG.info("Received network model notification {}", notification);
         if (notification.getNotificationType().equals(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
-                && notification.getTargetObjectType().equals(OBJECTTYPETAPICONTEXT.VALUE)) {
+                && notification.getTargetObjectType().equals(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE)) {
             if (notification.getChangedAttributes() == null) {
                 return;
             }
@@ -167,7 +168,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
             .setChangedAttributes(changedStates)
             .setEventTimeStamp(datetime)
             .setTargetObjectName(targetObjectNames)
-            .setTargetObjectType(OBJECTTYPETAPICONTEXT.VALUE)
+            .setTargetObjectType(CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.VALUE)
             .setLayerProtocolName(connService.getLayerProtocolName())
             .build();
     }
@@ -337,7 +338,7 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
                         // To check if the oneps are from the original Top connection
                         newConnState = getConnectionState(changedOneps, onepStates, newConn);
                     }
-
+                    LOG.debug("Analysing connection = {} ", newConn.getName().toString());
                     LOG.info("Previous connection state = {} & New connection state = {}",
                             newConn.getOperationalState().getName(), newConnState.getName());
                     Connection changedConn = new ConnectionBuilder(newConn).setOperationalState(newConnState).build();

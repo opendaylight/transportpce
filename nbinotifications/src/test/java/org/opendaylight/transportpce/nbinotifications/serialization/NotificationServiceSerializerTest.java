@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.nbinotifications.serialization;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,17 +16,19 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationProcessService;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 public class NotificationServiceSerializerTest extends AbstractTest {
 
     @Test
-    void serializeTest() throws IOException {
+    void serializeTest() throws IOException, JSONException {
         JsonStringConverter<NotificationProcessService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         String json = Files.readString(Paths.get("src/test/resources/event.json"));
@@ -43,6 +44,6 @@ public class NotificationServiceSerializerTest extends AbstractTest {
         String expectedJson = Files.readString(Paths.get("src/test/resources/expected_event.json"));
         // Minify the json string
         expectedJson = new ObjectMapper().readValue(expectedJson, JsonNode.class).toString();
-        assertEquals(expectedJson, new String(data, StandardCharsets.UTF_8), "The event should be equals");
+        JSONAssert.assertEquals(expectedJson, new String(data, StandardCharsets.UTF_8), true);
     }
 }
