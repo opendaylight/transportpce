@@ -156,42 +156,27 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         // TODO -> Add check for Full T0 Multilayer
-        List<String> topoNameList = null;
-        try {
-            topoNameList = topologyUtils.readTopologyName(input.getTopologyId());
-        } catch (TapiTopologyException e) {
-            LOG.error("Topology {} not found in datastore", input.getTopologyId());
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Invalid Topology name")
-                .buildFuture();
-        }
-        if (!topoNameList.contains(TapiStringConstants.T0_MULTILAYER)
-            && !topoNameList.contains(TapiStringConstants.TPDR_100G)) {
-            if (topoNameList.contains(TapiStringConstants.T0_FULL_MULTILAYER)) {
-                Uuid topoUuid = input.getTopologyId();
-                Context context = this.tapiContext.getTapiContext();
-                Map<TopologyKey,
-                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
-                    topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
-                if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topoUuid)))) {
-                    LOG.error("Topology {} not found in datastore", input.getTopologyId());
-                    return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                        .withError(ErrorType.RPC, "Invalid Topology name")
-                        .buildFuture();
-                }
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-                    topology = topologyMap.get(new TopologyKey(topoUuid));
-                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                        .setTopology(this.topologyUtils.transformTopology(topology))
-                        .build())
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        if (input.getTopologyId().equals(topologyUuid)) {
+            Context context = this.tapiContext.getTapiContext();
+            Map<TopologyKey,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
+                topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
+            if (!(topologyMap != null && topologyMap.containsKey(new TopologyKey(topologyUuid)))) {
+                LOG.error("Topology {} not found in datastore", input.getTopologyId());
+                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                    .withError(ErrorType.RPC, "Invalid Topology name")
                     .buildFuture();
             }
-            LOG.error("Invalid TAPI topology name");
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Invalid Topology name")
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+                topology = topologyMap.get(new TopologyKey(topologyUuid));
+            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                    .setTopology(this.topologyUtils.transformTopology(topology))
+                    .build())
                 .buildFuture();
         }
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
+        topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
             Charset.forName("UTF-8"))).toString());
         try {
             LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
@@ -365,6 +350,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                 .withError(ErrorType.RPC, "Invalid Link name")
                 .buildFuture();
         }
+        LOG.info("debug link is : {}", link.getName().toString());
         return RpcResultBuilder.success(new GetLinkDetailsOutputBuilder().setLink(new LinkBuilder(link).build())
                 .build()).buildFuture();
     }
@@ -566,14 +552,4 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         return null;
     }
 
-//    private Uuid getUuidFromIput(String serviceIdOrName) {
-//        try {
-//            UUID.fromString(serviceIdOrName);
-//            LOG.info("Given attribute {} is a UUID", serviceIdOrName);
-//            return new Uuid(serviceIdOrName);
-//        } catch (IllegalArgumentException e) {
-//            LOG.info("Given attribute {} is not a UUID", serviceIdOrName);
-//            return new Uuid(UUID.nameUUIDFromBytes(serviceIdOrName.getBytes(StandardCharsets.UTF_8)).toString());
-//        }
-//    }
 }
