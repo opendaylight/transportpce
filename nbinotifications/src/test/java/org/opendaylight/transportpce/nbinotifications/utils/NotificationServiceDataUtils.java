@@ -44,11 +44,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Cont
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPETAPICONTEXT;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContextBuilder;
@@ -138,7 +138,7 @@ public final class NotificationServiceDataUtils {
         return new NotificationBuilder()
             .setNotificationType(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
             .setLayerProtocolName(LayerProtocolName.ETH)
-            .setTargetObjectType(OBJECTTYPETAPICONTEXT.VALUE)
+            .setTargetObjectType(CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.VALUE)
             .setEventTimeStamp(datetime)
             .setUuid(new Uuid(UUID.randomUUID().toString()))
             .setTargetObjectIdentifier(targetObjectId)
@@ -174,7 +174,7 @@ public final class NotificationServiceDataUtils {
             .setValueName("Subscription name")
             .build();
         SubscriptionFilter subscriptionFilter = new SubscriptionFilterBuilder()
-            .setRequestedObjectTypes(new HashSet<>(List.of(OBJECTTYPETAPICONTEXT.VALUE)))
+            .setRequestedObjectTypes(new HashSet<>(List.of(CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.VALUE)))
             .setRequestedNotificationTypes(new HashSet<>(List.of(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE,
                 NOTIFICATIONTYPEOBJECTCREATION.VALUE, NOTIFICATIONTYPEOBJECTDELETION.VALUE)))
             .setRequestedLayerProtocols(new HashSet<>(List.of(LayerProtocolName.ETH)))
@@ -254,13 +254,13 @@ public final class NotificationServiceDataUtils {
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1 topologyContext
             = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1Builder()
-            .setTopologyContext(new TopologyContextBuilder()
-                .setNwTopologyService(new NwTopologyServiceBuilder()
-                    .setTopology(new HashMap<>())
-                    .setUuid(
-                        new Uuid(
-                            UUID.nameUUIDFromBytes("Network Topo Service".getBytes(Charset.forName("UTF-8")))
-                                .toString()))
+                .setTopologyContext(new TopologyContextBuilder()
+                    .setNwTopologyService(new NwTopologyServiceBuilder()
+                        .setTopology(new HashMap<>())
+                        .setUuid(
+                            new Uuid(
+                                UUID.nameUUIDFromBytes("Network Topo Service".getBytes(Charset.forName("UTF-8")))
+                                    .toString()))
                     .setName(Map.of(nwTopoServiceName.key(), nwTopoServiceName))
                     .build())
                 .setTopology(new HashMap<>())
@@ -269,11 +269,11 @@ public final class NotificationServiceDataUtils {
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1 notificationContext
             = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1Builder()
-            .setNotificationContext(new NotificationContextBuilder()
-                .setNotification(new HashMap<>())
-                .setNotifSubscription(new HashMap<>())
-                .build())
-            .build();
+                .setNotificationContext(new NotificationContextBuilder()
+                    .setNotification(new HashMap<>())
+                    .setNotifSubscription(new HashMap<>())
+                    .build())
+                .build();
 
         ContextBuilder contextBuilder = new ContextBuilder()
             .setName(Map.of(contextName.key(), contextName))
