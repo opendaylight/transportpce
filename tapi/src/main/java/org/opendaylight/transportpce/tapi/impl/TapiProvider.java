@@ -117,8 +117,9 @@ public class TapiProvider {
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
 
-        TapiConnectivityImpl tapi = new TapiConnectivityImpl(this.serviceHandler, tapiContext, connectivityUtils,
-                pceListenerImpl, rendererListenerImpl, networkTransactionService);
+        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(this.serviceHandler, tapiContext,
+                connectivityUtils, pceListenerImpl, rendererListenerImpl, networkTransactionService);
+        rpcRegistrations.add(rpcProviderService.registerRpcImplementations(tapiConnectivity.registerRPCs()));
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils, tapiLink);
         rpcRegistrations.add(rpcProviderService.registerRpcImplementations(topo.registerRPCs()));
 
