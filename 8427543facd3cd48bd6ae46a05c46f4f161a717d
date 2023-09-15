@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fa89fcc_dc01c393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Thanks to both of You for your valuable comments and the time you spent on reviewing this. As I started working on solving the Junit tests failures in step 3, I addressed your comment in this change (I am still not really comfortable in going back to previous change to backport modifications).\nFor Guillaume comments, its is quite easy to check, since they are addressed in the first files appearing in change 107886.\nI have checked as solved only the one for which I am pretty sure I address them correctly which does not prevent you from checking it!\nThanks",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac417d06_756b2fcb",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 6
@@ -31,6 +48,24 @@
       "writtenOn": "2023-08-04T17:54:17Z",
       "side": 1,
       "message": "indent +8 to separate method declaration from its body",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e3db2cc_9bf1fe56",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Addressed in change 107886",
+      "parentUuid": "ac417d06_756b2fcb",
       "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +87,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30346c84_40bf5912",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Addressed in change 107886",
+      "parentUuid": "2b6031fa_c44945d5",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c66e42cf_c419ed70",
@@ -69,6 +122,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d24fa38_0f8115ac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Addressed in change 107886",
+      "parentUuid": "c66e42cf_c419ed70",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f58b05a0_8233a09d",
@@ -82,6 +153,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "Any specific reason why this rpc should be commented out?",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 83
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2391088_2aff6c98",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "In this step, I am just applying simple modifications to handle migration to Tapi2.4.\nA lot of things need to be done on the CEP to adjust it to the new interfaces defined. Furthermore, a lot of things in the T-API PCE will depend on CEPs. I planned to do work more on CEP aspects and add all methods required for correct operations with the PCE in another step, after we have basic function reworked and passing (Step 1, 2, 3). This is why a let it, but commented it. The issue we have is that to create the IID we need all information that we originally got in the header of the RPC and which we don\u0027t have anymore in 2.4. In short, for sure we still need it, but a lot of refactoring is required which clearly goes further than just this method.",
+      "parentUuid": "f58b05a0_8233a09d",
       "range": {
         "startLine": 378,
         "startChar": 8,
@@ -115,6 +210,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "514b5e4b_9e1108f5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Thanks so much for pointing to this. I was bit annoyed of not finding a way to handle it properly! Addressed in change 107886",
+      "parentUuid": "330efb15_4f12313c",
+      "range": {
+        "startLine": 106,
+        "startChar": 61,
+        "endLine": 106,
+        "endChar": 82
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e88ffe38_87b80598",
@@ -138,6 +257,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98da41f1_8b5141ec",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Same! Addressed in change 107886",
+      "parentUuid": "e88ffe38_87b80598",
+      "range": {
+        "startLine": 170,
+        "startChar": 33,
+        "endLine": 170,
+        "endChar": 54
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ae96c75_4c8b2139",
@@ -151,6 +294,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.class\nimport org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE",
+      "range": {
+        "startLine": 360,
+        "startChar": 33,
+        "endLine": 360,
+        "endChar": 54
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4855d4_3e73705b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiRendererListenerImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Same, Addressed in change 107886",
+      "parentUuid": "6ae96c75_4c8b2139",
       "range": {
         "startLine": 360,
         "startChar": 33,
@@ -186,6 +353,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7560a73c_16442437",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "OK, thanks. Did not get it would be removed. Addressed in change 107886, but just adding to the layer protocol names that are supported digital-OTN. In a next step, I will remove ODU, but keep it as it is right now, to not add to much complexity in solving the Junit test!",
+      "parentUuid": "1b266a7c_2f85d3f2",
+      "range": {
+        "startLine": 189,
+        "startChar": 81,
+        "endLine": 189,
+        "endChar": 98
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "902b9d0c_fb49dd01",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
         "patchSetId": 6
@@ -197,6 +388,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "Since the TapiXpdr nodes are merged into a single node this if could just be removed and the 2 functions either merged or 2 different calls for creating the corresponding NEPs and SIPs. I dont know if it is intended to be done in the future step, but test may fail because the node will only have DSR neps since every node we create will have DSR layer protocol name within the list",
+      "range": {
+        "startLine": 415,
+        "startChar": 8,
+        "endLine": 422,
+        "endChar": 9
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d4d26d_96f173a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "I have merged in change 107886 the 2 functions. I am not creating anymore i-OTSI. So I kept only getNodeUuid4Dsr, added into it creation of e-OTSI and removed the node rule group creation. My feeling is that we will rely on CEP to link NEPS vertically. Will need to discuss with you whether this is the right way to proceed and in the case of Xponders, if we shall create e-OTSI or just OTS, or both. Not clear to me in this transition phase (2.4) where we keep things from the old world and add some new ones!",
+      "parentUuid": "902b9d0c_fb49dd01",
       "range": {
         "startLine": 415,
         "startChar": 8,
@@ -232,6 +447,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8bac52d_73fb681c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "I agree. I let it commented because I know we need it, but also considered that MC or OTSiMC will be created only at service creation. Will also need to discuss this with you if you are OK, and on the best way to handle it.",
+      "parentUuid": "357185c4_b3f92341",
+      "range": {
+        "startLine": 838,
+        "startChar": 14,
+        "endLine": 838,
+        "endChar": 23
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a0b7e13_fb2fc567",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 6
@@ -243,6 +482,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "As in ConvertTapiFullTopo. Every ODU layer protocol name must be changed with DIGITAL_OTN",
+      "range": {
+        "startLine": 180,
+        "startChar": 81,
+        "endLine": 180,
+        "endChar": 98
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828a07bd_c5bd07de",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Agree. Applied the same as described in #189",
+      "parentUuid": "7a0b7e13_fb2fc567",
       "range": {
         "startLine": 180,
         "startChar": 81,
@@ -299,6 +562,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0020c6f_5cbd7264",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Thanks. Perfect. Addressed in change 107886",
+      "parentUuid": "f2ccb188_930c3c88",
+      "range": {
+        "startLine": 288,
+        "startChar": 33,
+        "endLine": 288,
+        "endChar": 54
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2fa9c56_121b33e6",
@@ -312,6 +599,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "This function should have the same aspect as the ones described in TapiConvertTopo and TapiConvertFullTopo, where we merge OTSi and DSR nodes into 1 and the same with the NEPs",
+      "range": {
+        "startLine": 442,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 54
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51342ba9_b4003409",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Agree. Applied the same principle as described in answer to #422",
+      "parentUuid": "e2fa9c56_121b33e6",
       "range": {
         "startLine": 442,
         "startChar": 31,
@@ -347,6 +658,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c456159_cb524bc6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Addressed in change 107886",
+      "parentUuid": "4fe881e9_88607c67",
+      "range": {
+        "startLine": 471,
+        "startChar": 8,
+        "endLine": 474,
+        "endChar": 37
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb962fde_852d62cc",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
         "patchSetId": 6
@@ -358,6 +693,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "As in convertTapiFullTopo this should be uncommented in a future step to create the corresponding augmentations per NEP type",
+      "range": {
+        "startLine": 923,
+        "startChar": 10,
+        "endLine": 923,
+        "endChar": 19
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf90c9c_ea40af53",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Yes. Same issue as in #838. Applied the same principle.",
+      "parentUuid": "cb962fde_852d62cc",
       "range": {
         "startLine": 923,
         "startChar": 10,
@@ -385,6 +744,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1efd4375_caadc44b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "Addressed in change 107886",
+      "parentUuid": "55653c1c_a9e17586",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc22c6da_6ae7ac4f",
@@ -398,6 +775,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "This part of the code with the call readTopologyName from topology utils is doing more or less the same as lines 176. Therefore there is no need to do 2 times the same thing. I would say the if checks that we have in line 168, 169 and 170 could be just removed. We need to get the list of topologies stored in the datastore and then retrieved the requested one if it exists. However, in the case of the abstracted Tapi topology which is created on the fly and not stored in the datastore... it should have a specific check, but it should be based on the UUID, which can be generated following line 194",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 167,
+        "endChar": 9
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fac9505_25158f70",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-15T16:33:28Z",
+      "side": 1,
+      "message": "I have reworked a bit that one. Hope it will be correct (I spent some time to solve one of the Junit tests that was failing). Can I ask you to look at change 107886 and tell me if the correction seems appropriate? Thanks",
+      "parentUuid": "dc22c6da_6ae7ac4f",
       "range": {
         "startLine": 159,
         "startChar": 8,
