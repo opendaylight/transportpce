@@ -96,7 +96,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private void putTapiLinkInTopology(
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
         LOG.info("Creating tapi link in TAPI topology context");
         InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
