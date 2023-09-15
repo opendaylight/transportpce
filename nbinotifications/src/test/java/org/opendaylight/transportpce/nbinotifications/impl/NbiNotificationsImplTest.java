@@ -32,7 +32,6 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
@@ -103,11 +102,10 @@ public class NbiNotificationsImplTest extends AbstractTest {
             = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
             nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
-        GetNotificationListInputBuilder builder1 = new GetNotificationListInputBuilder()
+        assertNull(nbiNotificationsImpl.getNotificationList(new GetNotificationListInputBuilder()
             .setTimeRange(null)
-            .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid());
-        ListenableFuture<RpcResult<GetNotificationListOutput>> result1 =
-            nbiNotificationsImpl.getNotificationList(builder1.build());
-        assertNull(result1.get().getResult().getNotification(), "Should be null");
+            .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid())
+            .build())
+            .get().getResult().getNotification(), "Should be null");
     }
 }
