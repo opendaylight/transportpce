@@ -73,6 +73,30 @@
       },
       "revId": "1ffa98283ea73eb4ff7108321c8009786b6d68a8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "448e6b83_48569f7e",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-18T09:39:06Z",
+      "side": 1,
+      "message": "for the SIMS_TO_USE\u003dNone case",
+      "parentUuid": "70e219e1_9e66e661",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 28
+      },
+      "revId": "1ffa98283ea73eb4ff7108321c8009786b6d68a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
