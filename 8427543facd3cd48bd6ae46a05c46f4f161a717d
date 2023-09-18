@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "295d0133_f0b011ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-18T08:15:34Z",
+      "side": 1,
+      "message": "You are welcome Olivier and thanks for having handled all these remarks.\nJust a few comments:\n\n- your change is currently in \"merge conflict\" and needs to be rebased. Technically, it can not be merged until a rebase on the current master branch is performed.\n\n- The relation chain is not up-to-date. You can see \"indirect ancestor\" in Gerrit interface on the top right corner. This means that the child changes of this one have also to be rebased on top of it. They have been pushed on top of an older PS.\n\n- Tracking comments between 2 changes is a bit cumbersome. Please could you squash them into one? This would also ease the child rebase issue by the way.\n\nLet me know if you have any trouble with these operations.\n\nHope this helps\nGuillaume",
+      "parentUuid": "5fa89fcc_dc01c393",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac417d06_756b2fcb",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 6
