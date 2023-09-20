@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3367cbb_cedcd761",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T08:32:03Z",
+      "side": 1,
+      "message": "Added some additional comments. I guess this is still in the phase of just having minor functionalities working, before really upgrading the code to 2.4 version. Overall the code seems good to me 😊",
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc70b9ce_490d1787",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T08:32:03Z",
+      "side": 1,
+      "message": "We can have a single name for the XPDR node type. No need to have a list of 2 names, one with DSR and the other one with OTSi",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 81
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "229801b9_0f167c6e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T08:32:03Z",
+      "side": 1,
+      "message": "This method will need some refactoring, as it will now create all the NEPs (DSR, DIGITAL_OTN and PHOTONIC_MEDIA) for a node. Maybe we could divide it in a 3 step process. Remember that the creation of NEPs will depend in the topology that we are working on, and whether there are services existing or not in the datastore (Time 0 topology vs Time 1 topology -- I did a presentation to on this). Just have this in mind",
+      "range": {
+        "startLine": 469,
+        "startChar": 17,
+        "endLine": 469,
+        "endChar": 32
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a8450ea_c0b68704",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T08:32:03Z",
+      "side": 1,
+      "message": "Same comments as in TapiCOnvertFullTopo file",
+      "range": {
+        "startLine": 185,
+        "startChar": 28,
+        "endLine": 185,
+        "endChar": 42
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
