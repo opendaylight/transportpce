@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "519ca2b8_9d9866ae",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T10:38:59Z",
+      "side": 1,
+      "message": "I agree with you. There are two ways of looking at it. As you said, just provide the notifications supported by the code, even if there are no subscription services created. And the one I mentioned, you only provide a sublist (or all, or none) of all supported notifications in the code --\u003e those ones that are included in the notification subscription service",
+      "parentUuid": "540cf853_4bc57a10",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 109
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "966e6928_21828862",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
         "patchSetId": 1
@@ -149,6 +173,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54fb3472_c4d15b70",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T10:38:59Z",
+      "side": 1,
+      "message": "That is correct. However not all those objects are taken into consideration in the code yet. But it is the right approach. There will be some code refactoring and addition to handle the notifications correctly. But it will be at a later step",
+      "parentUuid": "e38f32f6_5a584b30",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 60
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b158d664_4f0fa1b8",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
         "patchSetId": 1
@@ -184,6 +232,30 @@
       "side": 1,
       "message": "Hum, not so obvious to me. We will need to discuss this during a standup!",
       "parentUuid": "b158d664_4f0fa1b8",
+      "range": {
+        "startLine": 224,
+        "startChar": 14,
+        "endLine": 226,
+        "endChar": 51
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82477c5e_20fe751a",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T10:38:59Z",
+      "side": 1,
+      "message": "Anytime 😊",
+      "parentUuid": "231cac6d_2aefca8c",
       "range": {
         "startLine": 224,
         "startChar": 14,
@@ -258,6 +330,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a1ad94_de33462f",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T10:38:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9e297f0d_ce987147",
+      "range": {
+        "startLine": 141,
+        "startChar": 33,
+        "endLine": 141,
+        "endChar": 54
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6dad12ab_1a4e3d41",
@@ -295,6 +391,30 @@
       "side": 1,
       "message": "Done in step3",
       "parentUuid": "6dad12ab_1a4e3d41",
+      "range": {
+        "startLine": 177,
+        "startChar": 59,
+        "endLine": 177,
+        "endChar": 80
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f76a1a5_bd7d04c7",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 8667
+      },
+      "writtenOn": "2023-09-20T10:38:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "35d2a70e_efbf9698",
       "range": {
         "startLine": 177,
         "startChar": 59,
