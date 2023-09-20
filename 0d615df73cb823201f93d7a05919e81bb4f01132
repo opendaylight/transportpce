@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8257d66_6978d454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Will need to discuss this with you. Looking at 2.4, I see that we have no more supported-notification-types and supported-object-types in the subscription-filter*. I can\u0027t find anymore these field elsewhere. But I may miss something since I am not very familiar with the way trees are built in T-API especially when augmentations are used.",
+      "parentUuid": "222115d6_ca538ab7",
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ea34176_c58bb28d",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-08-31T08:35:47Z",
       "side": 1,
       "message": "I think the previous code was alright. I assumed that the supported notification types were those from the notification subscription services that were created in the datastore. For example, if there are no notification subscription created, no notification types are supported, but when you create a notification subscription service, you specify the type of notifications that you are expecting to store/receive",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 109
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "540cf853_4bc57a10",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Hi Javier. My understanding is not the same, but I am definitely not skilled on this topic... We will also need to discuss this. In my mind, the notification we support are the one we potentially handles (meaning the code to handle them is present). So if someone subscribes to a notification and that we are not handling it in tpce, he will never receives them.",
+      "parentUuid": "3ea34176_c58bb28d",
       "range": {
         "startLine": 159,
         "startChar": 8,
@@ -83,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e38f32f6_5a584b30",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Did not realized first the object-type were handled in a different way/location in tapi 2.4 (moved to the corresponding yang files for topology and connectivity). As you pointed it out in other comments, I understood how it works. Thanks! Now that I know how to retrieve the corresponding elements, I have added in the step 3 the following one : \n\n        objectTypeList.add(TOPOLOGYOBJECTTYPENODE.VALUE);\n        objectTypeList.add(TOPOLOGYOBJECTTYPELINK.VALUE);\n        objectTypeList.add(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE);\n        objectTypeList.add(TOPOLOGYOBJECTTYPENODERULEGROUP.VALUE);\n        objectTypeList.add(TOPOLOGYOBJECTTYPEINTERRULEGROUP.VALUE);\n        objectTypeList.add(CONNECTIVITYOBJECTTYPE.VALUE);\n        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.VALUE);\n        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTIONENDPOINT.VALUE);\n        objectTypeList.add(CONNECTIVITYOBJECTTYPECONNECTION.VALUE);\n        \n        Tell me if this seems acceptable to you and if I have missed some. This is a bit luxurious, and at that time we don\u0027t have the code to support all of those. Please correct and tell me what we currently support so that I can remove from the list (or at least comment) the one we will support in a next step!",
+      "parentUuid": "966e6928_21828862",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 60
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b158d664_4f0fa1b8",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
         "patchSetId": 1
@@ -94,6 +160,30 @@
       "writtenOn": "2023-08-31T08:35:47Z",
       "side": 1,
       "message": "They are inside the SubscriptionFilter. They just moved it to a different container",
+      "range": {
+        "startLine": 224,
+        "startChar": 14,
+        "endLine": 226,
+        "endChar": 51
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "231cac6d_2aefca8c",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Hum, not so obvious to me. We will need to discuss this during a standup!",
+      "parentUuid": "b158d664_4f0fa1b8",
       "range": {
         "startLine": 224,
         "startChar": 14,
@@ -146,6 +236,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9e297f0d_ce987147",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Done in step3. Thanks for pointing it out!",
+      "parentUuid": "fa691950_68917a63",
+      "range": {
+        "startLine": 141,
+        "startChar": 33,
+        "endLine": 141,
+        "endChar": 54
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6dad12ab_1a4e3d41",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
         "patchSetId": 1
@@ -157,6 +271,30 @@
       "writtenOn": "2023-08-31T08:35:47Z",
       "side": 1,
       "message": "CONNECTIVITYOBJECTTYPECONNECTIVITYSERVICE.class",
+      "range": {
+        "startLine": 177,
+        "startChar": 59,
+        "endLine": 177,
+        "endChar": 80
+      },
+      "revId": "0d615df73cb823201f93d7a05919e81bb4f01132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d2a70e_efbf9698",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Done in step3",
+      "parentUuid": "6dad12ab_1a4e3d41",
       "range": {
         "startLine": 177,
         "startChar": 59,

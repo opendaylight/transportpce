@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca9c9840_43b4b454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-09-20T10:04:07Z",
+      "side": 1,
+      "message": "Thanks so much Javier. Tried to address your comments in step3, but unfortunately, not all of them, since I guess I missed something regarding supported notification/object types. Will need further discussion.",
+      "revId": "c30a959ba04b3c55d4d2b363c293110452bf7e7c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
