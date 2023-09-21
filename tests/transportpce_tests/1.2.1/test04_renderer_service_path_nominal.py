@@ -230,7 +230,6 @@ class TransportPCERendererTesting(unittest.TestCase):
              'fec': 'off'},
             response['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
-    @unittest.skip("attributes that contains slashes seems to give some troubles to the controller")
     def test_13_service_path_create_xpdr_check(self):
         response = test_utils.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
         # FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-591
@@ -286,7 +285,6 @@ class TransportPCERendererTesting(unittest.TestCase):
         response = test_utils.check_node_attribute_request("XPDRA01", "interface", "XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
-    @unittest.skip("attributes that contains slashes seems to give some troubles to the controller")
     def test_22_service_path_delete_xpdr_check(self):
         response = test_utils.check_node_attribute_request("XPDRA01", "circuit-packs", "1%2F0%2F1-PLUG-NET")
         self.assertEqual(response['status_code'], requests.codes.ok)
