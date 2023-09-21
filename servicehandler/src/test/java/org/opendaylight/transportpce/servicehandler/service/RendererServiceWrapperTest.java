@@ -83,7 +83,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
         TempServiceDeleteInput input = new TempServiceDeleteInputBuilder(ServiceDataUtils.buildTempServiceDeleteInput())
             .setCommonId(null).build();
         ServiceDeleteOutput response = this.rendererServiceWrapperMock
-            .performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult);
+            .performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult, null);
         assertEquals(ResponseCodes.FINAL_ACK_YES, response.getConfigurationResponseCommon().getAckFinalIndicator());
         assertEquals(ResponseCodes.RESPONSE_FAILED, response.getConfigurationResponseCommon().getResponseCode());
         verifyNoInteractions(this.rendererServiceOperationsMock);
@@ -132,8 +132,9 @@ public class RendererServiceWrapperTest extends AbstractTest {
                     .class), any()))
             .thenReturn(response);
         TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput();
+        var tempServiceDeleteInput = ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
         ServiceDeleteOutput rendereResponse = this.rendererServiceWrapperMock
-            .performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult);
+            .performRenderer(tempServiceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, null);
         assertEquals(
             ResponseCodes.FINAL_ACK_NO,
             rendereResponse.getConfigurationResponseCommon().getAckFinalIndicator());
