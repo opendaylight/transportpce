@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af330936_e33097e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-22T07:01:44Z",
+      "side": 1,
+      "message": "CI connectivity issue with URL in the docs...\n\n21:13:33   buildcontroller: OK (347.17\u003dsetup[11.04]+cmd[336.13] seconds)\n21:13:33   testsPCE: OK (309.12\u003dsetup[94.51]+cmd[214.61] seconds)\n21:13:33   sims121: OK (17.11\u003dsetup[13.94]+cmd[3.17] seconds)\n21:13:33   build_karaf_tests121: OK (76.17\u003dsetup[13.92]+cmd[62.26] seconds)\n21:13:33   tests121: OK (2152.67\u003dsetup[8.09]+cmd[2144.58] seconds)\n21:13:33   sims221: OK (17.05\u003dsetup[13.92]+cmd[3.13] seconds)\n21:13:33   build_karaf_tests221: OK (74.44\u003dsetup[10.92]+cmd[63.52] seconds)\n21:13:33   tests_tapi: OK (949.84\u003dsetup[13.86]+cmd[2.21,933.77] seconds)\n21:13:33   tests221: OK (3047.16\u003dsetup[7.99]+cmd[3039.17] seconds)\n21:13:33   sims71: OK (14.56\u003dsetup[11.78]+cmd[2.78] seconds)\n21:13:33   build_karaf_tests71: OK (93.96\u003dsetup[15.46]+cmd[78.50] seconds)\n21:13:33   tests71: OK (502.10\u003dsetup[14.42]+cmd[2.17,485.52] seconds)\n21:13:33   build_karaf_tests_hybrid: OK (94.58\u003dsetup[22.28]+cmd[72.30] seconds)\n21:13:33   tests_hybrid: OK (908.02\u003dsetup[8.06]+cmd[5.22,894.73] seconds)\n21:13:33   buildlighty: OK (119.24\u003dsetup[7.78]+cmd[111.46] seconds)\n21:13:33   docs: OK (66.49\u003dsetup[64.65]+cmd[1.84] seconds)\n21:13:33   docs-linkcheck: FAIL code 1 (67.94\u003dsetup[64.74]+cmd[3.19] seconds)\n21:13:33   checkbashisms: OK (133.22\u003dsetup[2.38]+cmd[130.26,0.58] seconds)\n21:13:33   pre-commit: OK (38.42\u003dsetup[3.93]+cmd[26.93,7.56] seconds)\n21:13:33   pylint: OK (43.77\u003dsetup[15.90]+cmd[27.87] seconds)\n21:13:33   evaluation failed :( (5965.19 seconds)",
+      "revId": "9209b97ba82e8179dba1b779951d6053fd8eba96",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
