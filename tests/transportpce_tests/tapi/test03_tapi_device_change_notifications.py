@@ -278,17 +278,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response['output']['service']['lifecycle-state'], 'INSTALLED')
 
     def test_14_change_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
+                                                       {
             "port-name": "1",
             "port-type": "CFP2",
             "administrative-state": "outOfService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8144/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "xpdr-network"
+        }))
         time.sleep(2)
 
     def test_15_check_update_portmapping(self):
@@ -418,17 +414,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_21_restore_status_line_port_xpdrc(self):
-        url = "{}/config/org-openroadm-device:org-openroadm-device/circuit-packs/1%2F0%2F1-PLUG-NET/ports/1"
-        body = {"ports": [{
+        self.assertTrue(test_utils.sims_update_cp_port(('xpdrc', self.NODE_VERSION_221), '1/0/1-PLUG-NET', '1',
+                                                       {
             "port-name": "1",
             "port-type": "CFP2",
             "administrative-state": "inService",
-            "port-qual": "xpdr-network"}]}
-        response = requests.request("PUT", url.format("http://127.0.0.1:8144/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
+            "port-qual": "xpdr-network"
+        }))
         time.sleep(2)
 
     def test_22_check_update_portmapping_ok(self):

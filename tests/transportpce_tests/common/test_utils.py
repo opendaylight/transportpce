@@ -721,17 +721,12 @@ def sims_update_cp_port_rest(sim: tuple, circuitpack: str, port: str, payload: d
 
 def sims_update_cp_port_ntcf(sim: tuple, circuitpack: str, payload: dict):
     body = {"circuit-packs": {"circuit-pack-name": circuitpack, "ports": payload}}
-    print(body)
     xml_body = '<config><org-openroadm-device xmlns="http://org/openroadm/device">'
-    print(xml_body)
     xml_body += dict2xml(body, indent="  ")
-    print(xml_body)
     xml_body += '</org-openroadm-device></config>'
-    print(xml_body)
-    print(SIMS[sim]['port'])
-    with connect_ssh(host='127.0.0.1', port=SIMS[sim]['port'], username=NODES_LOGIN, password=NODES_PWD) as session:
+    with connect_ssh(host='127.0.0.1', port=int(SIMS[sim]['port']), username=NODES_LOGIN, password=NODES_PWD) as session:
         mgr = Manager(session, timeout=120)
-        mgr.edit_config(xml_body, target="candidate", default_operation="merge")
-        mgr.commit(True)
-    session.close()
+        reply = mgr.edit_config(xml_body, target="candidate", default_operation="merge")
+    if "None" in str(reply):
+        return True
     return False
