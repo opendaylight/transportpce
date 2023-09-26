@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "6703834d01e27bce741235f47b0f27f0692215d8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db234a4_925fc45a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-26T07:54:01Z",
+      "side": 1,
+      "message": "Thanks Christophe. LGTM\nPlease can we keep only the TAPI migration to lighty node and squash fixes with the previous change ?",
+      "revId": "6703834d01e27bce741235f47b0f27f0692215d8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
