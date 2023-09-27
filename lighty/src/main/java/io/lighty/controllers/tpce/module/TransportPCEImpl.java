@@ -123,14 +123,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         new PortMappingListener(networkModelService);
         var lgServRPS = lightyServices.getRpcProviderService();
         var lgServNS = lightyServices.getNotificationService();
+        new NetworkUtilsImpl(lgServBDB, lgServRPS);
         networkModelProvider = new NetworkModelProvider(
                 networkTransaction,
                 lgServBDB,
-                lgServRPS,
                 networkModelService, deviceTransactionManager, portMapping,
                 lgServNS,
-                new FrequenciesServiceImpl(lgServBDB),
-                new NetworkUtilsImpl(lgServBDB));
+                new FrequenciesServiceImpl(lgServBDB));
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
