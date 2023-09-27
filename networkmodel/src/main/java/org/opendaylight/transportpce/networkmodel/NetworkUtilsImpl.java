@@ -39,16 +39,22 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component
 public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkUtilsImpl.class);
     private final DataBroker dataBroker;
 
-    public NetworkUtilsImpl(DataBroker dataBroker) {
+    @Activate
+    public NetworkUtilsImpl(@Reference DataBroker dataBroker) {
         this.dataBroker = dataBroker;
+        LOG.info("NetworkUtilsImpl instanciated");
     }
 
     @Override

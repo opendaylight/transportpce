@@ -50,7 +50,8 @@ public class NetworkModelProviderTest {
     NotificationService notificationService;
     @Mock
     FrequenciesService frequenciesService;
-
+    @Mock
+    TransportpceNetworkutilsService networkUtils;
 
     @Test
     void networkmodelProviderInitTest() {
@@ -65,7 +66,7 @@ public class NetworkModelProviderTest {
         when(networkTransactionService.commit()).then(answer);
 
         new NetworkModelProvider(networkTransactionService, dataBroker, rpcProviderService, networkModelService,
-                deviceTransactionManager, portMapping, notificationService, frequenciesService);
+                deviceTransactionManager, portMapping, notificationService, frequenciesService, networkUtils);
 
         verify(rpcProviderService, times(1))
             .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
