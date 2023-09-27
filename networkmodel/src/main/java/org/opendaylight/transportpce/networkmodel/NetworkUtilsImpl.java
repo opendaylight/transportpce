@@ -7,27 +7,33 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLinkOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinksInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinksOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinksOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodesOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodesOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinksInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinksOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinksOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -36,29 +42,39 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
+public class NetworkUtilsImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkUtilsImpl.class);
     private final DataBroker dataBroker;
+    private final Registration rpcReg;
 
     @Activate
-    public NetworkUtilsImpl(@Reference DataBroker dataBroker) {
+    public NetworkUtilsImpl(@Reference DataBroker dataBroker, @Reference RpcProviderService rpcProvider) {
         this.dataBroker = dataBroker;
+        rpcReg = rpcProvider.registerRpcImplementations(getRpcClassToInstanceMap());
         LOG.info("NetworkUtilsImpl instanciated");
     }
 
-    @Override
-    public ListenableFuture<RpcResult<DeleteLinkOutput>> deleteLink(DeleteLinkInput input) {
+    @Deactivate
+    public void close() {
+        rpcReg.close();
+        LOG.info("{} closed", getClass().getSimpleName());
+    }
+
+    private ListenableFuture<RpcResult<DeleteLinkOutput>> deleteLink(DeleteLinkInput input) {
 
         LinkId linkId = new LinkId(input.getLinkId());
         // Building link instance identifier
@@ -99,8 +115,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         }
     }
 
-    @Override
-    public ListenableFuture<RpcResult<InitRoadmNodesOutput>> initRoadmNodes(InitRoadmNodesInput input) {
+    private ListenableFuture<RpcResult<InitRoadmNodesOutput>> initRoadmNodes(InitRoadmNodesInput input) {
         boolean createRdmLinks = OrdLink.createRdm2RdmLinks(input, this.dataBroker);
         if (createRdmLinks) {
             return RpcResultBuilder
@@ -113,8 +128,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         }
     }
 
-    @Override
-    public ListenableFuture<RpcResult<InitXpdrRdmLinksOutput>> initXpdrRdmLinks(InitXpdrRdmLinksInput input) {
+    private ListenableFuture<RpcResult<InitXpdrRdmLinksOutput>> initXpdrRdmLinks(InitXpdrRdmLinksInput input) {
         // Assigns user provided input in init-network-view RPC to nodeId
         LOG.info("Xpdr to Roadm links rpc called");
         boolean createXpdrRdmLinks = Rdm2XpdrLink.createXpdrRdmLinks(input.getLinksInput(), this.dataBroker);
@@ -130,8 +144,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         }
     }
 
-    @Override
-    public ListenableFuture<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
+    private ListenableFuture<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
         LOG.info("Roadm to Xpdr links rpc called");
         boolean createRdmXpdrLinks = Rdm2XpdrLink.createRdmXpdrLinks(input.getLinksInput(), this.dataBroker);
         if (createRdmXpdrLinks) {
@@ -144,5 +157,14 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
             LOG.error("init-rdm-xpdr-links rpc failed due to a bad input parameter");
             return RpcResultBuilder.<InitRdmXpdrLinksOutput>failed().buildFuture();
         }
+    }
+
+    public final ClassToInstanceMap<Rpc<?, ?>> getRpcClassToInstanceMap() {
+        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(DeleteLink.class, this::deleteLink)
+            .put(InitRoadmNodes.class, this::initRoadmNodes)
+            .put(InitXpdrRdmLinks.class, this::initXpdrRdmLinks)
+            .put(InitRdmXpdrLinks.class, this::initRdmXpdrLinks)
+            .build();
     }
 }
