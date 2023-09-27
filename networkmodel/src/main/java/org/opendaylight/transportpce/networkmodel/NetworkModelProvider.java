@@ -69,13 +69,14 @@ public class NetworkModelProvider {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference PortMapping portMapping,
             @Reference NotificationService notificationService,
-            @Reference FrequenciesService frequenciesService) {
+            @Reference FrequenciesService frequenciesService,
+            @Reference TransportpceNetworkutilsService networkUtils) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
         this.listeners = new ArrayList<>();
-        this.networkutilsService = new NetworkUtilsImpl(dataBroker);
+        this.networkutilsService = networkUtils;
         this.topologyListener = new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager,
             portMapping);
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
