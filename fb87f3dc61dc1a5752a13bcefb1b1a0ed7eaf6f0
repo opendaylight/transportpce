@@ -50,6 +50,23 @@
       "message": "recheck",
       "revId": "fb87f3dc61dc1a5752a13bcefb1b1a0ed7eaf6f0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "898971c2_f31a6df0",
+        "filename": "tox.ini",
+        "patchSetId": 6
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-27T10:42:50Z",
+      "side": 1,
+      "message": "I think we can simply remove this line now",
+      "revId": "fb87f3dc61dc1a5752a13bcefb1b1a0ed7eaf6f0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
