@@ -32,6 +32,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
+import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
 import org.opendaylight.transportpce.networkmodel.listeners.PortMappingListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -128,7 +129,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lgServRPS,
                 networkModelService, deviceTransactionManager, portMapping,
                 lgServNS,
-                new FrequenciesServiceImpl(lgServBDB));
+                new FrequenciesServiceImpl(lgServBDB),
+                new NetworkUtilsImpl(lgServBDB));
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
