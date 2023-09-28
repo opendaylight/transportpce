@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.dmaap.client.listener;
 
+import java.util.Set;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -14,22 +15,24 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.dmaap.client.resource.EventsApi;
 import org.opendaylight.transportpce.dmaap.client.resource.config.JsonConfigurator;
 import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
-    private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
+public class NbiNotificationsHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsHandler.class);
     private String topic = "unauthenticated.TPCE";
     private EventsApi api;
+    private Registration reg;
 
-    public NbiNotificationsListenerImpl(String baseUrl, String username, String password) {
+    public NbiNotificationsHandler(String baseUrl, String username, String password) {
         LOG.info("Dmaap server {} for user {}", baseUrl, username);
         Client client = ClientBuilder.newClient();
         if (username != null && username.isBlank() && password != null && !password.isBlank()) {
@@ -43,8 +46,18 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
 
     }
 
-    @Override
-    public void onPublishNotificationProcessService(PublishNotificationProcessService notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(
+                PublishNotificationProcessService.class, this::onPublishNotificationProcessService),
+            new CompositeListener.Component<>(
+                PublishNotificationAlarmService.class, this::onPublishNotificationAlarmService),
+            new CompositeListener.Component<>(
+                PublishTapiNotificationService.class, this::onPublishTapiNotificationService)
+        ));
+    }
+
+    void onPublishNotificationProcessService(PublishNotificationProcessService notification) {
         try {
             CreatedEvent response = api.sendEvent(topic, notification);
             LOG.info("Response received {}", response);
@@ -54,11 +67,9 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
 
     }
 
-    @Override
-    public void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
+    private void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
     }
 
-    @Override
-    public void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
+    private void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
     }
 }
