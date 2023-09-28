@@ -56,7 +56,7 @@ public class NetworkModelProvider {
     private List<Registration> listeners;
     private @NonNull Registration networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
-    private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
+    private Registration serviceHandlerListenerRegistration;
     private NotificationService notificationService;
     private FrequenciesService frequenciesService;
     private PortMappingListener portMappingListener;
@@ -99,8 +99,8 @@ public class NetworkModelProvider {
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
         networkutilsServiceRpcRegistration = rpcProviderService
             .registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
-        TransportpceServicehandlerListener serviceHandlerListner = new ServiceHandlerListener(frequenciesService);
-        serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
+        serviceHandlerListenerRegistration = notificationService.registerCompositeListener(
+            new ServiceHandlerListener(frequenciesService).getCompositeListener());
     }
 
         /**
