@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.nbinotifications.utils;
 import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
+import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsHandler;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
@@ -29,7 +29,7 @@ public final class TopicManager {
     private Map<String, Publisher<NotificationTapiService>> tapiPublisherMap = new HashMap<>();
     private String publisherServer;
     private JsonStringConverter<NotificationTapiService> tapiConverter;
-    private NbiNotificationsListenerImpl nbiNotificationsListener;
+    private NbiNotificationsHandler nbiNotificationsListener;
     private Map<String, Publisher<NotificationAlarmService>> alarmPublisherMap = new HashMap<>();
     private Map<String, Publisher<NotificationProcessService>> processPublisherMap = new HashMap<>();
     private JsonStringConverter<NotificationProcessService> processConverter;
@@ -42,7 +42,7 @@ public final class TopicManager {
         return instance;
     }
 
-    public void setNbiNotificationsListener(NbiNotificationsListenerImpl nbiNotificationsListener) {
+    public void setNbiNotificationsListener(NbiNotificationsHandler nbiNotificationsListener) {
         this.nbiNotificationsListener = nbiNotificationsListener;
     }
 
