@@ -8,9 +8,10 @@
 package org.opendaylight.transportpce.nbinotifications.listener;
 
 import java.util.Map;
+import java.util.Set;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.NbiNotificationsUtils;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
@@ -20,14 +21,16 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapi
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
+public class NbiNotificationsListenerImpl {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
     private Map<String, Publisher<NotificationProcessService>> publishersServiceMap;
     private Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
     private Map<String, Publisher<NotificationTapiService>> tapiPublisherMap;
+    private Registration reg;
 
     public NbiNotificationsListenerImpl(Map<String, Publisher<NotificationProcessService>> publishersServiceMap,
                                         Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap,
@@ -37,8 +40,22 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
         this.tapiPublisherMap = tapiPublisherMap;
     }
 
-    @Override
-    public void onPublishNotificationProcessService(PublishNotificationProcessService notification) {
+    public void register(final NotificationService notificationService) {
+        reg = notificationService.registerCompositeListener(new NotificationService.CompositeListener(Set.of(
+            new NotificationService.CompositeListener.Component<>(
+                PublishNotificationProcessService.class, this::onPublishNotificationProcessService),
+            new NotificationService.CompositeListener.Component<>(
+                PublishNotificationAlarmService.class, this::onPublishNotificationAlarmService),
+            new NotificationService.CompositeListener.Component<>(
+                PublishTapiNotificationService.class, this::onPublishTapiNotificationService)
+        )));
+    }
+
+    public void unregister() {
+        reg.close();
+    }
+
+    void onPublishNotificationProcessService(PublishNotificationProcessService notification) {
         LOG.info("Receiving request for publishing notification service");
         String publisherName = notification.getPublisherName();
         if (!publishersServiceMap.containsKey(publisherName)) {
@@ -58,8 +75,7 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
                         .build(), notification.getConnectionType().getName());
     }
 
-    @Override
-    public void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
+    private void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
         LOG.info("Receiving request for publishing notification alarm service");
         String publisherName = notification.getPublisherName();
         if (!publishersAlarmMap.containsKey(publisherName)) {
@@ -75,8 +91,7 @@ public class NbiNotificationsListenerImpl implements NbiNotificationsListener {
                         .build(), "alarm" + notification.getConnectionType().getName());
     }
 
-    @Override
-    public void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
+    void onPublishTapiNotificationService(PublishTapiNotificationService notification) {
         LOG.info("Receiving request for publishing TAPI notification");
         String topic = notification.getTopic();
         if (!tapiPublisherMap.containsKey(topic)) {
