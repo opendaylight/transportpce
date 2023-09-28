@@ -8,24 +8,30 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
+import java.util.Set;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceHandlerListener implements TransportpceServicehandlerListener {
+public class ServiceHandlerListener {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerListener.class);
     private final FrequenciesService service;
+
 
     public ServiceHandlerListener(FrequenciesService service) {
         LOG.info("Init service handler listener for network");
         this.service = service;
     }
 
-    @Override
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)));
+    }
+
     public void onServiceRpcResultSh(ServiceRpcResultSh notification) {
         if (notification.getStatus() != RpcStatusEx.Successful) {
             LOG.info("RpcStatusEx of notification not equals successful. Nothing to do for notification {}",
