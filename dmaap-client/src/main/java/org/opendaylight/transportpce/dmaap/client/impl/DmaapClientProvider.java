@@ -9,8 +9,7 @@ package org.opendaylight.transportpce.dmaap.client.impl;
 
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.transportpce.dmaap.client.listener.NbiNotificationsListenerImpl;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -33,7 +32,7 @@ public class DmaapClientProvider {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(DmaapClientProvider.class);
-    private ListenerRegistration<NbiNotificationsListener> listenerRegistration;
+    private Registration listenerRegistration;
 
     @Activate
     public DmaapClientProvider(@Reference NotificationService notificationService, Configuration config) {
@@ -42,8 +41,8 @@ public class DmaapClientProvider {
 
     public DmaapClientProvider(NotificationService notificationService, String baseUrl,
             String username, String password) {
-        listenerRegistration = notificationService.registerNotificationListener(
-                new NbiNotificationsListenerImpl(baseUrl, username, password));
+        final var listener = new NbiNotificationsListenerImpl(baseUrl, username, password);
+        listener.register(notificationService);
         LOG.info("DmaapClientProvider Session Initiated");
     }
 
