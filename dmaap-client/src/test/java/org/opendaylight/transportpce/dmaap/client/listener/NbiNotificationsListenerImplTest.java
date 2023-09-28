@@ -29,7 +29,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
@@ -52,7 +51,7 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
         logger.addAppender(listAppender);
-        NbiNotificationsListener listener = new NbiNotificationsListenerImpl("http://localhost:9998", null, null);
+        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl("http://localhost:9998", null, null);
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setCommonId("CommonId")
                 .setMessage("Service implemented")
