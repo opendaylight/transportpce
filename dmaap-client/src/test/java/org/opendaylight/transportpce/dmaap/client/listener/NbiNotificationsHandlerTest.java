@@ -29,7 +29,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.endpoint.TxDirectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
@@ -38,7 +37,7 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.LoggerFactory;
 
-public class NbiNotificationsListenerImplTest extends JerseyTest {
+public class NbiNotificationsHandlerTest extends JerseyTest {
     @Override
     protected Application configure() {
         enable(TestProperties.LOG_TRAFFIC);
@@ -48,11 +47,11 @@ public class NbiNotificationsListenerImplTest extends JerseyTest {
 
     @Test
     void onPublishNotificationServiceTest() {
-        Logger logger = (Logger) LoggerFactory.getLogger(NbiNotificationsListenerImpl.class);
+        Logger logger = (Logger) LoggerFactory.getLogger(NbiNotificationsHandler.class);
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
         logger.addAppender(listAppender);
-        NbiNotificationsListener listener = new NbiNotificationsListenerImpl("http://localhost:9998", null, null);
+        NbiNotificationsHandler listener = new NbiNotificationsHandler("http://localhost:9998", null, null);
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setCommonId("CommonId")
                 .setMessage("Service implemented")
