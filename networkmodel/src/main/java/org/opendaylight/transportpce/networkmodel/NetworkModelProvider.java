@@ -28,9 +28,7 @@ import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
@@ -56,7 +54,7 @@ public class NetworkModelProvider {
     private List<Registration> listeners;
     private @NonNull Registration networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
-    private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
+    private Registration serviceHandlerListenerRegistration;
     private NotificationService notificationService;
     private FrequenciesService frequenciesService;
     private PortMappingListener portMappingListener;
@@ -99,8 +97,8 @@ public class NetworkModelProvider {
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
         networkutilsServiceRpcRegistration = rpcProviderService
             .registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
-        TransportpceServicehandlerListener serviceHandlerListner = new ServiceHandlerListener(frequenciesService);
-        serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
+        serviceHandlerListenerRegistration = notificationService.registerCompositeListener(
+            new ServiceHandlerListener(frequenciesService).getCompositeListener());
     }
 
         /**
