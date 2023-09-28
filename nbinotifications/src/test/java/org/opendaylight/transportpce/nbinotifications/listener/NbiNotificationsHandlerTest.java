@@ -37,7 +37,7 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationServiceBuilder;
 
-public class NbiNotificationsListenerImplTest extends AbstractTest {
+public class NbiNotificationsHandlerTest extends AbstractTest {
     @Mock
     private Publisher<NotificationProcessService> publisherService;
     @Mock
@@ -52,7 +52,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishNotificationServiceTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("test")
@@ -68,7 +68,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishNotificationServiceWrongPublisherTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         PublishNotificationProcessService notification = new PublishNotificationProcessServiceBuilder()
                 .setPublisherName("wrongPublisher")
@@ -84,7 +84,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishNotificationAlarmServiceTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("test")
@@ -99,7 +99,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishNotificationAlarmServiceWrongPublisherTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         PublishNotificationAlarmService notification = new PublishNotificationAlarmServiceBuilder()
                 .setPublisherName("wrongPublisher")
@@ -114,7 +114,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishTapiNotificationServiceTest() throws ExecutionException, InterruptedException {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
 
         PublishTapiNotificationService notification
@@ -127,7 +127,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void onPublishTapiNotificationServiceTestWrongPublisherTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
             Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         PublishTapiNotificationService notification
             = new PublishTapiNotificationServiceBuilder(NotificationServiceDataUtils.buildReceivedTapiAlarmEvent())
@@ -139,7 +139,7 @@ public class NbiNotificationsListenerImplTest extends AbstractTest {
 
     @Test
     void getTapiPublisherFromTopicTest() {
-        NbiNotificationsListenerImpl listener = new NbiNotificationsListenerImpl(Map.of("test", publisherService),
+        NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
         assertNull(listener.getTapiPublisherFromTopic("toto"));
         assertEquals(publisherTapiService, listener.getTapiPublisherFromTopic("test"));
