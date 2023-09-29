@@ -9,8 +9,7 @@
 package org.opendaylight.transportpce.olm;
 
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
-import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class OlmProvider {
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
-    private ObjectRegistration<TransportpceOlmService> olmRPCRegistration;
+    private final Registration reg;
 
     /**
      * Instantiates a new olm provider.
@@ -35,9 +34,8 @@ public class OlmProvider {
      */
     @Activate
     public OlmProvider(@Reference final RpcProviderService rpcProviderService,
-            @Reference final TransportpceOlmService olmPowerServiceRpc) {
-        olmRPCRegistration = rpcProviderService.registerRpcImplementation(TransportpceOlmService.class,
-                olmPowerServiceRpc);
+            @Reference final OlmPowerServiceRpcImpl olmPowerServiceRpc) {
+        reg = olmPowerServiceRpc.registerWith(rpcProviderService);
         LOG.info("OlmProvider Session Initiated");
     }
 
@@ -48,8 +46,8 @@ public class OlmProvider {
     public void close() {
         LOG.info("OlmProvider Closed");
         // Clean up the RPC service registration
-        if (olmRPCRegistration != null) {
-            olmRPCRegistration.close();
+        if (reg != null) {
+            reg.close();
         }
     }
 }
