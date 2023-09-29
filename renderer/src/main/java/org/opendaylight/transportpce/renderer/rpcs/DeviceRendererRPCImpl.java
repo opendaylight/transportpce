@@ -8,26 +8,35 @@
 
 package org.opendaylight.transportpce.renderer.rpcs;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOms;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.TransportpceDeviceRendererService;
+import org.opendaylight.yangtools.concepts.Registration;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +47,27 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererRPCImpl.class);
     private DeviceRendererService deviceRenderer;
     private OtnDeviceRendererService otnDeviceRendererService;
+    private Registration reg;
 
     @Activate
-    public DeviceRendererRPCImpl(@Reference DeviceRendererService deviceRenderer,
+    public DeviceRendererRPCImpl(@Reference RpcProviderService rpcProviderService,
+            @Reference DeviceRendererService deviceRenderer,
             @Reference OtnDeviceRendererService otnDeviceRendererService) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRendererService = otnDeviceRendererService;
+        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(ServicePath.class, this::servicePath)
+            .put(OtnServicePath.class, this::otnServicePath)
+            .put(RendererRollback.class, this::rendererRollback)
+            .put(CreateOtsOms.class, this::createOtsOms)
+            .build());
         LOG.debug("DeviceRendererRPCImpl instantiated");
+    }
+
+    @Deactivate
+    public void close() {
+        this.reg.close();
+        LOG.info("DeviceRendererRPCImpl Closed");
     }
 
     /**
@@ -72,7 +95,7 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
      * @return Result of the request
      */
     @Override
-    public ListenableFuture<RpcResult<ServicePathOutput>> servicePath(ServicePathInput input) {
+    public final ListenableFuture<RpcResult<ServicePathOutput>> servicePath(ServicePathInput input) {
         if (input.getOperation() != null) {
             if (input.getOperation().getIntValue() == 1) {
                 LOG.info("Create operation request received");
@@ -92,7 +115,7 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
     }
 
     @Override
-    public ListenableFuture<RpcResult<OtnServicePathOutput>> otnServicePath(OtnServicePathInput input) {
+    public final ListenableFuture<RpcResult<OtnServicePathOutput>> otnServicePath(OtnServicePathInput input) {
         if (input.getOperation() != null && input.getServiceFormat() != null && input.getServiceRate() != null) {
             String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
             if (input.getOperation().getIntValue() == 1) {
@@ -118,12 +141,12 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
      * @return Success flag and nodes which failed to rollback
      */
     @Override
-    public ListenableFuture<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
+    public final ListenableFuture<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
         return RpcResultBuilder.success(this.deviceRenderer.rendererRollback(input)).buildFuture();
     }
 
     @Override
-    public ListenableFuture<RpcResult<CreateOtsOmsOutput>> createOtsOms(CreateOtsOmsInput input) {
+    public final ListenableFuture<RpcResult<CreateOtsOmsOutput>> createOtsOms(CreateOtsOmsInput input) {
         LOG.info("Request received to create oms and ots interfaces on {}: {}", input.getNodeId(), input
             .getLogicalConnectionPoint());
         try {
@@ -133,5 +156,9 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
                     input.getLogicalConnectionPoint(),e);
         }
         return null;
+    }
+
+    public Registration getRegisteredRpc() {
+        return reg;
     }
 }
