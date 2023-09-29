@@ -7,18 +7,25 @@
  */
 package org.opendaylight.transportpce.renderer.rpcs;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDelete;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererService;
+import org.opendaylight.yangtools.concepts.Registration;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,15 +36,27 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
     private static final Logger LOG = LoggerFactory.getLogger(TransportPCEServicePathRPCImpl.class);
 
     private final RendererServiceOperations rendererServiceOperations;
+    private Registration reg;
 
     @Activate
-    public TransportPCEServicePathRPCImpl(@Reference RendererServiceOperations rendererServiceOperations) {
+    public TransportPCEServicePathRPCImpl(@Reference RendererServiceOperations rendererServiceOperations,
+            @Reference RpcProviderService rpcProviderService) {
         this.rendererServiceOperations = rendererServiceOperations;
+        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(ServiceImplementationRequest.class, this::serviceImplementationRequest)
+            .put(ServiceDelete.class, this::serviceDelete)
+            .build());
         LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
 
+    @Deactivate
+    public void close() {
+        this.reg.close();
+        LOG.info("TransportPCEServicePathRPCImpl Closed");
+    }
+
     @Override
-    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public final ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service delete request {}", serviceName);
         ServiceDeleteOutput output = null;
@@ -50,7 +69,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
+    public final ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {}", serviceName);
