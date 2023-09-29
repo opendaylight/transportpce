@@ -9,6 +9,8 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
+import java.util.ArrayList;
+import java.util.List;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -38,7 +40,6 @@ import org.opendaylight.transportpce.networkmodel.service.FrequenciesServiceImpl
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl;
 import org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl;
-import org.opendaylight.transportpce.olm.OlmProvider;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
@@ -75,6 +76,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,8 +93,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final PceProvider pceProvider;
     // network model beans
     private final NetworkModelProvider networkModelProvider;
-    // OLM beans
-    private final OlmProvider olmProvider;
     // renderer beans
     private final RendererProvider rendererProvider;
     // service-handler beans
@@ -101,6 +101,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider tapiProvider;
     // nbi-notifications beans
     private NbiNotificationsProvider nbiNotificationsProvider;
+    private List<Registration> rpcRegistrations = new ArrayList<>();
 
     public TransportPCEImpl(
             LightyServices lightyServices, boolean activateNbiNotification, boolean activateTapi,
@@ -145,14 +146,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         MappingUtils mappingUtils = new MappingUtilsImpl(lgServBDB);
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
-        TransportpceOlmService olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
+        OlmPowerServiceRpcImpl olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
             new OlmPowerServiceImpl(
                 lgServBDB,
                 new PowerMgmtImpl(
                     openRoadmInterfaces, crossConnect, deviceTransactionManager,
                     portMapping, Long.valueOf(olmtimer1).longValue(), Long.valueOf(olmtimer2).longValue()),
-                deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces));
-        olmProvider = new OlmProvider(lgServRPS, olmPowerServiceRpc);
+                deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces),
+            lgServRPS);
+        rpcRegistrations.add(olmPowerServiceRpc.getRegisteredRpc());
         LOG.info("Creating renderer beans ...");
         initOpenRoadmFactory(mappingUtils, openRoadmInterfaces, portMapping);
         DeviceRendererService deviceRendererService = new DeviceRendererServiceImpl(
@@ -238,14 +240,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.close();
         LOG.info("Shutting down renderer provider ...");
         rendererProvider.close();
-        LOG.info("Shutting down OLM provider ...");
-        olmProvider.close();
         LOG.info("Shutting down network-model provider ...");
         networkModelProvider.close();
         LOG.info("Shutting down PCE provider ...");
         pceProvider.close();
         LOG.info("Shutting down transaction providers ...");
         deviceTransactionManager.preDestroy();
+        LOG.info("Closing registered RPCs...");
+        for (Registration reg : rpcRegistrations) {
+            reg.close();
+        }
         LOG.info("Shutdown done.");
         return true;
     }

@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -42,6 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -55,11 +57,13 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
 
     @Mock
     private OlmPowerService olmPowerService;
-    private OlmPowerServiceRpcImpl olmPowerServiceRpc;
+    @Mock
+    private RpcProviderService rpcProviderService;
+    private TransportpceOlmService olmPowerServiceRpc;
 
     @BeforeEach
     public void setUp() {
-        this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService);
+        this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService, rpcProviderService);
     }
 
     @Test
