@@ -21,19 +21,17 @@ public class ServiceHandlerListener {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerListener.class);
     private final FrequenciesService service;
 
-    private final NotificationService.CompositeListener reg;
-
     public ServiceHandlerListener(FrequenciesService service) {
         LOG.info("Init service handler listener for network");
         this.service = service;
-        reg = new NotificationService.CompositeListener(Set.of(
+    }
+
+    public NotificationService.CompositeListener getCompositeListener() {
+        return new NotificationService.CompositeListener(Set.of(
             new NotificationService.CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)
         ));
     }
 
-    public NotificationService.CompositeListener getCompositeListener(){
-        return reg;
-    }
     public void onServiceRpcResultSh(ServiceRpcResultSh notification) {
         if (notification.getStatus() != RpcStatusEx.Successful) {
             LOG.info("RpcStatusEx of notification not equals successful. Nothing to do for notification {}",

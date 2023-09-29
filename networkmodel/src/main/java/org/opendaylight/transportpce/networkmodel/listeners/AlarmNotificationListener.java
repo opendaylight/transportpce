@@ -10,8 +10,10 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
@@ -19,7 +21,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsupp
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.AlarmNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.alarm.ProbableCause;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.Resource;
@@ -37,24 +38,30 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
+public class AlarmNotificationListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(AlarmNotificationListener.class);
     private static final String PIPE = "|";
     private final DataBroker dataBroker;
+    private final NotificationService.CompositeListener compositeListener;
 
     public AlarmNotificationListener(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
+        compositeListener = new NotificationService.CompositeListener(Set.of(
+            new NotificationService.CompositeListener.Component<>(AlarmNotification.class, this::onAlarmNotification)
+        ));
     }
 
+    public NotificationService.CompositeListener getCompositeListener() {
+        return compositeListener;
+    }
 
     /**
      * Callback for alarm-notification.
      *
      * @param notification AlarmNotification object
      */
-    @Override
-    public void onAlarmNotification(AlarmNotification notification) {
+    private void onAlarmNotification(AlarmNotification notification) {
         List<Nodes> allNodeList = new ArrayList<>();
         InstanceIdentifier<ServiceNodelist> serviceNodeListIID = InstanceIdentifier.create(ServiceNodelist.class);
         try (ReadTransaction rtx = dataBroker.newReadOnlyTransaction()) {

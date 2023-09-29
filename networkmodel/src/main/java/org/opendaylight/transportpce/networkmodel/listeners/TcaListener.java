@@ -8,21 +8,32 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.OrgOpenroadmTcaListener;
+import java.util.Set;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.TcaNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TcaListener implements OrgOpenroadmTcaListener {
+public class TcaListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TcaListener.class);
+    private final NotificationService.CompositeListener compositeListener;
+
+    public TcaListener()  {
+        compositeListener = new NotificationService.CompositeListener(Set.of(
+            new NotificationService.CompositeListener.Component<>(TcaNotification.class, this::onTcaNotification)
+        ));
+    }
+
+    public NotificationService.CompositeListener getCompositeListener() {
+        return compositeListener;
+    }
 
     /**
      * Callback for tca-notification.
      * @param notification TcaNotification object
      */
-    @Override
-    public void onTcaNotification(TcaNotification notification) {
+    private void onTcaNotification(TcaNotification notification) {
         LOG.info("Notification {} received {}", TcaNotification.QNAME, notification);
     }
 
