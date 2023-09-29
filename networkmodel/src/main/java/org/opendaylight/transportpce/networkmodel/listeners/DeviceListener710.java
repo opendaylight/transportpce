@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.CreateTechInfoNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OtdrScanResult;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.pack.Ports;
@@ -31,7 +32,7 @@ import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeviceListener710 implements OrgOpenroadmDeviceListener {
+public class DeviceListener710 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceListener710.class);
     private final String nodeId;
@@ -43,14 +44,21 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
         this.portMapping = portMapping;
     }
 
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(ChangeNotification.class, this::onChangeNotification),
+            new CompositeListener.Component<>(CreateTechInfoNotification.class, this::onCreateTechInfoNotification),
+            new CompositeListener.Component<>(OtdrScanResult.class, this::onOtdrScanResult)
+        ));
+    }
+
     /**
      * Callback for change-notification.
      *
      * @param notification
      *            ChangeNotification object
      */
-    @Override
-    public void onChangeNotification(ChangeNotification notification) {
+    void onChangeNotification(ChangeNotification notification) {
         LOG.debug("device71 notification received = {}", notification);
         if (notification.getEdit() == null) {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
@@ -123,8 +131,7 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
         }
     }
 
-    @Override
-    public void onCreateTechInfoNotification(CreateTechInfoNotification notification) {
+    private void onCreateTechInfoNotification(CreateTechInfoNotification notification) {
     }
 
     /**
@@ -133,8 +140,7 @@ public class DeviceListener710 implements OrgOpenroadmDeviceListener {
      * @param notification
      *            OtdrScanResult object
      */
-    @Override
-    public void onOtdrScanResult(OtdrScanResult notification) {
+    private void onOtdrScanResult(OtdrScanResult notification) {
         LOG.info("Notification {} received {}", OtdrScanResult.QNAME, notification);
     }
 
