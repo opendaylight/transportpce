@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ebb6774_a13aa32b",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-29T07:08:38Z",
+      "side": 1,
+      "message": "please can we separate this improvement from this functional change ?",
+      "revId": "0317972bbbbdebf3f2f2466395172aa7e6159c92",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad8c75be_dc781aff",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationServiceDeserializer.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-09-29T07:08:38Z",
+      "side": 1,
+      "message": "else not needed IMO",
+      "revId": "0317972bbbbdebf3f2f2466395172aa7e6159c92",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
