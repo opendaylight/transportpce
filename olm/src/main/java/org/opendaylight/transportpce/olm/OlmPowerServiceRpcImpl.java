@@ -64,8 +64,8 @@ public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
      */
     @Override
     public ListenableFuture<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
-        if (this.olmPowerService.getPm(input).getNodeId() == null) {
-            LOG.error("getPm: Error with input parameters");
+        if (input.getNodeId() == null) {
+            LOG.error("getPm: NodeId can not be null");
             return RpcResultBuilder.<GetPmOutput>failed()
                     .withError(ErrorType.RPC, "Error with input parameters")
                     .buildFuture();

@@ -88,30 +88,6 @@ public final class TransactionUtils {
         return true;
     }
 
-//
-//    public static boolean writeTransaction(DataBroker dataBroker, LogicalDatastoreType logicalDatastoreType,
-//        InstanceIdentifier instanceIdentifier,
-//        DataObject object)
-
-//    public static DataObject readTransaction(DeviceTransactionManager deviceTransactionManager,
-//                                  String nodeId,
-//                                  LogicalDatastoreType logicalDatastoreType,
-//                                  InstanceIdentifier<? extends DataObject> instanceIdentifier)
-//            throws ExecutionException, InterruptedException {
-//        Future<Optional<DeviceTransaction>> deviceTxFuture =
-//                deviceTransactionManager.getDeviceTransaction(nodeId);
-//        if (!deviceTxFuture.get().isPresent()) {
-//            return null;
-//        }
-//        DeviceTransaction deviceTx = deviceTxFuture.get().get();
-//        com.google.common.base.Optional<? extends DataObject> readOpt
-//                = deviceTx.read(logicalDatastoreType, instanceIdentifier).get();
-//        if (!readOpt.isPresent()) {
-//            return null;
-//        }
-//        return readOpt.get();
-//    }
-
     public static Network1 getNullNetwork() {
         Map<LinkKey, Link> nullMap = null;
         Network1 network = new Network1Builder().setLink(nullMap).build();
