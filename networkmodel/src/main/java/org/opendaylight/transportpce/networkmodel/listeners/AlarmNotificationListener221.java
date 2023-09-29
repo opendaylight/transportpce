@@ -10,8 +10,10 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
@@ -19,7 +21,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsupp
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.AlarmNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.alarm.ProbableCause;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.ResourceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev181019.resource.resource.Resource;
@@ -37,7 +38,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
+public class AlarmNotificationListener221 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AlarmNotificationListener221.class);
     private static final String PIPE = "|";
@@ -47,14 +48,17 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
         this.dataBroker = dataBroker;
     }
 
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(AlarmNotification.class, this::onAlarmNotification)));
+    }
 
     /**
      * Callback for alarm-notification.
      *
      * @param notification AlarmNotification object
      */
-    @Override
-    public void onAlarmNotification(AlarmNotification notification) {
+    private void onAlarmNotification(AlarmNotification notification) {
         List<Nodes> allNodeList = new ArrayList<>();
         InstanceIdentifier<ServiceNodelist> serviceNodeListIID = InstanceIdentifier.create(ServiceNodelist.class);
         try {
