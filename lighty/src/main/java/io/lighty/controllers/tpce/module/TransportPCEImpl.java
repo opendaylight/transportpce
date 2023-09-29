@@ -46,7 +46,6 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.transportpce.renderer.RendererProvider;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 // Adding OTN interface
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
@@ -93,8 +92,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private final PceProvider pceProvider;
     // network model beans
     private final NetworkModelProvider networkModelProvider;
-    // renderer beans
-    private final RendererProvider rendererProvider;
     // service-handler beans
     private final ServicehandlerProvider servicehandlerProvider;
     // T-api
@@ -163,8 +160,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 mappingUtils, portMapping);
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(
                 crossConnect, openRoadmInterfaces, deviceTransactionManager, mappingUtils, portMapping);
-        rendererProvider = initRenderer(
-                lightyServices, olmPowerServiceRpc, deviceRendererService, otnDeviceRendererService, portMapping);
+        initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService, otnDeviceRendererService, portMapping);
 
         LOG.info("Creating service-handler beans ...");
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
@@ -238,8 +234,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             LOG.info("Shutting down service-handler provider ...");
         }
         servicehandlerProvider.close();
-        LOG.info("Shutting down renderer provider ...");
-        rendererProvider.close();
         LOG.info("Shutting down network-model provider ...");
         networkModelProvider.close();
         LOG.info("Shutting down PCE provider ...");
@@ -267,19 +261,20 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             tapiNetworkModelListenerImpl, tapiNetworkModelService);
     }
 
-    private RendererProvider initRenderer(
+    private void initRenderer(
             LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
             DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService,
             PortMapping portMapping) {
-        return new RendererProvider(
-            lightyServices.getRpcProviderService(), deviceRendererService,
-            otnDeviceRendererService,
-            new DeviceRendererRPCImpl(deviceRendererService, otnDeviceRendererService),
-            new TransportPCEServicePathRPCImpl(
+        DeviceRendererRPCImpl deviceRendererRpcImpl = new DeviceRendererRPCImpl(lightyServices.getRpcProviderService(),
+                deviceRendererService, otnDeviceRendererService);
+        rpcRegistrations.add(deviceRendererRpcImpl.getRegisteredRpc());
+        TransportPCEServicePathRPCImpl tpceServicePathRPCImpl = new TransportPCEServicePathRPCImpl(
                 new RendererServiceOperationsImpl(
                     deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
                     lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService(),
-                    portMapping)));
+                    portMapping),
+                lightyServices.getRpcProviderService());
+        rpcRegistrations.add(tpceServicePathRPCImpl.getRegisteredRpc());
     }
 
     private OpenRoadmInterfaceFactory initOpenRoadmFactory(

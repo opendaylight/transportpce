@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.renderer.rpcs;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
@@ -28,6 +30,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 
 
 public class DeviceRendererRPCImplTest extends AbstractTest {
+    private final RpcProviderService rpcProviderService = mock(RpcProviderService.class);
     private final DeviceRendererService deviceRenderer = mock(DeviceRendererService.class);
     private final OtnDeviceRendererService otnDeviceRenderer = mock(OtnDeviceRendererService.class);
     private final ServicePathInput servicePathInput = spy(ServicePathInput.class);
@@ -37,7 +40,12 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
 
     @BeforeEach
     void setup() {
-        deviceRendererRPC = new DeviceRendererRPCImpl(deviceRenderer, otnDeviceRenderer);
+        deviceRendererRPC = new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRenderer);
+    }
+
+    @Test
+    void testRpcRegistration() {
+        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
     }
 
     @Test
