@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fdcfc35_af59400a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-29T09:58:30Z",
+      "side": 1,
+      "message": "Thanks for the review. Done",
+      "revId": "bf9453eeaf2b725ac937e09c89ea04a838200411",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aced4002_19d01bf5",
@@ -48,6 +65,24 @@
       "writtenOn": "2023-09-29T07:11:44Z",
       "side": 1,
       "message": "2023?",
+      "revId": "bf9453eeaf2b725ac937e09c89ea04a838200411",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d395220d_152e5560",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkUtilsImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-09-29T09:58:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aced4002_19d01bf5",
       "revId": "bf9453eeaf2b725ac937e09c89ea04a838200411",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
