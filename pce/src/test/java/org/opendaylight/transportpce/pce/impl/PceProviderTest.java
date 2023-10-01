@@ -28,10 +28,12 @@ public class PceProviderTest extends AbstractTest {
     private RpcProviderService rpcService;
     @Mock
     private PathComputationService pathComputationService;
+    @Mock
+    private TransportpcePceService pceServiceRPCImpl;
 
     @Test
     void testInit() {
-        new PceProvider(rpcService, pathComputationService);
+        new PceProvider(rpcService, pathComputationService, pceServiceRPCImpl);
         verify(rpcService, times(1)).registerRpcImplementation(any(), any(TransportpcePceService.class));
     }
 }
