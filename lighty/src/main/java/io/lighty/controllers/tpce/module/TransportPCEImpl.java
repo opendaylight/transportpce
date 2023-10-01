@@ -201,6 +201,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                     new TapiNetworkModelServiceImpl(
                         networkTransaction, deviceTransactionManager, tapiLink,
                         lgServBNPS));
+            rpcRegistrations.addAll(tapiProvider.getRegisteredRpcs());
         }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
