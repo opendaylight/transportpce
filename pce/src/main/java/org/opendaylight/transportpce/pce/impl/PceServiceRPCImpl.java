@@ -19,20 +19,26 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev22
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * PceService implementation.
  */
+@Component
 public class PceServiceRPCImpl implements TransportpcePceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceServiceRPCImpl.class);
 
     private final PathComputationService pathComputationService;
 
-    public PceServiceRPCImpl(PathComputationService pathComputationService) {
+    @Activate
+    public PceServiceRPCImpl(@Reference PathComputationService pathComputationService) {
         this.pathComputationService = pathComputationService;
+        LOG.info("PceServiceRPCImpl instantiated");
     }
 
     @Override
