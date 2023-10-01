@@ -26,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -86,6 +87,8 @@ public class TapiConnectivityImplTest extends AbstractTest {
     private NetworkListener networkModelListenerImpl;
     @Mock
     public CatalogDataStoreOperations catalogDataStoreOperations;
+    @Mock
+    private RpcProviderService rpcProviderService;
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImplTest.class);
     private static ServiceDataStoreOperations serviceDataStoreOperations;
@@ -129,7 +132,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     @Test
     void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(pathComputationService,
+        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
@@ -154,7 +157,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     @Test
     void createConnServiceShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(pathComputationService,
+        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
@@ -180,7 +183,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     @Test
     void deleteConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(pathComputationService,
+        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
@@ -205,7 +208,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     @Test
     void deleteConnServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput1();
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(pathComputationService,
+        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
@@ -230,7 +233,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     void deleteConnServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
         when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
 
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(pathComputationService,
+        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
             rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
