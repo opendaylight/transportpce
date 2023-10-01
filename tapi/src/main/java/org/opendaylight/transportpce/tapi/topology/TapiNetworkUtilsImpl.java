@@ -7,22 +7,27 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.DeleteTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.DeleteTapiLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.DeleteTapiLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.DeleteTapiLinkOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitRoadmRoadmTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitRoadmRoadmTapiLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitRoadmRoadmTapiLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitRoadmRoadmTapiLinkOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitXpdrRdmTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitXpdrRdmTapiLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitXpdrRdmTapiLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.InitXpdrRdmTapiLinkOutputBuilder;
@@ -37,12 +42,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.context.TopologyKey;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,16 +63,29 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
             .getBytes(Charset.forName("UTF-8"))).toString());
     private final NetworkTransactionService networkTransactionService;
     private final TapiLink tapiLink;
+    private Registration reg;
 
     @Activate
-    public TapiNetworkUtilsImpl(@Reference NetworkTransactionService networkTransactionService,
-            @Reference TapiLink tapiLink) {
+    public TapiNetworkUtilsImpl(@Reference RpcProviderService rpcProviderService,
+            @Reference NetworkTransactionService networkTransactionService, @Reference TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
         this.tapiLink = tapiLink;
+        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(InitRoadmRoadmTapiLink.class, this::initRoadmRoadmTapiLink)
+            .put(InitXpdrRdmTapiLink.class, this::initXpdrRdmTapiLink)
+            .put(DeleteTapiLink.class, this::deleteTapiLink)
+            .build());
+        LOG.info("TapiNetworkUtilsImpl instantiated");
+    }
+
+    @Deactivate
+    public void close() {
+        this.reg.close();
+        LOG.info("TapiNetworkUtilsImpl Closed");
     }
 
     @Override
-    public ListenableFuture<RpcResult<InitRoadmRoadmTapiLinkOutput>> initRoadmRoadmTapiLink(
+    public final ListenableFuture<RpcResult<InitRoadmRoadmTapiLinkOutput>> initRoadmRoadmTapiLink(
             InitRoadmRoadmTapiLinkInput input) {
         // TODO --> need to check if the nodes and neps exist in the topology
         String sourceNode = input.getRdmANode();
@@ -92,7 +113,8 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
     }
 
     @Override
-    public ListenableFuture<RpcResult<InitXpdrRdmTapiLinkOutput>> initXpdrRdmTapiLink(InitXpdrRdmTapiLinkInput input) {
+    public final ListenableFuture<RpcResult<
+            InitXpdrRdmTapiLinkOutput>> initXpdrRdmTapiLink(InitXpdrRdmTapiLinkInput input) {
         // TODO --> need to check if the nodes and neps exist in the topology
         String destNode = input.getRdmNode();
         String destTp = input.getAddDropTp();
@@ -119,7 +141,7 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
     }
 
     @Override
-    public ListenableFuture<RpcResult<DeleteTapiLinkOutput>> deleteTapiLink(DeleteTapiLinkInput input) {
+    public final ListenableFuture<RpcResult<DeleteTapiLinkOutput>> deleteTapiLink(DeleteTapiLinkInput input) {
         // TODO: check if this IID is correct
         // TODO --> need to check if the link exists in the topology
         try {
@@ -137,6 +159,10 @@ public class TapiNetworkUtilsImpl implements TransportpceTapinetworkutilsService
                 .withError(ErrorType.RPC, "Failed to delete link from topology")
                 .buildFuture();
         }
+    }
+
+    public Registration getRegisteredRpc() {
+        return reg;
     }
 
     private boolean putLinkInTopology(Link tapLink) {

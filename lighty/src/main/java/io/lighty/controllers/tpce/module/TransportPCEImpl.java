@@ -192,7 +192,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
             TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
-            new TapiNetworkUtilsImpl(networkTransaction, tapiLink);
+            new TapiNetworkUtilsImpl(lgServRPS, networkTransaction, tapiLink);
             tapiProvider = initTapi(
                     lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
                     new TapiNetworkModelListenerImpl(
@@ -255,7 +255,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
             lightyServices.getNotificationService(), lightyServices.getBindingNotificationPublishService(),
             networkTransactionService, servicehandler, serviceDataStoreOperations,
-            new TapiNetworkUtilsImpl(networkTransactionService, tapiLink),
             tapiNetworkModelListenerImpl, tapiNetworkModelService);
     }
 
