@@ -38,11 +38,10 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
     @Test
     void initTest() {
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        NbiNotificationsProvider provider = new NbiNotificationsProvider("localhost:8080", "localhost:8080",
+        new NbiNotificationsProvider("localhost:8080", "localhost:8080",
                 rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
                 networkTransactionService);
-        verify(rpcProviderRegistry, times(2))
-                .registerRpcImplementation(any(), any(NbiNotificationsImpl.class));
+        verify(rpcProviderRegistry, times(1)).registerRpcImplementations(any());
         verify(notificationService, times(1))
                 .registerNotificationListener(any(NbiNotificationsListenerImpl.class));
     }
