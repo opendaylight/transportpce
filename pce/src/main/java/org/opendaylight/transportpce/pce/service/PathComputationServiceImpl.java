@@ -82,7 +82,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
         this.portMapping = portMapping;
-        LOG.debug("PathComputationServiceImpl instantiated");
+        LOG.info("PathComputationServiceImpl instantiated");
     }
 
     @SuppressFBWarnings(
