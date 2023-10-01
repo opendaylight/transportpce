@@ -28,15 +28,15 @@ public class PceProvider {
     private static final Logger LOG = LoggerFactory.getLogger(PceProvider.class);
 
     private final RpcProviderService rpcService;
-    private ObjectRegistration<PceServiceRPCImpl> rpcRegistration;
+    private ObjectRegistration<TransportpcePceService> rpcRegistration;
 
     @Activate
     public PceProvider(@Reference RpcProviderService rpcProviderService,
-            @Reference PathComputationService pathComputationService) {
+            @Reference PathComputationService pathComputationService,
+            @Reference TransportpcePceService pceServiceRPCImpl) {
         this.rpcService = rpcProviderService;
+        rpcRegistration = rpcService.registerRpcImplementation(TransportpcePceService.class, pceServiceRPCImpl);
         LOG.info("PceProvider Session Initiated");
-        final PceServiceRPCImpl consumer = new PceServiceRPCImpl(pathComputationService);
-        rpcRegistration = rpcService.registerRpcImplementation(TransportpcePceService.class, consumer);
     }
 
     /*

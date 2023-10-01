@@ -44,6 +44,7 @@ import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.impl.PceProvider;
+import org.opendaylight.transportpce.pce.impl.PceServiceRPCImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
@@ -137,7 +138,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 new GnpyConsumerImpl(
                     "http://127.0.0.1:8008", "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer()),
                 portMapping);
-        pceProvider = new PceProvider(lgServRPS, pathComputationService);
+        pceProvider = new PceProvider(lgServRPS, pathComputationService, new PceServiceRPCImpl(pathComputationService));
 
         LOG.info("Creating OLM beans ...");
         MappingUtils mappingUtils = new MappingUtilsImpl(lgServBDB);
