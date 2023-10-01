@@ -29,10 +29,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.TapiCommonService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationListener;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
 
 @ExtendWith(MockitoExtension.class)
 public class TapiProviderTest {
@@ -64,9 +61,7 @@ public class TapiProviderTest {
                 networkTransactionService, serviceHandler, serviceDataStoreOperations,
                 tapiNetworkModelListenerImpl, tapiNetworkModelServiceImpl);
 
-        verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(TapiConnectivityService.class));
-        verify(rpcProviderRegistry, times(2)).registerRpcImplementation(any(), any(TapiTopologyService.class));
-        verify(rpcProviderRegistry, times(2)).registerRpcImplementation(any(), any(TapiCommonService.class));
+        verify(rpcProviderRegistry, times(2)).registerRpcImplementations(any());
         verify(dataBroker, times(4)).registerDataTreeChangeListener(any(), any());
     }
 }
