@@ -41,7 +41,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -84,15 +83,10 @@ public class TapiProvider {
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class)
         .child(Link.class);
     private final DataBroker dataBroker;
-    private final RpcProviderService rpcProviderService;
-    private final NotificationService notificationService;
     private final NetworkTransactionService networkTransactionService;
     private final OrgOpenroadmServiceService serviceHandler;
     private final ServiceDataStoreOperations serviceDataStoreOperations;
-    private final TransportpceTapinetworkutilsService tapiNetworkUtils;
-    private TapiNotificationListener tapiNetworkModelListenerImpl;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
-    private ObjectRegistration<TransportpceTapinetworkutilsService> tapiNetworkutilsServiceRpcRegistration;
     private List<Registration> listeners;
     private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
@@ -107,18 +101,12 @@ public class TapiProvider {
             @Reference NetworkTransactionService networkTransactionService,
             @Reference OrgOpenroadmServiceService serviceHandler,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
-            @Reference TransportpceTapinetworkutilsService tapiNetworkUtils,
             @Reference TapiNotificationListener tapiNetworkModelListenerImpl,
             @Reference TapiNetworkModelService tapiNetworkModelServiceImpl) {
         this.dataBroker = dataBroker;
-        this.rpcProviderService = rpcProviderService;
-        this.notificationService = notificationService;
         this.networkTransactionService = networkTransactionService;
         this.serviceHandler = serviceHandler;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
-        this.tapiNetworkUtils = tapiNetworkUtils;
-        this.tapiNetworkModelListenerImpl = tapiNetworkModelListenerImpl;
-
         LOG.info("TapiProvider Session Initiated");
         TapiContext tapiContext = new TapiContext(this.networkTransactionService);
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
@@ -154,9 +142,6 @@ public class TapiProvider {
                 topologyListener));
         listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), tapiPortMappingListener));
-        tapiNetworkutilsServiceRpcRegistration =
-                rpcProviderService.registerRpcImplementation(TransportpceTapinetworkutilsService.class,
-                        this.tapiNetworkUtils);
         TapiListener tapiListener = new TapiListener();
         listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(
@@ -180,9 +165,6 @@ public class TapiProvider {
     public void close() {
         listeners.forEach(lis -> lis.close());
         listeners.clear();
-        if (tapiNetworkutilsServiceRpcRegistration != null) {
-            tapiNetworkutilsServiceRpcRegistration.close();
-        }
         pcelistenerRegistration.close();
         rendererlistenerRegistration.close();
         servicehandlerlistenerRegistration.close();
