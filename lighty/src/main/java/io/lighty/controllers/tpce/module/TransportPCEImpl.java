@@ -176,13 +176,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lgServBNPS, serviceDataStoreOperations);
         NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
                 lgServBNPS, serviceDataStoreOperations);
-        OrgOpenroadmServiceService servicehandler = new ServicehandlerImpl(
+        ServicehandlerImpl servicehandler = new ServicehandlerImpl(lgServRPS,
                 pathComputationService, rendererServiceOperations,
                 lgServBNPS, pceListenerImpl,
                 rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations,
                 new CatalogDataStoreOperationsImpl(networkTransaction));
+        rpcRegistrations.add(servicehandler.getRegisteredRpc());
         servicehandlerProvider = new ServicehandlerProvider(
-                lgServBDB, lgServRPS,
+                lgServBDB,
                 lgServNS, serviceDataStoreOperations, pceListenerImpl,
                 rendererListenerImpl, networkModelListenerImpl, lgServBNPS,
                 servicehandler,

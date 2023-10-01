@@ -13,7 +13,6 @@ import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
@@ -23,7 +22,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpen
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -49,12 +47,10 @@ public class ServicehandlerProvider {
     private ListenerRegistration<DataTreeChangeListener<Services>> serviceDataTreeChangeListenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
     private ListenerRegistration<TransportpceNetworkmodelListener> networkmodellistenerRegistration;
-    private ObjectRegistration<OrgOpenroadmServiceService> rpcRegistration;
     private ServiceDataStoreOperations serviceDataStoreOperations;
 
     @Activate
     public ServicehandlerProvider(@Reference final DataBroker dataBroker,
-            @Reference RpcProviderService rpcProviderService,
             @Reference NotificationService notificationService,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
             @Reference TransportpcePceListener pceListenerImpl,
@@ -70,8 +66,6 @@ public class ServicehandlerProvider {
         networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImpl);
         serviceDataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
             DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, SERVICE), serviceListener);
-        rpcRegistration = rpcProviderService
-            .registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
         LOG.info("ServicehandlerProvider Session Initiated");
         LOG.info("Transportpce controller started");
     }
@@ -86,6 +80,5 @@ public class ServicehandlerProvider {
         serviceDataTreeChangeListenerRegistration.close();
         rendererlistenerRegistration.close();
         networkmodellistenerRegistration.close();
-        rpcRegistration.close();
     }
 }
