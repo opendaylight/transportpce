@@ -10,12 +10,18 @@ package org.opendaylight.transportpce.pce.impl;
 
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -27,7 +33,7 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveInputBuilder;
 
-
+@ExtendWith(MockitoExtension.class)
 public class PceServiceRPCImplTest extends AbstractTest {
 
     private PathComputationService pathComputationService;
@@ -36,6 +42,9 @@ public class PceServiceRPCImplTest extends AbstractTest {
     private PceServiceRPCImpl pceServiceRPC;
     @Mock
     private PortMapping portMapping;
+    @Mock
+    private RpcProviderService rpcProviderService;
+
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
@@ -45,7 +54,12 @@ public class PceServiceRPCImplTest extends AbstractTest {
         networkTransaction =  new NetworkTransactionImpl(getDataBroker());
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, portMapping);
-        pceServiceRPC = new PceServiceRPCImpl(pathComputationService);
+        pceServiceRPC = new PceServiceRPCImpl(rpcProviderService, pathComputationService);
+    }
+
+    @Test
+    void testRpcRegistration() {
+        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
     }
 
     @Test
