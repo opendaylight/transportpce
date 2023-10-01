@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -46,76 +48,111 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalog;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalogInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalogOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalog;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalogInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalogOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalActivationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalActivationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalActivationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalDeactivationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalDeactivationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalDeactivationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPerformanceInfoRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPerformanceInfoRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPerformanceInfoRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPowerControl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPowerControlInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EndTerminalPowerControlOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EquipmentNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EquipmentNotificationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.EquipmentNotificationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.NetworkReOptimization;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.NetworkReOptimizationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.NetworkReOptimizationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelCreate;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelRequestCancel;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelRequestCancelInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OpticalTunnelRequestCancelOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreate;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateBulk;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateBulkInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateBulkOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateComplexResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateComplexResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateComplexResultNotificationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteComplexResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteComplexResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteComplexResultNotificationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheck;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckBulk;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckBulkInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckBulkOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigure;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureBulk;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureBulkInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureBulkOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigureResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReroute;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirmInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirmOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirmResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirmResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteConfirmResultNotificationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestoration;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversion;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversionInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversionOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversionResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversionResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReversionResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRoll;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRollInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRollOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRollResultNotificationRequest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRollResultNotificationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRollResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceSrlgGet;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceSrlgGetInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceSrlgGetOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreate;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateBulk;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateBulkInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateBulkOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceDelete;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.delete.input.ServiceDeleteReqInfo.TailRetention;
@@ -130,9 +167,12 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
+import org.opendaylight.yangtools.concepts.Registration;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,9 +203,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private NetworkListener networkModelListenerImpl;
     private NotificationPublishService notificationPublishService;
     private CatalogDataStoreOperations catalogDataStoreOperations;
+    private Registration reg;
 
     @Activate
-    public ServicehandlerImpl(@Reference PathComputationService pathComputationService,
+    public ServicehandlerImpl(@Reference RpcProviderService rpcProviderService,
+            @Reference PathComputationService pathComputationService,
             @Reference RendererServiceOperations rendererServiceOperations,
             @Reference NotificationPublishService notificationPublishService,
             @Reference PceListener pceListenerImpl,
@@ -181,7 +223,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
         this.networkModelListenerImpl = networkModelListenerImpl;
+        this.reg = rpcProviderService.registerRpcImplementations(registerRPCs());
         LOG.info("ServicehandlerImpl Initiated");
+    }
+
+    @Deactivate
+    public void close() {
+        this.reg.close();
+        LOG.info("ServicehandlerImpl Closed");
     }
 
 
@@ -232,7 +281,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
+    public final ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
         LOG.info("RPC serviceCreate received");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
@@ -288,7 +337,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public final ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceDeleteReqInfo().getServiceName();
         LOG.info("RPC serviceDelete request received for {}", serviceName);
 
@@ -358,7 +407,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
+    public final ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
             ServiceFeasibilityCheckInput input) {
         LOG.info("RPC serviceFeasibilityCheck received");
         // Validation
@@ -393,7 +442,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
+    public final ListenableFuture<RpcResult<
+            ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
         String serviceName = input.getServiceName();
         LOG.info("RPC serviceReconfigure received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
@@ -439,7 +489,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
+    public final ListenableFuture<RpcResult<
+            ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
         String serviceName = input.getServiceName();
         LOG.info("RPC serviceRestoration received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
@@ -515,21 +566,21 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<EquipmentNotificationOutput>>
+    public final ListenableFuture<RpcResult<EquipmentNotificationOutput>>
             equipmentNotification(EquipmentNotificationInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>>
+    public final ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>>
             serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
+    public final ListenableFuture<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
         String serviceName = input.getServiceName();
         LOG.info("RPC serviceReroute received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
@@ -590,26 +641,26 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceReversionOutput>> serviceReversion(ServiceReversionInput input) {
+    public final ListenableFuture<RpcResult<ServiceReversionOutput>> serviceReversion(ServiceReversionInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRollOutput>> serviceRoll(ServiceRollInput input) {
+    public final ListenableFuture<RpcResult<ServiceRollOutput>> serviceRoll(ServiceRollInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<NetworkReOptimizationOutput>>
+    public final ListenableFuture<RpcResult<NetworkReOptimizationOutput>>
             networkReOptimization(NetworkReOptimizationInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
+    public final ListenableFuture<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
         String commonId = input.getCommonId();
         LOG.info("RPC temp serviceDelete request received for {}", commonId);
 
@@ -667,7 +718,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
+    public final ListenableFuture<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
         LOG.info("RPC tempServiceCreate received");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
@@ -712,7 +763,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<
+    public final ListenableFuture<RpcResult<
         ServiceDeleteComplexResultNotificationRequestOutput>> serviceDeleteComplexResultNotificationRequest(
             ServiceDeleteComplexResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
@@ -720,7 +771,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<
+    public final ListenableFuture<RpcResult<
         ServiceCreateResultNotificationRequestOutput>> serviceCreateResultNotificationRequest(
             ServiceCreateResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
@@ -728,7 +779,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<
+    public final ListenableFuture<RpcResult<
         ServiceDeleteResultNotificationRequestOutput>> serviceDeleteResultNotificationRequest(
             ServiceDeleteResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
@@ -736,7 +787,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<
+    public final ListenableFuture<RpcResult<
         ServiceCreateComplexResultNotificationRequestOutput>> serviceCreateComplexResultNotificationRequest(
             ServiceCreateComplexResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
@@ -744,89 +795,77 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceFeasibilityCheckBulkOutput>> serviceFeasibilityCheckBulk(
+    public final ListenableFuture<RpcResult<ServiceFeasibilityCheckBulkOutput>> serviceFeasibilityCheckBulk(
         ServiceFeasibilityCheckBulkInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * Send notification to NBI notification in order to publish message.
-     * @param service PublishNotificationService
-     */
-    private void sendNbiNotification(PublishNotificationProcessService service) {
-        try {
-            notificationPublishService.putNotification(service);
-        } catch (InterruptedException e) {
-            LOG.warn("Cannot send notification to nbi", e);
-            Thread.currentThread().interrupt();
-        }
-    }
-
-
     @Override
-    public ListenableFuture<RpcResult<ServiceCreateBulkOutput>> serviceCreateBulk(ServiceCreateBulkInput input) {
+    public final ListenableFuture<RpcResult<ServiceCreateBulkOutput>> serviceCreateBulk(ServiceCreateBulkInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<TempServiceCreateBulkOutput>> tempServiceCreateBulk(
+    public final ListenableFuture<RpcResult<TempServiceCreateBulkOutput>> tempServiceCreateBulk(
         TempServiceCreateBulkInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRollResultNotificationRequestOutput>> serviceRollResultNotificationRequest(
-        ServiceRollResultNotificationRequestInput input) {
+    public final ListenableFuture<RpcResult<
+        ServiceRollResultNotificationRequestOutput>> serviceRollResultNotificationRequest(
+            ServiceRollResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceReconfigureBulkOutput>> serviceReconfigureBulk(
+    public final ListenableFuture<RpcResult<ServiceReconfigureBulkOutput>> serviceReconfigureBulk(
         ServiceReconfigureBulkInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceReconfigureResultNotificationRequestOutput>>
+    public final ListenableFuture<RpcResult<ServiceReconfigureResultNotificationRequestOutput>>
             serviceReconfigureResultNotificationRequest(ServiceReconfigureResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRestorationResultNotificationRequestOutput>>
+    public final ListenableFuture<RpcResult<ServiceRestorationResultNotificationRequestOutput>>
             serviceRestorationResultNotificationRequest(ServiceRestorationResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceReversionResultNotificationRequestOutput>>
+    public final ListenableFuture<RpcResult<ServiceReversionResultNotificationRequestOutput>>
             serviceReversionResultNotificationRequest(ServiceReversionResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRerouteConfirmResultNotificationRequestOutput>>
+    public final ListenableFuture<RpcResult<ServiceRerouteConfirmResultNotificationRequestOutput>>
             serviceRerouteConfirmResultNotificationRequest(ServiceRerouteConfirmResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<OpticalTunnelCreateOutput>> opticalTunnelCreate(OpticalTunnelCreateInput input) {
+    public final ListenableFuture<RpcResult<
+            OpticalTunnelCreateOutput>> opticalTunnelCreate(OpticalTunnelCreateInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<OpticalTunnelRequestCancelOutput>> opticalTunnelRequestCancel(
+    public final ListenableFuture<RpcResult<OpticalTunnelRequestCancelOutput>> opticalTunnelRequestCancel(
             OpticalTunnelRequestCancelInput input) {
         // TODO Auto-generated method stub
         return null;
@@ -842,7 +881,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
      * @param input AddOpenroadmOperationalModesToCatalogInput to be added to Catalog
      * @return Result of the request
      */
-    public ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>>
+    public final ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>>
         addOpenroadmOperationalModesToCatalog(AddOpenroadmOperationalModesToCatalogInput input) {
 
         LOG.info("RPC addOpenroadmOperationalModesToCatalog in progress");
@@ -876,8 +915,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
      * @param input AddSpecificOperationalModesToCatalogInput to be added to Catalog
      * @return Result of the request
      */
-    public ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>> addSpecificOperationalModesToCatalog(
-            AddSpecificOperationalModesToCatalogInput input) {
+    public final ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>>
+            addSpecificOperationalModesToCatalog(AddSpecificOperationalModesToCatalogInput input) {
 
         LOG.info("RPC addSpecificOperationalModesToCatalog in progress");
         LOG.debug(" Input openSpecificRoadm {}", input);
@@ -901,37 +940,97 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceSrlgGetOutput>> serviceSrlgGet(ServiceSrlgGetInput input) {
+    public final ListenableFuture<RpcResult<ServiceSrlgGetOutput>> serviceSrlgGet(ServiceSrlgGetInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<EndTerminalPerformanceInfoRequestOutput>> endTerminalPerformanceInfoRequest(
+    public final ListenableFuture<RpcResult<EndTerminalPerformanceInfoRequestOutput>> endTerminalPerformanceInfoRequest(
         EndTerminalPerformanceInfoRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<EndTerminalActivationRequestOutput>> endTerminalActivationRequest(
-        EndTerminalActivationRequestInput input) {
+    public final ListenableFuture<RpcResult<EndTerminalActivationRequestOutput>> endTerminalActivationRequest(
+            EndTerminalActivationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<EndTerminalDeactivationRequestOutput>> endTerminalDeactivationRequest(
-        EndTerminalDeactivationRequestInput input) {
+    public final ListenableFuture<RpcResult<EndTerminalDeactivationRequestOutput>> endTerminalDeactivationRequest(
+            EndTerminalDeactivationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<EndTerminalPowerControlOutput>> endTerminalPowerControl(
-        EndTerminalPowerControlInput input) {
+    public final ListenableFuture<RpcResult<EndTerminalPowerControlOutput>> endTerminalPowerControl(
+            EndTerminalPowerControlInput input) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public Registration getRegisteredRpc() {
+        return reg;
+    }
+
+    /**
+     * Send notification to NBI notification in order to publish message.
+     * @param service PublishNotificationService
+     */
+    private void sendNbiNotification(PublishNotificationProcessService service) {
+        try {
+            notificationPublishService.putNotification(service);
+        } catch (InterruptedException e) {
+            LOG.warn("Cannot send notification to nbi", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
+        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(ServiceCreate.class, this::serviceCreate)
+            .put(ServiceDelete.class, this::serviceDelete)
+            .put(ServiceFeasibilityCheck.class, this::serviceFeasibilityCheck)
+            .put(ServiceReconfigure.class, this::serviceReconfigure)
+            .put(ServiceRestoration.class, this::serviceRestoration)
+            .put(EquipmentNotification.class, this::equipmentNotification)
+            .put(ServiceRerouteConfirm.class, this::serviceRerouteConfirm)
+            .put(ServiceReroute.class, this::serviceReroute)
+            .put(ServiceReversion.class, this::serviceReversion)
+            .put(ServiceRoll.class, this::serviceRoll)
+            .put(NetworkReOptimization.class, this::networkReOptimization)
+            .put(TempServiceDelete.class, this::tempServiceDelete)
+            .put(TempServiceCreate.class, this::tempServiceCreate)
+            .put(ServiceDeleteComplexResultNotificationRequest.class,
+                this::serviceDeleteComplexResultNotificationRequest)
+            .put(ServiceCreateResultNotificationRequest.class, this::serviceCreateResultNotificationRequest)
+            .put(ServiceDeleteResultNotificationRequest.class, this::serviceDeleteResultNotificationRequest)
+            .put(ServiceCreateComplexResultNotificationRequest.class,
+                this::serviceCreateComplexResultNotificationRequest)
+            .put(ServiceFeasibilityCheckBulk.class, this::serviceFeasibilityCheckBulk)
+            .put(ServiceCreateBulk.class, this::serviceCreateBulk)
+            .put(TempServiceCreateBulk.class, this::tempServiceCreateBulk)
+            .put(ServiceRollResultNotificationRequest.class, this::serviceRollResultNotificationRequest)
+            .put(ServiceReconfigureBulk.class, this::serviceReconfigureBulk)
+            .put(ServiceReconfigureResultNotificationRequest.class, this::serviceReconfigureResultNotificationRequest)
+            .put(ServiceRestorationResultNotificationRequest.class, this::serviceRestorationResultNotificationRequest)
+            .put(ServiceReversionResultNotificationRequest.class, this::serviceReversionResultNotificationRequest)
+            .put(ServiceRerouteConfirmResultNotificationRequest.class,
+                this::serviceRerouteConfirmResultNotificationRequest)
+            .put(OpticalTunnelCreate.class, this::opticalTunnelCreate)
+            .put(OpticalTunnelRequestCancel.class, this::opticalTunnelRequestCancel)
+            .put(AddOpenroadmOperationalModesToCatalog.class, this::addOpenroadmOperationalModesToCatalog)
+            .put(AddSpecificOperationalModesToCatalog.class, this::addSpecificOperationalModesToCatalog)
+            .put(ServiceSrlgGet.class, this::serviceSrlgGet)
+            .put(EndTerminalPerformanceInfoRequest.class, this::endTerminalPerformanceInfoRequest)
+            .put(EndTerminalActivationRequest.class, this::endTerminalActivationRequest)
+            .put(EndTerminalDeactivationRequest.class, this::endTerminalDeactivationRequest)
+            .put(EndTerminalPowerControl.class, this::endTerminalPowerControl)
+            .build();
     }
 }
 
