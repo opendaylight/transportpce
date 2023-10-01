@@ -7,20 +7,28 @@
  */
 package org.opendaylight.transportpce.pce.impl;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserve;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.CancelResourceReserveOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRerouteRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceService;
+import org.opendaylight.yangtools.concepts.Registration;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +42,29 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     private static final Logger LOG = LoggerFactory.getLogger(PceServiceRPCImpl.class);
 
     private final PathComputationService pathComputationService;
+    private Registration reg;
 
     @Activate
-    public PceServiceRPCImpl(@Reference PathComputationService pathComputationService) {
+    public PceServiceRPCImpl(@Reference RpcProviderService rpcProviderService,
+            @Reference PathComputationService pathComputationService) {
         this.pathComputationService = pathComputationService;
+        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(CancelResourceReserve.class, this::cancelResourceReserve)
+            .put(PathComputationRequest.class, this::pathComputationRequest)
+            .put(PathComputationRerouteRequest.class, this::pathComputationRerouteRequest)
+            .build());
+
         LOG.info("PceServiceRPCImpl instantiated");
     }
 
+    @Deactivate
+    public void close() {
+        this.reg.close();
+        LOG.info("PceServiceRPCImpl Closed");
+    }
+
     @Override
-    public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
+    public final ListenableFuture<RpcResult<CancelResourceReserveOutput>>
             cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve request received");
         try {
@@ -57,7 +79,7 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRequestOutput>>
+    public final ListenableFuture<RpcResult<PathComputationRequestOutput>>
             pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC path computation request received");
         LOG.debug("input parameters are : input = {}", input);
@@ -73,7 +95,7 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>> pathComputationRerouteRequest(
+    public final ListenableFuture<RpcResult<PathComputationRerouteRequestOutput>> pathComputationRerouteRequest(
             PathComputationRerouteRequestInput input) {
         LOG.info("RPC path computation reroute request received");
         LOG.debug("input parameters are : input = {}", input);
@@ -86,5 +108,9 @@ public class PceServiceRPCImpl implements TransportpcePceService {
             LOG.error("RPC path computation request failed !", e);
             return RpcResultBuilder.success((PathComputationRerouteRequestOutput) null).buildFuture();
         }
+    }
+
+    public Registration getRegisteredRpc() {
+        return reg;
     }
 }

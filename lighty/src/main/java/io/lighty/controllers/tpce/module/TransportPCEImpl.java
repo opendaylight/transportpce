@@ -43,7 +43,6 @@ import org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
-import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.impl.PceServiceRPCImpl;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
@@ -75,7 +74,6 @@ import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
@@ -90,8 +88,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // because implementation has additional public methods ...
     private final DeviceTransactionManagerImpl deviceTransactionManager;
     private final NetworkTransactionService networkTransaction;
-    // pce beans
-    private final PceProvider pceProvider;
     // network model beans
     private final NetworkModelProvider networkModelProvider;
     // service-handler beans
@@ -139,8 +135,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 new GnpyConsumerImpl(
                     "http://127.0.0.1:8008", "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer()),
                 portMapping);
-        TransportpcePceService pceServiceRPCImpl = new PceServiceRPCImpl(pathComputationService);
-        pceProvider = new PceProvider(lgServRPS, pathComputationService, pceServiceRPCImpl);
+        PceServiceRPCImpl pceServiceRPCImpl = new PceServiceRPCImpl(lgServRPS, pathComputationService);
+        rpcRegistrations.add(pceServiceRPCImpl.getRegisteredRpc());
 
         LOG.info("Creating OLM beans ...");
         MappingUtils mappingUtils = new MappingUtilsImpl(lgServBDB);
@@ -239,8 +235,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         servicehandlerProvider.close();
         LOG.info("Shutting down network-model provider ...");
         networkModelProvider.close();
-        LOG.info("Shutting down PCE provider ...");
-        pceProvider.close();
         LOG.info("Shutting down transaction providers ...");
         deviceTransactionManager.preDestroy();
         LOG.info("Closing registered RPCs...");
