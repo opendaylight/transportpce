@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.nbinotifications.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +19,11 @@ import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsL
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsListener;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NbiNotificationsService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.concepts.ObjectRegistration;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -51,7 +48,7 @@ public class NbiNotificationsProvider {
     private static Map<String, Publisher<NotificationProcessService>> publishersServiceMap =  new HashMap<>();
     private static Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap =  new HashMap<>();
     private ListenerRegistration<NbiNotificationsListener> listenerRegistration;
-    private List<ObjectRegistration<NbiNotificationsImpl>> rpcRegistrations = new ArrayList<>();
+    private Registration rpcRegistration;
 
     @Activate
     public NbiNotificationsProvider(@Reference RpcProviderService rpcProviderService,
@@ -92,8 +89,7 @@ public class NbiNotificationsProvider {
 
         NbiNotificationsImpl nbiImpl = new NbiNotificationsImpl(converterService, converterAlarmService,
             converterTapiService, subscriberServer, networkTransactionService, topicManager);
-        rpcRegistrations.add(rpcProviderService.registerRpcImplementation(NbiNotificationsService.class, nbiImpl));
-        rpcRegistrations.add(rpcProviderService.registerRpcImplementation(TapiNotificationService.class, nbiImpl));
+        rpcRegistration = rpcProviderService.registerRpcImplementations(nbiImpl.registerRPCs());
         NbiNotificationsListenerImpl nbiNotificationsListener = new NbiNotificationsListenerImpl(
                 topicManager.getProcessTopicMap(), topicManager.getAlarmTopicMap(), topicManager.getTapiTopicMap());
         listenerRegistration = notificationService.registerNotificationListener(nbiNotificationsListener);
@@ -112,7 +108,7 @@ public class NbiNotificationsProvider {
         for (Publisher<NotificationAlarmService> publisherAlarm : publishersAlarmMap.values()) {
             publisherAlarm.close();
         }
-        rpcRegistrations.forEach(reg -> reg.close());
+        rpcRegistration.close();
         listenerRegistration.close();
         LOG.info("NbiNotificationsProvider Closed");
     }

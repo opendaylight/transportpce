@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.nbinotifications.impl;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -27,9 +28,11 @@ import org.opendaylight.transportpce.nbinotifications.serialization.Notification
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.TapiNotificationDeserializer;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceInput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsAlarmServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceInput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutput;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.GetNotificationsProcessServiceOutputBuilder;
@@ -42,27 +45,34 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notification
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.CreateNotificationSubscriptionServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.DeleteNotificationSubscriptionServiceOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetails;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceDetailsOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetNotificationSubscriptionServiceListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypes;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.GetSupportedNotificationTypesOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.UpdateNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.context.NotificationContext;
@@ -78,6 +88,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.subscription.service.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.subscription.service.SubscriptionFilterBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -380,6 +391,20 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
         return RpcResultBuilder.<GetNotificationListOutput>failed()
             .withError(ErrorType.APPLICATION,
                 "Notifications couldnt be retrieved from Kafka server").buildFuture();
+    }
+
+    public ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
+        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
+            .put(GetNotificationsProcessService.class, this::getNotificationsProcessService)
+            .put(GetNotificationsAlarmService.class, this::getNotificationsAlarmService)
+            .put(GetSupportedNotificationTypes.class, this::getSupportedNotificationTypes)
+            .put(CreateNotificationSubscriptionService.class, this::createNotificationSubscriptionService)
+            .put(UpdateNotificationSubscriptionService.class, this::updateNotificationSubscriptionService)
+            .put(DeleteNotificationSubscriptionService.class, this::deleteNotificationSubscriptionService)
+            .put(GetNotificationSubscriptionServiceDetails.class, this::getNotificationSubscriptionServiceDetails)
+            .put(GetNotificationSubscriptionServiceList.class, this::getNotificationSubscriptionServiceList)
+            .put(GetNotificationList.class, this::getNotificationList)
+            .build();
     }
 
     private NotificationContext getNotificationContext() {
