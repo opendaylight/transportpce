@@ -14,14 +14,15 @@ import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelNotificationHandler;
+import org.opendaylight.transportpce.servicehandler.listeners.PceNotificationHandler;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererNotificationHandler;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -37,33 +38,34 @@ import org.slf4j.LoggerFactory;
  *
  */
 @Component
-public class ServicehandlerProvider {
+public class ServiceHandlerProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerProvider.class);
     private static final InstanceIdentifier<Services> SERVICE = InstanceIdentifier.builder(ServiceList.class)
             .child(Services.class).build();
 
-    private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
+    private final Registration pcelistenerRegistration;
     private ListenerRegistration<DataTreeChangeListener<Services>> serviceDataTreeChangeListenerRegistration;
-    private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
-    private ListenerRegistration<TransportpceNetworkmodelListener> networkmodellistenerRegistration;
+    private final Registration rendererlistenerRegistration;
+    private final Registration networkmodellistenerRegistration;
     private ServiceDataStoreOperations serviceDataStoreOperations;
 
     @Activate
-    public ServicehandlerProvider(@Reference final DataBroker dataBroker,
+    public ServiceHandlerProvider(@Reference final DataBroker dataBroker,
             @Reference NotificationService notificationService,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
-            @Reference TransportpcePceListener pceListenerImpl,
-            @Reference TransportpceRendererListener rendererListenerImpl,
-            @Reference TransportpceNetworkmodelListener networkModelListenerImpl,
-            @Reference NotificationPublishService notificationPublishService,
-            @Reference OrgOpenroadmServiceService servicehandler,
+            @Reference PceNotificationHandler pceNotificationHandler,
+            @Reference RendererNotificationHandler rendererNotificationHandler,
+            @Reference NetworkModelNotificationHandler networkModelNotificationHandler,
             @Reference DataTreeChangeListener<Services> serviceListener) {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.serviceDataStoreOperations.initialize();
-        pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
-        rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
-        networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImpl);
+        pcelistenerRegistration = notificationService
+            .registerCompositeListener(pceNotificationHandler.getCompositeListener());
+        rendererlistenerRegistration = notificationService
+            .registerCompositeListener(rendererNotificationHandler.getCompositeListener());
+        networkmodellistenerRegistration = notificationService
+            .registerCompositeListener(networkModelNotificationHandler.getCompositeListener());
         serviceDataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
             DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, SERVICE), serviceListener);
         LOG.info("ServicehandlerProvider Session Initiated");
