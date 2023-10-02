@@ -89,6 +89,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.subscription.service.SubscriptionFilterBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
+import org.opendaylight.yangtools.yang.common.ErrorTag;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -243,7 +244,9 @@ public class NbiNotificationsImpl implements NbiNotificationsService, TapiNotifi
     public ListenableFuture<RpcResult<UpdateNotificationSubscriptionServiceOutput>>
             updateNotificationSubscriptionService(UpdateNotificationSubscriptionServiceInput input) {
         // TODO --> Not yet implemented
-        return null;
+        return RpcResultBuilder.<UpdateNotificationSubscriptionServiceOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override

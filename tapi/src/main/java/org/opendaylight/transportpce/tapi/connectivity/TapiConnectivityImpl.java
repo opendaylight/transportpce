@@ -85,6 +85,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.Service;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.get.connectivity.service.list.output.ServiceKey;
 import org.opendaylight.yangtools.yang.binding.Rpc;
+import org.opendaylight.yangtools.yang.common.ErrorTag;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -230,7 +231,9 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<UpdateConnectivityServiceOutput>> updateConnectivityService(
             UpdateConnectivityServiceInput input) {
         // TODO Auto-generated method stub. More complicated as it depends on what needs to be updated... left aside
-        return null;
+        return RpcResultBuilder.<UpdateConnectivityServiceOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
