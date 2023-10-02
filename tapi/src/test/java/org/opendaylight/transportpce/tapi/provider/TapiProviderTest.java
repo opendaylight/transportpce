@@ -27,9 +27,10 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev210408.TransportpceTapinetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationListener;
 
 @ExtendWith(MockitoExtension.class)
 public class TapiProviderTest {
@@ -49,7 +50,7 @@ public class TapiProviderTest {
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
-    private TapiNotificationListener tapiNetworkModelListenerImpl;
+    private TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler;
     @Mock
     private TapiNetworkModelService tapiNetworkModelServiceImpl;
 
@@ -59,7 +60,7 @@ public class TapiProviderTest {
         doReturn(emptyFluentFuture()).when(networkTransactionService).commit();
         new TapiProvider(dataBroker, rpcProviderRegistry, notificationService, notificationPublishService,
                 networkTransactionService, serviceHandler, serviceDataStoreOperations,
-                tapiNetworkModelListenerImpl, tapiNetworkModelServiceImpl);
+                tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl);
 
         verify(rpcProviderRegistry, times(2)).registerRpcImplementations(any());
         verify(dataBroker, times(4)).registerDataTreeChangeListener(any(), any());

@@ -15,16 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.Network;
@@ -80,9 +81,9 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TapiPceListenerImpl implements TransportpcePceListener {
+public class TapiPceNotificationHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiPceListenerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TapiPceNotificationHandler.class);
 
     private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
         .getBytes(Charset.forName("UTF-8"))).toString());
@@ -99,7 +100,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
     private Connection topConnXpdrXpdrPhtn;
     private Connection topConnXpdrXpdrOdu;
 
-    public TapiPceListenerImpl(DataBroker dataBroker) {
+    public TapiPceNotificationHandler(DataBroker dataBroker) {
         this.connectionFullMap = new HashMap<>();
         this.dataBroker = dataBroker;
         this.networkTransactionService = new NetworkTransactionImpl(this.dataBroker);
@@ -108,8 +109,12 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         this.topConnXpdrXpdrOdu = null;
     }
 
-    @Override
-    public void onServicePathRpcResult(ServicePathRpcResult notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(ServicePathRpcResult.class, this::onServicePathRpcResult)));
+    }
+
+    private void onServicePathRpcResult(ServicePathRpcResult notification) {
         if (compareServicePathRpcResult(notification)) {
             LOG.warn("ServicePathRpcResult already wired !");
             return;
