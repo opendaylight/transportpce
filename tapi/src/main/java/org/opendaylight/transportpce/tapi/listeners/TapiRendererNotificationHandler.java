@@ -15,15 +15,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
@@ -53,23 +54,28 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TapiRendererListenerImpl implements TransportpceRendererListener {
+public class TapiRendererNotificationHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiRendererListenerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TapiRendererNotificationHandler.class);
     private final DataBroker dataBroker;
     private Uuid serviceUuid;
     private RendererRpcResultSp serviceRpcResultSp;
     private final NetworkTransactionService networkTransactionService;
     private final NotificationPublishService notificationPublishService;
 
-    public TapiRendererListenerImpl(DataBroker dataBroker, NotificationPublishService notificationPublishService) {
+    public TapiRendererNotificationHandler(DataBroker dataBroker,
+            NotificationPublishService notificationPublishService) {
         this.dataBroker = dataBroker;
         this.networkTransactionService = new NetworkTransactionImpl(this.dataBroker);
         this.notificationPublishService = notificationPublishService;
     }
 
-    @Override
-    public void onRendererRpcResultSp(RendererRpcResultSp notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(RendererRpcResultSp.class, this::onRendererRpcResultSp)));
+    }
+
+    private void onRendererRpcResultSp(RendererRpcResultSp notification) {
         if (compareServiceRpcResultSp(notification)) {
             LOG.warn("ServiceRpcResultSp already wired !");
             return;

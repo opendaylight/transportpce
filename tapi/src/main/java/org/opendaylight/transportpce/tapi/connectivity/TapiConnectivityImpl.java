@@ -16,8 +16,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
+import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.RpcActions;
@@ -102,12 +102,12 @@ public class TapiConnectivityImpl implements TapiConnectivityService {
     private OrgOpenroadmServiceService serviceHandler;
     private final TapiContext tapiContext;
     private final ConnectivityUtils connectivityUtils;
-    private TapiPceListenerImpl pceListenerImpl;
-    private TapiRendererListenerImpl rendererListenerImpl;
+    private TapiPceNotificationHandler pceListenerImpl;
+    private TapiRendererNotificationHandler rendererListenerImpl;
 
     public TapiConnectivityImpl(OrgOpenroadmServiceService serviceHandler, TapiContext tapiContext,
-                                ConnectivityUtils connectivityUtils, TapiPceListenerImpl pceListenerImpl,
-                                TapiRendererListenerImpl rendererListenerImpl) {
+                                ConnectivityUtils connectivityUtils, TapiPceNotificationHandler pceListenerImpl,
+                                TapiRendererNotificationHandler rendererListenerImpl) {
         LOG.info("inside TapiImpl constructor");
         this.serviceHandler = serviceHandler;
         this.tapiContext = tapiContext;
