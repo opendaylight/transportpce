@@ -8,7 +8,9 @@
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
@@ -18,7 +20,6 @@ import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -37,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class PceListenerImpl implements TransportpcePceListener, PceListener {
+public class PceListenerImpl implements PceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
     private static final String PUBLISHER = "PceListener";
@@ -68,8 +69,12 @@ public class PceListenerImpl implements TransportpcePceListener, PceListener {
         this.notificationPublishService = notificationPublishService;
     }
 
-    @Override
-    public void onServicePathRpcResult(ServicePathRpcResult notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(ServicePathRpcResult.class, this::onServicePathRpcResult)));
+    }
+
+    private void onServicePathRpcResult(ServicePathRpcResult notification) {
         if (compareServicePathRpcResult(notification)) {
             LOG.warn("ServicePathRpcResult already wired !");
             return;

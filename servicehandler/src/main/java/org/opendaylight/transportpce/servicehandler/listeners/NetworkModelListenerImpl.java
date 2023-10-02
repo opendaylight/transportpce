@@ -12,14 +12,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -49,7 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class NetworkModelListenerImpl implements TransportpceNetworkmodelListener, NetworkListener {
+public class NetworkModelListenerImpl implements NetworkListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelListenerImpl.class);
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -61,8 +62,12 @@ public class NetworkModelListenerImpl implements TransportpceNetworkmodelListene
         this.serviceDataStoreOperations = serviceDataStoreOperations;
     }
 
-    @Override
-    public void onTopologyUpdateResult(TopologyUpdateResult notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(TopologyUpdateResult.class, this::onTopologyUpdateResult)));
+    }
+
+    void onTopologyUpdateResult(TopologyUpdateResult notification) {
         LOG.debug("Topology update notification: {}", notification);
         if (compareTopologyUpdateResult(notification)) {
             LOG.warn("TopologyUpdateResult already wired !");
