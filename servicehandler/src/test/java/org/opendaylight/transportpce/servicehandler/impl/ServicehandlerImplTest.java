@@ -7,7 +7,10 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -73,6 +76,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestorationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceSrlgGetInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceSrlgGetOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateOutput;
@@ -89,12 +94,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.response.parameters.PathDescriptionBuilder;
+import org.opendaylight.yangtools.yang.common.ErrorSeverity;
+import org.opendaylight.yangtools.yang.common.ErrorTag;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 @ExtendWith(MockitoExtension.class)
 public class ServicehandlerImplTest extends AbstractTest {
-
     @Mock
     private RpcProviderService rpcProviderService;
     @Mock
@@ -145,6 +152,24 @@ public class ServicehandlerImplTest extends AbstractTest {
             pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
             serviceDataStoreOperations, catalogDataStoreOperations);
         verify(rpcProviderService, times(1)).registerRpcImplementations(any());
+    }
+
+    @Test
+    void testNotImplementedRpc() throws InterruptedException, ExecutionException {
+        ListenableFuture<RpcResult<ServiceSrlgGetOutput>> result = new ServicehandlerImpl(rpcProviderService,
+                pathComputationService, rendererServiceOperations, notificationPublishService,
+                pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                serviceDataStoreOperations, catalogDataStoreOperations)
+            .serviceSrlgGet(new ServiceSrlgGetInputBuilder().build());
+        result.addListener(() -> endSignal.countDown(), executorService);
+        endSignal.await();
+        assertNotNull(result.get());
+        assertFalse(result.get().isSuccessful());
+        assertNull(result.get().getResult());
+        assertEquals(ErrorType.RPC, result.get().getErrors().get(0).getErrorType());
+        assertEquals(ErrorSeverity.ERROR, result.get().getErrors().get(0).getSeverity());
+        assertEquals(ErrorTag.OPERATION_NOT_SUPPORTED, result.get().getErrors().get(0).getTag());
+        assertEquals("RPC not implemented yet", result.get().getErrors().get(0).getMessage());
     }
 
     @Test

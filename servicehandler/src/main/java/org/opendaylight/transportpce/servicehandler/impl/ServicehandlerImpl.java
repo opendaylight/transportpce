@@ -169,7 +169,10 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.pro
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.Rpc;
+import org.opendaylight.yangtools.yang.common.ErrorTag;
+import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -292,7 +295,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
-        //Check any presence of services with the same name
+        //Check any presence of services with the same nameequipmentNotification
         String serviceName = input.getServiceName();
         if (this.serviceDataStoreOperations.getService(serviceName).isPresent()) {
             LOG.warn(SERVICE_CREATE_MSG, LogMessages.serviceInDS(serviceName));
@@ -569,14 +572,18 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public final ListenableFuture<RpcResult<EquipmentNotificationOutput>>
             equipmentNotification(EquipmentNotificationInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<EquipmentNotificationOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>>
             serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceRerouteConfirmOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -643,20 +650,26 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     @Override
     public final ListenableFuture<RpcResult<ServiceReversionOutput>> serviceReversion(ServiceReversionInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceReversionOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceRollOutput>> serviceRoll(ServiceRollInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceRollOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<NetworkReOptimizationOutput>>
             networkReOptimization(NetworkReOptimizationInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<NetworkReOptimizationOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -767,7 +780,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceDeleteComplexResultNotificationRequestOutput>> serviceDeleteComplexResultNotificationRequest(
             ServiceDeleteComplexResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceDeleteComplexResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -775,7 +790,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceCreateResultNotificationRequestOutput>> serviceCreateResultNotificationRequest(
             ServiceCreateResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceCreateResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -783,7 +800,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceDeleteResultNotificationRequestOutput>> serviceDeleteResultNotificationRequest(
             ServiceDeleteResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceDeleteResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -791,27 +810,35 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceCreateComplexResultNotificationRequestOutput>> serviceCreateComplexResultNotificationRequest(
             ServiceCreateComplexResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceCreateComplexResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceFeasibilityCheckBulkOutput>> serviceFeasibilityCheckBulk(
         ServiceFeasibilityCheckBulkInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceFeasibilityCheckBulkOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceCreateBulkOutput>> serviceCreateBulk(ServiceCreateBulkInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceCreateBulkOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<TempServiceCreateBulkOutput>> tempServiceCreateBulk(
         TempServiceCreateBulkInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<TempServiceCreateBulkOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -819,56 +846,72 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ServiceRollResultNotificationRequestOutput>> serviceRollResultNotificationRequest(
             ServiceRollResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceRollResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceReconfigureBulkOutput>> serviceReconfigureBulk(
         ServiceReconfigureBulkInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceReconfigureBulkOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceReconfigureResultNotificationRequestOutput>>
             serviceReconfigureResultNotificationRequest(ServiceReconfigureResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceReconfigureResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceRestorationResultNotificationRequestOutput>>
             serviceRestorationResultNotificationRequest(ServiceRestorationResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceRestorationResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceReversionResultNotificationRequestOutput>>
             serviceReversionResultNotificationRequest(ServiceReversionResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceReversionResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<ServiceRerouteConfirmResultNotificationRequestOutput>>
             serviceRerouteConfirmResultNotificationRequest(ServiceRerouteConfirmResultNotificationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceRerouteConfirmResultNotificationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<
             OpticalTunnelCreateOutput>> opticalTunnelCreate(OpticalTunnelCreateInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<OpticalTunnelCreateOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<OpticalTunnelRequestCancelOutput>> opticalTunnelRequestCancel(
             OpticalTunnelRequestCancelInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<OpticalTunnelRequestCancelOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
@@ -942,35 +985,45 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     @Override
     public final ListenableFuture<RpcResult<ServiceSrlgGetOutput>> serviceSrlgGet(ServiceSrlgGetInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<ServiceSrlgGetOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<EndTerminalPerformanceInfoRequestOutput>> endTerminalPerformanceInfoRequest(
         EndTerminalPerformanceInfoRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<EndTerminalPerformanceInfoRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<EndTerminalActivationRequestOutput>> endTerminalActivationRequest(
             EndTerminalActivationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<EndTerminalActivationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<EndTerminalDeactivationRequestOutput>> endTerminalDeactivationRequest(
             EndTerminalDeactivationRequestInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<EndTerminalDeactivationRequestOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     @Override
     public final ListenableFuture<RpcResult<EndTerminalPowerControlOutput>> endTerminalPowerControl(
             EndTerminalPowerControlInput input) {
         // TODO Auto-generated method stub
-        return null;
+        return RpcResultBuilder.<EndTerminalPowerControlOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     public Registration getRegisteredRpc() {

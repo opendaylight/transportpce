@@ -118,6 +118,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.to
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Rpc;
+import org.opendaylight.yangtools.yang.common.ErrorTag;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -342,8 +343,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     @Override
     public ListenableFuture<RpcResult<UpdateServiceInterfacePointOutput>>
             updateServiceInterfacePoint(UpdateServiceInterfacePointInput input) {
-        // TODO --> not yet implemented
-        return null;
+        return RpcResultBuilder.<UpdateServiceInterfacePointOutput>failed()
+            .withError(ErrorType.RPC, ErrorTag.OPERATION_NOT_SUPPORTED, "RPC not implemented yet")
+            .buildFuture();
     }
 
     private Topology createAbstracted100GTpdrTopology(Topology topology) {
