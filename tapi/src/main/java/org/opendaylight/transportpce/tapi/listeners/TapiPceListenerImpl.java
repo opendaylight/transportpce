@@ -15,16 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.Network;
@@ -80,7 +81,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TapiPceListenerImpl implements TransportpcePceListener {
+public class TapiPceListenerImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiPceListenerImpl.class);
 
@@ -108,8 +109,13 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         this.topConnXpdrXpdrOdu = null;
     }
 
-    @Override
-    public void onServicePathRpcResult(ServicePathRpcResult notification) {
+    public NotificationService.CompositeListener getCompositeListener() {
+        return new NotificationService.CompositeListener(Set.of(
+            new NotificationService.CompositeListener
+                .Component<>(ServicePathRpcResult.class, this::onServicePathRpcResult)));
+    }
+
+    private void onServicePathRpcResult(ServicePathRpcResult notification) {
         if (compareServicePathRpcResult(notification)) {
             LOG.warn("ServicePathRpcResult already wired !");
             return;
