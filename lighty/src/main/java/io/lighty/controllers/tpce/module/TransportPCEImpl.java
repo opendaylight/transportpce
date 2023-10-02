@@ -67,7 +67,7 @@ import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
-import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
@@ -194,7 +194,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             new TapiNetworkUtilsImpl(lgServRPS, networkTransaction, tapiLink);
             tapiProvider = initTapi(
                     lightyServices, servicehandler, networkTransaction, serviceDataStoreOperations,
-                    new TapiNetworkModelListenerImpl(
+                    new TapiNetworkModelNotificationHandler(
                         networkTransaction, lgServBNPS),
                     tapiLink,
                     new TapiNetworkModelServiceImpl(
@@ -249,13 +249,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private TapiProvider initTapi(
             LightyServices lightyServices, OrgOpenroadmServiceService servicehandler,
             NetworkTransactionService networkTransactionService, ServiceDataStoreOperations serviceDataStoreOperations,
-            TapiNetworkModelListenerImpl tapiNetworkModelListenerImpl, TapiLink tapiLink,
+            TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler, TapiLink tapiLink,
             TapiNetworkModelService tapiNetworkModelService) {
         return new TapiProvider(
             lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
             lightyServices.getNotificationService(), lightyServices.getBindingNotificationPublishService(),
             networkTransactionService, servicehandler, serviceDataStoreOperations,
-            tapiNetworkModelListenerImpl, tapiNetworkModelService);
+            new TapiNetworkUtilsImpl(lightyServices.getRpcProviderService(), networkTransactionService, tapiLink),
+            tapiNetworkModelNotificationHandler, tapiNetworkModelService);
     }
 
     private void initRenderer(
