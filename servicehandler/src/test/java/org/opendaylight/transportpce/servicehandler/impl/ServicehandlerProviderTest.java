@@ -19,11 +19,14 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
+import org.opendaylight.transportpce.pce.service.PathComputationService;
+import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TransportpceNetworkmodelListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.TransportpcePceListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 
@@ -31,17 +34,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service
 public class ServicehandlerProviderTest extends AbstractTest {
 
     @Mock
+    RendererServiceOperations rendererServiceOperations;
+    @Mock
+    PathComputationService pathComputationService;
+    @Mock
+    NetworkModelService networkModelService;
+    @Mock
     DataBroker dataBroker;
     @Mock
     RpcProviderService rpcProviderRegistry;
     @Mock
     ServiceDataStoreOperations serviceDataStoreOperations;
-    @Mock
-    TransportpcePceListener pceListenerImpl;
-    @Mock
-    TransportpceRendererListener rendererListenerImpl;
-    @Mock
-    TransportpceNetworkmodelListener networkModelListenerImpl;
     @Mock
     NotificationPublishService notificationPublishService;
     @Mock
@@ -49,11 +52,18 @@ public class ServicehandlerProviderTest extends AbstractTest {
     @Mock
     DataTreeChangeListener<Services> serviceListener;
 
+    private final PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations,
+        pathComputationService, notificationPublishService, serviceDataStoreOperations);
+    private final RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(pathComputationService,
+        notificationPublishService, networkModelService);
+    private final NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
+        notificationPublishService, serviceDataStoreOperations);
+
     @Test
     void testInitRegisterServiceHandlerToRpcRegistry() {
-        new ServicehandlerProvider(dataBroker, rpcProviderRegistry, getNotificationService() ,
-                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-                notificationPublishService, servicehandler, serviceListener);
+        new ServicehandlerProvider(dataBroker, rpcProviderRegistry, getNotificationService(),
+            serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+            notificationPublishService, servicehandler, serviceListener);
 
         verify(rpcProviderRegistry, times(1)).registerRpcImplementation(any(), any(OrgOpenroadmServiceService.class));
         verify(dataBroker, times(1)).registerDataTreeChangeListener(any(), any());
