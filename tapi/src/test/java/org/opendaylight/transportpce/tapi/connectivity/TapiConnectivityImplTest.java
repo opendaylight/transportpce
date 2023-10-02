@@ -39,9 +39,9 @@ import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiPceListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiRendererListenerImpl;
-import org.opendaylight.transportpce.tapi.listeners.TapiServiceHandlerListenerImpl;
+import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
+import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
+import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiConnectivityDataUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
@@ -74,11 +74,11 @@ public class TapiConnectivityImplTest extends AbstractTest {
     @Mock
     private NotificationPublishService notificationPublishService;
     @Mock
-    private TapiPceListenerImpl tapipceListenerImpl;
+    private TapiPceNotificationHandler tapipceNotificationHandler;
     @Mock
-    private TapiRendererListenerImpl tapirendererListenerImpl;
+    private TapiRendererNotificationHandler tapirendererNotificationHandler;
     @Mock
-    private TapiServiceHandlerListenerImpl tapiserviceHandlerListenerImpl;
+    private TapiServiceNotificationHandler tapiserviceNotificationHandler;
     @Mock
     private PceListener pceListenerImpl;
     @Mock
@@ -137,7 +137,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl);
+            tapipceNotificationHandler, tapirendererNotificationHandler);
 
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
             tapiConnectivity.createConnectivityService(new CreateConnectivityServiceInputBuilder().build());
@@ -165,7 +165,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl);
+            tapipceNotificationHandler, tapirendererNotificationHandler);
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
             tapiConnectivity.createConnectivityService(input);
         result.addListener(new Runnable() {
@@ -188,7 +188,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl);
+            tapipceNotificationHandler, tapirendererNotificationHandler);
 
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
             tapiConnectivity.deleteConnectivityService(new DeleteConnectivityServiceInputBuilder().build());
@@ -213,7 +213,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl);
+            tapipceNotificationHandler, tapirendererNotificationHandler);
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
             tapiConnectivity.deleteConnectivityService(input);
         result.addListener(new Runnable() {
@@ -238,7 +238,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
             networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
 
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceListenerImpl, tapirendererListenerImpl);
+            tapipceNotificationHandler, tapirendererNotificationHandler);
 
         ServiceCreateInput createInput = TapiConnectivityDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
