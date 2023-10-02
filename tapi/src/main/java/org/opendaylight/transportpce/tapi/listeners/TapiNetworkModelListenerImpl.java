@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
@@ -50,7 +52,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.Notification;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.NotificationType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.ObjectType;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.TapiNotificationListener;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributes;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.notification.ChangedAttributesKey;
@@ -75,7 +76,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
+public class TapiNetworkModelListenerImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelListenerImpl.class);
     private final NetworkTransactionService networkTransactionService;
@@ -95,8 +96,12 @@ public class TapiNetworkModelListenerImpl implements TapiNotificationListener {
         LOG.debug("TapiNetworkModelListenerImpl instantiated");
     }
 
-    @Override
-    public void onNotification(Notification notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(Notification.class, this::onNotification)));
+    }
+
+    private void onNotification(Notification notification) {
         LOG.info("Received network model notification {}", notification);
         if (notification.getNotificationType() == NotificationType.ATTRIBUTEVALUECHANGE
                 && notification.getTargetObjectType() == ObjectType.NODEEDGEPOINT) {
