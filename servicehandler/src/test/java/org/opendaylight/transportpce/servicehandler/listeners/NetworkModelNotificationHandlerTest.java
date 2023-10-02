@@ -60,14 +60,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 
 @ExtendWith(MockitoExtension.class)
-public class NetworkModelListenerImplTest {
+public class NetworkModelNotificationHandlerTest {
 
     @Mock
     private NotificationPublishService notificationPublishService;
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private static PathDescription pathDescription;
-    private NetworkModelListenerImpl networkModelListener;
+    private NetworkModelNotificationHandler networkModelListener;
 
     @BeforeEach
     void setUp() {
@@ -75,7 +75,7 @@ public class NetworkModelListenerImplTest {
                 .setAToZDirection(new AToZDirectionBuilder().setAToZ(new HashMap<>(createMapAtoZ())).build())
                 .setZToADirection(new ZToADirectionBuilder().setZToA(new HashMap<>(createMapZtoA())).build())
                 .build();
-        networkModelListener = new NetworkModelListenerImpl(notificationPublishService,
+        networkModelListener = new NetworkModelNotificationHandler(notificationPublishService,
                 serviceDataStoreOperations);
     }
 
@@ -294,7 +294,8 @@ public class NetworkModelListenerImplTest {
 
     @Test
     void testOnTopologyUpdateResultWhenNeverWired() {
-        NetworkModelListenerImpl networkModelListenerMocked = Mockito.mock(NetworkModelListenerImpl.class);
+        NetworkModelNotificationHandler networkModelListenerMocked = Mockito.mock(
+            NetworkModelNotificationHandler.class);
         doCallRealMethod().when(networkModelListenerMocked).onTopologyUpdateResult(any(TopologyUpdateResult.class));
 
         Map<TopologyChangesKey, TopologyChanges> topologyChanges1 = Map.of(
@@ -321,7 +322,8 @@ public class NetworkModelListenerImplTest {
 
     @Test
     void testOnTopologyUpdateResultWhenAlreadyWired() {
-        NetworkModelListenerImpl networkModelListenerMocked = Mockito.mock(NetworkModelListenerImpl.class);
+        NetworkModelNotificationHandler networkModelListenerMocked = Mockito.mock(
+            NetworkModelNotificationHandler.class);
         doCallRealMethod().when(networkModelListenerMocked).onTopologyUpdateResult(any(TopologyUpdateResult.class));
 
         Map<TopologyChangesKey, TopologyChanges> topologyChanges = Map.of(
