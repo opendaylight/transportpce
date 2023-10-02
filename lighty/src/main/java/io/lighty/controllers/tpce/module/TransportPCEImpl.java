@@ -59,11 +59,11 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
+import org.opendaylight.transportpce.servicehandler.impl.ServiceHandlerProvider;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
-import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider;
-import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelNotificationHandler;
+import org.opendaylight.transportpce.servicehandler.listeners.PceNotificationHandler;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererNotificationHandler;
 import org.opendaylight.transportpce.servicehandler.listeners.ServiceListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
@@ -96,7 +96,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // renderer beans
     private final RendererProvider rendererProvider;
     // service-handler beans
-    private final ServicehandlerProvider servicehandlerProvider;
+    private final ServiceHandlerProvider servicehandlerProvider;
     // T-api
     private TapiProvider tapiProvider;
     // nbi-notifications beans
@@ -174,22 +174,22 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 portMapping);
         ServiceDataStoreOperations serviceDataStoreOperations =
             new ServiceDataStoreOperationsImpl(lgServBDB);
-        RendererListenerImpl rendererListenerImpl =
-            new RendererListenerImpl(pathComputationService, lgServBNPS, networkModelService);
-        PceListenerImpl pceListenerImpl = new PceListenerImpl(
+        RendererNotificationHandler rendererNotificationHandler =
+            new RendererNotificationHandler(pathComputationService, lgServBNPS, networkModelService);
+        PceNotificationHandler pceListenerImpl = new PceNotificationHandler(
                 rendererServiceOperations, pathComputationService,
                 lgServBNPS, serviceDataStoreOperations);
-        NetworkModelListenerImpl networkModelListenerImpl = new NetworkModelListenerImpl(
+        NetworkModelNotificationHandler networkModelNotificationHandler = new NetworkModelNotificationHandler(
                 lgServBNPS, serviceDataStoreOperations);
         OrgOpenroadmServiceService servicehandler = new ServicehandlerImpl(
                 pathComputationService, rendererServiceOperations,
                 lgServBNPS, pceListenerImpl,
-                rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations,
+                rendererNotificationHandler, networkModelNotificationHandler, serviceDataStoreOperations,
                 new CatalogDataStoreOperationsImpl(networkTransaction));
-        servicehandlerProvider = new ServicehandlerProvider(
+        servicehandlerProvider = new ServiceHandlerProvider(
                 lgServBDB, lgServRPS,
                 lgServNS, serviceDataStoreOperations, pceListenerImpl,
-                rendererListenerImpl, networkModelListenerImpl, lgServBNPS,
+                rendererNotificationHandler, networkModelNotificationHandler, lgServBNPS,
                 servicehandler,
                 new ServiceListener(
                     servicehandler, serviceDataStoreOperations, lgServBNPS));
