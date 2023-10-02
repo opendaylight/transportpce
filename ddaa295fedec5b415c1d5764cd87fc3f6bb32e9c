@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6b176e_b411c400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "Thx, LGTM apart minor issues mostly about style coherency",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02765a64_d41523d9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n    private Map\u003cEndPointKey, EndPoint\u003e createEndPoints(\n            Map\u003corg.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210\n                    .create.connectivity.service.input.EndPointKey,\n                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210\n                    .create.connectivity.service.input.EndPoint\u003e endPoints) {",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5962dcf_0bfded13",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "and this ?\n\n        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210\n                .create.connectivity.service.input.EndPoint ep: endPoints.values()) {",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73fd424b_50a8d0e0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "TODO comments should prefarably be on a separate line IMO",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb39f64b_b279baef",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "There is a parenthesis helling here IMO\nwhat about this rather ?\n\n        return RpcResultBuilder\n            .success(\n                new GetNodeEdgePointDetailsOutputBuilder()\n                    .setNodeEdgePoint(new NodeEdgePointBuilder(nep).build())\n                    .build())\n            .buildFuture();",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70332181_c1297ce2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "LF after \u003d would healp readability IMO",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "843376b4_d106d689",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "idem line 240 for style coherency\n\netc",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f14b63_e5213bb3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "LF after \"rev181210\" would be more appropriate IMO\nAlso, wouldn\u0027t \"var\" fit better here and in any other similar occurences in this file?",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2172fbc2_486076b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "OK - cf line 473 for style coherency",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fa3f61_c505f740",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "previous indentation was better IMO\nthis is an argument of \".augmentation\" which is at the same level of \".getAssociatedConnectionMapTp()\"",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c54ab67_6a3a7a92",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-02T06:54:05Z",
+      "side": 1,
+      "message": "fair but I think the previous style was also fair\nAnd I think all arguments on the a separate line is usually easier to read.",
+      "revId": "ddaa295fedec5b415c1d5764cd87fc3f6bb32e9c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
