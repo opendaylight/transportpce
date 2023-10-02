@@ -11,7 +11,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -21,7 +23,6 @@ import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
@@ -50,11 +51,11 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
-@Component
-public class RendererListenerImpl implements TransportpceRendererListener, RendererListener {
+@Component(service = {RendererNotificationHandler.class, RendererListener.class})
+public class RendererNotificationHandler implements RendererListener {
 
     private static final String PUBLISHER = "RendererListener";
-    private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RendererNotificationHandler.class);
     private RendererRpcResultSp serviceRpcResultSp;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private ServiceInput input;
@@ -63,9 +64,8 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
     private NotificationPublishService notificationPublishService;
     private final NetworkModelService networkModelService;
 
-
     @Activate
-    public RendererListenerImpl(@Reference PathComputationService pathComputationService,
+    public RendererNotificationHandler(@Reference PathComputationService pathComputationService,
             @Reference NotificationPublishService notificationPublishService,
             @Reference NetworkModelService networkModelService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
@@ -75,8 +75,12 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         this.networkModelService = networkModelService;
     }
 
-    @Override
-    public void onRendererRpcResultSp(RendererRpcResultSp notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(RendererRpcResultSp.class, this::onRendererRpcResultSp)));
+    }
+
+    private void onRendererRpcResultSp(RendererRpcResultSp notification) {
         if (compareServiceRpcResultSp(notification)) {
             LOG.warn("ServiceRpcResultSp already wired !");
             return;
