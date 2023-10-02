@@ -11,7 +11,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -21,7 +23,6 @@ import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
@@ -51,7 +52,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @Component
-public class RendererListenerImpl implements TransportpceRendererListener, RendererListener {
+public class RendererListenerImpl implements RendererListener {
 
     private static final String PUBLISHER = "RendererListener";
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
@@ -62,7 +63,6 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
     private Boolean tempService;
     private NotificationPublishService notificationPublishService;
     private final NetworkModelService networkModelService;
-
 
     @Activate
     public RendererListenerImpl(@Reference PathComputationService pathComputationService,
@@ -75,8 +75,12 @@ public class RendererListenerImpl implements TransportpceRendererListener, Rende
         this.networkModelService = networkModelService;
     }
 
-    @Override
-    public void onRendererRpcResultSp(RendererRpcResultSp notification) {
+    public CompositeListener getCompositeListener() {
+        return new CompositeListener(Set.of(
+            new CompositeListener.Component<>(RendererRpcResultSp.class, this::onRendererRpcResultSp)));
+    }
+
+    private void onRendererRpcResultSp(RendererRpcResultSp notification) {
         if (compareServiceRpcResultSp(notification)) {
             LOG.warn("ServiceRpcResultSp already wired !");
             return;
