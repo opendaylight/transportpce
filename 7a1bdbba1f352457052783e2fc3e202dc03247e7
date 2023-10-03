@@ -16,6 +16,24 @@
       "message": "what about this instead ?\n\nSome unimplemented RPCs return null and raise a NPE on javax.servlet.\n- return a RpcResult with error instead.",
       "revId": "7a1bdbba1f352457052783e2fc3e202dc03247e7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc7a0a3_281275ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-03T08:59:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e3de242_af920389",
+      "revId": "7a1bdbba1f352457052783e2fc3e202dc03247e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
