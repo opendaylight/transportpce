@@ -232,34 +232,29 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=60):
     # pylint: disable=lost-exception
     # pylint: disable=consider-using-with
     stringfound = False
-    filefound = False
     line = None
     try:
         with TimeOut(seconds=time_to_wait):
             while not os.path.exists(log_file):
                 time.sleep(0.2)
-            filelogs = open(log_file, 'r', encoding='utf-8')
-            filelogs.seek(0, 2)
-            filefound = True
-            print("Searching for pattern '" + regexp + "' in " + os.path.basename(log_file), end='... ', flush=True)
-            compiled_regexp = re.compile(regexp)
-            while True:
-                line = filelogs.readline()
-                if compiled_regexp.search(line):
-                    print('Pattern found!', end=' ')
-                    stringfound = True
-                    break
-                if not line:
-                    time.sleep(0.1)
+            with open(log_file, 'r', encoding='utf-8') as filelogs:
+                filelogs.seek(0, 2)
+                print("Searching for pattern '" + regexp + "' in " + os.path.basename(log_file), end='... ', flush=True)
+                compiled_regexp = re.compile(regexp)
+                while True:
+                    line = filelogs.readline()
+                    if compiled_regexp.search(line):
+                        print('Pattern found!', end=' ')
+                        stringfound = True
+                        break
+                    if not line:
+                        time.sleep(0.1)
+        return stringfound
     except TimeoutError:
         print('Pattern not found after ' + str(time_to_wait), end=' seconds! ', flush=True)
+        return stringfound
     except PermissionError:
         print('Permission Error when trying to access the log file', end=' ... ', flush=True)
-    finally:
-        if filefound:
-            filelogs.close()
-        else:
-            print('log file does not exist or is not accessible... ', flush=True)
         return stringfound
 
 
