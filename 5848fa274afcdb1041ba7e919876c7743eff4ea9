@@ -16,6 +16,23 @@
       "message": "network issue on the gate...\n  buildcontroller: OK (279.67\u003dsetup[9.52]+cmd[270.15] seconds)\n  testsPCE: OK (332.47\u003dsetup[88.65]+cmd[243.83] seconds)\n  sims121: OK (18.55\u003dsetup[16.26]+cmd[2.29] seconds)\n  build_karaf_tests121: OK (84.51\u003dsetup[16.18]+cmd[68.33] seconds)\n  tests121: OK (2165.64\u003dsetup[9.63]+cmd[2156.01] seconds)\n  sims221: OK (18.36\u003dsetup[16.19]+cmd[2.17] seconds)\n  build_karaf_tests221: OK (102.05\u003dsetup[18.87]+cmd[83.18] seconds)\n  tests_tapi: OK (971.17\u003dsetup[26.73]+cmd[1.47,942.98] seconds)\n  tests221: OK (2875.92\u003dsetup[7.29]+cmd[2868.63] seconds)\n  sims71: OK (21.13\u003dsetup[18.81]+cmd[2.32] seconds)\n  build_karaf_tests71: OK (106.57\u003dsetup[13.75]+cmd[92.82] seconds)\n  tests71: OK (475.03\u003dsetup[7.52]+cmd[0.83,466.68] seconds)\n  build_karaf_tests_hybrid: OK (97.62\u003dsetup[14.22]+cmd[83.40] seconds)\n  tests_hybrid: OK (906.54\u003dsetup[7.43]+cmd[2.60,896.50] seconds)\n  buildlighty: OK (99.46\u003dsetup[8.20]+cmd[91.26] seconds)\n  docs: OK (44.60\u003dsetup[42.57]+cmd[2.03] seconds)\n  docs-linkcheck: FAIL code 1 (45.56\u003dsetup[41.91]+cmd[3.64] seconds)\n  checkbashisms: OK (51.16\u003dsetup[2.37]+cmd[48.09,0.69] seconds)\n  pre-commit: OK (33.93\u003dsetup[4.01]+cmd[22.97,6.95] seconds)\n  pylint: OK (37.17\u003dsetup[5.18]+cmd[31.99] seconds)",
       "revId": "5848fa274afcdb1041ba7e919876c7743eff4ea9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef1311e2_55f958ff",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-03T06:42:06Z",
+      "side": 1,
+      "message": "this variable seems only used once",
+      "revId": "5848fa274afcdb1041ba7e919876c7743eff4ea9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
