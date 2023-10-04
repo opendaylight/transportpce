@@ -40,7 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
 
-public class OlmPowerServiceImplTest  extends AbstractTest {
+class OlmPowerServiceImplTest  extends AbstractTest {
 
     private DeviceTransactionManager deviceTransactionManager;
     private OpenRoadmInterfaces openRoadmInterfaces;

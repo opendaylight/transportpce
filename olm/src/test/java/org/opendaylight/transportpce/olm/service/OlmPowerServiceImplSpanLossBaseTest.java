@@ -63,7 +63,7 @@ import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
+class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceImplSpanLossBaseTest.class);
     private DeviceTransactionManager deviceTransactionManager;
