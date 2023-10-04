@@ -21,14 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 
 @ExtendWith(MockitoExtension.class)
 public class NetworkModelProviderTest {
@@ -36,8 +34,6 @@ public class NetworkModelProviderTest {
     NetworkTransactionService networkTransactionService;
     @Mock
     DataBroker dataBroker;
-    @Mock
-    RpcProviderService rpcProviderService;
     @Mock
     NetworkModelService networkModelService;
     @Mock
@@ -50,8 +46,6 @@ public class NetworkModelProviderTest {
     NotificationService notificationService;
     @Mock
     FrequenciesService frequenciesService;
-    @Mock
-    TransportpceNetworkutilsService networkUtils;
 
     @Test
     void networkmodelProviderInitTest() {
@@ -65,11 +59,9 @@ public class NetworkModelProviderTest {
         };
         when(networkTransactionService.commit()).then(answer);
 
-        new NetworkModelProvider(networkTransactionService, dataBroker, rpcProviderService, networkModelService,
-                deviceTransactionManager, portMapping, notificationService, frequenciesService, networkUtils);
+        new NetworkModelProvider(networkTransactionService, dataBroker, networkModelService, deviceTransactionManager,
+                portMapping, notificationService, frequenciesService);
 
-        verify(rpcProviderService, times(1))
-            .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
         verify(dataBroker, times(2)).registerDataTreeChangeListener(any(), any());
     }
 }

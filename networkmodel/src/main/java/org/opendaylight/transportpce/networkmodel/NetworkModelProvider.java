@@ -9,11 +9,9 @@ package org.opendaylight.transportpce.networkmodel;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -25,7 +23,6 @@ import org.opendaylight.transportpce.networkmodel.listeners.ServiceHandlerListen
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
@@ -50,11 +47,8 @@ public class NetworkModelProvider {
         .child(Mapping.class);
 
     private final DataBroker dataBroker;
-    private final RpcProviderService rpcProviderService;
-    private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
     private List<Registration> listeners;
-    private @NonNull Registration networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
     private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
     private NotificationService notificationService;
@@ -64,19 +58,15 @@ public class NetworkModelProvider {
     @Activate
     public NetworkModelProvider(@Reference NetworkTransactionService networkTransactionService,
             @Reference final DataBroker dataBroker,
-            @Reference final RpcProviderService rpcProviderService,
             @Reference final NetworkModelService networkModelService,
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference PortMapping portMapping,
             @Reference NotificationService notificationService,
-            @Reference FrequenciesService frequenciesService,
-            @Reference TransportpceNetworkutilsService networkUtils) {
+            @Reference FrequenciesService frequenciesService) {
         this.dataBroker = dataBroker;
-        this.rpcProviderService = rpcProviderService;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
         this.listeners = new ArrayList<>();
-        this.networkutilsService = networkUtils;
         this.topologyListener = new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager,
             portMapping);
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
@@ -98,8 +88,6 @@ public class NetworkModelProvider {
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener));
         listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
-        networkutilsServiceRpcRegistration = rpcProviderService
-            .registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
         TransportpceServicehandlerListener serviceHandlerListner = new ServiceHandlerListener(frequenciesService);
         serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
     }
@@ -112,9 +100,6 @@ public class NetworkModelProvider {
         LOG.info("NetworkModelProvider Closed");
         listeners.forEach(lis -> lis.close());
         listeners.clear();
-        if (networkutilsServiceRpcRegistration != null) {
-            networkutilsServiceRpcRegistration.close();
-        }
         serviceHandlerListenerRegistration.close();
     }
 }
