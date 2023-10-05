@@ -2,8 +2,8 @@
 
 cd $(dirname "$0")
 cd ..
-git clone https://github.com/PANTHEONtech/lighty.git
-cd lighty-core
+git clone https://github.com/PANTHEONtech/lighty.git lighty-repo
+cd lighty-repo
 git checkout main
 #git checkout 18.0.x
 export JDK_JAVA_OPTIONS="--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED"
