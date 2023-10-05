@@ -2,7 +2,7 @@
 
 cd $(dirname "$0")
 cd ..
-git clone https://github.com/PantheonTechnologies/lighty-core.git
+git clone https://github.com/PANTHEONtech/lighty.git
 cd lighty-core
 git checkout main
 #git checkout 18.0.x
