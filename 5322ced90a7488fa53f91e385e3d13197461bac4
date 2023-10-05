@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "031a99ce_c234091e",
+        "filename": "lighty/build_lighty_core.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 8144
+      },
+      "writtenOn": "2023-10-05T13:00:50Z",
+      "side": 1,
+      "message": "What about?\n\ngit clone https://github.com/PANTHEONtech/lighty.git\ncd lighty/lighty-core",
+      "revId": "5322ced90a7488fa53f91e385e3d13197461bac4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
