@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ad61f9_46071f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-06T09:15:01Z",
+      "side": 1,
+      "message": "Hi Matej\nAs discussed w/ Ivan \u0026 Giles on slack, I suspect some infra issues.\nLocally PCE tests did pass. cf below\nThere might be also some SNAPSHOT caches issues.\nI propose we split this relation chain and rebase every change directly on top of master to see if they behave better and so that they can be merged independantly.\nHope this helps\nGuillaume\n\n\n$ tox -e buildcontroller,testsPCE\n[...]\ntestsPCE run-test: commands[0] | ./launch_tests.sh pce\npytest-3 -q transportpce_tests/pce/test01_pce.py\n....................                                                                                                                                                                                                                   [100%]\n20 passed in 88.51s (0:01:28)\npytest-3 -q transportpce_tests/pce/test02_pce_400G.py\n.........                                                                                                                                                                                                                              [100%]\n9 passed in 37.84s\npytest-3 -q transportpce_tests/pce/test03_gnpy.py\n........                                                                                                                                                                                                                               [100%]\n8 passed in 37.22s\n__________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________\n  testsPCE: commands succeeded\n  congratulations :)",
+      "revId": "cae8a9142d0aa1555a28dcb3b560b6e4efed2132",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
