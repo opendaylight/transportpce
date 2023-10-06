@@ -16,6 +16,23 @@
       "message": "commit message and lighty build normally fixed.\nThis change should pass the gate now.",
       "revId": "04ec90d77b5292b61f52e3a10c2f45980ed3806c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "106ab3d0_52c79ffc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-06T15:45:24Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "04ec90d77b5292b61f52e3a10c2f45980ed3806c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
