@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11ccf57c_16549470",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-06T13:32:34Z",
+      "side": 1,
+      "message": "line length \u003e 72 char\n\ngitlint..................................................................Failed\n12:44:45 - hook id: gitlint-ci\n12:44:45 - exit code: 1\n12:44:45 \n12:44:45 3: B1 Line exceeds max length (73\u003e72): \"Don\u0027t use NotificationListener in classes used by ServicehandlerProvider.\"",
+      "revId": "79b7fcaf350cb817cbcb3ce76ad1fc45d2eb574d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
