@@ -84,6 +84,23 @@
       "message": "recheck",
       "revId": "04ec90d77b5292b61f52e3a10c2f45980ed3806c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4294726e_f95d70ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-09T07:57:03Z",
+      "side": 1,
+      "message": "CI Infra issues seems behind us. but lighty build seems still KO...\n\n09:39:34 unzip:  cannot find or open target/tpce-bin.zip, target/tpce-bin.zip.zip or target/tpce-bin.zip.ZIP.\n09:39:34 buildlighty: exit 9 (85.59 seconds) /w/workspace/transportpce-tox-verify-transportpce-master/lighty\u003e ./build.sh pid\u003d88351\n09:39:34   buildcontroller: OK (299.03\u003dsetup[11.61]+cmd[287.42] seconds)\n09:39:34   testsPCE: OK (304.82\u003dsetup[82.85]+cmd[221.97] seconds)\n09:39:34   sims121: OK (15.55\u003dsetup[12.78]+cmd[2.77] seconds)\n09:39:34   build_karaf_tests121: OK (71.08\u003dsetup[12.37]+cmd[58.71] seconds)\n09:39:34   tests121: OK (2152.19\u003dsetup[7.89]+cmd[2144.30] seconds)\n09:39:34   sims221: OK (15.26\u003dsetup[12.61]+cmd[2.64] seconds)\n09:39:34   build_karaf_tests221: OK (80.99\u003dsetup[11.44]+cmd[69.54] seconds)\n09:39:34   tests_tapi: OK (792.12\u003dsetup[21.20]+cmd[770.93] seconds)\n09:39:34   tests221: OK (2895.75\u003dsetup[8.06]+cmd[2887.68] seconds)\n09:39:34   sims71: OK (13.59\u003dsetup[11.25]+cmd[2.34] seconds)\n09:39:34   build_karaf_tests71: OK (96.50\u003dsetup[18.34]+cmd[78.15] seconds)\n09:39:34   tests71: OK (479.17\u003dsetup[8.02]+cmd[1.40,469.74] seconds)\n09:39:34   build_karaf_tests_hybrid: OK (94.71\u003dsetup[12.29]+cmd[82.41] seconds)\n09:39:34   tests_hybrid: OK (902.12\u003dsetup[7.80]+cmd[3.92,890.40] seconds)\n09:39:34   buildlighty: FAIL code 9 (93.14\u003dsetup[7.55]+cmd[85.59] seconds)\n09:39:34   docs: OK (52.43\u003dsetup[44.14]+cmd[8.29] seconds)\n09:39:34   docs-linkcheck: OK (64.14\u003dsetup[44.37]+cmd[19.77] seconds)\n09:39:34   checkbashisms: OK (56.01\u003dsetup[2.64]+cmd[52.73,0.63] seconds)\n09:39:34   pre-commit: OK (46.04\u003dsetup[4.08]+cmd[29.71,12.25] seconds)\n09:39:34   pylint: OK (32.17\u003dsetup[8.21]+cmd[23.96] seconds)\n09:39:34   evaluation failed :( (5557.76 seconds)\n09:39:34 + tox_status\u003d255",
+      "revId": "04ec90d77b5292b61f52e3a10c2f45980ed3806c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
