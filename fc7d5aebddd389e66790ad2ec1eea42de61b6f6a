@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d02429b1_c318f0b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-10T11:26:46Z",
+      "side": 1,
+      "message": "dead URL false positives due to CI connectivity issue\n\n12:36:19   buildlighty: OK (23.79\u003dsetup[8.02]+cmd[15.77] seconds)\n12:36:19   docs: OK (41.22\u003dsetup[39.35]+cmd[1.87] seconds)\n12:36:19   docs-linkcheck: FAIL code 1 (42.29\u003dsetup[39.10]+cmd[3.19] seconds)",
+      "revId": "fc7d5aebddd389e66790ad2ec1eea42de61b6f6a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
