@@ -453,7 +453,7 @@ public class OpenRoadmTopologyTest {
         }
     }
 
-    private class InterruptedLinkFuture implements  ListenableFuture<Optional<Link>> {
+    private final class InterruptedLinkFuture implements  ListenableFuture<Optional<Link>> {
 
         @Override
         public boolean cancel(boolean arg0) {
