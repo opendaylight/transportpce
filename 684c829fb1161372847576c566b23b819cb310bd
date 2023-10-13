@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a8a8e2_f37e566a",
+        "filename": "inventory/src/main/resources/org.ops4j.datasource-transporpce.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-13T07:09:52Z",
+      "side": 1,
+      "message": "I think we could just and simply remove the line.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 41
+      },
+      "revId": "684c829fb1161372847576c566b23b819cb310bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
