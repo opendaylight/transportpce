@@ -19,7 +19,7 @@ fi
 
 #build controller, source JDK_JAVA_OPTIONS to remove illegal reflective acces warnings introduced by Java11
 . "$current_dir"/reflectwarn.sh
-mvn clean install -B -q -s tests/odl_settings.xml -DskipTests -Dmaven.javadoc.skip=true -Dodlparent.spotbugs.skip -Dodlparent.checkstyle.skip
+mvn clean install -B -q -s tests/odl_settings.xml -Pq
 
 #patch Karaf exec for the same reason at runtime and also to have the possibility to use alternative ports
 ./karaf/target/assembly/ressources/post_install_for_tests.sh
