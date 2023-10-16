@@ -55,6 +55,7 @@ class TransportPCEtesting(unittest.TestCase):
     def setUpClass(cls):
         # pylint: disable=bare-except
         sample_files_parsed = False
+        time.sleep(10)
         try:
             TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                             "..", "..", "sample_configs", "honeynode-topo.json")
