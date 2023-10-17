@@ -17,7 +17,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev181210.get.notification.list.output.Notification;
 
 public class NotificationTapiServiceDeserializerTest extends AbstractTest {
