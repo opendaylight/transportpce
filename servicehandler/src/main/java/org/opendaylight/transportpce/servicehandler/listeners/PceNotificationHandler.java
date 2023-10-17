@@ -27,10 +27,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.notification.process.service.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.notification.process.service.ServiceZEndBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -240,6 +240,7 @@ public class PceNotificationHandler implements PceListener {
                             .setServiceZEnd(new ServiceZEndBuilder(tempServiceList.getServiceZEnd()).build())
                             .setCommonId(tempServiceList.getCommonId())
                             .setConnectionType(tempServiceList.getConnectionType())
+                            .setIsTempService(true)
                             .setPublisherName(PUBLISHER);
         } else {
             Services service = serviceDataStoreOperations.getService(input.getServiceName()).orElseThrow();
@@ -250,6 +251,7 @@ public class PceNotificationHandler implements PceListener {
                             .setServiceAEnd(new ServiceAEndBuilder(service.getServiceAEnd()).build())
                             .setServiceZEnd(new ServiceZEndBuilder(service.getServiceZEnd()).build())
                             .setCommonId(service.getCommonId())
+                            .setIsTempService(false)
                             .setConnectionType(service.getConnectionType())
                             .setPublisherName(PUBLISHER);
 

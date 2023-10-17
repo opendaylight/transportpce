@@ -27,15 +27,15 @@ import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceD
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationServiceBuilder;
 
 public class NbiNotificationsHandlerTest extends AbstractTest {
     @Mock
@@ -58,6 +58,7 @@ public class NbiNotificationsHandlerTest extends AbstractTest {
                 .setPublisherName("test")
                 .setCommonId("commonId")
                 .setConnectionType(ConnectionType.Service)
+                .setIsTempService(false)
                 .setMessage("Service deleted")
                 .setOperationalState(State.OutOfService)
                 .setServiceName("service name")

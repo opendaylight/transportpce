@@ -11,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.process.service.output.NotificationsProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.get.notifications.process.service.output.NotificationsProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.get.notifications.process.service.output.NotificationsProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.get.notifications.process.service.output.NotificationsProcessServiceBuilder;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
             return null;
         }
         LOG.info("Reading event {}", mappedString);
-        return new NotificationsProcessServiceBuilder()
+        NotificationsProcessServiceBuilder notificationsProcessServiceBuilder = new NotificationsProcessServiceBuilder()
                 .setCommonId(mappedString.getCommonId())
                 .setConnectionType(mappedString.getConnectionType())
                 .setMessage(mappedString.getMessage())
@@ -59,8 +59,14 @@ public class NotificationServiceDeserializer implements Deserializer<Notificatio
                 .setResponseFailed(mappedString.getResponseFailed())
                 .setServiceName(mappedString.getServiceName())
                 .setServiceAEnd(mappedString.getServiceAEnd())
-                .setServiceZEnd(mappedString.getServiceZEnd())
-                .build();
+                .setServiceZEnd(mappedString.getServiceZEnd());
+        if (mappedString.getIsTempService()) {
+            return notificationsProcessServiceBuilder
+                    .setAToZ(mappedString.getAToZ())
+                    .setZToA(mappedString.getZToA())
+                    .build();
+        }
+        return notificationsProcessServiceBuilder.build();
     }
 
 }
