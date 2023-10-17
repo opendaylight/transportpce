@@ -12,15 +12,15 @@ import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.NbiNotificationsUtils;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationAlarmServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationProcessServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.NotificationTapiServiceBuilder;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationAlarmService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishNotificationProcessService;
-import org.opendaylight.yang.gen.v1.nbi.notifications.rev211013.PublishTapiNotificationService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationAlarmServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationProcessServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapiServiceBuilder;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
+import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class NbiNotificationsHandler {
             return;
         }
         Publisher<NotificationProcessService> publisher = publishersServiceMap.get(publisherName);
-        publisher.sendEvent(new NotificationProcessServiceBuilder()
+        NotificationProcessServiceBuilder notificationProcessServiceBuilder = new NotificationProcessServiceBuilder()
                 .setCommonId(notification.getCommonId())
                 .setConnectionType(notification.getConnectionType())
                 .setMessage(notification.getMessage())
@@ -67,8 +67,18 @@ public class NbiNotificationsHandler {
                 .setResponseFailed(notification.getResponseFailed())
                 .setServiceAEnd(notification.getServiceAEnd())
                 .setServiceName(notification.getServiceName())
-                .setServiceZEnd(notification.getServiceZEnd())
-                        .build(), notification.getConnectionType().getName());
+                .setServiceZEnd(notification.getServiceZEnd());
+
+        if (notification.getIsTempService()) {
+            // A-to-Z and Z-to-A containers are only needed for temp-service-create notification
+            publisher.sendEvent(notificationProcessServiceBuilder
+                    .setAToZ(notification.getAToZ())
+                    .setZToA(notification.getZToA())
+                    .build(), notification.getConnectionType().getName());
+        } else {
+            publisher.sendEvent(notificationProcessServiceBuilder
+                    .build(), notification.getConnectionType().getName());
+        }
     }
 
     void onPublishNotificationAlarmService(PublishNotificationAlarmService notification) {
