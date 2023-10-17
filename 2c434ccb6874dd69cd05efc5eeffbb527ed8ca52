@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d870aa37_bb17a3dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-17T05:34:23Z",
+      "side": 1,
+      "message": "This change does not take into acount change 108084: Do not use RpcService in servicehandler module | https://git.opendaylight.org/gerrit/c/transportpce/+/108084.\nWas the rebase been really effective?",
+      "revId": "2c434ccb6874dd69cd05efc5eeffbb527ed8ca52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
