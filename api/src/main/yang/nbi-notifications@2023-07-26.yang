@@ -12,6 +12,9 @@ module nbi-notifications {
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
   }
+  import org-openroadm-resource {
+    prefix org-openroadm-resource;
+  }
   import tapi-common {
     prefix tapi-common;
     revision-date 2018-12-10;
@@ -32,6 +35,11 @@ module nbi-notifications {
   revision 2021-10-13 {
     description
       "Implement new models, RPC for TAPI service notification";
+  }
+
+  revision 2023-07-26 {
+      description
+        "Adding service-rpc-result data details to the publish-notification-process-service";
   }
 
   revision 2021-08-13 {
@@ -90,8 +98,29 @@ module nbi-notifications {
       description
         "Operational State: Actual state of service";
     }
+    leaf is-temp-service {
+      type boolean;
+      default "false";
+      description
+        "Used to indicate if the it is a temp-service or not";
+    }
+    container aToZ {
+      when "../is-temp-service = 'true'" {
+        description
+            "a-to-z is only used for temp-service-cerate";
+        }
+        uses org-openroadm-resource:common-och-otsi-attributes;
+        uses org-openroadm-resource:path-computation-outputs;
+    }
+    container zToA {
+      when "../is-temp-service = 'true'" {
+        description
+              "a-to-z is only used for temp-service-cerate";
+        }
+      uses org-openroadm-resource:common-och-otsi-attributes;
+      uses org-openroadm-resource:path-computation-outputs;
+    }
   }
-
   grouping notification-alarm-service {
     leaf message {
       type string;
