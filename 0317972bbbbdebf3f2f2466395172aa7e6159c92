@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31e4d09f_ed858c10",
+        "filename": "nbinotifications/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-10-17T20:21:10Z",
+      "side": 1,
+      "message": "This change has been submitted at https://git.opendaylight.org/gerrit/c/transportpce/+/107350",
+      "parentUuid": "6ebb6774_a13aa32b",
+      "revId": "0317972bbbbdebf3f2f2466395172aa7e6159c92",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad8c75be_dc781aff",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-29T07:08:38Z",
       "side": 1,
       "message": "else not needed IMO",
+      "revId": "0317972bbbbdebf3f2f2466395172aa7e6159c92",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e64f99dd_593f1a22",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/NotificationServiceDeserializer.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2023-10-17T20:21:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad8c75be_dc781aff",
       "revId": "0317972bbbbdebf3f2f2466395172aa7e6159c92",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
