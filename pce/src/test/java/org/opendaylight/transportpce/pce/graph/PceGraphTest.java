@@ -404,7 +404,7 @@ public class PceGraphTest extends AbstractTest {
         pceOtnNode2.checkAvailableTribSlot();
 
         pceLink1 = new PceLink(link1, pceOtnNode, pceOtnNode2);
-        pceLink1.setClient("XPONDER-CLIENT");
+        pceLink1.setClientA("XPONDER-CLIENT");
 
         pceLink1.getDestId();
         pceOtnNode.addOutgoingLink(pceLink1);
