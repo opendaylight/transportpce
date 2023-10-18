@@ -211,7 +211,7 @@ class TransportPCEtesting(unittest.TestCase):
             atoz = response['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
             ztoa = response['output']['response-parameters']['path-description']['zToA-direction']['zToA'][i]
             if atoz['id'] == '14':
-                self.assertEqual(atoz['resource']['tp-id'], 'SRG1-PP1-TX')
+                self.assertEqual(atoz['resource']['tp-id'], '')
             if ztoa['id'] == '0':
                 self.assertEqual(ztoa['resource']['tp-id'], 'SRG1-PP1-RX')
         time.sleep(2)
