@@ -185,7 +185,7 @@ public class PcePathDescription {
         AToZ lastResource = null;
 
         // build A side Client TP
-        String tpName = path.get(0).getClient();
+        String tpName = path.get(0).getClientA();
         String xname = path.get(0).getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpId(tpName).setTpNodeId(xname)
@@ -270,7 +270,7 @@ public class PcePathDescription {
         }
 
         // build Z side Client TP
-        tpName = lastLink.getClient();
+        tpName = lastLink.getClientZ();
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -291,7 +291,7 @@ public class PcePathDescription {
 
         // build Z size Client TP
         PceLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
-        String tpName = pcelink.getClient();
+        String tpName = pcelink.getClientA();
         String xname = pcelink.getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -379,7 +379,7 @@ public class PcePathDescription {
         }
 
         // build Z side Client TP
-        tpName = lastLink.getClient();
+        tpName = lastLink.getClientZ();
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName).build();

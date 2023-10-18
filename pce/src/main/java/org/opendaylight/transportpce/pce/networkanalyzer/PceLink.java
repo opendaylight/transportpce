@@ -49,7 +49,8 @@ public class PceLink implements Serializable {
 
     // this member is for XPONDER INPUT/OUTPUT links.
     // it keeps name of client corresponding to NETWORK TP
-    private String client = "";
+    private String clientA = "";
+    private String clientZ = "";
     private final LinkId linkId;
     private final OpenroadmLinkType linkType;
     private final NodeId sourceId;
@@ -372,16 +373,24 @@ public class PceLink implements Serializable {
         return destId;
     }
 
-    public String getClient() {
-        return client;
+    public String getClientA() {
+        return clientA;
     }
 
     public Double getLength() {
         return length;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setClientA(String client) {
+        this.clientA = client;
+    }
+
+    public String getClientZ() {
+        return clientZ;
+    }
+
+    public void setClientZ(String client) {
+        this.clientZ = client;
     }
 
     // Double for transformer of JUNG graph

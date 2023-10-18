@@ -71,7 +71,7 @@ public class PcePathDescriptionTests extends AbstractTest {
                 GridConstant.SLOT_WIDTH_50);
 
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
-        pceLink.setClient("XPONDER-CLIENT");
+        pceLink.setClientA("XPONDER-CLIENT");
 
         pceResult = new PceResult();
         pceResult.setRC("200");
