@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b13284_99ca481f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-18T06:42:19Z",
+      "side": 1,
+      "message": "Thank you Matej for this new PS and for having managed this NotificationListener migration on TPCE.",
+      "revId": "9b290e99c92d1d16049353cb2e000edae1220b1b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
