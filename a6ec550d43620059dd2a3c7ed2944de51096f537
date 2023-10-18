@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ecae249_3665a082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-10-18T17:00:12Z",
+      "side": 1,
+      "message": "Hello. Opening this change to review. It does not pass the gate, due to pylint issues. Not clear to me where the problem is (in which test). My understanding is that the tox tests passe (apart from this issue). Thanks",
+      "revId": "a6ec550d43620059dd2a3c7ed2944de51096f537",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
