@@ -176,9 +176,9 @@ public class PceLinkTest extends AbstractTest {
         assertNotNull(pceLink.getLinkId());
         assertNotNull(pceLink.getSourceId());
         assertNotNull(pceLink.getDestId());
-        pceLink.setClient("specific_client");
-        assertTrue(pceLink.getClient().equals("specific_client"));
-        assertNotNull(pceLink.getClient());
+        pceLink.setClientA("specific_client");
+        assertTrue(pceLink.getClientA().equals("specific_client"));
+        assertNotNull(pceLink.getClientA());
         assertNotNull(pceLink.getLatency());
         assertNotNull(pceLink.getAvailableBandwidth());
         assertNotNull(pceLink.getUsedBandwidth());

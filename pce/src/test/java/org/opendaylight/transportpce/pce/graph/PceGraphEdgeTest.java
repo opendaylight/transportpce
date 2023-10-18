@@ -50,7 +50,7 @@ public class PceGraphEdgeTest {
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
-        pceLink.setClient("XPONDER-CLIENT");
+        pceLink.setClientA("XPONDER-CLIENT");
 
         pceGraphEdge = new PceGraphEdge(pceLink);
     }
