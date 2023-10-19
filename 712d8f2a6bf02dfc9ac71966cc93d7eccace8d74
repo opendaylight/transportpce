@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a117a3de_072872b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-10-19T08:16:43Z",
+      "side": 1,
+      "message": "@guillaume : hello Guillaume. Could you have a look at the verify? Looks like we have an issue with pre-commit. Don\u0027t know how to solve it since I don\u0027t see where the failure is... Thanks!",
+      "revId": "712d8f2a6bf02dfc9ac71966cc93d7eccace8d74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
