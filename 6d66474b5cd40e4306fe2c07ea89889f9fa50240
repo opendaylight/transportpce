@@ -33,6 +33,24 @@
       "message": "buildlighty: FAIL code 9 (18.63\u003dsetup[7.41]+cmd[11.22] seconds)",
       "revId": "6d66474b5cd40e4306fe2c07ea89889f9fa50240",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf143108_4a6edd02",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T16:28:31Z",
+      "side": 1,
+      "message": "yes indeed. Should be OK with PS17.",
+      "parentUuid": "7fc552fc_924ad91a",
+      "revId": "6d66474b5cd40e4306fe2c07ea89889f9fa50240",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
