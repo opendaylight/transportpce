@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61e2da7f_6da7266f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-20T15:46:21Z",
+      "side": 1,
+      "message": "this last PS seems to break lighty.io build support",
+      "revId": "6d66474b5cd40e4306fe2c07ea89889f9fa50240",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc552fc_924ad91a",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-20T15:46:21Z",
+      "side": 1,
+      "message": "buildlighty: FAIL code 9 (18.63\u003dsetup[7.41]+cmd[11.22] seconds)",
+      "revId": "6d66474b5cd40e4306fe2c07ea89889f9fa50240",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
