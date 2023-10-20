@@ -33,6 +33,24 @@
       "message": "@all is there any objection to merge this change ?",
       "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec73e260_9a453444",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T07:18:27Z",
+      "side": 1,
+      "message": "yes, objection from me.\nI\u0027ma reviewing it, and as for ServiceHandler module, the rebase didn\u0027t take into acount modification brought by the change on RpcService migration (108093: Do not use RpcService in TPCE tapi module | https://git.opendaylight.org/gerrit/c/transportpce/+/108093)",
+      "parentUuid": "6fd01e0b_de4ac8a1",
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
