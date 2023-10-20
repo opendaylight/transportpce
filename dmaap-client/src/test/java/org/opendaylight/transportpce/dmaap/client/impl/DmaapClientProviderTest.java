@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.transportpce.dmaap.client.listener.NbiNotificationsListenerImpl;
 
 
 public class DmaapClientProviderTest {
@@ -33,7 +32,7 @@ public class DmaapClientProviderTest {
     void testInitRegisterNbiNotificationsToRpcRegistry() {
         new DmaapClientProvider(notificationService, "http://localhost", "username", "password");
         verify(notificationService, times(1))
-            .registerNotificationListener(Mockito.any(NbiNotificationsListenerImpl.class));
+            .registerCompositeListener(Mockito.any(NotificationService.CompositeListener.class));
     }
 
 }

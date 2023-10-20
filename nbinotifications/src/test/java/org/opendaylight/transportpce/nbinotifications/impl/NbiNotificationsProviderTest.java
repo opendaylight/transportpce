@@ -19,7 +19,6 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.nbinotifications.listener.NbiNotificationsListenerImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 public class NbiNotificationsProviderTest  extends AbstractTest {
@@ -43,6 +42,6 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
                 networkTransactionService);
         verify(rpcProviderRegistry, times(1)).registerRpcImplementations(any());
         verify(notificationService, times(1))
-                .registerNotificationListener(any(NbiNotificationsListenerImpl.class));
+                .registerCompositeListener(any(NotificationService.CompositeListener.class));
     }
 }
