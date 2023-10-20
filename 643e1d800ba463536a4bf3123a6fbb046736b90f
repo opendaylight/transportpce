@@ -69,6 +69,92 @@
       "parentUuid": "ec73e260_9a453444",
       "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb2c23fb_f071009a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T07:35:27Z",
+      "side": 1,
+      "message": "No major issue. Actually, just few useless properties to remove...",
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5008711_7e1515b6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T07:35:27Z",
+      "side": 1,
+      "message": "remove this useless property",
+      "range": {
+        "startLine": 84,
+        "startChar": 54,
+        "endLine": 84,
+        "endChar": 71
+      },
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd2a3129_5d2ad61b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T07:35:27Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 85,
+        "startChar": 48,
+        "endLine": 85,
+        "endChar": 84
+      },
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe1c0107_b1e87b9c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-10-20T07:35:27Z",
+      "side": 1,
+      "message": "idem (old property from previous implementation)",
+      "range": {
+        "startLine": 86,
+        "startChar": 56,
+        "endLine": 86,
+        "endChar": 71
+      },
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
