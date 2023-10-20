@@ -16,6 +16,23 @@
       "message": "@Gilles @Christophe\nplease can you confirm it does not collide w/ the previous RPCprovider changes merged ?\nAFAIK it LGTM\n\n\n+ @Olivier in CC since he is working on TAPI",
       "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd01e0b_de4ac8a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-20T07:14:31Z",
+      "side": 1,
+      "message": "@all is there any objection to merge this change ?",
+      "revId": "643e1d800ba463536a4bf3123a6fbb046736b90f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
