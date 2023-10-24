@@ -56,7 +56,7 @@ class OpenlabStandaloneTesting(unittest.TestCase):
         time.sleep(1)
 
     # retrieve values from TeamDynamics
-    def test_00_retrive_from_teamDynamics(self):
+    def test_00_retrieve_from_teamDynamics(self):
         response = test_openlab_utils.get_devices_from_TD(os.getenv("VENDOR"))
         if response is not False:
             _device = test_openlab_utils.get_device(response, os.getenv("NODEID"))
