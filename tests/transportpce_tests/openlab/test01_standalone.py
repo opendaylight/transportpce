@@ -17,25 +17,27 @@ import requests
 # pylint: disable=wrong-import-order
 import sys
 import os
+
 sys.path.append('transportpce_tests/common')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
 import test_openlab_utils
 
+
 class OpenlabStandaloneTesting(unittest.TestCase):
-    
     processes = None
     device = {
-            "NAME": '',
-            "VENDOR": '',
-            "NODETYPE": '',
-            "USERNAME": '',
-            "PASSWORD": '',
-            "HOST": '',
-            "PORT": '',
-            "OR_VERSION": ''
-        } # TODO add TYPE when needed
+        "NAME": '',
+        "VENDOR": '',
+        "NODETYPE": '',
+        "USERNAME": '',
+        "PASSWORD": '',
+        "HOST": '',
+        "PORT": '',
+        "OR_VERSION": ''
+    }  # TODO add TYPE when needed
+
     # NODE_VERSION = os.getenv('OR_VERSION')
     @classmethod
     def setUpClass(cls):
@@ -59,7 +61,7 @@ class OpenlabStandaloneTesting(unittest.TestCase):
         if response is not False:
             _device = test_openlab_utils.get_device(response, os.getenv("NODEID"))
             OpenlabStandaloneTesting.device = _device
-        self.assertNotEqual(OpenlabStandaloneTesting.device,{
+        self.assertNotEqual(OpenlabStandaloneTesting.device, {
             "NAME": '',
             "VENDOR": '',
             "NODETYPE": '',
@@ -69,35 +71,44 @@ class OpenlabStandaloneTesting(unittest.TestCase):
             "PORT": '',
             "OR_VERSION": ''
         })
-           
+
     # check if device ip can be pinged
     def test_01_device_reachability(self):
         response = test_openlab_utils.check_ping(os.getenv("HOST"), OpenlabStandaloneTesting.device)
         self.assertEqual(response, "Network Active")
- 
+
     # Check if device ip and netconf port can be reached by username and password
     def test_02_device_netconf_connection(self):
-        connection, disconnection = test_openlab_utils.check_device_netconf_connection(OpenlabStandaloneTesting.device, os.getenv("HOST"),os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"),120)
+        connection, disconnection = test_openlab_utils.check_device_netconf_connection(OpenlabStandaloneTesting.device,
+                                                                                       os.getenv("HOST"),
+                                                                                       os.getenv("PORT"),
+                                                                                       os.getenv("USERNAME"),
+                                                                                       os.getenv("PASSWORD"), 120)
         self.assertEqual(connection, True)
         self.assertEqual(disconnection, True)
         time.sleep(2)
 
     # Check if device netconf capability. TODO: check if all required capabilities exist 
     def test_03_device_netconf_capability(self):
-        numCap= test_openlab_utils.check_device_netconf_capabilities(os.getenv("HOST"),os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"),120)
+        numCap = test_openlab_utils.check_device_netconf_capabilities(os.getenv("HOST"), os.getenv("PORT"),
+                                                                      os.getenv("USERNAME"), os.getenv("PASSWORD"), 120)
         self.assertGreater(numCap, 0, "no capabilities")
         time.sleep(2)
 
     # Check what streams device supports
     def test_04_device_netconf_stream(self):
-        netconf_container = test_openlab_utils.check_device_container('netconf',os.getenv("HOST"),os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"),120)
+        netconf_container = test_openlab_utils.check_device_container('netconf', os.getenv("HOST"), os.getenv("PORT"),
+                                                                      os.getenv("USERNAME"), os.getenv("PASSWORD"), 120)
         streamExist = test_openlab_utils.check_device_netconf_container(netconf_container)
         self.assertEqual(streamExist, True)
         time.sleep(2)
 
     # Check if device info tag through netconf
     def test_05_device_info_container(self):
-        running_info_container = test_openlab_utils.check_device_openroadm_container('info',os.getenv("HOST"),os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"),120)
+        running_info_container = test_openlab_utils.check_device_openroadm_container('info', os.getenv("HOST"),
+                                                                                     os.getenv("PORT"),
+                                                                                     os.getenv("USERNAME"),
+                                                                                     os.getenv("PASSWORD"), 120)
         vendorFound, modelFound, serialIdFound = test_openlab_utils.check_device_info_container(running_info_container)
         self.assertEqual(vendorFound, True)
         self.assertEqual(modelFound, True)
@@ -114,27 +125,30 @@ class OpenlabStandaloneTesting(unittest.TestCase):
 
     # Check if device openroadm get, container by container. **MAIN**
     def test_07_device_get(self):
-        operational_get = test_openlab_utils.check_device_openroadm_container('',os.getenv("HOST"),os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"),600)
+        operational_get = test_openlab_utils.check_device_openroadm_container('', os.getenv("HOST"), os.getenv("PORT"),
+                                                                              os.getenv("USERNAME"),
+                                                                              os.getenv("PASSWORD"), 600)
         response = test_openlab_utils.check_device_get(operational_get)
         self.assertEqual(response, True)
         time.sleep(2)
 
     # Check if the device mount has error
     def test_08_check_device_mount_error(self):
-        noError, response = test_openlab_utils.check_mount_device_error(os.getenv("NODEID"), 
-                                                                        os.getenv("HOST"), os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"))
-        self.assertEqual(noError,True,'error found during mounting')
+        noError, response = test_openlab_utils.check_mount_device_error(os.getenv("NODEID"),
+                                                                        os.getenv("HOST"), os.getenv("PORT"),
+                                                                        os.getenv("USERNAME"), os.getenv("PASSWORD"))
+        self.assertEqual(noError, True, 'error found during mounting')
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
         time.sleep(2)
-        #unmount device to make sure next mount will have 201 code (remount gets 204 no content code.)
+        # unmount device to make sure next mount will have 201 code (remount gets 204 no content code.)
         response = test_utils.unmount_device(os.getenv("NODEID"))
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-
     # Check if the device can be mounted to TPCE
     def test_20_device_connection(self):
-        response = test_openlab_utils.mount_device(os.getenv("NODEID"), os.getenv("HOST"), os.getenv("PORT"),os.getenv("USERNAME"),os.getenv("PASSWORD"))
+        response = test_openlab_utils.mount_device(os.getenv("NODEID"), os.getenv("HOST"), os.getenv("PORT"),
+                                                   os.getenv("USERNAME"), os.getenv("PASSWORD"))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
@@ -142,7 +156,7 @@ class OpenlabStandaloneTesting(unittest.TestCase):
     # TODO: bug in this test case
     def test_21_notification_subscription(self):
         response = test_openlab_utils.check_notification_subscription(os.getenv("NODEID"))
-        self.assertIn(response,('OPENROADM stream subscribed','NETCONF stream subscribed'))
+        self.assertIn(response, ('OPENROADM stream subscribed', 'NETCONF stream subscribed'))
 
     # Check if the node appears in the ietf-network topology
     def test_22_device_connected(self):
@@ -156,17 +170,19 @@ class OpenlabStandaloneTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['node-info']['node-type'], os.getenv('NODETYPE').lower())
         self.assertEqual(response['node-info']['openroadm-version'], os.getenv('OR_VERSION'))
-    
+
     # Check device portmapping
     def test_24_device_portmapping(self):
         portmapping_response = test_utils.get_portmapping_node_attr(os.getenv("NODEID"), None, None)
         self.assertEqual(portmapping_response['status_code'], requests.codes.ok)
-        response = test_openlab_utils.parsePortmapping(portmapping_response['nodes'][0]) # it is a list with only one element
+        response = test_openlab_utils.parsePortmapping(
+            portmapping_response['nodes'][0])  # it is a list with only one element
         self.assertIsInstance(response, dict)
         OpenlabStandaloneTesting.portmapping = response
-    #TODO: need to check connection map based on the port mapping for rdm
+
+    # TODO: need to check connection map based on the port mapping for rdm
     #                    internal links based on port mapping for xpdr
-    
+
     # interface creation test, also test pm and alarm within
     ################
     def test_30_device_rendering(self):
@@ -176,7 +192,7 @@ class OpenlabStandaloneTesting(unittest.TestCase):
         self.assertEqual(response[2], True, "pmCheck")
         self.assertEqual(response[3], True, "alarmCheck")
         self.assertEqual(response[4], True, "deleteCheck")
-    
+
     # # Added test to check mc-capability-profile for a transponder
     # def test_08_check_mccapprofile(self):
     #     res = test_utils_rfc8040.get_portmapping_node_attr("XPDR-A2", "mc-capabilities", "XPDR-mcprofile")
