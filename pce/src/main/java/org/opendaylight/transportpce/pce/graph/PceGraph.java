@@ -17,9 +17,10 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.alg.shortestpath.PathValidator;
+import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -43,9 +44,6 @@ public class PceGraph {
     ////////////////////////// for Graph ///////////////////////////
     // how many paths to bring
     private int kpathsToBring = 15;
-
-    // max #hops
-    private int mhopsPerPath = 100;
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
@@ -93,7 +91,7 @@ public class PceGraph {
 
         LOG.info(" In PCE GRAPH calcPath : K SHORT PATHS algorithm ");
 
-        DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph =
+        Graph<String, PceGraphEdge> weightedGraph =
                 new DefaultDirectedWeightedGraph<>(PceGraphEdge.class);
         populateWithNodes(weightedGraph);
         populateWithLinks(weightedGraph);
@@ -160,16 +158,15 @@ public class PceGraph {
         return (pceResult.getStatus());
     }
 
-    private boolean runKgraphs(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
+    private boolean runKgraphs(Graph<String, PceGraphEdge> weightedGraph) {
 
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
             return false;
         }
         PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
 
-        // KShortestPaths on weightedGraph
-        KShortestSimplePaths<String, PceGraphEdge> swp =
-            new KShortestSimplePaths<>(weightedGraph, mhopsPerPath, wpv);
+        // YenShortestPath on weightedGraph
+        YenKShortestPath<String, PceGraphEdge> swp = new YenKShortestPath<>(weightedGraph, wpv);
         List<GraphPath<String, PceGraphEdge>> weightedPathList = swp
             .getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
         allWPaths = IntStream
@@ -207,7 +204,7 @@ public class PceGraph {
         return true;
     }
 
-    private void populateWithNodes(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
+    private void populateWithNodes(Graph<String, PceGraphEdge> weightedGraph) {
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
@@ -218,7 +215,7 @@ public class PceGraph {
         }
     }
 
-    private boolean populateWithLinks(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
+    private boolean populateWithLinks(Graph<String, PceGraphEdge> weightedGraph) {
 
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
@@ -281,10 +278,6 @@ public class PceGraph {
 
     public void setKpathsToBring(int kpathsToBring) {
         this.kpathsToBring = kpathsToBring;
-    }
-
-    public void setMhopsPerPath(int mhopsPerPath) {
-        this.mhopsPerPath = mhopsPerPath;
     }
 
     public List<PceLink> getPathAtoZ() {
