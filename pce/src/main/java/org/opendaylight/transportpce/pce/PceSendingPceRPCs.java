@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
@@ -108,7 +109,8 @@ public class PceSendingPceRPCs {
         LOG.info("cancelResourceReserve ...");
     }
 
-    public void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints) {
+    private void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints,
+            PceConstraintMode mode) {
 
         PceCalculation nwAnalizer = new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc,
                 portMapping, endpoints);
@@ -122,7 +124,7 @@ public class PceSendingPceRPCs {
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints, softConstraints,
-                rc, serviceType, networkTransaction);
+                rc, serviceType, networkTransaction, mode);
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {
@@ -159,7 +161,7 @@ public class PceSendingPceRPCs {
         PceConstraintsCalc constraints = new PceConstraintsCalc(input, networkTransaction);
         pceHardConstraints = constraints.getPceHardConstraints();
         pceSoftConstraints = constraints.getPceSoftConstraints();
-        pathComputationWithConstraints(pceHardConstraints, pceSoftConstraints);
+        pathComputationWithConstraints(pceHardConstraints, pceSoftConstraints, PceConstraintMode.Loose);
         this.success = rc.getStatus();
         this.message = rc.getMessage();
         this.responseCode = rc.getResponseCode();
@@ -233,7 +235,7 @@ public class PceSendingPceRPCs {
         PceConstraintsCalc constraintsGnpy = new PceConstraintsCalc(inputFromGnpy, networkTransaction);
         PceConstraints gnpyHardConstraints = constraintsGnpy.getPceHardConstraints();
         PceConstraints gnpySoftConstraints = constraintsGnpy.getPceSoftConstraints();
-        pathComputationWithConstraints(gnpyHardConstraints, gnpySoftConstraints);
+        pathComputationWithConstraints(gnpyHardConstraints, gnpySoftConstraints, PceConstraintMode.Strict);
         AToZDirection atoz = rc.getAtoZDirection();
         ZToADirection ztoa = rc.getZtoADirection();
         if (gnpyToCheckFeasiblity(atoz, ztoa,gnpy)) {
