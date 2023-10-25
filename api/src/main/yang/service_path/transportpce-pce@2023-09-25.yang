@@ -54,11 +54,16 @@ module transportpce-pce {
       POSSIBILITY OF SUCH DAMAGE";
 
 
+  revision 2023-09-25 {
+      description
+        "Add pce-constraint-mode enum to be able to disinguish the way to manage node include constraints inside the
+         PCE module";
+    }
   revision 2022-08-08 {
-    description
-      "Implement the RPC path-computation-reroute-request (only for reroute purposes) that computes a service path of
-      an existing service in order to reroute it";
-  }
+      description
+        "Implement the RPC path-computation-reroute-request (only for reroute purposes) that computes a service path of
+        an existing service in order to reroute it";
+    }
   revision 2022-06-15 {
     description
       "change fraction digits from 2 to 6 for accumulative-value leaf, from 2 to 6 to be compliant with Gnpy";
@@ -87,6 +92,17 @@ module transportpce-pce {
   revision 2017-04-26 {
     description
       "Version 1.5";
+  }
+
+  typedef pce-constraint-mode {
+    type enumeration {
+      enum loose {
+        value 1;
+      }
+      enum strict {
+        value 2;
+      }
+    }
   }
 
   grouping stubpce-path-description {
