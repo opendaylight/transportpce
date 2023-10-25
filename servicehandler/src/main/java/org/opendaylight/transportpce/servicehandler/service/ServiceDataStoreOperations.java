@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler.service;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
@@ -128,7 +128,7 @@ public interface ServiceDataStoreOperations {
      * @return result of createTempService operation
      */
     OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
-                                      org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev220808
+                                      org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925
                                               .service.path.rpc.result.PathDescription pathDescription);
 
     Optional<ServicePathList> getServicePaths();
