@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
@@ -36,6 +38,7 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
@@ -55,6 +58,7 @@ public class PostAlgoPathValidator {
 
     public static final Long CONST_OSNR = 1L;
     public static final double SYS_MARGIN = 0;
+
     private Double tpceCalculatedMargin = 0.0;
     private final NetworkTransactionService networkTransactionService;
 
@@ -68,7 +72,7 @@ public class PostAlgoPathValidator {
         justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
-            String serviceType) {
+            String serviceType, PceConstraintMode mode) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -139,7 +143,7 @@ public class PostAlgoPathValidator {
                     return pceResult;
                 }
                 // Check if nodes are included in the hard constraints
-                if (!checkInclude(path, pceHardConstraints)) {
+                if (!checkInclude(path, pceHardConstraints, mode)) {
                     pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                     pceResult.setLocalCause(PceResult.LocalCause.HD_NODE_INCLUDE);
                     return pceResult;
@@ -202,15 +206,16 @@ public class PostAlgoPathValidator {
     }
 
     // Check the inclusion if it is defined in the hard constraints
-    private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput) {
-        List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude()
-            .stream().sorted((rp1, rp2) -> rp1.getName().compareTo(rp2.getName()))
-            .collect(Collectors.toList());
+    @SuppressWarnings("MissingSwitchDefault")
+    private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput,
+            PceConstraintMode mode) {
+        List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
         if (listToInclude.isEmpty()) {
             return true;
         }
         List<PceGraphEdge> pathEdges = path.getEdgeList();
         LOG.debug(" in checkInclude vertex list: [{}]", path.getVertexList());
+        LOG.debug("listToInclude = {}", listToInclude);
         List<String> listOfElementsSubNode = new ArrayList<>();
         listOfElementsSubNode.add(pathEdges.get(0).link().getsourceNetworkSupNodeId());
         listOfElementsSubNode.addAll(
@@ -225,10 +230,17 @@ public class PostAlgoPathValidator {
         listOfElementsSRLG.addAll(
             listOfElementsBuild(pathEdges, PceConstraints.ResourceType.SRLG, pceHardConstraintsInput));
         // validation: check each type for each element
-        return listOfElementsSubNode.containsAll(
-                listToInclude
-                    .stream().filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
-                    .map(ResourcePair::getName).collect(Collectors.toList()))
+        LOG.debug("listOfElementsSubNode = {}", listOfElementsSubNode);
+        return switch (mode) {
+            case Loose -> listOfElementsSubNode
+                .containsAll(listToInclude.stream()
+                    .filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
+                    .map(ResourcePair::getName).collect(Collectors.toList()));
+            case Strict -> listOfElementsSubNode
+                .equals(listToInclude.stream()
+                    .filter(rp -> PceConstraints.ResourceType.NODE.equals(rp.getType()))
+                    .map(ResourcePair::getName).collect(Collectors.toList()));
+        }
             && listOfElementsSRLG.containsAll(
                 listToInclude
                     .stream().filter(rp -> PceConstraints.ResourceType.SRLG.equals(rp.getType()))
@@ -241,7 +253,7 @@ public class PostAlgoPathValidator {
 
     private List<String> listOfElementsBuild(List<PceGraphEdge> pathEdges, PceConstraints.ResourceType type,
             PceConstraints pceHardConstraints) {
-        List<String> listOfElements = new ArrayList<>();
+        Set<String> listOfElements = new LinkedHashSet<>();
         for (PceGraphEdge link : pathEdges) {
             switch (type) {
                 case NODE:
@@ -277,7 +289,7 @@ public class PostAlgoPathValidator {
                     LOG.debug("listOfElementsBuild unsupported resource type");
             }
         }
-        return listOfElements;
+        return new ArrayList<>(listOfElements);
     }
 
     private Map<String, Uint16> chooseTribPort(GraphPath<String,
