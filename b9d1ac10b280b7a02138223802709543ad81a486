@@ -16,6 +16,24 @@
       "message": "@Guillaume\nDo you know how to solve this docs-linkcheck issue?",
       "revId": "b9d1ac10b280b7a02138223802709543ad81a486",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7e451f1_8371b0dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-27T12:44:27Z",
+      "side": 1,
+      "message": "Nope, this error is a false positive probably linked to LFN infra connectivity issue.\nYou can ignore such URLs in docs/conf.py but it would be a pity to disable this checks for temporary failures.\nCf Michael\u0027s blog dead URLs that were true positive.\nI advised your simply force the verified +1 here and report this issue to the TSC and the LFN.",
+      "parentUuid": "880dbf34_96ba6705",
+      "revId": "b9d1ac10b280b7a02138223802709543ad81a486",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
