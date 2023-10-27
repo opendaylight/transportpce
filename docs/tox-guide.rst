@@ -42,7 +42,7 @@ Tox configuration
 -----------------
 
 `Tox` configuration is written in the `tox.ini` file at the root folder of the Git project.
-Please read `tox official documentation <https://tox.readthedocs.io/>`_ for more details.
+Please read `tox official documentation <https://tox.wiki/>`_ for more details.
 For tox users, the most important parameter in the `[tox]` section is `envlist`.
 It specifies which profiles to run by default (i.e. when tox is called without the option `-e`).
 The option `-e` overrides this parameter and allows to choose which profiles to run.
