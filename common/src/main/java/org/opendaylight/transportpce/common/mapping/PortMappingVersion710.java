@@ -1053,7 +1053,6 @@ public class PortMappingVersion710 {
             Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability>
                     supportedIntf = new HashSet<>();
             Set<String> regenProfiles = new HashSet<>();
-            SupportedInterfaceCapability sic1 = null;
             for (SupportedInterfaceCapability sic : supIntfCapaList) {
                 // Here it could add null values and cause a null pointer exception
                 // Especially when the MappingUtilsImpl does not contain required supported-if-cap
@@ -1070,26 +1069,25 @@ public class PortMappingVersion710 {
                     LOG.info("Regen-profiles {}", sic.getOtsigroupCapabilityProfileName());
                     regenProfiles.addAll(sic.getOtsigroupCapabilityProfileName());
                 }
-                sic1 = sic;
+                if (port.getPortQual() == PortQual.SwitchClient
+                        && sic.getOtnCapability() != null) {
+                    // Here we assume all the supported-interfaces has the support same rates, and the
+                    // trib-slot numbers are assumed to be the same
+                    String mxpProfileName = sic.getOtnCapability().getMpdrClientRestriction().get(0)
+                            .getMuxpProfileName().stream().findFirst().orElseThrow();
+                    // From this muxponder-profile get the min-trib-slot and the max-trib-slot
+                    LOG.info("{}: Muxp-profile used for trib information {}", nodeId, mxpProfileName);
+                    // This provides the tribSlot information from muxProfile
+                    List<OpucnTribSlotDef> minMaxOpucnTribSlots = getOpucnTribSlots(nodeId, mxpProfileName);
+                    mpBldr.setMpdrRestrictions(
+                            new MpdrRestrictionsBuilder()
+                                    .setMinTribSlot(minMaxOpucnTribSlots.get(0))
+                                    .setMaxTribSlot(minMaxOpucnTribSlots.get(1))
+                                    .build());
+                }
             }
             mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build())
                     .setSupportedInterfaceCapability(supportedIntf);
-            if (port.getPortQual() == PortQual.SwitchClient
-                && !sic1.getOtnCapability().getMpdrClientRestriction().isEmpty()) {
-                // Here we assume all the supported-interfaces has the support same rates, and the
-                // trib-slot numbers are assumed to be the same
-                String mxpProfileName = sic1.getOtnCapability().getMpdrClientRestriction().get(0).getMuxpProfileName()
-                    .stream().findFirst().orElseThrow();
-                // From this muxponder-profile get the min-trib-slot and the max-trib-slot
-                LOG.info("{}: Muxp-profile used for trib information {}", nodeId, mxpProfileName);
-                // This provides the tribSlot information from muxProfile
-                List<OpucnTribSlotDef> minMaxOpucnTribSlots = getOpucnTribSlots(nodeId, mxpProfileName);
-                mpBldr.setMpdrRestrictions(
-                    new MpdrRestrictionsBuilder()
-                        .setMinTribSlot(minMaxOpucnTribSlots.get(0))
-                        .setMaxTribSlot(minMaxOpucnTribSlots.get(1))
-                        .build());
-            }
         }
         if (port.getAdministrativeState() != null) {
             mpBldr.setPortAdminState(port.getAdministrativeState().name());
