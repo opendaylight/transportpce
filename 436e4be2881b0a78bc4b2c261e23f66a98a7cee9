@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a576f9_5b187bdd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-31T14:50:35Z",
+      "side": 1,
+      "message": "strict",
+      "revId": "436e4be2881b0a78bc4b2c261e23f66a98a7cee9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0333d3e1_eae65aa3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-31T14:50:35Z",
+      "side": 1,
+      "message": "since we are in the area, can we indent this line +4 here?\n\nsetters should not be at the same level than the builder lines.",
+      "revId": "436e4be2881b0a78bc4b2c261e23f66a98a7cee9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02dbfccb_1e78d685",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-31T14:50:35Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "436e4be2881b0a78bc4b2c261e23f66a98a7cee9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
