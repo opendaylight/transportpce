@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "19930237_fc45ee1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-31T14:27:23Z",
+      "side": 1,
+      "message": "strict",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5ecced53_65aceba4",
@@ -82,6 +99,23 @@
       "writtenOn": "2023-10-28T13:52:25Z",
       "side": 1,
       "message": "recheck",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eaff208_17b72fa2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-10-31T14:27:23Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be wiser to have  strict or loose behavior by default ?",
       "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
