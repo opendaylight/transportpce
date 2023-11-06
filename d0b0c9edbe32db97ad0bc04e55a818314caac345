@@ -118,6 +118,24 @@
       "message": "wouldn\u0027t it be wiser to have  strict or loose behavior by default ?",
       "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1df3ad1_b220f2f1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-11-06T09:01:36Z",
+      "side": 1,
+      "message": "This is a false positive. Default has no sence here since mode comes from an Enum.",
+      "parentUuid": "5eaff208_17b72fa2",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
