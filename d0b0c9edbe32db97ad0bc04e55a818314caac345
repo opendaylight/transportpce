@@ -136,6 +136,24 @@
       "parentUuid": "5eaff208_17b72fa2",
       "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "224f6c4b_5c2c3ec1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-06T09:03:51Z",
+      "side": 1,
+      "message": "Agreed. But if this Enum is modified, wouldn\u0027t it make sense to have a protection here ?",
+      "parentUuid": "b1df3ad1_b220f2f1",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
