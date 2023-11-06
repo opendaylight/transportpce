@@ -154,6 +154,24 @@
       "parentUuid": "b1df3ad1_b220f2f1",
       "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "826c1793_04dd3458",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2023-11-06T09:10:18Z",
+      "side": 1,
+      "message": "Since the Enum comes from the yang model, if you change the Enum, you will be forced to adapt the code, otherwise it will not compile. At runtime, it is impossible to have a value other than those defined in the enum.",
+      "parentUuid": "224f6c4b_5c2c3ec1",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
