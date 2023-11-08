@@ -190,6 +190,24 @@
       "parentUuid": "224f6c4b_5c2c3ec1",
       "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0655cf2_82e8c475",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-08T09:40:20Z",
+      "side": 1,
+      "message": "I guess you are referring to this checkstyle issue that concerns such switch expressions with JDK versions \u003e\u003d 14\nhttps://github.com/checkstyle/checkstyle/issues/8779\nAs I understand it, this bug should be fixed in next versions of checkstyle.\nI assume we can let a TODO comment to remove this annotation when checkstyle versions of odlparent will be bumped.",
+      "parentUuid": "826c1793_04dd3458",
+      "revId": "d0b0c9edbe32db97ad0bc04e55a818314caac345",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
