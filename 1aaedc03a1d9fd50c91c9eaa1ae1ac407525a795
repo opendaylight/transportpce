@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45f4b5cd_e3d7a971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T09:39:37Z",
+      "side": 1,
+      "message": "Thanks for your valuable comments. Keep them in mind considering that we are in a early step of migration to 2.4, trying to work on the same perimeter. The real support of 2.4 with all added functionalities considering a deeper refactoring, and a consolidation to take into account all what has changed and what\u0027s becomes deprecated is planned for next steps. Set comments to solved as we understood you will probably not have time to make further review.",
+      "revId": "1aaedc03a1d9fd50c91c9eaa1ae1ac407525a795",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

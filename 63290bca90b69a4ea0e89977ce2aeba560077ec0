@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49cc99b_3ffbad71",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T09:39:37Z",
+      "side": 1,
+      "message": "Sure. At that time just made the minimum modification I can do so that we can make sure Junit and functional tests still pass. But a deeper refacto is planned, considering revisiting most of the code.",
+      "parentUuid": "bc70b9ce_490d1787",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 81
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "229801b9_0f167c6e",
@@ -64,6 +88,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6698d822_33d9f2d4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T09:39:37Z",
+      "side": 1,
+      "message": "Same as previous. Fully agree on the fact that we will need to rework what\u0027s currently done, especially to consider Digital OTN, removing all what\u0027s deprecated. It is planned in further refactoring. At that time, we just try to move to 2.4 and make it run with current Junit and functional test.",
+      "parentUuid": "229801b9_0f167c6e",
+      "range": {
+        "startLine": 469,
+        "startChar": 17,
+        "endLine": 469,
+        "endChar": 32
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a8450ea_c0b68704",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-09-20T08:32:03Z",
       "side": 1,
       "message": "Same comments as in TapiCOnvertFullTopo file",
+      "range": {
+        "startLine": 185,
+        "startChar": 28,
+        "endLine": 185,
+        "endChar": 42
+      },
+      "revId": "63290bca90b69a4ea0e89977ce2aeba560077ec0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0702b57_994b6e7d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T09:39:37Z",
+      "side": 1,
+      "message": "Agree. Same comments on my side",
+      "parentUuid": "6a8450ea_c0b68704",
       "range": {
         "startLine": 185,
         "startChar": 28,
