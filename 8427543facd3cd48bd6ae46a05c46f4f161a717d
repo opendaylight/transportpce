@@ -70,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96911a96_4be23e60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:44:46Z",
+      "side": 1,
+      "message": "Hi Guillaume, thanks for your comment. yes I agree on the fact that tracking comment between 2 changes is a bit cumbersome. Probably very easy for you to proceed with squash, not that easy for me as I am still not comfortable with git/gerrit. Moreover, not sure that the correction I made in step3 is isolated and can be easiliy squashed without the other modifications. Could you do me a favor : please believe me, and let proceed with the following. These changes have been there for a while, and I am spending a lot of time in rebasing them each time a new change is merged because some yang files have been modified which lead to a lot of merge conflicts... So lets focus on the essential and try to get this merge, if you don\u0027t have other issue. This blocks further work, notably the real refacto of the tapi code, where we have a lot of redundancy. Thanks",
+      "parentUuid": "295d0133_f0b011ba",
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac417d06_756b2fcb",
@@ -505,6 +523,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c4d839a_9ad64cb3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:44:46Z",
+      "side": 1,
+      "message": "Guess change 107886 is adressing the comment. Setting it to resolved.",
+      "parentUuid": "08d4d26d_96f173a4",
+      "range": {
+        "startLine": 415,
+        "startChar": 8,
+        "endLine": 422,
+        "endChar": 9
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "357185c4_b3f92341",
@@ -660,6 +702,30 @@
       "writtenOn": "2023-08-31T08:13:50Z",
       "side": 1,
       "message": "As in TapiConvertFullTopo, this should be reduced to a single call for all NEPs in all layers or 2 different calls, one for each specific layer",
+      "range": {
+        "startLine": 381,
+        "startChar": 8,
+        "endLine": 388,
+        "endChar": 9
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dde97874_6fd53c59",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:44:46Z",
+      "side": 1,
+      "message": "Agree. Proposed to make in the deep refactoring comming that will also consolidate the handling of OTN using digital_OTN.",
+      "parentUuid": "69dd60c3_3519c787",
       "range": {
         "startLine": 381,
         "startChar": 8,
@@ -1002,6 +1068,30 @@
       "side": 1,
       "message": "I have reworked a bit that one. Hope it will be correct (I spent some time to solve one of the Junit tests that was failing). Can I ask you to look at change 107886 and tell me if the correction seems appropriate? Thanks",
       "parentUuid": "dc22c6da_6ae7ac4f",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 167,
+        "endChar": 9
+      },
+      "revId": "8427543facd3cd48bd6ae46a05c46f4f161a717d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f4a6b6_3ab11791",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:44:46Z",
+      "side": 1,
+      "message": "Set it to resolved, since no more review from Javier is expected",
+      "parentUuid": "9fac9505_25158f70",
       "range": {
         "startLine": 159,
         "startChar": 8,

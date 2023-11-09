@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16209c6b_71480f38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:44:46Z",
+      "side": 1,
+      "message": "Modify the status of the addressed comments since no review is anymore expected from Nokia, and I guess comments from Orange have been correctly addressed",
+      "revId": "19940a933166a8a793d597f37eef631b26cafee9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
