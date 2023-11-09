@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4b2b6a_58f9b2c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-09T14:28:53Z",
+      "side": 1,
+      "message": "Addressed most of the comments, considering that we are working on integration of 2.4 models, and that the implementation of 2.4 new features will be made in a later step, after we have deeply refactored the code.",
+      "revId": "5ecb58abb4fadb9ed76a0a0099f9ef6a57a04090",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
