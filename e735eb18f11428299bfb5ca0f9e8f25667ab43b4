@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d35e7cd_58c2537b",
+        "filename": "dmaap-client/src/main/java/org/opendaylight/transportpce/dmaap/client/impl/DmaapClientProvider.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "I think these imports commented out can be removed",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f13045bc_93bcf66d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererNotificationHandler.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "useless empty line",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34b53041_0ded50bc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "I think these imports commented out can be removed",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a2dcda_1c5cb0ff",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "TODO comment already present in line 389\nIdeally it should be on a separate line also",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "055c1204_f0b5bc0e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiProvider.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "I think commented out imports should be removed",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47461c35_d449b363",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiRendererNotificationHandler.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a38f63c_d0f97249",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/provider/TapiProviderTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:11:04Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
