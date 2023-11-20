@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfe9f7a7_0a6d8f8f",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:29:25Z",
+      "side": 1,
+      "message": "commented out code and imports here",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82cfad9d_fdb9f6f3",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsHandler.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:29:25Z",
+      "side": 1,
+      "message": "commented out import here",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9474b8_a2d536b5",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-20T10:29:25Z",
+      "side": 1,
+      "message": "commented out imports here",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
