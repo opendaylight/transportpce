@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd9f563_be748eab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:21:41Z",
+      "side": 1,
+      "message": "Thanks Guillaume for this deep review and the associated comments. Tried to address them, but there are 3 remaining. Please see my reply",
+      "revId": "bc65ffa1dcb9b0194c737254f47b1756216f9441",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
