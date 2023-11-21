@@ -265,6 +265,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ce6c801_9cf396e3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-21T13:43:39Z",
+      "side": 1,
+      "message": "Is it addressed in step 2 or 3?\nIf so, removal is the best option.\nOtherwise, a TODO comment is more appropriate IMO and if needed,\nthis code can always be retrieved from the git history (commit hash can be mentionend in the TODO for example).",
+      "parentUuid": "ca6314b3_6bcddae6",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1a2dcda_1c5cb0ff",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
         "patchSetId": 13

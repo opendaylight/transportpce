@@ -16,6 +16,41 @@
       "message": "Thanks Guillaume for this deep review and the associated comments. Tried to address them, but there are 3 remaining. Please see my reply",
       "revId": "bc65ffa1dcb9b0194c737254f47b1756216f9441",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b0973d_4caa03ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-21T13:43:39Z",
+      "side": 1,
+      "message": "You are welcome. This looks to me much better now.\nPlease find my answers here.\n\nHope this helps\nBR\nGuillaume",
+      "parentUuid": "ecd9f563_be748eab",
+      "revId": "bc65ffa1dcb9b0194c737254f47b1756216f9441",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51141ac6_53b6e3f1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-21T13:43:39Z",
+      "side": 1,
+      "message": "not this one\nthis line was correctly indented in the previous PS.",
+      "revId": "bc65ffa1dcb9b0194c737254f47b1756216f9441",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
