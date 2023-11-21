@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "48eead35_d88b22c9",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:58Z",
+      "side": 1,
+      "message": "OK for commented imports and some of the commented code. However some additional work needed to refactor code concerning notifications since implementation has changed. Will consider doing this in the refacto, and prefer to keep trace of what was done before just not to forget handling any notification types.",
+      "parentUuid": "dfe9f7a7_0a6d8f8f",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82cfad9d_fdb9f6f3",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsHandler.java",
         "patchSetId": 8
@@ -31,6 +49,24 @@
       "writtenOn": "2023-11-20T10:29:25Z",
       "side": 1,
       "message": "commented out import here",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c42a74a8_9e4ebb53",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsHandler.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82cfad9d_fdb9f6f3",
       "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2023-11-20T10:29:25Z",
       "side": 1,
       "message": "commented out imports here",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e111e3_54b5ab40",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/utils/NbiNotificationsUtils.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b9474b8_a2d536b5",
       "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
