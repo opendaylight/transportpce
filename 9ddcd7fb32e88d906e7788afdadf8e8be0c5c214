@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7c6f788_dd2fab47",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "812e0dc7_607f21b8",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2000f023_6c41f0ab",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "LF not needed",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58dd1eb2_aa88db8c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2000f023_6c41f0ab",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +88,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa1ed0d9_6db85a28",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ef5f620_140ec0b8",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9799d2e1_d19ed829",
@@ -69,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16c65c54_346954c6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9799d2e1_d19ed829",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2fe2d40_2b143f77",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "these imports can simply be remvoed",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8bc9186_db16a3c2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2fe2d40_2b143f77",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -105,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15928ad6_45b66a3f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Prefer to let it until the refactoring, checking if this shall be removed or changed to another method. Need to investigate more...",
+      "parentUuid": "0d73cdd2_a576170d",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c8f43ee_6e3e353b",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
         "patchSetId": 16
@@ -116,6 +224,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "commented out imports not needed",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2fc961_1dd08168",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c8f43ee_6e3e353b",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -137,6 +263,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "692a4ded_55bb95e8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c67fb010_94bc7fed",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f2737d2_80ec9741",
@@ -150,6 +294,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "idem",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd02e21d_acd3e563",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f2737d2_80ec9741",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -171,6 +333,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd95237d_68169854",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97931e72_4c4b0a1f",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "283774c3_1e1cb59c",
@@ -184,6 +364,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "idem",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7d4c430_8291f320",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/provider/TapiProviderTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "283774c3_1e1cb59c",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -207,6 +405,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fadc016_48fe38ae",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Don\u0027t see your point. There are a lot of elements that we can not derive anymore  from topo-name, and we now also need the uuid (since TAPI 2.4). I added the topo uuids in the place where the topo name were, which looks rational to me. I did not decide myself to put the topo names there, and to be honnest I don\u0027t have any idea off all the implications it may have to move this away.",
+      "parentUuid": "24007f2f_fb18b989",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a54f297_65dcc27e",
         "filename": "tests/transportpce_tests/common/test_utils.py",
         "patchSetId": 16
@@ -218,6 +434,24 @@
       "writtenOn": "2023-11-20T11:00:40Z",
       "side": 1,
       "message": "I am convinced w still need this line.",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace2fd76_ca9110f7",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Guess you mean not convinced? Did the modification accordingly.",
+      "parentUuid": "9a54f297_65dcc27e",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

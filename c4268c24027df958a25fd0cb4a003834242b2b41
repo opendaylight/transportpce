@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ff06e8_b7b2bade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-21T10:18:10Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your valuable comments. Tried to address them, but there are 3 remaining. Please see my reply",
+      "revId": "c4268c24027df958a25fd0cb4a003834242b2b41",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
