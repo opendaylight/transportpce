@@ -283,6 +283,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e543994_c5050c7e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2023-11-22T15:56:10Z",
+      "side": 1,
+      "message": "No it is addressed neither in step 2 nor in step 3. I finally kept the commented code as is,  modifying the TODO comment. Yes we can always retrieve some previous code from old changes, but I prefer having it in front of my eyes. I have on my side some notes with all locations of commented codes that must be modified, reused, or moved to other place. I know this may not be the best way to proceed, but this is the way I am used to work. Just ask you to be patient : All these dead codes will be used in refacto or removed, and I keep trace of what needs to be done. This will be my next step.",
+      "parentUuid": "7ce6c801_9cf396e3",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1a2dcda_1c5cb0ff",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
         "patchSetId": 13
