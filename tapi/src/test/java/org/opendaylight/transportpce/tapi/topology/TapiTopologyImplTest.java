@@ -285,6 +285,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             .filter(l -> l.getName().containsKey(new NameKey("OTS link name"))).count();
         long nbOtnLinks = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("otn link name"))).count();
+        LOG.info("ERRORLINK List of link = {}", topology.getLink().values().toString());
         assertEquals(8, nbOtsLinks, "Link list should contain 8 OTS links");
         assertEquals(2, nbOtnLinks, "Link list should contain 2 OTN links");
 
