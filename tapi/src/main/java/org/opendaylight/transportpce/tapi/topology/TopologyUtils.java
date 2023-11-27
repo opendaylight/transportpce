@@ -189,13 +189,17 @@ public final class TopologyUtils {
                 tapiNodeList = new HashMap<>();
             Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
                 tapiLinkList = new HashMap<>();
-            ConvertORTopoToTapiFullTopo tapiFactory = new ConvertORTopoToTapiFullTopo(topoUuid, this.tapiLink);
+            ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topoUuid, this.tapiLink);
+            ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topoUuid);
             Iterator<Map.Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
             while (it.hasNext()) {
                 String nodeId = it.next().getKey();
                 tapiFactory.convertNode(otnNodeMap.get(new NodeId(nodeId)), networkPortMap.get(nodeId));
+                this.tapiSips.putAll(tapiFactory.getTapiSips());
+                tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
+                tapiFullFactory.setTapiSips(tapiFactory.getTapiSips());
                 tapiNodeList.putAll(tapiFactory.getTapiNodes());
-                tapiLinkList.putAll(tapiFactory.getTapiLinks());
+                tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
             }
             // roadm infrastructure not abstracted
             // read openroadm-network
@@ -215,8 +219,10 @@ public final class TopologyUtils {
                         .getNodeType()
                         .equals(OpenroadmNodeType.ROADM))
                     .collect(Collectors.toList())) {
-                    tapiFactory.convertRoadmNode(roadm, openroadmTopo);
-                    tapiNodeList.putAll(tapiFactory.getTapiNodes());
+                    tapiFullFactory.convertRoadmNode(roadm, openroadmTopo);
+                    this.tapiSips.putAll(tapiFullFactory.getTapiSips());
+                    tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
+                    tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
                 }
             } else {
                 LOG.warn("No roadm nodes exist in the network");
@@ -225,15 +231,15 @@ public final class TopologyUtils {
             List<Link> rdmTordmLinkList = linkList.stream()
                 .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
                 .collect(Collectors.toList());
-            tapiFactory.convertRdmToRdmLinks(rdmTordmLinkList);
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
+            tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
             // map xpdr_input to roadm and xpdr_output to roadm links.
             xponderInLinkList.addAll(xponderOutLinkList);
-            tapiFactory.convertXpdrToRdmLinks(xponderInLinkList);
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            tapiFullFactory.convertXpdrToRdmLinks(xponderInLinkList);
+            tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
 
             // Retrieve created sips map in TapiFactory when mapping all the nodes
-            this.tapiSips = tapiFactory.getTapiSips();
+            this.tapiSips.putAll(tapiFullFactory.getTapiSips());
             return new TopologyBuilder()
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
@@ -288,7 +294,6 @@ public final class TopologyUtils {
         }
         LOG.info("Mapping found = {}", mapping);
         String networkPortDirection = mapping.getPortDirection();
-        // long count = 0;
         switch (networkPortDirection) {
             // TODO -> remove the part of counting only if the Network LCP is part of a Link.
             //  We want to have all OTN nodes in the TAPI topology

@@ -260,26 +260,6 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    private static ServiceAEnd getServiceAEnd(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
-        if (sepA.getType().equals(ServiceEndpointType.SERVICEAEND)) {
-            return new ServiceAEndBuilder(sepA.getValue()).build();
-        } else if (sepZ.getType().equals(ServiceEndpointType.SERVICEAEND)) {
-            return new ServiceAEndBuilder(sepZ.getValue()).build();
-        } else {
-            return null;
-        }
-    }
-
-    private static ServiceZEnd getServiceZEnd(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
-        if (sepA.getType().equals(ServiceEndpointType.SERVICEZEND)) {
-            return new ServiceZEndBuilder(sepA.getValue()).build();
-        } else if (sepZ.getType().equals(ServiceEndpointType.SERVICEZEND)) {
-            return new ServiceZEndBuilder(sepZ.getValue()).build();
-        } else {
-            return null;
-        }
-    }
-
     public void setSipMap(Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips) {
         this.sipMap = sips;
     }
@@ -312,7 +292,7 @@ public final class ConnectivityUtils {
             .build();
         // Connection creation
         Map<ConnectionKey, Connection> connMap =
-            createConnectionsFromService(serviceAEnd, serviceZEnd, pathDescription);
+            createConnectionsFromService(pathDescription, mapServiceLayerToAend(serviceAEnd));
         LOG.debug("connectionMap for service {} = {} ", name.toString(), connMap.toString());
         ConnectivityConstraint conConstr =
             new ConnectivityConstraintBuilder().setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).build();
@@ -332,46 +312,8 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    private LayerProtocolName mapServiceLayer(ServiceFormat serviceFormat, EndPoint endPoint1, EndPoint endPoint2) {
-        switch (serviceFormat) {
-            case OC:
-            case OTU:
-                return LayerProtocolName.PHOTONICMEDIA;
-            case ODU:
-                return LayerProtocolName.ODU;
-            case Ethernet:
-                String node1 = endPoint1.getLocalId();
-                String node2 = endPoint2.getLocalId();
-                if (getOpenroadmType(node1).equals(OpenroadmNodeType.TPDR)
-                        && getOpenroadmType(node2).equals(OpenroadmNodeType.TPDR)) {
-                    return LayerProtocolName.ETH;
-                }
-                return LayerProtocolName.DSR;
-            default:
-                LOG.info("Service layer mapping not supported for {}", serviceFormat.getName());
-        }
-        return null;
-    }
-
-    private OpenroadmNodeType getOpenroadmType(String nodeName) {
-        LOG.info("Node name = {}", nodeName);
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+",nodeName, TapiStringConstants.XPDR))
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode
-            = this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
-        if (tapiNode != null) {
-            return OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type"))
-                .getValue());
-        }
-        return null;
-    }
-
-    private Map<ConnectionKey, Connection> createConnectionsFromService(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd
-                    serviceAEnd,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceZEnd
-                    serviceZEnd,
-            PathDescription pathDescription) {
+    public Map<ConnectionKey, Connection> createConnectionsFromService(PathDescription pathDescription,
+            LayerProtocolName lpn) {
         Map<ConnectionKey, Connection> connectionServMap = new HashMap<>();
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
         //  and XPDR NETWORK TTPs (if any). From the path description. This will help to build the uuid of the CEPs
@@ -458,15 +400,14 @@ public final class ConnectivityUtils {
         }
         // create corresponding CEPs and Connections. Connections should be added to the corresponding context
         // CEPs must be included in the topology context as an augmentation for each ONEP!!
-        ServiceFormat serviceFormat = serviceAEnd.getServiceFormat(); // should be equal to serviceZEnd
         // TODO -> Maybe we dont need to create the connections and ceps if the previous service doesnt exist??
         //  As mentioned above, for 100GbE service creation there are ROADMs in the path description.
         //  What are the configurations needed here? No OTU, ODU... what kind of cross connections is needed?
         //  this needs to be changed
         // TODO: OpenROADM getNodeType from the NamesList to verify what needs to be created
         OpenroadmNodeType openroadmNodeType = getOpenRoadmNodeType(xpdrNodelist);
-        switch (serviceFormat) {
-            case OC:
+        switch (lpn) {
+            case PHOTONICMEDIA:
                 // Identify number of ROADMs
                 // - XC Connection between MC CEPs mapped from MC NEPs (within a roadm)
                 // - XC Connection between OTSiMC CEPs mapped from OTSiMC NEPs (within a roadm)
@@ -474,18 +415,12 @@ public final class ConnectivityUtils {
                 // - Top Connection OTSiMC betwwen OTSiMC CEPs of extreme roadms
                 connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
                     edgeRoadm1, edgeRoadm2));
-                break;
-            case OTU:
-                // Identify number of ROADMs between XPDRs and check if OC is created
-                // - XC Connection between MC CEPs mapped from MC NEPs (within a roadm)
-                // - Top Connection MC betwwen MC CEPs of different roadms
-                // - XC Connection between OTSiMC CEPs mapped from OTSiMC NEPs (within a roadm)
-                // - Top Connection OTSiMC betwwen OTSiMC CEPs of different roadms
-                connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
-                    edgeRoadm1, edgeRoadm2));
-                // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
-                // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
-                connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
+                if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
+                    .contains("ROADM")) {
+                    // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
+                    // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
+                    connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
+                }
                 this.topConnRdmRdm = null;
                 break;
             case ODU:
@@ -497,7 +432,7 @@ public final class ConnectivityUtils {
                     this.topConnXpdrXpdrPhtn = null;
                 }
                 break;
-            case Ethernet:
+            case ETH:
                 // Check if OC, OTU and ODU are created
                 if (openroadmNodeType.equals(OpenroadmNodeType.TPDR)) {
                     LOG.info("WDM ETH service");
@@ -511,6 +446,12 @@ public final class ConnectivityUtils {
                         connectionServMap));
                     this.topConnXpdrXpdrPhtn = null;
                 }
+                break;
+            case DSR:
+                LOG.info("OTN XGE/ODUe service");
+                // - XC connection between iODU and eODU
+                // - Top connection between eODU ports
+                // - Top connection between DSR ports
                 if (openroadmNodeType.equals(OpenroadmNodeType.SWITCH)) {
                     // TODO: We create both ODU and DSR because there is no ODU service creation for the switch
                     // - XC Connection OTSi between iODU and eODU of xpdr
@@ -531,6 +472,188 @@ public final class ConnectivityUtils {
         }
         LOG.debug("CONNSERVERMAP = {}", connectionServMap.toString());
         return connectionServMap;
+    }
+
+    public void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
+        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
+        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
+                new NodeKey(nodeUuid))
+            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+            .build();
+        try {
+            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
+                LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            if (optionalOnep.isPresent()) {
+                LOG.error("ONEP is already present in datastore");
+                return;
+            }
+            // merge in datastore
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID,
+                onep);
+            this.networkTransactionService.commit().get();
+            LOG.info("NEP {} added successfully.", onep.getName().toString());
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName().toString(), e);
+        }
+    }
+
+    public Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.ConnectionKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection> getConnectionFullMap() {
+        return this.connectionFullMap;
+    }
+
+    public ServiceCreateInput createORServiceInput(CreateConnectivityServiceInput input, Uuid serviceUuid) {
+        // TODO: not taking into account all the constraints. Only using EndPoints and Connectivity Constraint.
+        Map<org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointKey,
+            org.opendaylight.yang.gen.v1.urn
+                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint>
+            endPointMap = input.getEndPoint();
+        ConnectionType connType = null;
+        ServiceFormat serviceFormat = null;
+        String nodeAid = String.join("+", endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
+            TapiStringConstants.XPDR);
+        String nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
+            TapiStringConstants.XPDR);
+        LOG.info("NodeAid = {}", nodeAid);
+        LOG.info("NodeZid = {}", nodeZid);
+        //switch (constraint.getServiceLayer().getIntValue()) {
+        switch (input.getLayerProtocolName().getIntValue()) {
+            case 0:
+                LOG.info("ODU");
+                connType = ConnectionType.Infrastructure;
+                serviceFormat = ServiceFormat.ODU;
+                break;
+            case 1:
+                LOG.info("ETH, no need to create OTU and ODU");
+                connType = ConnectionType.Service;
+                serviceFormat = ServiceFormat.Ethernet;
+                break;
+            case 2:
+                LOG.info("DSR, need to create OTU and ODU");
+                connType = ConnectionType.Service;
+                serviceFormat = ServiceFormat.Ethernet;
+                break;
+            case 3:
+                LOG.info("PHOTONIC");
+                connType = getConnectionTypePhtnc(endPointMap.values());
+                serviceFormat = getServiceFormatPhtnc(endPointMap.values());
+                LOG.debug("Node a photonic = {}", nodeAid);
+                LOG.debug("Node z photonic = {}", nodeZid);
+                break;
+            default:
+                LOG.info("Service type {} not supported", input.getLayerProtocolName().getName());
+        }
+        // Requested Capacity for connectivity service
+        Uint64 capacity = Uint64.valueOf(Math.abs(
+            input.getConnectivityConstraint().getRequestedCapacity().getTotalSize().getValue().intValue()));
+        // map endpoints into service end points. Map the type of service from TAPI to OR
+        ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(endPointMap.values().stream().findFirst().orElseThrow(),
+            serviceFormat, nodeAid, capacity, input.getLayerProtocolName());
+        ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(endPointMap.values().stream().skip(1).findFirst()
+                .orElseThrow(), serviceFormat, nodeZid, capacity, input.getLayerProtocolName());
+        if (serviceAEnd == null || serviceZEnd == null) {
+            LOG.error("Couldnt map endpoints to service end");
+            return null;
+        }
+        LOG.info("Service a end = {}", serviceAEnd);
+        LOG.info("Service z end = {}", serviceZEnd);
+        return new ServiceCreateInputBuilder()
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setConnectionType(connType)
+            .setServiceName(serviceUuid.getValue())
+            .setCommonId("common id")
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request-1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url")
+                .setRequestSystemId("appname")
+                .build())
+            .setCustomer("customer")
+            .setDueDate(DateAndTime.getDefaultInstance("2018-06-15T00:00:01Z"))
+            .setOperatorContact("pw1234")
+            .build();
+    }
+
+    private static ServiceAEnd getServiceAEnd(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
+        if (sepA.getType().equals(ServiceEndpointType.SERVICEAEND)) {
+            return new ServiceAEndBuilder(sepA.getValue()).build();
+        } else if (sepZ.getType().equals(ServiceEndpointType.SERVICEAEND)) {
+            return new ServiceAEndBuilder(sepZ.getValue()).build();
+        } else {
+            return null;
+        }
+    }
+
+    private static ServiceZEnd getServiceZEnd(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
+        if (sepA.getType().equals(ServiceEndpointType.SERVICEZEND)) {
+            return new ServiceZEndBuilder(sepA.getValue()).build();
+        } else if (sepZ.getType().equals(ServiceEndpointType.SERVICEZEND)) {
+            return new ServiceZEndBuilder(sepZ.getValue()).build();
+        } else {
+            return null;
+        }
+    }
+
+    private LayerProtocolName mapServiceLayerToAend(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd
+            serviceAEnd) {
+        ServiceFormat serviceFormat = serviceAEnd.getServiceFormat();
+        switch (serviceFormat) {
+            case OC:
+            case OTU:
+                return LayerProtocolName.PHOTONICMEDIA;
+            case ODU:
+                return LayerProtocolName.ODU;
+            case Ethernet:
+                if (getOpenroadmType(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortDeviceName()).equals(OpenroadmNodeType.TPDR)) {
+                    return LayerProtocolName.ETH;
+                }
+                return LayerProtocolName.DSR;
+            default:
+                LOG.info("Service layer mapping not supported for {}", serviceFormat.getName());
+        }
+        return null;
+    }
+
+    private LayerProtocolName mapServiceLayer(ServiceFormat serviceFormat, EndPoint endPoint1, EndPoint endPoint2) {
+        switch (serviceFormat) {
+            case OC:
+            case OTU:
+                return LayerProtocolName.PHOTONICMEDIA;
+            case ODU:
+                return LayerProtocolName.ODU;
+            case Ethernet:
+                String node1 = endPoint1.getLocalId();
+                String node2 = endPoint2.getLocalId();
+                if (getOpenroadmType(node1).equals(OpenroadmNodeType.TPDR)
+                        && getOpenroadmType(node2).equals(OpenroadmNodeType.TPDR)) {
+                    return LayerProtocolName.ETH;
+                }
+                return LayerProtocolName.DSR;
+            default:
+                LOG.info("Service layer mapping not supported for {}", serviceFormat.getName());
+        }
+        return null;
+    }
+
+    private OpenroadmNodeType getOpenroadmType(String nodeName) {
+        LOG.info("Node name = {}", nodeName);
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+",nodeName, TapiStringConstants.XPDR))
+            .getBytes(StandardCharsets.UTF_8)).toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode
+            = this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
+        if (tapiNode != null) {
+            return OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type"))
+                .getValue());
+        }
+        return null;
     }
 
     private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsEth(List<String> xpdrClientTplist,
@@ -1458,115 +1581,9 @@ public final class ConnectivityUtils {
         updateTopologyWithNep(topoUuid, nodeUuid, nepUuid, onep);
     }
 
-    public void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
-        // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
-            .child(Topology.class, new TopologyKey(topoUuid))
-            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
-                new NodeKey(nodeUuid))
-            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
-            .build();
-        try {
-            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            if (optionalOnep.isPresent()) {
-                LOG.error("ONEP is already present in datastore");
-                return;
-            }
-            // merge in datastore
-            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID,
-                onep);
-            this.networkTransactionService.commit().get();
-            LOG.info("NEP {} added successfully.", onep.getName().toString());
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName().toString(), e);
-        }
-    }
-
-    public Map<org.opendaylight.yang.gen.v1.urn
-        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection>
-            getConnectionFullMap() {
-        return this.connectionFullMap;
-    }
-
     private String getIdBasedOnModelVersion(String nodeid) {
         return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*") ? String.join("-", nodeid.split("-")[0],
             nodeid.split("-")[1]) : nodeid.split("-")[0];
-    }
-
-    public ServiceCreateInput createORServiceInput(CreateConnectivityServiceInput input, Uuid serviceUuid) {
-        // TODO: not taking into account all the constraints. Only using EndPoints and Connectivity Constraint.
-        Map<org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointKey,
-            org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint>
-            endPointMap = input.getEndPoint();
-        ConnectionType connType = null;
-        ServiceFormat serviceFormat = null;
-        String nodeAid = String.join("+", endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.XPDR);
-        String nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.XPDR);
-        LOG.info("NodeAid = {}", nodeAid);
-        LOG.info("NodeZid = {}", nodeZid);
-        //switch (constraint.getServiceLayer().getIntValue()) {
-        switch (input.getLayerProtocolName().getIntValue()) {
-            case 0:
-                LOG.info("ODU");
-                connType = ConnectionType.Infrastructure;
-                serviceFormat = ServiceFormat.ODU;
-                break;
-            case 1:
-                LOG.info("ETH, no need to create OTU and ODU");
-                connType = ConnectionType.Service;
-                serviceFormat = ServiceFormat.Ethernet;
-                break;
-            case 2:
-                LOG.info("DSR, need to create OTU and ODU");
-                connType = ConnectionType.Service;
-                serviceFormat = ServiceFormat.Ethernet;
-                break;
-            case 3:
-                LOG.info("PHOTONIC");
-                connType = getConnectionTypePhtnc(endPointMap.values());
-                serviceFormat = getServiceFormatPhtnc(endPointMap.values());
-                LOG.debug("Node a photonic = {}", nodeAid);
-                LOG.debug("Node z photonic = {}", nodeZid);
-                break;
-            default:
-                LOG.info("Service type {} not supported", input.getLayerProtocolName().getName());
-        }
-        // Requested Capacity for connectivity service
-        Uint64 capacity = Uint64.valueOf(Math.abs(
-            input.getConnectivityConstraint().getRequestedCapacity().getTotalSize().getValue().intValue()));
-        // map endpoints into service end points. Map the type of service from TAPI to OR
-        ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(endPointMap.values().stream().findFirst().orElseThrow(),
-            serviceFormat, nodeAid, capacity, input.getLayerProtocolName());
-        ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(endPointMap.values().stream().skip(1).findFirst()
-                .orElseThrow(), serviceFormat, nodeZid, capacity, input.getLayerProtocolName());
-        if (serviceAEnd == null || serviceZEnd == null) {
-            LOG.error("Couldnt map endpoints to service end");
-            return null;
-        }
-        LOG.info("Service a end = {}", serviceAEnd);
-        LOG.info("Service z end = {}", serviceZEnd);
-        return new ServiceCreateInputBuilder()
-            .setServiceAEnd(serviceAEnd)
-            .setServiceZEnd(serviceZEnd)
-            .setConnectionType(connType)
-            .setServiceName(serviceUuid.getValue())
-            .setCommonId("common id")
-            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request-1")
-                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url")
-                .setRequestSystemId("appname")
-                .build())
-            .setCustomer("customer")
-            .setDueDate(DateAndTime.getDefaultInstance("2018-06-15T00:00:01Z"))
-            .setOperatorContact("pw1234")
-            .build();
     }
 
     private ServiceZEnd tapiEndPointToServiceZPoint(
