@@ -110,7 +110,7 @@ public class TapiProvider {
                 tapiContext, this.serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
         tapiInitialORMapping.performServInitialMapping();
-        TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker);
+        TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker, connectivityUtils);
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
 
