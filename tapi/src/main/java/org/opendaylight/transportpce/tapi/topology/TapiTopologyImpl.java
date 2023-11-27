@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
-//import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -424,13 +423,16 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             tapiLinkList = new HashMap<>();
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
-        ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topoUuid, this.tapiLink);
+        ConvertORTopoToTapiTopo tapiAbstractFactory = new ConvertORTopoToTapiTopo(topoUuid, this.tapiLink);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topoUuid);
         Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
         while (it.hasNext()) {
             String nodeId = it.next().getKey();
             tapiFactory.convertNode(otnNodeMap.get(new NodeId(nodeId)), networkPortMap.get(nodeId));
-            tapiNodeList.putAll(tapiFactory.getTapiNodes());
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            tapiAbstractFactory.setTapiNodes(tapiFactory.getTapiNodes());
+            tapiAbstractFactory.setTapiSips(tapiFactory.getTapiSips());
+            tapiNodeList.putAll(tapiAbstractFactory.getTapiNodes());
+            tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         }
         if (openroadmTopo.nonnullNode().values().stream()
                 .filter(nt -> nt
@@ -438,9 +440,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
                     .getNodeType()
                     .equals(OpenroadmNodeType.SRG))
                 .count() > 0) {
-            tapiFactory.convertRoadmInfrastructure();
-            tapiNodeList.putAll(tapiFactory.getTapiNodes());
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            tapiAbstractFactory.convertRoadmInfrastructure();
+            tapiNodeList.putAll(tapiAbstractFactory.getTapiNodes());
+            tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         } else {
             LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
         }
@@ -448,8 +450,8 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.networks.network.LinkKey, Link> otnLinkMap =
                 otnTopo.augmentation(Network1.class).getLink();
-            tapiFactory.convertLinks(otnLinkMap);
-            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            tapiAbstractFactory.convertLinks(otnLinkMap);
+            tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         }
         Name name = new NameBuilder()
             .setValue(TapiStringConstants.T0_MULTILAYER)
