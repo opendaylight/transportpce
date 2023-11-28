@@ -16,6 +16,193 @@
       "message": "OK, made some additional modifications to better address your comments, thanks !",
       "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df90e9f_36a94515",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "commented import",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f945015d_e0854132",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "commented import",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2d8997_aa496ef0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "space after // for style coherency",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "592760bc_68b0a9fe",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "LF should better be after ( rather than ) IMO\n\nWhat about this ?\n\n            InstanceIdentifier\u003cConnectivityService\u003e nodeIID \u003d InstanceIdentifier.builder(Context.class)\n                .augmentation(\n                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)\n                .child(ConnectivityContext.class)\n                .child(ConnectivityService.class, new ConnectivityServiceKey(uuid))\n                .build();",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47f2fce3_16af69da",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n            sclpqiList.add(\n                new SupportedCepLayerProtocolQualifierInstancesBuilder()\n                    .setLayerProtocolQualifier(\n                        TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)\n                            ? PHOTONICLAYERQUALIFIEROMS.VALUE\n                            : PHOTONICLAYERQUALIFIEROTS.VALUE)\n                    .setNumberOfCepInstances(Uint64.valueOf(1))\n                    .build());",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d627b29a_9240deca",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "a ternary operator looks to me more appropriate here too.",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a35dd06_f24a270b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkUtilsImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "can be removed since it is a commented copy paste from the code just below",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd099c3d_b1695f59",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiOrLinkListener.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "indent +4 or add a LF here to clearly separate method declaration from its body.",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7d9371_cfcb37c2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "commented import",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc4f0834_4226b1ac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "commented imports",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00cb5624_20e095be",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/CreateConnectivityServiceValidation.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T10:43:15Z",
+      "side": 1,
+      "message": "A guard clause would be more appropriate here IMO\n\n            if (!topoConstraintCheckResult.hasPassed()) {\n                return OperationResult.failed(topoConstraintCheckResult.getMessage());\n            }\n            LOG.info(\"create-connectivity-service topo constraints compliant !\");",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
