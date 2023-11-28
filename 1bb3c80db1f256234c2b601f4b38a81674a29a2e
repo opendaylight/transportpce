@@ -20,6 +20,91 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "360df2f5_0f244ce8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "indent +4 here to separate setters from builder declaration",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dccaca04_052ef560",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bfa1c78_6a0be475",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55a6acf5_ff804bf7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91a5639a_0798f233",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "optNode.isEmpty() might be more appropriate here",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0df90e9f_36a94515",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
         "patchSetId": 15
@@ -82,6 +167,23 @@
       "writtenOn": "2023-11-28T10:43:15Z",
       "side": 1,
       "message": "LF should better be after ( rather than ) IMO\n\nWhat about this ?\n\n            InstanceIdentifier\u003cConnectivityService\u003e nodeIID \u003d InstanceIdentifier.builder(Context.class)\n                .augmentation(\n                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)\n                .child(ConnectivityContext.class)\n                .child(ConnectivityService.class, new ConnectivityServiceKey(uuid))\n                .build();",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc54c44e_076cf957",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "isEmpty() might be more appropriate here",
       "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -167,6 +269,23 @@
       "writtenOn": "2023-11-28T10:43:15Z",
       "side": 1,
       "message": "commented import",
+      "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f67894_bd6ecd3f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-28T15:24:26Z",
+      "side": 1,
+      "message": "indent +4 here to separate condition from code block",
       "revId": "1bb3c80db1f256234c2b601f4b38a81674a29a2e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
