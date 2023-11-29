@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a6df5f_6d0941d3",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "isEmpty would be more appropriate IMO",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b21c81e3_39368ae0",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "729a2989_e9c0d396",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "what about something like this rather ?\n\n        Map\u003cAdditionalInfoKey, AdditionalInfo\u003e addInfoMap \u003d new HashMap\u003c\u003e();\n        for (org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.notification.tapi.service.AdditionalInfo addInfo:\n                mappedString.getAdditionalInfo() \u003d\u003d null ? new ArrayList\u003c\u003e() : mappedString.getAdditionalInfo().values()) {\n            AdditionalInfo transAddInfo \u003d new AdditionalInfoBuilder()\n                .setValue(addInfo.getValue())\n                .setValueName(addInfo.getValueName())\n                .build();\n            addInfoMap.put(transAddInfo.key(), transAddInfo);\n        }\n\na stream might be even better here IMO",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ad3ba8_99c58267",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d53c6b2_07cf6ecc",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78e2ac7f_a424d89f",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T09:58:49Z",
+      "side": 1,
+      "message": "commented import",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
