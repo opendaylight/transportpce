@@ -423,6 +423,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30a36a6f_9d922b6d",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-11-29T08:57:31Z",
+      "side": 1,
+      "message": "Only 3 tests are using these UUID from what I can see; which is very few indeed.\nMeanwhile, I agree this is closely related to the topo names already put here.\nMaybe we can reconsider putting these topo names along with their UUID in another place. I suspect they are only used in these 3 tests too.",
+      "parentUuid": "2fadc016_48fe38ae",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a54f297_65dcc27e",
         "filename": "tests/transportpce_tests/common/test_utils.py",
         "patchSetId": 16
