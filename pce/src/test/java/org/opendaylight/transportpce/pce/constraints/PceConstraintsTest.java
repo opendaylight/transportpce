@@ -16,6 +16,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.NoPreference;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 public class PceConstraintsTest extends AbstractTest {
@@ -108,7 +109,8 @@ public class PceConstraintsTest extends AbstractTest {
     @Test
     void getIncludePceNodesTest() {
         assertTrue(pceConstraints.getIncludePceNodes().size() == 0);
-        pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null, null, null, null));
+        pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null, null, null, null,
+                new NoPreference()));
         assertTrue(pceConstraints.getIncludePceNodes().size() == 1);
     }
 
