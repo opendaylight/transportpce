@@ -29,6 +29,9 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.Factory;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.PreferenceFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev220922.mc.capabilities.McCapabilities;
@@ -293,9 +296,11 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC2:
             case StringConstants.SERVICE_TYPE_OTUC3:
             case  StringConstants.SERVICE_TYPE_OTUC4:
+                Factory portPreferenceFactory = new PreferenceFactory();
+                Preference portPreference = portPreferenceFactory.portPreference(input);
                 // 100GE service and OTU4 service are handled at the openroadm-topology layer
                 for (Node node : allNodes) {
-                    validateNode(node);
+                    validateNode(node, portPreference);
                 }
 
                 LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
@@ -439,7 +444,7 @@ public class PceCalculation {
         }
     }
 
-    private void validateNode(Node node) {
+    private void validateNode(Node node, Preference portPreference) {
         LOG.debug("validateNode: node {} ", node);
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
@@ -478,7 +483,7 @@ public class PceCalculation {
             return;
         }
 
-        if (endPceNode(nodeType, pceNode.getNodeId(), pceNode)) {
+        if (endPceNode(nodeType, pceNode.getNodeId(), pceNode, portPreference)) {
             if (this.aendPceNode == null && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
                 // Added to ensure A-node has a addlink in the topology
                 List<Link> links = this.allLinks.stream()
@@ -625,10 +630,11 @@ public class PceCalculation {
         }
     }
 
-    private Boolean endPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceOpticalNode pceNode) {
+    private Boolean endPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceOpticalNode pceNode,
+                               Preference portPreference) {
         switch (openroadmNodeType) {
             case SRG:
-                pceNode.initSrgTps();
+                pceNode.initSrgTps(portPreference);
                 this.azSrgs.add(nodeId);
                 break;
             case XPONDER:
