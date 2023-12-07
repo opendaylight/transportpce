@@ -26,6 +26,8 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.NoPreference;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder;
@@ -76,6 +78,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     private String serviceType = "100GE";
     @Mock
     private PortMapping portMapping;
+    private final Preference portPreference = new NoPreference();
 
     @BeforeEach
     void setUp() {
@@ -100,7 +103,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initFrequenciesBitSet();
         assertFalse(pceOpticalNode.isValid());
@@ -163,7 +166,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("7", StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
@@ -177,7 +180,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         pceOpticalNode.initFrequenciesBitSet();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         assertNull(pceOpticalNode.getRdmSrgClient("7" ,StringConstants.SERVICE_DIRECTION_AZ));
@@ -191,7 +194,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("7" ,StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
@@ -205,7 +208,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(null, null, null, specificNode,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
         assertTrue(pceOpticalNode.checkTP("testTP"));
@@ -219,7 +222,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(null, null, null, node,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50);
-        pceOpticalNode.initSrgTps();
+        pceOpticalNode.initSrgTps(portPreference);
         assertNull(pceOpticalNode.getRdmSrgClient("2" ,StringConstants.SERVICE_DIRECTION_AZ));
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
