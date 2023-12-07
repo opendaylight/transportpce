@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2023 Orange, Inc. and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
+package org.opendaylight.transportpce.pce.networkanalyzer.port;
+
+import java.util.Map;
+import java.util.Set;
+
+public class ClientPreference implements Preference {
+
+    Map<String, Set<String>> nodePortPreference;
+
+    public ClientPreference(Map<String, Set<String>> nodePortPreference) {
+        this.nodePortPreference = nodePortPreference;
+    }
+
+    @Override
+    public boolean preferredPort(String node, String portName) {
+        if (nodePortPreference.containsKey(node)) {
+            return nodePortPreference.containsKey(node) && nodePortPreference.get(node).contains(portName);
+        }
+
+        //If there is no preferred port registered for the node, it means
+        //the client has no preference regarding the node.
+        // Therefore, we'll treat the node as it was preferred to
+        //prevent it from NOT being used.
+        return true;
+    }
+
+}
