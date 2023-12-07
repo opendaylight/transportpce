@@ -1005,35 +1005,45 @@ public class PostAlgoPathValidator {
         BitSet result = BitSet.valueOf(freqMap);
         boolean isFlexGrid = true;
         LOG.debug("Processing path {} with length {}", path, path.getLength());
+        BitSet pceNodeFreqMap;
+        Set<PceNode> pceNodes = new LinkedHashSet<>();
+
         for (PceGraphEdge edge : path.getEdgeList()) {
-            NodeId srcNodeId = edge.link().getSourceId();
-            LOG.debug("Processing source {} ", srcNodeId);
-            if (allPceNodes.containsKey(srcNodeId)) {
-                PceNode pceNode = allPceNodes.get(srcNodeId);
-                LOG.debug("Processing PCE node {}", pceNode);
-                String pceNodeVersion = pceNode.getVersion();
-                NodeId pceNodeId = pceNode.getNodeId();
-                BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
-                BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
-                if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
-                    LOG.debug("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
-                        pceNodeId, pceNodeVersion, sltWdthGran);
-                    isFlexGrid = false;
-                }
-                if (sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)
-                        && ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
-                    LOG.debug("Node {}: version is {} with slot width granularity {} and central "
-                            + "frequency granularity is {} -> fixed grid mode",
-                        pceNodeId, pceNodeVersion, sltWdthGran, ctralFreqGran);
-                    isFlexGrid = false;
-                }
-                BitSet pceNodeFreqMap = pceNode.getBitSetData();
-                LOG.debug("Pce node bitset {}", pceNodeFreqMap);
-                if (pceNodeFreqMap != null) {
-                    result.and(pceNodeFreqMap);
-                    LOG.debug("intermediate bitset {}", result);
-                }
+            PceLink link = edge.link();
+            LOG.debug("Processing {} to {}", link.getSourceId().getValue(), link.getDestId().getValue());
+            if (allPceNodes.containsKey(link.getSourceId())) {
+                pceNodes.add(allPceNodes.get(link.getSourceId()));
             }
+            if (allPceNodes.containsKey(link.getDestId())) {
+                pceNodes.add(allPceNodes.get(link.getDestId()));
+            }
+        }
+
+        for (PceNode pceNode : pceNodes) {
+            LOG.debug("Processing PCE node {}", pceNode);
+            String pceNodeVersion = pceNode.getVersion();
+            NodeId pceNodeId = pceNode.getNodeId();
+            BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
+            BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
+            if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
+                LOG.debug("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
+                    pceNodeId, pceNodeVersion, sltWdthGran);
+                isFlexGrid = false;
+            }
+            if (sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)
+                    && ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
+                LOG.debug("Node {}: version is {} with slot width granularity {} and central "
+                        + "frequency granularity is {} -> fixed grid mode",
+                    pceNodeId, pceNodeVersion, sltWdthGran, ctralFreqGran);
+                isFlexGrid = false;
+            }
+            pceNodeFreqMap = pceNode.getBitSetData();
+            LOG.debug("Pce node bitset {}", pceNodeFreqMap);
+            if (pceNodeFreqMap != null) {
+                result.and(pceNodeFreqMap);
+                LOG.debug("intermediate bitset {}", result);
+            }
+
         }
         LOG.debug("Bitset result {}", result);
         return computeBestSpectrumAssignment(result, spectralWidthSlotNumber, isFlexGrid);
