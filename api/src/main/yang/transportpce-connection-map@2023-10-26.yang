@@ -1,0 +1,76 @@
+module transportpce-connection-map {
+  yang-version 1;
+  namespace "http://org-opendaylight/transportpce/connection/map";
+  prefix org-opendaylight-transportpce-connection-map;
+
+  organization
+    "Smartoptics";
+  contact
+    "transportPCE committers - Smartoptics";
+  description
+    "YANG definitions for defining port mapping in TransportPCE.
+    Copyright (c) 2023 Smartoptics and others. All rights reserved.";
+
+  revision 2023-10-26 {
+    description
+      "Initial revision.";
+  }
+
+
+  grouping node-connection-map-group {
+    list node-connection-map {
+      key "connection-map-number";
+      config false;
+      leaf connection-map-number {
+        type uint32;
+        description
+          "Unique identifier for this connection-map entry";
+      }
+      container source {
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Circuit-Pack identifier. Unique within the context of a device.
+            Same as leafref value in model, if applicable.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Port identifier. Unique within the context of a circuit-pack.
+            Same as leafref value in model, if applicable.";
+        }
+      }
+      list destination {
+        key "circuit-pack-name port-name";
+        min-elements 1;
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Circuit-Pack identifier. Unique within the context of a device.
+            Same as leafref value in model, if applicable.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Port identifier. Unique within the context of a circuit-pack.
+            Same as leafref value in model, if applicable.";
+        }
+      }
+    }
+  }
+
+
+  container openroadm-connection-map {
+    list network-nodes {
+      key "node-id";
+      leaf node-id {
+        type string;
+        description
+          "Unique identifier for node in the network";
+      }
+      uses node-connection-map-group;
+    }
+  }
+}
