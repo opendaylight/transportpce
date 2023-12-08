@@ -1,0 +1,95 @@
+module com-smartoptics-openroadm-portmapping {
+  yang-version 1;
+  namespace "http://com/smartoptics/openroadm/portmapping";
+  prefix com-smartoptics-openroadm-portmapping;
+
+
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2020-05-29;
+  }
+  import org-openroadm-device-types {
+     prefix org-openroadm-device-types;
+     revision-date 2019-11-29;
+  }
+  import org-openroadm-otn-common-types {
+      prefix org-openroadm-otn-common-types;
+      revision-date 2020-03-27;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2023-05-26;
+  }
+
+
+  organization
+    "Smartoptics";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions for defining port mapping in TransportPCE.
+     Copyright (c) 2017 AT&T and others. All rights reserved.";
+
+  revision 2023-10-26 {
+    description
+      "Initial revision.";
+  }
+
+
+  grouping node-connection-map-group {
+    list node-connection-map {
+      key "connection-map-number";
+      config false;
+      leaf connection-map-number {
+        type uint32;
+        description
+          "Unique identifier for this connection-map entry";
+      }
+      container source {
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Circuit-Pack identifier. Unique within the context of a device.
+            Same as leafref value in model, if applicable.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Port identifier. Unique within the context of a circuit-pack.
+            Same as leafref value in model, if applicable.";
+        }
+      }
+      list destination {
+        key "circuit-pack-name port-name";
+        min-elements 1;
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Circuit-Pack identifier. Unique within the context of a device.
+            Same as leafref value in model, if applicable.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Port identifier. Unique within the context of a circuit-pack.
+            Same as leafref value in model, if applicable.";
+        }
+      }
+    }
+  }
+
+
+  container openroadm-connection-map {
+    list network-nodes {
+      key "node-id";
+      leaf node-id {
+        type string;
+        description
+          "Unique identifier for node in the network";
+      }
+      uses node-connection-map-group;
+    }
+  }
+}
