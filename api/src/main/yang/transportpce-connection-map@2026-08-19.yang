@@ -1,0 +1,91 @@
+module transportpce-connection-map {
+  yang-version 1;
+  namespace "http://org-opendaylight/transportpce/connection/map";
+  prefix org-opendaylight-transportpce-connection-map;
+
+  organization
+    "Smartoptics";
+  contact
+    "transportPCE committers - Smartoptics";
+  description
+    "YANG definitions for the connection map in TransportPCE, describing
+    the internal cross-connections between a source port and one or more
+    destination ports on each network node.
+    Copyright (c) 2026 Smartoptics and others. All rights reserved.";
+
+  revision 2026-08-19 {
+    description
+      "Initial revision.";
+  }
+
+
+  grouping node-connection-map-group {
+    list node-connection-map {
+      key "connection-map-number";
+      config false;
+      leaf connection-map-number {
+        type uint32;
+        description
+          "Local index of this connection-map entry within the node's
+          list of connections. Not correlated to any identifier outside
+          this list.";
+      }
+      container source {
+        description
+          "The source port of the internal connection.";
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Name of the circuit pack holding the source port, as used
+            for this node in the port-mapping model.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Name of the source port on the circuit pack, as used for
+            this node in the port-mapping model.";
+        }
+      }
+      list destination {
+        key "circuit-pack-name port-name";
+        min-elements 1;
+        description
+          "One or more destination ports that the source port is
+          internally connected to.";
+        leaf circuit-pack-name {
+          type string;
+          mandatory true;
+          description
+            "Name of the circuit pack holding the destination port, as
+            used for this node in the port-mapping model.";
+        }
+        leaf port-name {
+          type string;
+          description
+            "Name of the destination port on the circuit pack, as used
+            for this node in the port-mapping model.";
+        }
+      }
+    }
+  }
+
+
+  container openroadm-connection-map {
+    description
+      "Per-node map of internal connections between a source port and
+      one or more destination ports.";
+    list network-nodes {
+      key "node-id";
+      description
+        "Connection map for a single network node.";
+      leaf node-id {
+        type string;
+        description
+          "Unique identifier of the network node, corresponding to the
+          node-id of the mounted device.";
+      }
+      uses node-connection-map-group;
+    }
+  }
+}
