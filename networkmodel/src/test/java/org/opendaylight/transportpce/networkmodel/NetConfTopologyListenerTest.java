@@ -112,7 +112,7 @@ public class NetConfTopologyListenerTest {
         verify(node, times(1)).getModificationType();
         verify(node, times(3)).getDataBefore();
         verify(node, times(1)).getDataAfter();
-        verify(networkModelService, times(1)).createOpenRoadmNode(anyString(), anyString());
+        verify(networkModelService, times(1)).createOpenRoadmNode(anyString(), anyString(), dataBroker);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class NetConfTopologyListenerTest {
         verify(node, times(1)).getModificationType();
         verify(node, times(3)).getDataBefore();
         verify(node, times(1)).getDataAfter();
-        verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
+        verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString(), dataBroker);
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
 
@@ -162,7 +162,7 @@ public class NetConfTopologyListenerTest {
         verify(node, times(2)).getModificationType();
         verify(node, times(3)).getDataBefore();
         verify(node, never()).getDataAfter();
-        verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
+        verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString(), dataBroker);
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
 
