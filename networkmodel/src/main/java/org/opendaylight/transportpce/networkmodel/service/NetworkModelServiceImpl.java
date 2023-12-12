@@ -107,7 +107,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void createOpenRoadmNode(String nodeId, String openRoadmVersion) {
+    public void createOpenRoadmNode(String nodeId, String openRoadmVersion, DataBroker dataBroker) {
         try {
             LOG.info("createOpenROADMNode: {} ", nodeId);
 
@@ -145,6 +145,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
             // nodes/links creation in openroadm-topology
             TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId),
+                                                                                dataBroker,
                                                                                 firstMount);
             if (topologyShard != null) {
                 this.topologyShardMountedDevice.put(nodeId, topologyShard);
