@@ -34,6 +34,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -76,10 +77,13 @@ public class OpenRoadmTopologyTest {
     @Mock
     private NetworkTransactionService networkTransactionService;
 
+    @Mock
+    private DataBroker dataBroker;
+
     @Test
     void createTopologyShardForDegreeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2, List.of());
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(2, topologyShard.getNodes().size(), "Should contain 2 Degree nodes only");
         assertEquals(2, topologyShard.getLinks().size(), "Should contain 2 links");
@@ -111,7 +115,7 @@ public class OpenRoadmTopologyTest {
     void createTopologyShardForSrgTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm(
                 "ROADMA01", "nodeA", 0, List.of(Integer.valueOf(1)));
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         List<Node> nodes = topologyShard.getNodes();
         assertEquals(1, nodes.size(), "Should contain 1 SRG node only");
@@ -124,7 +128,7 @@ public class OpenRoadmTopologyTest {
         List<Integer> srgNbs = List.of(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(10),
                 Integer.valueOf(11));
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 0, srgNbs);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         List<Node> nodes = topologyShard.getNodes().stream()
             .sorted((n1, n2) -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue()))
@@ -141,7 +145,7 @@ public class OpenRoadmTopologyTest {
     void createTopologyShardForCompleteRdmNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2,
             List.of(Integer.valueOf(1), Integer.valueOf(2)));
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(4, topologyShard.getNodes().size(), "Should contain 2 Deg and 2 SRG nodes");
         List<Link> addLinks = topologyShard.getLinks().stream()
@@ -161,7 +165,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForTpdrNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, null);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -171,7 +175,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForTpdrNode2Test() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Tpdr);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -181,7 +185,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForMpdrNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Mpdr);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -191,7 +195,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForSwitchNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Switch);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -202,7 +206,7 @@ public class OpenRoadmTopologyTest {
     void createTopologyShardForRdmWithoutClliTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", null, 2, List.of());
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            OpenRoadmTopology.createTopologyShard(mappingNode);
+            OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         });
         assertTrue("Supplied value may not be null".contains(exception.getMessage()));
     }

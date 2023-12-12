@@ -100,7 +100,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                             return;
                         }
                         this.networkModelService
-                            .createOpenRoadmNode(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
+                            .createOpenRoadmNode(nodeId, deviceCapabilityOpt.orElseThrow().getCapability(), dataBroker);
                         onDeviceConnected(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
                         LOG.info("Device {} correctly connected to controller", nodeId);
                     }
