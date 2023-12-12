@@ -88,6 +88,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final NotificationPublishService notificationPublishService;
     private Map<TopologyChangesKey, TopologyChanges> topologyChanges;
     private TopologyUpdateResult notification = null;
+    private final DataBroker dataBroker;
 
     @Activate
     public NetworkModelServiceImpl(@Reference DataBroker dataBroker,
@@ -103,6 +104,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.notificationPublishService = notificationPublishService;
         this.topologyChanges = new HashMap<TopologyChangesKey, TopologyChanges>();
+        this.dataBroker = dataBroker;
         LOG.debug("NetworkModelServiceImpl instantiated");
     }
 
@@ -144,8 +146,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 openroadmNetworkNode);
 
             // nodes/links creation in openroadm-topology
-            TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId),
-                                                                                firstMount);
+            TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(
+                    portMapping.getNode(nodeId),
+                    dataBroker,
+                    firstMount);
             if (topologyShard != null) {
                 this.topologyShardMountedDevice.put(nodeId, topologyShard);
                 for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
