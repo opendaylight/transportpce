@@ -96,6 +96,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelServiceImpl.class);
 
     private NetworkTransactionService networkTransactionService;
+    private final DataBroker dataBroker;
     private final R2RLinkDiscovery linkDiscovery;
     private final PortMapping portMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
@@ -122,6 +123,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             @Reference final NotificationPublishService notificationPublishService) {
 
         this.networkTransactionService = networkTransactionService;
+        this.dataBroker = dataBroker;
         this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
@@ -863,7 +865,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     private void addNodeInOpenroadmTopology(Nodes mappingNode, boolean firstMount) {
         // nodes/links creation in openroadm-topology
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, firstMount);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker, firstMount);
         if (topologyShard != null) {
             this.topologyShardMountedDevice.put(mappingNode.getNodeId(), topologyShard);
             for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
