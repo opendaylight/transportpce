@@ -21,11 +21,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
+import org.opendaylight.transportpce.common.mapping.connectionmap.StorageFactory;
+import org.opendaylight.transportpce.common.mapping.connectionmap.storage.Storage;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
+import org.opendaylight.transportpce.networkmodel.links.Factory;
+import org.opendaylight.transportpce.networkmodel.links.InterfaceConnectionMap;
+import org.opendaylight.transportpce.networkmodel.links.LinkMapFactory;
+import org.opendaylight.transportpce.networkmodel.links.state.ConnectionMapState;
+import org.opendaylight.transportpce.networkmodel.links.strategy.DeviceConnectionMap;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.shared.risk.group.SharedRiskGroup;
@@ -105,23 +113,26 @@ public final class OpenRoadmTopology {
      * Create Nodes and Links in the openroadm topology depending on the type of device.
      *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
+     * @param dataBroker Provides access to the conceptual data tree store, used to read the connection map
      * @return Subset of the topology
      */
-    public static TopologyShard createTopologyShard(Nodes mappingNode) {
-        return createTopologyShard(mappingNode, true);
+    public static TopologyShard createTopologyShard(Nodes mappingNode, DataBroker dataBroker) {
+        return createTopologyShard(mappingNode, dataBroker, true);
     }
 
     /**
      * Create a Nodes and Links in the openroadm topology depending on the type of device.
      *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
+     * @param dataBroker Provides access to the conceptual data tree store, used to read the connection map
      * @param firstMount Allow to distinguish if this is a new node creation or a netconf session reinitialization
      * @return Subset of the topology
      */
-    public static TopologyShard createTopologyShard(Nodes mappingNode, boolean firstMount) {
+    public static TopologyShard createTopologyShard(Nodes mappingNode, DataBroker dataBroker, boolean firstMount) {
         switch (mappingNode.getNodeInfo().getNodeType()) {
             case Rdm :
-                return createRdmTopologyShard(mappingNode, firstMount);
+                org.opendaylight.transportpce.common.mapping.connectionmap.Factory factory = new StorageFactory();
+                return createRdmTopologyShard(mappingNode, factory.storage(dataBroker), firstMount);
             case Xpdr :
                 return createXpdrTopologyShard(mappingNode);
             default :
@@ -134,23 +145,28 @@ public final class OpenRoadmTopology {
      * Create the Node and Link elements of the topology when the node is of ROADM type.
      *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
+     * @param storage Provides access to the previously saved device connection map
      * @param firstMount Allow to distinguish if this is a new node creation or a netconf session reinitialization
      * @return topology with new Node and Links
      */
-    public static TopologyShard createRdmTopologyShard(Nodes mappingNode, boolean firstMount) {
+    public static TopologyShard createRdmTopologyShard(Nodes mappingNode, Storage storage, boolean firstMount) {
+        String nodeId = mappingNode.getNodeId();
         LOG.info("creating rdm node in openroadmtopology for node {}",
-                mappingNode.getNodeId());
+                nodeId);
         // transform flat mapping list to per degree and per srg mapping lists
         Map<String, List<Mapping>> mapDeg = new HashMap<>();
         Map<String, List<Mapping>> mapSrg = new HashMap<>();
         List<Mapping> mappingList = new ArrayList<>(mappingNode.nonnullMapping().values());
         mappingList.sort(Comparator.comparing(Mapping::getLogicalConnectionPoint));
         List<String> nodeShardList = new ArrayList<>();
+
+        Map<String, String> translate = new HashMap<>();
         for (Mapping mapping : mappingList) {
             String str = mapping.getLogicalConnectionPoint().split("-")[0];
             if (!nodeShardList.contains(str)) {
                 nodeShardList.add(str);
             }
+            translate.put(mapping.getSupportingCircuitPackName(), nodeId + "-" + str);
         }
         for (String str : nodeShardList) {
             List<Mapping> interList =
@@ -162,14 +178,14 @@ public final class OpenRoadmTopology {
             } else if (str.contains("SRG")) {
                 mapSrg.put(str, interList);
             } else {
-                LOG.error("unknow element");
+                LOG.error("unknown element");
             }
         }
         List<Node> nodes = new ArrayList<>();
         // create degree nodes
         for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
             nodes.add(
-                createDegree(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
+                createDegree(entry.getKey(), entry.getValue(), nodeId,
                         mappingNode.getNodeInfo().getNodeClli(), firstMount)
                     .build());
         }
@@ -181,13 +197,27 @@ public final class OpenRoadmTopology {
         // create srg nodes
         for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
             nodes.add(
-                createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
+                createSrg(entry.getKey(), entry.getValue(), nodeId,
                         mappingNode.getNodeInfo().getNodeClli(), sharedRiskGroup(entry.getKey(), sharedRiskGroups),
                         firstMount)
                     .build());
         }
         LOG.info("adding links numOfDegrees={} numOfSrgs={}", mapDeg.size(), mapSrg.size());
-        List<Link> links = createNewLinks(nodes);
+
+        Factory linkMapFactory = new LinkMapFactory(LOG);
+        Map<String, Set<String>> circuitConnections = linkMapFactory.circuitConnections(storage, nodeId);
+        Set<org.opendaylight.transportpce.networkmodel.links.Link> connections = linkMapFactory.connections(
+                circuitConnections,
+                translate
+        );
+        org.opendaylight.transportpce.networkmodel.links.state.State connectionMapState =
+                new ConnectionMapState(
+                        new DeviceConnectionMap(connections)
+                );
+        org.opendaylight.transportpce.networkmodel.links.ConnectionMap linkConnectionMap = new InterfaceConnectionMap(
+            connectionMapState.connectionMap(connections)
+        );
+        List<Link> links = createNewLinks(nodes, linkConnectionMap);
         LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
         return new TopologyShard(nodes, links);
     }
@@ -507,7 +537,10 @@ public final class OpenRoadmTopology {
                 .withKey(new LinkKey(linkId));
     }
 
-    private static List<Link> createNewLinks(List<Node> nodes) {
+    private static List<Link> createNewLinks(
+            List<Node> nodes,
+            org.opendaylight.transportpce.networkmodel.links.ConnectionMap connectionMap) {
+
         List<Link> links = new ArrayList<>();
         String srcNode;
         String destNode;
@@ -517,6 +550,16 @@ public final class OpenRoadmTopology {
             for (int j = i + 1; j < nodes.size(); j++) {
                 srcNode = nodes.get(i).getNodeId().getValue();
                 destNode = nodes.get(j).getNodeId().getValue();
+
+                if (!connectionMap.contains(srcNode, destNode)) {
+                    LOG.debug("Connection map does not contain connection from {} to {}, skipping.",
+                            srcNode,
+                            destNode
+                    );
+                    continue;
+                }
+                LOG.info("Connection map from {} to {}", srcNode, destNode);
+
                 // A to Z direction
                 srcTp = nodes.get(i)
                         .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
