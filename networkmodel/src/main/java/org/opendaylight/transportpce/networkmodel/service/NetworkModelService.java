@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
@@ -26,8 +27,10 @@ public interface NetworkModelService {
      *     unique node ID of new OpenROADM node
      * @param nodeVersion
      *     OpenROADM node version
+     * @param dataBroker
+     *     required persistence
      */
-    void createOpenRoadmNode(String nodeId, String nodeVersion);
+    void createOpenRoadmNode(String nodeId, String nodeVersion, DataBroker dataBroker);
 
     /**
      * Delete OpenROADM node from portmapping and topologies.
