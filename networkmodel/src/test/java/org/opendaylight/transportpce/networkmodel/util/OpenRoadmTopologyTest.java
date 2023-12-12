@@ -18,6 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,12 +31,15 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -43,6 +47,14 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.OpenroadmConnectionMap;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.node.connection.map.group.NodeConnectionMap;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.node.connection.map.group.NodeConnectionMapBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.node.connection.map.group.node.connection.map.Destination;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.node.connection.map.group.node.connection.map.Source;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.openroadm.connection.map.NetworkNodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.openroadm.connection.map.NetworkNodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026.openroadm.connection.map.NetworkNodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.shared.risk.group.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.shared.risk.group.SharedRiskGroupBuilder;
@@ -74,6 +86,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 
 /**
@@ -84,10 +97,169 @@ public class OpenRoadmTopologyTest {
     @Mock
     private NetworkTransactionService networkTransactionService;
 
+    @Mock
+    private DataBroker dataBroker;
+
+    @Mock
+    private ReadTransaction readTransaction;
+
+    private void mockNoStoredConnectionMap() {
+        when(dataBroker.newReadOnlyTransaction()).thenReturn(readTransaction);
+        when(readTransaction.read(any(), any()))
+            .thenReturn(FluentFuture.from(Futures.immediateFuture(Optional.empty())));
+    }
+
+    private void mockStoredConnectionMapWithOneDegree() {
+        DataObjectIdentifier<NetworkNodes> nodesIID = DataObjectIdentifier
+                .builder(OpenroadmConnectionMap.class)
+                .child(NetworkNodes.class, new NetworkNodesKey("ROADMA01"))
+                .build();
+
+        //SRG1
+        Destination srg1Destination = destination("4/0", "C2");
+        Source srg1Source = source("4/0", "C2");
+
+        //SRG2
+        Destination srg2Destination = destination("5/0", "C1");
+        Source srg2Source = source("5/0", "C1");
+
+        //DEG1
+        Source deg1source = source("1/0", "L1");
+        Destination deg1Dest = destination("1/0", "L1");
+
+        NodeConnectionMap deg1NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(1))
+                .setSource(deg1source)
+                .setDestination(
+                        Map.of(
+                                srg1Destination.key(), srg1Destination,
+                                srg2Destination.key(), srg2Destination))
+                .build();
+
+        NodeConnectionMap srg1NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(2))
+                .setSource(srg1Source)
+                .setDestination(Map.of(deg1Dest.key(), deg1Dest))
+                .build();
+
+        NodeConnectionMap srg2NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(3))
+                .setSource(srg2Source)
+                .setDestination(Map.of(deg1Dest.key(), deg1Dest))
+                .build();
+
+        NetworkNodes roadma01 = new NetworkNodesBuilder()
+                .setNodeConnectionMap(
+                        Map.of(
+                                deg1NodeConnection.key(), deg1NodeConnection,
+                                srg1NodeConnection.key(), srg1NodeConnection,
+                                srg2NodeConnection.key(), srg2NodeConnection))
+                .setNodeId("ROADMA01")
+                .build();
+
+        when(dataBroker.newReadOnlyTransaction()).thenReturn(readTransaction);
+        when(readTransaction.read(LogicalDatastoreType.OPERATIONAL, nodesIID))
+                .thenReturn(FluentFuture.from(Futures.immediateFuture(Optional.of(roadma01))));
+
+    }
+
+    private void mockStoredConnectionMapWithTwoDegrees() {
+        DataObjectIdentifier<NetworkNodes> nodesIID = DataObjectIdentifier
+                .builder(OpenroadmConnectionMap.class)
+                .child(NetworkNodes.class, new NetworkNodesKey("ROADMA01"))
+                .build();
+
+        //SRG1
+        Destination srg1Destination = destination("4/0", "C2");
+        Source srg1source = source("4/0", "C2");
+
+        //SRG2
+        Destination srg2Destination = destination("5/0", "C1");
+        Source srg2Source = source("5/0", "C1");
+
+        //DEG1
+        Source deg1source = source("1/0", "L1");
+        Destination deg1Dest = destination("1/0", "L1");
+
+        // DEG2
+        Source deg2source = source("2/0", "L1");
+        Destination deg2Dest = destination("2/0", "L1");
+
+        NodeConnectionMap deg1NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(1))
+                .setSource(deg1source)
+                .setDestination(
+                        Map.of(
+                                deg2Dest.key(), deg2Dest,
+                                srg1Destination.key(), srg1Destination,
+                                srg2Destination.key(), srg2Destination))
+                .build();
+
+        NodeConnectionMap deg2NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(2))
+                .setSource(deg2source)
+                .setDestination(
+                        Map.of(
+                                deg1Dest.key(), deg1Dest,
+                                srg1Destination.key(), srg1Destination,
+                                srg2Destination.key(), srg2Destination))
+                .build();
+
+        NodeConnectionMap srg1NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(3))
+                .setSource(srg1source)
+                .setDestination(
+                        Map.of(
+                                deg1Dest.key(), deg1Dest,
+                                deg2Dest.key(), deg2Dest))
+                .build();
+
+        NodeConnectionMap srg2NodeConnection = new NodeConnectionMapBuilder()
+                .setConnectionMapNumber(Uint32.fromIntBits(4))
+                .setSource(srg2Source)
+                .setDestination(
+                        Map.of(
+                                deg1Dest.key(), deg1Dest,
+                                deg2Dest.key(), deg2Dest))
+                .build();
+
+        NetworkNodes roadma01 = new NetworkNodesBuilder()
+                .setNodeConnectionMap(
+                        Map.of(
+                                deg1NodeConnection.key(), deg1NodeConnection,
+                                deg2NodeConnection.key(), deg2NodeConnection,
+                                srg1NodeConnection.key(), srg1NodeConnection,
+                                srg2NodeConnection.key(), srg2NodeConnection))
+                .setNodeId("ROADMA01")
+                .build();
+
+        when(dataBroker.newReadOnlyTransaction()).thenReturn(readTransaction);
+        when(readTransaction.read(LogicalDatastoreType.OPERATIONAL, nodesIID))
+                .thenReturn(FluentFuture.from(Futures.immediateFuture(Optional.of(roadma01))));
+
+    }
+
+    private static @NonNull Source source(String circuitPackName, String portName) {
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026
+                .node.connection.map.group.node.connection.map.SourceBuilder()
+                .setCircuitPackName(circuitPackName)
+                .setPortName(portName)
+                .build();
+    }
+
+    private static @NonNull Destination destination(String circuitPackName, String portName) {
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.connection.map.rev231026
+                .node.connection.map.group.node.connection.map.DestinationBuilder()
+                .setCircuitPackName(circuitPackName)
+                .setPortName(portName)
+                .build();
+    }
+
     @Test
     void createTopologyShardForDegreeTest() {
+        mockNoStoredConnectionMap();
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2, List.of());
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(2, topologyShard.getNodes().size(), "Should contain 2 Degree nodes only");
         assertEquals(2, topologyShard.getLinks().size(), "Should contain 2 links");
@@ -117,9 +289,10 @@ public class OpenRoadmTopologyTest {
 
     @Test
     void createTopologyShardForSrgTest() {
+        mockNoStoredConnectionMap();
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm(
                 "ROADMA01", "nodeA", 0, List.of(Integer.valueOf(1)));
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         List<Node> nodes = topologyShard.getNodes();
         assertEquals(1, nodes.size(), "Should contain 1 SRG node only");
@@ -129,10 +302,11 @@ public class OpenRoadmTopologyTest {
 
     @Test
     void createTopologyShardForMultipleSrgTest() {
+        mockNoStoredConnectionMap();
         List<Integer> srgNbs = List.of(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(10),
                 Integer.valueOf(11));
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 0, srgNbs);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         List<Node> nodes = topologyShard.getNodes().stream()
             .sorted((n1, n2) -> n1.getNodeId().getValue().compareTo(n2.getNodeId().getValue()))
@@ -147,9 +321,10 @@ public class OpenRoadmTopologyTest {
 
     @Test
     void createTopologyShardForCompleteRdmNodeTest() {
+        mockNoStoredConnectionMap();
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2,
             List.of(Integer.valueOf(1), Integer.valueOf(2)));
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(4, topologyShard.getNodes().size(), "Should contain 2 Deg and 2 SRG nodes");
         List<Link> addLinks = topologyShard.getLinks().stream()
@@ -167,9 +342,53 @@ public class OpenRoadmTopologyTest {
     }
 
     @Test
+    void createTopologyShardForCompleteRdmNodeConnectionMapWithOneDegreeTest() {
+        mockStoredConnectionMapWithOneDegree();
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2,
+                List.of(Integer.valueOf(1), Integer.valueOf(2)));
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
+        assertNotNull(topologyShard);
+        assertEquals(4, topologyShard.getNodes().size(), "Should contain 2 Deg and 2 SRG nodes");
+        List<Link> addLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ADDLINK))
+                .collect(Collectors.toList());
+        assertEquals(2, addLinks.size(), "Should contain 1 add links");
+        List<Link> dropLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.DROPLINK))
+                .collect(Collectors.toList());
+        assertEquals(2, dropLinks.size(), "Should contain 2 drop links");
+        List<Link> expressLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.EXPRESSLINK))
+                .collect(Collectors.toList());
+        assertEquals(0, expressLinks.size(), "Should contain 2 express links");
+    }
+
+    @Test
+    void createTopologyShardForCompleteRdmNodeConnectionMapWithTwoDegreesTest() {
+        mockStoredConnectionMapWithTwoDegrees();
+        Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", "nodeA", 2,
+                List.of(Integer.valueOf(1), Integer.valueOf(2)));
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
+        assertNotNull(topologyShard);
+        assertEquals(4, topologyShard.getNodes().size(), "Should contain 2 Deg and 2 SRG nodes");
+        List<Link> addLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ADDLINK))
+                .collect(Collectors.toList());
+        assertEquals(4, addLinks.size(), "Should contain 1 add links");
+        List<Link> dropLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.DROPLINK))
+                .collect(Collectors.toList());
+        assertEquals(4, dropLinks.size(), "Should contain 2 drop links");
+        List<Link> expressLinks = topologyShard.getLinks().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.EXPRESSLINK))
+                .collect(Collectors.toList());
+        assertEquals(2, expressLinks.size(), "Should contain 2 express links");
+    }
+
+    @Test
     void createTopologyShardForTpdrNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, null);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -179,7 +398,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForTpdrNode2Test() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Tpdr);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -189,7 +408,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForMpdrNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Mpdr);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -199,7 +418,7 @@ public class OpenRoadmTopologyTest {
     @Test
     void createTopologyShardForSwitchNodeTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForXpdr("XPDRA01", "nodeA", 2, 2, XpdrNodeTypes.Switch);
-        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode);
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         assertNotNull(topologyShard);
         assertEquals(1, topologyShard.getNodes().size(), "Should contain a single node");
         assertEquals(0, topologyShard.getLinks().size(), "Should contain 0 link");
@@ -210,7 +429,7 @@ public class OpenRoadmTopologyTest {
     void createTopologyShardForRdmWithoutClliTest() {
         Nodes mappingNode = NetworkmodelTestUtil.createMappingForRdm("ROADMA01", null, 2, List.of());
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            OpenRoadmTopology.createTopologyShard(mappingNode);
+            OpenRoadmTopology.createTopologyShard(mappingNode, dataBroker);
         });
         assertTrue("Supplied value may not be null".contains(exception.getMessage()));
     }
