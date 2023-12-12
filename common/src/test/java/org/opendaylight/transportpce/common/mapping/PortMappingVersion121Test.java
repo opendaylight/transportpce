@@ -449,12 +449,12 @@ public class PortMappingVersion121Test {
                         .thenReturn(Optional.of(ordmSrgObject6));
 
         OrgOpenroadmDevice orgOpenroadmDevice = new OrgOpenroadmDeviceBuilder().build();
-         InstanceIdentifier<OrgOpenroadmDevice> deviceId = InstanceIdentifier
+        InstanceIdentifier<OrgOpenroadmDevice> deviceId = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceId,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
-            .thenReturn(Optional.of(orgOpenroadmDevice));
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                        .thenReturn(Optional.of(orgOpenroadmDevice));
 
         // test createMappingData with a node with 3 dgree + 3 srg + bidirectional & unidirectional ports
         assertTrue(portMappingVersion121.createMappingData("node"),
