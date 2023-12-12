@@ -31,6 +31,9 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.connectionmap.Factory;
+import org.opendaylight.transportpce.common.mapping.connectionmap.Storage;
+import org.opendaylight.transportpce.common.mapping.connectionmap.StorageFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.OpenroadmNodeVersion;
@@ -123,6 +126,29 @@ public class PortMappingVersion221 {
         this.deviceTransactionManager = deviceTransactionManager;
     }
 
+    private OrgOpenroadmDevice readConnectionMapFromDevice(String nodeId) {
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .build();
+        Optional<OrgOpenroadmDevice> deviceOptional = this.deviceTransactionManager.getDataFromDevice(
+                nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+
+        OrgOpenroadmDevice device = deviceOptional.orElseThrow();
+
+        LOG.info("Device data retrieved for nodeId {}", nodeId);
+
+        return device;
+    }
+
+    private boolean saveConnectionMapToDatastore(String nodeId, OrgOpenroadmDevice device) {
+        Factory factory = new StorageFactory();
+
+        Storage storage = factory.storage(dataBroker, LOG);
+
+        return storage.save(nodeId, device.getConnectionMap());
+    }
+
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
         List<Mapping> portMapList = new ArrayList<>();
@@ -165,6 +191,10 @@ public class PortMappingVersion221 {
                 if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilities)) {
                     // return false if MC capabilites failed
                     LOG.warn(PortMappingUtils.UNABLE_MC_CAPA_LOGMSG, nodeId);
+                    return false;
+                }
+                if (!saveConnectionMapToDatastore(nodeId, readConnectionMapFromDevice(nodeId))) {
+                    LOG.warn(PortMappingUtils.UNABLE_TO_SAVE_CONNECTIONMAP_LOGMSG, nodeId);
                     return false;
                 }
                 break;
