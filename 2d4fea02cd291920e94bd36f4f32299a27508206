@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea8b1fff_8f822bd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-12-14T14:43:26Z",
+      "side": 1,
+      "message": "LGTM but I need an optician\u0027s feedback\n@committers + Olivier does it look good to you ?",
+      "revId": "2d4fea02cd291920e94bd36f4f32299a27508206",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
