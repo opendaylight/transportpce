@@ -70,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b939a7_6e6db06f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2023-12-14T13:21:11Z",
+      "side": 1,
+      "message": "Good point. I agree.",
+      "parentUuid": "d82cfbc7_55ded2f9",
+      "revId": "9dffd7fe913343dc9991c3674d9a51c7a8d382fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa4f8a02_f4415488",
