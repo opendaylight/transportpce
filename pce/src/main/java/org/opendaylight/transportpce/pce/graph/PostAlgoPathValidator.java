@@ -1009,41 +1009,44 @@ public class PostAlgoPathValidator {
         Set<PceNode> pceNodes = new LinkedHashSet<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
-            PceLink link = edge.link();
-            LOG.debug("Processing {} to {}", link.getSourceId().getValue(), link.getDestId().getValue());
-            if (allPceNodes.containsKey(link.getSourceId())) {
-                pceNodes.add(allPceNodes.get(link.getSourceId()));
+            NodeId srcId = edge.link().getSourceId();
+            NodeId dstId = edge.link().getDestId();
+            LOG.debug("Processing {} to {}", srcId.getValue(), dstId.getValue());
+            if (allPceNodes.containsKey(srcId)) {
+                pceNodes.add(allPceNodes.get(srcId));
             }
-            if (allPceNodes.containsKey(link.getDestId())) {
-                pceNodes.add(allPceNodes.get(link.getDestId()));
+            if (allPceNodes.containsKey(dstId)) {
+                pceNodes.add(allPceNodes.get(dstId));
             }
         }
 
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
-            String pceNodeVersion = pceNode.getVersion();
-            NodeId pceNodeId = pceNode.getNodeId();
-            BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
-            BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
-            if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
-                LOG.debug("Node {}: version is {} and slot width granularity is {} -> fixed grid mode",
-                    pceNodeId, pceNodeVersion, sltWdthGran);
-                isFlexGrid = false;
-            }
-            if (sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)
-                    && ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
-                LOG.debug("Node {}: version is {} with slot width granularity {} and central "
-                        + "frequency granularity is {} -> fixed grid mode",
-                    pceNodeId, pceNodeVersion, sltWdthGran, ctralFreqGran);
-                isFlexGrid = false;
-            }
             pceNodeFreqMap = pceNode.getBitSetData();
             LOG.debug("Pce node bitset {}", pceNodeFreqMap);
             if (pceNodeFreqMap != null) {
                 result.and(pceNodeFreqMap);
                 LOG.debug("intermediate bitset {}", result);
             }
-
+            String pceNodeVersion = pceNode.getVersion();
+            BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
+            if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
+                LOG.debug("Node {}: version is {} with slot width granularity {} - fixed grid mode",
+                    pceNode.getNodeId(), pceNodeVersion, sltWdthGran);
+                isFlexGrid = false;
+                continue;
+            }
+            if (!sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
+                continue;
+            }
+            BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
+            if (!ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
+                continue;
+            }
+            LOG.debug(
+                "Node {}: version is {} with slot width and central frequency granularities {} {} - fixed grid mode",
+                pceNode.getNodeId(), pceNodeVersion, sltWdthGran, ctralFreqGran);
+            isFlexGrid = false;
         }
         LOG.debug("Bitset result {}", result);
         return computeBestSpectrumAssignment(result, spectralWidthSlotNumber, isFlexGrid);
