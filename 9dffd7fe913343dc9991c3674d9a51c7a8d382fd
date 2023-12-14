@@ -121,6 +121,24 @@
       "message": "What about this ?\n\n        for (PceNode pceNode : pceNodes) {\n            LOG.debug(\"Processing PCE node {}\", pceNode);\n            pceNodeFreqMap \u003d pceNode.getBitSetData();\n            LOG.debug(\"Pce node bitset {}\", pceNodeFreqMap);\n            if (pceNodeFreqMap !\u003d null) {\n                result.and(pceNodeFreqMap);\n                LOG.debug(\"intermediate bitset {}\", result);\n            }\n\n            String pceNodeVersion \u003d pceNode.getVersion();\n            BigDecimal sltWdthGran \u003d pceNode.getSlotWidthGranularity();\n            if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {\n                LOG.debug(\"Node {}: version is {} and slot width granularity is {} -\u003e fixed grid mode\",\n                    pceNode.getNodeId(), pceNodeVersion, sltWdthGran);\n                isFlexGrid \u003d false;\n                continue;\n            }\n\n            if (!sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)){\n                continue;\n            }\n            BigDecimal ctralFreqGran \u003d pceNode.getCentralFreqGranularity();\n            if (!ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {\n                continue;\n            }\n            LOG.debug(\"Node {}: version is {} with slot width granularity {} and central \"\n                    + \"frequency granularity is {} -\u003e fixed grid mode\",\n                pceNode.getNodeId(), pceNodeVersion, sltWdthGran, ctralFreqGran);\n            isFlexGrid \u003d false;\n        }",
       "revId": "9dffd7fe913343dc9991c3674d9a51c7a8d382fd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbae3577_33640204",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2023-12-14T13:40:53Z",
+      "side": 1,
+      "message": "Well, the logic seems to be identical at first glance and the code is perhaps somewhat easier to read.\nMy only concern is your suggestion requires mixing a bugfix with a refactoring in the same commit/change. Perhaps not a big deal in this case. I\u0027d be happy to do the refactoring. What do you think, create a new review or do the refactoring in this one?",
+      "parentUuid": "aa4f8a02_f4415488",
+      "revId": "9dffd7fe913343dc9991c3674d9a51c7a8d382fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
