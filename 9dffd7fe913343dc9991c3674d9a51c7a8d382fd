@@ -157,6 +157,24 @@
       "parentUuid": "dbae3577_33640204",
       "revId": "9dffd7fe913343dc9991c3674d9a51c7a8d382fd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35e5512b_474793ce",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-12-14T14:30:30Z",
+      "side": 1,
+      "message": "Just to be clear, your code was perfectly readable.\nMy concern was more about performance. The logic is very close bu not completely identical.\nThe guard clause style introduced here avoids for most fixed grid cases some checks and the creation of a variable.",
+      "parentUuid": "53645927_10e5434b",
+      "revId": "9dffd7fe913343dc9991c3674d9a51c7a8d382fd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
