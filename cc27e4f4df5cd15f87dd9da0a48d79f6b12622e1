@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "cc27e4f4df5cd15f87dd9da0a48d79f6b12622e1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9be3ac32_9016e315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2023-12-15T10:43:26Z",
+      "side": 1,
+      "message": "docs-linkcheck false positive\n\n11:40:19   buildcontroller: OK (166.61\u003dsetup[9.08]+cmd[157.53] seconds)\n11:40:19   testsPCE: OK (299.64\u003dsetup[85.37]+cmd[214.27] seconds)\n11:40:19   sims121: OK (10.88\u003dsetup[8.18]+cmd[2.70] seconds)\n11:40:19   build_karaf_tests121: OK (59.20\u003dsetup[8.18]+cmd[51.02] seconds)\n11:40:19   tests121: OK (2173.88\u003dsetup[6.85]+cmd[2167.03] seconds)\n11:40:19   sims221: OK (10.84\u003dsetup[8.13]+cmd[2.72] seconds)\n11:40:19   build_karaf_tests221: OK (60.92\u003dsetup[16.82]+cmd[44.10] seconds)\n11:40:19   tests_tapi: OK (790.32\u003dsetup[9.57]+cmd[780.75] seconds)\n11:40:19   tests221: OK (2911.28\u003dsetup[9.37]+cmd[2901.92] seconds)\n11:40:19   sims71: OK (20.33\u003dsetup[17.71]+cmd[2.62] seconds)\n11:40:19   build_karaf_tests71: OK (77.42\u003dsetup[11.28]+cmd[66.14] seconds)\n11:40:19   tests71: OK (476.88\u003dsetup[6.93]+cmd[1.24,468.71] seconds)\n11:40:19   build_karaf_tests_hybrid: OK (73.28\u003dsetup[20.05]+cmd[53.23] seconds)\n11:40:19   tests_hybrid: OK (956.73\u003dsetup[6.96]+cmd[3.03,946.75] seconds)\n11:40:19   buildlighty: OK (29.62\u003dsetup[6.71]+cmd[22.91] seconds)\n11:40:19   docs: OK (42.12\u003dsetup[40.20]+cmd[1.92] seconds)\n11:40:19   docs-linkcheck: FAIL code 1 (44.07\u003dsetup[40.87]+cmd[3.20] seconds)\n11:40:19   checkbashisms: OK (52.29\u003dsetup[2.60]+cmd[48.70,1.00] seconds)\n11:40:19   pre-commit: OK (31.36\u003dsetup[3.71]+cmd[18.57,9.08] seconds)\n11:40:19   pylint: OK (25.76\u003dsetup[4.00]+cmd[21.76] seconds)\n11:40:19   evaluation failed :( (5403.41 seconds)",
+      "revId": "cc27e4f4df5cd15f87dd9da0a48d79f6b12622e1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
