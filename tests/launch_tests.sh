@@ -5,6 +5,11 @@ if [ -n "$USE_ODL_ALT_KARAF_ENV" ]; then
     . $USE_ODL_ALT_KARAF_ENV
 fi
 
+if [ -n "$USE_OPENLAB_DEVICE_ENV" ]; then
+    echo "using device environment variables from $USE_OPENLAB_DEVICE_ENV"
+    . $USE_OPENLAB_DEVICE_ENV
+fi
+
 for arg in $@; do
     if [ -z "$test_suite" ]; then
         test_suite=$1
@@ -41,7 +46,7 @@ if [ -z "$LAUNCHER" ]; then
         fi
     fi
     if [ -d "allure-report" ]; then
-        LAUNCHER="$LAUNCHER --alluredir=allure-report/"
+        LAUNCHER="$LAUNCHER --alluredir=allure-report/ -s"
     fi
     LAUNCHER="$LAUNCHER -q"
 fi

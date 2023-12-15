@@ -46,7 +46,7 @@ NODES_PWD = 'admin'
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
 
-REQUEST_TIMEOUT = 10
+REQUEST_TIMEOUT = 200
 
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
@@ -146,6 +146,7 @@ def post_request(url, data):
         headers=TYPE_APPLICATION_JSON,
         auth=(ODL_LOGIN, ODL_PWD),
         timeout=REQUEST_TIMEOUT)
+
 
 #
 # Process management
@@ -253,11 +254,11 @@ def install_karaf_feature(feature_name: str):
     executable = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         '..', '..', '..', KARAF_INSTALLDIR, 'target', 'assembly', 'bin', 'client')
-# FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-701
-# -b option needed below because of Karaf client bug reporte in the JIRA ticket mentioned above
+    # FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-701
+    # -b option needed below because of Karaf client bug reporte in the JIRA ticket mentioned above
     return subprocess.run([executable, '-b'],
                           input='feature:install ' + feature_name + '\n feature:list | grep '
-                          + feature_name + ' \n logout \n',
+                                + feature_name + ' \n logout \n',
                           universal_newlines=True, check=False)
 
 
@@ -315,6 +316,7 @@ class TimeOut:
         # pylint: disable=W0622
         signal.alarm(0)
 
+
 #
 # Basic NetCONF device operations
 #
@@ -370,8 +372,10 @@ def check_device_connection(node: str):
 
 def check_node_request(node: str):
     # pylint: disable=line-too-long
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device?content=config',  # nopep8
-           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device'}  # nopep8
+    url = {
+        'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device?content=config',
+        # nopep8
+        'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device'}  # nopep8
     response = get_request(url[RESTCONF_VERSION].format('{}', node))
     res = response.json()
     return_key = {'rfc8040': 'org-openroadm-device:org-openroadm-device',
@@ -386,8 +390,10 @@ def check_node_request(node: str):
 
 def check_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}?content=nonconfig',  # nopep8
-           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
+    url = {
+        'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}?content=nonconfig',
+        # nopep8
+        'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
     response = get_request(url[RESTCONF_VERSION].format('{}', node, attribute, attribute_value))
     res = response.json()
     return_key = {'rfc8040': 'org-openroadm-device:' + attribute,
@@ -406,8 +412,10 @@ def check_node_attribute_request(node: str, attribute: str, attribute_value: str
 
 def check_node_attribute2_request(node: str, attribute: str, attribute_value: str, attribute2: str):
     # pylint: disable=line-too-long
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}/{}?content=config',  # nopep8
-           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}/{}'}  # nopep8
+    url = {
+        'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}/{}?content=config',
+        # nopep8
+        'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}/{}'}  # nopep8
     response = get_request(url[RESTCONF_VERSION].format('{}', node, attribute, attribute_value, attribute2))
     res = response.json()
     if attribute2 in res.keys():
@@ -420,10 +428,13 @@ def check_node_attribute2_request(node: str, attribute: str, attribute_value: st
 
 def del_node_attribute_request(node: str, attribute: str, attribute_value: str):
     # pylint: disable=line-too-long
-    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}',  # nopep8
-           'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
+    url = {
+        'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}={}',
+        # nopep8
+        'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/org-openroadm-device:org-openroadm-device/{}/{}'}  # nopep8
     response = delete_request(url[RESTCONF_VERSION].format('{}', node, attribute, attribute_value))
     return response
+
 
 #
 # Portmapping operations
@@ -467,6 +478,7 @@ def get_portmapping_node_attr(node: str, attr: str, value: str):
         return_output = res['errors']['error'][0]
     return {'status_code': response.status_code,
             attr: return_output}
+
 
 #
 # Topology operations
@@ -549,7 +561,7 @@ def add_oms_attr_request(link: str, oms_attr: str):
     return response
 
 
-def del_oms_attr_request(link: str,):
+def del_oms_attr_request(link: str, ):
     url = {'rfc8040': '{}/data/ietf-network:networks/network={}/ietf-network-topology:link={}',
            'draft-bierman02': '{}/config/ietf-network:networks/network/{}/ietf-network-topology:link/{}'}
     url2 = url[RESTCONF_VERSION] + '/org-openroadm-network-topology:OMS-attributes/span'
@@ -684,6 +696,7 @@ def transportpce_api_rpc_request(api_module: str, rpc: str, payload: dict):
             return_output = res[return_key[RESTCONF_VERSION]]
     return {'status_code': response.status_code,
             'output': return_output}
+
 
 #
 # simulators datastore operations

@@ -41,3 +41,12 @@ docs/_build/
 honeynode-simulator/
 pce/data
 pce/some-output
+tests/allure-report
+tests/transportpce_tests/common/log/
+tests/transportpce_tests/openlab/log/
+tests/sample_configs/
+karaf71
+karaf121
+karaf221
+karaf_hybrid
+tests/lightynode

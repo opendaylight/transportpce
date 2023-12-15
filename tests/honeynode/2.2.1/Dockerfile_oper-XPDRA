@@ -1,0 +1,9 @@
+FROM alpine
+
+ADD honeynode-simulator /root/honeynode-simulator
+ADD oper-XPDRA.xml /root/honeynode-simulator/oper-XPDRA.xml
+RUN apk add --update --no-cache openjdk11 bash procps \
+    && cd /root \
+    && cd honeynode-simulator
+
+CMD ./root/honeynode-simulator/honeycomb-tpce 830 ./root/honeynode-simulator/oper-XPDRA.xml
