@@ -1,0 +1,353 @@
+{
+    "nodes": [
+        {
+            "node-id": "ROADM-C1",
+            "node-info": {
+                "node-type": "rdm",
+                "node-model": "model2",
+                "openroadm-version": "2.2.1",
+                "node-clli": "NodeC",
+                "node-vendor": "vendorA",
+                "node-ip-address": "127.0.0.13"
+            },
+            "cp-to-degree": [
+                {
+                    "circuit-pack-name": "1/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                },
+                {
+                    "circuit-pack-name": "2/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "2/0",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "1/0",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                }
+            ],
+            "mapping": [
+                {
+                    "logical-connection-point": "SRG1-PP3-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C3"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP2-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C2"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP4-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C4"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP1-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C1"
+                },
+                {
+                    "logical-connection-point": "DEG1-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG1-TTP-TXRX",
+                    "supporting-circuit-pack-name": "1/0",
+                    "supporting-ots": "OTS-DEG1-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                },
+                {
+                    "logical-connection-point": "DEG2-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG2-TTP-TXRX",
+                    "supporting-circuit-pack-name": "2/0",
+                    "supporting-ots": "OTS-DEG2-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                }
+            ],
+            "mc-capabilities": [
+                {
+                    "mc-node-name": "DEG1-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "DEG2-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "SRG1-PP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                }
+            ]
+        },
+        {
+            "node-id": "ROADM-A1",
+            "node-info": {
+                "node-type": "rdm",
+                "node-model": "model2",
+                "openroadm-version": "2.2.1",
+                "node-clli": "NodeA",
+                "node-vendor": "vendorA",
+                "node-ip-address": "127.0.0.11"
+            },
+            "cp-to-degree": [
+                {
+                    "circuit-pack-name": "1/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                },
+                {
+                    "circuit-pack-name": "2/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "2/0",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "1/0",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                }
+            ],
+            "mapping": [
+                {
+                    "logical-connection-point": "SRG1-PP2-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C2"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP4-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C4"
+                },
+                {
+                    "logical-connection-point": "SRG3-PP4-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "5/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C4"
+                },
+                {
+                    "logical-connection-point": "SRG3-PP3-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "5/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C3"
+                },
+                {
+                    "logical-connection-point": "DEG2-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG2-TTP-TXRX",
+                    "supporting-circuit-pack-name": "2/0",
+                    "supporting-ots": "OTS-DEG2-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP3-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C3"
+                },
+                {
+                    "logical-connection-point": "SRG3-PP2-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "5/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C2"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP1-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C1"
+                },
+                {
+                    "logical-connection-point": "DEG1-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG1-TTP-TXRX",
+                    "supporting-circuit-pack-name": "1/0",
+                    "supporting-ots": "OTS-DEG1-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                },
+                {
+                    "logical-connection-point": "SRG3-PP1-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "5/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C1"
+                }
+            ],
+            "mc-capabilities": [
+                {
+                    "mc-node-name": "DEG2-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "DEG1-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "SRG3-PP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "SRG1-PP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                }
+            ]
+        },
+        {
+            "node-id": "ROADM-B1",
+            "node-info": {
+                "node-type": "rdm",
+                "node-model": "model2",
+                "openroadm-version": "2.2.1",
+                "node-clli": "NodeB",
+                "node-vendor": "vendorA",
+                "node-ip-address": "127.0.0.12"
+            },
+            "cp-to-degree": [
+                {
+                    "circuit-pack-name": "1/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                },
+                {
+                    "circuit-pack-name": "2/0/ETH-PLUG",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "2/0",
+                    "interface-name": "1GE-interface-2",
+                    "degree-number": 2
+                },
+                {
+                    "circuit-pack-name": "1/0",
+                    "interface-name": "1GE-interface-1",
+                    "degree-number": 1
+                }
+            ],
+            "mapping": [
+                {
+                    "logical-connection-point": "SRG1-PP3-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C3"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP2-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C2"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP4-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C4"
+                },
+                {
+                    "logical-connection-point": "SRG1-PP1-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-circuit-pack-name": "3/0",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "C1"
+                },
+                {
+                    "logical-connection-point": "DEG1-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG1-TTP-TXRX",
+                    "supporting-circuit-pack-name": "1/0",
+                    "supporting-ots": "OTS-DEG1-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                },
+                {
+                    "logical-connection-point": "DEG2-TTP-TXRX",
+                    "port-oper-state": "InService",
+                    "supporting-oms": "OMS-DEG2-TTP-TXRX",
+                    "supporting-circuit-pack-name": "2/0",
+                    "supporting-ots": "OTS-DEG2-TTP-TXRX",
+                    "port-direction": "bidirectional",
+                    "port-admin-state": "InService",
+                    "supporting-port": "L1"
+                }
+            ],
+            "mc-capabilities": [
+                {
+                    "mc-node-name": "DEG1-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "DEG2-TTP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                },
+                {
+                    "mc-node-name": "SRG1-PP",
+                    "slot-width-granularity": "50.0",
+                    "center-freq-granularity": "50.0"
+                }
+            ]
+        }
+    ]
+}
