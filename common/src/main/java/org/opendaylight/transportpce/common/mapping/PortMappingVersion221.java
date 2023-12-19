@@ -33,8 +33,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.srg.adapter.Rev231110;
-import org.opendaylight.transportpce.common.srg.adapter.SrgRev231110;
+import org.opendaylight.transportpce.common.srg.revision.SrgRev181019Adapter;
 import org.opendaylight.transportpce.common.srg.storage.SrgStorage;
 import org.opendaylight.transportpce.common.srg.storage.Storage;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.Network;
@@ -210,8 +209,7 @@ public class PortMappingVersion221 {
 
     private boolean saveSrgInformation(String nodeId, OrgOpenroadmDevice device) {
         Storage srgStorage = new SrgStorage(dataBroker, LOG);
-        Rev231110 rev231110 = new SrgRev231110();
-        return srgStorage.save(nodeId, rev231110.srg(device.getSharedRiskGroup()));
+        return srgStorage.save(nodeId, new SrgRev181019Adapter(device.getSharedRiskGroup()));
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
