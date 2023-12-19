@@ -33,6 +33,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.srg.revision.Rev250714;
+import org.opendaylight.transportpce.common.srg.revision.SrgRev181019Adapter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.OpenroadmNodeVersion;
@@ -127,26 +129,32 @@ public class PortMappingVersion221 {
 
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
-        DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Info.class)
-            .build();
-        Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
-                nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .build();
+        Optional<OrgOpenroadmDevice> deviceOptional = this.deviceTransactionManager.getDataFromDevice(
+                nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (deviceInfoOptional.isEmpty()) {
+        if (deviceOptional.isEmpty()) {
+            LOG.warn("No device found in operational datastore for nodeId {}", nodeId);
+            return false;
+        }
+        LOG.info("Device data retrieved for nodeId {}", nodeId);
+        OrgOpenroadmDevice device = deviceOptional.orElseThrow();
+        Info deviceInfo = device.getInfo();
+        if (deviceInfo == null) {
             LOG.warn(PortMappingUtils.DEVICE_HAS_LOGMSG, nodeId, "no info", "subtree");
             return false;
         }
-        Info deviceInfo = deviceInfoOptional.orElseThrow();
         NodeInfo nodeInfo = createNodeInfo(deviceInfo);
         if (nodeInfo == null) {
             return false;
         }
-        postPortMapping(nodeId, nodeInfo, null, null, null, null);
+        postPortMapping(nodeId, nodeInfo, null, null, null, null, null);
 
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
+        Rev250714 srgMap = null;
         switch (deviceInfo.getNodeType()) {
 
             case Rdm:
@@ -169,6 +177,8 @@ public class PortMappingVersion221 {
                     LOG.warn(PortMappingUtils.UNABLE_MC_CAPA_LOGMSG, nodeId);
                     return false;
                 }
+                // Shared Risk Group - Wavelength duplication
+                srgMap = sharedRiskGroup(device);
                 break;
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
@@ -182,7 +192,7 @@ public class PortMappingVersion221 {
                 break;
 
         }
-        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities);
+        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities, srgMap);
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
@@ -245,6 +255,11 @@ public class PortMappingVersion221 {
         }
     }
 
+    private Rev250714 sharedRiskGroup(OrgOpenroadmDevice device) {
+        Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroup = device.nonnullSharedRiskGroup();
+        return new SrgRev181019Adapter(sharedRiskGroup);
+    }
+
     private boolean createXpdrPortMapping(String nodeId, List<Mapping> portMapList) {
         // Creating for Xponder Line and Client Ports
         OrgOpenroadmDevice device = getXpdrDevice(nodeId);
@@ -275,7 +290,7 @@ public class PortMappingVersion221 {
             }
         }
         if (device.getOduSwitchingPools() != null) {
-            postPortMapping(nodeId, null, null, null, getSwitchingPoolList(device, lcpMap, nodeId), null);
+            postPortMapping(nodeId, null, null, null, getSwitchingPoolList(device, lcpMap, nodeId), null, null);
         }
         mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
@@ -711,7 +726,7 @@ public class PortMappingVersion221 {
 
     private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
             List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList,
-            Map<McCapabilitiesKey, McCapabilities> mcCapabilities) {
+            Map<McCapabilitiesKey, McCapabilities> mcCapabilities, Rev250714 srgs) {
         NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey(nodeId)).setNodeId(nodeId);
         if (nodeInfo != null) {
             nodesBldr.setNodeInfo(nodeInfo);
@@ -744,6 +759,10 @@ public class PortMappingVersion221 {
         if (mcCapabilities != null) {
             nodesBldr.setMcCapabilities(mcCapabilities);
         }
+        if (srgs != null) {
+            nodesBldr.setSharedRiskGroup(srgs.srg());
+        }
+
         Map<NodesKey,Nodes> nodesList = new HashMap<>();
         Nodes nodes = nodesBldr.build();
         nodesList.put(nodes.key(),nodes);
@@ -1143,7 +1162,7 @@ public class PortMappingVersion221 {
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
         List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, interfaceList);
         LOG.info(PortMappingUtils.MAP_LOOKS_LOGMSG, nodeId, interfaceList);
-        postPortMapping(nodeId, null, null, cpToDegreeList, null, null);
+        postPortMapping(nodeId, null, null, cpToDegreeList, null, null, null);
 
         for (Entry<Integer, List<ConnectionPorts>> cpMapEntry : getPerDegreePorts(nodeId, deviceInfo).entrySet()) {
             List<ConnectionPorts> cpMapValue = cpMapEntry.getValue();
