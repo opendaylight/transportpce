@@ -33,6 +33,9 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.srg.revision.SrgRev181019Adapter;
+import org.opendaylight.transportpce.common.srg.storage.SrgStorage;
+import org.opendaylight.transportpce.common.srg.storage.Storage;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
@@ -127,18 +130,23 @@ public class PortMappingVersion221 {
 
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
-        DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Info.class)
-            .build();
-        Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
-                nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .build();
+        Optional<OrgOpenroadmDevice> deviceOptional = this.deviceTransactionManager.getDataFromDevice(
+                nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (deviceInfoOptional.isEmpty()) {
+        if (deviceOptional.isEmpty()) {
+            LOG.warn("No device found in operational datastore for nodeId {}", nodeId);
+            return false;
+        }
+        LOG.info("Device data retrieved for nodeId {}", nodeId);
+        OrgOpenroadmDevice device = deviceOptional.orElseThrow();
+        Info deviceInfo = device.getInfo();
+        if (deviceInfo == null) {
             LOG.warn(PortMappingUtils.DEVICE_HAS_LOGMSG, nodeId, "no info", "subtree");
             return false;
         }
-        Info deviceInfo = deviceInfoOptional.orElseThrow();
         NodeInfo nodeInfo = createNodeInfo(deviceInfo);
         if (nodeInfo == null) {
             return false;
@@ -169,6 +177,10 @@ public class PortMappingVersion221 {
                     LOG.warn(PortMappingUtils.UNABLE_MC_CAPA_LOGMSG, nodeId);
                     return false;
                 }
+                if (!saveSrgInformation(nodeId, device)) {
+                    LOG.warn(PortMappingUtils.UNABLE_SRG_LOGMSG, nodeId);
+                    return false;
+                }
                 break;
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
@@ -183,6 +195,11 @@ public class PortMappingVersion221 {
 
         }
         return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities);
+    }
+
+    private boolean saveSrgInformation(String nodeId, OrgOpenroadmDevice device) {
+        Storage srgStorage = new SrgStorage(dataBroker, LOG);
+        return srgStorage.save(nodeId, new SrgRev181019Adapter(device.getSharedRiskGroup()));
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
