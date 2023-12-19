@@ -15,9 +15,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 public interface Rev250905 {
 
     /**
-     * SRG in Rev250714.
+     * SRG in Rev250905.
      *
-     * @return a map of SharedRiskGroup in Rev250714 format
+     * @return a map of SharedRiskGroup in Rev250905 format
      */
     Map<SharedRiskGroupKey, SharedRiskGroup> srg();
 
