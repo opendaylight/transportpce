@@ -3,6 +3,17 @@
   <nodeId>
     <__value>ROADM-B-SRG12</__value>
   </nodeId>
+  <node>
+    <id>ROADM-B-SRG12</id>
+    <supporting-node>
+      <node-ref>ROADM-B</node-ref>
+      <network-ref>openroadm-network</network-ref>
+    </supporting-node>
+    <supporting-node>
+      <node-ref>NodeB</node-ref>
+      <network-ref>clli-network</network-ref>
+    </supporting-node>
+  </node>
   <deviceNodeId>ROADM-B</deviceNodeId>
   <nodeType>SRG</nodeType>
   <adminStates>InService</adminStates>
