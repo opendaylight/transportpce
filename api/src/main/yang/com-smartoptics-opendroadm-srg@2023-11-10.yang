@@ -1,0 +1,109 @@
+module com-smartoptics-openroadm-srg {
+  yang-version 1;
+  namespace "http://com/smartoptics/openroadm/srg";
+  prefix com-smartoptics-openroadm-srg;
+
+
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2020-05-29;
+  }
+  import org-openroadm-device-types {
+    prefix org-openroadm-device-types;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2020-03-27;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2023-05-26;
+  }
+
+
+  organization
+    "Smartoptics";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions for defining port mapping in TransportPCE.
+    Copyright (c) 2017 AT&T and others. All rights reserved.";
+
+  revision 2023-11-10 {
+    description
+      "Initial revision.";
+  }
+
+
+  grouping circuit-pack-name {
+    leaf circuit-pack-name {
+      description
+        "Circuit-Pack identifier. Unique within the context of a device.";
+      type leafref {
+        path "/org-openroadm-device/circuit-packs/circuit-pack-name";
+      }
+    }
+  }
+
+  grouping srg {
+    leaf max-add-drop-ports {
+      type uint16;
+      config false;
+      mandatory true;
+    }
+    leaf srg-number {
+      type uint16;
+      description
+        "Validating if the srg is supported by add/drop group";
+    }
+    leaf wavelengthDuplication {
+      description
+        "Whether the SRG can handle duplicate wavelengths and if so to what extent.";
+      config false;
+      mandatory true;
+      type enumeration {
+        enum "onePerSRG" {
+          description
+            "The SRG cannot handle wavelength duplication. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will result in failure.";
+          value 1;
+        }
+        enum "onePerDegree" {
+          description
+            "The SRG can handle wavelength duplication, but only one per degree. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will succeed, so long as the connections are not using the same degree.";
+          value 2;
+        }
+      }
+    }
+    list circuit-packs {
+      key "index";
+      description
+        "list for Cards associated with an add/drop group and srg";
+      leaf index {
+        type uint32;
+      }
+      uses circuit-pack-name {
+        refine "circuit-pack-name" {
+          mandatory true;
+        }
+      }
+    }
+  }
+
+
+  container network {
+    list network-nodes {
+      key "node-id";
+      leaf node-id {
+        type string;
+        description
+          "Unique identifier for node in the network";
+      }
+      list shared-risk-group {
+        when "/org-openroadm-device/info/node-type='rdm'";
+        key "srg-number";
+        uses srg;
+      }
+    }
+  }
+}
