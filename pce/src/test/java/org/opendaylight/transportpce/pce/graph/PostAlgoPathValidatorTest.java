@@ -9,10 +9,13 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -35,6 +39,9 @@ import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
@@ -43,7 +50,17 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.Srg;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.NetworkNodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.NetworkNodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.NetworkNodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.network.nodes.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.network.nodes.SharedRiskGroupBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.srg.rev250702.network.network.nodes.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 class PostAlgoPathValidatorTest {
@@ -58,6 +75,8 @@ class PostAlgoPathValidatorTest {
 
     private final ClientInput clientInputMock;
 
+    private final DataBroker dataBrokerMock;
+
     PostAlgoPathValidatorTest() throws IOException {
         String nodesDirectory = "src/test/resources/topology/nodes";
         weightedGraph = this.weightedGraph("src/test/resources/topology/links", this.nodeIds(nodesDirectory));
@@ -69,6 +88,15 @@ class PostAlgoPathValidatorTest {
         when(clientInputMock.slotWidth(anyInt())).thenAnswer(input -> input.getArgument(0));
         when(clientInputMock.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
         when(clientInputMock.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
+
+        dataBrokerMock = mock(DataBroker.class);
+        ReadTransaction readTransactionMock = mock(ReadTransaction.class);
+        Mockito.when(readTransactionMock.read(any(),
+                        (DataObjectIdentifier<DataObject>) any()))
+                .thenReturn(srg());
+
+        Mockito.when(dataBrokerMock.newReadOnlyTransaction())
+                .thenReturn(readTransactionMock);
     }
 
     @Test
@@ -166,14 +194,20 @@ class PostAlgoPathValidatorTest {
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
 
+        FluentFuture<Optional<DataObject>> srg = srg();
+
         SpectrumAssignment expected = new SpectrumAssignmentBuilder()
                 .setBeginIndex(Uint16.valueOf(740))
                 .setStopIndex(Uint16.valueOf(755))
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator .getSpectrumAssignment(entry, nodes, 16, mock(Subscriber.class)));
+
+        assertEquals(expected, postAlgoPathValidator .getSpectrumAssignment(entry, nodes, 16, mock(Subscriber.class),
+                dataBrokerMock));
     }
+
+
 
     /**
      * Setting up a service of 37.5GHz should be possible given this path and the following mc capabilities.
@@ -232,7 +266,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 6, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 6, mock(Subscriber.class),
+                dataBrokerMock));
     }
 
     /**
@@ -305,7 +340,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 6, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 6, mock(Subscriber.class),
+                dataBrokerMock));
     }
 
     /**
@@ -380,7 +416,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 8, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 8, mock(Subscriber.class),
+                dataBrokerMock));
     }
 
     /**
@@ -453,7 +490,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 16, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 16, mock(Subscriber.class),
+                dataBrokerMock));
     }
 
     /**
@@ -514,7 +552,8 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 10, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 10, mock(Subscriber.class),
+                dataBrokerMock));
     }
 
     /**
@@ -577,11 +616,44 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(true)
                 .build();
 
-        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 10, mock(Subscriber.class)));
+        assertEquals(expected, postAlgoPathValidator.getSpectrumAssignment(entry, nodes, 10, mock(Subscriber.class),
+                dataBrokerMock));
+    }
+
+
+    public void testMe() throws IOException {
+        String dir = "src/test/resources/topology/exp";
+        Set<String> fileNames = Set.of("ROADM-A-DEG1.txt");
+
+        List<String> xmls = new ArrayList<>(fileNames.size());
+        for (String filename : fileNames) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+            try (Stream<String> stream = Files.lines(Path.of(dir,  "/", filename))) {
+                stream.forEach(line -> {
+                    stringBuilder.append(line);
+                    stringBuilder.append(System.lineSeparator());
+                });
+            }
+
+            xmls.add(stringBuilder.toString());
+        }
+
+        XStream xstream = new XStream(new DomDriver());
+        xstream.alias("org.opendaylight.yang.rt.v1.obj.urn.ietf.params.xml.ns.yang.ietf.network"
+                + ".rev180226.networks.network.Node", Node.class);
+        xstream.registerConverter(new NodeConverter());
+
+        xstream.allowTypesByWildcard(new String[] {
+            "org.opendaylight.**"
+        });
+
     }
 
     private Map<NodeId, PceNode> allPceNodes(String dir) throws IOException {
         XStream xstream = new XStream(new DomDriver());
+        xstream.alias("node", Node.class);
+        xstream.registerConverter(new NodeConverter());
         xstream.alias("PceOpticalNode", PceOpticalNode.class);
         xstream.omitField(PceOpticalNode.class, "availableSrgPp");
         xstream.omitField(PceOpticalNode.class, "availableSrgCp");
@@ -727,5 +799,98 @@ class PostAlgoPathValidatorTest {
         public double getWeight() {
             return weight;
         }
+    }
+
+    private class SrgNode {
+        private final String nodeId;
+        private final String nodeType;
+        private final String srgNumber;
+        private final String waveLengthDuplication;
+
+        SrgNode(String nodeId, String nodeType, String srgNumber, String waveLengthDuplication) {
+            this.nodeId = nodeId;
+            this.nodeType = nodeType;
+            this.srgNumber = srgNumber;
+            this.waveLengthDuplication = waveLengthDuplication;
+        }
+
+        SharedRiskGroup createSharedRiskGroup() {
+            return new SharedRiskGroupBuilder()
+                    .setSrgNumber(Uint16.valueOf(Integer.parseInt(srgNumber)))
+                    .setWavelengthDuplication(Srg.WavelengthDuplication.valueOf(waveLengthDuplication))
+                    .build();
+        }
+    }
+
+    private class NetWrkNde {
+        private final String nodeId;
+
+        private final List<SrgNode> srgNodes;
+
+        NetWrkNde(String nodeId, List<SrgNode> srgNodes) {
+            this.nodeId = nodeId;
+            this.srgNodes = srgNodes;
+        }
+
+        NetworkNodes networkNodes() {
+            Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = srgNodes.stream()
+                    .map(SrgNode::createSharedRiskGroup)
+                    .collect(Collectors.toMap(SharedRiskGroup::key, Function.identity()));
+
+            return new NetworkNodesBuilder()
+                    .setNodeId(nodeId)
+                    .setSharedRiskGroup(sharedRiskGroupMap)
+                    .build();
+        }
+    }
+
+    private Map<NetworkNodesKey, NetworkNodes> createNetworkNodesMapTwo(List<NetWrkNde> netWrkNdes) {
+        return netWrkNdes.stream()
+                .collect(Collectors.toMap(
+                        n -> new NetworkNodesKey(n.nodeId),
+                        NetWrkNde::networkNodes));
+    }
+
+    private NetworkNodes createNetworkNodesMap(List<NetWrkNde> netWrkNdes) {
+        NetworkNodesBuilder networkNodesBuilder = new NetworkNodesBuilder();
+
+        for (NetWrkNde netWrkNde : netWrkNdes) {
+            networkNodesBuilder.setNodeId(netWrkNde.nodeId);
+            Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = netWrkNde.srgNodes.stream()
+                    .map(SrgNode::createSharedRiskGroup)
+                    .collect(Collectors.toMap(SharedRiskGroup::key, Function.identity()));
+            networkNodesBuilder.setSharedRiskGroup(sharedRiskGroupMap);
+        }
+
+        return networkNodesBuilder.build();
+    }
+
+    private NetworkNodes createNetworkNodesMap() {
+        List<NetWrkNde> netWrkNdes = List.of(
+                new NetWrkNde("ROADM-A", List.of(
+                        new SrgNode("ROADM-A", "SRG", "1", "OnePerSRG"),
+                        new SrgNode("ROADM-A", "SRG", "4", "OnePerSRG")
+                )),
+                new NetWrkNde("ROADM-B", List.of(
+                        new SrgNode("ROADM-B", "SRG", "1", "OnePerSRG"),
+                        new SrgNode("ROADM-B", "SRG", "3", "OnePerSRG"),
+                        new SrgNode("ROADM-B", "SRG", "13", "OnePerSRG")
+                )),
+                new NetWrkNde("ROADM-C", List.of(
+                        new SrgNode("ROADM-C", "SRG", "12", "OnePerSRG"),
+                        new SrgNode("ROADM-C", "SRG", "13", "OnePerSRG")
+                ))
+        );
+        return createNetworkNodesMap(netWrkNdes);
+    }
+
+    private FluentFuture<Optional<DataObject>> srg() {
+        Optional<NetworkNodes> networkOptional = Optional.of(createNetworkNodesMap());
+
+        SettableFuture<Optional<NetworkNodes>> objectSettableFuture = SettableFuture.create();
+        objectSettableFuture.set(networkOptional);
+
+        return FluentFuture.from(objectSettableFuture)
+                .transform(optional -> optional.map(NetworkNodes.class::cast), Runnable::run);
     }
 }
