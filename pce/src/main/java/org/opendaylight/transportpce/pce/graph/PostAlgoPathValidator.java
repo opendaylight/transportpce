@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -33,6 +34,11 @@ import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.srg.node.NetworkNode;
+import org.opendaylight.transportpce.common.srg.node.SrgNetworkNode;
+import org.opendaylight.transportpce.common.srg.storage.Cache;
+import org.opendaylight.transportpce.common.srg.storage.SrgStorage;
+import org.opendaylight.transportpce.common.srg.storage.Storage;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
@@ -72,7 +78,7 @@ public class PostAlgoPathValidator {
         justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
-            String serviceType, PceConstraintMode mode) {
+            String serviceType, PceConstraintMode mode, DataBroker dataBroker) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -93,7 +99,7 @@ public class PostAlgoPathValidator {
             //fallthrough
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
-                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
+                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber, dataBroker);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
                         && spectrumAssignment.getStopIndex().equals(Uint16.valueOf(0))) {
@@ -999,7 +1005,7 @@ public class PostAlgoPathValidator {
      *         no spectrum assignment found, beginIndex = stopIndex = 0
      */
     private SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
-            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber) {
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, DataBroker dataBroker) {
         byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         BitSet result = BitSet.valueOf(freqMap);
@@ -1020,14 +1026,24 @@ public class PostAlgoPathValidator {
             }
         }
 
+        Storage storage = new Cache(new SrgStorage(dataBroker, LOG));
+        NetworkNode networkNode = new SrgNetworkNode();
+
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
+
             pceNodeFreqMap = pceNode.getBitSetData();
             LOG.debug("Pce node bitset {}", pceNodeFreqMap);
-            if (pceNodeFreqMap != null) {
-                result.and(pceNodeFreqMap);
-                LOG.debug("intermediate bitset {}", result);
+
+            if (!pceNode.isContentionLessSrg(networkNode, storage)) {
+                if (pceNodeFreqMap != null) {
+                    result.and(pceNodeFreqMap);
+                    LOG.debug("intermediate bitset {}", result);
+                }
+            } else {
+                LOG.debug("PCE node {} is contentionless srg, skipping.", pceNode);
             }
+
             String pceNodeVersion = pceNode.getVersion();
             BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
             if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {

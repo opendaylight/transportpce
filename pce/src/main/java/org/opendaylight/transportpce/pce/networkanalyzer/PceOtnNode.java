@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.srg.node.NetworkNode;
+import org.opendaylight.transportpce.common.srg.storage.Storage;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
@@ -600,5 +602,15 @@ public class PceOtnNode implements PceNode {
     @Override
     public BigDecimal getCentralFreqGranularity() {
         return null;
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public boolean isContentionLessSrg(NetworkNode networkNode, Storage storage) {
+        return false;
     }
 }

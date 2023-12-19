@@ -124,7 +124,7 @@ public class PceSendingPceRPCs {
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints, softConstraints,
-                rc, serviceType, networkTransaction, mode);
+                rc, serviceType, networkTransaction, mode, networkTransaction.getDataBroker());
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {

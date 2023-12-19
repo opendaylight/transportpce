@@ -22,6 +22,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -67,10 +68,12 @@ public class PceGraph {
 
     private final NetworkTransactionService networkTransactionService;
 
+    private DataBroker dataBroker = null;
+
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints,
             PceResult pceResult, String serviceType, NetworkTransactionService networkTransactionService,
-            PceConstraintMode mode) {
+            PceConstraintMode mode, DataBroker dataBroker) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -82,6 +85,7 @@ public class PceGraph {
         this.serviceType = serviceType;
         this.networkTransactionService = networkTransactionService;
         this.pceConstraintMode = mode;
+        this.dataBroker = dataBroker;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
@@ -107,7 +111,8 @@ public class PceGraph {
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
             PostAlgoPathValidator papv = new PostAlgoPathValidator(networkTransactionService);
             pceResult = papv.checkPath(
-                    path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
+                    path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode,
+                    dataBroker);
             this.margin = papv.getTpceCalculatedMargin();
             if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
                 LOG.info("Path is validated");
