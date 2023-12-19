@@ -33,6 +33,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.srg.revision.Rev250905;
+import org.opendaylight.transportpce.common.srg.revision.SrgRev181019Adapter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
@@ -143,10 +145,11 @@ public class PortMappingVersion221 {
         if (nodeInfo == null) {
             return false;
         }
-        postPortMapping(nodeId, nodeInfo, null, null, null, null);
+        postPortMapping(nodeId, nodeInfo, null, null, null, null, null);
 
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
+        Rev250905 srgMap = null;
         switch (deviceInfo.getNodeType()) {
 
             case Rdm:
@@ -164,11 +167,14 @@ public class PortMappingVersion221 {
                     return false;
                 }
                 // Get MC capabilities
-                if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilities)) {
+                List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
+                if (!createMcCapabilitiesList(nodeId, deviceInfo, mcCapabilities, srgs)) {
                     // return false if MC capabilites failed
                     LOG.warn(PortMappingUtils.UNABLE_MC_CAPA_LOGMSG, nodeId);
                     return false;
                 }
+                //Wavelength duplication
+                srgMap = SrgRev181019Adapter.instantiate(srgs);
                 break;
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
@@ -182,7 +188,7 @@ public class PortMappingVersion221 {
                 break;
 
         }
-        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities);
+        return postPortMapping(nodeId, nodeInfo, portMapList, null, null, mcCapabilities, srgMap);
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
@@ -275,7 +281,7 @@ public class PortMappingVersion221 {
             }
         }
         if (device.getOduSwitchingPools() != null) {
-            postPortMapping(nodeId, null, null, null, getSwitchingPoolList(device, lcpMap, nodeId), null);
+            postPortMapping(nodeId, null, null, null, getSwitchingPoolList(device, lcpMap, nodeId), null, null);
         }
         mappingMap.forEach((k,v) -> portMapList.add(v));
         return true;
@@ -711,7 +717,7 @@ public class PortMappingVersion221 {
 
     private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
             List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList,
-            Map<McCapabilitiesKey, McCapabilities> mcCapabilities) {
+            Map<McCapabilitiesKey, McCapabilities> mcCapabilities, Rev250905 srgs) {
         NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey(nodeId)).setNodeId(nodeId);
         if (nodeInfo != null) {
             nodesBldr.setNodeInfo(nodeInfo);
@@ -744,6 +750,10 @@ public class PortMappingVersion221 {
         if (mcCapabilities != null) {
             nodesBldr.setMcCapabilities(mcCapabilities);
         }
+        if (srgs != null) {
+            nodesBldr.setSharedRiskGroup(srgs.srg());
+        }
+
         Map<NodesKey,Nodes> nodesList = new HashMap<>();
         Nodes nodes = nodesBldr.build();
         nodesList.put(nodes.key(),nodes);
@@ -1130,9 +1140,8 @@ public class PortMappingVersion221 {
     }
 
     private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo,
-            Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap) {
+            Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap, List<SharedRiskGroup> srgs) {
         Map<Integer, Degree> degrees = getDegreesMap(nodeId, deviceInfo);
-        List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
         mcCapabilitiesMap.putAll(getMcCapabilities(degrees, srgs, nodeId));
         return true;
     }
@@ -1143,7 +1152,7 @@ public class PortMappingVersion221 {
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
         List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, interfaceList);
         LOG.info(PortMappingUtils.MAP_LOOKS_LOGMSG, nodeId, interfaceList);
-        postPortMapping(nodeId, null, null, cpToDegreeList, null, null);
+        postPortMapping(nodeId, null, null, cpToDegreeList, null, null, null);
 
         for (Entry<Integer, List<ConnectionPorts>> cpMapEntry : getPerDegreePorts(nodeId, deviceInfo).entrySet()) {
             List<ConnectionPorts> cpMapValue = cpMapEntry.getValue();
