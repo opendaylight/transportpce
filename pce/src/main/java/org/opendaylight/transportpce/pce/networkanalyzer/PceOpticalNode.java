@@ -20,6 +20,8 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.srg.node.NetworkNode;
+import org.opendaylight.transportpce.common.srg.storage.Storage;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
@@ -40,6 +42,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.Supp
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -575,4 +578,21 @@ public class PceOpticalNode implements PceNode {
         this.endpoints = endpoints;
     }
 
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public boolean isContentionLessSrg(NetworkNode networkNode, Storage storage) {
+        if (!nodeType.equals(OpenroadmNodeType.SRG)) {
+            return false;
+        }
+
+        return networkNode.contentionLess(
+                new NetworkId(StringConstants.OPENROADM_NETWORK),
+                node,
+                storage
+        );
+    }
 }
