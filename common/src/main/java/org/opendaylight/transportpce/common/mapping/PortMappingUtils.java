@@ -94,6 +94,8 @@ public final class PortMappingUtils {
         "{} : unable to {} mapping for {}";
     public static final String UNABLE_MC_CAPA_LOGMSG =
         "{} : unable to create MC capabilities";
+    public static final String UNABLE_SRG_LOGMSG =
+            "{} : unable to save SRG information to storage";
     public static final String UNSUPPORTED_DIR_LOGMSG =
         "{} : port {} on {} - unsupported Direction {}";
     public static final String UPDATE = "update";
