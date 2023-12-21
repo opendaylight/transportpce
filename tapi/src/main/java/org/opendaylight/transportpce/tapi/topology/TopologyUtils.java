@@ -53,7 +53,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
@@ -241,6 +241,14 @@ public final class TopologyUtils {
             // Retrieve created sips map in TapiFactory when mapping all the nodes
 //            this.tapiSips = (tapiFullFactory.getTapiSips());
             this.tapiSips.putAll(tapiFullFactory.getTapiSips());
+            var topo = new TopologyBuilder()
+                .setName(Map.of(name.key(), name))
+                .setUuid(topoUuid)
+                .setNode(tapiNodeList)
+                .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
+                    LayerProtocolName.DSR))
+                .setLink(tapiLinkList).build();
+            LOG.error("TOPOUTIL, Initial FullTopology Builder.build = {}", topo.toString());
             return new TopologyBuilder()
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
@@ -255,10 +263,6 @@ public final class TopologyUtils {
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
                 LayerProtocolName.DSR))
             .build();
-    }
-
-    public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
-        return tapiSips;
     }
 
     public boolean checkTp(String nodeIdTopo, String nodeIdPortMap, TerminationPoint tp, List<Link> xpdOut,
@@ -322,23 +326,20 @@ public final class TopologyUtils {
                 .setUuid(topology.getUuid())
                 .setName(topology.getName())
                 .setLayerProtocolName(topology.getLayerProtocolName())
-                .setNode(topology.getNode())
                 .setLink(topology.getLink());
-        if (topology.getNode() == null) {
-            topologyBuilder.setNode(topology.getNode());
+        if (topology.nonnullNode().isEmpty()) {
             return topologyBuilder.build();
         }
-        // TODO -> Need to remove CEPs from NEPs. If not error from get Topology details output
         Map<NodeKey, Node> mapNode = new HashMap<>();
-        for (Node node: topology.getNode().values()) {
+        for (Node node: topology.nonnullNode().values()) {
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-            for (OwnedNodeEdgePoint onep: node.getOwnedNodeEdgePoint().values()) {
-                OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
-                if (onep1 == null) {
-                    onepMap.put(onep.key(), onep);
-                    continue;
-                }
-                OwnedNodeEdgePointBuilder newOnepBuilder = new OwnedNodeEdgePointBuilder()
+            for (OwnedNodeEdgePoint onep: node.nonnullOwnedNodeEdgePoint().values()) {
+//                    OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
+//                    if (onep1 == null) {
+//                        onepMap.put(onep.key(), onep);
+//                        continue;
+//                    }
+                OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder()
                         .setUuid(onep.getUuid())
                         .setLayerProtocolName(onep.getLayerProtocolName())
                         .setName(onep.getName())
@@ -347,17 +348,25 @@ public final class TopologyUtils {
                         .setAdministrativeState(onep.getAdministrativeState())
                         .setOperationalState(onep.getOperationalState())
                         .setLifecycleState(onep.getLifecycleState())
-//                        .setTerminationDirection(onep.getTerminationDirection())
-//                        .setTerminationState(onep.getTerminationState())
+//                            .setTerminationDirection(onep.getTerminationDirection())
+//                            .setTerminationState(onep.getTerminationState())
                         .setDirection(onep.getDirection())
-                        .setLinkPortRole(onep.getLinkPortRole());
-                if (onep.getMappedServiceInterfacePoint() != null) {
-                    newOnepBuilder.setMappedServiceInterfacePoint(onep.getMappedServiceInterfacePoint());
-                }
-                OwnedNodeEdgePoint nep = newOnepBuilder.build();
-                onepMap.put(nep.key(), nep);
+                        .setSupportedPayloadStructure(onep.getSupportedPayloadStructure())
+                        .setAvailablePayloadStructure(onep.getAvailablePayloadStructure())
+                        .setLinkPortRole(onep.getLinkPortRole())
+                        .setMappedServiceInterfacePoint(onep.nonnullMappedServiceInterfacePoint())
+                        .build();
+                onepMap.put(newOnep.key(), newOnep);
             }
-            Node newNode = new NodeBuilder(node)
+            Node newNode = new NodeBuilder()
+                    .setUuid(node.getUuid())
+                    .setName(node.getName())
+                    .setOperationalState(node.getOperationalState())
+                    .setAdministrativeState(node.getAdministrativeState())
+                    .setLifecycleState(node.getLifecycleState())
+                    .setLayerProtocolName(node.getLayerProtocolName())
+                    .setNodeRuleGroup(node.getNodeRuleGroup())
+                    .setInterRuleGroup(node.getInterRuleGroup())
                     .setOwnedNodeEdgePoint(onepMap)
                     .build();
             mapNode.put(newNode.key(), newNode);
@@ -365,4 +374,9 @@ public final class TopologyUtils {
         topologyBuilder.setNode(mapNode);
         return topologyBuilder.build();
     }
+
+    public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
+        return tapiSips;
+    }
+
 }
