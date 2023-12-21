@@ -218,13 +218,17 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          response['switching-pool-lcp'][0]['switching-pool-type'])
         self.assertEqual(1,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
-        self.assertIn(
-            {'nbl-number': 2,
-             'lcp-list': ['XPDR2-NETWORK3', 'XPDR2-NETWORK4', 'XPDR2-CLIENT1', 'XPDR2-CLIENT3',
-                          'XPDR2-CLIENT2', 'XPDR2-NETWORK1', 'XPDR2-CLIENT4', 'XPDR2-NETWORK2'],
-             'interconnect-bandwidth-unit': 1000000000,
-             'interconnect-bandwidth': 0},
-            response['switching-pool-lcp'][0]['non-blocking-list'])
+        expected_sorted_list = ['XPDR2-CLIENT1', 'XPDR2-CLIENT2', 'XPDR2-CLIENT3', 'XPDR2-CLIENT4',
+                                'XPDR2-NETWORK1', 'XPDR2-NETWORK2', 'XPDR2-NETWORK3', 'XPDR2-NETWORK4']
+        expected_subset_response = {
+            "nbl-number": 2,
+            "interconnect-bandwidth-unit": 1000000000,
+            "interconnect-bandwidth": 0}
+        subset = {k: v for k, v in response['switching-pool-lcp'][0]['non-blocking-list'][0].items()
+                  if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['switching-pool-lcp'][0]['non-blocking-list'][0]['lcp-list']),
+                         expected_sorted_list)
 
     def test_20_spdr_switching_pool_3(self):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "switching-pool-lcp", "3")
