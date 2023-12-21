@@ -405,7 +405,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
         self.assertEqual(response['status_code'], requests.codes.ok)
         link_list = response['output']['topology']['link']
-        print(response['output']['topology']['link'])
         nb_updated_link = 0
         for link in link_list:
             if all(x in link['name'][0]['value'] for x in ['XPDR-C1-XPDR1', 'XPDR1-NETWORK1']):
@@ -427,7 +426,6 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_20_check_update_connectivity_service_Ethernet(self):
         self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
-        print(str(self.uuid_services.eth))
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
