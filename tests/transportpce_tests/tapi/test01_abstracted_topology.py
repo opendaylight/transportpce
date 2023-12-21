@@ -690,14 +690,6 @@ class TransportTapitesting(unittest.TestCase):
 
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
-   nb = 0
-   for dictio in list_dicts:
-       print(dictio)
-       if dictio[key1][0][key2] == value:
-           nb += 1
-   return nb
-
-def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
     for dictio in list_dicts:
         for name in dictio[key1]:
