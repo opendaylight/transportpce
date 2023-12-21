@@ -101,8 +101,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Ru
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.link.details.output.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.node.edge.point.details.output.NodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.details.output.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.details.output.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
@@ -132,6 +130,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
     private final TapiContext tapiContext;
     private final TopologyUtils topologyUtils;
     private final TapiLink tapiLink;
+    private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
 
     public TapiTopologyImpl(DataBroker dataBroker, TapiContext tapiContext, TopologyUtils topologyUtils,
                             TapiLink tapiLink) {
@@ -139,6 +138,8 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
         this.tapiContext = tapiContext;
         this.topologyUtils = topologyUtils;
         this.tapiLink = tapiLink;
+        this.tapiSips = new HashMap<>();
+
     }
 
     @Override
@@ -164,43 +165,53 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
-        // TODO -> Add check for Full T0 Multilayer
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology;
+        Uuid topologyUuidAbs = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
-        if (input.getTopologyId().equals(topologyUuid)) {
+        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        if (input.getTopologyId().equals(topologyUuidFull)) {
             Context context = this.tapiContext.getTapiContext();
             Map<TopologyKey,
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
                 topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
-            if (topologyMap == null || !topologyMap.containsKey(new TopologyKey(topologyUuid))) {
+            if (topologyMap == null || !topologyMap.containsKey(new TopologyKey(topologyUuidFull))) {
                 LOG.error("Topology {} not found in datastore", input.getTopologyId());
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Invalid Topology name")
                     .buildFuture();
             }
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-                topology = topologyMap.get(new TopologyKey(topologyUuid));
+            topology = topologyMap.get(new TopologyKey(input.getTopologyId()));
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                    .setTopology(this.topologyUtils.transformTopology(topology))
-                    .build())
+                .setTopology(this.topologyUtils.transformTopology(topology))
+                .build())
                 .buildFuture();
         }
-        topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
+        Uuid topologyUuid100G = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
             Charset.forName("UTF-8"))).toString());
-        try {
-            LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
-            Topology topology = createAbstractedOtnTopology();
-            if (topologyUuid.equals(input.getTopologyId())) {
+        if (topologyUuid100G.equals(input.getTopologyId()) || topologyUuidAbs.equals(input.getTopologyId())) {
+            try {
+                LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
+                topology = createAbstractedOtnTopology();
+                if (input.getTopologyId().equals(topologyUuidAbs)) {
+                    return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                        .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                        .buildFuture();
+                }
                 topology = createAbstracted100GTpdrTopology(topology);
+                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                    .buildFuture();
+            } catch (TapiTopologyException e) {
+                LOG.error("error building TAPI topology");
+                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                    .withError(ErrorType.RPC, "Error building topology")
+                    .buildFuture();
             }
-            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().setTopology(topology).build())
-                .buildFuture();
-        } catch (TapiTopologyException e) {
-            LOG.error("error building TAPI topology");
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Error building topology")
-                .buildFuture();
         }
+        return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+            .withError(ErrorType.RPC, "Invalid Topology name")
+            .buildFuture();
     }
 
     @Override
@@ -338,7 +349,9 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .build();
     }
 
-    private Topology createAbstracted100GTpdrTopology(Topology topology) {
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+            createAbstracted100GTpdrTopology(
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology) {
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> dsrNodes =
             topology.nonnullNode().values().stream()
                 .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
@@ -355,31 +368,17 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8"))).toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             createTapiNode(nep100GTpdrList, topoUuid);
-        return new TopologyBuilder()
+        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context
+                .TopologyBuilder()
             .setName(Map.of(topoName.key(), topoName))
             .setUuid(topoUuid)
             .setNode(Map.of(node.key(), node))
+            .setLayerProtocolName(Set.of(LayerProtocolName.DSR, LayerProtocolName.ETH))
             .build();
     }
 
-    private Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
-        Network topology = null;
-        FluentFuture<Optional<Network>> topologyFuture = dataBroker.newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, networkIID);
-        try {
-            topology = topologyFuture.get().orElseThrow();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
-                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
-        } catch (ExecutionException e) {
-            throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
-                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
-        }
-        return topology;
-    }
-
-    private Topology createAbstractedOtnTopology() throws TapiTopologyException {
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+            createAbstractedOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
         List<Link> linkList = new ArrayList<>();
@@ -457,11 +456,32 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .setValue(TapiStringConstants.T0_MULTILAYER)
             .setValueName("TAPI Topology Name")
             .build();
-        return new TopologyBuilder()
-                .setName(Map.of(name.key(), name))
-                .setUuid(topoUuid)
-                .setNode(tapiNodeList)
-                .setLink(tapiLinkList).build();
+        LOG.info("TOPOABSTRACTED : the list of node is as follows {}", tapiNodeList.toString());
+        this.tapiSips.putAll(tapiAbstractFactory.getTapiSips());
+        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context
+                .TopologyBuilder()
+            .setName(Map.of(name.key(), name))
+            .setUuid(topoUuid)
+            .setNode(tapiNodeList)
+            .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.DIGITALOTN))
+            .setLink(tapiLinkList).build();
+    }
+
+    private Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
+        Network topology = null;
+        FluentFuture<Optional<Network>> topologyFuture = dataBroker.newReadOnlyTransaction()
+            .read(LogicalDatastoreType.CONFIGURATION, networkIID);
+        try {
+            topology = topologyFuture.get().orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
+                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        } catch (ExecutionException e) {
+            throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
+                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        }
+        return topology;
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
@@ -580,6 +600,10 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .build();
         nodeRuleGroupMap.put(nodeRuleGroup.key(), nodeRuleGroup);
         return nodeRuleGroupMap;
+    }
+
+    public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
+        return tapiSips;
     }
 
 }

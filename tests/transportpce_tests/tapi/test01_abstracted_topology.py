@@ -187,7 +187,6 @@ class TransportTapitesting(unittest.TestCase):
         self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
-        print(response)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response["output"]["topology"]["node"]), 1, 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
@@ -647,7 +646,7 @@ class TransportTapitesting(unittest.TestCase):
                          'node name should be: ROADM-infra')
 
     def test_43_get_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE
+        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -684,14 +683,6 @@ class TransportTapitesting(unittest.TestCase):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-
-# def count_object_with_double_key(list_dicts, key1, key2, value):
-#    nb = 0
-#    for dictio in list_dicts:
-#        print(dictio)
-#        if dictio[key1][0][key2] == value:
-#            nb += 1
-#    return nb
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
