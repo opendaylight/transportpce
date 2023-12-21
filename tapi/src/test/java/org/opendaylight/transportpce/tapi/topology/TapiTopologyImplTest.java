@@ -537,7 +537,6 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         for (Node node:topology.getNode().values()) {
-            //String nodeName = node.getName().values().stream().findFirst().orElseThrow().getValue();
             Uuid nodeUuid = node.getUuid();
             GetNodeDetailsInput input1 = TapiTopologyDataUtils.buildGetNodeDetailsInput(topologyUuid, nodeUuid);
             ListenableFuture<RpcResult<GetNodeDetailsOutput>> result1 = tapiTopoImpl.getNodeDetails(input1);
@@ -553,7 +552,6 @@ public class TapiTopologyImplTest extends AbstractTest {
             Node node1 = rpcResult1.getResult().getNode();
             assertNotNull(node1, "Node should not be null");
             for (OwnedNodeEdgePoint onep:node1.getOwnedNodeEdgePoint().values()) {
-                //String onepName = onep.getName().values().stream().findFirst().orElseThrow().getValue();
                 Uuid onepUuid = onep.getUuid();
                 GetNodeEdgePointDetailsInput input2 = TapiTopologyDataUtils.buildGetNodeEdgePointDetailsInput(
                     topologyUuid, nodeUuid, onepUuid);
@@ -594,7 +592,6 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         for (Link link:topology.getLink().values()) {
-            //String linkName = link.getName().values().stream().findFirst().orElseThrow().getValue();
             Uuid linkUuid = link.getUuid();
             GetLinkDetailsInput input1 = TapiTopologyDataUtils.buildGetLinkDetailsInput(
                 topologyUuid, linkUuid);
