@@ -77,6 +77,7 @@ public final class TopologyUtils {
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
+    public static final String NOOPMODEDECLARED = "No operational mode declared in Topo for Tp {}, assumes by default ";
 
     public TopologyUtils(NetworkTransactionService networkTransactionService, DataBroker dataBroker,
                          TapiLink tapiLink) {
