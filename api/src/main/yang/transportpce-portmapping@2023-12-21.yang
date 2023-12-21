@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2023-12-21 {
+    description
+       "Add leaflist supported-operational-mode to lcp";
+  }
   revision 2022-09-22 {
     description
        "Add initial support to regenerators functionality; Modify the attribute
@@ -252,6 +256,11 @@ module transportpce-portmapping {
         type identityref {
           base org-openroadm-port-types:supported-if-capability;
         }
+      }
+      leaf-list supported-operational-mode {
+        type string;
+        description
+          "List of operational-mode supported by the port";
       }
       uses mpdr-restrictions-grp;
       uses regen-profiles-grp;
