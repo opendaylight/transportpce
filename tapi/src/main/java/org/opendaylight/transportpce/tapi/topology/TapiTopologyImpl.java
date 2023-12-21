@@ -175,7 +175,7 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             Map<TopologyKey,
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
                 topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
-            if (!(topologyMap != null && (topologyMap.containsKey(new TopologyKey(topologyUuidFull))))) {
+            if (topologyMap == null || (topologyMap.containsKey(new TopologyKey(topologyUuidFull)))) {
                 LOG.error("Topology {} not found in datastore", input.getTopologyId());
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Invalid Topology name")
