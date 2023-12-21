@@ -129,7 +129,8 @@ public class TapiTopologyImplTest extends AbstractTest {
             Charset.forName("UTF-8"))).toString());
         LOG.info("TPDR100GUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         LOG.info("RESULT of getTopoDetailsTopo/name = {}", result.get().getResult().getTopology().getName().toString());
         result.addListener(new Runnable() {
@@ -179,7 +180,8 @@ public class TapiTopologyImplTest extends AbstractTest {
             Charset.forName("UTF-8"))).toString());
         LOG.info("T0MultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -329,7 +331,8 @@ public class TapiTopologyImplTest extends AbstractTest {
             Charset.forName("UTF-8"))).toString());
         LOG.info("T0FullMultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -460,12 +463,6 @@ public class TapiTopologyImplTest extends AbstractTest {
                 .filter(nep -> nep.getName().containsKey(new NameKey("eNodeEdgePoint"))))
             .count();
         assertEquals(4, inb5, "SPDR-SA1-XPDR2+XPONDER (switch) should have 4 external network neps");
-        Node nodeRoadm = topology.getNode().values().stream()
-            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA)
-                && !node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-            .filter(node -> node.getName().get(new NameKey("roadm node name")).getValue()
-                .equals("ROADM-A1+PHOTONIC_MEDIA"))
-            .findAny().orElseThrow();
         long inb6 = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA)
                 && !node.getLayerProtocolName().contains(LayerProtocolName.DSR))
@@ -523,7 +520,8 @@ public class TapiTopologyImplTest extends AbstractTest {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -536,7 +534,6 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         for (Node node:topology.getNode().values()) {
-            //String nodeName = node.getName().values().stream().findFirst().orElseThrow().getValue();
             Uuid nodeUuid = node.getUuid();
             GetNodeDetailsInput input1 = TapiTopologyDataUtils.buildGetNodeDetailsInput(topologyUuid, nodeUuid);
             ListenableFuture<RpcResult<GetNodeDetailsOutput>> result1 = tapiTopoImpl.getNodeDetails(input1);
@@ -552,7 +549,6 @@ public class TapiTopologyImplTest extends AbstractTest {
             Node node1 = rpcResult1.getResult().getNode();
             assertNotNull(node1, "Node should not be null");
             for (OwnedNodeEdgePoint onep:node1.getOwnedNodeEdgePoint().values()) {
-                //String onepName = onep.getName().values().stream().findFirst().orElseThrow().getValue();
                 Uuid onepUuid = onep.getUuid();
                 GetNodeEdgePointDetailsInput input2 = TapiTopologyDataUtils.buildGetNodeEdgePointDetailsInput(
                     topologyUuid, nodeUuid, onepUuid);
@@ -580,7 +576,8 @@ public class TapiTopologyImplTest extends AbstractTest {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
             @Override
@@ -593,7 +590,6 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         for (Link link:topology.getLink().values()) {
-            //String linkName = link.getName().values().stream().findFirst().orElseThrow().getValue();
             Uuid linkUuid = link.getUuid();
             GetLinkDetailsInput input1 = TapiTopologyDataUtils.buildGetLinkDetailsInput(
                 topologyUuid, linkUuid);
@@ -616,7 +612,8 @@ public class TapiTopologyImplTest extends AbstractTest {
     void getSipDetailsWhenSuccessful()
             throws ExecutionException, InterruptedException {
         GetServiceInterfacePointListInput input = TapiTopologyDataUtils.buildServiceInterfacePointListInput();
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+            tapiLink);
         ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>> result = tapiTopoImpl
             .getServiceInterfacePointList(input);
         result.addListener(new Runnable() {

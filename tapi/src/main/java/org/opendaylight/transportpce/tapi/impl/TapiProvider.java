@@ -117,7 +117,7 @@ public class TapiProvider {
         TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(this.serviceHandler, tapiContext,
             connectivityUtils, pceListenerImpl, rendererListenerImpl, networkTransactionService);
         rpcRegistrations.add(rpcProviderService.registerRpcImplementations(tapiConnectivity.registerRPCs()));
-        TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker, tapiContext, topologyUtils, tapiLink);
+        TapiTopologyImpl topo = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils, tapiLink);
         rpcRegistrations.add(rpcProviderService.registerRpcImplementations(topo.registerRPCs()));
 
         this.listeners = new ArrayList<>();
