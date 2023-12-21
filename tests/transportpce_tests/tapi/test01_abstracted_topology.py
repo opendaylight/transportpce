@@ -688,6 +688,7 @@ class TransportTapitesting(unittest.TestCase):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
+
 def count_object_with_double_key(list_dicts, key1, key2, value):
     nb = 0
     for dictio in list_dicts:
