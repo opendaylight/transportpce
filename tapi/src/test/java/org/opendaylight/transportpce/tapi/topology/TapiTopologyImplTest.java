@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+//import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -94,6 +95,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     private static ConnectivityUtils connectivityUtils;
     private static ServiceDataStoreOperations serviceDataStoreOperations;
     private static TapiInitialORMapping tapiInitialORMapping;
+//    private static TapiTopologyImpl tapiTopoImpl;
     private static TapiLink tapiLink;
 
     @BeforeAll
@@ -116,6 +118,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
             networkTransactionService);
+//        tapiTopoImpl = new TapiTopologyImpl(getDataBroker(), tapiContext, topologyUtils, tapiLink);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
