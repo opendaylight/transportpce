@@ -46,10 +46,20 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                                ]
                            }
                            }
+    SUBSET_NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR4-NETWORK1",
+                                  "supporting-port": "L1",
+                                  "port-direction": "bidirectional",
+                                  "port-qual": "xpdr-network",
+                                  "supporting-circuit-pack-name": "1/1/6-PLUG-NET",
+                                  "xpdr-type": "regen",
+                                  "port-admin-state": "InService",
+                                  "port-oper-state": "InService"
+                                  }
     REGEN_CAPABILITIES = ["OTUC2-REGEN",
                           "OTUC3-REGEN",
                           "OTUC4-REGEN",
                           ]
+    SUP_INT_CAPA = ["org-openroadm-port-types:if-otsi-otsigroup"]
     NODE_VERSION = "7.1"
 
     @classmethod
@@ -146,24 +156,30 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_05_get_portmapping_network1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR4-NETWORK1")
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR4-NETWORK1-OTUC4"
-        self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "AKkLPpWaa8x+"
-        self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR4-NETWORK2"
-        self.assertIn(
-            self.NETWORK1_CHECK_DICT,
-            response["mapping"])
+        self.SUBSET_NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR4-NETWORK1-OTUC4"
+        self.SUBSET_NETWORK1_CHECK_DICT["lcp-hash-val"] = "AKkLPpWaa8x+"
+        self.SUBSET_NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR4-NETWORK2"
+        subset = {k: v for k, v in response["mapping"][0].items() if k in self.SUBSET_NETWORK1_CHECK_DICT}
+        self.assertDictEqual(subset, self.SUBSET_NETWORK1_CHECK_DICT)
+        self.assertEqual(sorted(response["mapping"][0]["regen-profiles"]["regen-profile"]),
+                         self.REGEN_CAPABILITIES)
+        self.assertEqual(sorted(response["mapping"][0]["supported-interface-capability"]),
+                         self.SUP_INT_CAPA)
 
     def test_06_get_portmapping_network1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR4-NETWORK2")
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.NETWORK1_CHECK_DICT["logical-connection-point"] = "XPDR4-NETWORK2"
-        self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR4-NETWORK2-OTUC4"
-        self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "AKkLPpWaa8x9"
-        self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR4-NETWORK1"
-        self.NETWORK1_CHECK_DICT["supporting-circuit-pack-name"] = "1/1/5-PLUG-NET"
-        self.assertIn(
-            self.NETWORK1_CHECK_DICT,
-            response["mapping"])
+        self.SUBSET_NETWORK1_CHECK_DICT["logical-connection-point"] = "XPDR4-NETWORK2"
+        self.SUBSET_NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR4-NETWORK2-OTUC4"
+        self.SUBSET_NETWORK1_CHECK_DICT["lcp-hash-val"] = "AKkLPpWaa8x9"
+        self.SUBSET_NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR4-NETWORK1"
+        self.SUBSET_NETWORK1_CHECK_DICT["supporting-circuit-pack-name"] = "1/1/5-PLUG-NET"
+        subset = {k: v for k, v in response["mapping"][0].items() if k in self.SUBSET_NETWORK1_CHECK_DICT}
+        self.assertDictEqual(subset, self.SUBSET_NETWORK1_CHECK_DICT)
+        self.assertEqual(sorted(response["mapping"][0]["regen-profiles"]["regen-profile"]),
+                         self.REGEN_CAPABILITIES)
+        self.assertEqual(sorted(response["mapping"][0]["supported-interface-capability"]),
+                         self.SUP_INT_CAPA)
 
     def test_07_check_interface_oduc4(self):
         response = test_utils.check_node_attribute_request(
