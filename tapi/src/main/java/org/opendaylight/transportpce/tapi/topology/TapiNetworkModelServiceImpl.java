@@ -21,9 +21,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
@@ -46,8 +51,15 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.x
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ContextBuilder;
@@ -686,11 +698,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .build();
 
             List<SupportedIfCapability> newSupIfCapList =
-                    new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
+                new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
+            List<String> opModeList = new ArrayList<>();
+            if (xpdrNetMaps.get(i).getSupportedOperationalMode() != null) {
+                opModeList.addAll(xpdrNetMaps.get(i).getSupportedOperationalMode());
+            }
 
-            OwnedNodeEdgePoint onep = createNep(nepUuid2, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid2, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                true, String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS), newSupIfCapList,
+                true, String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS), newSupIfCapList, opModeList,
                 transformOperState(xpdrNetMaps.get(i).getPortOperState()),
                 transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
@@ -708,10 +724,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
+            List<String> opModeList = new ArrayList<>();
+            if (xpdrNetMaps.get(i).getSupportedOperationalMode() != null) {
+                opModeList.addAll(xpdrNetMaps.get(i).getSupportedOperationalMode());
+            }
 
-            OwnedNodeEdgePoint onep = createNep(nepUuid3, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid3, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName), LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA,
-                false, String.join("+", nodeId, TapiStringConstants.OTSI_MC), newSupIfCapList,
+                false, String.join("+", nodeId, TapiStringConstants.OTSI_MC), newSupIfCapList, opModeList,
                 transformOperState(xpdrNetMaps.get(i).getPortOperState()),
                 transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
@@ -742,9 +762,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrClMaps.get(i).getSupportedInterfaceCapability());
 
-            OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(name.key(), name), LayerProtocolName.DSR, LayerProtocolName.DSR, true,
-                String.join("+", nodeId, TapiStringConstants.DSR), newSupIfCapList,
+                String.join("+", nodeId, TapiStringConstants.DSR), newSupIfCapList, null,
                 transformOperState(xpdrClMaps.get(i).getPortOperState()),
                 transformAdminState(xpdrClMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
@@ -764,11 +784,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
-
-            OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, true,
-                String.join("+", nodeId, TapiStringConstants.I_ODU), newSupIfCapList,
+                String.join("+", nodeId, TapiStringConstants.I_ODU), newSupIfCapList, null,
                 transformOperState(xpdrNetMaps.get(i).getPortOperState()),
                 transformAdminState(xpdrNetMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
@@ -789,10 +808,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrClMaps.get(i).getSupportedInterfaceCapability());
 
-            OwnedNodeEdgePoint onep = createNep(nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
+            OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, true,
-                String.join("+", nodeId, TapiStringConstants.E_ODU), newSupIfCapList,
+                String.join("+", nodeId, TapiStringConstants.E_ODU), newSupIfCapList, null,
                 transformOperState(xpdrClMaps.get(i).getPortOperState()),
                 transformAdminState(xpdrClMaps.get(i).getPortAdminState()));
             onepl.put(onep.key(), onep);
@@ -811,12 +830,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return adminState.equals(AdminStates.InService) ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
-    private OwnedNodeEdgePoint createNep(Uuid nepUuid, String tpid, Map<NameKey, Name> nepNames,
-                                         LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip,
-                                         String keyword,
-                                         List<SupportedIfCapability> sicList,
-                                         OperationalState operState, AdministrativeState adminState) {
+    private OwnedNodeEdgePoint createNep(String nodeId, Uuid nepUuid, String tpid, Map<NameKey, Name> nepNames,
+            LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword,
+            List<SupportedIfCapability> sicList, List<String> opModeList,
+            OperationalState operState, AdministrativeState adminState) {
         List<SupportedInterfaceCapability> sicListTemp = new ArrayList<>();
+        List<OperationalModeKey> keyedOpModeList = new ArrayList<>();
         for (SupportedIfCapability supInterCapa : sicList) {
             SupportedInterfaceCapability supIfCapa = new SupportedInterfaceCapabilityBuilder()
                     .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
@@ -840,6 +859,33 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         onepBldr.setDirection(Direction.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(adminState).setOperationalState(operState)
                 .setLifecycleState(LifecycleState.INSTALLED);
+        if (keyword.contains(TapiStringConstants.OTSI_MC) || keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+            if (opModeList == null || opModeList.isEmpty()) {
+                for (SupportedInterfaceCapability sic : sicColl) {
+                    String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
+                    if (("IfOCHOTUCnODUCn").equals(ifCapType) || ("IfOCHOTUCnODUCnUniregen").equals(ifCapType)
+                            || ("IfOCHOTUCnODUCnRegen").equals(ifCapType)) {
+                        keyedOpModeList.add(new OperationalModeKey("400G"));
+                        LOG.warn(TopologyUtils.NOOPMODEDECLARED + "400G rate available", tpid);
+                        break;
+                    }
+                }
+                keyedOpModeList.add(new OperationalModeKey("100G"));
+                LOG.warn(TopologyUtils.NOOPMODEDECLARED + "100G rate available", tpid);
+            } else {
+                for (String opMode : opModeList) {
+                    keyedOpModeList.add(new OperationalModeKey(opMode));
+                }
+            }
+            Map<Double, Double> freqWidthMap = new HashMap<>();
+            if (getNetworkTerminationPointFromDatastore(nodeId, tpid) != null) {
+                freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
+            } else {
+                LOG.error("CREATENEP, No Tp found in topology for LCP {}, of NodeId {} ", tpid, nodeId);
+            }
+            onepBldr = tapiFactory.addPayloadStructureAndPhotSpecToOnep(nodeId, freqWidthMap, keyedOpModeList, sicColl,
+                onepBldr, keyword);
+        }
         return onepBldr.build();
     }
 
@@ -1276,4 +1322,44 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.error("Error committing into datastore", e);
         }
     }
+
+    /**
+     * Get a network termination point for nodeId and tpId.
+     * @param nodeId String
+     * @param tpId String
+     * @return network termination point, null otherwise
+     */
+    private TerminationPoint getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
+        InstanceIdentifier<TerminationPoint> tpIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.Node.class,
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.NodeKey(new NodeId(nodeId)))
+            .augmentation(Node1.class)
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .networks.network.node.TerminationPoint.class,
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .networks.network.node.TerminationPointKey(new TpId(tpId)))
+            .build();
+        try (ReadTransaction readTx = this.networkTransactionService.getDataBroker().newReadOnlyTransaction()) {
+            Optional<TerminationPoint> optionalTerminationPoint = readTx
+                    .read(LogicalDatastoreType.CONFIGURATION, tpIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            return optionalTerminationPoint.isEmpty() ? null : optionalTerminationPoint.orElseThrow();
+        } catch (ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+            return null;
+        } catch (InterruptedException e) {
+            LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted",
+                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+            Thread.currentThread().interrupt();
+            return null;
+        }
+    }
+
+
 }
