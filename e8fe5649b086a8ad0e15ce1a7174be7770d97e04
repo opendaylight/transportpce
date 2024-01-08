@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51b83389_afd6f1e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "JIRA ticket",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9418ad7b_b60ca1c0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "LF complicates reading\nwhat about this ?\n\n    public Map\u003c\n        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,\n        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection\u003e\n            getConnectionFullMap() {\n        return this.connectionFullMap;\n    }",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5cbcd3_3c691485",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "indent +4 here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e9be614_0bc673b6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "switch/case would be more appropriate here IMO",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae96e8e_063b3e8c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8122eada_0f56dace",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "NS split",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b1932a_cae68207",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "indet +4 here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a368a1_0c5621da",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "commented code here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4e4671_9d061f16",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "commented code here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f098588_6301f0f6",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-08T11:06:54Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
