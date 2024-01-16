@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51bd4168_c61d7970",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-16T09:54:39Z",
+      "side": 1,
+      "message": "useless modification IMO",
+      "revId": "c9a9b9f8069d18f07f12ce696ce7ab63335cda62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
