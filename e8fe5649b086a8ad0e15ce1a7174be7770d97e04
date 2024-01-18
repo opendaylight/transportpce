@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6945f69b_b8b58079",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:09:47Z",
+      "side": 1,
+      "message": "Ah yes you\u0027re correct\nI think a guard-clause style would avoid confusion though I agree it is equivalent to an else-if structure\nThis way, sepA and sep2 would be aligned. see below\n\n        if (sepA.getType().equals(ServiceEndpointType.SERVICEAEND)) {\n            return new ServiceAEndBuilder(sepA.getValue()).build();\n        }\n        if (sepZ.getType().equals(ServiceEndpointType.SERVICEAEND)) {\n            return new ServiceAEndBuilder(sepZ.getValue()).build();\n        }\n        return null;",
+      "parentUuid": "356f0790_a2a27da8",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ae96e8e_063b3e8c",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 3
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "idem",
       "parentUuid": "7ae96e8e_063b3e8c",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fab50ff9_b5a72a87",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:09:47Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "906f7d65_b00681fe",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
