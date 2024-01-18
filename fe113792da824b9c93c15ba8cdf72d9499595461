@@ -16,6 +16,40 @@
       "message": "Thanks Guillaume. Addressed your point.",
       "revId": "fe113792da824b9c93c15ba8cdf72d9499595461",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c7be584_27edb829",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T18:43:23Z",
+      "side": 1,
+      "message": "This modifications \u0027d better be done before in previous changes  when this annotation was introduced IMO",
+      "revId": "fe113792da824b9c93c15ba8cdf72d9499595461",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c2f6c3_dc51ac22",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T18:43:23Z",
+      "side": 1,
+      "message": "a string constant might be more appropriate here IMO",
+      "revId": "fe113792da824b9c93c15ba8cdf72d9499595461",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
