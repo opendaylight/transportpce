@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f2ab36_9c961129",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your comments. Addressed the ones I could. A limited number of commented code lines remains to avoid forgetting some future changes. Also 2 proposals for using switch case in place of if are not addressed (please see my reply explaining the reason why I did not do it).",
+      "revId": "b0f39dd2aa004f418a1213a98c1f1216b23e24b3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

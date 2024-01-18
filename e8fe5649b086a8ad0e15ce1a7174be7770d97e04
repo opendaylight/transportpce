@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29c8113_b81d3b06",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51b83389_afd6f1e7",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9418ad7b_b60ca1c0",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04856896_5fcfca5d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Proceeded in a slightly different way, since your proposal does not respect your own principles of indentation ;-)",
+      "parentUuid": "9418ad7b_b60ca1c0",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea5cbcd3_3c691485",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-08T11:06:54Z",
       "side": 1,
       "message": "indent +4 here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "826d5cf0_d57cb6e3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea5cbcd3_3c691485",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "356f0790_a2a27da8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Sorry but my feeling is that we can not apply switch case here since there are 2 values tested (first and second separator)",
+      "parentUuid": "2e9be614_0bc673b6",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ae96e8e_063b3e8c",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 3
@@ -82,6 +154,24 @@
       "writtenOn": "2024-01-08T11:06:54Z",
       "side": 1,
       "message": "idem",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "906f7d65_b00681fe",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "7ae96e8e_063b3e8c",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -103,6 +193,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6549952_2ccd6d66",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8122eada_0f56dace",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4b1932a_cae68207",
@@ -116,6 +224,24 @@
       "writtenOn": "2024-01-08T11:06:54Z",
       "side": 1,
       "message": "indet +4 here",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70b6810d_3e577e0e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4b1932a_cae68207",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -137,6 +263,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eceea50_291f0c32",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04a368a1_0c5621da",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa4e4671_9d061f16",
@@ -154,6 +298,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa55326a_a6ccb1e7",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa4e4671_9d061f16",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f098588_6301f0f6",
@@ -167,6 +329,24 @@
       "writtenOn": "2024-01-08T11:06:54Z",
       "side": 1,
       "message": "etc",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9139ff8a_3c4bd9c1",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:06:28Z",
+      "side": 1,
+      "message": "Done, partially, some commented code remaining for the purpose of future work",
+      "parentUuid": "9f098588_6301f0f6",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
