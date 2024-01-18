@@ -211,6 +211,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80e3e731_a0d6755a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15928ad6_45b66a3f",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c8f43ee_6e3e353b",
@@ -453,6 +471,24 @@
       "side": 1,
       "message": "suspicion confirmed\n\n$ grep -lR MULTILAYER * | grep py$\ncommon/test_utils.py\ntapi/test02_full_topology.py\ntapi/test03_tapi_device_change_notifications.py\ntapi/test01_abstracted_topology.py",
       "parentUuid": "30a36a6f_9d922b6d",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96056567_437308ae",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Yes OK, but anyway, there will be some additional tests related to T-API, and there is no generic file concerning only T-API tests. So again I don\u0027t see why this is an issue to put this here which seems reasonable to me. Feel free to move it when you will make your own refacto.",
+      "parentUuid": "3c4d7f53_d34c4a55",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },

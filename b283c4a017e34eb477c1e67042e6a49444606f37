@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f01c12e_91663394",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bd7ff3f_9b5cbf91",
+      "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d49031c1_118bcdd3",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-11-29T08:57:31Z",
       "side": 1,
       "message": "not needed IMO",
+      "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e622c2_d8e754a4",
+        "filename": "tests/transportpce_tests/tapi/test01_abstracted_topology.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d49031c1_118bcdd3",
       "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -69,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e9d6a87_cdb316b7",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a273d17f_d5bf38e0",
+      "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f32bc115_8a374a03",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-11-29T08:57:31Z",
       "side": 1,
       "message": "not needed IMO",
+      "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "571716ec_1c801b15",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f32bc115_8a374a03",
       "revId": "b283c4a017e34eb477c1e67042e6a49444606f37",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
