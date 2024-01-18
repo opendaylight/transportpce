@@ -118,6 +118,23 @@
       "message": "etc",
       "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d682f13_d3658131",
+        "filename": "tests/transportpce_tests/tapi/test01_abstracted_topology.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T18:47:21Z",
+      "side": 1,
+      "message": "not needed IMO",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
