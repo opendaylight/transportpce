@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9e3b031_a68897ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T14:53:59Z",
+      "side": 1,
+      "message": "\"Migration\" with a capital letter would be better  for coherency in the relation chain IMO",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d0292990_e582c479",
@@ -14,6 +31,40 @@
       "writtenOn": "2024-01-18T13:33:43Z",
       "side": 1,
       "message": "Thanks Guillaume for your comments. I have now addressed all of them",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e1ace6_e0c51cb2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T14:53:59Z",
+      "side": 1,
+      "message": "trailing blank",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e12522_ab21ad4b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/CreateConnectivityServiceValidation.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T14:53:59Z",
+      "side": 1,
+      "message": "this else-block is now useless",
       "revId": "71549896026b0427d6ddc6348239db44b1726801",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
