@@ -16,6 +16,24 @@
       "message": "useless modification IMO",
       "revId": "c9a9b9f8069d18f07f12ce696ce7ab63335cda62",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1501ca3a_a4b86e02",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:12:18Z",
+      "side": 1,
+      "message": "Don\u0027t know If I have addressed this correctly ... Did the thing that must be addressed vanished through another correction??? of did I not get the point. Thanks for confirming!",
+      "parentUuid": "51bd4168_c61d7970",
+      "revId": "c9a9b9f8069d18f07f12ce696ce7ab63335cda62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f79d061_647c6cb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:12:18Z",
+      "side": 1,
+      "message": "Hi Guillaume please look at my answer and confirm or infirm if I addressed the point. Thanks",
+      "revId": "ff61f610ef685000f4c5c5cf4f65b136bc078e4f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
