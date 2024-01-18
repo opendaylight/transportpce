@@ -18,6 +18,41 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5fa8bd_cf0dc586",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2ffa098_afa7566e",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96bd7bc0_1c8561ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your valuable comments. I have addressed them. Please review\nThanks",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab5e397b_fc2f536f",
@@ -31,6 +66,24 @@
       "writtenOn": "2024-01-08T11:10:35Z",
       "side": 1,
       "message": "switch/case would be more appropriate here IMO",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b62df3f_178d8257",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab5e397b_fc2f536f",
       "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b294a418_47591319",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2578626b_5b650358",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45f8c6c1_7a2f58f8",
@@ -65,6 +136,24 @@
       "writtenOn": "2024-01-08T11:10:35Z",
       "side": 1,
       "message": "idem",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d0efd5_475e3216",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45f8c6c1_7a2f58f8",
       "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +175,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7301e1f8_ef20f512",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31a019eb_a06fe8fa",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19783694_d26898f2",
@@ -103,6 +210,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dd8b2ad_68e87bc0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19783694_d26898f2",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c95f2b1_725ae6b8",
@@ -116,6 +241,24 @@
       "writtenOn": "2024-01-08T11:10:35Z",
       "side": 1,
       "message": "switch/case would be more appropriate here IMO",
+      "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "816cfcbd_af670c4a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T14:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c95f2b1_725ae6b8",
       "revId": "9a55c5a534ace4b49f309515afa43c036ed579bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
