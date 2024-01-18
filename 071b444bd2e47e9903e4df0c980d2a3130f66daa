@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44bab40_c64b0e75",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26a6df5f_6d0941d3",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b21c81e3_39368ae0",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-11-29T09:58:49Z",
       "side": 1,
       "message": "idem",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456ab548_d3de68eb",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b21c81e3_39368ae0",
       "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55f394fa_b3556e34",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "Sorry, but I find this absolutely unreadable. As you know I am not in favor of ternary operators, and in this case where you include the ternary operator in the for loop, I am even not able to figure out what could be the result and not so sure that what you propose is absolutely equivalent. As I will be the guy who will debug this part of the software as we go through the refactoring and the completion of the TAPI 2.4 devs, I won\u0027t do it, and I even don\u0027t recommend that you make it by yourself through your own refactoring.",
+      "parentUuid": "729a2989_e9c0d396",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1ad3ba8_99c58267",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
         "patchSetId": 10
@@ -65,6 +119,24 @@
       "writtenOn": "2023-11-29T09:58:49Z",
       "side": 1,
       "message": "idem",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40dba9ca_5903503a",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "See previous comment",
+      "parentUuid": "d1ad3ba8_99c58267",
       "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -88,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc4a881f_70ac69bb",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "See previous comment",
+      "parentUuid": "6d53c6b2_07cf6ecc",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78e2ac7f_a424d89f",
         "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
         "patchSetId": 10
@@ -99,6 +189,24 @@
       "writtenOn": "2023-11-29T09:58:49Z",
       "side": 1,
       "message": "commented import",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d513500f_9a799371",
+        "filename": "nbinotifications/src/test/java/org/opendaylight/transportpce/nbinotifications/utils/NotificationServiceDataUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78e2ac7f_a424d89f",
       "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

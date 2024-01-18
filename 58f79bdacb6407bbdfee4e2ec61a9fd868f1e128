@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5cbe05e_dca431ac",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsImpl.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:51:18Z",
+      "side": 1,
+      "message": "Continued removing some of the commented code. Let the comment for functions that still need to be reworked, as a reminder of what was previously done to keep in mind what shall be done, otherwise for sure will forget to do it",
+      "parentUuid": "48eead35_d88b22c9",
+      "revId": "58f79bdacb6407bbdfee4e2ec61a9fd868f1e128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82cfad9d_fdb9f6f3",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/listener/NbiNotificationsHandler.java",
         "patchSetId": 8
