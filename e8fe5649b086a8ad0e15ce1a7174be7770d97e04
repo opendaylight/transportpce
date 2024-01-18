@@ -71,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0900654_776d5446",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T18:34:58Z",
+      "side": 1,
+      "message": "copy/paste in Gerrit comments can be a bit tricky sometimes",
+      "parentUuid": "04856896_5fcfca5d",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea5cbcd3_3c691485",
