@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef604343_e8edfa95",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "trailing blank",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cca6058_c7c2834b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "use simply //fallthrough and remove line 405 for checkstyle\n\ncf https://checkstyle.org/checks/coding/fallthrough.html",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e398f4f_8574294b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "trailing blank",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ec26471_9347394d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "idem previous",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b93650_848a1dd0",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "can be removed IMO",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d4663d1_e944ea32",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7339ee3a_7181cb51",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-18T15:20:02Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "909b53c60163a5363f0b49c6f3da61b24bba86c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
