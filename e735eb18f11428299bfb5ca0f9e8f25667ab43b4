@@ -299,6 +299,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a99e7103_be158368",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:33:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e543994_c5050c7e",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1a2dcda_1c5cb0ff",
@@ -575,6 +593,24 @@
       "side": 1,
       "message": "OK to do it during refacto. This code allows me to keep in mind that the MC nep creation which can not be done anymore at that step, shall be done in a next step. Will reuse that code in a different context!",
       "parentUuid": "3c1382f4_6555405b",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e9441e2_2b71aa1b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:33:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2872a3d5_f5c7c1f5",
       "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -925,6 +961,24 @@
       "side": 1,
       "message": "Same as previous comment on this topic. For this one, OK to do it during refacto. This code allows me to keep in mind that the MC nep \u0026 OTSIMC Nep creation which can not be done anymore at that step, shall be done in a next step. Will reuse that code in a different context!",
       "parentUuid": "eb74cfff_1ae0c98b",
+      "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae775d58_ae31805f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-18T13:33:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81eb4620_1c22d977",
       "revId": "e735eb18f11428299bfb5ca0f9e8f25667ab43b4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
