@@ -249,6 +249,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f50cd14_d87e7133",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiNetworkModelNotificationHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:11:40Z",
+      "side": 1,
+      "message": "No Objection. My mistake for closing it!",
+      "parentUuid": "956faa06_ccfcf702",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c8f43ee_6e3e353b",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
         "patchSetId": 16
@@ -525,6 +543,24 @@
       "side": 1,
       "message": "fair enough\nI keep this comment opened as a reminder",
       "parentUuid": "96056567_437308ae",
+      "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de827b3c_c9aee4e7",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:11:40Z",
+      "side": 1,
+      "message": "OK!",
+      "parentUuid": "19a19119_7da08766",
       "revId": "9ddcd7fb32e88d906e7788afdadf8e8be0c5c214",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },

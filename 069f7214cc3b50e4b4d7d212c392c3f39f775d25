@@ -16,6 +16,23 @@
       "message": "Thanks Guillaume. Addressed your comments. Only one remaining on which I don\u0027t see the benefit and even the way to handle your point. Please see my last reply.",
       "revId": "069f7214cc3b50e4b4d7d212c392c3f39f775d25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3130f5d3_4852fde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:11:40Z",
+      "side": 1,
+      "message": "Fair enough! OK to keep the comments that are still open, and sorry if by mistake I closed some.",
+      "revId": "069f7214cc3b50e4b4d7d212c392c3f39f775d25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
