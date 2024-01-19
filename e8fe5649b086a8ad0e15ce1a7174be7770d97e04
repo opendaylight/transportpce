@@ -177,6 +177,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "502defd8_50c4d62f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6945f69b_b8b58079",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ae96e8e_063b3e8c",
@@ -226,6 +244,24 @@
       "side": 1,
       "message": "idem",
       "parentUuid": "906f7d65_b00681fe",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5b1515_acf9e939",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab50ff9_b5a72a87",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -401,6 +437,24 @@
       "side": 1,
       "message": "Done, partially, some commented code remaining for the purpose of future work",
       "parentUuid": "9f098588_6301f0f6",
+      "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05be8635_3585d2f5",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:06:18Z",
+      "side": 1,
+      "message": "Forgot to remove an an additional one, but prefer to let the others.",
+      "parentUuid": "9139ff8a_3c4bd9c1",
       "revId": "e8fe5649b086a8ad0e15ce1a7174be7770d97e04",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
