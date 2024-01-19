@@ -52,6 +52,24 @@
       "parentUuid": "1501ca3a_a4b86e02",
       "revId": "c9a9b9f8069d18f07f12ce696ce7ab63335cda62",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d5c7ec_a688f961",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T15:35:26Z",
+      "side": 1,
+      "message": "OK, in fact did not correct anything: I just did not understand what the comment was about and thought that original cause had vanished. Now I see it: I guess case-return after the last }?  it is now corrected",
+      "parentUuid": "d27a55f2_6f66f998",
+      "revId": "c9a9b9f8069d18f07f12ce696ce7ab63335cda62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
