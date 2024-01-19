@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "866cd266_a546fb22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9e3b031_a68897ed",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d0292990_e582c479",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 17
@@ -31,6 +49,23 @@
       "writtenOn": "2024-01-18T13:33:43Z",
       "side": 1,
       "message": "Thanks Guillaume for your comments. I have now addressed all of them",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2e6b4da_0fd3dc8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:13:18Z",
+      "side": 1,
+      "message": "Think I have now addressed all comments! Thanks",
       "revId": "71549896026b0427d6ddc6348239db44b1726801",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -52,6 +87,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5604950_9b2131a5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e1ace6_e0c51cb2",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40e12522_ab21ad4b",
@@ -65,6 +118,24 @@
       "writtenOn": "2024-01-18T14:53:59Z",
       "side": 1,
       "message": "this else-block is now useless",
+      "revId": "71549896026b0427d6ddc6348239db44b1726801",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a939ea4_c6c84197",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/CreateConnectivityServiceValidation.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-19T11:13:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40e12522_ab21ad4b",
       "revId": "71549896026b0427d6ddc6348239db44b1726801",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
