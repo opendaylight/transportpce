@@ -86,6 +86,24 @@
       "parentUuid": "e3c2f6c3_dc51ac22",
       "revId": "fe113792da824b9c93c15ba8cdf72d9499595461",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0586321_0b98871c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-19T11:16:18Z",
+      "side": 1,
+      "message": "Not one. I can see it 4 times inside the TAPI module.\n\n$ find . -name \u0027*.java\u0027 | xargs grep \u0027No operational mode declared in Topology for Tp\u0027\n./src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java:                        LOG.warn(\"No operational mode declared in Topology for Tp {}, assumes by default\"\n./src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java:                LOG.warn(\"No operational mode declared in Topology for Tp {}, assumes by default\"\n./src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java:                        LOG.warn(\"No operational mode declared in Topology for Tp {}, assumes by default\"\n./src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java:                LOG.warn(\"No operational mode declared in Topology for Tp {}, assumes by default\"",
+      "parentUuid": "1eab55f4_4b6fc42c",
+      "revId": "fe113792da824b9c93c15ba8cdf72d9499595461",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
