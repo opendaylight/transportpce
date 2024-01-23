@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c4e9421_22e44a59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T17:50:42Z",
+      "side": 1,
+      "message": "Just let the last 3 comment about the potential refactoring",
+      "revId": "64faadc2a5d6784b128ede43e57ba2a82edb94cd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
