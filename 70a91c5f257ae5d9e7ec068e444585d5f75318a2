@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7464e581_53eccd4d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T17:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d3dc491_1f0b83c9",
+      "revId": "70a91c5f257ae5d9e7ec068e444585d5f75318a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa4407f8_99a1bd70",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-23T09:37:38Z",
       "side": 1,
       "message": "no blan in the footer before JIRA please.",
+      "revId": "70a91c5f257ae5d9e7ec068e444585d5f75318a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06082731_8a87c8a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T17:51:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa4407f8_99a1bd70",
       "revId": "70a91c5f257ae5d9e7ec068e444585d5f75318a2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

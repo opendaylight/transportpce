@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c282c12c_1fd0cbc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T17:51:55Z",
+      "side": 1,
+      "message": "Adressed last ones associated with commit message",
+      "revId": "dd60a9dc62b82f18f9c3a83e42f41a9d0330f62c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
