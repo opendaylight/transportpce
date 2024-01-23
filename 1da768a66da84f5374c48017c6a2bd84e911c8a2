@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0adb838_e756efce",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T14:26:11Z",
+      "side": 1,
+      "message": "TODO argument why we keep in comments the old fashion and we use the new one",
+      "revId": "1da768a66da84f5374c48017c6a2bd84e911c8a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d736ca51_11255d8a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T14:26:11Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "1da768a66da84f5374c48017c6a2bd84e911c8a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ecf370f_73c65e1e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopoTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T14:26:11Z",
+      "side": 1,
+      "message": "comment to remove",
+      "revId": "1da768a66da84f5374c48017c6a2bd84e911c8a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a746902_b685e5f6",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopoTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T14:26:11Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "1da768a66da84f5374c48017c6a2bd84e911c8a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
