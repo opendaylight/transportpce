@@ -16,6 +16,57 @@
       "message": "Done",
       "revId": "f0c25bdf328d625ac64be6a147a7584c46441c10",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72080ca4_3358d709",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-23T09:47:50Z",
+      "side": 1,
+      "message": "IMO reverting the 2 blocks by inverting the check is preferable\nfreqWidthMap \u003d\u003d null || freqWidthMap.isEmpty()\n\nonce that done, I suspect this can be improved by setting a few variable in the 2 blocks to pass to onepBldr.setAvailablePayloadStructure and  ospecBd setters.\n\nThis may be done in a separate deeper refactoring",
+      "revId": "f0c25bdf328d625ac64be6a147a7584c46441c10",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d45566_db371a90",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-23T09:47:50Z",
+      "side": 1,
+      "message": "What about this?\n\n            .child(\n                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226\n                    .networks.network.Node.class,\n                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226\n                    .networks.network.NodeKey(new NodeId(nodeId)))",
+      "revId": "f0c25bdf328d625ac64be6a147a7584c46441c10",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c75d7d6_009ad1a8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-23T09:47:50Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "f0c25bdf328d625ac64be6a147a7584c46441c10",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
