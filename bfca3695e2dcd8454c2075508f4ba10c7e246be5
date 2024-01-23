@@ -16,6 +16,24 @@
       "message": "IMO an indent +4 would be welcome here to ease reading by separating clearly builder from setter",
       "revId": "bfca3695e2dcd8454c2075508f4ba10c7e246be5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54ae3027_7041c8f7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-01-23T17:51:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc770716_7a09a3aa",
+      "revId": "bfca3695e2dcd8454c2075508f4ba10c7e246be5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
