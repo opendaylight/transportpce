@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3dc491_1f0b83c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-23T09:37:38Z",
+      "side": 1,
+      "message": "commit message title w/o capital letter is not coherent w/ the relation chain",
+      "revId": "70a91c5f257ae5d9e7ec068e444585d5f75318a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa4407f8_99a1bd70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-23T09:37:38Z",
+      "side": 1,
+      "message": "no blan in the footer before JIRA please.",
+      "revId": "70a91c5f257ae5d9e7ec068e444585d5f75318a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
