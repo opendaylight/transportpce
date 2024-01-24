@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33f5198c_755375ba",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-24T08:54:03Z",
+      "side": 1,
+      "message": "what about streams ?\nMaybe we can keep this open and propose sthg later ?",
+      "parentUuid": "55f394fa_b3556e34",
+      "revId": "071b444bd2e47e9903e4df0c980d2a3130f66daa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1ad3ba8_99c58267",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/serialization/TapiNotificationDeserializer.java",
         "patchSetId": 10
