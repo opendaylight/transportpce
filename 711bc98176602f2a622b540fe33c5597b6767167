@@ -16,6 +16,23 @@
       "message": "Addressed last ones, thanks!",
       "revId": "711bc98176602f2a622b540fe33c5597b6767167",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2173a7cf_c915be77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-24T09:43:39Z",
+      "side": 1,
+      "message": "@committers relation chain LGTM apart minor comments opened that can be addressed later",
+      "revId": "711bc98176602f2a622b540fe33c5597b6767167",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
