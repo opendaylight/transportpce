@@ -22,7 +22,6 @@ import org.opendaylight.transportpce.dmaap.client.resource.model.CreatedEvent;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
-import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,6 @@ public class NbiNotificationsHandler {
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsHandler.class);
     private String topic = "unauthenticated.TPCE";
     private EventsApi api;
-    private Registration reg;
 
     public NbiNotificationsHandler(String baseUrl, String username, String password) {
         LOG.info("Dmaap server {} for user {}", baseUrl, username);
