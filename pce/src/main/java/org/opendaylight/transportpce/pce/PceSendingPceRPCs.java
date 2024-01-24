@@ -123,7 +123,7 @@ public class PceSendingPceRPCs {
         }
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
-                nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints, softConstraints,
+                nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
                 rc, serviceType, networkTransaction, mode);
         graph.calcPath();
         rc = graph.getReturnStructure();
@@ -255,7 +255,7 @@ public class PceSendingPceRPCs {
 
     private PceGraph patchRerunGraph(PceGraph graph) {
         LOG.info("In pathComputation patchRerunGraph : rerun Graph with metric = PROPAGATION-DELAY ");
-        graph.setConstrains(pceHardConstraints, pceSoftConstraints);
+        graph.setConstrains(pceHardConstraints);
         graph.calcPath();
         return graph;
     }

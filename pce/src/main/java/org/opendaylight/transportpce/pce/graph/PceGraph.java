@@ -53,7 +53,6 @@ public class PceGraph {
     private String serviceType = "";
     private Double margin = null;
     PceConstraints pceHardConstraints;
-    PceConstraints pceSoftConstraints;
     private PceConstraintMode pceConstraintMode;
 
     // results
@@ -68,9 +67,8 @@ public class PceGraph {
     private final NetworkTransactionService networkTransactionService;
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints,
-            PceResult pceResult, String serviceType, NetworkTransactionService networkTransactionService,
-            PceConstraintMode mode) {
+            Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
+            NetworkTransactionService networkTransactionService, PceConstraintMode mode) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -78,7 +76,6 @@ public class PceGraph {
         this.allPceLinks = allPceLinks;
         this.pceResult = pceResult;
         this.pceHardConstraints = pceHardConstraints;
-        this.pceSoftConstraints = pceSoftConstraints;
         this.serviceType = serviceType;
         this.networkTransactionService = networkTransactionService;
         this.pceConstraintMode = mode;
@@ -292,8 +289,7 @@ public class PceGraph {
         return margin;
     }
 
-    public void setConstrains(PceConstraints pceHardConstraintsInput, PceConstraints pceSoftConstraintsInput) {
+    public void setConstrains(PceConstraints pceHardConstraintsInput) {
         this.pceHardConstraints = pceHardConstraintsInput;
-        this.pceSoftConstraints = pceSoftConstraintsInput;
     }
 }
