@@ -21,7 +21,6 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.NotificationTapi
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishNotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230726.PublishTapiNotificationService;
-import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,6 @@ public class NbiNotificationsHandler {
     private Map<String, Publisher<NotificationProcessService>> publishersServiceMap;
     private Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
     private Map<String, Publisher<NotificationTapiService>> tapiPublisherMap;
-    private Registration reg;
 
     public NbiNotificationsHandler(Map<String, Publisher<NotificationProcessService>> publishersServiceMap,
                                         Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap,

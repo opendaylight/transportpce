@@ -32,7 +32,6 @@ public class CrossConnectImpl implements CrossConnect {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl.class);
 
-    protected CrossConnect crossConnect;
     private final MappingUtils mappingUtils;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
@@ -56,7 +55,6 @@ public class CrossConnectImpl implements CrossConnect {
         this.crossConnectImpl121 = crossConnectImpl121;
         this.crossConnectImpl221 = crossConnectImpl221;
         this.crossConnectImpl710 = crossConnectImpl710;
-        this.crossConnect = null;
     }
 
     public Optional<?> getCrossConnect(String nodeId, String connectionNumber) {
