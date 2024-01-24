@@ -249,7 +249,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
@@ -262,7 +262,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.1559963686478447));
     }
@@ -275,7 +275,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.3351048800367167));
     }
@@ -288,7 +288,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), false);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
@@ -301,7 +301,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
@@ -314,7 +314,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
@@ -327,7 +327,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
@@ -340,7 +340,7 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
+            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
@@ -354,8 +354,8 @@ public class PceGraphTest extends AbstractTest {
         pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            null, rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
-        pceGraph.setConstrains(pceHardConstraints, null);
+            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose);
+        pceGraph.setConstrains(pceHardConstraints);
 
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(2).getLatency()),
@@ -416,7 +416,7 @@ public class PceGraphTest extends AbstractTest {
         allPceNodes = Map.of(
             new NodeId("optical"), pceOtnNode,
             new NodeId("optical2"), pceOtnNode2);
-        return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes, allPceLinks, pceHardConstraints, null,
+        return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes, allPceLinks, pceHardConstraints,
                 new PceResult(), type, null, PceConstraintMode.Loose);
     }
 
