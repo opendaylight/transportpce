@@ -16,6 +16,40 @@
       "message": "Shall be OK : addressed the last ones!",
       "revId": "c529c51f4603d17e7bfb74d4bf8dd2438cf4d9a7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ea4489e_4db312bb",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-25T15:26:18Z",
+      "side": 1,
+      "message": "I am not convinced we really need to go to the end of this loop",
+      "revId": "c529c51f4603d17e7bfb74d4bf8dd2438cf4d9a7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "813f90d7_7eb865e7",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-25T15:26:18Z",
+      "side": 1,
+      "message": "else-block not needed after a break\nwhy not returning directly indexNrg++ ?",
+      "revId": "c529c51f4603d17e7bfb74d4bf8dd2438cf4d9a7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
