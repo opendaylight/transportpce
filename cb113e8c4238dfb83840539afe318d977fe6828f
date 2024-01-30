@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a659dcca_aae5c7e0",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-30T17:42:16Z",
+      "side": 1,
+      "message": ".stream().findFirst() instead??",
+      "range": {
+        "startLine": 895,
+        "startChar": 67,
+        "endLine": 895,
+        "endChar": 85
+      },
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b97cd737_7080add7",
+        "filename": "tests/transportpce_tests/tapi/test01_abstracted_topology.py",
+        "patchSetId": 25
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-30T17:42:16Z",
+      "side": 1,
+      "message": "to be removed",
+      "range": {
+        "startLine": 190,
+        "startChar": 7,
+        "endLine": 190,
+        "endChar": 23
+      },
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
