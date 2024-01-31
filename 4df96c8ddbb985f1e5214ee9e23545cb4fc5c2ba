@@ -63,6 +63,24 @@
       "message": "I don\u0027t see the point in outputting these few constants in a separate file, other than multiplying the files and confusing the mind rather than anything else. If you really wanted to separate what concerns the tapi tests from other tests (but, I wonder why?, code readability?), a simple comment line in the original file should be enough...",
       "revId": "4df96c8ddbb985f1e5214ee9e23545cb4fc5c2ba",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4616721a_d43fa3f5",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-31T12:20:01Z",
+      "side": 1,
+      "message": "There was a talk in the relation chain about it.\nHere are some of them:\n- spare memory, should we load these variables for each test when only 3 need them ?\n- coherency\n  these values are tighly coupled and specific to TAPI sample topology files.\n  If I am not mistaken, OpenROADM equivalents are hardcoded in tests themselves\n  and appear only when needed (and not in test_utils)\n- design\n  test_utils only harcodes controllers and sims management values, not optical parameter -\u003e it is a more a framework where to find methods",
+      "parentUuid": "8a954532_90b942e7",
+      "revId": "4df96c8ddbb985f1e5214ee9e23545cb4fc5c2ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
