@@ -21,6 +21,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
+import tapi_utils  # nopep8
 import test_utils  # nopep8
 
 
@@ -274,7 +275,7 @@ class TransportPCEtesting(unittest.TestCase):
                          'There should be 22 openroadm links')
 
     def test_13_get_tapi_topology_details(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
