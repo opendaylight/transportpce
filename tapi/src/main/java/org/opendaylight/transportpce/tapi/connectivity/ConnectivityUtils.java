@@ -269,7 +269,7 @@ public final class ConnectivityUtils {
         LOG.info("Service = {}", service);
         Optional<ServicePaths> optServicePaths =
             this.serviceDataStoreOperations.getServicePath(service.getServiceName());
-        if (!optServicePaths.isPresent()) {
+        if (optServicePaths.isEmpty()) {
             LOG.error("No service path found for service {}", service.getServiceName());
             return null;
         }
@@ -288,8 +288,8 @@ public final class ConnectivityUtils {
         endPointMap.put(endPoint2.key(), endPoint2);
         LOG.info("EndPoints of connectivity services = {}", endPointMap);
         // Services Names
-        Name name = new NameBuilder().setValueName("Connectivity Service Name").setValue(service.getServiceName())
-            .build();
+        Name name =
+            new NameBuilder().setValueName("Connectivity Service Name").setValue(service.getServiceName()).build();
         // Connection creation
         Map<ConnectionKey, Connection> connMap =
             createConnectionsFromService(pathDescription, mapServiceLayerToAend(serviceAEnd));
@@ -326,7 +326,7 @@ public final class ConnectivityUtils {
         List<String> rdmNodelist = new ArrayList<>();
         List<String> xpdrNodelist = new ArrayList<>();
         for (AToZ elem:pathDescription.getAToZDirection().getAToZ().values().stream()
-            .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
+                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
             resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
             switch (resourceType) {
                 case TapiStringConstants.TP:
@@ -416,7 +416,7 @@ public final class ConnectivityUtils {
                 connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
                     edgeRoadm1, edgeRoadm2));
                 if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
-                    .contains("ROADM")) {
+                        .contains("ROADM")) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
@@ -601,8 +601,8 @@ public final class ConnectivityUtils {
     }
 
     private LayerProtocolName mapServiceLayerToAend(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd
-            serviceAEnd) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
+                .service.ServiceAEnd serviceAEnd) {
         ServiceFormat serviceFormat = serviceAEnd.getServiceFormat();
         switch (serviceFormat) {
             case OC:
@@ -645,15 +645,15 @@ public final class ConnectivityUtils {
 
     private OpenroadmNodeType getOpenroadmType(String nodeName) {
         LOG.info("Node name = {}", nodeName);
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+",nodeName, TapiStringConstants.XPDR))
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode
-            = this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
-        if (tapiNode != null) {
-            return OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type"))
-                .getValue());
-        }
-        return null;
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode =
+            this.tapiContext.getTapiNode(
+                this.tapiTopoUuid,
+                new Uuid(UUID.nameUUIDFromBytes(
+                        (String.join("+",nodeName, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
+                    .toString()));
+        return tapiNode == null
+            ? null
+            : OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type")).getValue());
     }
 
     private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsEth(List<String> xpdrClientTplist,
@@ -1816,13 +1816,12 @@ public final class ConnectivityUtils {
 
     private ConnectionType getConnectionTypePhtnc(Collection<org.opendaylight.yang.gen.v1.urn
             .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint> endPoints) {
-        if (endPoints.stream().anyMatch(ep -> ep.getName().values().stream()
-                .anyMatch(name -> name.getValue().contains("ROADM")))) {
+        return endPoints.stream()
+                .anyMatch(ep -> ep.getName().values().stream().anyMatch(name -> name.getValue().contains("ROADM")))
             // EndPoints are ROADMs
-            return ConnectionType.RoadmLine;
-        }
-        // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
-        return ConnectionType.Infrastructure;
+            ? ConnectionType.RoadmLine
+            // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
+            : ConnectionType.Infrastructure;
     }
 
     private ServiceFormat getServiceFormatPhtnc(Collection<org.opendaylight.yang.gen.v1.urn
@@ -1929,26 +1928,24 @@ public final class ConnectivityUtils {
         boolean withSip, OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
 
         //TODO : complete implementation with SIP
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", orNodeId, nepPhotonicSublayer,
-                tpId)).getBytes(StandardCharsets.UTF_8)).toString());
         Name nepName = new NameBuilder()
                 .setValueName(TapiStringConstants.PHTNC_MEDIA + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, nepPhotonicSublayer, tpId))
                 .build();
-        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
-        if (TapiStringConstants.MC.equals(nepPhotonicSublayer)) {
-            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIERMC.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
-                .build());
-        } else {
-            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
-                .build());
-        }
-        OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
-            .setUuid(nepUuid)
+        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList =
+            new ArrayList<>(List.of(
+                new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                    .setLayerProtocolQualifier(
+                        TapiStringConstants.MC.equals(nepPhotonicSublayer)
+                            ? PHOTONICLAYERQUALIFIERMC.VALUE
+                            : PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
+                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .build()));
+        return new OwnedNodeEdgePointBuilder()
+            .setUuid(
+                new Uuid(UUID.nameUUIDFromBytes(
+                        (String.join("+", orNodeId, nepPhotonicSublayer,tpId)).getBytes(StandardCharsets.UTF_8))
+                    .toString()))
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName.key(), nepName))
             .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
@@ -1957,8 +1954,6 @@ public final class ConnectivityUtils {
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED)
             .build();
-
-        return onep;
     }
 
 }
