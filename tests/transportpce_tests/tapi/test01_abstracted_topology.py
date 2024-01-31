@@ -23,6 +23,7 @@ import requests
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
+import tapi_utils  # nopep8
 import test_utils  # nopep8
 
 
@@ -184,7 +185,7 @@ class TransportTapitesting(unittest.TestCase):
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_01_get_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -200,7 +201,7 @@ class TransportTapitesting(unittest.TestCase):
                          'node should contain 1 node rule group')
 
     def test_02_get_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -212,14 +213,14 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_04_check_tapi_topos(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response["output"]["topology"]["node"]), 1, 'Topology should contain 1 node')
         self.assertNotIn("link", response["output"]["topology"], 'Topology should contain no link')
 
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -235,7 +236,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_07_check_tapi_topos(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -252,7 +253,7 @@ class TransportTapitesting(unittest.TestCase):
 
     def test_10_check_tapi_topos(self):
         self.test_01_get_tapi_topology_T100G()
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -293,7 +294,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_check_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -304,7 +305,7 @@ class TransportTapitesting(unittest.TestCase):
                          'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_14_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -344,7 +345,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_18_check_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -358,7 +359,7 @@ class TransportTapitesting(unittest.TestCase):
                          'name of owned-node-edge-points should be XPDR-A1-XPDR1+DSR+XPDR1-CLIENT1')
 
     def test_19_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -433,7 +434,7 @@ class TransportTapitesting(unittest.TestCase):
         self.test_18_check_tapi_topology_T100G()
 
     def test_29_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -488,7 +489,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_32_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -527,7 +528,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_34_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -572,7 +573,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_37_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -610,7 +611,7 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_40_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -632,7 +633,7 @@ class TransportTapitesting(unittest.TestCase):
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_42_check_tapi_topology_T0(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -646,7 +647,7 @@ class TransportTapitesting(unittest.TestCase):
                          'node name should be: ROADM-infra')
 
     def test_43_get_tapi_topology_T100G(self):
-        self.tapi_topo["topology-id"] = test_utils.T100GE_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T100GE_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         self.assertEqual(response['status_code'], requests.codes.ok)
