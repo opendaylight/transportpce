@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e334e6_76aa9f18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-31T12:08:00Z",
+      "side": 1,
+      "message": "dash instead of colon also no LF needed betwenn this and the footer.\nIt is a part of the footer indeed",
+      "revId": "cb888a3b0b1d325fb63b0bfa75ff3e711e72a635",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "06b4b076_386bdff6",
