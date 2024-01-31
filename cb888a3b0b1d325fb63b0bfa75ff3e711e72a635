@@ -101,6 +101,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd201a3f_db1becd6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T12:46:56Z",
+      "side": 1,
+      "message": "ah yes indeed!\nMay be the guarded pattern label of java21 will help to do it!",
+      "parentUuid": "d4295d42_2e334abe",
+      "range": {
+        "startLine": 355,
+        "startChar": 12,
+        "endLine": 367,
+        "endChar": 13
+      },
+      "revId": "cb888a3b0b1d325fb63b0bfa75ff3e711e72a635",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca650163_9b70e416",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 12
