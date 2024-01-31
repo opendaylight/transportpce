@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d89d5a9_5649c426",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-01-31T12:07:08Z",
+      "side": 1,
+      "message": "dash instead of colon",
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a659dcca_aae5c7e0",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
         "patchSetId": 25
