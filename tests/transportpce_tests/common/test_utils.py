@@ -50,12 +50,6 @@ REQUEST_TIMEOUT = 10
 
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
-T100GE = 'Transponder 100GE'
-T0_MULTILAYER_TOPO = 'T0 - Multi-layer topology'
-T0_FULL_MULTILAYER_TOPO = 'T0 - Full Multi-layer topology'
-T100GE_UUID = 'cf51c729-3699-308a-a7d0-594c6a62ebbb'
-T0_MULTILAYER_TOPO_UUID = '747c670e-7a07-3dab-b379-5b1cd17402a3'
-T0_FULL_MULTILAYER_TOPO_UUID = '393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7'
 
 SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'log')
 

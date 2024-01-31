@@ -19,6 +19,7 @@ import sys
 sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
+import tapi_utils  # nopep8
 import test_utils  # nopep8
 
 # pylint: disable=too-few-public-methods
@@ -358,7 +359,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_17_check_update_tapi_neps(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = "XPDR-C1-XPDR1+OTSi"
         self.node_details["node-id"] = "1770bea4-b1da-3b20-abce-7d182c0ec0df"
         response = test_utils.transportpce_api_rpc_request(
@@ -399,7 +400,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_18_check_update_tapi_links(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -473,7 +474,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_check_update_tapi_neps_ok(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = "XPDR-C1-XPDR1+OTSi"
         self.node_details["node-id"] = "1770bea4-b1da-3b20-abce-7d182c0ec0df"
         response = test_utils.transportpce_api_rpc_request(
@@ -499,7 +500,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_25_check_update_tapi_links_ok(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -579,7 +580,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_31_check_update_tapi_neps(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
         self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
@@ -603,7 +604,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_32_check_update_tapi_links(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -654,7 +655,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_23_check_update_openroadm_topo_ok()
 
     def test_38_check_update_tapi_neps_ok(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
         self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
@@ -742,7 +743,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_45_check_update_tapi_neps(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = "ROADM-A1+PHOTONIC_MEDIA"
         self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
@@ -766,7 +767,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_46_check_update_tapi_links(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
@@ -878,7 +879,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_59_check_update_tapi_neps(self):
-        self.node_details["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.node_details["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
 #        self.node_details["node-id"] = uuid.UUID(bytes="ROADM-A1+PHOTONIC_MEDIA".bytes)
         self.node_details["node-id"] = "3b726367-6f2d-3e3f-9033-d99b61459075"
         response = test_utils.transportpce_api_rpc_request(
@@ -902,7 +903,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_60_check_update_tapi_links(self):
-        self.tapi_topo["topology-id"] = test_utils.T0_FULL_MULTILAYER_TOPO_UUID
+        self.tapi_topo["topology-id"] = tapi_utils.T0_FULL_MULTILAYER_TOPO_UUID
         response = test_utils.transportpce_api_rpc_request(
             'tapi-topology', 'get-topology-details', self.tapi_topo)
         time.sleep(2)
