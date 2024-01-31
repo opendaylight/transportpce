@@ -113,7 +113,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstances;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedCepLayerProtocolQualifierInstancesBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
@@ -129,17 +128,18 @@ import org.slf4j.LoggerFactory;
 
 public final class ConnectivityUtils {
 
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-        .getBytes(StandardCharsets.UTF_8)).toString());
+    private final Uuid tapiTopoUuid = new Uuid(
+            UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
     private static final Logger LOG = LoggerFactory.getLogger(ConnectivityUtils.class);
 
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiContext tapiContext;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap;
+    // this variable is for complete connection objects
     private final Map<
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey,
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection>
-        connectionFullMap; // this variable is for complete connection objects
+            connectionFullMap;
     private final NetworkTransactionService networkTransactionService;
     private Connection topConnRdmRdm;
     private Connection topConnXpdrXpdrPhtn;
@@ -173,56 +173,65 @@ public final class ConnectivityUtils {
             .setServiceName("service test")
             .setServiceAEnd(serviceAEnd)
             .setServiceZEnd(serviceZEnd)
-            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request-1")
-                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").setRequestSystemId(
-                    "appname")
-                .build())
+            .setSdncRequestHeader(
+                new SdncRequestHeaderBuilder()
+                    .setRequestId("request-1")
+                    .setRpcAction(RpcActions.ServiceCreate)
+                    .setNotificationUrl("notification url")
+                    .setRequestSystemId("appname")
+                    .build())
             .build();
     }
 
-    public static ServiceAEnd buildServiceAEnd(String nodeid, String clli, String txPortDeviceName,
-                                               String txPortName, String rxPortDeviceName, String rxPortName) {
+    public static ServiceAEnd buildServiceAEnd(
+            String nodeid, String clli, String txPortDeviceName,
+            String txPortName, String rxPortDeviceName, String rxPortName) {
         return new ServiceAEndBuilder()
             .setClli(clli)
             .setNodeId(new NodeIdType(nodeid))
             .setOpticType(OpticTypes.Gray)
             .setServiceFormat(ServiceFormat.Ethernet)
             .setServiceRate(Uint32.valueOf(100))
-            .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO), new TxDirectionBuilder()
-                .setPort(new PortBuilder()
-                    .setPortDeviceName(txPortDeviceName)
-                    .setPortName(txPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
-                    .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
-                    .build())
-                .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
-                    .setLgxPortShelf("00")
-                    .build())
-                .build()))
-            .setRxDirection(Map.of(new RxDirectionKey(Uint8.ZERO), new RxDirectionBuilder()
-                .setPort(new PortBuilder()
-                    .setPortDeviceName(rxPortDeviceName)
-                    .setPortName(rxPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
-                    .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
-                    .build())
-                .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
-                    .setLgxPortShelf("00")
-                    .build())
-                .build()))
+            .setTxDirection(Map.of(
+                new TxDirectionKey(Uint8.ZERO),
+                new TxDirectionBuilder()
+                    .setPort(new PortBuilder()
+                        .setPortDeviceName(txPortDeviceName)
+                        .setPortName(txPortName)
+                        .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setPortShelf("00")
+                        .setPortType(TapiStringConstants.PORT_TYPE)
+                        .build())
+                    .setLgx(new LgxBuilder()
+                        .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
+                        .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
+                        .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setLgxPortShelf("00")
+                        .build())
+                    .build()))
+            .setRxDirection(Map.of(
+                new RxDirectionKey(Uint8.ZERO),
+                new RxDirectionBuilder()
+                    .setPort(new PortBuilder()
+                        .setPortDeviceName(rxPortDeviceName)
+                        .setPortName(rxPortName)
+                        .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setPortShelf("00")
+                        .setPortType(TapiStringConstants.PORT_TYPE)
+                        .build())
+                    .setLgx(new LgxBuilder()
+                        .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
+                        .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
+                        .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setLgxPortShelf("00")
+                        .build())
+                    .build()))
             .build();
     }
 
-    public static ServiceZEnd buildServiceZEnd(String nodeid, String clli, String txPortDeviceName,
-                                               String txPortName, String rxPortDeviceName, String rxPortName) {
+    public static ServiceZEnd buildServiceZEnd(
+            String nodeid, String clli, String txPortDeviceName,
+            String txPortName, String rxPortDeviceName, String rxPortName) {
         return  new ServiceZEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid))
             .setOpticType(OpticTypes.Gray)
             .setServiceFormat(ServiceFormat.Ethernet)
@@ -269,31 +278,30 @@ public final class ConnectivityUtils {
         LOG.info("Service = {}", service);
         Optional<ServicePaths> optServicePaths =
             this.serviceDataStoreOperations.getServicePath(service.getServiceName());
-        if (!optServicePaths.isPresent()) {
+        if (optServicePaths.isEmpty()) {
             LOG.error("No service path found for service {}", service.getServiceName());
             return null;
         }
-        ServicePaths servicePaths = optServicePaths.orElseThrow();
-        PathDescription pathDescription = servicePaths.getPathDescription();
+        PathDescription pathDescription = optServicePaths.orElseThrow().getPathDescription();
         LOG.info("Path description of service = {}", pathDescription);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd serviceAEnd
-            = service.getServiceAEnd();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd serviceAEnd =
+            service.getServiceAEnd();
         // Endpoint creation
         EndPoint endPoint1 = mapServiceAEndPoint(serviceAEnd, pathDescription);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceZEnd serviceZEnd
-            = service.getServiceZEnd();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceZEnd serviceZEnd =
+            service.getServiceZEnd();
         EndPoint endPoint2 = mapServiceZEndPoint(serviceZEnd, pathDescription);
-        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>();
-        endPointMap.put(endPoint1.key(), endPoint1);
-        endPointMap.put(endPoint2.key(), endPoint2);
+        Map<EndPointKey, EndPoint> endPointMap = new HashMap<>(Map.of(
+                endPoint1.key(), endPoint1,
+                endPoint2.key(), endPoint2));
         LOG.info("EndPoints of connectivity services = {}", endPointMap);
         // Services Names
-        Name name = new NameBuilder().setValueName("Connectivity Service Name").setValue(service.getServiceName())
-            .build();
+        Name name =
+            new NameBuilder().setValueName("Connectivity Service Name").setValue(service.getServiceName()).build();
         // Connection creation
         Map<ConnectionKey, Connection> connMap =
             createConnectionsFromService(pathDescription, mapServiceLayerToAend(serviceAEnd));
-        LOG.debug("connectionMap for service {} = {} ", name.toString(), connMap.toString());
+        LOG.debug("connectionMap for service {} = {} ", name, connMap);
         ConnectivityConstraint conConstr =
             new ConnectivityConstraintBuilder().setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).build();
         // TODO: full connectivity service?? With constraints and the rest of fields...
@@ -301,8 +309,8 @@ public final class ConnectivityUtils {
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes(service.getServiceName().getBytes(StandardCharsets.UTF_8))
-                .toString()))
+            .setUuid(new Uuid(
+                UUID.nameUUIDFromBytes(service.getServiceName().getBytes(StandardCharsets.UTF_8)).toString()))
             .setLayerProtocolName(mapServiceLayer(serviceAEnd.getServiceFormat(), endPoint1, endPoint2))
             .setConnectivityConstraint(conConstr)
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
@@ -312,8 +320,8 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    public Map<ConnectionKey, Connection> createConnectionsFromService(PathDescription pathDescription,
-            LayerProtocolName lpn) {
+    public Map<ConnectionKey, Connection> createConnectionsFromService(
+            PathDescription pathDescription, LayerProtocolName lpn) {
         Map<ConnectionKey, Connection> connectionServMap = new HashMap<>();
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
         //  and XPDR NETWORK TTPs (if any). From the path description. This will help to build the uuid of the CEPs
@@ -326,7 +334,7 @@ public final class ConnectivityUtils {
         List<String> rdmNodelist = new ArrayList<>();
         List<String> xpdrNodelist = new ArrayList<>();
         for (AToZ elem:pathDescription.getAToZDirection().getAToZ().values().stream()
-            .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
+                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
             resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
             switch (resourceType) {
                 case TapiStringConstants.TP:
@@ -413,10 +421,10 @@ public final class ConnectivityUtils {
                 // - XC Connection between OTSiMC CEPs mapped from OTSiMC NEPs (within a roadm)
                 // - Top Connection MC betwwen MC CEPs of different roadms
                 // - Top Connection OTSiMC betwwen OTSiMC CEPs of extreme roadms
-                connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
-                    edgeRoadm1, edgeRoadm2));
+                connectionServMap.putAll(
+                    createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
                 if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
-                    .contains("ROADM")) {
+                        .contains("ROADM")) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
@@ -436,14 +444,15 @@ public final class ConnectivityUtils {
                 // Check if OC, OTU and ODU are created
                 if (openroadmNodeType.equals(OpenroadmNodeType.TPDR)) {
                     LOG.info("WDM ETH service");
-                    connectionServMap.putAll(createRoadmCepsAndConnections(rdmAddDropTplist, rdmDegTplist, rdmNodelist,
-                        edgeRoadm1, edgeRoadm2));
+                    connectionServMap.putAll(
+                        createRoadmCepsAndConnections(
+                            rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(xpdrNetworkTplist, xpdrNodelist));
                     this.topConnRdmRdm = null;
                     xpdrClientTplist = getAssociatedClientsPort(xpdrNetworkTplist);
                     LOG.info("Associated client ports = {}", xpdrClientTplist);
-                    connectionServMap.putAll(createXpdrCepsAndConnectionsEth(xpdrClientTplist, xpdrNodelist,
-                        connectionServMap));
+                    connectionServMap.putAll(
+                        createXpdrCepsAndConnectionsEth(xpdrClientTplist, xpdrNodelist, connectionServMap));
                     this.topConnXpdrXpdrPhtn = null;
                 }
                 break;
@@ -456,21 +465,21 @@ public final class ConnectivityUtils {
                     // TODO: We create both ODU and DSR because there is no ODU service creation for the switch
                     // - XC Connection OTSi between iODU and eODU of xpdr
                     // - Top connection in the ODU layer, between xpdr eODU ports (?)
-                    connectionServMap.putAll(createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist,
-                        xpdrNodelist));
+                    connectionServMap.putAll(
+                        createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist, xpdrNodelist));
                     this.topConnXpdrXpdrPhtn = null;
                 }
                 if (openroadmNodeType.equals(OpenroadmNodeType.MUXPDR)) {
                     // TODO: OTN service but mux has 3 steps at rendering. Verify that things exist
-                    connectionServMap.putAll(createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist,
-                        xpdrNodelist));
+                    connectionServMap.putAll(
+                        createXpdrCepsAndConnectionsDsr(xpdrClientTplist, xpdrNetworkTplist, xpdrNodelist));
                     this.topConnXpdrXpdrOdu = null;
                 }
                 break;
             default:
                 LOG.error("Service type format not supported");
         }
-        LOG.debug("CONNSERVERMAP = {}", connectionServMap.toString());
+        LOG.debug("CONNSERVERMAP = {}", connectionServMap);
         return connectionServMap;
     }
 
@@ -485,19 +494,18 @@ public final class ConnectivityUtils {
             .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
             .build();
         try {
-            Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            Optional<OwnedNodeEdgePoint> optionalOnep =
+                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (optionalOnep.isPresent()) {
                 LOG.error("ONEP is already present in datastore");
                 return;
             }
             // merge in datastore
-            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID,
-                onep);
+            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onep);
             this.networkTransactionService.commit().get();
-            LOG.info("NEP {} added successfully.", onep.getName().toString());
+            LOG.info("NEP {} added successfully.", onep.getName());
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName().toString(), e);
+            LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName(), e);
         }
     }
 
@@ -510,16 +518,17 @@ public final class ConnectivityUtils {
 
     public ServiceCreateInput createORServiceInput(CreateConnectivityServiceInput input, Uuid serviceUuid) {
         // TODO: not taking into account all the constraints. Only using EndPoints and Connectivity Constraint.
-        Map<org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointKey,
-            org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint>
-            endPointMap = input.getEndPoint();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPointKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPoint> endPointMap = input.getEndPoint();
         ConnectionType connType = null;
         ServiceFormat serviceFormat = null;
-        String nodeAid = String.join("+", endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
+        String nodeAid = String.join("+",
+            endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
             TapiStringConstants.XPDR);
-        String nodeZid = String.join("+", endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
+        String nodeZid = String.join("+",
+            endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
             TapiStringConstants.XPDR);
         LOG.info("NodeAid = {}", nodeAid);
         LOG.info("NodeZid = {}", nodeZid);
@@ -554,10 +563,12 @@ public final class ConnectivityUtils {
         Uint64 capacity = Uint64.valueOf(Math.abs(
             input.getConnectivityConstraint().getRequestedCapacity().getTotalSize().getValue().intValue()));
         // map endpoints into service end points. Map the type of service from TAPI to OR
-        ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(endPointMap.values().stream().findFirst().orElseThrow(),
+        ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(
+            endPointMap.values().stream().findFirst().orElseThrow(),
             serviceFormat, nodeAid, capacity, input.getLayerProtocolName());
-        ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(endPointMap.values().stream().skip(1).findFirst()
-                .orElseThrow(), serviceFormat, nodeZid, capacity, input.getLayerProtocolName());
+        ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(
+            endPointMap.values().stream().skip(1).findFirst().orElseThrow(),
+            serviceFormat, nodeZid, capacity, input.getLayerProtocolName());
         if (serviceAEnd == null || serviceZEnd == null) {
             LOG.error("Couldnt map endpoints to service end");
             return null;
@@ -601,8 +612,8 @@ public final class ConnectivityUtils {
     }
 
     private LayerProtocolName mapServiceLayerToAend(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEnd
-            serviceAEnd) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
+                .service.ServiceAEnd serviceAEnd) {
         ServiceFormat serviceFormat = serviceAEnd.getServiceFormat();
         switch (serviceFormat) {
             case OC:
@@ -611,8 +622,10 @@ public final class ConnectivityUtils {
             case ODU:
                 return LayerProtocolName.ODU;
             case Ethernet:
-                if (getOpenroadmType(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow().getPort()
-                        .getPortDeviceName()).equals(OpenroadmNodeType.TPDR)) {
+                if (getOpenroadmType(
+                            serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()
+                                .getPort().getPortDeviceName())
+                        .equals(OpenroadmNodeType.TPDR)) {
                     return LayerProtocolName.ETH;
                 }
                 return LayerProtocolName.DSR;
@@ -642,23 +655,23 @@ public final class ConnectivityUtils {
         }
         return null;
     }
+    //TODO factorize these two similar methods
 
     private OpenroadmNodeType getOpenroadmType(String nodeName) {
         LOG.info("Node name = {}", nodeName);
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+",nodeName, TapiStringConstants.XPDR))
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode
-            = this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
-        if (tapiNode != null) {
-            return OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type"))
-                .getValue());
-        }
-        return null;
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode =
+            this.tapiContext.getTapiNode(
+                this.tapiTopoUuid,
+                new Uuid(UUID.nameUUIDFromBytes(
+                        (String.join("+",nodeName, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
+                    .toString()));
+        return tapiNode == null
+            ? null
+            : OpenroadmNodeType.forName(tapiNode.getName().get(new NameKey("Node Type")).getValue());
     }
 
-    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsEth(List<String> xpdrClientTplist,
-                                                                           List<String> xpdrNodelist,
-                                                                           Map<ConnectionKey, Connection> lowerConn) {
+    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsEth(
+            List<String> xpdrClientTplist, List<String> xpdrNodelist, Map<ConnectionKey, Connection> lowerConn) {
         // TODO: do we need to create cross connection between iODU and eODU??
         // add the lower connections of the previous steps for this kind of service
         Map<LowerConnectionKey, LowerConnection> xcMap = new HashMap<>();
@@ -666,48 +679,47 @@ public final class ConnectivityUtils {
             LowerConnection conn = new LowerConnectionBuilder().setConnectionUuid(lowConn.getConnectionUuid()).build();
             xcMap.put(conn.key(), conn);
         }
-        Map<ConnectionKey, Connection> connServMap = new HashMap<>();
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-            ConnectionEndPoint> cepMapDsr = new HashMap<>();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapDsr = new HashMap<>();
         // Create 1 cep per Xpdr in the CLIENT
         // 1 top connection DSR between the CLIENT xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
-                .orElseThrow();
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR,
-                LayerProtocolName.DSR);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.DSR,
-                TapiStringConstants.XPDR, netCep1);
-
+            String spcXpdrClient =
+                xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+            ConnectionEndPoint netCep1 =
+                createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, LayerProtocolName.DSR);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, netCep1);
             cepMapDsr.put(netCep1.key(), netCep1);
         }
-        String spcXpdr1 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().orElseThrow();
-        String spcXpdr2 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
+        String spcXpdr1 =
+            xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(0)))
+                .findFirst().orElseThrow();
+        String spcXpdr2 =
+            xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
+                .findFirst().orElseThrow();
 
         // DSR top connection between edge xpdr CLIENT DSR
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connectionDsr = createTopConnection(spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
-            LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connectionDsr =
+            createTopConnection(
+                spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
+                LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
 
         // DSR top connection that will be added to the service object
         Connection conn1 = new ConnectionBuilder().setConnectionUuid(connectionDsr.getUuid()).build();
-        connServMap.put(conn1.key(), conn1);
-
-        return connServMap;
+        return new HashMap<>(Map.of(conn1.key(), conn1));
     }
 
-    private Map<ConnectionKey,Connection> createXpdrCepsAndConnectionsDsr(List<String> xpdrClientTplist,
-                                                                          List<String> xpdrNetworkTplist,
-                                                                          List<String> xpdrNodelist) {
+    private Map<ConnectionKey,Connection> createXpdrCepsAndConnectionsDsr(
+            List<String> xpdrClientTplist, List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
         Map<ConnectionKey, Connection> connServMap = new HashMap<>();
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-            ConnectionEndPoint> cepMapDsr = new HashMap<>();
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-            ConnectionEndPoint> cepMapOdu = new HashMap<>();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapDsr = new HashMap<>();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapOdu = new HashMap<>();
         // TODO: when upgrading the models to 2.1.3, get the connection inclusion because those connections will
         //  be added to the lower connection of a top connection
         Map<LowerConnectionKey, LowerConnection> xcMap = new HashMap<>();
@@ -716,17 +728,17 @@ public final class ConnectivityUtils {
         // 1 top connection between eODU and a top connection DSR between the CLIENT xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrClient = xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
-                .orElseThrow();
-            ConnectionEndPoint clientCep1 = createCepXpdr(spcXpdrClient, TapiStringConstants.DSR,
-                TapiStringConstants.XPDR, LayerProtocolName.DSR);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR,
-                clientCep1);
+            String spcXpdrClient =
+                xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+            ConnectionEndPoint clientCep1 =
+                createCepXpdr(spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, LayerProtocolName.DSR);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, clientCep1);
 
-            ConnectionEndPoint clientCep2 = createCepXpdr(spcXpdrClient, TapiStringConstants.E_ODU,
-                TapiStringConstants.XPDR, LayerProtocolName.ODU);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrClient, TapiStringConstants.E_ODU, TapiStringConstants.XPDR,
-                clientCep2);
+            ConnectionEndPoint clientCep2 = createCepXpdr(
+                    spcXpdrClient, TapiStringConstants.E_ODU, TapiStringConstants.XPDR, LayerProtocolName.ODU);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrClient, TapiStringConstants.E_ODU, TapiStringConstants.XPDR, clientCep2);
 
             String spcXpdrNetwork = getAssociatedNetworkPort(spcXpdrClient, xpdrNetworkTplist);
             ConnectionEndPoint netCep3 = getAssociatediODUCep(spcXpdrNetwork);
@@ -734,9 +746,10 @@ public final class ConnectivityUtils {
             cepMapDsr.put(clientCep1.key(), clientCep1);
             cepMapOdu.put(clientCep2.key(), clientCep2);
             // Create x connection between I_ODU and E_ODU within xpdr
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-                connection = createXCBetweenCeps(clientCep2, netCep3, spcXpdrClient, spcXpdrNetwork,
-                TapiStringConstants.ODU, LayerProtocolName.ODU);
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .connectivity.context.Connection connection =
+                createXCBetweenCeps(
+                    clientCep2, netCep3, spcXpdrClient, spcXpdrNetwork, TapiStringConstants.ODU, LayerProtocolName.ODU);
             this.connectionFullMap.put(connection.key(), connection);
 
             // Create X connection that will be added to the service object
@@ -745,14 +758,18 @@ public final class ConnectivityUtils {
         }
 
         // DSR top connection between edge xpdr CLIENT DSR
-        String spcXpdr1 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().orElseThrow();
-        String spcXpdr2 = xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
+        String spcXpdr1 =
+            xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(0)))
+                .findFirst().orElseThrow();
+        String spcXpdr2 =
+            xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
+                .findFirst().orElseThrow();
 
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connectionOdu = createTopConnection(spcXpdr1, spcXpdr2, cepMapOdu, TapiStringConstants.E_ODU,
-            LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrOdu);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connectionOdu =
+            createTopConnection(
+                spcXpdr1, spcXpdr2, cepMapOdu, TapiStringConstants.E_ODU,
+                LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrOdu);
         this.connectionFullMap.put(connectionOdu.key(), connectionOdu);
 
         // ODU top connection that will be added to the service object
@@ -761,9 +778,11 @@ public final class ConnectivityUtils {
         LowerConnection lowerConn = new LowerConnectionBuilder().setConnectionUuid(connectionOdu.getUuid()).build();
         xcMap.put(lowerConn.key(), lowerConn);
 
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connectionDsr = createTopConnection(spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
-            LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connectionDsr =
+            createTopConnection(
+                spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
+                LayerProtocolName.DSR, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
 
         // DSR top connection that will be added to the service object
@@ -773,50 +792,49 @@ public final class ConnectivityUtils {
         return connServMap;
     }
 
-    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsOdu(List<String> xpdrNetworkTplist,
-                                                                           List<String> xpdrNodelist) {
+    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsOdu(
+            List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
         Map<ConnectionKey, Connection> connServMap = new HashMap<>();
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-            ConnectionEndPoint> cepMap = new HashMap<>();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         // TODO: when upgrading the models to 2.1.3, get the connection inclusion because those connections will
         //  be added to the lower connection of a top connection
         Map<LowerConnectionKey, LowerConnection> xcMap = new HashMap<>();
-
         // Create 1 cep per Xpdr in the I_ODU and a top
         // connection iODU between the xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
-                .orElseThrow();
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.I_ODU,
-                TapiStringConstants.XPDR, LayerProtocolName.ODU);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.XPDR,
-                netCep1);
-
+            String spcXpdrNetwork =
+                xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+            ConnectionEndPoint netCep1 =
+                createCepXpdr(
+                    spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.XPDR, LayerProtocolName.ODU);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.XPDR, netCep1);
             cepMap.put(netCep1.key(), netCep1);
         }
-
         // ODU top connection between edge xpdr i_ODU
-        String spcXpdr1 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().orElseThrow();
-        String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_ODU,
-            LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrPhtn);
+        String spcXpdr1 =
+            xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(0)))
+                .findFirst().orElseThrow();
+        String spcXpdr2 =
+            xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
+                .findFirst().orElseThrow();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connection =
+            createTopConnection(
+                spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.I_ODU,
+                LayerProtocolName.ODU, xcMap, this.topConnXpdrXpdrPhtn);
         this.connectionFullMap.put(connection.key(), connection);
-
         // ODU top connection that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         connServMap.put(conn.key(), conn);
         this.topConnXpdrXpdrOdu = conn;
-
         return connServMap;
     }
 
-    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsPht(List<String> xpdrNetworkTplist,
-                                                                           List<String> xpdrNodelist) {
-
+    private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsPht(
+                List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
         // TODO: when upgrading the models to 2.1.3, get the connection inclusion because those connections will
         //  be added to the lower connection of a top connection
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
@@ -824,23 +842,24 @@ public final class ConnectivityUtils {
         // create ceps and x connections within xpdr
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
-            String spcXpdrNetwork = xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst()
-                .orElseThrow();
+            String spcXpdrNetwork =
+                xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             // There should be 1 network tp per xpdr
             //   Just create 2 different CEPs (1 OTS + 1 OTSI_MC)
-            ConnectionEndPoint netCep1 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS,
-                TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS,
-                TapiStringConstants.XPDR, netCep1);
-            ConnectionEndPoint netCep2 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.OTSI_MC,
-                TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
-            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.OTSI_MC, TapiStringConstants.XPDR,
-                netCep2);
+            ConnectionEndPoint netCep1 = createCepXpdr(
+                    spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS,
+                    TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.XPDR, netCep1);
+            ConnectionEndPoint netCep2 = createCepXpdr(
+                    spcXpdrNetwork, TapiStringConstants.OTSI_MC,
+                    TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
+            putXpdrCepInTopologyContext(
+                xpdr, spcXpdrNetwork, TapiStringConstants.OTSI_MC, TapiStringConstants.XPDR, netCep2);
 //            ConnectionEndPoint netCep3 = createCepXpdr(spcXpdrNetwork, TapiStringConstants.I_OTSI,
 //                TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
 //            putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiStringConstants.I_OTSI, TapiStringConstants.OTSI,
 //                netCep3);
-
             cepMap.put(netCep1.key(), netCep1);
             cepMap.put(netCep2.key(), netCep2);
 //            cepMap.put(netCep3.key(), netCep3);
@@ -849,39 +868,39 @@ public final class ConnectivityUtils {
 
         // OTSi top connection between edge OTSI_MC Xpdr
         Map<LowerConnectionKey, LowerConnection> xcMap = new HashMap<>();
-        String spcXpdr1 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(0))).findFirst().orElseThrow();
-        String spcXpdr2 = xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
-            .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow();
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connection = createTopConnection(spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.OTSI_MC,
-            LayerProtocolName.PHOTONICMEDIA, xcMap, this.topConnRdmRdm);
+        String spcXpdr1 =
+            xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(0)))
+                .findFirst().orElseThrow();
+        String spcXpdr2 =
+            xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
+                .findFirst().orElseThrow();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connection =
+            createTopConnection(
+                spcXpdr1, spcXpdr2, cepMap, TapiStringConstants.OTSI_MC,
+                LayerProtocolName.PHOTONICMEDIA, xcMap, this.topConnRdmRdm);
         this.connectionFullMap.put(connection.key(), connection);
 
       // OTSi top connection that will be added to the service object
-        Map<ConnectionKey, Connection> connServMap = new HashMap<>();
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
-        connServMap.put(conn.key(), conn);
         this.topConnXpdrXpdrPhtn = conn;
-
-        return connServMap;
+        return new HashMap<>(Map.of(conn.key(), conn));
     }
 
-    private Map<ConnectionKey, Connection> createRoadmCepsAndConnections(List<String> rdmAddDropTplist,
-                                                                         List<String> rdmDegTplist,
-                                                                         List<String> rdmNodelist,
-                                                                         String edgeRoadm1, String edgeRoadm2) {
+    private Map<ConnectionKey, Connection> createRoadmCepsAndConnections(
+            List<String> rdmAddDropTplist, List<String> rdmDegTplist, List<String> rdmNodelist,
+            String edgeRoadm1, String edgeRoadm2) {
         // TODO: will need to check if things exist already or not
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-            ConnectionEndPoint> cepMap = new HashMap<>();
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         // create ceps and x connections within roadm
         Map<LowerConnectionKey, LowerConnection> xcLowerMap = new HashMap<>();
         for (String roadm : rdmNodelist) {
             LOG.info("Creating ceps and xc for roadm {}", roadm);
             if (roadm.equals(edgeRoadm1) || roadm.equals(edgeRoadm2)) {
                 LOG.info("EDGE ROADM, cross connections needed between SRG and DEG");
-                String spcRdmAD = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm)).findFirst()
-                    .orElseThrow();
+                String spcRdmAD = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm))
+                    .findFirst().orElseThrow();
                 LOG.info("AD port of ROADm {} = {}", roadm, spcRdmAD);
                 // There should be only 1 AD and 1 DEG per roadm
                 // TODO photonic media model should be updated to have the corresponding CEPs. I will just create
@@ -917,15 +936,17 @@ public final class ConnectivityUtils {
 
                 LOG.info("Going to create cross connections for ROADM {}", roadm);
                 // Create X connections between MC and OTSi_MC for full map
-                org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection connection1
-                    = createXCBetweenCeps(adCep2, degCep2, spcRdmAD, spcRdmDEG, TapiStringConstants.MC,
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .connectivity.context.Connection connection1 =
+                    createXCBetweenCeps(
+                        adCep2, degCep2, spcRdmAD, spcRdmDEG, TapiStringConstants.MC,
                         LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 1 created = {}", connection1.toString());
-                org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection connection2
-                    = createXCBetweenCeps(adCep3, degCep3, spcRdmAD, spcRdmDEG, TapiStringConstants.OTSI_MC,
-                    LayerProtocolName.PHOTONICMEDIA);
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .connectivity.context.Connection connection2 =
+                    createXCBetweenCeps(
+                        adCep3, degCep3, spcRdmAD, spcRdmDEG, TapiStringConstants.OTSI_MC,
+                        LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 2 created = {}", connection2.toString());
                 this.connectionFullMap.put(connection1.key(), connection1);
                 this.connectionFullMap.put(connection2.key(), connection2);
@@ -954,8 +975,8 @@ public final class ConnectivityUtils {
                 cepMap.put(deg1Cep2.key(), deg1Cep2);
                 cepMap.put(deg1Cep3.key(), deg1Cep3);
 
-                String spcRdmDEG2 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).skip(1).findFirst()
-                    .orElseThrow();
+                String spcRdmDEG2 =
+                    rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).skip(1).findFirst().orElseThrow();
                 LOG.info("Degree 2 port of ROADm {} = {}", roadm, spcRdmDEG2);
 
                 ConnectionEndPoint deg2Cep0 = createCepRoadm(spcRdmDEG2, TapiStringConstants.PHTNC_MEDIA_OTS);
@@ -973,24 +994,25 @@ public final class ConnectivityUtils {
 
                 LOG.info("Going to create cross connections for ROADM {}", roadm);
                 // Create X connections between MC and OTSi_MC for full map
-                org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection connection1
-                    = createXCBetweenCeps(deg1Cep2, deg2Cep2, spcRdmDEG1, spcRdmDEG2,
-                    TapiStringConstants.MC, LayerProtocolName.PHOTONICMEDIA);
-                LOG.info("Cross connection 1 created = {}", connection1.toString());
-                org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection connection2
-                    = createXCBetweenCeps(deg1Cep3, deg2Cep3, spcRdmDEG1, spcRdmDEG2,
-                    TapiStringConstants.OTSI_MC, LayerProtocolName.PHOTONICMEDIA);
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .connectivity.context.Connection connection1 =
+                    createXCBetweenCeps(
+                        deg1Cep2, deg2Cep2, spcRdmDEG1, spcRdmDEG2,
+                        TapiStringConstants.MC, LayerProtocolName.PHOTONICMEDIA);
+                LOG.info("Cross connection 1 created = {}", connection1);
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .connectivity.context.Connection connection2 =
+                    createXCBetweenCeps(
+                        deg1Cep3, deg2Cep3, spcRdmDEG1, spcRdmDEG2,
+                        TapiStringConstants.OTSI_MC, LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 2 created = {}", connection2.toString());
                 this.connectionFullMap.put(connection1.key(), connection1);
                 this.connectionFullMap.put(connection2.key(), connection2);
 
                 // Create X connections that will be added to the service object
                 LowerConnection conn1 = new LowerConnectionBuilder().setConnectionUuid(connection1.getUuid()).build();
-                LowerConnection conn2 = new LowerConnectionBuilder().setConnectionUuid(connection2.getUuid()).build();
-
                 xcLowerMap.put(conn1.key(), conn1);
+                LowerConnection conn2 = new LowerConnectionBuilder().setConnectionUuid(connection2.getUuid()).build();
                 xcLowerMap.put(conn2.key(), conn2);
             }
         }
@@ -999,77 +1021,82 @@ public final class ConnectivityUtils {
         String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().orElseThrow();
         // MC top connection between edge roadms
         LOG.info("Going to created top connection between MC");
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connection = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.MC,
-            LayerProtocolName.PHOTONICMEDIA, xcLowerMap, null);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connection =
+            createTopConnection(
+                spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.MC,
+                LayerProtocolName.PHOTONICMEDIA, xcLowerMap, null);
         this.connectionFullMap.put(connection.key(), connection);
-        LOG.info("Top connection created = {}", connection.toString());
+        LOG.info("Top connection created = {}", connection);
 
-        Map<ConnectionKey, Connection> connServMap = new HashMap<>();
-        // OTSiMC top connections that will be added to the service object
-        Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
-        connServMap.put(conn.key(), conn);
         LowerConnection conn1 = new LowerConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
-        Map<LowerConnectionKey, LowerConnection> topLowerMap = new HashMap<>();
-        topLowerMap.put(conn1.key(), conn1);
-
         // OTSiMC top connection between edge roadms
         LOG.info("Going to created top connection between OTSiMC");
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            connection1 = createTopConnection(spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.OTSI_MC,
-            LayerProtocolName.PHOTONICMEDIA, topLowerMap, null);
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection connection1 =
+            createTopConnection(
+                spcRdmAD1, spcRdmAD2, cepMap, TapiStringConstants.OTSI_MC,
+                LayerProtocolName.PHOTONICMEDIA,
+                //topLowerMap,
+                new HashMap<>(Map.of(conn1.key(), conn1)),
+                null);
         this.connectionFullMap.put(connection1.key(), connection1);
-        LOG.info("Top connection created = {}", connection1.toString());
+        LOG.info("Top connection created = {}", connection1);
 
         // OTSiMC top connections that will be added to the service object
+        Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         Connection conn2 = new ConnectionBuilder().setConnectionUuid(connection1.getUuid()).build();
-        connServMap.put(conn2.key(), conn2);
         this.topConnRdmRdm = conn2;
-        return connServMap;
+        return new HashMap<>(Map.of(conn.key(), conn, conn2.key(), conn2));
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            createTopConnection(String tp1, String tp2,
-                        Map<org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
-                            ConnectionEndPoint> cepMap, String qual, LayerProtocolName topPortocol,
-                        Map<LowerConnectionKey, LowerConnection> xcMap, Connection additionalLowerConn) {
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection createTopConnection(
+            String tp1,
+            String tp2,
+            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap,
+            String qual, LayerProtocolName topPortocol,
+            Map<LowerConnectionKey, LowerConnection> xcMap,
+            Connection additionalLowerConn) {
         // find cep for each AD MC of roadm 1 and 2
         LOG.info("Top connection name = {}", String.join("+", "TOP", tp1, tp2, qual));
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ConnectionEndPoint adCep1 =
-            cepMap.get(new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey(
-                new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", tp1.split("\\+")[0],
-                        qual, tp1.split("\\+")[1])).getBytes(StandardCharsets.UTF_8))
-                    .toString())));
+            cepMap.get(
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .cep.list.ConnectionEndPointKey(new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "CEP", tp1.split("\\+")[0], qual, tp1.split("\\+")[1]))
+                        .getBytes(StandardCharsets.UTF_8)).toString())));
         LOG.info("ADCEP1 = {}", adCep1);
-        org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint cep1 =
-            new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointBuilder()
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint cep1 =
+            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(adCep1.getParentNodeEdgePoint().getNodeEdgePointUuid())
                 .setNodeUuid(adCep1.getParentNodeEdgePoint().getNodeUuid())
                 .setTopologyUuid(adCep1.getParentNodeEdgePoint().getTopologyUuid())
                 .setConnectionEndPointUuid(adCep1.getUuid())
                 .build();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ConnectionEndPoint adCep2 =
-            cepMap.get(new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey(
-                new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", tp2.split("\\+")[0],
-                        qual, tp2.split("\\+")[1])).getBytes(StandardCharsets.UTF_8))
-                    .toString())));
+            cepMap.get(
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .cep.list.ConnectionEndPointKey(
+                    new Uuid(UUID.nameUUIDFromBytes(
+                        (String.join("+", "CEP", tp2.split("\\+")[0], qual, tp2.split("\\+")[1]))
+                            .getBytes(StandardCharsets.UTF_8)).toString())));
         LOG.info("ADCEP2 = {}", adCep2);
-        org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint cep2 =
-            new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointBuilder()
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint cep2 =
+            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .connection.ConnectionEndPointBuilder()
                 .setNodeEdgePointUuid(adCep2.getParentNodeEdgePoint().getNodeEdgePointUuid())
                 .setNodeUuid(adCep2.getParentNodeEdgePoint().getNodeUuid())
                 .setTopologyUuid(adCep2.getParentNodeEdgePoint().getTopologyUuid())
                 .setConnectionEndPointUuid(adCep1.getUuid())
                 .build();
-        Map<ConnectionEndPointKey, org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint> ceps = new HashMap<>();
+        Map<ConnectionEndPointKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint> ceps = new HashMap<>();
         ceps.put(cep1.key(), cep1);
         ceps.put(cep2.key(), cep2);
         Name connName = new NameBuilder()
@@ -1081,10 +1108,10 @@ public final class ConnectivityUtils {
             xcMap.putIfAbsent(new LowerConnectionKey(additionalLowerConn.getConnectionUuid()),
                 new LowerConnectionBuilder().setConnectionUuid(additionalLowerConn.getConnectionUuid()).build());
         }
-        return new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", "TOP", tp1, tp2, qual))
-                .getBytes(StandardCharsets.UTF_8)).toString()))
+        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.ConnectionBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", "TOP", tp1, tp2, qual)).getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(connName.key(), connName))
             .setConnectionEndPoint(ceps)
             .setOperationalState(OperationalState.ENABLED)
@@ -1095,33 +1122,35 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection
-            createXCBetweenCeps(ConnectionEndPoint cep1, ConnectionEndPoint cep2, String tp1, String tp2, String qual,
-                        LayerProtocolName xcProtocol) {
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.Connection createXCBetweenCeps(
+            ConnectionEndPoint cep1, ConnectionEndPoint cep2,
+            String tp1, String tp2, String qual, LayerProtocolName xcProtocol) {
         LOG.info("Creation cross connection between: {} and {}", tp1, tp2);
         LOG.info("Cross connection name = {}", String.join("+", "XC", tp1, tp2, qual));
         LOG.debug("Parent NEP of CEP1 = {}", cep1.getParentNodeEdgePoint().toString());
         LOG.debug("Parent NEP CEP2 = {}", cep2.getParentNodeEdgePoint().toString());
-        org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint cepServ1 =
-            new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointBuilder()
-            .setNodeEdgePointUuid(cep1.getParentNodeEdgePoint().getNodeEdgePointUuid())
-            .setNodeUuid(cep1.getParentNodeEdgePoint().getNodeUuid())
-            .setTopologyUuid(cep1.getParentNodeEdgePoint().getTopologyUuid())
-            .setConnectionEndPointUuid(cep1.getUuid())
-            .build();
-        org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint cepServ2 =
-            new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointBuilder()
-            .setNodeEdgePointUuid(cep2.getParentNodeEdgePoint().getNodeEdgePointUuid())
-            .setNodeUuid(cep2.getParentNodeEdgePoint().getNodeUuid())
-            .setTopologyUuid(cep2.getParentNodeEdgePoint().getTopologyUuid())
-            .setConnectionEndPointUuid(cep2.getUuid())
-            .build();
-        Map<ConnectionEndPointKey, org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint> ceps = new HashMap<>();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint cepServ1 =
+            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .connection.ConnectionEndPointBuilder()
+                .setNodeEdgePointUuid(cep1.getParentNodeEdgePoint().getNodeEdgePointUuid())
+                .setNodeUuid(cep1.getParentNodeEdgePoint().getNodeUuid())
+                .setTopologyUuid(cep1.getParentNodeEdgePoint().getTopologyUuid())
+                .setConnectionEndPointUuid(cep1.getUuid())
+                .build();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint cepServ2 =
+            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .connection.ConnectionEndPointBuilder()
+                .setNodeEdgePointUuid(cep2.getParentNodeEdgePoint().getNodeEdgePointUuid())
+                .setNodeUuid(cep2.getParentNodeEdgePoint().getNodeUuid())
+                .setTopologyUuid(cep2.getParentNodeEdgePoint().getTopologyUuid())
+                .setConnectionEndPointUuid(cep2.getUuid())
+                .build();
+        Map<ConnectionEndPointKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connection.ConnectionEndPoint> ceps = new HashMap<>();
         ceps.put(cepServ1.key(), cepServ1);
         ceps.put(cepServ2.key(), cepServ2);
         Name connName = new NameBuilder()
@@ -1129,10 +1158,11 @@ public final class ConnectivityUtils {
             .setValue(String.join("+", "XC", tp1, tp2, qual))
             .build();
         // TODO: lower connection, supported link.......
-        return new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", "XC", tp1, tp2, qual))
-                .getBytes(StandardCharsets.UTF_8)).toString()))
+        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .connectivity.context.ConnectionBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", "XC", tp1, tp2, qual))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(connName.key(), connName))
             .setConnectionEndPoint(ceps)
             .setOperationalState(OperationalState.ENABLED)
@@ -1205,28 +1235,28 @@ public final class ConnectivityUtils {
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA);
-        if (!(TapiStringConstants.OTSI_MC.equals(qualifier))) {
-            cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep));
+        if (TapiStringConstants.OTSI_MC.equals(qualifier)) {
+            return cepBldr.build();
         }
-        return cepBldr.build();
+        return cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
 
-    private ConnectionEndPoint createCepXpdr(String id, String qualifier, String nodeLayer,
-                                             LayerProtocolName cepProtocol) {
+    private ConnectionEndPoint createCepXpdr(
+            String id, String qualifier, String nodeLayer, LayerProtocolName cepProtocol) {
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(String.join("+", id.split("\\+")[0], qualifier,
-                id.split("\\+")[1]))
+            .setValue(String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]))
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
-            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", id.split("\\+")[0],
-                    qualifier, id.split("\\+")[1])).getBytes(StandardCharsets.UTF_8))
-                .toString()))
-            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+",id.split("\\+")[0],
-                    TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
-                .toString()))
-            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-                .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+",id.split("\\+")[0], TapiStringConstants.XPDR))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         String clientQualifier = "";
         String clientNodeLayer = TapiStringConstants.PHTNC_MEDIA;
@@ -1248,21 +1278,22 @@ public final class ConnectivityUtils {
                 break;
         }
         ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
-            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", id.split("\\+")[0],
-                    clientQualifier, id.split("\\+")[1])).getBytes(StandardCharsets.UTF_8))
-                .toString()))
-            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+",id.split("\\+")[0],
-                    TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
-                .toString()))
-            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-                .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", id.split("\\+")[0], clientQualifier, id.split("\\+")[1]))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+",id.split("\\+")[0], TapiStringConstants.XPDR))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setTopologyUuid(new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
         // TODO: add parent ONEP??
         ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", id.split("\\+")[0],
-                    qualifier, id.split("\\+")[1])).getBytes(StandardCharsets.UTF_8))
-                .toString()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", "CEP", id.split("\\+")[0], qualifier, id.split("\\+")[1]))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
             .setParentNodeEdgePoint(pnep)
             .setName(Map.of(cepName.key(), cepName))
             .setConnectionPortRole(PortRole.SYMMETRIC)
@@ -1270,15 +1301,15 @@ public final class ConnectivityUtils {
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setLayerProtocolName(cepProtocol);
-        if (!(TapiStringConstants.DSR.equals(qualifier))) {
-            cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep));
+        if (TapiStringConstants.DSR.equals(qualifier)) {
+            return cepBldr.build();
         }
-        return cepBldr.build();
+        return cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
 
     private EndPoint mapServiceZEndPoint(
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceZEnd
-            serviceZEnd, PathDescription pathDescription) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
+                .service.ServiceZEnd serviceZEnd, PathDescription pathDescription) {
         EndPointBuilder endPointBuilder = new EndPointBuilder();
         // 1. Service Format: ODU, OTU, ETH
         ServiceFormat serviceFormat = serviceZEnd.getServiceFormat();
@@ -1325,7 +1356,7 @@ public final class ConnectivityUtils {
                     .setValue(Decimal64.valueOf(BigDecimal.valueOf(serviceZEnd.getServiceRate().doubleValue())))
                     .setUnit(CAPACITYUNITGBPS.VALUE)
                     .build())
-//                .setBandwidthProfile(new BandwidthProfileBuilder().build())
+//                .setBandwidthProfile(new BandwidthProfileBuilder().build()) // TODO: implement bandwidth profile
                 .build())
             .setProtectionRole(ProtectionRole.WORK)
             .setRole(PortRole.SYMMETRIC)
@@ -1363,10 +1394,12 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name name =
             new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameBuilder()
                 .setValueName("OpenROADM info")
-                .setValue(String.join("-", serviceAEnd.getClli(),
+                .setValue(String.join("-",
+                    serviceAEnd.getClli(),
                     serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow().getPort()
                         .getPortDeviceName(),
-                    serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow().getPort().getPortName()))
+                    serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow().getPort()
+                        .getPortName()))
                 .build();
         return endPointBuilder
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder()
@@ -1393,153 +1426,146 @@ public final class ConnectivityUtils {
     }
 
     private Uuid getSipIdFromZend(Map<ZToAKey, ZToA> mapztoa, String serviceNodeId, ServiceFormat serviceFormat) {
-        Uuid zendUuid = null;
         if (serviceNodeId.contains("ROADM")) {
             // Service from ROADM to ROADM
             // AddDrop-AddDrop ports --> MC layer SIPs
             ZToA firstElement = mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("0")).findFirst()
                     .orElseThrow();
             TerminationPoint tp = (TerminationPoint) firstElement.getResource().getResource();
-            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP",
-                    tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId())).getBytes(StandardCharsets.UTF_8))
-                .toString());
+            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()))
+                    .getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
-                if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
-                    continue;
+                if (sip.getUuid().equals(sipUuid)) {
+                    return sip.getUuid();
                 }
-                zendUuid = sip.getUuid();
-                break;
+                LOG.info("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
             }
-        } else {
-            // Service from XPDR to XPDR
-            ZToA firstElement;
-            TerminationPoint tp;
-            Uuid sipUuid;
-            switch (serviceFormat) {
-                case ODU:
-                    firstElement = mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("2")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Network-Network ports --> iODU layer SIPs TODO --> updated to E_ODU
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.I_ODU, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_ODU,
-                        tp.getTpId()));
-                    break;
-                case OTU:
-                    firstElement = mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("2")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Network-Network ports --> iOTSi layer SIPs
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.I_OTSI, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_OTSI,
-                        tp.getTpId()));
-                    break;
-                case Ethernet:
-                    LOG.info("Elements ZA = {}", mapztoa.values().toString());
-                    firstElement = mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("0")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Client-client ports --> DSR layer SIPs
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.DSR, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.DSR,
-                        tp.getTpId()));
-                    break;
-                default:
-                    sipUuid = null;
-                    LOG.warn("Service format {} not supported (?)", serviceFormat.getName());
-            }
-            for (ServiceInterfacePoint sip:this.sipMap.values()) {
-                if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
-                    continue;
-                }
-                zendUuid = sip.getUuid();
-                break;
-            }
+            return null;
         }
-        return zendUuid;
+        // Service from XPDR to XPDR
+        ZToA firstElement;
+        TerminationPoint tp;
+        Uuid sipUuid;
+        switch (serviceFormat) {
+            case ODU:
+                firstElement = mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("2")).findFirst()
+                        .orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Network-Network ports --> iODU layer SIPs TODO --> updated to E_ODU
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()));
+                break;
+            case OTU:
+                firstElement =
+                    mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("2")).findFirst().orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Network-Network ports --> iOTSi layer SIPs
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()));
+                break;
+            case Ethernet:
+                LOG.info("Elements ZA = {}", mapztoa.values().toString());
+                firstElement =
+                    mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("0")).findFirst().orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Client-client ports --> DSR layer SIPs
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()));
+                break;
+            default:
+                sipUuid = null;
+                LOG.warn("Service format {} not supported (?)", serviceFormat.getName());
+        }
+        for (ServiceInterfacePoint sip:this.sipMap.values()) {
+            if (sip.getUuid().equals(sipUuid)) {
+                return sip.getUuid();
+            }
+            LOG.info("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+        }
+        return null;
     }
 
     private Uuid getSipIdFromAend(Map<AToZKey, AToZ> mapatoz, String serviceNodeId, ServiceFormat serviceFormat) {
-        Uuid aendUuid = null;
         LOG.info("ServiceNode = {} and ServiceFormat = {}", serviceNodeId, serviceFormat.getName());
         LOG.info("Map a to z = {}", mapatoz);
         if (serviceNodeId.contains("ROADM")) {
             // Service from ROADM to ROADM
             // AddDrop-AddDrop ports --> MC layer SIPs
-            AToZ firstElement = mapatoz.values().stream().filter(atoz -> atoz.getId().equals("0")).findFirst()
-                    .orElseThrow();
+            AToZ firstElement =
+                mapatoz.values().stream().filter(atoz -> atoz.getId().equals("0")).findFirst().orElseThrow();
             LOG.info("First element of service path = {}", firstElement.getResource().getResource());
             TerminationPoint tp = (TerminationPoint) firstElement.getResource().getResource();
-            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP",
-                    tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId())).getBytes(StandardCharsets.UTF_8))
-                .toString());
-            LOG.info("ROADM SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.MC,
-                tp.getTpId()));
+            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()))
+                    .getBytes(StandardCharsets.UTF_8)).toString());
+            LOG.info("ROADM SIP name = {}",
+                String.join("+", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
-                if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
-                    continue;
+                if (sip.getUuid().equals(sipUuid)) {
+                    return sip.getUuid();
                 }
-                aendUuid = sip.getUuid();
-                break;
+                LOG.info("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
             }
-        } else {
-            // Service from XPDR to XPDR
-            AToZ firstElement;
-            TerminationPoint tp;
-            Uuid sipUuid;
-            switch (serviceFormat) {
-                case ODU:
-                    firstElement = mapatoz.values().stream().filter(atoz -> atoz.getId().equals("2")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Network-Network ports --> iODU layer SIPs. TODO -> updated to eODU
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.I_ODU, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("ODU XPDR SIP name = {}", String.join("+", tp.getTpNodeId(),
-                        TapiStringConstants.I_ODU, tp.getTpId()));
-                    break;
-                case OTU:
-                    firstElement = mapatoz.values().stream().filter(atoz -> atoz.getId().equals("2")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Network-Network ports --> iOTSi layer SIPs
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.I_OTSI, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("OTU XPDR SIP name = {}", String.join("+", tp.getTpNodeId(),
-                        TapiStringConstants.I_OTSI, tp.getTpId()));
-                    break;
-                case Ethernet:
-                    LOG.info("Elements AZ = {}", mapatoz.values().toString());
-                    firstElement = mapatoz.values().stream().filter(atoz -> atoz.getId().equals("0")).findFirst()
-                            .orElseThrow();
-                    tp = (TerminationPoint) firstElement.getResource().getResource();
-                    // Client-client ports --> DSR layer SIPs
-                    sipUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "SIP", tp.getTpNodeId(),
-                            TapiStringConstants.DSR, tp.getTpId())).getBytes(StandardCharsets.UTF_8)).toString());
-                    LOG.info("DSR XPDR SIP name = {}", String.join("+", tp.getTpNodeId(),
-                        TapiStringConstants.DSR, tp.getTpId()));
-                    break;
-                default:
-                    sipUuid = null;
-                    LOG.warn("Service format {} not supported (?)", serviceFormat.getName());
-            }
-            for (ServiceInterfacePoint sip:this.sipMap.values()) {
-                if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
-                    continue;
-                }
-                aendUuid = sip.getUuid();
-                break;
-            }
+            return null;
         }
-        return aendUuid;
+        // Service from XPDR to XPDR
+        AToZ firstElement;
+        TerminationPoint tp;
+        Uuid sipUuid;
+        switch (serviceFormat) {
+            case ODU:
+                firstElement =
+                    mapatoz.values().stream().filter(atoz -> atoz.getId().equals("2")).findFirst().orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Network-Network ports --> iODU layer SIPs. TODO -> updated to eODU
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("ODU XPDR SIP name = {}",
+                    String.join("+", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()));
+                break;
+            case OTU:
+                firstElement =
+                    mapatoz.values().stream().filter(atoz -> atoz.getId().equals("2")).findFirst().orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Network-Network ports --> iOTSi layer SIPs
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("OTU XPDR SIP name = {}",
+                    String.join("+", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()));
+                break;
+            case Ethernet:
+                LOG.info("Elements AZ = {}", mapatoz.values());
+                firstElement =
+                    mapatoz.values().stream().filter(atoz -> atoz.getId().equals("0")).findFirst().orElseThrow();
+                tp = (TerminationPoint) firstElement.getResource().getResource();
+                // Client-client ports --> DSR layer SIPs
+                sipUuid = new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()))
+                        .getBytes(StandardCharsets.UTF_8)).toString());
+                LOG.info("DSR XPDR SIP name = {}",
+                    String.join("+", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()));
+                break;
+            default:
+                sipUuid = null;
+                LOG.warn("Service format {} not supported (?)", serviceFormat.getName());
+        }
+        for (ServiceInterfacePoint sip:this.sipMap.values()) {
+            if (sip.getUuid().equals(sipUuid)) {
+                return sip.getUuid();
+            }
+            LOG.info("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+        }
+        return null;
     }
 
     private void putRdmCepInTopologyContext(String node, String spcRdmAD, String qual, ConnectionEndPoint cep) {
@@ -1555,8 +1581,8 @@ public final class ConnectivityUtils {
         this.tapiContext.updateTopologyWithCep(topoUuid, nodeUuid, nepUuid, cep);
     }
 
-    private void putXpdrCepInTopologyContext(String node, String spcXpdrNet, String qual, String nodeLayer,
-                                             ConnectionEndPoint cep) {
+    private void putXpdrCepInTopologyContext(
+            String node, String spcXpdrNet, String qual, String nodeLayer, ConnectionEndPoint cep) {
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
@@ -1582,14 +1608,15 @@ public final class ConnectivityUtils {
     }
 
     private String getIdBasedOnModelVersion(String nodeid) {
-        return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*") ? String.join("-", nodeid.split("-")[0],
-            nodeid.split("-")[1]) : nodeid.split("-")[0];
+        return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*")
+            ? String.join("-", nodeid.split("-")[0], nodeid.split("-")[1])
+            : nodeid.split("-")[0];
     }
 
     private ServiceZEnd tapiEndPointToServiceZPoint(
-        org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint endPoint,
-        ServiceFormat serviceFormat, String nodeZid, Uint64 capacity, LayerProtocolName serviceLayer) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPoint endPoint,
+            ServiceFormat serviceFormat, String nodeZid, Uint64 capacity, LayerProtocolName serviceLayer) {
         // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
         //  Not the rest which is needed in the txPortDeviceName.
         //  It could be obtained from the SIP which has the NEP and includes all the OR name.
@@ -1619,8 +1646,9 @@ public final class ConnectivityUtils {
             return null;
         }
         String nodeName = "";
-        for (Map.Entry<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name> entry:
+        for (Map.Entry<
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name> entry:
                 endPoint.getName().entrySet()) {
             if (!("Node Type").equals(entry.getValue().getValueName())) {
                 nodeName = entry.getValue().getValue();
@@ -1688,21 +1716,23 @@ public final class ConnectivityUtils {
         if (serviceFormat.equals(ServiceFormat.OTU)) {
             serviceZEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
-        if (!serviceLayer.equals(LayerProtocolName.ETH)) {
-            serviceZEndBuilder
-                .setEthernetAttributes(new EthernetAttributesBuilder().setSubrateEthSla(new SubrateEthSlaBuilder()
-                        .setCommittedBurstSize(Uint16.valueOf(64))
-                        .setCommittedInfoRate(Uint32.valueOf(100000))
-                        .build())
-                    .build());
+        if (serviceLayer.equals(LayerProtocolName.ETH)) {
+            return serviceZEndBuilder.build();
         }
-        return serviceZEndBuilder.build();
+        return serviceZEndBuilder
+            .setEthernetAttributes(new EthernetAttributesBuilder()
+                .setSubrateEthSla(new SubrateEthSlaBuilder()
+                    .setCommittedBurstSize(Uint16.valueOf(64))
+                    .setCommittedInfoRate(Uint32.valueOf(100000))
+                    .build())
+                .build())
+            .build();
     }
 
     private ServiceAEnd tapiEndPointToServiceAPoint(
-        org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint endPoint,
-        ServiceFormat serviceFormat, String nodeAid, Uint64 capacity, LayerProtocolName serviceLayer) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPoint endPoint,
+            ServiceFormat serviceFormat, String nodeAid, Uint64 capacity, LayerProtocolName serviceLayer) {
         // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
         //  Not the rest which is needed in the txPortDeviceName.
         //  It could be obtained from the SIP which has the NEP and includes all the OR name.
@@ -1720,10 +1750,8 @@ public final class ConnectivityUtils {
         //  connection is between 2 CLIENT ports. Otherwise it will not work...
         OwnedNodeEdgePoint nep = null;
         for (OwnedNodeEdgePoint onep : node.getOwnedNodeEdgePoint().values()) {
-            if (onep.getMappedServiceInterfacePoint() == null) {
-                continue;
-            }
-            if (onep.getMappedServiceInterfacePoint().containsKey(new MappedServiceInterfacePointKey(sipUuid))) {
+            if (onep.getMappedServiceInterfacePoint() != null
+                    && onep.getMappedServiceInterfacePoint().containsKey(new MappedServiceInterfacePointKey(sipUuid))) {
                 nep = onep;
                 break;
             }
@@ -1733,9 +1761,10 @@ public final class ConnectivityUtils {
             return null;
         }
         String nodeName = "";
-        for (Map.Entry<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
+        for (Map.Entry<
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameKey,
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name> entry:
-                endPoint.getName().entrySet()) {
+                    endPoint.getName().entrySet()) {
             if (!("Node Type").equals(entry.getValue().getValueName())) {
                 nodeName = entry.getValue().getValue();
             }
@@ -1760,8 +1789,8 @@ public final class ConnectivityUtils {
             .setServiceFormat(serviceFormat)
             .setServiceRate(Uint32.valueOf(capacity))
             .setEthernetAttributes(new EthernetAttributesBuilder().setSubrateEthSla(
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.subrate.eth
-                        .sla.SubrateEthSlaBuilder()
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
+                            .subrate.eth.sla.SubrateEthSlaBuilder()
                         .setCommittedBurstSize(Uint16.valueOf(64))
                         .setCommittedInfoRate(Uint32.valueOf(100000))
                         .build())
@@ -1803,49 +1832,65 @@ public final class ConnectivityUtils {
         } else if (serviceFormat.equals(ServiceFormat.OTU)) {
             serviceAEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
-        if (!serviceLayer.equals(LayerProtocolName.ETH)) {
-            serviceAEndBuilder
-                .setEthernetAttributes(new EthernetAttributesBuilder().setSubrateEthSla(new SubrateEthSlaBuilder()
-                        .setCommittedBurstSize(Uint16.valueOf(64))
-                        .setCommittedInfoRate(Uint32.valueOf(100000))
-                        .build())
-                    .build());
+        if (serviceLayer.equals(LayerProtocolName.ETH)) {
+            return serviceAEndBuilder.build();
         }
-        return serviceAEndBuilder.build();
+        return serviceAEndBuilder
+            .setEthernetAttributes(new EthernetAttributesBuilder()
+                .setSubrateEthSla(new SubrateEthSlaBuilder()
+                    .setCommittedBurstSize(Uint16.valueOf(64))
+                    .setCommittedInfoRate(Uint32.valueOf(100000))
+                    .build())
+                .build())
+            .build();
     }
 
-    private ConnectionType getConnectionTypePhtnc(Collection<org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint> endPoints) {
-        if (endPoints.stream().anyMatch(ep -> ep.getName().values().stream()
-                .anyMatch(name -> name.getValue().contains("ROADM")))) {
+    private ConnectionType getConnectionTypePhtnc(
+            Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPoint> endPoints) {
+        return endPoints.stream()
+                .anyMatch(ep -> ep.getName().values().stream().anyMatch(name -> name.getValue().contains("ROADM")))
             // EndPoints are ROADMs
-            return ConnectionType.RoadmLine;
-        }
-        // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
-        return ConnectionType.Infrastructure;
+            ? ConnectionType.RoadmLine
+            // EndPoints are not ROADMs -> XPDR, MUXPDR, SWTICHPDR
+            : ConnectionType.Infrastructure;
     }
 
-    private ServiceFormat getServiceFormatPhtnc(Collection<org.opendaylight.yang.gen.v1.urn
-            .onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint> endPoints) {
-        if (endPoints.stream().anyMatch(ep -> ep.getName().values().stream()
-                .anyMatch(name -> name.getValue().contains("ROADM")))) {
+    private ServiceFormat getServiceFormatPhtnc(
+            Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                .create.connectivity.service.input.EndPoint> endPoints) {
+        return endPoints.stream()
+                .anyMatch(ep -> ep.getName().values().stream().anyMatch(name -> name.getValue().contains("ROADM")))
             // EndPoints are ROADMs
-            return ServiceFormat.OC;
-        }
-        // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
-        return ServiceFormat.OTU;
+            ? ServiceFormat.OC
+            // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
+            : ServiceFormat.OTU;
     }
 
     private ConnectionEndPoint getAssociatediODUCep(String spcXpdrNetwork) {
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", spcXpdrNetwork.split("\\+")[0],
-            TapiStringConstants.XPDR).getBytes(StandardCharsets.UTF_8))).toString());
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", spcXpdrNetwork.split("\\+")[0],
-                TapiStringConstants.I_ODU, spcXpdrNetwork.split("\\+")[1]).getBytes(StandardCharsets.UTF_8)))
-            .toString());
-        Uuid cepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP",
-            spcXpdrNetwork.split("\\+")[0], TapiStringConstants.I_ODU, spcXpdrNetwork.split("\\+")[1]))
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        return this.tapiContext.getTapiCEP(this.tapiTopoUuid, nodeUuid, nepUuid, cepUuid);
+        return this.tapiContext.getTapiCEP(
+            this.tapiTopoUuid,
+            //nodeUuid,
+            new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+",
+                        spcXpdrNetwork.split("\\+")[0],
+                        TapiStringConstants.XPDR)
+                    .getBytes(StandardCharsets.UTF_8))).toString()),
+            //nepUuid,
+            new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+",
+                        spcXpdrNetwork.split("\\+")[0],
+                        TapiStringConstants.I_ODU,
+                        spcXpdrNetwork.split("\\+")[1])
+                    .getBytes(StandardCharsets.UTF_8))).toString()),
+            //cepUuid,
+            new Uuid(UUID.nameUUIDFromBytes(
+                (String.join("+",
+                        "CEP",
+                        spcXpdrNetwork.split("\\+")[0],
+                        TapiStringConstants.I_ODU,
+                        spcXpdrNetwork.split("\\+")[1]))
+                    .getBytes(StandardCharsets.UTF_8)).toString()));
     }
 
     private String getAssociatedNetworkPort(String spcXpdrClient, List<String> xpdrNetworkTplist) {
@@ -1860,21 +1905,23 @@ public final class ConnectivityUtils {
     private List<String> getAssociatedClientsPort(List<String> xpdrNetworkTplist) {
         List<String> clientPortList = new ArrayList<>();
         for (String networkPort:xpdrNetworkTplist) {
-            String nodeId = String.join("-", networkPort.split("\\+")[0].split("-")[0],
+            String nodeId = String.join("-",
+                networkPort.split("\\+")[0].split("-")[0],
                 networkPort.split("\\+")[0].split("-")[1]);
             String tpId = networkPort.split("\\+")[1];
             InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.builder(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
                 .child(Mapping.class, new MappingKey(tpId)).build();
             try {
-                Optional<Mapping> optMapping = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                    mapIID).get();
-                if (!optMapping.isPresent()) {
+                Optional<Mapping> optMapping =
+                    this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, mapIID).get();
+                if (optMapping.isEmpty()) {
                     LOG.error("Couldnt find mapping for port {} of node {}", tpId, nodeId);
                 }
                 Mapping mapping = optMapping.orElseThrow();
                 LOG.info("Mapping for node+port {}+{} = {}", nodeId, tpId, mapping);
-                String key = String.join("+", String.join("-", nodeId, tpId.split("\\-")[0]),
+                String key = String.join("+",
+                    String.join("-", nodeId, tpId.split("\\-")[0]),
                     mapping.getConnectionMapLcp());
                 LOG.info("Key to be added to list = {}", key);
                 if (!clientPortList.contains(key)) {
@@ -1892,23 +1939,28 @@ public final class ConnectivityUtils {
     private OpenroadmNodeType getOpenRoadmNodeType(List<String> xpdrNodelist) {
         List<OpenroadmNodeType> openroadmNodeTypeList = new ArrayList<>();
         for (String xpdrNode:xpdrNodelist) {
-            Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+",xpdrNode, TapiStringConstants.XPDR))
-                .getBytes(StandardCharsets.UTF_8)).toString());
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeIID = InstanceIdentifier.builder(
-                    Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev221121.Context1.class).child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-                .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
-                    new NodeKey(nodeUuid)).build();
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                    .topology.Node> nodeIID =
+                InstanceIdentifier.builder(Context.class)
+                    .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+                    .child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(
+                        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
+                        new NodeKey(
+                            //nodeUUID
+                            new Uuid(UUID.nameUUIDFromBytes(
+                                (String.join("+",xpdrNode, TapiStringConstants.XPDR))
+                                    .getBytes(StandardCharsets.UTF_8)).toString())))
+                    .build();
             try {
-                Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> optNode
-                    = this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID).get();
+                Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> optNode =
+                    this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID).get();
                 if (optNode.isEmpty()) {
                     return null;
                 }
-                OpenroadmNodeType openroadmNodeType = OpenroadmNodeType.forName(optNode.orElseThrow().getName().get(
-                    new NameKey("Node Type")).getValue());
+                OpenroadmNodeType openroadmNodeType =
+                    OpenroadmNodeType.forName(optNode.orElseThrow().getName().get(new NameKey("Node Type")).getValue());
                 if (!openroadmNodeTypeList.contains(openroadmNodeType)) {
                     openroadmNodeTypeList.add(openroadmNodeType);
                 }
@@ -1918,47 +1970,41 @@ public final class ConnectivityUtils {
             }
         }
         // TODO for now check that there is only one type, otherwise error
-        if (openroadmNodeTypeList.size() != 1) {
-            LOG.error("More than one xpdr type. List = {}", openroadmNodeTypeList);
-            return null;
+        if (openroadmNodeTypeList.size() == 1) {
+            return openroadmNodeTypeList.get(0);
         }
-        return openroadmNodeTypeList.get(0);
+        LOG.error("More than one xpdr type. List = {}", openroadmNodeTypeList);
+        return null;
     }
 
-    private OwnedNodeEdgePoint createRoadmNep(String orNodeId, String tpId,
-        boolean withSip, OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
-
+    private OwnedNodeEdgePoint createRoadmNep(
+            String orNodeId, String tpId, boolean withSip,
+            OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
         //TODO : complete implementation with SIP
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", orNodeId, nepPhotonicSublayer,
-                tpId)).getBytes(StandardCharsets.UTF_8)).toString());
         Name nepName = new NameBuilder()
                 .setValueName(TapiStringConstants.PHTNC_MEDIA + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, nepPhotonicSublayer, tpId))
                 .build();
-        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
-        if (TapiStringConstants.MC.equals(nepPhotonicSublayer)) {
-            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIERMC.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
-                .build());
-        } else {
-            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
-                .build());
-        }
-        OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
-            .setUuid(nepUuid)
+        return new OwnedNodeEdgePointBuilder()
+            .setUuid(
+                new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", orNodeId, nepPhotonicSublayer,tpId)).getBytes(StandardCharsets.UTF_8))
+                        .toString()))
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
             .setName(Map.of(nepName.key(), nepName))
-            .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
+            .setSupportedCepLayerProtocolQualifierInstances(
+                new ArrayList<>(List.of(
+                    new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                        .setLayerProtocolQualifier(
+                            TapiStringConstants.MC.equals(nepPhotonicSublayer)
+                                ? PHOTONICLAYERQUALIFIERMC.VALUE
+                                : PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
+                        .setNumberOfCepInstances(Uint64.valueOf(1))
+                        .build())))
             .setDirection(Direction.BIDIRECTIONAL)
             .setLinkPortRole(PortRole.SYMMETRIC)
             .setAdministrativeState(adminState).setOperationalState(operState)
             .setLifecycleState(LifecycleState.INSTALLED)
             .build();
-
-        return onep;
     }
-
 }
