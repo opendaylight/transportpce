@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5dd9736_133b653d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T09:42:33Z",
+      "side": 1,
+      "message": "No JIRA Ticket?",
+      "revId": "9559229e82e4e2726ea11416945ac51db082d584",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
