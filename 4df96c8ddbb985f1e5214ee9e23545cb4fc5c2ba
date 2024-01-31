@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f76815_b671960a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T09:54:34Z",
+      "side": 1,
+      "message": "\"-\" instead of \":\" to have the link to JIRA available from the commit message",
+      "range": {
+        "startLine": 12,
+        "startChar": 16,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "4df96c8ddbb985f1e5214ee9e23545cb4fc5c2ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a954532_90b942e7",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T09:54:34Z",
+      "side": 1,
+      "message": "I don\u0027t see the point in outputting these few constants in a separate file, other than multiplying the files and confusing the mind rather than anything else. If you really wanted to separate what concerns the tapi tests from other tests (but, I wonder why?, code readability?), a simple comment line in the original file should be enough...",
+      "revId": "4df96c8ddbb985f1e5214ee9e23545cb4fc5c2ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
