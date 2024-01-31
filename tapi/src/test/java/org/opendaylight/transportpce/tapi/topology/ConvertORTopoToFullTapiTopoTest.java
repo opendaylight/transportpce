@@ -1298,27 +1298,18 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private Integer nrgContainsClientAndNetwork(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid) {
         // 1 NRG should at least contain the NEP of interest in the NEP List
-        Boolean foundClient = false;
-        Boolean foundNetwork = false;
         Integer indexNrg = 0;
         for (NodeRuleGroup nrg : nrgList) {
+            Boolean foundClient = false;
+            Boolean foundNetwork = false;
             for (NodeEdgePoint nep : nrg.nonnullNodeEdgePoint().values()) {
-                if (nep.getNodeEdgePointUuid().equals(clientNepUuid)) {
-                    foundClient = true;
-                } else if (nep.getNodeEdgePointUuid().equals(networkNepUuid)) {
-                    foundNetwork = true;
-                }
+                foundClient = foundClient || nep.getNodeEdgePointUuid().equals(clientNepUuid);
+                foundNetwork = foundNetwork || nep.getNodeEdgePointUuid().equals(networkNepUuid);
             }
             if (foundClient && foundNetwork) {
-                break;
-            } else {
-                foundClient = false;
-                foundNetwork = false;
+                return indexNrg;
             }
             indexNrg++;
-        }
-        if (foundClient && foundNetwork) {
-            return indexNrg;
         }
         return null;
     }
