@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43f47746_eeaa2c80",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T09:25:53Z",
+      "side": 1,
+      "message": "Implementation of this method is very close to the previous one. There should be a way to share this code.",
+      "range": {
+        "startLine": 625,
+        "startChar": 25,
+        "endLine": 625,
+        "endChar": 45
+      },
+      "revId": "7a4db135ff3e4e4bea234dbcf223532e1f48afc9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963af3d7_4d8ec739",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-01-31T09:25:53Z",
+      "side": 1,
+      "message": "really necessary?",
+      "range": {
+        "startLine": 288,
+        "startChar": 8,
+        "endLine": 288,
+        "endChar": 88
+      },
+      "revId": "7a4db135ff3e4e4bea234dbcf223532e1f48afc9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
