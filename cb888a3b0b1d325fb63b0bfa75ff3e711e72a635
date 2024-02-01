@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "eff55335_37bdad8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:38:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80e334e6_76aa9f18",
+      "revId": "cb888a3b0b1d325fb63b0bfa75ff3e711e72a635",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "06b4b076_386bdff6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 12
@@ -123,6 +141,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b67d9c4_228092b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:38:05Z",
+      "side": 1,
+      "message": "Yes, I agree that switch case is more appropriate that this kind of structure, but If I remember well it does not fit here with a string.contains()...",
+      "parentUuid": "fd201a3f_db1becd6",
+      "range": {
+        "startLine": 355,
+        "startChar": 12,
+        "endLine": 367,
+        "endChar": 13
+      },
+      "revId": "cb888a3b0b1d325fb63b0bfa75ff3e711e72a635",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca650163_9b70e416",
@@ -136,6 +178,30 @@
       "writtenOn": "2024-01-31T09:37:33Z",
       "side": 1,
       "message": "I am not in favor to access to the datastore by this way, because in the past we have had to manage issues with concurrent access.\nNetworkTransactionService is here to avoid this possible issue. Use it instead.",
+      "range": {
+        "startLine": 470,
+        "startChar": 20,
+        "endLine": 470,
+        "endChar": 32
+      },
+      "revId": "cb888a3b0b1d325fb63b0bfa75ff3e711e72a635",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac960b2d_5eaf096d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:38:05Z",
+      "side": 1,
+      "message": "OK. Was not aware of this issue of concurrent accesses with Databroker. Done! Thanks for your help in managing it correctly!!!!",
+      "parentUuid": "ca650163_9b70e416",
       "range": {
         "startLine": 470,
         "startChar": 20,
