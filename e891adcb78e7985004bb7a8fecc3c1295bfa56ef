@@ -16,6 +16,23 @@
       "message": "Thanks to you for all these valuable comments. I addressed the ones that can be managed. Thanks for your help in doing so!",
       "revId": "e891adcb78e7985004bb7a8fecc3c1295bfa56ef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9f918c_4a182d91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-01T11:55:49Z",
+      "side": 1,
+      "message": "docs-linkcheck failure on a correct url",
+      "revId": "e891adcb78e7985004bb7a8fecc3c1295bfa56ef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
