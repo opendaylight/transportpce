@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0fa42b_51cc8a04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d89d5a9_5649c426",
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a659dcca_aae5c7e0",
@@ -41,6 +59,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd6b7f8d_5a67b1ea",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a659dcca_aae5c7e0",
+      "range": {
+        "startLine": 895,
+        "startChar": 67,
+        "endLine": 895,
+        "endChar": 85
+      },
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b97cd737_7080add7",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-01-30T17:42:16Z",
       "side": 1,
       "message": "to be removed",
+      "range": {
+        "startLine": 190,
+        "startChar": 7,
+        "endLine": 190,
+        "endChar": 23
+      },
+      "revId": "cb113e8c4238dfb83840539afe318d977fe6828f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06b5eaff_ed27a68e",
+        "filename": "tests/transportpce_tests/tapi/test01_abstracted_topology.py",
+        "patchSetId": 25
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b97cd737_7080add7",
       "range": {
         "startLine": 190,
         "startChar": 7,
