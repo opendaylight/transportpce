@@ -16,6 +16,24 @@
       "message": "JIRA link is with a dash and not a colon as seen by Gilles",
       "revId": "2354ff31388615e8935fe96b545f7f52b5e01325",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7848040c_ac5ebc05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:48:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f514790b_cc02a03f",
+      "revId": "2354ff31388615e8935fe96b545f7f52b5e01325",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
