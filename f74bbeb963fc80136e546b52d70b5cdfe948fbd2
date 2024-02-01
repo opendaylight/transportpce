@@ -16,6 +16,24 @@
       "message": "dash instead of colon",
       "revId": "f74bbeb963fc80136e546b52d70b5cdfe948fbd2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b57712_645b22f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccfbf79d_754a4918",
+      "revId": "f74bbeb963fc80136e546b52d70b5cdfe948fbd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c85b6557_cfd7826c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-01T10:48:20Z",
+      "side": 1,
+      "message": "Addressed Jira ticket format. Let the comment that will be addressed at a later step open to keep trace.",
+      "revId": "942384f299eecdf5163014ff7930b12ce26a2ca3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
