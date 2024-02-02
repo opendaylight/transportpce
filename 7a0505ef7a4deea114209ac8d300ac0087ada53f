@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad05a35b_3dcbfbac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T11:02:32Z",
+      "side": 1,
+      "message": "intermediates variables for these String.join may be welcome here.",
+      "revId": "7a0505ef7a4deea114209ac8d300ac0087ada53f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
