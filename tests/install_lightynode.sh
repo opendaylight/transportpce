@@ -13,7 +13,7 @@ if ! [ -x "$(command -v unzip)" ];then
     exit 1
 fi
 
-PLUGIN_VERSION=18.1.0.8
+PLUGIN_VERSION=19.1.0.3
 TARGET_DIR=$(dirname $0)/lightynode
 INSTALL_DIR=$TARGET_DIR/lightynode-openroadm-device
 ARTIFACT_ZIPFILE=$TARGET_DIR/artifact.zip
