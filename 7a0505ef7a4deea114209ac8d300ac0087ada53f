@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa5ea85_4bd6a294",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T12:27:47Z",
+      "side": 1,
+      "message": "13:24:49   buildcontroller: OK (155.06\u003dsetup[9.09]+cmd[145.97] seconds)\n13:24:49   testsPCE: OK (337.26\u003dsetup[85.55]+cmd[251.71] seconds)\n13:24:49   sims121: OK (12.33\u003dsetup[9.13]+cmd[3.20] seconds)\n13:24:49   build_karaf_tests121: OK (46.80\u003dsetup[9.20]+cmd[37.60] seconds)\n13:24:49   tests121: OK (2194.13\u003dsetup[8.09]+cmd[2186.05] seconds)\n13:24:49   sims221: OK (12.40\u003dsetup[9.18]+cmd[3.22] seconds)\n13:24:49   build_karaf_tests221: OK (71.15\u003dsetup[11.28]+cmd[59.87] seconds)\n13:24:49   tests_tapi: OK (812.75\u003dsetup[10.19]+cmd[802.56] seconds)\n13:24:49   tests221: OK (2896.49\u003dsetup[6.92]+cmd[2889.57] seconds)\n13:24:49   sims71: OK (14.88\u003dsetup[11.49]+cmd[3.38] seconds)\n13:24:49   build_karaf_tests71: OK (63.02\u003dsetup[21.13]+cmd[41.90] seconds)\n13:24:49   tests71: OK (484.01\u003dsetup[7.63]+cmd[1.24,475.15] seconds)\n13:24:49   build_karaf_tests_hybrid: OK (67.04\u003dsetup[8.54]+cmd[58.50] seconds)\n13:24:49   tests_hybrid: OK (963.40\u003dsetup[6.67]+cmd[3.42,953.31] seconds)\n13:24:49   buildlighty: OK (26.98\u003dsetup[6.94]+cmd[20.04] seconds)\n13:24:49   docs: OK (27.75\u003dsetup[25.81]+cmd[1.94] seconds)\n13:24:49   docs-linkcheck: FAIL code 1 (28.63\u003dsetup[25.77]+cmd[2.86] seconds)\n13:24:49   checkbashisms: OK (45.12\u003dsetup[2.75]+cmd[41.65,0.72] seconds)\n13:24:49   pre-commit: OK (37.73\u003dsetup[3.72]+cmd[26.55,7.47] seconds)\n13:24:49   pylint: OK (26.13\u003dsetup[4.78]+cmd[21.35] seconds)",
+      "revId": "7a0505ef7a4deea114209ac8d300ac0087ada53f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad05a35b_3dcbfbac",
