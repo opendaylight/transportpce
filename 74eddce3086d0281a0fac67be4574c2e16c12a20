@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d2591b_b571417e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T10:21:06Z",
+      "side": 1,
+      "message": "what about debug rather ?",
+      "revId": "74eddce3086d0281a0fac67be4574c2e16c12a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f512659_d75c8bf4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T10:21:06Z",
+      "side": 1,
+      "message": "what about debug rather ?",
+      "revId": "74eddce3086d0281a0fac67be4574c2e16c12a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb944310_296ab106",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T10:21:06Z",
+      "side": 1,
+      "message": "what about debug rather ?",
+      "revId": "74eddce3086d0281a0fac67be4574c2e16c12a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1577ffdf_89cf082e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-02T10:21:06Z",
+      "side": 1,
+      "message": "what about debug rather ?",
+      "revId": "74eddce3086d0281a0fac67be4574c2e16c12a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
