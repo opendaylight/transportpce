@@ -67,7 +67,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITAL
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
@@ -598,69 +597,69 @@ public class ConvertORToTapiTopology {
         return null;
     }
 
-    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId,
-            Map<Double, Double> freqWidthMap, List<OperationalModeKey> operModeList,
+    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(
+            String nodeId, Map<Double, Double> freqWidthMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
-        if (String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
-                || String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
-            //Creating OTS & OTSI_MC NEP specific attributes
-            onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(
-                sicColl,operModeList));
-            SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-            OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
-            if (freqWidthMap == null || freqWidthMap.isEmpty()) {
-                ospecBd
-                    .setUpperFrequency(Uint64.valueOf(0))
-                    .setLowerFrequency(Uint64.valueOf(0));
-                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
-                    false, sicColl,operModeList));
-                double naz = 0.01;
-                AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
-                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
-                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
-                    .build();
-                Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
-                aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
-                    aspec.getUpperFrequency()), aspec);
-                spectrumPac.setAvailableSpectrum(aspecMap);
-            } else {
-                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
-                    true, sicColl,operModeList));
-                ospecBd
-                    .setUpperFrequency(Uint64.valueOf(Math.round(
-                        freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                        + (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2)))
-                    .setLowerFrequency(Uint64.valueOf(Math.round(
-                        freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                        - (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2)));
-            }
-            OccupiedSpectrum ospec = ospecBd.build();
-            Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
-            ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
-                ospec.getUpperFrequency()), ospec);
-            spectrumPac.setOccupiedSpectrum(ospecMap);
-            double nazz = 0.01;
-            SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
-                .build();
-            Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
-            sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
-                sspec.getUpperFrequency()), sspec);
-            spectrumPac.setSupportableSpectrum(sspecMap);
-            PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
-                .setSpectrumCapabilityPac(spectrumPac.build())
-                .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
-                    new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                    .OwnedNodeEdgePoint1Builder()
-                    .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
-                    .build();
-            onepBldr.addAugmentation(onep1);
+        if (!String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
+                && !String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
+            return onepBldr;
         }
-        return onepBldr;
+        //Creating OTS & OTSI_MC NEP specific attributes
+        double naz = 0.01;
+        Uint64 supUpFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz));
+        Uint64 supLoFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz));
+        boolean boolParam;
+        Uint64 upFreq;
+        Uint64 loFreq;
+        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+        if (freqWidthMap == null || freqWidthMap.isEmpty()) {
+            upFreq = Uint64.valueOf(0);
+            loFreq = Uint64.valueOf(0);
+            boolParam = false;
+            AvailableSpectrum  aspec =
+                new AvailableSpectrumBuilder().setUpperFrequency(supUpFreq).setLowerFrequency(supLoFreq).build();
+            spectrumPac.setAvailableSpectrum(new HashMap<>(Map.of(
+                new AvailableSpectrumKey(aspec.getLowerFrequency(), aspec.getUpperFrequency()), aspec)));
+        } else {
+            upFreq = Uint64.valueOf(Math.round(
+                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
+                    + (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
+            loFreq = Uint64.valueOf(Math.round(
+                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
+                    - (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
+            boolParam = true;
+        }
+        OccupiedSpectrum ospec =
+            new OccupiedSpectrumBuilder()
+                .setUpperFrequency(upFreq)
+                .setLowerFrequency(loFreq)
+                .build();
+        SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+            .setUpperFrequency(supUpFreq)
+            .setLowerFrequency(supLoFreq)
+            .build();
+        return onepBldr
+            .setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(sicColl, operModeList))
+            .setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(boolParam, sicColl,operModeList))
+            .addAugmentation(
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                        .OwnedNodeEdgePoint1Builder()
+                    .setPhotonicMediaNodeEdgePointSpec(
+                        new PhotonicMediaNodeEdgePointSpecBuilder()
+                            .setSpectrumCapabilityPac(
+                                spectrumPac
+                                    .setOccupiedSpectrum(new HashMap<>(Map.of(
+                                        new OccupiedSpectrumKey(
+                                            ospec.getLowerFrequency(), ospec.getUpperFrequency()),
+                                        ospec)))
+                                    .setSupportableSpectrum(new HashMap<>(Map.of(
+                                        new SupportableSpectrumKey(
+                                            sspec.getLowerFrequency(), sspec.getUpperFrequency()),
+                                        sspec)))
+                                    .build())
+                            .build())
+                    .build());
     }
 
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
