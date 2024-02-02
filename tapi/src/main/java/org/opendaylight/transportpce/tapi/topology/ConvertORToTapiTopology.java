@@ -67,7 +67,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITAL
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
@@ -219,7 +218,7 @@ public class ConvertORToTapiTopology {
             String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
-            nepMap = new HashMap<>();
+                nepMap = new HashMap<>();
         for (OwnedNodeEdgePoint onep : onepl) {
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
                 nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
@@ -230,28 +229,19 @@ public class ConvertORToTapiTopology {
                 .build();
             nepMap.put(nep.key(), nep);
         }
-        String rdmName =
-            topoType.equals("Abstracted")
-                ? "rdm infra node rule group"
-                : orNodeId + " node rule group";
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
-        Set<RuleType> ruleTypes = new HashSet<>();
-        ruleTypes.add(RuleType.FORWARDING);
-        Map<RuleKey, Rule> ruleList = new HashMap<>();
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
             .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-            .setRuleType(ruleTypes)
+            .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
             .build();
-        ruleList.put(rule.key(), rule);
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((rdmName)
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((
+                    topoType.equals("Abstracted") ? "rdm infra node rule group" : orNodeId + " node rule group")
                 .getBytes(Charset.forName("UTF-8"))).toString()))
-            .setRule(ruleList)
+            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
             .setNodeEdgePoint(nepMap)
             .build();
-        nodeRuleGroupMap.put(nodeRuleGroup.key(), nodeRuleGroup);
-        return nodeRuleGroupMap;
+        return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
 
     public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(int nb,
@@ -304,8 +294,6 @@ public class ConvertORToTapiTopology {
                 nepRate = loopRate;
             }
         }
-        CapacityBuilder capBd = new CapacityBuilder()
-            .setUnit(CAPACITYUNITGBPS.VALUE);
         List<AvailablePayloadStructure> aps = new ArrayList<>();
         Integer cepInstanceNber = 1;
         if (otsiProvisioned) {
@@ -320,8 +308,11 @@ public class ConvertORToTapiTopology {
                     aps.add(new AvailablePayloadStructureBuilder()
                         .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, ODUTYPEODU4.VALUE))
                         .setNumberOfCepInstances(Uint64.valueOf(cepInstanceNber))
-                        .setCapacity(capBd.setValue(Decimal64.valueOf(100.0 * cepInstanceNber, RoundingMode.DOWN))
-                            .build())
+                        .setCapacity(
+                            new CapacityBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf(100.0 * cepInstanceNber, RoundingMode.DOWN))
+                                .build())
                         .build());
                     break;
                 case "IfOCHOTUCnODUCn":
@@ -333,8 +324,10 @@ public class ConvertORToTapiTopology {
                             ODUTYPEODUCN.VALUE, ODUTYPEODU4.VALUE))
                         .setNumberOfCepInstances(Uint64.valueOf(nepRate * cepInstanceNber))
                         .setCapacity(
-                            capBd.setValue(Decimal64.valueOf(nepRate * 100.0 * cepInstanceNber, RoundingMode.DOWN))
-                            .build())
+                            new CapacityBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf(nepRate * 100.0 * cepInstanceNber, RoundingMode.DOWN))
+                                .build())
                         .build());
                     break;
                 default:
@@ -369,8 +362,6 @@ public class ConvertORToTapiTopology {
                 nepRate = loopRate;
             }
         }
-        CapacityBuilder capBd = new CapacityBuilder()
-            .setUnit(CAPACITYUNITGBPS.VALUE);
         List<SupportedPayloadStructure> sps = new ArrayList<>();
         for (SupportedInterfaceCapability sic : sicList) {
             String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
@@ -381,7 +372,11 @@ public class ConvertORToTapiTopology {
                     sps.add(new SupportedPayloadStructureBuilder()
                         .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, ODUTYPEODU4.VALUE))
                         .setNumberOfCepInstances(Uint64.valueOf(1))
-                        .setCapacity(capBd.setValue(Decimal64.valueOf(100.0, RoundingMode.DOWN)).build())
+                        .setCapacity(
+                            new CapacityBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf(100.0, RoundingMode.DOWN))
+                                .build())
                         .build());
                     break;
                 case "IfOCHOTUCnODUCn":
@@ -392,7 +387,11 @@ public class ConvertORToTapiTopology {
                         .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, OTUTYPEOTUCN.VALUE,
                             ODUTYPEODUCN.VALUE, ODUTYPEODU4.VALUE))
                         .setNumberOfCepInstances(Uint64.valueOf(nepRate))
-                        .setCapacity(capBd.setValue(Decimal64.valueOf(nepRate * 100.0, RoundingMode.DOWN)).build())
+                        .setCapacity(
+                            new CapacityBuilder()
+                                .setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf(nepRate * 100.0, RoundingMode.DOWN))
+                                .build())
                         .build());
                     break;
                 default:
@@ -406,15 +405,15 @@ public class ConvertORToTapiTopology {
         justification = "Voluntarily No break in switchcase where comment is inserted in following method")
     public List<SupportedCepLayerProtocolQualifierInstances> createSupportedCepLayerProtocolQualifier(
             Collection<SupportedInterfaceCapability> sicList, LayerProtocolName lpn) {
-        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
         if (sicList == null) {
-            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
-                .build());
-            return sclpqiList;
+            return new ArrayList<>(List.of(
+                new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                    .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
+                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .build()));
         }
         LOG.debug("SIC list = {}", sicList);
+        List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>();
         for (SupportedInterfaceCapability sic : sicList) {
             String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
             switch (lpn.getName()) {
@@ -569,98 +568,92 @@ public class ConvertORToTapiTopology {
             return null;
         }
         XpdrNetworkAttributes xnatt = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
             .getXpdrNetworkAttributes();
-        Map<Double,Double> freqWidthMap = new HashMap<>();
-        if (xnatt.getWavelength() != null && xnatt.getWavelength().getFrequency() != null
-                && xnatt.getWavelength().getWidth() != null) {
-            freqWidthMap.put(xnatt.getWavelength().getFrequency().getValue().doubleValue(),
-                xnatt.getWavelength().getWidth().getValue().doubleValue());
-            return freqWidthMap;
+        if (xnatt.getWavelength() == null || xnatt.getWavelength().getFrequency() == null
+                || xnatt.getWavelength().getWidth() == null) {
+            return null;
         }
-        return null;
+        return new HashMap<>(Map.of(
+            xnatt.getWavelength().getFrequency().getValue().doubleValue(),
+            xnatt.getWavelength().getWidth().getValue().doubleValue()));
     }
 
     public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
         PpAttributes ppAtt = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
             .getPpAttributes();
-        if (ppAtt == null) {
+        if (ppAtt == null || ppAtt.getUsedWavelength() == null
+                || ppAtt.getUsedWavelength().entrySet().iterator().next() == null) {
             return null;
         }
-        Map<Double,Double> freqWidthMap = new HashMap<>();
-        if (ppAtt.getUsedWavelength() != null && ppAtt.getUsedWavelength().entrySet().iterator().next() != null) {
-            freqWidthMap.put(ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency().getValue()
-                .doubleValue(), ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency()
-                .getValue().doubleValue());
-            return freqWidthMap;
-        }
-        return null;
+        return new HashMap<>(Map.of(
+            ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency().getValue().doubleValue(),
+            ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency().getValue().doubleValue()));
     }
 
-    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId,
-            Map<Double, Double> freqWidthMap, List<OperationalModeKey> operModeList,
+    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(
+            String nodeId, Map<Double, Double> freqWidthMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
-        if (String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
-                || String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
-            //Creating OTS & OTSI_MC NEP specific attributes
-            onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(
-                sicColl,operModeList));
-            SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-            OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
-            if (freqWidthMap == null || freqWidthMap.isEmpty()) {
-                ospecBd
-                    .setUpperFrequency(Uint64.valueOf(0))
-                    .setLowerFrequency(Uint64.valueOf(0));
-                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
-                    false, sicColl,operModeList));
-                double naz = 0.01;
-                AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
-                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
-                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
-                    .build();
-                Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
-                aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
-                    aspec.getUpperFrequency()), aspec);
-                spectrumPac.setAvailableSpectrum(aspecMap);
-            } else {
-                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
-                    true, sicColl,operModeList));
-                ospecBd
-                    .setUpperFrequency(Uint64.valueOf(Math.round(
-                        freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                        + (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2)))
-                    .setLowerFrequency(Uint64.valueOf(Math.round(
-                        freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                        - (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2)));
-            }
-            OccupiedSpectrum ospec = ospecBd.build();
-            Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
-            ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
-                ospec.getUpperFrequency()), ospec);
-            spectrumPac.setOccupiedSpectrum(ospecMap);
-            double nazz = 0.01;
-            SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
-                .build();
-            Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
-            sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
-                sspec.getUpperFrequency()), sspec);
-            spectrumPac.setSupportableSpectrum(sspecMap);
-            PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
-                .setSpectrumCapabilityPac(spectrumPac.build())
-                .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
-                    new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                    .OwnedNodeEdgePoint1Builder()
-                    .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
-                    .build();
-            onepBldr.addAugmentation(onep1);
+        if (!String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
+                && !String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
+            return onepBldr;
         }
-        return onepBldr;
+        //Creating OTS & OTSI_MC NEP specific attributes
+        double naz = 0.01;
+        Uint64 supUpFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz));
+        Uint64 supLoFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz));
+        boolean boolParam;
+        Uint64 upFreq;
+        Uint64 loFreq;
+        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+        if (freqWidthMap == null || freqWidthMap.isEmpty()) {
+            upFreq = Uint64.valueOf(0);
+            loFreq = Uint64.valueOf(0);
+            boolParam = false;
+            AvailableSpectrum  aspec =
+                new AvailableSpectrumBuilder().setUpperFrequency(supUpFreq).setLowerFrequency(supLoFreq).build();
+            spectrumPac.setAvailableSpectrum(new HashMap<>(Map.of(
+                new AvailableSpectrumKey(aspec.getLowerFrequency(), aspec.getUpperFrequency()), aspec)));
+        } else {
+            upFreq = Uint64.valueOf(Math.round(
+                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
+                    + (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
+            loFreq = Uint64.valueOf(Math.round(
+                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
+                    - (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
+            boolParam = true;
+        }
+        OccupiedSpectrum ospec = new OccupiedSpectrumBuilder()
+            .setUpperFrequency(upFreq)
+            .setLowerFrequency(loFreq)
+            .build();
+        SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+            .setUpperFrequency(supUpFreq)
+            .setLowerFrequency(supLoFreq)
+            .build();
+        return onepBldr
+            .setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(sicColl, operModeList))
+            .setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(boolParam, sicColl,operModeList))
+            .addAugmentation(
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                        .OwnedNodeEdgePoint1Builder()
+                    .setPhotonicMediaNodeEdgePointSpec(
+                        new PhotonicMediaNodeEdgePointSpecBuilder()
+                            .setSpectrumCapabilityPac(
+                                spectrumPac
+                                    .setOccupiedSpectrum(new HashMap<>(Map.of(
+                                        new OccupiedSpectrumKey(
+                                            ospec.getLowerFrequency(), ospec.getUpperFrequency()),
+                                        ospec)))
+                                    .setSupportableSpectrum(new HashMap<>(Map.of(
+                                        new SupportableSpectrumKey(
+                                            sspec.getLowerFrequency(), sspec.getUpperFrequency()),
+                                        sspec)))
+                                    .build())
+                            .build())
+                    .build());
     }
 
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
@@ -692,21 +685,18 @@ public class ConvertORToTapiTopology {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
-        Map<RuleKey, Rule> ruleList = new HashMap<>();
-        Set<RuleType> ruleTypes = new HashSet<>();
-        ruleTypes.add(RuleType.FORWARDING);
-        Rule rule = new RuleBuilder()
-            .setLocalId("forward")
-            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-            .setRuleType(ruleTypes)
-            .build();
-        ruleList.put(rule.key(), rule);
         if (layerProtocols.contains(LayerProtocolName.DSR)
                 || layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA)) {
-            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupList, ruleList);
+            Rule rule = new RuleBuilder()
+                .setLocalId("forward")
+                .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+                .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
+                .build();
+            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupList, new HashMap<>(Map.of(rule.key(), rule)));
         } else {
-            LOG.error("Undefined LayerProtocolName for {} node {}", nodeNames.get(nodeNames.keySet().iterator().next())
-                .getValueName(), nodeNames.get(nodeNames.keySet().iterator().next()).getValue());
+            LOG.error("Undefined LayerProtocolName for {} node {}",
+                nodeNames.get(nodeNames.keySet().iterator().next()).getValueName(),
+                nodeNames.get(nodeNames.keySet().iterator().next()).getValue());
         }
      // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
@@ -1036,7 +1026,6 @@ public class ConvertORToTapiTopology {
             .setValueName("SIP name")
             .setValue(String.join("+", nodeid, tpId))
             .build();
-
         return new ServiceInterfacePointBuilder()
             .setUuid(sipUuid)
             .setName(Map.of(sipName.key(), sipName))
