@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
 <networks xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
 <network>
@@ -37,8 +38,8 @@
       xmlns="http://org/openroadm/network/topology">
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
@@ -126,8 +127,8 @@
       xmlns="http://org/openroadm/network/topology">
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
@@ -160,12 +161,12 @@
       <degree-number>1</degree-number>
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
-    </avail-freq-maps>     </degree-attributes>
+    </avail-freq-maps></degree-attributes>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeA</node-ref>
@@ -234,12 +235,12 @@
       <degree-number>2</degree-number>
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
-    </avail-freq-maps>     </degree-attributes>
+    </avail-freq-maps></degree-attributes>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeA</node-ref>
@@ -281,12 +282,12 @@
       xmlns="http://org/openroadm/network/topology">
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
-    </avail-freq-maps>     </srg-attributes>
+    </avail-freq-maps></srg-attributes>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeC</node-ref>
@@ -336,12 +337,12 @@
       <degree-number>1</degree-number>
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>
-    </avail-freq-maps>     </degree-attributes>
+    </avail-freq-maps></degree-attributes>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeC</node-ref>
@@ -391,8 +392,8 @@
       <degree-number>2</degree-number>
     <avail-freq-maps>
         <map-name>cband</map-name>
-        <start-edge-freq> 191.325</start-edge-freq>
-        <freq-map-granularity> 6.25</freq-map-granularity>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
         <effective-bits>768</effective-bits>
         <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         </freq-map>

@@ -15,7 +15,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -37,7 +37,6 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.TransactionUtils;
@@ -45,8 +44,8 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
@@ -77,7 +76,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private final OtnDeviceRendererService otnDeviceRendererService = mock(OtnDeviceRendererService.class);
     private final PortMapping portMapping = mock(PortMapping.class);
     private final CrossConnect crossConnect = mock(CrossConnect.class);
-    private TransportpceOlmService olmService;
+    private final RpcService rpcService = mock(RpcService.class);
+    private final ServicePowerTurndown servicePowerTurndown = mock(ServicePowerTurndown.class);
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
@@ -87,11 +87,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     @BeforeEach
     void setUp() {
         setMountPoint(new MountPointStub(getDataBroker()));
-        this.olmService = new OlmServiceStub();
-        this.olmService = spy(this.olmService);
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer,
-            otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService, portMapping);
+            otnDeviceRendererService, getDataBroker(), notificationPublishService, portMapping, rpcService);
     }
 
 
@@ -142,8 +140,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 .build())
             .build();
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(null);
-        doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
-            .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(any());
+        doReturn(RpcResultBuilder
+                .success((new ServicePowerTurndownOutputBuilder()).setResult("Failed").build()).buildFuture())
+            .when(servicePowerTurndown.invoke(any()));
         ServiceDeleteOutput serviceDeleteOutput
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), service).get();
         assertEquals(
@@ -156,9 +155,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
         doReturn(Collections.emptyList())
             .when(this.crossConnect).deleteCrossConnect(anyString(),anyString(), eq(false));
-        doReturn(RpcResultBuilder.success(new ServicePowerTurndownOutputBuilder().setResult("Failed").build())
-                .buildFuture())
-            .when(this.olmService).servicePowerTurndown(any());
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerTurndownOutputBuilder().setResult("Failed").build()).buildFuture())
+            .when(servicePowerTurndown.invoke(any()));
 
         writePathDescription();
         Services service = new ServicesBuilder()
@@ -196,7 +195,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
         doReturn(Collections.emptyList())
             .when(this.crossConnect).deleteCrossConnect(anyString(), anyString(), eq(false));
-        when(this.olmService.servicePowerTurndown(any()))
+        when(servicePowerTurndown.invoke(any()))
             .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder()).setResult("Success").build())
                 .buildFuture())
             .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder()).setResult("Failed").build())
@@ -228,7 +227,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             .get();
         assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        verify(this.olmService, times(2)).servicePowerTurndown(any());
+        verify(servicePowerTurndown.invoke(any()), times(2));
         verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node1"), any(),eq(false));
         verify(this.crossConnect, times(0)).deleteCrossConnect(eq("node2"), any(),eq(false));
     }

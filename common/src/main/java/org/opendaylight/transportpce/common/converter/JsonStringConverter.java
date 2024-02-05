@@ -65,14 +65,14 @@ public class JsonStringConverter<T extends DataObject> {
          */
 
         JSONCodecFactory codecFactory = supplier
-                .getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext());
+                .getShared(bindingDOMCodecServices.getRuntimeContext().modelContext());
         try (Writer writer = new StringWriter();
                 JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer, 4)) {
             EffectiveStatementInference rootNode = SchemaInferenceStack
-                .of(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext())
+                .of(bindingDOMCodecServices.getRuntimeContext().modelContext())
                 .toInference();
-            rootNode.getEffectiveModelContext();
-            rootNode.getEffectiveModelContext();
+            rootNode.modelContext();
+            rootNode.modelContext();
             NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter
                 .createExclusiveWriter(codecFactory, rootNode, EffectiveModelContext.NAME.getNamespace(), jsonWriter);
             try (NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(jsonStreamWriter)) {
@@ -123,7 +123,7 @@ public class JsonStringConverter<T extends DataObject> {
                      .create(
                              streamWriter,
                              supplier.getShared(bindingDOMCodecServices
-                                     .getRuntimeContext().getEffectiveModelContext()))) {
+                                     .getRuntimeContext().modelContext()))) {
             jsonParser.parse(reader);
             return (T) bindingDOMCodecServices.fromNormalizedNode(path, result.getResult().data()).getValue();
         } catch (IOException e) {

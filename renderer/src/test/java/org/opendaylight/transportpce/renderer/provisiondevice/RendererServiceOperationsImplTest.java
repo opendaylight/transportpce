@@ -12,6 +12,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -39,18 +42,19 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
-import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPm;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetup;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.MeasurementsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -67,13 +71,17 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     private final DeviceRendererService deviceRenderer = mock(DeviceRendererService.class);
     private final OtnDeviceRendererService otnDeviceRendererService = mock(OtnDeviceRendererService.class);
     private final PortMapping portMapping = mock(PortMapping.class);
+    private final RpcService rpcService = mock(RpcService.class);
     private RendererServiceOperationsImpl rendererServiceOperations;
     private OpenRoadmInterfaces openRoadmInterfaces;
-    private TransportpceOlmService olmService;
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     private OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
+    private final ServicePowerSetup servicePowerSetup = mock(ServicePowerSetup.class);
+    private final GetPm getPm = mock(GetPm.class);
+    private final OlmPowerSetupTask olmPowerSetupTask = mock(OlmPowerSetupTask.class);
+
 
     private void setMountPoint(MountPoint mountPoint) {
         this.mountPointService = new MountPointServiceStub(mountPoint);
@@ -87,12 +95,10 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     @BeforeEach
     void setUp() throws OpenRoadmInterfaceException {
         setMountPoint(new MountPointStub(getDataBroker()));
-        this.olmService = new OlmServiceStub();
         doNothing().when(this.openRoadmInterfaces).postEquipmentState(anyString(), anyString(), anyBoolean());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.olmService = spy(this.olmService);
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer, otnDeviceRendererService,
-                this.olmService, getDataBroker(), notificationPublishService, portMapping);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer,
+            otnDeviceRendererService, getDataBroker(), notificationPublishService, portMapping, rpcService);
     }
 
     @Test
@@ -114,7 +120,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
-        doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService).servicePowerSetup(any());
+        doReturn(RpcResultBuilder.failed().buildFuture()).when(servicePowerSetup).invoke(any());
         ServiceImplementationRequestOutput result =
                 this.rendererServiceOperations.serviceImplementation(input, false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -184,7 +190,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
 //        writePortMapping(input, StringConstants.NETWORK_TOKEN);
-        doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService).servicePowerSetup(any());
+        doReturn(RpcResultBuilder.failed().buildFuture()).when(servicePowerSetup).invoke(any());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
                 false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -203,7 +209,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .setNodeId("node1")
                 .setMeasurements(measurementsList)
                 .build();
-        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService).getPm(any());
+        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(getPm).invoke(any());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
                 false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -223,7 +229,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .setMeasurements(measurementsList)
                 .build();
 
-        when(this.olmService.getPm(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
                 false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -243,8 +249,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         GetPmInput getPmInputZ = createGetPmInput("XPONDER-2-3", StringConstants.NETWORK_TOKEN);
         GetPmInput getPmInputA = createGetPmInput("XPONDER-1-2", StringConstants.NETWORK_TOKEN);
 
-        when(this.olmService.getPm(eq(getPmInputZ))).thenReturn(RpcResultBuilder.success(getPmOutput2).buildFuture());
-        when(this.olmService.getPm(eq(getPmInputA))).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        when(getPm.invoke(eq(getPmInputZ))).thenReturn(RpcResultBuilder.success(getPmOutput2).buildFuture());
+        when(getPm.invoke(eq(getPmInputA))).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
@@ -260,7 +266,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
         GetPmOutput getPmOutput1 = null;
-        when(this.olmService.getPm(any())).thenReturn(RpcResultBuilder.success(getPmOutput1).buildFuture());
+        when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput1).buildFuture());
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
@@ -270,14 +276,15 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceImplementationServiceActive2() throws InterruptedException, ExecutionException {
+    void serviceImplementationServiceActive2() throws Exception {
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
         GetPmOutput getPmOutput = new GetPmOutputBuilder().setMeasurements(new ArrayList<>()).build();
-        when(this.olmService.getPm(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
+        when(olmPowerSetupTask.call()).thenReturn(OLMRenderingResult.ok());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
                 false).get();
         assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
@@ -295,7 +302,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .setMeasurements(measurementsList)
                 .build();
 
-        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService).getPm(any());
+        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(getPm.invoke(any()));
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any());
@@ -320,7 +327,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
                 .setMeasurements(measurementsList)
                 .build();
 
-        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService).getPm(any());
+        doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(getPm.invoke(any()));
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input,
                 false).get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());

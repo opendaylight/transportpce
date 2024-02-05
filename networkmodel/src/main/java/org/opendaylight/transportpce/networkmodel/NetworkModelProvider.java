@@ -83,7 +83,8 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
         listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener));
+                    InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)),
+                topologyListener));
         listeners.add(dataBroker.registerDataTreeChangeListener(
                 DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
         serviceHandlerListenerRegistration = notificationService.registerCompositeListener(

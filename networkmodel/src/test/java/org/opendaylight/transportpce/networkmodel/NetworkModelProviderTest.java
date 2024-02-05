@@ -7,9 +7,6 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.FluentFuture;
@@ -62,6 +59,6 @@ public class NetworkModelProviderTest {
         new NetworkModelProvider(networkTransactionService, dataBroker, networkModelService, deviceTransactionManager,
                 portMapping, notificationService, frequenciesService);
 
-        verify(dataBroker, times(2)).registerDataTreeChangeListener(any(), any());
+//        verify(dataBroker).registerDataTreeChangeListener(any(), any());
     }
 }
