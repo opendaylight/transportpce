@@ -18,12 +18,17 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossBaseImpl;
+import org.opendaylight.transportpce.olm.rpc.impl.CalculateSpanlossCurrentImpl;
+import org.opendaylight.transportpce.olm.rpc.impl.GetPmImpl;
+import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerResetImpl;
+import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerSetupImpl;
+import org.opendaylight.transportpce.olm.rpc.impl.ServicePowerTurndownImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -43,7 +48,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -59,12 +63,6 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
     private OlmPowerService olmPowerService;
     @Mock
     private RpcProviderService rpcProviderService;
-    private TransportpceOlmService olmPowerServiceRpc;
-
-    @BeforeEach
-    public void setUp() {
-        this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService, rpcProviderService);
-    }
 
     @Test
     void testGetPmFailWithNodeIdNull() throws InterruptedException, ExecutionException {
@@ -74,7 +72,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
                     .setResourceName("ots-deg1").build())
             .setResourceType(ResourceTypeEnum.Interface)
             .build();
-        ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
+        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(olmPowerService).invoke(input);
         assertFalse(output.get().isSuccessful());
         assertNull(output.get().getResult());
         assertEquals(ErrorType.RPC, output.get().getErrors().get(0).getErrorType());
@@ -89,7 +87,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
             .setNodeId("nodeId")
             .build();
         when(this.olmPowerService.getPm(any())).thenReturn(new GetPmOutputBuilder().build());
-        ListenableFuture<RpcResult<GetPmOutput>> output = this.olmPowerServiceRpc.getPm(input);
+        ListenableFuture<RpcResult<GetPmOutput>> output = new GetPmImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new GetPmOutputBuilder().build(), output.get().getResult());
     }
@@ -98,7 +96,8 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
     void testServicePowerSetup() throws InterruptedException, ExecutionException {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
         when(this.olmPowerService.servicePowerSetup(any())).thenReturn(new ServicePowerSetupOutputBuilder().build());
-        ListenableFuture<RpcResult<ServicePowerSetupOutput>> output = this.olmPowerServiceRpc.servicePowerSetup(input);
+        ListenableFuture<RpcResult<ServicePowerSetupOutput>> output =
+            new ServicePowerSetupImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new ServicePowerSetupOutputBuilder().build(), output.get().getResult());
     }
@@ -108,7 +107,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
         when(this.olmPowerService.servicePowerTurndown(any()))
             .thenReturn(new ServicePowerTurndownOutputBuilder().build());
-        var output = this.olmPowerServiceRpc.servicePowerTurndown(input);
+        var output = new ServicePowerTurndownImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new ServicePowerTurndownOutputBuilder().build(), output.get().getResult());
     }
@@ -118,7 +117,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInputAll();
         when(this.olmPowerService.calculateSpanlossBase(any()))
             .thenReturn(new CalculateSpanlossBaseOutputBuilder().build());
-        var output = this.olmPowerServiceRpc.calculateSpanlossBase(input);
+        var output = new CalculateSpanlossBaseImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new CalculateSpanlossBaseOutputBuilder().build(), output.get().getResult());
     }
@@ -128,7 +127,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         CalculateSpanlossCurrentInput input = new CalculateSpanlossCurrentInputBuilder().build();
         when(this.olmPowerService.calculateSpanlossCurrent(any()))
             .thenReturn(new CalculateSpanlossCurrentOutputBuilder().build());
-        var output = this.olmPowerServiceRpc.calculateSpanlossCurrent(input);
+        var output = new CalculateSpanlossCurrentImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new CalculateSpanlossCurrentOutputBuilder().build(), output.get().getResult());
     }
@@ -138,7 +137,7 @@ class OlmPowerServiceRpcImplTest extends AbstractTest {
         ServicePowerResetInput input = OlmPowerServiceRpcImplUtil.getServicePowerResetInput();
         when(this.olmPowerService.servicePowerReset(any()))
             .thenReturn(new ServicePowerResetOutputBuilder().build());
-        var output = this.olmPowerServiceRpc.servicePowerReset(input);
+        var output = new ServicePowerResetImpl(olmPowerService).invoke(input);
         assertTrue(output.get().isSuccessful());
         assertEquals(new ServicePowerResetOutputBuilder().build(), output.get().getResult());
     }

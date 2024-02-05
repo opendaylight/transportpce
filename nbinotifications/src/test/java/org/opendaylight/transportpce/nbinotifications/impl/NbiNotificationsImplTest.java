@@ -18,6 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.CreateNotificationSubscriptionServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationListImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationsAlarmServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationsProcessServiceImpl;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -29,83 +33,85 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.GetNotifications
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationAlarmService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationProcessService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionServiceOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class NbiNotificationsImplTest extends AbstractTest {
     private NbiNotificationsImpl nbiNotificationsImpl;
     public static NetworkTransactionService networkTransactionService;
     private TopicManager topicManager;
+    private JsonStringConverter<NotificationProcessService> converterProcess;
+    private JsonStringConverter<NotificationAlarmService> converterAlarm;
+    private JsonStringConverter<NotificationTapiService> converterTapi;
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
         topicManager = TopicManager.getInstance();
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        JsonStringConverter<NotificationProcessService> converter = new JsonStringConverter<>(
-                getDataStoreContextUtil().getBindingDOMCodecServices());
-        JsonStringConverter<NotificationAlarmService> converterAlarm = new JsonStringConverter<>(
-                getDataStoreContextUtil().getBindingDOMCodecServices());
-        JsonStringConverter<NotificationTapiService> converterTapi = new JsonStringConverter<>(
-            getDataStoreContextUtil().getBindingDOMCodecServices());
+        converterProcess = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
+        converterAlarm = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
+        converterTapi = new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
         topicManager.setTapiConverter(converterTapi);
         NotificationServiceDataUtils.createTapiContext(networkTransactionService);
 
-        nbiNotificationsImpl = new NbiNotificationsImpl(converter, converterAlarm, converterTapi,
+        nbiNotificationsImpl = new NbiNotificationsImpl(converterProcess, converterAlarm, converterTapi,
             "localhost:8080", networkTransactionService, topicManager);
     }
 
     @Test
     void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
-                nbiNotificationsImpl.getNotificationsProcessService(
+                new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080").invoke(
                         new GetNotificationsProcessServiceInputBuilder().build());
         assertNull(result.get().getResult().getNotificationsProcessService(), "Should be null");
     }
 
     @Test
     void getNotificationsServiceTest() throws InterruptedException, ExecutionException {
-        GetNotificationsProcessServiceInputBuilder builder = new GetNotificationsProcessServiceInputBuilder()
-                .setGroupId("groupId")
-                .setIdConsumer("consumerId")
-                .setConnectionType(ConnectionType.Service);
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
-                nbiNotificationsImpl.getNotificationsProcessService(builder.build());
+                new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080")
+            .invoke(new GetNotificationsProcessServiceInputBuilder()
+                    .setGroupId("groupId")
+                    .setIdConsumer("consumerId")
+                    .setConnectionType(ConnectionType.Service)
+                    .build());
         assertNull(result.get().getResult().getNotificationsProcessService(), "Should be null");
     }
 
     @Test
     void getNotificationsAlarmServiceTest() throws InterruptedException, ExecutionException {
-        GetNotificationsAlarmServiceInputBuilder builder = new GetNotificationsAlarmServiceInputBuilder()
-                .setGroupId("groupId")
-                .setIdConsumer("consumerId")
-                .setConnectionType(ConnectionType.Service);
         ListenableFuture<RpcResult<GetNotificationsAlarmServiceOutput>> result =
-                nbiNotificationsImpl.getNotificationsAlarmService(builder.build());
+                new GetNotificationsAlarmServiceImpl(converterAlarm, "localhost:8080")
+            .invoke(new GetNotificationsAlarmServiceInputBuilder()
+                    .setGroupId("groupId")
+                    .setIdConsumer("consumerId")
+                    .setConnectionType(ConnectionType.Service)
+                    .build());
         assertNull(result.get().getResult().getNotificationsAlarmService(), "Should be null");
     }
 
     @Test
     void createTapiNotificationSubscriptionServiceTest() throws InterruptedException, ExecutionException {
-        CreateNotificationSubscriptionServiceInputBuilder builder
-            = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-            nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
+                new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager)
+            .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
         assertNotNull(result.get().getResult().getSubscriptionService().getUuid().toString(),
             "Should receive UUID for subscription service");
     }
 
     @Test
     void getTapiNotificationsServiceTest() throws InterruptedException, ExecutionException {
-        CreateNotificationSubscriptionServiceInputBuilder builder
-            = NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder();
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-            nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
-        assertNull(nbiNotificationsImpl.getNotificationList(new GetNotificationListInputBuilder()
-            .setTimeRange(null)
-            .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid())
-            .build())
-            .get().getResult().getNotification(), "Should be null");
+                new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager)
+            .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
+        ListenableFuture<RpcResult<GetNotificationListOutput>> result2 =
+                new GetNotificationListImpl(converterTapi, "localhost:8080", networkTransactionService, topicManager)
+            .invoke(new GetNotificationListInputBuilder()
+                    .setTimeRange(null)
+                    .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid())
+                    .build());
+        assertNull(result2.get().getResult().getNotification(), "Should be null");
     }
 }

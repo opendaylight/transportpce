@@ -7,58 +7,82 @@
  */
 package org.opendaylight.transportpce.renderer.rpcs;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
-import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOms;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePath;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
+import org.opendaylight.yangtools.yang.common.RpcResult;
 
-
-public class DeviceRendererRPCImplTest extends AbstractTest {
-    private final RpcProviderService rpcProviderService = mock(RpcProviderService.class);
-    private final DeviceRendererService deviceRenderer = mock(DeviceRendererService.class);
-    private final OtnDeviceRendererService otnDeviceRenderer = mock(OtnDeviceRendererService.class);
-    private final ServicePathInput servicePathInput = spy(ServicePathInput.class);
-    private final CreateOtsOmsInput createOtsOmsInput = mock(CreateOtsOmsInput.class);
-    private final RendererRollbackInput rendererRollbackInput = mock(RendererRollbackInput.class);
-    private DeviceRendererRPCImpl deviceRendererRPC = null;
+@ExtendWith(MockitoExtension.class)
+public class DeviceRendererRPCImplTest {
+    @Mock
+    private DeviceRendererService deviceRendererService;
+    @Mock
+    private RpcProviderService rpcProviderService;
+    @Mock
+    private DeviceRendererService deviceRenderer;
+    @Mock
+    private OtnDeviceRendererService otnDeviceRendererService;
+    @Spy
+    private ServicePathInput servicePathInput;
+    @Mock
+    private CreateOtsOmsInput createOtsOmsInput;
+    @Mock
+    private RendererRollbackInput rendererRollbackInput;
+    private ServicePath servicePath;
+    private RendererRollback rendererRollback;
+    private CreateOtsOms createOtsOms;
 
     @BeforeEach
     void setup() {
-        deviceRendererRPC = new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRenderer);
+        servicePath = new ServicePathImpl(deviceRenderer);
+        rendererRollback = new RendererRollbackImpl(deviceRenderer);
+        createOtsOms = new CreateOtsOmsImpl(deviceRenderer);
     }
 
     @Test
     void testRpcRegistration() {
+        new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRendererService);
         verify(rpcProviderService, times(1)).registerRpcImplementations(any());
     }
 
     @Test
     void testServicePathCreateOption() {
         when(servicePathInput.getOperation()).thenReturn(Action.Create);
-        deviceRendererRPC.servicePath(servicePathInput);
+        servicePath.invoke(servicePathInput);
         verify(deviceRenderer, times(1)).setupServicePath(servicePathInput, null);
     }
 
     @Test
     void testServicePathDeleteOption() {
         when(servicePathInput.getOperation()).thenReturn(Action.Delete);
-        deviceRendererRPC.servicePath(servicePathInput);
+        servicePath.invoke(servicePathInput);
         verify(deviceRenderer, times(1)).deleteServicePath(servicePathInput);
     }
 
@@ -66,7 +90,7 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
     void testRendererRollback() {
         when(deviceRenderer.rendererRollback(rendererRollbackInput))
             .thenReturn(new RendererRollbackOutputBuilder().build());
-        deviceRendererRPC.rendererRollback(rendererRollbackInput);
+        rendererRollback.invoke(rendererRollbackInput);
         verify(deviceRenderer, times(1)).rendererRollback(rendererRollbackInput);
     }
 
@@ -75,15 +99,20 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
         when(createOtsOmsInput.getNodeId()).thenReturn("nodeId");
         when(createOtsOmsInput.getLogicalConnectionPoint()).thenReturn("logicalConnectionPoint");
         when(deviceRenderer.createOtsOms(createOtsOmsInput)).thenReturn(null);
-        deviceRendererRPC.createOtsOms(createOtsOmsInput);
+        createOtsOms.invoke(createOtsOmsInput);
         verify(deviceRenderer, times(1)).createOtsOms(createOtsOmsInput);
     }
 
     @Test
-    void testCreateOtsOmsReturnException() throws OpenRoadmInterfaceException {
+    void testCreateOtsOmsReturnException()
+            throws OpenRoadmInterfaceException, InterruptedException, ExecutionException {
         when(createOtsOmsInput.getNodeId()).thenReturn("nodeId");
         when(createOtsOmsInput.getLogicalConnectionPoint()).thenReturn("logicalConnectionPoint");
         when(deviceRenderer.createOtsOms(createOtsOmsInput)).thenThrow(OpenRoadmInterfaceException.class);
-        assertNull(deviceRendererRPC.createOtsOms(createOtsOmsInput));
+        ListenableFuture<RpcResult<CreateOtsOmsOutput>> result = createOtsOms.invoke(createOtsOmsInput);
+        assertTrue(result.isDone());
+        assertFalse(result.get().isSuccessful());
+        assertNull(result.get().getResult());
+        assertEquals("to create oms and ots interfaces", result.get().getErrors().get(0).getMessage());
     }
 }

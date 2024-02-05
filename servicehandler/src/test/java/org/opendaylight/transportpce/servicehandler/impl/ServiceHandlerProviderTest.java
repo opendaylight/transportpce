@@ -58,6 +58,6 @@ public class ServiceHandlerProviderTest extends AbstractTest {
         new ServiceHandlerProvider(dataBroker, getNotificationService(),
             serviceDataStoreOperations, pceNotificationHandler, rendererNotificationHandler,
             networkModelNotificationHandler, serviceListener);
-        verify(dataBroker, times(1)).registerDataTreeChangeListener(any(), any());
+        verify(dataBroker, times(1)).registerTreeChangeListener(any(), any());
     }
 }
