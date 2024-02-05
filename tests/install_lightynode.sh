@@ -2,7 +2,7 @@
 
 #set -x
 
-PLUGIN_VERSION=${1:-19.1.0.3}
+PLUGIN_VERSION=${1:-19.1.0.5}
 
 #check if curl exists
 if ! [ -x "$(command -v curl)" ];then
