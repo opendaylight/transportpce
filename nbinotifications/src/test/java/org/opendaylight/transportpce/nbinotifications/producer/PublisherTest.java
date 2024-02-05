@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.CreateNotificationSubscriptionServiceImpl;
 import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConstants;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceSerializer;
@@ -119,7 +120,8 @@ public class PublisherTest extends AbstractTest {
             .setRequestedObjectIdentifier(new HashSet<>(List.of(new Uuid("76d8f07b-ead5-4132-8eb8-cf3fdef7e079"))))
             .build();
         builder.setSubscriptionFilter(subscriptionFilter);
-        nbiNotificationsImpl.createNotificationSubscriptionService(builder.build());
+
+        new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager).invoke(builder.build());
         String json = Files.readString(Paths.get("src/test/resources/tapi_event.json"));
         NotificationTapiService notificationTapiService = converterTapiService
             .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationTapiService.QNAME),

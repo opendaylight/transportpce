@@ -18,8 +18,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScan
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yangtools.yang.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class DeviceListener121 {
             // 1. Detect the org-openroadm-device object modified
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
-                    LinkedList<PathArgument> path = new LinkedList<>();
+                    LinkedList<DataObjectStep<?>> path = new LinkedList<>();
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
                     InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
                     String portName = InstanceIdentifier.keyOf(portIID).getPortName();

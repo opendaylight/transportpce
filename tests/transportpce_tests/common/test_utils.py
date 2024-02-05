@@ -327,13 +327,19 @@ def mount_device(node: str, sim: str):
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}',
            'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}'}
     body = {'node': [{
-        'node-id': node,
-        'netconf-node-topology:username': NODES_LOGIN,
-        'netconf-node-topology:password': NODES_PWD,
-        'netconf-node-topology:host': '127.0.0.1',
-        'netconf-node-topology:port': SIMS[sim]['port'],
-        'netconf-node-topology:tcp-only': 'false',
-        'netconf-node-topology:pass-through': {}}]}
+            "node-id": node,
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": SIMS[sim]['port'],
+            "netconf-node-topology:login-password-unencrypted": {
+                "netconf-node-topology:username": NODES_LOGIN,
+                "netconf-node-topology:password": NODES_PWD
+            },
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:reconnect-on-changed-schema": "false",
+            "netconf-node-topology:connection-timeout-millis": "20000",
+            "netconf-node-topology:default-request-timeout-millis": "60000",
+            "netconf-node-topology:max-connection-attempts": "0",
+            "netconf-node-topology:keepalive-delay": "120"}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
     if wait_until_log_contains(TPCE_LOG, 'Triggering notification stream NETCONF for node ' + node, 180):
         print('Node ' + node + ' correctly added to tpce topology', end='... ', flush=True)

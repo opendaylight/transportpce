@@ -16,14 +16,14 @@ import static org.mockito.Mockito.spy;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrail;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -32,17 +32,17 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 public final class MountPointUtils {
 
     public static MountPointStub getMountPoint(List<Ports> ports, DataBroker dataBroker) {
-        RpcConsumerRegistry rpcConsumerRegistry = spy(RpcConsumerRegistry.class);
-        OrgOpenroadmDeviceService orgOpenroadmDeviceService = spy(OrgOpenroadmDeviceService.class);
+        RpcService rpcService = spy(RpcService.class);
+        GetConnectionPortTrail getConnectionPortTrail = spy(GetConnectionPortTrail.class);
         GetConnectionPortTrailOutputBuilder getConnectionPortTrailOutputBldr
                 = new GetConnectionPortTrailOutputBuilder();
         getConnectionPortTrailOutputBldr.setPorts(ports);
         ListenableFuture<RpcResult<GetConnectionPortTrailOutput>> rpcResultFuture =
                 RpcResultBuilder.success(getConnectionPortTrailOutputBldr.build()).buildFuture();
-        doReturn(rpcResultFuture).when(orgOpenroadmDeviceService).getConnectionPortTrail(any());
-        doReturn(orgOpenroadmDeviceService).when(rpcConsumerRegistry).getRpcService(any());
+        doReturn(rpcResultFuture).when(getConnectionPortTrail.invoke(any()));
+        doReturn(getConnectionPortTrail).when(rpcService).getRpc(any());
         MountPointStub mountPoint = new MountPointStub(dataBroker);
-        mountPoint.setRpcConsumerRegistry(rpcConsumerRegistry);
+        mountPoint.setRpcService(rpcService);
         return mountPoint;
     }
 

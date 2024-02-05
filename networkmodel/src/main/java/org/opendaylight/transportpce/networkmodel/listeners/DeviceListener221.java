@@ -20,8 +20,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.n
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
+import org.opendaylight.yangtools.yang.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ public class DeviceListener221 {
             // 1. Detect the org-openroadm-device object modified
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
-                    LinkedList<PathArgument> path = new LinkedList<>();
+                    LinkedList<DataObjectStep<?>> path = new LinkedList<>();
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));
                     InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
                     String portName = InstanceIdentifier.keyOf(portIID).getPortName();
@@ -88,7 +88,7 @@ public class DeviceListener221 {
                     thread.start();
                     break;
                 case "Interface":
-                    LinkedList<PathArgument> pathInter = new LinkedList<>();
+                    LinkedList<DataObjectStep<?>> pathInter = new LinkedList<>();
                     edit.getTarget().getPathArguments().forEach(p -> pathInter.add(p));
                     InstanceIdentifier<Interface> interfIID = InstanceIdentifier.unsafeOf(pathInter);
                     String interfName = InstanceIdentifier.keyOf(interfIID).getName();

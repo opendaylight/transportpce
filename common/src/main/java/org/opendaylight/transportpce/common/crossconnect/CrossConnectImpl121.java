@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.MountPoint;
-import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -27,10 +27,10 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrail;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.connection.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.connection.SourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
@@ -162,16 +162,15 @@ public class CrossConnectImpl121 {
             LOG.error("Failed to obtain mount point for device {}!", nodeId);
             return Collections.emptyList();
         }
-        final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
+        final Optional<RpcService> service = mountPoint.getService(RpcService.class);
         if (!service.isPresent()) {
             LOG.error("Failed to get RpcService for node {}", nodeId);
         }
-        final OrgOpenroadmDeviceService rpcService = service.orElseThrow()
-            .getRpcService(OrgOpenroadmDeviceService.class);
-        final GetConnectionPortTrailInputBuilder portTrainInputBuilder = new GetConnectionPortTrailInputBuilder();
-        portTrainInputBuilder.setConnectionNumber(connectionName);
-        final Future<RpcResult<GetConnectionPortTrailOutput>> portTrailOutput = rpcService.getConnectionPortTrail(
-                portTrainInputBuilder.build());
+        final GetConnectionPortTrail rpcService = service.orElseThrow().getRpc(GetConnectionPortTrail.class);
+        final Future<RpcResult<GetConnectionPortTrailOutput>> portTrailOutput = rpcService.invoke(
+                new GetConnectionPortTrailInputBuilder()
+                    .setConnectionNumber(connectionName)
+                    .build());
         if (portTrailOutput != null) {
             try {
                 RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();

@@ -8,13 +8,14 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.NotificationService.Listener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.LldpNbrInfoChange;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.OrgOpenroadmLldpListener;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LldpListener implements OrgOpenroadmLldpListener {
+public class LldpListener implements Listener<LldpNbrInfoChange> {
 
     private static final Logger LOG = LoggerFactory.getLogger(LldpListener.class);
     private final NodeId nodeId;
@@ -28,7 +29,7 @@ public class LldpListener implements OrgOpenroadmLldpListener {
      * @param notification LldpNbrInfoChange object
      */
     @Override
-    public void onLldpNbrInfoChange(LldpNbrInfoChange notification) {
-        LOG.info("Notification {} received {}", LldpNbrInfoChange.QNAME, notification);
+    public void onNotification(@NonNull LldpNbrInfoChange notification) {
+        LOG.info("Notification {} received {} on node {}", LldpNbrInfoChange.QNAME, notification, nodeId);
     }
 }

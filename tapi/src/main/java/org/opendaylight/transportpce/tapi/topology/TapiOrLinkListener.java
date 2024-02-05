@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import java.nio.charset.Charset;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -58,12 +58,12 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     @Override
-    public void onDataTreeChanged(@NonNull Collection<DataTreeModification<Link>> changes) {
+    public void onDataTreeChanged(@NonNull List<DataTreeModification<Link>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Link> change : changes) {
-            if (change.getRootNode().getDataBefore() == null && change.getRootNode().getDataAfter() != null) {
+            if (change.getRootNode().dataBefore() == null && change.getRootNode().dataAfter() != null) {
                 LOG.info("New link in openroadm topology");
-                Link link = change.getRootNode().getDataAfter();
+                Link link = change.getRootNode().dataAfter();
                 // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
                 //  the opposite one. But first check the type
                 Link1 link1 = link.augmentation(Link1.class);

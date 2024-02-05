@@ -7,15 +7,15 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.ConnectionOper.ConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.connection.oper.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.available.capabilities.AvailableCapability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev231121.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +30,16 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
     }
 
     @Override
-    public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
+    public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();
-            if (rootNode.getDataBefore() == null) {
+            if (rootNode.dataBefore() == null) {
                 continue;
             }
-            String nodeId = rootNode.getDataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.getDataBefore().augmentation(NetconfNode.class);
-            switch (rootNode.getModificationType()) {
+            String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
+            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNode.class);
+            switch (rootNode.modificationType()) {
                 case DELETE:
                     this.tapiNetworkModelService.deleteTapinode(nodeId);
                     // TODO -> unregistration to NETCONF stream not yet supported
@@ -47,7 +47,7 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
                     LOG.info("Device {} correctly disconnected from controller", nodeId);
                     break;
                 case WRITE:
-                    NetconfNode netconfNodeAfter = rootNode.getDataAfter().augmentation(NetconfNode.class);
+                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNode.class);
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
@@ -70,7 +70,7 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
                     }
                     break;
                 default:
-                    LOG.debug("Unknown modification type {}", rootNode.getModificationType().name());
+                    LOG.debug("Unknown modification type {}", rootNode.modificationType().name());
                     break;
             }
         }

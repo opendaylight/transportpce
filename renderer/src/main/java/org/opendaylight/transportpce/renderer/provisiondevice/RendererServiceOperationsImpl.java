@@ -25,6 +25,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -47,12 +48,14 @@ import org.opendaylight.transportpce.renderer.provisiondevice.transaction.histor
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPm;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetup;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
@@ -106,25 +109,25 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     private final DeviceRendererService deviceRenderer;
     private final OtnDeviceRendererService otnDeviceRenderer;
-    private final TransportpceOlmService olmService;
     private final DataBroker dataBroker;
     private final NotificationPublishService notificationPublishService;
     private final PortMapping portMapping;
+    private final RpcService rpcService;
     private ListeningExecutorService executor;
 
     @Activate
     public RendererServiceOperationsImpl(@Reference DeviceRendererService deviceRenderer,
             @Reference OtnDeviceRendererService otnDeviceRenderer,
-            @Reference TransportpceOlmService olmService,
             @Reference DataBroker dataBroker,
             @Reference NotificationPublishService notificationPublishService,
-            @Reference PortMapping portMapping) {
+            @Reference PortMapping portMapping,
+            @Reference RpcService rpcService) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
-        this.olmService = olmService;
         this.dataBroker = dataBroker;
         this.notificationPublishService = notificationPublishService;
         this.portMapping = portMapping;
+        this.rpcService = rpcService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         LOG.debug("RendererServiceOperationsImpl instantiated");
     }
@@ -328,8 +331,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private ServicePowerTurndownOutput olmPowerTurndown(ServicePathInputData servicePathInputData)
             throws InterruptedException, ExecutionException, TimeoutException {
         LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-        return this.olmService
-            .servicePowerTurndown(
+        return rpcService.getRpc(ServicePowerTurndown.class).invoke(
                 new ServicePowerTurndownInputBuilder(servicePathInputData.getServicePathInput()).build())
             .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS)
             .getResult();
@@ -504,7 +506,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 RpcStatusEx.Pending,
                 "Olm power setup A-Z");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureAtoZ =
-                this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputAtoZ));
+                this.executor.submit(
+                    new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputAtoZ));
 
         LOG.info("OLM power setup Z-A");
         sendNotifications(
@@ -513,7 +516,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 RpcStatusEx.Pending,
                 "Olm power setup Z-A");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureZtoA =
-                this.executor.submit(new OlmPowerSetupTask(this.olmService, powerSetupInputZtoA));
+                this.executor.submit(
+                    new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputZtoA));
         ListenableFuture<List<OLMRenderingResult>> olmFutures =
                 Futures.allAsList(olmPowerSetupFutureAtoZ, olmPowerSetupFutureZtoA);
 
@@ -529,23 +533,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     RpcStatusEx.Pending,
                     OLM_ROLL_BACK_MSG);
             rollbackProcessor.addTask(
-                    new OlmPowerSetupRollbackTask("AtoZOLMTask", true, this.olmService, powerSetupInputAtoZ));
+                    new OlmPowerSetupRollbackTask("AtoZOLMTask", true, rpcService.getRpc(ServicePowerTurndown.class),
+                        powerSetupInputAtoZ));
             rollbackProcessor.addTask(
-                    new OlmPowerSetupRollbackTask("ZtoAOLMTask", true, this.olmService, powerSetupInputZtoA));
+                    new OlmPowerSetupRollbackTask("ZtoAOLMTask", true, rpcService.getRpc(ServicePowerTurndown.class),
+                        powerSetupInputZtoA));
             return;
         }
-        rollbackProcessor.addTask(
-                new OlmPowerSetupRollbackTask(
-                        "AtoZOLMTask",
-                        !olmResults.get(0).isSuccess(),
-                        this.olmService,
-                        powerSetupInputAtoZ));
-        rollbackProcessor.addTask(
-                new OlmPowerSetupRollbackTask(
-                        "ZtoAOLMTask",
-                        !olmResults.get(1).isSuccess(),
-                        this.olmService,
-                        powerSetupInputZtoA));
+        rollbackProcessor.addTask(new OlmPowerSetupRollbackTask(
+                "AtoZOLMTask", !olmResults.get(0).isSuccess(), rpcService.getRpc(ServicePowerTurndown.class),
+                powerSetupInputAtoZ));
+        rollbackProcessor.addTask(new OlmPowerSetupRollbackTask(
+                "ZtoAOLMTask", !olmResults.get(1).isSuccess(), rpcService.getRpc(ServicePowerTurndown.class),
+                powerSetupInputZtoA));
     }
 
     @SuppressFBWarnings(
@@ -574,9 +574,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     private List<Measurements> getMeasurements(String nodeId, String tp) {
         try {
-            GetPmOutput getPmOutput =
-                this.olmService
-                    .getPm(
+            GetPmOutput getPmOutput = rpcService.getRpc(GetPm.class).invoke(
                         new GetPmInputBuilder()
                             .setNodeId(nodeId)
                             .setGranularity(PmGranularity._15min)

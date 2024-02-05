@@ -20,12 +20,17 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingAdapterFactory;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
+import org.opendaylight.mdsal.binding.dom.adapter.spi.AdapterFactory;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.mdsal.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMNotificationPublishService;
+import org.opendaylight.mdsal.dom.api.DOMNotificationService;
 import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
+import org.opendaylight.mdsal.dom.broker.RouterDOMNotificationService;
+import org.opendaylight.mdsal.dom.broker.RouterDOMPublishNotificationService;
 import org.opendaylight.mdsal.dom.broker.SerializedDOMDataBroker;
 import org.opendaylight.mdsal.dom.spi.FixedDOMSchemaService;
 import org.opendaylight.mdsal.dom.spi.store.DOMStore;
@@ -44,7 +49,9 @@ public class DataStoreContextImpl implements DataStoreContext {
     private final NotificationPublishService notificationPublishService;
     private EffectiveModelContext schemaCtx;
     private BindingDOMCodecServices bindingDOMCodecServices;
-    private BindingAdapterFactory adapterFactory ;
+    private AdapterFactory adapterFactory;
+    private DOMNotificationService domNotificationService;
+    private DOMNotificationPublishService domNotificationPublishService;
 
     @SuppressFBWarnings(value = "MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR")
     public DataStoreContextImpl() {
@@ -57,6 +64,8 @@ public class DataStoreContextImpl implements DataStoreContext {
         bindingDOMCodecServices = new BindingCodecContext(BindingRuntimeHelpers.createRuntimeContext());
         adapterFactory = new BindingAdapterFactory(new ConstantAdapterContext(bindingDOMCodecServices));
         domNotificationRouter = new DOMNotificationRouter(16);
+        domNotificationService = new RouterDOMNotificationService(domNotificationRouter);
+        domNotificationPublishService = new RouterDOMPublishNotificationService(domNotificationRouter);
         datastores = createDatastores();
         domDataBroker = createDOMDataBroker();
         dataBroker = createDataBroker();
@@ -76,12 +85,12 @@ public class DataStoreContextImpl implements DataStoreContext {
 
     @Override
     public final NotificationService createNotificationService() {
-        return adapterFactory.createNotificationService(domNotificationRouter);
+        return adapterFactory.createNotificationService(domNotificationService);
     }
 
     @Override
     public final NotificationPublishService createNotificationPublishService() {
-        return adapterFactory.createNotificationPublishService(domNotificationRouter);
+        return adapterFactory.createNotificationPublishService(domNotificationPublishService);
     }
 
     @Override
@@ -115,13 +124,11 @@ public class DataStoreContextImpl implements DataStoreContext {
     }
 
     private DOMStore createConfigurationDatastore() {
-        return InMemoryDOMDataStoreFactory.create("CFG",
-                FixedDOMSchemaService.of(bindingDOMCodecServices.getRuntimeContext()));
+        return InMemoryDOMDataStoreFactory.create("DOM-CFG", new FixedDOMSchemaService(schemaCtx));
     }
 
     private DOMStore createOperationalDatastore() {
-        return InMemoryDOMDataStoreFactory.create("OPER",
-                FixedDOMSchemaService.of(bindingDOMCodecServices.getRuntimeContext()));
+        return InMemoryDOMDataStoreFactory.create("DOM-OPER", new FixedDOMSchemaService(schemaCtx));
     }
 
     @Override

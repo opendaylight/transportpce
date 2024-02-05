@@ -10,9 +10,9 @@ package org.opendaylight.transportpce.tapi.connectivity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -27,18 +27,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperations;
-import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkListener;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
@@ -51,20 +53,23 @@ import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreate;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceOutput;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +98,12 @@ public class TapiConnectivityImplTest extends AbstractTest {
     public CatalogDataStoreOperations catalogDataStoreOperations;
     @Mock
     private RpcProviderService rpcProviderService;
+    @Mock
+    private RpcService rpcService;
+    @Mock
+    private ServiceCreate serviceCreate;
+    @Mock
+    private ServiceDelete serviceDelete;
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiConnectivityImplTest.class);
     private static ServiceDataStoreOperations serviceDataStoreOperations;
@@ -131,20 +142,18 @@ public class TapiConnectivityImplTest extends AbstractTest {
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
+        new TapiConnectivityImpl(rpcService, tapiContext, connectivityUtils,
+                tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
         LOG.info("setup done");
     }
 
     @Test
     void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
-            rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-
-        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
-
-        ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
-            tapiConnectivity.createConnectivityService(new CreateConnectivityServiceInputBuilder().build());
+        when(rpcService.getRpc(any()))
+            .thenReturn(new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils,
+                    tapipceNotificationHandler, tapirendererNotificationHandler));
+        ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result = rpcService
+                .getRpc(CreateConnectivityService.class).invoke(new CreateConnectivityServiceInputBuilder().build());
         result.addListener(new Runnable() {
             @Override
             public void run() {
@@ -161,26 +170,23 @@ public class TapiConnectivityImplTest extends AbstractTest {
     @Test
     void createConnServiceShouldBeSuccessfulWhenPerformPCESuccessful()
             throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
-            rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-
+        ConfigurationResponseCommon crc = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1")
+                .setResponseCode("OK")
+                .setAckFinalIndicator("requestProcessed").build();
+        when(rpcService.getRpc(any())).thenReturn(serviceCreate);
+        doReturn(RpcResultBuilder
+                .success(new ServiceCreateOutputBuilder()
+                    .setConfigurationResponseCommon(crc)
+                    .build())
+                .buildFuture())
+            .when(serviceCreate).invoke(any());
         CreateConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceCreateInput();
 
-        when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
-
-        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
-            tapiConnectivity.createConnectivityService(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-
-        endSignal.await();
+                    new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils,
+                        tapipceNotificationHandler, tapirendererNotificationHandler)
+                .invoke(input);
         LOG.info("INPUT= {}", input.toString());
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
         assertTrue(rpcResult.isSuccessful());
@@ -188,15 +194,10 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     @Test
     void deleteConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
-            rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-
-        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
-
-        ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
-            tapiConnectivity.deleteConnectivityService(new DeleteConnectivityServiceInputBuilder().build());
+        when(rpcService.getRpc(any()))
+            .thenReturn(new DeleteConnectivityServiceImpl(rpcService, tapiContext, networkTransactionService));
+        ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result = rpcService
+                .getRpc(DeleteConnectivityService.class).invoke(new DeleteConnectivityServiceInputBuilder().build());
         result.addListener(new Runnable() {
             @Override
             public void run() {
@@ -212,14 +213,11 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
     @Test
     void deleteConnServiceShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+        when(rpcService.getRpc(any()))
+            .thenReturn(new DeleteConnectivityServiceImpl(rpcService, tapiContext, networkTransactionService));
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput1();
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
-            rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
-        ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
-            tapiConnectivity.deleteConnectivityService(input);
+        ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result = rpcService
+                .getRpc(DeleteConnectivityService.class).invoke(input);
         result.addListener(new Runnable() {
             @Override
             public void run() {
@@ -239,32 +237,20 @@ public class TapiConnectivityImplTest extends AbstractTest {
             .setRequestId("request 1")
             .setResponseCode("OK")
             .setAckFinalIndicator("requestProcessed").build();
-        ServiceDeleteOutput sdo = new ServiceDeleteOutputBuilder()
-            .setConfigurationResponseCommon(crc)
-            .build();
-        when(rendererServiceOperations.serviceDelete(any(), any()))
-            .thenReturn(Futures.immediateFuture(sdo));
-
-        OrgOpenroadmServiceService serviceHandler = new ServicehandlerImpl(rpcProviderService, pathComputationService,
-            rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-            networkModelListenerImpl, serviceDataStoreOperations, catalogDataStoreOperations);
-
-        TapiConnectivityImpl tapiConnectivity = new TapiConnectivityImpl(serviceHandler, tapiContext, connectivityUtils,
-            tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
+        when(rpcService.getRpc(any())).thenReturn(serviceDelete);
+        doReturn(RpcResultBuilder
+                .success(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+                        .ServiceDeleteOutputBuilder()
+                    .setConfigurationResponseCommon(crc)
+                    .build())
+                .buildFuture())
+            .when(serviceDelete).invoke(any());
         ServiceCreateInput createInput = TapiConnectivityDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
         tapiContext.updateConnectivityContext(TapiConnectivityDataUtils.createConnService(), new HashMap<>());
         DeleteConnectivityServiceInput input = TapiConnectivityDataUtils.buildConnServiceDeleteInput();
         ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> result =
-            tapiConnectivity.deleteConnectivityService(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-
-        endSignal.await();
+                new DeleteConnectivityServiceImpl(rpcService, tapiContext, networkTransactionService).invoke(input);
         LOG.debug("RESULT = {}", result.toString());
         RpcResult<DeleteConnectivityServiceOutput> rpcResult = result.get();
         assertTrue(rpcResult.isSuccessful());
