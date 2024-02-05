@@ -38,9 +38,9 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PceConstraintMode;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.SpectrumAssignment;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.SpectrumAssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;

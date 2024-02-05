@@ -54,16 +54,21 @@ module transportpce-pce {
       POSSIBILITY OF SUCH DAMAGE";
 
 
+  revision 2024-02-05 {
+      description
+        "Add customer-name to path-computation-request input to check in controller-customization if the customer's
+        services need specific handling";
+  }
   revision 2023-09-25 {
       description
         "Add pce-constraint-mode enum to be able to disinguish the way to manage node include constraints inside the
          PCE module";
-    }
+  }
   revision 2022-08-08 {
       description
         "Implement the RPC path-computation-reroute-request (only for reroute purposes) that computes a service path of
         an existing service in order to reroute it";
-    }
+  }
   revision 2022-06-15 {
     description
       "change fraction digits from 2 to 6 for accumulative-value leaf, from 2 to 6 to be compliant with Gnpy";
@@ -182,6 +187,13 @@ module transportpce-pce {
           "Identifier for the service to be created in the ROADM network,
            e.g., CLFI, CLCI, etc. This is reported against the service, but
            may not get reflected in the service in the network.";
+      }
+      leaf customer-name {
+        type string;
+        description
+          "name of the customer that may be declared in controller-customization,
+          to define a specific way to handle constraints associated with this
+          customer.";
       }
       leaf resource-reserve {
         type boolean;
