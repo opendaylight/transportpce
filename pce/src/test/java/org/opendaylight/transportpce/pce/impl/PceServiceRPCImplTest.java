@@ -31,7 +31,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.CancelResourceReserveInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserveInputBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class PceServiceRPCImplTest extends AbstractTest {
