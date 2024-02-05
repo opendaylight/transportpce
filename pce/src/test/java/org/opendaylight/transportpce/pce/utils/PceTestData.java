@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRerouteRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRerouteRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.path.computation.request.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.path.computation.reroute.request.input.EndpointsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.EndpointsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommon;
@@ -346,7 +346,7 @@ public final class PceTestData {
                 .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder()
                         .setRequestId("request1")
                         .build())
-                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925
+                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
                         .path.computation.reroute.request.input.ServiceAEndBuilder()
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(100))
@@ -375,7 +375,7 @@ public final class PceTestData {
                                         .build())
                                 .build())
                         .build())
-                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925
+                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
                         .path.computation.reroute.request.input.ServiceZEndBuilder()
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setServiceRate(Uint32.valueOf(0))
@@ -587,13 +587,13 @@ public final class PceTestData {
                         .setRequestId("request 1")
                         .build())
                 .setPceRoutingMetric(PceMetric.HopCount)
-                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925
+                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
                         .path.computation.reroute.request.input.ServiceAEndBuilder()
                         .setServiceRate(Uint32.valueOf(100))
                         .setServiceFormat(ServiceFormat.Ethernet)
                         .setNodeId("XPONDER-1-2")
                         .build())
-                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925
+                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
                         .path.computation.reroute.request.input.ServiceZEndBuilder()
                         .setServiceRate(Uint32.valueOf(0))
                         .setServiceFormat(ServiceFormat.Ethernet)
