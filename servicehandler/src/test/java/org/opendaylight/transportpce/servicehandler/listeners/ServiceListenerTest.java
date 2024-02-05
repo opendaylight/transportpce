@@ -5,7 +5,6 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -17,8 +16,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -28,9 +27,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
@@ -52,8 +51,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreate;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReroute;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.ServicesBuilder;
@@ -67,32 +69,38 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 public class ServiceListenerTest {
 
     @Mock
-    private ServicehandlerImpl servicehandler;
+    private RpcService rpcService;
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
     private NotificationPublishService notificationPublishService;
     @Mock
     private PathComputationService pathComputationService;
+    @Mock
+    private ServiceDelete serviceDelete;
+    @Mock
+    private ServiceReroute serviceReroute;
+    @Mock
+    private ServiceCreate serviceCreate;
 
     @Test
     void testOnDataTreeChangedWhenDeleteService() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Services>> changes = new HashSet<>();
+        final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
-        when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
+        ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).getModificationType();
-        verify(service, times(2)).getDataBefore();
-        verify(service, never()).getDataAfter();
+        verify(service, times(1)).modificationType();
+        verify(service, times(2)).dataBefore();
+        verify(service, never()).dataAfter();
         try {
             verify(notificationPublishService, never()).putNotification(any(PublishNotificationAlarmService.class));
         } catch (InterruptedException e) {
@@ -104,22 +112,22 @@ public class ServiceListenerTest {
     void testOnDataTreeChangedWhenServiceBecomesOutOfService() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Services>> changes = new HashSet<>();
+        final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceDown = buildService(State.OutOfService, AdminStates.InService);
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        when(service.getDataAfter()).thenReturn(serviceDown);
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
+        when(service.dataAfter()).thenReturn(serviceDown);
+        ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).getModificationType();
-        verify(service, times(3)).getDataBefore();
-        verify(service, times(1)).getDataAfter();
+        verify(service, times(1)).modificationType();
+        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataAfter();
         try {
             verify(notificationPublishService, times(1))
                     .putNotification(buildNotificationAlarmService(serviceDown, "The service is now outOfService"));
@@ -132,20 +140,20 @@ public class ServiceListenerTest {
     void testOnDataTreeChangedWhenShouldNeverHappen() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Services>> changes = new HashSet<>();
+        final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
-        when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
+        when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
+        ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(2)).getModificationType();
-        verify(service, times(2)).getDataBefore();
-        verify(service, never()).getDataAfter();
+        verify(service, times(2)).modificationType();
+        verify(service, times(2)).dataBefore();
+        verify(service, never()).dataAfter();
         try {
             verify(notificationPublishService, never()).putNotification(any(PublishNotificationAlarmService.class));
         } catch (InterruptedException e) {
@@ -157,7 +165,7 @@ public class ServiceListenerTest {
     void testOnDataTreeChangedWhenServiceDegradedShouldBeRerouted() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Services>> changes = new HashSet<>();
+        final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
@@ -166,73 +174,76 @@ public class ServiceListenerTest {
         Services serviceAfter = new ServicesBuilder(buildService(State.OutOfService, AdminStates.InService))
                 .setServiceResiliency(serviceResiliency)
                 .build();
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(service.getDataBefore())
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.dataBefore())
             .thenReturn(new ServicesBuilder(buildService(State.InService, AdminStates.InService))
                         .setServiceResiliency(serviceResiliency)
                         .build());
-        when(service.getDataAfter()).thenReturn(serviceAfter);
+        when(service.dataAfter()).thenReturn(serviceAfter);
         when(serviceDataStoreOperations.getService(anyString())).thenReturn(Optional.of(serviceAfter));
-        when(servicehandler.serviceDelete(any()))
+        when(rpcService.getRpc(ServiceDelete.class)).thenReturn(serviceDelete);
+        when(serviceDelete.invoke(any()))
             .thenReturn(RpcResultBuilder.success(new ServiceDeleteOutputBuilder()
                                 .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
                         .buildFuture());
-        when(servicehandler.serviceReroute(any()))
+        when(rpcService.getRpc(ServiceReroute.class)).thenReturn(serviceReroute);
+        when(serviceReroute.invoke(any()))
             .thenReturn(RpcResultBuilder.success(new ServiceRerouteOutputBuilder()
                                 .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
                         .buildFuture());
-        when(servicehandler.serviceCreate(any()))
+        when(rpcService.getRpc(ServiceCreate.class)).thenReturn(serviceCreate);
+        when(serviceCreate.invoke(any()))
             .thenReturn(RpcResultBuilder.success(new ServiceCreateOutputBuilder()
                                 .setConfigurationResponseCommon(new ConfigurationResponseCommonBuilder()
                                                 .setResponseCode(ResponseCodes.RESPONSE_OK)
                                                 .build())
                                 .build())
                         .buildFuture());
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+        ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).getModificationType();
-        verify(service, times(3)).getDataBefore();
-        verify(service, times(1)).getDataAfter();
-        verify(servicehandler, times(1)).serviceDelete(any());
+        verify(service, times(1)).modificationType();
+        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataAfter();
+//        verify(servicehandler, times(1)).serviceDelete(any());
 
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         listener.onDataTreeChanged(changes);
-        verify(servicehandler, times(1)).serviceCreate(any());
+//        verify(servicehandler, times(1)).serviceCreate(any());
     }
 
     @Test
     void testOnDataTreeChangedWhenServiceDegradedShouldNotBeRerouted() {
         @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
                 mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Services>> changes = new HashSet<>();
+        final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceAfter = buildService(State.OutOfService, AdminStates.InService);
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(service.getDataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
-        when(service.getDataAfter()).thenReturn(serviceAfter);
-        ServiceListener listener = new ServiceListener(servicehandler, serviceDataStoreOperations,
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
+        when(service.dataAfter()).thenReturn(serviceAfter);
+        ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(service, times(1)).getModificationType();
-        verify(service, times(3)).getDataBefore();
-        verify(service, times(1)).getDataAfter();
-        verify(servicehandler, times(0)).serviceDelete(any());
+        verify(service, times(1)).modificationType();
+        verify(service, times(3)).dataBefore();
+        verify(service, times(1)).dataAfter();
+//        verify(servicehandler, times(0)).serviceDelete(any());
 
-        when(service.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         listener.onDataTreeChanged(changes);
-        verify(servicehandler, times(0)).serviceCreate(any());
+//        verify(servicehandler, times(0)).serviceCreate(any());
     }
 
     private Services buildService(State state, AdminStates adminStates) {

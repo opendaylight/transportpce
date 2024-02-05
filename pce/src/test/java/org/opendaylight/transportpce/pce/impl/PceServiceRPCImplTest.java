@@ -39,7 +39,6 @@ public class PceServiceRPCImplTest extends AbstractTest {
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
     private NetworkTransactionImpl networkTransaction;
-    private PceServiceRPCImpl pceServiceRPC;
     @Mock
     private PortMapping portMapping;
     @Mock
@@ -54,33 +53,35 @@ public class PceServiceRPCImplTest extends AbstractTest {
         networkTransaction =  new NetworkTransactionImpl(getDataBroker());
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
                 null, portMapping);
-        pceServiceRPC = new PceServiceRPCImpl(rpcProviderService, pathComputationService);
     }
 
     @Test
     void testRpcRegistration() {
+        new PceServiceRPCImpl(rpcProviderService, pathComputationService);
         verify(rpcProviderService, times(1)).registerRpcImplementations(any());
     }
 
     @Test
     void testCancelResourceReserve() {
-        CancelResourceReserveInputBuilder cancelResourceReserveInput = new CancelResourceReserveInputBuilder();
-        assertNotNull(pceServiceRPC.cancelResourceReserve(cancelResourceReserveInput.build()));
+        assertNotNull(new CancelResourceReserveImpl(pathComputationService)
+                .invoke(new CancelResourceReserveInputBuilder().build()));
     }
 
     @Test
     void testPathComputationRequest() {
-        assertNotNull(pceServiceRPC.pathComputationRequest(PceTestData.getPCERequest()));
+        assertNotNull(new PathComputationRequestImpl(pathComputationService)
+                .invoke(PceTestData.getPCERequest()));
     }
 
     @Test
     void testPathComputationRerouteRequest() {
-        assertNotNull(pceServiceRPC.pathComputationRerouteRequest(PceTestData.getPCERerouteRequest()));
+        assertNotNull(new PathComputationRerouteRequestImpl(pathComputationService)
+                .invoke(PceTestData.getPCERerouteRequest()));
     }
 
     @Test
     void testPathComputationRequestCoRoutingOrGeneral2() {
-        assertNotNull(
-            pceServiceRPC.pathComputationRequest(PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
+        assertNotNull(new PathComputationRequestImpl(pathComputationService)
+                .invoke(PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
     }
 }

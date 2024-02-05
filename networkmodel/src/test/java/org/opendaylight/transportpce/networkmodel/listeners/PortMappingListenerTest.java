@@ -16,8 +16,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +45,7 @@ public class PortMappingListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenMappingOperAndAdminDidntChange() {
-        final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
+        final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
         @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
@@ -54,8 +54,8 @@ public class PortMappingListenerTest {
         final Mapping newMapping = mock(Mapping.class);
 
         when(ch.getRootNode()).thenReturn(mappingObject);
-        when(mappingObject.getDataBefore()).thenReturn(oldMapping);
-        when(mappingObject.getDataAfter()).thenReturn(newMapping);
+        when(mappingObject.dataBefore()).thenReturn(oldMapping);
+        when(mappingObject.dataAfter()).thenReturn(newMapping);
         when(oldMapping.getPortAdminState()).thenReturn("InService");
         when(oldMapping.getPortOperState()).thenReturn("InService");
         when(newMapping.getPortAdminState()).thenReturn("InService");
@@ -67,7 +67,7 @@ public class PortMappingListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenMappingAdminChanged() {
-        final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
+        final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
         @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
@@ -76,8 +76,8 @@ public class PortMappingListenerTest {
         final Mapping newMapping = mock(Mapping.class);
 
         when(ch.getRootNode()).thenReturn(mappingObject);
-        when(mappingObject.getDataBefore()).thenReturn(oldMapping);
-        when(mappingObject.getDataAfter()).thenReturn(newMapping);
+        when(mappingObject.dataBefore()).thenReturn(oldMapping);
+        when(mappingObject.dataAfter()).thenReturn(newMapping);
         when(oldMapping.getPortAdminState()).thenReturn("InService");
         when(newMapping.getPortAdminState()).thenReturn("OutOfService");
 
@@ -87,7 +87,7 @@ public class PortMappingListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenMappingOperChanged() {
-        final Collection<DataTreeModification<Mapping>> changes = new HashSet<>();
+        final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
         @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
@@ -96,8 +96,8 @@ public class PortMappingListenerTest {
         final Mapping newMapping = mock(Mapping.class);
 
         when(ch.getRootNode()).thenReturn(mappingObject);
-        when(mappingObject.getDataBefore()).thenReturn(oldMapping);
-        when(mappingObject.getDataAfter()).thenReturn(newMapping);
+        when(mappingObject.dataBefore()).thenReturn(oldMapping);
+        when(mappingObject.dataAfter()).thenReturn(newMapping);
         when(oldMapping.getPortAdminState()).thenReturn("InService");
         when(oldMapping.getPortOperState()).thenReturn("InService");
         when(newMapping.getPortAdminState()).thenReturn("InService");

@@ -9,27 +9,27 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.concurrent.Future;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OlmPowerSetupRollbackTask extends RollbackTask {
-
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerSetupRollbackTask.class);
+
     private static final String FAILED = "Failed";
     private final boolean isRollbackNecessary;
-    private final TransportpceOlmService olmService;
+    private final ServicePowerTurndown servicePowerTurndown;
     private final ServicePowerSetupInput powerSetupInput;
 
-    public OlmPowerSetupRollbackTask(String id, boolean isRollbackNecessary, TransportpceOlmService olmService,
-                                     ServicePowerSetupInput powerSetupInput) {
+    public OlmPowerSetupRollbackTask(String id, boolean isRollbackNecessary, ServicePowerTurndown servicePowerTurndown,
+            ServicePowerSetupInput powerSetupInput) {
         super(id);
         this.isRollbackNecessary = isRollbackNecessary;
-        this.olmService = olmService;
+        this.servicePowerTurndown = servicePowerTurndown;
         this.powerSetupInput = powerSetupInput;
     }
 
@@ -49,7 +49,7 @@ public class OlmPowerSetupRollbackTask extends RollbackTask {
                 .build();
 
         Future<RpcResult<ServicePowerTurndownOutput>> powerTurndownResultFuture =
-                this.olmService.servicePowerTurndown(powerTurndownInput);
+                servicePowerTurndown.invoke(powerTurndownInput);
         RpcResult<ServicePowerTurndownOutput> powerTurndownResult = powerTurndownResultFuture.get();
         if (FAILED.equals(powerTurndownResult.getResult().getResult())) {
             LOG.warn("Olmp power setup rollback for {} was not successful!", this.getId());

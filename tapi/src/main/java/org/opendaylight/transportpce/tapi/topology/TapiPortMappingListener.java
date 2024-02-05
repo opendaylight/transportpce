@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
@@ -29,13 +29,13 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
     }
 
     @Override
-    public void onDataTreeChanged(@NonNull Collection<DataTreeModification<Nodes>> changes) {
+    public void onDataTreeChanged(@NonNull List<DataTreeModification<Nodes>> changes) {
         for (DataTreeModification<Nodes> change : changes) {
             LOG.debug("TAPI module: Change in Node = {}", change.getRootNode());
             // Data before needs to be not null
-            if (change.getRootNode().getDataAfter() != null && change.getRootNode().getDataBefore() != null) {
-                Nodes nodesAft = change.getRootNode().getDataAfter();
-                Nodes nodesBef = change.getRootNode().getDataBefore();
+            if (change.getRootNode().dataAfter() != null && change.getRootNode().dataBefore() != null) {
+                Nodes nodesAft = change.getRootNode().dataAfter();
+                Nodes nodesBef = change.getRootNode().dataBefore();
                 // TODO -> need to filter out the ones that are not after creation.
                 //  (Mapping before = null & Mapping after != null) is the rule for a first time connected device
                 String nodeId = nodesAft.getNodeId();

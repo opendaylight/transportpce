@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
@@ -27,14 +26,14 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
     private static final Logger LOG = LoggerFactory.getLogger(TapiListener.class);
 
     @Override
-    public void onDataTreeChanged(@NonNull Collection<DataTreeModification<ServiceInterfacePoints>> changes) {
+    public void onDataTreeChanged(@NonNull List<DataTreeModification<ServiceInterfacePoints>> changes) {
         LOG.info("onDataTreeChanged in TapiListener");
         for (DataTreeModification<ServiceInterfacePoints> change : changes) {
             DataObjectModification<ServiceInterfacePoints> rootSIP = change.getRootNode();
-            switch (rootSIP.getModificationType()) {
+            switch (rootSIP.modificationType()) {
                 case WRITE:
                     LOG.info("onDataTreeChanged in TapiListener : WRITE");
-                    ServiceInterfacePoints data = rootSIP.getDataAfter();
+                    ServiceInterfacePoints data = rootSIP.dataAfter();
                     List<ServiceEndPoint> listSEP = new ArrayList<>(data.getServiceEndPoint().values());
                     MappingUtils.deleteMap();
                     for (ServiceEndPoint sep : listSEP) {
@@ -45,12 +44,12 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
                 case SUBTREE_MODIFIED:
                     LOG.info("onDataTreeChanged in TapiListener : SUBTREE_MODIFIED");
                     Iterator<? extends DataObjectModification<? extends DataObject>> iterator = rootSIP
-                        .getModifiedChildren().iterator();
+                        .getModifiedChildren(ServiceEndPoint.class).iterator();
                     while (iterator.hasNext()) {
                         DataObjectModification<? extends DataObject> dom = iterator.next();
                         // to delete existing child entry
-                        if (dom.getDataAfter() == null) {
-                            DataObject dataObject = dom.getDataBefore();
+                        if (dom.dataAfter() == null) {
+                            DataObject dataObject = dom.dataBefore();
                             ServiceEndPoint sep = null;
                             sep = (ServiceEndPoint) dataObject;
                             Uuid uuid = sep.getUuid();
@@ -60,10 +59,10 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
                         }
 
                         // to add new child entry
-                        if (dom.getDataType().toString().compareTo("interface org.opendaylight.yang.gen.v1.urn.opendayl"
+                        if (dom.dataType().toString().compareTo("interface org.opendaylight.yang.gen.v1.urn.opendayl"
                             + "ight.params.xml.ns.yang.tapi.rev180928.service._interface.points.ServiceEndPoint") == 0
-                            && dom.getDataBefore() == null) {
-                            DataObject dataObject = dom.getDataAfter();
+                            && dom.dataBefore() == null) {
+                            DataObject dataObject = dom.dataAfter();
                             ServiceEndPoint sep = null;
                             sep = (ServiceEndPoint) dataObject;
                             MappingUtils.addMapSEP(sep);

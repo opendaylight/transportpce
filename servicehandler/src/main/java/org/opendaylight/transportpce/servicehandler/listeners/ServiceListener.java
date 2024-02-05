@@ -9,8 +9,8 @@ package org.opendaylight.transportpce.servicehandler.listeners;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -21,6 +21,7 @@ import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -31,11 +32,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.resiliency.ServiceResiliency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreate;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReroute;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRerouteOutput;
@@ -58,33 +61,33 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceListener.class);
     private static final String PUBLISHER = "ServiceListener";
-    private OrgOpenroadmServiceService servicehandlerImpl;
+    private final RpcService rpcService;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private NotificationPublishService notificationPublishService;
     private Map<String, ServiceInput> mapServiceInputReroute;
     private final ScheduledExecutorService executor;
 
     @Activate
-    public ServiceListener(@Reference OrgOpenroadmServiceService servicehandlerImpl,
+    public ServiceListener(@Reference RpcService rpcService,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
             @Reference NotificationPublishService notificationPublishService) {
-        this.servicehandlerImpl = servicehandlerImpl;
-        this.notificationPublishService = notificationPublishService;
+        this.rpcService = rpcService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
+        this.notificationPublishService = notificationPublishService;
         this.executor = MoreExecutors.getExitingScheduledExecutorService(new ScheduledThreadPoolExecutor(4));
         mapServiceInputReroute = new HashMap<>();
     }
 
     @Override
-    public void onDataTreeChanged(Collection<DataTreeModification<Services>> changes) {
+    public void onDataTreeChanged(List<DataTreeModification<Services>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Services> change : changes) {
             DataObjectModification<Services> rootService = change.getRootNode();
-            if (rootService.getDataBefore() == null) {
+            if (rootService.dataBefore() == null) {
                 continue;
             }
-            String serviceInputName = rootService.getDataBefore().key().getServiceName();
-            switch (rootService.getModificationType()) {
+            String serviceInputName = rootService.dataBefore().key().getServiceName();
+            switch (rootService.modificationType()) {
                 case DELETE:
                     LOG.info("Service {} correctly deleted from controller", serviceInputName);
                     if (mapServiceInputReroute.get(serviceInputName) != null) {
@@ -92,8 +95,8 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                     }
                     break;
                 case WRITE:
-                    Services inputBefore = rootService.getDataBefore();
-                    Services inputAfter = rootService.getDataAfter();
+                    Services inputBefore = rootService.dataBefore();
+                    Services inputAfter = rootService.dataAfter();
                     if (inputBefore.getOperationalState() == State.InService
                             && inputAfter.getOperationalState() == State.OutOfService) {
                         LOG.info("Service {} is becoming outOfService", serviceInputName);
@@ -153,7 +156,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                     }
                     break;
                 default:
-                    LOG.debug("Unknown modification type {}", rootService.getModificationType().name());
+                    LOG.debug("Unknown modification type {}", rootService.modificationType().name());
                     break;
             }
         }
@@ -172,7 +175,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
             return;
         }
         Services service = serviceOpt.orElseThrow();
-        ListenableFuture<RpcResult<ServiceDeleteOutput>> res = this.servicehandlerImpl.serviceDelete(
+        ListenableFuture<RpcResult<ServiceDeleteOutput>> res = rpcService.getRpc(ServiceDelete.class).invoke(
                 new ServiceDeleteInputBuilder()
                         .setSdncRequestHeader(new SdncRequestHeaderBuilder(service.getSdncRequestHeader())
                                 .setRpcAction(RpcActions.ServiceDelete)
@@ -217,7 +220,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
      * @param serviceNameToReroute Name of the service
      */
     private void serviceRerouteStep2(String serviceNameToReroute) {
-        ListenableFuture<RpcResult<ServiceCreateOutput>> res = this.servicehandlerImpl.serviceCreate(
+        ListenableFuture<RpcResult<ServiceCreateOutput>> res = rpcService.getRpc(ServiceCreate.class).invoke(
                 mapServiceInputReroute.get(serviceNameToReroute).getServiceCreateInput());
         try {
             String httpResponseCode = res.get().getResult().getConfigurationResponseCommon().getResponseCode();
@@ -249,7 +252,7 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
                         .setRpcAction(RpcActions.ServiceReroute)
                         .build())
                 .build();
-        ListenableFuture<RpcResult<ServiceRerouteOutput>> res = this.servicehandlerImpl.serviceReroute(
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> res = rpcService.getRpc(ServiceReroute.class).invoke(
                 serviceRerouteInput);
         try {
             return res.get().getResult().getConfigurationResponseCommon().getResponseCode()
@@ -273,4 +276,5 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
             Thread.currentThread().interrupt();
         }
     }
+
 }

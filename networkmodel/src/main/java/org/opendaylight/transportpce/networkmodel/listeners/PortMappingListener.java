@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
@@ -16,8 +16,8 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
+import org.opendaylight.yangtools.yang.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 
 public class PortMappingListener implements DataTreeChangeListener<Mapping> {
 
@@ -28,11 +28,11 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
     }
 
     @Override
-    public void onDataTreeChanged(@NonNull Collection<DataTreeModification<Mapping>> changes) {
+    public void onDataTreeChanged(@NonNull List<DataTreeModification<Mapping>> changes) {
         for (DataTreeModification<Mapping> change : changes) {
-            if (change.getRootNode().getDataBefore() != null && change.getRootNode().getDataAfter() != null) {
-                Mapping oldMapping = change.getRootNode().getDataBefore();
-                Mapping newMapping = change.getRootNode().getDataAfter();
+            if (change.getRootNode().dataBefore() != null && change.getRootNode().dataAfter() != null) {
+                Mapping oldMapping = change.getRootNode().dataBefore();
+                Mapping newMapping = change.getRootNode().dataAfter();
                 if (oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
                         && oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
                     return;
@@ -45,11 +45,10 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
     }
 
     protected String getNodeIdFromMappingDataTreeIdentifier(DataTreeIdentifier<Mapping> dataTreeIdentifier) {
-        LinkedList<PathArgument> path = new LinkedList<>((Collection<? extends PathArgument>)
-                dataTreeIdentifier.getRootIdentifier().getPathArguments());
+        LinkedList<DataObjectStep<?>> path = new LinkedList<>();
+        dataTreeIdentifier.path().getPathArguments().forEach(p -> path.add(p));
         path.removeLast();
         InstanceIdentifier<Nodes> portMappingNodeID = InstanceIdentifier.unsafeOf(path);
         return InstanceIdentifier.keyOf(portMappingNodeID).getNodeId();
-
     }
 }

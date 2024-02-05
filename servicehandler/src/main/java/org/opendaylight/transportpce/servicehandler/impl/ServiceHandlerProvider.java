@@ -19,7 +19,6 @@ import org.opendaylight.transportpce.servicehandler.listeners.RendererNotificati
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
@@ -39,11 +38,11 @@ import org.slf4j.LoggerFactory;
 public class ServiceHandlerProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerProvider.class);
-    private static final InstanceIdentifier<Services> SERVICE = InstanceIdentifier.builder(ServiceList.class)
-            .child(Services.class).build();
+    private static final InstanceIdentifier<Services> SERVICE = InstanceIdentifier.create(ServiceList.class)
+            .child(Services.class);
 
     private final Registration pcelistenerRegistration;
-    private ListenerRegistration<DataTreeChangeListener<Services>> serviceDataTreeChangeListenerRegistration;
+    private Registration serviceListListenerRegistration;
     private final Registration rendererlistenerRegistration;
     private final Registration networkmodellistenerRegistration;
     private ServiceDataStoreOperations serviceDataStoreOperations;
@@ -64,8 +63,8 @@ public class ServiceHandlerProvider {
             .registerCompositeListener(rendererNotificationHandler.getCompositeListener());
         networkmodellistenerRegistration = notificationService
             .registerCompositeListener(networkModelNotificationHandler.getCompositeListener());
-        serviceDataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
-            DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, SERVICE), serviceListener);
+        final var serviceListId = DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL, SERVICE);
+        serviceListListenerRegistration = dataBroker.registerTreeChangeListener(serviceListId, serviceListener);
         LOG.info("ServicehandlerProvider Session Initiated");
         LOG.info("Transportpce controller started");
     }
@@ -77,7 +76,7 @@ public class ServiceHandlerProvider {
     public void close() {
         LOG.info("ServicehandlerProvider Closed");
         pcelistenerRegistration.close();
-        serviceDataTreeChangeListenerRegistration.close();
+        serviceListListenerRegistration.close();
         rendererlistenerRegistration.close();
         networkmodellistenerRegistration.close();
     }

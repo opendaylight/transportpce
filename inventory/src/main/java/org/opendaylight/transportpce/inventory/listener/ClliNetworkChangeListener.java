@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.inventory.listener;
 
-import java.util.Collection;
+import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -19,7 +19,7 @@ public class ClliNetworkChangeListener implements DataTreeChangeListener<Network
     private static final Logger LOG = LoggerFactory.getLogger(ClliNetworkChangeListener.class);
 
     @Override
-    public void onDataTreeChanged(Collection<DataTreeModification<Network>> changes) {
+    public void onDataTreeChanged(List<DataTreeModification<Network>> changes) {
         LOG.info("Clli network changed {}", changes);
     }
 
