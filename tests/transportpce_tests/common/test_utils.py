@@ -28,6 +28,7 @@ from dict2xml import dict2xml
 from netconf_client.connect import connect_ssh
 from netconf_client.ncclient import Manager
 
+
 # pylint: disable=import-error
 import simulators
 
@@ -729,5 +730,44 @@ def sims_update_cp_port_ntcf(sim: tuple, circuitpack: str, payload: dict):
         mgr = Manager(session, timeout=120)
         reply = mgr.edit_config(xml_body, target="candidate", default_operation="merge")
     if "None" in str(reply):
+        return True
+    return False
+
+
+def sims_update_pm_interact(sim: tuple, payload: dict):
+    if SIMS_TYPE == 'lightynode':
+        return sims_update_pm_interact_ntcf(sim, payload)
+    if SIMS_TYPE == 'honeynode':
+        return sims_update_pm_interact_rest(sim, payload)
+    return False
+
+
+def sims_update_pm_interact_rest(sim: tuple, payload: dict):
+    # pylint: disable=consider-using-f-string
+    url = "{}/operations/pm-handling:pm-interact".format(SIMS[sim]['restconf_baseurl'])
+    body = {"input": payload}
+    response = requests.request("POST",
+                                url,
+                                data=json.dumps(body),
+                                headers=TYPE_APPLICATION_JSON,
+                                auth=(ODL_LOGIN, ODL_PWD),
+                                timeout=REQUEST_TIMEOUT)
+    return response.status_code == requests.codes.ok
+
+
+def sims_update_pm_interact_ntcf(sim: tuple, payload: dict):
+    # pylint: disable=line-too-long
+    xml_body = '<pm-interact xmlns="http://honeynode-simulator/pm-handling">'
+    xml_body += dict2xml(payload, indent="  ")
+    xml_body += '</pm-interact>'
+    new_xml = xml_body.replace("<pm-resource-instance>/org-openroadm-device:org-openroadm-device/org-openroadm-device:interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>",
+                               "<pm-resource-instance xmlns:a=\"http://org/openroadm/device\">/a:org-openroadm-device/a:interface[a:name='OTS-DEG2-TTP-TXRX']</pm-resource-instance>")
+    with connect_ssh(host='127.0.0.1',
+                     port=int(SIMS[sim]['port']),
+                     username=NODES_LOGIN,
+                     password=NODES_PWD) as session:
+        mgr = Manager(session, timeout=120)
+        reply = mgr.dispatch(new_xml)
+    if "netconf_client.ncclient.RPCReply" in str(reply):
         return True
     return False
