@@ -14,7 +14,6 @@
 # pylint: disable=too-many-public-methods
 # pylint: disable=too-many-lines
 
-import json
 import unittest
 import time
 import requests
@@ -682,6 +681,64 @@ class TransportPCEtesting(unittest.TestCase):
         }
     ]
 
+    pm_handling_degrade_body = {
+        "rpc-action": "set",
+        "pm-to-be-set-or-created": {
+            "current-pm-entry": [
+                {
+                    "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+                                            ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+                    "pm-resource-type": "interface",
+                    "pm-resource-type-extension": "",
+                    "current-pm": [
+                        {
+                            "type": "opticalPowerInput",
+                            "extension": "",
+                            "location": "nearEnd",
+                            "direction": "rx",
+                            "measurement": [
+                                {
+                                    "granularity": "15min",
+                                    "pmParameterValue": -30,
+                                    "pmParameterUnit": "dBm",
+                                    "validity": "complete"
+                                },
+                                {
+                                    "granularity": "24Hour",
+                                    "pmParameterValue": -21.3,
+                                    "pmParameterUnit": "dBm",
+                                    "validity": "complete"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    pm_handling_recover_body = {
+        "rpc-action": "clear",
+        "pm-to-get-clear-or-delete": {
+            "current-pm-entry": [
+                {
+                    "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
+                                            ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
+                    "pm-resource-type": "interface",
+                    "pm-resource-type-extension": "",
+                    "current-pm": [
+                        {
+                            "type": "opticalPowerInput",
+                            "extension": "",
+                            "location": "nearEnd",
+                            "direction": "rx"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
@@ -811,50 +868,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Degrade ROADM-A1-ROADM-C1 link
     def test_14_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "set",
-                "pm-to-be-set-or-created": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx",
-                                    "measurement": [
-                                        {
-                                            "granularity": "15min",
-                                            "pmParameterValue": -30,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        },
-                                        {
-                                            "granularity": "24Hour",
-                                            "pmParameterValue": -21.3,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+        self.assertTrue(test_utils.sims_update_pm_interact(('roadma', self.NODE_VERSION_221),
+                                                           self.pm_handling_degrade_body))
         time.sleep(2)
 
     def test_15_get_eth_service1(self):
@@ -891,36 +906,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Restore ROADM-A1-ROADM-C1 link
     def test_17_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "clear",
-                "pm-to-get-clear-or-delete": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
+        self.assertTrue(test_utils.sims_update_pm_interact(('roadma', self.NODE_VERSION_221),
+                                                           self.pm_handling_recover_body))
         time.sleep(2)
 
     def test_18_get_eth_service1(self):
@@ -1137,50 +1124,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Degrade ROADM-A1-ROADM-C1 link
     def test_36_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "set",
-                "pm-to-be-set-or-created": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx",
-                                    "measurement": [
-                                        {
-                                            "granularity": "15min",
-                                            "pmParameterValue": -30,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        },
-                                        {
-                                            "granularity": "24Hour",
-                                            "pmParameterValue": -21.3,
-                                            "pmParameterUnit": "dBm",
-                                            "validity": "complete"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully set !")
+        self.test_14_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput()
         time.sleep(self.WAITING * 2)
 
     def test_37_get_eth_service1(self):
@@ -1244,37 +1188,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Restore ROADM-A1-ROADM-C1 link
     def test_41_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
-        url = "{}/operations/pm-handling:pm-interact"
-        body = {
-            "input": {
-                "rpc-action": "clear",
-                "pm-to-get-clear-or-delete": {
-                    "current-pm-entry": [
-                        {
-                            "pm-resource-instance": "/org-openroadm-device:org-openroadm-device/org-openroadm-device"
-                                                    ":interface[org-openroadm-device:name='OTS-DEG2-TTP-TXRX']",
-                            "pm-resource-type": "interface",
-                            "pm-resource-type-extension": "",
-                            "current-pm": [
-                                {
-                                    "type": "opticalPowerInput",
-                                    "extension": "",
-                                    "location": "nearEnd",
-                                    "direction": "rx"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-        response = requests.request("POST", url.format("http://127.0.0.1:8141/restconf"),
-                                    data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
-                                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD),
-                                    timeout=test_utils.REQUEST_TIMEOUT)
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json()['output']['status-message'], "The PMs has been successfully released !")
-        time.sleep(2)
+        self.test_17_clear_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput()
 
     def test_42_get_eth_service1(self):
         self.test_13_get_eth_service1()
