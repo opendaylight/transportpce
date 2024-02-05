@@ -10,13 +10,14 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.OLMRenderingResult;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.Notification;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -25,17 +26,12 @@ import org.slf4j.LoggerFactory;
 
 public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
 
-    private final String serviceName;
-
-    private final String path;
-
-    private final TransportpceOlmService olmService;
-
-    private final ServicePathInputData servicePathInputData;
-
-    private final Notification notification;
-
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerTurnDownTask.class);
+    private final String serviceName;
+    private final String path;
+    private final ServicePathInputData servicePathInputData;
+    private final Notification notification;
+    private final RpcService rpcService;
 
     /**
      * Task used to power down OLM.
@@ -43,17 +39,14 @@ public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
      * <p>
      * Intended to be used for parallel execution.
      */
-    public OlmPowerTurnDownTask(String serviceName,
-                                String path,
-                                TransportpceOlmService olmService,
-                                ServicePathInputData servicePathInputData,
-                                Notification notification) {
+    public OlmPowerTurnDownTask(String serviceName, String path, ServicePathInputData servicePathInputData,
+            Notification notification, RpcService rpcService) {
 
         this.serviceName = serviceName;
         this.path = path;
-        this.olmService = olmService;
         this.servicePathInputData = servicePathInputData;
         this.notification = notification;
+        this.rpcService = rpcService;
     }
 
     @Override
@@ -61,7 +54,7 @@ public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
 
         LOG.debug("Turning down power on {} path for service {}", path, serviceName);
 
-        Future<RpcResult<ServicePowerTurndownOutput>> fr = this.olmService.servicePowerTurndown(
+        Future<RpcResult<ServicePowerTurndownOutput>> fr = rpcService.getRpc(ServicePowerTurndown.class).invoke(
             new ServicePowerTurndownInputBuilder(
                 servicePathInputData.getServicePathInput()
             ).build());

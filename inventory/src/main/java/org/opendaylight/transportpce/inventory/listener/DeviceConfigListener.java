@@ -17,8 +17,8 @@ import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.inventory.DeviceInventory;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.ConnectionOper.ConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev231121.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,24 +42,24 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
     }
 
     @Override
-    public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
+    public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
 
         //LOG.debug("testing np1: {}", changes.toString());
         String openROADMversion = "";
         List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
         for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
             DataObjectModification<Node> rootNode = device.getRootNode();
-            String nodeId = rootNode.getDataAfter().key().getNodeId().getValue();
+            String nodeId = rootNode.dataAfter().key().getNodeId().getValue();
 
             LOG.debug("nodeId {}", nodeId);
 
-            NetconfNode netconfNode = rootNode.getDataAfter().augmentation(NetconfNode.class);
+            NetconfNode netconfNode = rootNode.dataAfter().augmentation(NetconfNode.class);
             ConnectionStatus connectionStatus =
                     netconfNode.getConnectionStatus();
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                     .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
                     .count();
-            LOG.debug("DCL Modification Type {}", device.getRootNode().getModificationType().toString());
+            LOG.debug("DCL Modification Type {}", device.getRootNode().modificationType().toString());
             LOG.debug("DCL Capability Count {}", count);
             LOG.debug("DCL Connection Status {}", connectionStatus);
             if (isCreate(device) || isUpdate(device)) {
@@ -111,14 +111,14 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      */
     private static List<DataTreeModification<Node>> getRealDevicesOnly(Collection<DataTreeModification<Node>> changes) {
         return changes.stream()
-                .filter(change -> (change.getRootNode().getDataAfter() != null
+                .filter(change -> (change.getRootNode().dataAfter() != null
                         && !StringConstants.DEFAULT_NETCONF_NODEID
-                        .equalsIgnoreCase(change.getRootNode().getDataAfter().key().getNodeId().getValue())
-                        && change.getRootNode().getDataAfter().augmentation(NetconfNode.class) != null)
-                        || (change.getRootNode().getDataBefore() != null
+                        .equalsIgnoreCase(change.getRootNode().dataAfter().key().getNodeId().getValue())
+                        && change.getRootNode().dataAfter().augmentation(NetconfNode.class) != null)
+                        || (change.getRootNode().dataBefore() != null
                         && !StringConstants.DEFAULT_NETCONF_NODEID.equalsIgnoreCase(
-                        change.getRootNode().getDataBefore().key().getNodeId().getValue())
-                        && change.getRootNode().getDataBefore().augmentation(NetconfNode.class) != null
+                        change.getRootNode().dataBefore().key().getNodeId().getValue())
+                        && change.getRootNode().dataBefore().augmentation(NetconfNode.class) != null
 
                 )).collect(Collectors.toList());
     }
@@ -128,8 +128,8 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      *
      */
     private static boolean isCreate(DataTreeModification<Node> change) {
-        return change.getRootNode().getDataBefore() == null && change.getRootNode().getDataAfter() != null
-                && ModificationType.WRITE.equals(change.getRootNode().getModificationType());
+        return change.getRootNode().dataBefore() == null && change.getRootNode().dataAfter() != null
+                && ModificationType.WRITE.equals(change.getRootNode().modificationType());
     }
 
     /**
@@ -137,7 +137,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      *
      */
     private static boolean isUpdate(DataTreeModification<Node> change) {
-        return ModificationType.SUBTREE_MODIFIED.equals(change.getRootNode().getModificationType());
+        return ModificationType.SUBTREE_MODIFIED.equals(change.getRootNode().modificationType());
     }
 
     /**
@@ -145,7 +145,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      *
      */
     private static boolean isDelete(DataTreeModification<Node> change) {
-        return change.getRootNode().getDataBefore() != null && change.getRootNode().getDataAfter() == null
-                && ModificationType.DELETE.equals(change.getRootNode().getModificationType());
+        return change.getRootNode().dataBefore() != null && change.getRootNode().dataAfter() == null
+                && ModificationType.DELETE.equals(change.getRootNode().modificationType());
     }
 }

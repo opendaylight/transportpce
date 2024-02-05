@@ -23,12 +23,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetails;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyDetailsOutput;
 import org.opendaylight.yangtools.yang.common.ErrorType;
@@ -36,6 +39,8 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 
 @ExtendWith(MockitoExtension.class)
 public class TapiTopologyImplExceptionTest {
+    @Mock
+    private RpcService rpcService;
     @Mock
     private NetworkTransactionService networkTransactionService;
     @Mock
@@ -49,12 +54,13 @@ public class TapiTopologyImplExceptionTest {
     void getTopologyDetailsWithExceptionTest() throws InterruptedException, ExecutionException {
         when(networkTransactionService.read(any(), any()))
             .thenReturn(FluentFuture.from(Futures.immediateFailedFuture(new InterruptedException())));
+        when(rpcService.getRpc(GetTopologyDetails.class))
+            .thenReturn(new GetTopologyDetailsImpl(tapiContext, topologyUtils, tapiLink, networkTransactionService));
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = rpcService
+                .getRpc(GetTopologyDetails.class).invoke(input);
         assertFalse(result.get().isSuccessful(), "RpcResult is not successful");
         assertNull(result.get().getResult(), "RpcResult result should be null");
         assertEquals(ErrorType.RPC, result.get().getErrors().get(0).getErrorType());

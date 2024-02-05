@@ -17,8 +17,6 @@ import static org.mockito.Mockito.when;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -36,14 +34,15 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.ConnectionOper.ConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.connection.oper.AvailableCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.connection.oper.AvailableCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.connection.oper.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.connection.oper.available.capabilities.AvailableCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240118.credentials.credentials.LoginPasswordBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev221225.NetconfNodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.AvailableCapabilities;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.AvailableCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.available.capabilities.AvailableCapability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.available.capabilities.AvailableCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.credentials.credentials.LoginPwBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.credentials.credentials.login.pw.LoginPasswordBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev231121.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev231121.NetconfNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeBuilder;
@@ -68,7 +67,7 @@ public class NetConfTopologyListenerTest {
     @Test
     void testOnDataTreeChangedWhenDeleteNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Node>> changes = new HashSet<>();
+        final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         final NodeRegistration nodeRegistration = mock(NodeRegistration.class);
         changes.add(ch);
@@ -76,15 +75,15 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
             OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
-        when(node.getDataBefore()).thenReturn(netconfNode);
+        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(node.dataBefore()).thenReturn(netconfNode);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping, registrations);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).getModificationType();
-        verify(node, times(3)).getDataBefore();
+        verify(node, times(1)).modificationType();
+        verify(node, times(3)).dataBefore();
         verify(networkModelService, times(1)).deleteOpenRoadmnode(anyString());
         verify(nodeRegistration, times(0)).unregisterListeners();
     }
@@ -92,7 +91,7 @@ public class NetConfTopologyListenerTest {
     @Test
     void testOnDataTreeChangedWhenAddNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Node>> changes = new HashSet<>();
+        final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(node);
@@ -101,24 +100,24 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(node.getDataBefore()).thenReturn(netconfNodeBefore);
-        when(node.getDataAfter()).thenReturn(netconfNodeAfter);
+        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(node.dataBefore()).thenReturn(netconfNodeBefore);
+        when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).getModificationType();
-        verify(node, times(3)).getDataBefore();
-        verify(node, times(1)).getDataAfter();
+        verify(node, times(1)).modificationType();
+        verify(node, times(3)).dataBefore();
+        verify(node, times(1)).dataAfter();
         verify(networkModelService, times(1)).createOpenRoadmNode(anyString(), anyString());
     }
 
     @Test
     void testOnDataTreeChangedWhenDisconnectingNode() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Node>> changes = new HashSet<>();
+        final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(node);
@@ -127,17 +126,17 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
-        when(node.getDataBefore()).thenReturn(netconfNodeBefore);
-        when(node.getDataAfter()).thenReturn(netconfNodeAfter);
+        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(node.dataBefore()).thenReturn(netconfNodeBefore);
+        when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).getModificationType();
-        verify(node, times(3)).getDataBefore();
-        verify(node, times(1)).getDataAfter();
+        verify(node, times(1)).modificationType();
+        verify(node, times(3)).dataBefore();
+        verify(node, times(1)).dataAfter();
         verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
@@ -145,23 +144,23 @@ public class NetConfTopologyListenerTest {
     @Test
     void testOnDataTreeChangedWhenShouldNeverHappen() {
         @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
-        final Collection<DataTreeModification<Node>> changes = new HashSet<>();
+        final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(node);
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.getModificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
-        when(node.getDataBefore()).thenReturn(netconfNodeBefore);
+        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
+        when(node.dataBefore()).thenReturn(netconfNodeBefore);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(2)).getModificationType();
-        verify(node, times(3)).getDataBefore();
-        verify(node, never()).getDataAfter();
+        verify(node, times(2)).modificationType();
+        verify(node, times(3)).dataBefore();
+        verify(node, never()).dataAfter();
         verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
@@ -182,12 +181,13 @@ public class NetConfTopologyListenerTest {
             .setPort(new PortNumber(Uint16.valueOf(9999)))
             .setReconnectOnChangedSchema(true)
             .setDefaultRequestTimeoutMillis(Uint32.valueOf(1000))
-            .setBetweenAttemptsTimeoutMillis(Uint16.valueOf(100))
             .setKeepaliveDelay(Uint32.valueOf(1000))
             .setTcpOnly(true)
-            .setCredentials(new LoginPasswordBuilder()
-                .setUsername("testuser")
-                .setPassword("testpassword")
+            .setCredentials(new LoginPwBuilder()
+                .setLoginPassword(new LoginPasswordBuilder()
+                    .setUsername("testuser")
+                    .setPassword("testpassword".getBytes())
+                    .build())
                 .build())
             .build();
         return new NodeBuilder()

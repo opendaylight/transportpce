@@ -9,9 +9,11 @@
 package org.opendaylight.transportpce.test.stub;
 
 import java.util.Optional;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMMountPointServiceAdapter;
+import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class MountPointServiceStub implements MountPointService {
@@ -31,8 +33,7 @@ public class MountPointServiceStub implements MountPointService {
     }
 
     @Override
-    public <T extends MountPointListener> ListenerRegistration<T> registerListener(InstanceIdentifier<?> path,
-        T listener) {
-        return null;
+    public @NonNull Registration registerListener(InstanceIdentifier<?> path, MountPointListener listener) {
+        return new BindingDOMMountPointServiceAdapter(null, null).registerListener(path, listener);
     }
 }

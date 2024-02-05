@@ -26,8 +26,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
+import org.opendaylight.yangtools.yang.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class DeviceListener710 {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
-            LinkedList<PathArgument> path = new LinkedList<>();
+            LinkedList<DataObjectStep<?>> path = new LinkedList<>();
             switch (edit.getTarget().getTargetType().getSimpleName()) {
                 case "Ports":
                     edit.getTarget().getPathArguments().forEach(p -> path.add(p));

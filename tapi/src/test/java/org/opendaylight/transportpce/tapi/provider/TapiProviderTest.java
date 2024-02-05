@@ -24,12 +24,12 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OrgOpenroadmServiceService;
 
 @ExtendWith(MockitoExtension.class)
 public class TapiProviderTest {
@@ -37,15 +37,15 @@ public class TapiProviderTest {
     @Mock
     private DataBroker dataBroker;
     @Mock
-    private RpcProviderService rpcProviderRegistry;
+    private RpcProviderService rpcProviderService;
     @Mock
     private NotificationService notificationService;
+    @Mock
+    private RpcService rpcService;
     @Mock
     private NotificationPublishService notificationPublishService;
     @Mock
     private NetworkTransactionService networkTransactionService;
-    @Mock
-    private OrgOpenroadmServiceService serviceHandler;
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
@@ -57,11 +57,11 @@ public class TapiProviderTest {
     void testInitRegisterTapiToRpcRegistry() {
         when(networkTransactionService.read(any(), any())).thenReturn(Futures.immediateFuture(Optional.empty()));
         doReturn(emptyFluentFuture()).when(networkTransactionService).commit();
-        new TapiProvider(dataBroker, rpcProviderRegistry, notificationService, notificationPublishService,
-                networkTransactionService, serviceHandler, serviceDataStoreOperations,
+        new TapiProvider(dataBroker, rpcProviderService, rpcService, notificationService, notificationPublishService,
+                networkTransactionService, serviceDataStoreOperations,
                 tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl);
 
-        verify(rpcProviderRegistry, times(2)).registerRpcImplementations(any());
-        verify(dataBroker, times(4)).registerDataTreeChangeListener(any(), any());
+        verify(rpcProviderService, times(2)).registerRpcImplementations(any());
+        verify(dataBroker, times(4)).registerTreeChangeListener(any(), any());
     }
 }

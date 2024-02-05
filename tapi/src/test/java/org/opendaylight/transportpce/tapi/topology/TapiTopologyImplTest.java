@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -37,6 +41,12 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetLinkDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetNodeDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetNodeEdgePointDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointListImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
@@ -82,9 +92,12 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@ExtendWith(MockitoExtension.class)
 public class TapiTopologyImplTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImplTest.class);
 
+    @Mock
+    private RpcService rpcService;
     private static ListeningExecutorService executorService;
     private static CountDownLatch endSignal;
     private static final int NUM_THREADS = 3;
@@ -123,23 +136,17 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+    void getTopologyDetailsForTransponder100GTopologyWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
             Charset.forName("UTF-8"))).toString());
         LOG.info("TPDR100GUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
+//        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
+//            tapiLink);
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
+                topologyUtils, tapiLink, networkTransactionService)
+            .invoke(input);
         LOG.info("RESULT of getTopoDetailsTopo/name = {}", result.get().getResult().getTopology().getName().toString());
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
@@ -174,22 +181,14 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+    void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         LOG.info("T0MultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
+                topologyUtils, tapiLink, networkTransactionService)
+            .invoke(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
@@ -331,16 +330,9 @@ public class TapiTopologyImplTest extends AbstractTest {
             Charset.forName("UTF-8"))).toString());
         LOG.info("T0FullMultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
+                topologyUtils, tapiLink, networkTransactionService)
+            .invoke(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
@@ -515,35 +507,21 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    void getNodeAndNepsDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+    void getNodeAndNepsDetailsWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
+                    topologyUtils, tapiLink, networkTransactionService)
+                .invoke(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         for (Node node:topology.getNode().values()) {
             Uuid nodeUuid = node.getUuid();
             GetNodeDetailsInput input1 = TapiTopologyDataUtils.buildGetNodeDetailsInput(topologyUuid, nodeUuid);
-            ListenableFuture<RpcResult<GetNodeDetailsOutput>> result1 = tapiTopoImpl.getNodeDetails(input1);
-            result.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    endSignal.countDown();
-                }
-            }, executorService);
-            endSignal.await();
+            ListenableFuture<RpcResult<GetNodeDetailsOutput>> result1 = new GetNodeDetailsImpl(tapiContext)
+                    .invoke(input1);
             RpcResult<GetNodeDetailsOutput> rpcResult1 = result1.get();
             @Nullable
             Node node1 = rpcResult1.getResult().getNode();
@@ -552,15 +530,8 @@ public class TapiTopologyImplTest extends AbstractTest {
                 Uuid onepUuid = onep.getUuid();
                 GetNodeEdgePointDetailsInput input2 = TapiTopologyDataUtils.buildGetNodeEdgePointDetailsInput(
                     topologyUuid, nodeUuid, onepUuid);
-                ListenableFuture<RpcResult<GetNodeEdgePointDetailsOutput>> result2
-                    = tapiTopoImpl.getNodeEdgePointDetails(input2);
-                result.addListener(new Runnable() {
-                    @Override
-                    public void run() {
-                        endSignal.countDown();
-                    }
-                }, executorService);
-                endSignal.await();
+                ListenableFuture<RpcResult<GetNodeEdgePointDetailsOutput>> result2 =
+                        new GetNodeEdgePointDetailsImpl(tapiContext).invoke(input2);
                 RpcResult<GetNodeEdgePointDetailsOutput> rpcResult2 = result2.get();
                 org.opendaylight.yang.gen.v1
                     .urn.onf.otcc.yang.tapi.topology.rev221121.get.node.edge.point.details.output.NodeEdgePoint
@@ -571,21 +542,13 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    void getLinkDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+    void getLinkDetailsWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
+        ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
+                topologyUtils, tapiLink, networkTransactionService)
+            .invoke(input);
         RpcResult<GetTopologyDetailsOutput> rpcResult = result.get();
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
@@ -593,14 +556,8 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uuid linkUuid = link.getUuid();
             GetLinkDetailsInput input1 = TapiTopologyDataUtils.buildGetLinkDetailsInput(
                 topologyUuid, linkUuid);
-            ListenableFuture<RpcResult<GetLinkDetailsOutput>> result1 = tapiTopoImpl.getLinkDetails(input1);
-            result.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    endSignal.countDown();
-                }
-            }, executorService);
-            endSignal.await();
+            ListenableFuture<RpcResult<GetLinkDetailsOutput>> result1 = new GetLinkDetailsImpl(tapiContext)
+                    .invoke(input1);
             RpcResult<GetLinkDetailsOutput> rpcResult1 = result1.get();
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.link.details.output.Link link1
                 = rpcResult1.getResult().getLink();
@@ -609,35 +566,18 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    void getSipDetailsWhenSuccessful()
-            throws ExecutionException, InterruptedException {
+    void getSipDetailsWhenSuccessful() throws ExecutionException, InterruptedException {
         GetServiceInterfacePointListInput input = TapiTopologyDataUtils.buildServiceInterfacePointListInput();
-        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-            tapiLink);
-        ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>> result = tapiTopoImpl
-            .getServiceInterfacePointList(input);
-        result.addListener(new Runnable() {
-            @Override
-            public void run() {
-                endSignal.countDown();
-            }
-        }, executorService);
-        endSignal.await();
+        ListenableFuture<RpcResult<GetServiceInterfacePointListOutput>> result =
+                new GetServiceInterfacePointListImpl(tapiContext).invoke(input);
         RpcResult<GetServiceInterfacePointListOutput> rpcResult = result.get();
         Map<SipKey, Sip> sipMap = rpcResult.getResult().getSip();
         for (Sip sip:sipMap.values()) {
             Uuid sipUuid = sip.getUuid();
             GetServiceInterfacePointDetailsInput input1 = TapiTopologyDataUtils
                 .buildGetServiceInterfacePointDetailsInput(sipUuid);
-            ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>> result1
-                = tapiTopoImpl.getServiceInterfacePointDetails(input1);
-            result.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    endSignal.countDown();
-                }
-            }, executorService);
-            endSignal.await();
+            ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>> result1 =
+                    new GetServiceInterfacePointDetailsImpl(tapiContext).invoke(input1);
             RpcResult<GetServiceInterfacePointDetailsOutput> rpcResult1 = result1.get();
             org.opendaylight.yang.gen.v1
                 .urn.onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.details.output.Sip sip1
