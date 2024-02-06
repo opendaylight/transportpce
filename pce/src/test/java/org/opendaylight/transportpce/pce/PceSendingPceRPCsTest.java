@@ -7,13 +7,13 @@
  */
 package org.opendaylight.transportpce.pce;
 
-
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,6 @@ import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
-import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingBuilder;
@@ -37,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+
 
 @ExtendWith(MockitoExtension.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
@@ -54,10 +54,9 @@ public class PceSendingPceRPCsTest extends AbstractTest {
 
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InterruptedException, ExecutionException {
         this.dataBroker = getNewDataBroker();
         networkTransaction = new NetworkTransactionImpl(this.dataBroker);
-        PceTestUtils.writeNetworkInDataStore(this.dataBroker);
         gnpyConsumer = new GnpyConsumerImpl(
             "http://localhost:9998", "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
         pceSendingPceRPCs = new PceSendingPceRPCs(
@@ -93,6 +92,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     void checkMessage() {
         assertNull(pceSendingPceRPCs.getMessage());
     }
+
 
     @Test
     void responseCodeTest() {
