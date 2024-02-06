@@ -78,7 +78,8 @@ public class PCEServiceWrapper {
             return performPCE(serviceCreateInput.getHardConstraints(), serviceCreateInput.getSoftConstraints(),
                     serviceCreateInput.getServiceName(), serviceCreateInput.getSdncRequestHeader(),
                     serviceCreateInput.getServiceAEnd(), serviceCreateInput.getServiceZEnd(),
-                    ServiceNotificationTypes.ServiceCreateResult, reserveResource);
+                    ServiceNotificationTypes.ServiceCreateResult, reserveResource,
+                    serviceCreateInput.getCustomer());
         } else {
             return returnPCEFailed();
         }
@@ -91,7 +92,8 @@ public class PCEServiceWrapper {
             return performPCE(tempServiceCreateInput.getHardConstraints(), tempServiceCreateInput.getSoftConstraints(),
                     tempServiceCreateInput.getCommonId(), tempServiceCreateInput.getSdncRequestHeader(),
                     tempServiceCreateInput.getServiceAEnd(), tempServiceCreateInput.getServiceZEnd(),
-                    ServiceNotificationTypes.ServiceCreateResult, reserveResource);
+                    ServiceNotificationTypes.ServiceCreateResult, reserveResource,
+                    tempServiceCreateInput.getCustomer());
         } else {
             return returnPCEFailed();
         }
@@ -106,7 +108,8 @@ public class PCEServiceWrapper {
                     serviceFeasibilityCheckInput.getSoftConstraints(), serviceFeasibilityCheckInput.getCommonId(),
                     serviceFeasibilityCheckInput.getSdncRequestHeader(), serviceFeasibilityCheckInput.getServiceAEnd(),
                     serviceFeasibilityCheckInput.getServiceZEnd(),
-                    ServiceNotificationTypes.ServiceCreateResult, reserveResource);
+                    ServiceNotificationTypes.ServiceCreateResult, reserveResource,
+                    serviceFeasibilityCheckInput.getCustomer());
         } else {
             return returnPCEFailed();
         }
@@ -114,7 +117,8 @@ public class PCEServiceWrapper {
 
     private PathComputationRequestOutput performPCE(HardConstraints hardConstraints, SoftConstraints softConstraints,
             String serviceName, SdncRequestHeader sdncRequestHeader, ServiceEndpoint serviceAEnd,
-            ServiceEndpoint serviceZEnd, ServiceNotificationTypes notifType, boolean reserveResource) {
+            ServiceEndpoint serviceZEnd, ServiceNotificationTypes notifType, boolean reserveResource,
+            String customerName) {
         LOG.info("Calling path computation.");
         notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
                 .setStatus(RpcStatusEx.Pending)
@@ -127,7 +131,7 @@ public class PCEServiceWrapper {
         FutureCallback<PathComputationRequestOutput> pceCallback =
                 new PathComputationRequestOutputCallback(notifType, serviceName);
         PathComputationRequestInput pathComputationRequestInput = createPceRequestInput(serviceName, sdncRequestHeader,
-                hardConstraints, softConstraints, reserveResource, serviceAEnd, serviceZEnd);
+                hardConstraints, softConstraints, reserveResource, serviceAEnd, serviceZEnd, customerName);
         ListenableFuture<PathComputationRequestOutput> pce = this.pathComputationService
                 .pathComputationRequest(pathComputationRequestInput);
         Futures.addCallback(pce, pceCallback, executor);
@@ -173,7 +177,7 @@ public class PCEServiceWrapper {
     private PathComputationRequestInput createPceRequestInput(String serviceName,
             SdncRequestHeader serviceHandler, HardConstraints hardConstraints,
             SoftConstraints softConstraints, Boolean reserveResource, ServiceEndpoint serviceAEnd,
-            ServiceEndpoint serviceZEnd) {
+            ServiceEndpoint serviceZEnd, String customerName) {
         LOG.info("Mapping ServiceCreateInput or ServiceFeasibilityCheckInput or serviceReconfigureInput to PCE"
                 + "requests");
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
@@ -187,6 +191,7 @@ public class PCEServiceWrapper {
             .setHardConstraints(hardConstraints)
             .setSoftConstraints(softConstraints)
             .setPceRoutingMetric(PceMetric.TEMetric)
+            .setCustomerName(customerName)
             .setServiceAEnd(ModelMappingUtils.createServiceAEnd(serviceAEnd))
             .setServiceZEnd(ModelMappingUtils.createServiceZEnd(serviceZEnd))
             .build();
