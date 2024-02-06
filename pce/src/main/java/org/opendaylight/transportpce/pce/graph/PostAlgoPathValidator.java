@@ -61,9 +61,11 @@ public class PostAlgoPathValidator {
 
     private Double tpceCalculatedMargin = 0.0;
     private final NetworkTransactionService networkTransactionService;
+    private final BitSet spectrumConstraint;
 
-    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService) {
+    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint) {
         this.networkTransactionService = networkTransactionService;
+        this.spectrumConstraint = spectrumConstraint;
     }
 
     @SuppressWarnings("fallthrough")
@@ -1048,6 +1050,10 @@ public class PostAlgoPathValidator {
                 pceNode.getNodeId(), pceNodeVersion, sltWdthGran, ctralFreqGran);
             isFlexGrid = false;
         }
+        if (spectrumConstraint != null) {
+            result.and(spectrumConstraint);
+        }
+
         LOG.debug("Bitset result {}", result);
         return computeBestSpectrumAssignment(result, spectralWidthSlotNumber, isFlexGrid);
     }
