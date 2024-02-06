@@ -16,6 +16,58 @@
       "message": "@Guillaume : could you please check tox.ini to verify if the script is ok for a complete lightynode migration ?",
       "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc3e5f7_f1dade92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-06T13:52:08Z",
+      "side": 1,
+      "message": "Sure.\nLGTM in the spirit. A few minor issues pointed here.",
+      "parentUuid": "de38cb6e_c4e93528",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56fc9c84_225a5321",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-06T13:52:08Z",
+      "side": 1,
+      "message": "not needed IMO",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2992e463_4d60467e",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-06T13:52:08Z",
+      "side": 1,
+      "message": "shouldn\u0027t this line be removed ?",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
