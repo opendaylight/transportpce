@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.pce;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.constraints.OperatorConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.gnpy.GnpyException;
@@ -121,10 +122,11 @@ public class PceSendingPceRPCs {
             LOG.error("In pathComputationWithConstraints, nwAnalizer: result = {}", rc);
             return;
         }
+        OperatorConstraints opConstraints = new OperatorConstraints(networkTransaction);
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
-                rc, serviceType, networkTransaction, mode);
+                rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()));
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {

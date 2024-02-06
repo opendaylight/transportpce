@@ -1,0 +1,38 @@
+{
+    "controller-behaviour-settings": {
+    	"spectrum-filling": {
+		  "spectrum-filling-rules": [
+		    {
+		      "rule-id": 1,
+		      "priority": 1,
+		      "RMSA-policy": "maximize-capacity",
+		      "spectrum-range-of-appliance": {
+		        "dedicated-signal-bandwidth-multiple": 50,
+		        "spectrum-portion-id": 0,
+		        "start-edge-frequency": 191.325,
+		        "stop-edge-frequency": 191.375,
+		        "dedicated-customer": [
+		          "CustomerProfileLamda1"
+		        ],
+		        "non-authorized-customer": [
+		          "All-other"
+		        ]
+		      }
+		    },
+		    {
+		      "rule-id": 2,
+		      "priority": 1,
+		      "RMSA-policy": "maximize-capacity",
+		      "spectrum-range-of-appliance": {
+		        "spectrum-portion-id": 1,
+		        "start-edge-frequency": 191.375,
+		        "stop-edge-frequency": 196.125,
+		        "non-authorized-customer": [
+		          "CustomerProfileLamda1"
+		        ]
+		      }
+		    }
+		  ]
+		}
+	}
+}

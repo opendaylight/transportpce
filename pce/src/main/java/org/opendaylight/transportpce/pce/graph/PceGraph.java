@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ public class PceGraph {
     private Double margin = null;
     PceConstraints pceHardConstraints;
     private PceConstraintMode pceConstraintMode;
+    private BitSet spectrumConstraint;
 
     // results
     private PceResult pceResult = null;
@@ -68,7 +70,7 @@ public class PceGraph {
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
-            NetworkTransactionService networkTransactionService, PceConstraintMode mode) {
+            NetworkTransactionService networkTransactionService, PceConstraintMode mode, BitSet spectrumConstraint) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -79,6 +81,7 @@ public class PceGraph {
         this.serviceType = serviceType;
         this.networkTransactionService = networkTransactionService;
         this.pceConstraintMode = mode;
+        this.spectrumConstraint = spectrumConstraint;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
@@ -102,7 +105,7 @@ public class PceGraph {
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
-            PostAlgoPathValidator papv = new PostAlgoPathValidator(networkTransactionService);
+            PostAlgoPathValidator papv = new PostAlgoPathValidator(networkTransactionService, spectrumConstraint);
             pceResult = papv.checkPath(
                     path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
             this.margin = papv.getTpceCalculatedMargin();
