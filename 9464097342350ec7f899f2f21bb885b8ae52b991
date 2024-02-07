@@ -68,6 +68,24 @@
       "message": "shouldn\u0027t this line be removed ?",
       "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bec92276_d7d5a8a9",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-07T17:10:59Z",
+      "side": 1,
+      "message": "yes. This line must be removed.",
+      "parentUuid": "2992e463_4d60467e",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
