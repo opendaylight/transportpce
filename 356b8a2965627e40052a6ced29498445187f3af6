@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c9437f7_021eca30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-07T07:53:37Z",
+      "side": 1,
+      "message": "Remove the line to have JIRA reference inside the commit message footer.",
+      "revId": "356b8a2965627e40052a6ced29498445187f3af6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e99eea8_6c7f668a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-07T07:53:37Z",
+      "side": 1,
+      "message": "Add a sign-off-by in your commit message footer",
+      "revId": "356b8a2965627e40052a6ced29498445187f3af6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
