@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "075b0844_564f0841",
+        "filename": "tests/install_lightynode.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-07T15:05:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42a75b15_3bea4eef",
+      "revId": "7bf958c3d35301b0926fe333fa7bf3c148129745",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01247f70_92ce5a0b",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-05T08:29:20Z",
       "side": 1,
       "message": "install_sims.sh below is already taking care of that",
+      "revId": "7bf958c3d35301b0926fe333fa7bf3c148129745",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3021903_85bf288a",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-07T15:05:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "01247f70_92ce5a0b",
       "revId": "7bf958c3d35301b0926fe333fa7bf3c148129745",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
