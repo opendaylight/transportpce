@@ -1125,6 +1125,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Degrade ROADM-A1-ROADM-C1 link
     def test_36_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput(self):
         self.test_14_set_pm_ROADMA_OTS_DEG2_TTP_TXRX_OpticalPowerInput()
+        time.sleep(self.WAITING * 2)
 
     def test_37_get_eth_service1(self):
         self.test_13_get_eth_service1()
