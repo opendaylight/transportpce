@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "013f47f6_91faeddf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-08T07:59:27Z",
+      "side": 1,
+      "message": "introduces a new code style",
+      "revId": "6fd36d1301ab532cfb22a1a1e3778c14cc9bcd95",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
