@@ -16,6 +16,24 @@
       "message": "@Olivier: LowerFreq \u003e UpperFreq ?",
       "revId": "7a048218cda47fd274d3e9d9b1fcae730107738d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4f3c52_1a44ad02",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-08T17:47:46Z",
+      "side": 0,
+      "message": "You are right, my mistake! Thus to be corrected in your proposal (line 588--\u003e590). Thanks!",
+      "parentUuid": "e50373a3_aff5ef40",
+      "revId": "7a048218cda47fd274d3e9d9b1fcae730107738d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9304fe9_492f5012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-08T17:47:46Z",
+      "side": 1,
+      "message": "I have replied to your comment. You are right it is a mistake on my side. Then this shall be corrected also in target code. For the refacto, hope the code you create is consistent with the original (since all the tests have not been developed, creation of MC and OTSI MC still being incomplete). To be honest, I did not review all of it : did review simple changes, but as soon as the IF conditions are inverted, and intermediate variable are added, or removed, every thing appears as changed, even the part of the code that is kept, and it is almost impossible for me to keep the thread. Thanks",
+      "revId": "b8849e9dba353a692f64d398b2d48975ea80b0d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
