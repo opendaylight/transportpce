@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9f250db_3bbd35c3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-08T07:48:12Z",
+      "side": 1,
+      "message": "\u003e what about debug rather ?\n\nyes, I also think debug level would be more appropriate",
+      "parentUuid": "b0d2591b_b571417e",
+      "revId": "74eddce3086d0281a0fac67be4574c2e16c12a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f512659_d75c8bf4",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 5
