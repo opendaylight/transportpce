@@ -53,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "139a24b3_291d16d8",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-02-08T09:05:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "56fc9c84_225a5321",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2992e463_4d60467e",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "yes. This line must be removed.",
       "parentUuid": "2992e463_4d60467e",
+      "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f93acb_4830a61e",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-02-08T09:05:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bec92276_d7d5a8a9",
       "revId": "9464097342350ec7f899f2f21bb885b8ae52b991",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
