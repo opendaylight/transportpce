@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b9db74f_796b1ed1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-02-08T16:10:24Z",
+      "side": 1,
+      "message": "@Guillaume, could you please test the with_docker functional tests. I cannot test them since I migrate to a new lab top. Thanks in adavance.",
+      "revId": "67aa2da08aed4b6073b3de14b6c50b4761b2093a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
