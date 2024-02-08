@@ -16,6 +16,29 @@
       "message": "recheck",
       "revId": "aeb683a2eaf824a74e151983b5001030efb84fad",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8465941_77100bfb",
+        "filename": "pce/src/test/resources/spectrum-filling-rule1.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-02-08T15:44:44Z",
+      "side": 1,
+      "message": "spaces instead of tab",
+      "range": {
+        "startLine": 3,
+        "startChar": 1,
+        "endLine": 3,
+        "endChar": 5
+      },
+      "revId": "aeb683a2eaf824a74e151983b5001030efb84fad",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
