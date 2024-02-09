@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfebcc31_a1c002a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-09T14:11:01Z",
+      "side": 1,
+      "message": "Hi Guillaume. Agree with Gilles. I think we should stick to code-styles that were defined with a global consent. I have the same comment as for TAPI convertORToTapiTopology. Doing some refacto in eclipse where you know where you go is great. Reviewing it on Gerrit interface when everything was changed, the logic inverted, some intermediate variables removed and some others added is almost impossible to me. Fortunately, the existing tests here should garanty that the code is equivalent in terms of functionnality (if all needed tests were developped), but I can do it on my side.",
+      "revId": "5b308f06cf91635d61a3e32932f9870927103f50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0e88891_8693d258",
