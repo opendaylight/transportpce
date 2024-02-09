@@ -364,7 +364,7 @@ public class RendererNotificationHandler implements RendererListener {
         } else {
             deleteServiceOperationResult = this.serviceDataStoreOperations.deleteService(serviceName);
         }
-        if (deleteServiceOperationResult.isSuccess()) {
+        if (!deleteServiceOperationResult.isSuccess()) {
             LOG.warn("{}Service was not removed from datastore!", serviceType);
         }
     }
