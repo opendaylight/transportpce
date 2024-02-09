@@ -197,8 +197,8 @@ public class PowerMgmtImpl implements PowerMgmt {
 
                     LOG.info("Spanloss TX is {}", spanLossTx);
                     // TODO: The span-loss limits should be obtained from optical specifications
-                    if (spanLossTx == null || spanLossTx.intValue() <= 0 || spanLossTx.intValue() > 27) {
-                        LOG.error("Power Value is null: spanLossTx null or out of openROADM range ]0,27] {}",
+                    if (spanLossTx == null || spanLossTx.intValue() < 0 || spanLossTx.intValue() > 27) {
+                        LOG.error("Power Value is null: spanLossTx null or out of openROADM range [0,27] {}",
                             spanLossTx);
                         return false;
                     }
