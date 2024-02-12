@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "2da6eca5db7a5ed0fd9bc357961e6fee4753a937",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a36f4b7_be201ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-02-12T15:26:47Z",
+      "side": 1,
+      "message": "I don\u0027t know what\u0027s going on with Python tests. They seem to fail at different random places every time.",
+      "revId": "2da6eca5db7a5ed0fd9bc357961e6fee4753a937",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
