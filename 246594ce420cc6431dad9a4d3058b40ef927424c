@@ -52,6 +52,24 @@
       "parentUuid": "3a1e14b6_3eddfb95",
       "revId": "246594ce420cc6431dad9a4d3058b40ef927424c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9c2abfd_73ac04bc",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/RollbackResultMessage.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T12:29:01Z",
+      "side": 1,
+      "message": "yep it\u0027s much better though a ternary operator would still be more indicated for interfaces declaration IMO (it spare some checks at compilation time).\nI agree the solution I propose is more complicated to read but it is also more memory efficiant. It avoids to declare this string plus a double call to failedRollback.getInterface().",
+      "parentUuid": "710eb09e_f74ace23",
+      "revId": "246594ce420cc6431dad9a4d3058b40ef927424c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
