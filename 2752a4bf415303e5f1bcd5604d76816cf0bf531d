@@ -33,6 +33,24 @@
       "message": "LGTM but this generates an error in current Junit test suite\norg.opendaylight.transportpce.common.device.DeviceTransactionManagerTest.advancedPositiveTransactionTest",
       "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eda2ccb7_62887210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-02-13T12:49:58Z",
+      "side": 1,
+      "message": "I don\u0027t know, it seems the unit test didn\u0027t fail in the first build, only after recheck. I don\u0027t see how that unit test is related to this change.",
+      "parentUuid": "06d884d1_2e9cda9f",
+      "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
