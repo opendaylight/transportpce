@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10700313_ee6d4b7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:44:11Z",
+      "side": 1,
+      "message": "Thanks for this nice change.\nHere are some proposals for improvement",
+      "revId": "4bbebfd05af615cd365462022a99ec1d42305dd5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "853d2c21_2df65d11",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/transaction/delete/DeleteService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:44:11Z",
+      "side": 1,
+      "message": "What about this rather ?\n\n        if (result \u003d\u003d null) {\n            subscriber.result(false, deviceId, connectionNumber);\n            return new ArrayList\u003c\u003e();\n        }\n        subscriber.result(true, deviceId, connectionNumber);\n        return result;",
+      "revId": "4bbebfd05af615cd365462022a99ec1d42305dd5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e001a90_43cc0880",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/transaction/delete/FailedRollbackResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:44:11Z",
+      "side": 1,
+      "message": "What about this rather ?\n\n        if (success) {\n            return false;\n        }\n        if (!failedRollback.containsKey(nodeId)) {\n             failedRollback.put(nodeId, new LinkedHashSet\u003c\u003e());\n        }\n        return failedRollback.get(nodeId).add(interfaceId);",
+      "revId": "4bbebfd05af615cd365462022a99ec1d42305dd5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
