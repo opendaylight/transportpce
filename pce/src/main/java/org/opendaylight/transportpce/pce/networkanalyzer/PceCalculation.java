@@ -511,20 +511,25 @@ public class PceCalculation {
         switch (serviceFormat) {
             case "Ethernet":
             case "OC":
-                if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
-                    return true;
+                switch (azEndPoint) {
+                    case "A":
+                        return checkAendInputTxPortDeviceName()
+                            ? pceNode.getNodeId().getValue().equals(azNodeId)
+                            : pceNode.getSupNetworkNodeId().equals(azNodeId);
+                    case "Z":
+                        return checkZendInputTxPortDeviceName()
+                            ? pceNode.getNodeId().getValue().equals(azNodeId)
+                            : pceNode.getSupNetworkNodeId().equals(azNodeId);
+                    default:
+                        return false;
                 }
             //fallthrough
             case "OTU":
                 switch (azEndPoint) {
                     case "A":
-                        return checkAendInputTxPortDeviceName()
-                            && pceNode.getNodeId().getValue()
-                                .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName());
+                        return checkAendInputTxPortDeviceName() && pceNode.getNodeId().getValue().equals(azNodeId);
                     case "Z":
-                        return checkZendInputTxPortDeviceName()
-                            && pceNode.getNodeId().getValue()
-                                .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName());
+                        return checkZendInputTxPortDeviceName() && pceNode.getNodeId().getValue().equals(azNodeId);
                     default:
                         return false;
                 }
