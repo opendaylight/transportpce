@@ -16,6 +16,24 @@
       "message": "I think some Python tests are failing because they are implemented with the assumption that the config datastore is not persistent when TransportPCE is restarted. Note that config datastore is enabled while operational datastore is disabled by default in OpenDaylight.\n\nThis can be fixed by either rewriting the tests, or by setting \"persistent\u003dfalse\" in org.opendaylight.controller.cluster.datastore.cfg after building TransportPCE but before running tests:\n\nhttps://git.opendaylight.org/gerrit/gitweb?p\u003dintegration/distribution.git;a\u003dblob;f\u003dkaraf-scripts/src/main/assembly/bin/set_persistence.sh;h\u003d15c227176368803dccb62b4b3f8c9843f6fb878b;hb\u003dHEAD#l59",
       "revId": "abc80fdc8ee61176e0cc2ec1583d43dffa7e4e06",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00e45de_55d10eb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:34:22Z",
+      "side": 1,
+      "message": "very likely.\nCurrently some scripts are run to update the karaf configuration.\ncf tests/build_karaf_for_tests.sh\nand karaf/src/main/assembly/ressources/post_install_for_tests.sh\nPlease could you adapt the last one in this change to check if it behvas beter this way ?",
+      "parentUuid": "7eb52165_fb801f09",
+      "revId": "abc80fdc8ee61176e0cc2ec1583d43dffa7e4e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
