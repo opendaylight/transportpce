@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd0defc_c2a214d4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/RollbackResultMessage.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:50:17Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n    @Override\n    public String createErrorMessage(Collection\u003cFailedToRollback\u003e failedRollbacks) {\n        List\u003cString\u003e failedRollbackNodes \u003d new ArrayList\u003c\u003e();\n        failedRollbacks.forEach(failedRollback -\u003e {\n            var intf \u003d failedRollback.getInterface();\n            failedRollbackNodes.add(\n                    failedRollback.getNodeId()\n                    + \": \"\n                    + intf \u003d\u003d null ? \"\" : String.join(\", \", intf)\n            );\n        });\n        return String.join(System.lineSeparator(), failedRollbackNodes);\n    }",
+      "revId": "246594ce420cc6431dad9a4d3058b40ef927424c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
