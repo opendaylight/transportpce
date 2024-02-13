@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a1696d4_045bf6d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T10:34:53Z",
+      "side": 1,
+      "message": "Cf answer to Gilles.\nUnfortunately, having a consent that covers most aspects of coding style is a hard task. It was never completely reach up to now despite many efforts. Covering all aspects is also not wishable if possible.\nPlease feel free to propose eclipse profile that would help or to reformat this code in a separate change on top of this one if it helps.",
+      "parentUuid": "bfebcc31_a1c002a2",
+      "revId": "5b308f06cf91635d61a3e32932f9870927103f50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0e88891_8693d258",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-02-08T07:48:12Z",
       "side": 1,
       "message": "this code style is not aligned with what largely dominates the rest of the projet",
+      "range": {
+        "startLine": 231,
+        "startChar": 47,
+        "endLine": 233,
+        "endChar": 74
+      },
+      "revId": "5b308f06cf91635d61a3e32932f9870927103f50",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "882060fe_ae042889",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T10:34:53Z",
+      "side": 1,
+      "message": "Many things I found in this class were not aligned with the rest of the project.\nAlthough, this code was merged...\nPlease can you elaborate why this is error prone ? or why it complicates the maintenance ?\n\nPlease also consider that coding style is here to ease reading and helps debugging or refactoring or maintenance etc. And such rewriting helped me to find bugs and CPD improvements in many places...\n\nAlso, the dominant style for methods declaration in the project until recently was conventional style with a LF and indent +8.\nWe now have many places with the IntelliJ defaults with arguments aligned with the parenthesis after LF. It seems many contributors are using IntelliJ and as I stated in a previous change, both styles are commonly accepted.\nBut in ODL, with long NS and List or Map declarations, IntelliJ coding style is not very concise, and thus not coherent with other aspects of the coding style where concision is encouraged.\n\nNote that what I propose here is just a commonly accepted variation of the conventional coding style, quite similar to the google coding style array interpretation at https://google.github.io/styleguide/javaguide.html#s4.8.3-arrays\n\nI agree it would make more sense in a situation found at line 1604 than here.\nPlease feel free to propose a change on top of this one if you think it would fit better.",
+      "parentUuid": "a0e88891_8693d258",
       "range": {
         "startLine": 231,
         "startChar": 47,
