@@ -34,6 +34,24 @@
       "parentUuid": "e50373a3_aff5ef40",
       "revId": "7a048218cda47fd274d3e9d9b1fcae730107738d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b43306_4b8eaba8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-13T09:57:59Z",
+      "side": 0,
+      "message": "OK I propose I take care of this on a separate change based on the current code base. And I\u0027ll let you fix any Junit erro if it occurs. We can then rebase this change on top of it.",
+      "parentUuid": "cf4f3c52_1a44ad02",
+      "revId": "7a048218cda47fd274d3e9d9b1fcae730107738d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
