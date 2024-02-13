@@ -86,6 +86,24 @@
       "parentUuid": "eda2ccb7_62887210",
       "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40305300_cb80ec6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-02-13T15:03:25Z",
+      "side": 1,
+      "message": "This time there was no failed init test, only a failed Python test, which happens randomly.",
+      "parentUuid": "7c54c413_c67990fe",
+      "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
