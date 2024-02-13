@@ -16,6 +16,24 @@
       "message": "what about this rather ?\n\n    @Override\n    public String createErrorMessage(Collection\u003cFailedToRollback\u003e failedRollbacks) {\n        List\u003cString\u003e failedRollbackNodes \u003d new ArrayList\u003c\u003e();\n        failedRollbacks.forEach(failedRollback -\u003e {\n            var intf \u003d failedRollback.getInterface();\n            failedRollbackNodes.add(\n                    failedRollback.getNodeId()\n                    + \": \"\n                    + intf \u003d\u003d null ? \"\" : String.join(\", \", intf)\n            );\n        });\n        return String.join(System.lineSeparator(), failedRollbackNodes);\n    }",
       "revId": "246594ce420cc6431dad9a4d3058b40ef927424c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a1e14b6_3eddfb95",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/RollbackResultMessage.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-13T11:12:20Z",
+      "side": 1,
+      "message": "Thanks for your feedback. Honestly I find your suggestion to be more complicated. Basically too much happening at the same time on the same line. \n\nBut I agree my original suggestion leaves room for improvement. There is an unnecessary \u0027else\u0027-statement and a superfluous newline character for instance.\n\nHow about...\n\n@Override\npublic String createErrorMessage(Collection\u003cFailedToRollback\u003e failedRollbacks) {\n    List\u003cString\u003e failedRollbackNodes \u003d new ArrayList\u003c\u003e();\n    failedRollbacks.forEach(failedRollback -\u003e {\n\n        String interfaces \u003d \"\";\n\n        if (failedRollback.getInterface() !\u003d null) {\n            interfaces \u003d String.join(\", \", failedRollback.getInterface());\n        }\n\n        failedRollbackNodes.add(failedRollback.getNodeId() + \": \" + interfaces);\n\n    });\n\n    return String.join(System.lineSeparator(), failedRollbackNodes);\n}",
+      "parentUuid": "5fd0defc_c2a214d4",
+      "revId": "246594ce420cc6431dad9a4d3058b40ef927424c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
