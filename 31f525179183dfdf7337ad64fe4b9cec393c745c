@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9130da_e0f3efa4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-14T11:50:05Z",
+      "side": 1,
+      "message": "Remove case Ila",
+      "revId": "31f525179183dfdf7337ad64fe4b9cec393c745c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
