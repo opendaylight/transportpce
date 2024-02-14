@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c5cd223_fb14f71c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/connectionmap/VoidStorage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-14T11:50:19Z",
+      "side": 1,
+      "message": "Delete this class",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 12
+      },
+      "revId": "621d0f3f649b171a40d72e7cf5499cde174c094d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
