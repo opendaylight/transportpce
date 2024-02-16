@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d599c8ac_6d01779b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "-\u003e Determine preferred node/port from PCRI",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e13376bd_e5dd651a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "-\u003e Use\n(Present tense imperative mode is recommended)",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6fb183_30be290a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "thanks Joakim. LGTM apart a few cosmetics issues",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da2bf23_e1d54e4e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "2024 rather?",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c116694e_1640fa09",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "OK - proposal - what about return + a ternary operator here?",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681cd636_2952cc71",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/Factory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac0c593_633b40d9",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "I suspect this variable is used only once and could be removed.\nIsn\u0027t it ?",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "707f1f3a_721d99ec",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "idem etc",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "909873c3_9f9ea3f7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:18:35Z",
+      "side": 1,
+      "message": "useless intermediate variable IMO",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
