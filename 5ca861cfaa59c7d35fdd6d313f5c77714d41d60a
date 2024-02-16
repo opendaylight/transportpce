@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e1ff68_bfa398cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d599c8ac_6d01779b",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e13376bd_e5dd651a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-16T09:18:35Z",
       "side": 1,
       "message": "-\u003e Use\n(Present tense imperative mode is recommended)",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f5c6baa_6b13c1ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e13376bd_e5dd651a",
       "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -71,6 +107,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b158f39_8124172d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Actually written in late 2023 for sulfur. Carried over when I created this review but I get you point. I\u0027ll change it.",
+      "parentUuid": "2da2bf23_e1d54e4e",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3507bb8_68e92630",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "nodePortPreference.containsKey(node) is redundant. I\u0027ll remove it.",
+      "range": {
+        "startLine": 25,
+        "startChar": 19,
+        "endLine": 25,
+        "endChar": 55
+      },
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c116694e_1640fa09",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
         "patchSetId": 8
@@ -82,6 +159,24 @@
       "writtenOn": "2024-02-16T09:18:35Z",
       "side": 1,
       "message": "OK - proposal - what about return + a ternary operator here?",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61ab320f_e5f12e0f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "I typically avoid the ternary operator since I don\u0027t see any benefit. Difficult to read and makes adding/editing code harder. \n\nHow about this compromise:\n\n    return !nodePortPreference.containsKey(node) || nodePortPreference.get(node).contains(portName);",
+      "parentUuid": "c116694e_1640fa09",
       "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -103,6 +198,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a92c7c0b_f886d8be",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/Factory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "681cd636_2952cc71",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ac0c593_633b40d9",
@@ -116,6 +229,24 @@
       "writtenOn": "2024-02-16T09:18:35Z",
       "side": 1,
       "message": "I suspect this variable is used only once and could be removed.\nIsn\u0027t it ?",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b44bef0_6f68cb4c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9ac0c593_633b40d9",
       "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -137,6 +268,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3d44ca5_3964566c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "707f1f3a_721d99ec",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "909873c3_9f9ea3f7",
@@ -150,6 +299,24 @@
       "writtenOn": "2024-02-16T09:18:35Z",
       "side": 1,
       "message": "useless intermediate variable IMO",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "893035c4_1004af2d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/port/PreferenceFactoryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:52:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "909873c3_9f9ea3f7",
       "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
