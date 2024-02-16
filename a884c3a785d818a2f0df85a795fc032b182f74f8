@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "a884c3a785d818a2f0df85a795fc032b182f74f8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85ac27ee_e1063d15",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/constraints/OperatorConstraints.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T15:03:15Z",
+      "side": 1,
+      "message": "customerName !\u003d null checked twice",
+      "revId": "a884c3a785d818a2f0df85a795fc032b182f74f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
