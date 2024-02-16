@@ -156,6 +156,24 @@
       "message": "Same Junit test in error org.opendaylight.transportpce.common.device.DeviceTransactionManagerTest.advancedPositiveTransactionTest\nIt might be a tricky  issue beause of transaction manager\n+ Gilles \u0026 Christophe for their opinion",
       "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70495f0_ddae2874",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-02-16T11:38:44Z",
+      "side": 1,
+      "message": "Looks like a timing issue that is completely unrelated to this change.",
+      "parentUuid": "71b55441_ee1c0386",
+      "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
