@@ -52,6 +52,24 @@
       "parentUuid": "a00e45de_55d10eb2",
       "revId": "abc80fdc8ee61176e0cc2ec1583d43dffa7e4e06",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2e9fd8f_5fdd9eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-16T09:23:11Z",
+      "side": 1,
+      "message": "awesome\nLGTM\n+  other commiters to have their feedbacks",
+      "parentUuid": "22afa6cb_4858ac5a",
+      "revId": "abc80fdc8ee61176e0cc2ec1583d43dffa7e4e06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
