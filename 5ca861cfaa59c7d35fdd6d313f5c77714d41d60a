@@ -123,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a805e0_d10489fe",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b158f39_8124172d",
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3507bb8_68e92630",
@@ -136,6 +154,30 @@
       "writtenOn": "2024-02-16T10:52:54Z",
       "side": 1,
       "message": "nodePortPreference.containsKey(node) is redundant. I\u0027ll remove it.",
+      "range": {
+        "startLine": 25,
+        "startChar": 19,
+        "endLine": 25,
+        "endChar": 55
+      },
+      "revId": "5ca861cfaa59c7d35fdd6d313f5c77714d41d60a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce0e2d8_f110f6ab",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/port/ClientPreference.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-16T10:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3507bb8_68e92630",
       "range": {
         "startLine": 25,
         "startChar": 19,
