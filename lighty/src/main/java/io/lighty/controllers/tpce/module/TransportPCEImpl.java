@@ -55,6 +55,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererS
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.transportpce.servicehandler.catalog.CatalogDataStoreOperationsImpl;
@@ -165,8 +166,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
                 lgServBDB,
-                lgServBNPS,
-                portMapping);
+                new NotificationSender(lgServBNPS),
+                portMapping
+            );
         ServiceDataStoreOperations serviceDataStoreOperations =
             new ServiceDataStoreOperationsImpl(lgServBDB);
         RendererNotificationHandler rendererNotificationHandler =
@@ -275,8 +277,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                             otnDeviceRendererService,
                             olmPowerServiceRpc,
                             lightyServices.getBindingDataBroker(),
-                            lightyServices.getBindingNotificationPublishService(),
-                            portMapping),
+                            new NotificationSender(
+                                lightyServices.getBindingNotificationPublishService()
+                            ),
+                            portMapping
+                        ),
                     lightyServices.getRpcProviderService())
                 .getRegisteredRpc());
     }
