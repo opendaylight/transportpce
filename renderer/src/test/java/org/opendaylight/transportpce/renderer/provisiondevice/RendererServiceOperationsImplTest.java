@@ -39,6 +39,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
@@ -92,7 +93,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.olmService = spy(this.olmService);
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer, otnDeviceRendererService,
-                this.olmService, getDataBroker(), notificationPublishService, portMapping);
+                this.olmService, getDataBroker(), new NotificationSender(notificationPublishService), portMapping);
     }
 
     @Test
