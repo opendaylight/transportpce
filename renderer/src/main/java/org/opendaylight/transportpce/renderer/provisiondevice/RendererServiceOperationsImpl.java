@@ -38,6 +38,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRender
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerTurnDownTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OtnDeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
@@ -46,8 +47,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
@@ -91,8 +90,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             "OLM power setup was not successful! Rendering and OLM will be rolled back.";
     private static final String RENDERING_DEVICES_A_Z_MSG = "Rendering devices A-Z";
     private static final String RENDERING_DEVICES_Z_A_MSG = "Rendering device Z-A";
-    private static final String TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG = "Turning down power on A-to-Z path";
-    private static final String FAILED = "Failed";
+    private static final String ATOZPATH = "A-to-Z";
+    private static final String ZTOAPATH = "Z-to-A";
     private static final String OPERATION_FAILED = "Operation Failed";
     private static final String OPERATION_SUCCESSFUL = "Operation Successful";
     private static final int NUMBER_OF_THREADS = 4;
@@ -313,19 +312,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         return formatRateMap
             .get(input.getServiceAEnd().getServiceFormat())
             .get(serviceName);
-    }
-
-    @SuppressFBWarnings(
-            value = "UPM_UNCALLED_PRIVATE_METHOD",
-            justification = "call in call() method")
-    private ServicePowerTurndownOutput olmPowerTurndown(ServicePathInputData servicePathInputData)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-        return this.olmService
-            .servicePowerTurndown(
-                new ServicePowerTurndownInputBuilder(servicePathInputData.getServicePathInput()).build())
-            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS)
-            .getResult();
     }
 
     @SuppressFBWarnings(
@@ -710,48 +696,48 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName, pathDescription, Action.Delete);
         ServicePathInputData servicePathInputDataZtoA =
             ModelMappingUtils.rendererCreateServiceInputZToA(serviceName, pathDescription, Action.Delete);
+
+        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ =
+            this.executor.submit(
+                new OlmPowerTurnDownTask(
+                    serviceName,
+                    ATOZPATH,
+                    olmService,
+                    servicePathInputDataAtoZ,
+                    notification
+                )
+            );
+
+        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA =
+            this.executor.submit(
+                new OlmPowerTurnDownTask(
+                    serviceName,
+                    ZTOAPATH,
+                    olmService,
+                    servicePathInputDataZtoA,
+                    notification
+                )
+            );
+
+        ListenableFuture<List<OLMRenderingResult>> olmPowerTurnDownFutures =
+            Futures.allAsList(olmPowerTurnDownFutureAtoZ, olmPowerTurnDownFutureZtoA);
+
+        List<OLMRenderingResult> olmRenderingResults;
         // OLM turn down power
         try {
-            LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceDelete,
-                serviceName,
-                RpcStatusEx.Pending,
-                TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-            // TODO add some flag rather than string
-            if (FAILED.equals(
-                    olmPowerTurndown(servicePathInputDataAtoZ)
-                        .getResult())) {
-                LOG.error("Service power turndown failed on A-to-Z path for service {}!", serviceName);
-                sendNotifications(
-                    ServicePathNotificationTypes.ServiceDelete,
-                    serviceName,
-                    RpcStatusEx.Failed,
-                    "Service power turndown failed on A-to-Z path for service");
-                return false;
-            }
-            LOG.debug("Turning down power on Z-to-A path");
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceDelete,
-                serviceName,
-                RpcStatusEx.Pending,
-                "Turning down power on Z-to-A path");
-            // TODO add some flag rather than string
-            if (FAILED.equals(
-                    olmPowerTurndown(servicePathInputDataZtoA)
-                        .getResult())) {
-                LOG.error("Service power turndown failed on Z-to-A path for service {}!", serviceName);
-                sendNotifications(
-                    ServicePathNotificationTypes.ServiceDelete,
-                    serviceName,
-                    RpcStatusEx.Failed,
-                    "Service power turndown failed on Z-to-A path for service");
-                return false;
-            }
+            LOG.info("Waiting for A-Z and Z-A OLM power turn down ...");
+            olmRenderingResults = olmPowerTurnDownFutures.get(
+                Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS
+            );
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error while turning down power!", e);
             return false;
         }
+        if (!olmRenderingResults.get(0).isSuccess() || !olmRenderingResults.get(1).isSuccess()) {
+            LOG.error("Error while turning down power!");
+            return false;
+        }
+        LOG.info("OLM power successfully turned down!");
         // delete service path with renderer
         LOG.info("Deleting service path via renderer");
         sendNotifications(
