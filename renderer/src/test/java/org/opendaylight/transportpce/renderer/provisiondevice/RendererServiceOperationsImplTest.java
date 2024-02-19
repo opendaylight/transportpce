@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -39,6 +38,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
@@ -89,10 +89,16 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         setMountPoint(new MountPointStub(getDataBroker()));
         this.olmService = new OlmServiceStub();
         doNothing().when(this.openRoadmInterfaces).postEquipmentState(anyString(), anyString(), anyBoolean());
-        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.olmService = spy(this.olmService);
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer, otnDeviceRendererService,
-                this.olmService, getDataBroker(), notificationPublishService, portMapping);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(
+            deviceRenderer, otnDeviceRendererService,
+            this.olmService,
+            getDataBroker(),
+            new NotificationSender(
+                new NotificationPublishServiceMock()
+            ),
+            portMapping
+        );
     }
 
     @Test

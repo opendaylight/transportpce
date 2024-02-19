@@ -29,7 +29,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -37,6 +36,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -89,9 +89,16 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         setMountPoint(new MountPointStub(getDataBroker()));
         this.olmService = new OlmServiceStub();
         this.olmService = spy(this.olmService);
-        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer,
-            otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService, portMapping);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(
+            deviceRenderer,
+            otnDeviceRendererService,
+            olmService,
+            getDataBroker(),
+            new NotificationSender(
+                new NotificationPublishServiceMock()
+            ),
+            portMapping
+        );
     }
 
 
