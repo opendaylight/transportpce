@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -33,6 +32,7 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.Notification;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
@@ -50,8 +50,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -75,7 +73,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -104,7 +101,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final OtnDeviceRendererService otnDeviceRenderer;
     private final TransportpceOlmService olmService;
     private final DataBroker dataBroker;
-    private final NotificationPublishService notificationPublishService;
+    private final Notification notification;
     private final PortMapping portMapping;
     private ListeningExecutorService executor;
 
@@ -113,13 +110,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             @Reference OtnDeviceRendererService otnDeviceRenderer,
             @Reference TransportpceOlmService olmService,
             @Reference DataBroker dataBroker,
-            @Reference NotificationPublishService notificationPublishService,
+            @Reference Notification notification,
             @Reference PortMapping portMapping) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
         this.olmService = olmService;
         this.dataBroker = dataBroker;
-        this.notificationPublishService = notificationPublishService;
+        this.notification = notification;
         this.portMapping = portMapping;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         LOG.debug("RendererServiceOperationsImpl instantiated");
@@ -902,9 +899,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             String serviceName,
             RpcStatusEx rpcStatusEx,
             String message) {
-        send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                null, null, null, null));
+
+        notification.send(
+            servicePathNotificationTypes,
+            serviceName,
+            rpcStatusEx,
+            message
+        );
     }
 
     /**
@@ -924,60 +925,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             Link notifLink,
             Set<String> supportedLinks,
             String serviceType) {
-        send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                pathDescription, notifLink, supportedLinks, serviceType));
-    }
 
-    /**
-     * Build notification containing path description information.
-     * @param servicePathNotificationTypes ServicePathNotificationTypes
-     * @param serviceName String
-     * @param rpcStatusEx RpcStatusEx
-     * @param message String
-     * @param pathDescription PathDescription
-     * @return notification with RendererRpcResultSp type.
-     */
-    private RendererRpcResultSp buildNotification(
-            ServicePathNotificationTypes servicePathNotificationTypes,
-            String serviceName,
-            RpcStatusEx rpcStatusEx,
-            String message,
-            PathDescription pathDescription,
-            Link notifLink,
-            Set<String> supportedLinks,
-            String serviceType) {
-        RendererRpcResultSpBuilder builder =
-            new RendererRpcResultSpBuilder()
-                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)
-                .setStatusMessage(message)
-                .setServiceType(serviceType);
-        if (pathDescription != null) {
-            builder
-                .setAToZDirection(pathDescription.getAToZDirection())
-                .setZToADirection(pathDescription.getZToADirection());
-        }
-        if (notifLink != null) {
-            builder.setLink(notifLink);
-        }
-        if (supportedLinks != null) {
-            builder.setLinkId(supportedLinks);
-        }
-        return builder.build();
-    }
-
-    /**
-     * Send renderer notification.
-     * @param notification Notification
-     */
-    private void send(Notification<?> notification) {
-        try {
-            LOG.info("Sending notification {}", notification);
-            notificationPublishService.putNotification(notification);
-        } catch (InterruptedException e) {
-            LOG.info("notification offer rejected: ", e);
-            Thread.currentThread().interrupt();
-        }
+        notification.send(
+            notification.buildNotification(
+                servicePathNotificationTypes,
+                serviceName,
+                rpcStatusEx,
+                message,
+                pathDescription,
+                notifLink,
+                supportedLinks,
+                serviceType
+            )
+        );
     }
 
     private Link createLinkForNotif(List<LinkTp> otnLinkTerminationPoints) {

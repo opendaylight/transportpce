@@ -37,6 +37,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -91,7 +92,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.olmService = spy(this.olmService);
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(deviceRenderer,
-            otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService, portMapping);
+            otnDeviceRendererService, olmService, getDataBroker(), new NotificationSender(notificationPublishService),
+            portMapping);
     }
 
 
