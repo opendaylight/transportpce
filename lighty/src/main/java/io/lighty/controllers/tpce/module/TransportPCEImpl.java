@@ -50,6 +50,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 // Adding OTN interface
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 // Add OTN
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl;
@@ -165,8 +166,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
                 lgServBDB,
-                lgServBNPS,
-                portMapping);
+                new NotificationSender(lgServBNPS),
+                portMapping
+            );
         ServiceDataStoreOperations serviceDataStoreOperations =
             new ServiceDataStoreOperationsImpl(lgServBDB);
         RendererNotificationHandler rendererNotificationHandler =
@@ -275,8 +277,11 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                             otnDeviceRendererService,
                             olmPowerServiceRpc,
                             lightyServices.getBindingDataBroker(),
-                            lightyServices.getBindingNotificationPublishService(),
-                            portMapping),
+                            new NotificationSender(
+                                lightyServices.getBindingNotificationPublishService()
+                            ),
+                            portMapping
+                        ),
                     lightyServices.getRpcProviderService())
                 .getRegisteredRpc());
     }
