@@ -87,6 +87,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITAL
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULECANNOTFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
@@ -375,7 +376,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
 
         assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
@@ -389,8 +390,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeForRoadmWhenRoadmNeighborAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
-        tapiFullFactory.convertRoadmNode(roadmC, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
+        tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
 
         List<Link> rdmTordmLinkList = ortopoLinks.values().stream()
             .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
@@ -448,7 +449,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         }
         tapiFactory.convertNode(otnMuxA, networkPortListA);
         tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         List<Link> xponderOutLinkList = ortopoLinks.values().stream()
             .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
             .filter(lk1 -> ((lk1.getSource().getSourceNode().equals(otnMuxA.getNodeId())
@@ -804,9 +805,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 checkNepOtsiRdmNode(otsNep4, otsNep4Uuid, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
-                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .sorted((nrg1, nrg2) -> nrg1.getName().entrySet().iterator().next().getValue().toString()
+                        .compareTo(nrg2.getName().entrySet().iterator().next().getValue().toString()))
                     .collect(Collectors.toList());
-                checkNodeRuleGroupForRdm(nrgList4, 12);
+                LOG.info("NODERULEGROUP List nrgLIst4 is as follows {}", nrgList4.toString());
+                List<Integer> nepNumber = new ArrayList<>(List.of(2, 4, 4));
+                checkNodeRuleGroupForRdm(nrgList4, nepNumber);
                 break;
             default:
                 fail();
@@ -973,22 +977,27 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             "the rule type should be 'FORWARDING'");
     }
 
-    private void checkNodeRuleGroupForRdm(List<NodeRuleGroup> nrgList, int nbNeps) {
-        assertEquals(1, nrgList.size(), "RDM infra node - OTSi should contain a single node rule groups");
-        if (nbNeps > 0) {
-            List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
-            assertEquals(nbNeps, nodeEdgePointList.size(),
-                "RDM infra node -rule-group should contain " + nbNeps + " NEP");
-        } else {
-            assertNull(nrgList.get(0).getNodeEdgePoint(), "RDM infra node -rule-group should contain no NEP");
+    private void checkNodeRuleGroupForRdm(List<NodeRuleGroup> nrgList, List<Integer> nbNeps) {
+        assertEquals(3, nrgList.size(), "RDM infra node - OTS should contain 3 node rule groups");
+        int index = 0;
+        for (NodeRuleGroup nrg : nrgList) {
+            List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrg.getNodeEdgePoint().values());
+            assertEquals(nbNeps.get(index), nodeEdgePointList.size(),
+                "RDM infra node -rule-group should contain " + nbNeps.get(index) + " NEP");
+            List<Rule> ruleList = new ArrayList<>(nrg.nonnullRule().values());
+            assertEquals(1, ruleList.size(), "node-rule-group should contain a single rule");
+            assertEquals("forward", ruleList.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+            assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
+                "the rule type should be 'FORWARDING'");
+            if (nrg.getName().entrySet().iterator().next().getValue().toString().contains("DEG")) {
+                assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
+                    "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
+            } else {
+                assertEquals(FORWARDINGRULECANNOTFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
+                    "the forwarding rule should be 'CANNOTFORWARDACROSSGROUP'");
+            }
+            index++;
         }
-        List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
-        assertEquals(1, ruleList.size(), "node-rule-group should contain a single rule");
-        assertEquals("forward", ruleList.get(0).getLocalId(), "local-id of the rule should be 'forward'");
-        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
-            "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
-        assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
-            "the rule type should be 'FORWARDING'");
     }
 
     private void checkNodeRuleGroupForTpdrOTSi(List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid,
