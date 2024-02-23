@@ -269,8 +269,8 @@ class TransportTapitesting(unittest.TestCase):
                          'Topology should contain 1 otsi nodes')
         self.assertIn("PHOTONIC_MEDIA", response["output"]["topology"]["node"][0]["layer-protocol-name"],
                       'Node layer protocol should contain PHOTONIC_MEDIA')
-        self.assertEqual(1, len(response["output"]["topology"]["node"][0]["node-rule-group"]),
-                         'node should contain 1 node rule group')
+        self.assertNotIn("node-rule-group", response["output"]["topology"]["node"][0],
+                         'Topology should contain no node-rule-group')
 
     def test_11_connect_xpdra_n1_to_roadma_pp1(self):
         response = test_utils.transportpce_api_rpc_request(
