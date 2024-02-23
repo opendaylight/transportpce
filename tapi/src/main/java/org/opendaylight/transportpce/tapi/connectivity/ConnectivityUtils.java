@@ -1406,7 +1406,7 @@ public final class ConnectivityUtils {
             LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+                    LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
                     continue;
                 }
                 zendUuid = sip.getUuid();
@@ -1455,7 +1455,7 @@ public final class ConnectivityUtils {
             }
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+                    LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
                     continue;
                 }
                 zendUuid = sip.getUuid();
@@ -1483,7 +1483,7 @@ public final class ConnectivityUtils {
                 tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+                    LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
                     continue;
                 }
                 aendUuid = sip.getUuid();
@@ -1532,7 +1532,7 @@ public final class ConnectivityUtils {
             }
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (!sip.getUuid().equals(sipUuid)) {
-                    LOG.info("SIP {} doesn match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+                    LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
                     continue;
                 }
                 aendUuid = sip.getUuid();
