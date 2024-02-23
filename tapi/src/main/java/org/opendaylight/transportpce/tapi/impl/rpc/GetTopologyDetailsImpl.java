@@ -112,38 +112,34 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> invoke(GetTopologyDetailsInput input) {
         var topoId = input.getTopologyId();
-        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-            .toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology;
+        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
         if (topologyUuidFull.equals(topoId)) {
-            Map<TopologyKey, Topology> topologyMap =
-                this.tapiContext.getTapiContext().augmentation(Context1.class).getTopologyContext().getTopology();
+            Map<TopologyKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
+                topologyMap = this.tapiContext.getTapiContext().augmentation(Context1.class).getTopologyContext()
+                    .getTopology();
             if (topologyMap == null || !topologyMap.containsKey(new TopologyKey(topologyUuidFull))) {
                 LOG.error("Topology {} not found in datastore", topoId);
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Invalid Topology name")
                     .buildFuture();
             }
-            return RpcResultBuilder
-                .success(
-                    new GetTopologyDetailsOutputBuilder()
-                        .setTopology(
-                            this.topologyUtils.transformTopology(
-                                topologyMap.get(new TopologyKey(topoId))))
-                        .build())
+            topology = topologyMap.get(new TopologyKey(topoId));
+            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                .setTopology(this.topologyUtils.transformTopology(topology))
+                .build())
                 .buildFuture();
         }
-        if (new Uuid(UUID.nameUUIDFromBytes(
-                        TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-                    .toString())
-                .equals(topoId)) {
+        Uuid topologyUuidTapiAbs = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        if (input.getTopologyId().equals(topologyUuidTapiAbs)) {
             try {
                 LOG.info("Building TAPI Topology abstraction for {}", topoId);
-                return RpcResultBuilder
-                    .success(
-                        new GetTopologyDetailsOutputBuilder()
-                            .setTopology(this.topologyUtils.transformTopology(createAbsTopologyFromTapiTopo()))
-                            .build())
+                topology = createAbsTopologyFromTapiTopo();
+                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
                     .buildFuture();
             } catch (TapiTopologyException e) {
                 LOG.error("error building TAPI topology");
@@ -152,42 +148,33 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                     .buildFuture();
             }
         }
-        try {
-            if (new Uuid(UUID.nameUUIDFromBytes(
-                            TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-                        .toString())
-                    .equals(topoId)) {
+        Uuid topologyUuid100G = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        Uuid topologyUuidAbs = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
+            Charset.forName("UTF-8"))).toString());
+        if (topologyUuid100G.equals(topoId) || topologyUuidAbs.equals(topoId)) {
+            try {
                 LOG.info("Building TAPI Topology abstraction for {}", topoId);
-                return RpcResultBuilder
-                    .success(
-                        new GetTopologyDetailsOutputBuilder()
-                            .setTopology(this.topologyUtils.transformTopology(createAbstractedOtnTopology()))
-                            .build())
+                topology = createAbstractedOtnTopology();
+                if (topoId.equals(topologyUuidAbs)) {
+                    return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                        .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                        .buildFuture();
+                }
+                topology = createAbstracted100GTpdrTopology(topology);
+                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                    .buildFuture();
+            } catch (TapiTopologyException e) {
+                LOG.error("error building TAPI topology");
+                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                    .withError(ErrorType.RPC, "Error building topology")
                     .buildFuture();
             }
-            if (new Uuid(UUID.nameUUIDFromBytes(
-                            TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8")))
-                        .toString())
-                    .equals(topoId)) {
-                LOG.info("Building TAPI Topology abstraction for {}", topoId);
-                return RpcResultBuilder
-                    .success(
-                        new GetTopologyDetailsOutputBuilder()
-                            .setTopology(
-                                this.topologyUtils.transformTopology(
-                                    createAbstracted100GTpdrTopology(createAbstractedOtnTopology())))
-                            .build())
-                    .buildFuture();
-            }
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Invalid Topology name")
-                .buildFuture();
-        } catch (TapiTopologyException e) {
-            LOG.error("error building TAPI topology");
-            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Error building topology")
-                .buildFuture();
         }
+        return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+            .withError(ErrorType.RPC, "Invalid Topology name")
+            .buildFuture();
     }
 
     public Topology createAbstracted100GTpdrTopology(Topology topology) {
@@ -301,11 +288,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             .build();
     }
 
-    public Topology createAbsTopologyFromTapiTopo() throws TapiTopologyException {
-        Uuid refTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Topology tapiFullTopo =
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+            createAbsTopologyFromTapiTopo() throws TapiTopologyException {
+        Uuid refTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
+            .getBytes(Charset.forName("UTF-8"))).toString());
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology tapiFullTopo =
             this.tapiContext
                 .getTopologyContext().entrySet().stream().filter(topo -> topo.getKey().getUuid().equals(refTopoUuid))
                 .findAny().orElseThrow().getValue();
@@ -315,21 +302,25 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         absTapiTopo.convertRoadmInfrastructure();
 
         Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
-            tapiNodeList = new HashMap<>(absTapiTopo.getTapiNodes());
-        LOG.info("ABSTRACTED TAPI TOPOLOGY : the list of node is as follows {}", tapiNodeList);
+            tapiNodeList = new HashMap<>();
+        Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
+            tapiLinkList = new HashMap<>();
+        tapiNodeList.putAll(absTapiTopo.getTapiNodes());
+        tapiLinkList.putAll(absTapiTopo.getTapiLinks());
         Name name = new NameBuilder()
             .setValue(TapiStringConstants.T0_MULTILAYER)
             .setValueName("TAPI Topology Name")
             .build();
-        return new TopologyBuilder()
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_TAPI_MULTILAYER
+            .getBytes(Charset.forName("UTF-8"))).toString());
+        LOG.info("ABSTRACTED TAPI TOPOLOGY : the list of node is as follows {}", tapiNodeList);
+        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context
+                .TopologyBuilder()
             .setName(Map.of(name.key(), name))
-            .setUuid(
-                new Uuid(UUID.nameUUIDFromBytes(
-                        TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+            .setUuid(topoUuid)
             .setNode(tapiNodeList)
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.DIGITALOTN))
-            .setLink(new HashMap<>(absTapiTopo.getTapiLinks()))
+            .setLink(tapiLinkList)
             .build();
     }
 
