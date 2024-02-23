@@ -13,8 +13,19 @@ public final class TapiStringConstants {
     public static final String OMS_RDM_RDM_LINK = "tapi-rdm-rdm-link";
     public static final String OMS_XPDR_RDM_LINK = "tapi-xpdr-rdm-link";
     public static final String OTN_XPDR_XPDR_LINK = "tapi-otn-xpdr-xpdr-link";
+    public static final String VALUE_NAME_OTN_XPDR_XPDR_LINK = "otn link name";
+    public static final String VALUE_NAME_OTS_XPDR_RDM_LINK = "Xpdr to roadm link";
+    public static final String VALUE_NAME_OMS_RDM_RDM_LINK = "OMS link name";
+    public static final String VALUE_NAME_ROADM_NODE = "roadm node name";
+    public static final String VALUE_NAME_XPDR_NODE = "dsr/odu node name";
     public static final String T0_MULTILAYER = "T0 - Multi-layer topology";
+    public static final String T0_TAPI_MULTILAYER = "T0 - Tapi-Multi-layer Abstracted topology";
     public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";
+    // TODO: these hardcoded UUID are here for debugging purpose.
+    // They allow to have a reference somewhere of the UUID to be used when testing.
+    public static final String T0_MULTILAYER_UUID = "747c670e-7a07-3dab-b379-5b1cd17402a3";
+    public static final String T0_TAPI_MULTILAYER_UUID = "a6c5aed1-dc75-333a-b3a3-b6b70534eae8";
+    public static final String T0_FULL_MULTILAYER_UUID = "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a8";
     public static final String TPDR_100G = "Transponder 100GE";
     public static final String DSR = "DSR";
     public static final String ODU = "ODU";
