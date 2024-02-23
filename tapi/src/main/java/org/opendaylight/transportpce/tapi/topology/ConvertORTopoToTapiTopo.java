@@ -41,6 +41,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
@@ -148,6 +150,8 @@ public class ConvertORTopoToTapiTopo {
             .getBytes(Charset.forName("UTF-8"))).toString());
         Name nodeName =  new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA)
             .build();
+        Name nodeName2 =  new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA)
+            .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(OpenroadmNodeType.ROADM.getName()).build();
         Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
@@ -158,9 +162,13 @@ public class ConvertORTopoToTapiTopo {
         // nep creation for rdm infra abstraction node
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = createNepForRdmNode(photonicNepUuisMap.size());
         // node rule group creation
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList
-            = new ConvertORToTapiTopology(this.tapiTopoUuid)
-                .createNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
+        var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
+            = tapiFactory.createAllNodeRuleGroupForRdmNode("T0ML", nodeUuid, null, onepMap.values());
+        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
+            = tapiFactory.createInterRuleGroupForRdmNode("T0ML", nodeUuid, null,
+                nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
+
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -184,13 +192,14 @@ public class ConvertORTopoToTapiTopo {
         // build RDM infra node abstraction
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node rdmNode = new NodeBuilder()
             .setUuid(nodeUuid)
-            .setName(Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType))
+            .setName(Map.of(nodeName.key(), nodeName, nodeName2.key(), nodeName2, nameNodeType.key(), nameNodeType))
             .setLayerProtocolName(nodeLayerProtocols)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(onepMap)
-            .setNodeRuleGroup(nodeRuleGroupList)
+            .setNodeRuleGroup(nodeRuleGroupMap)
+            .setInterRuleGroup(interRuleGroupMap)
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setRiskParameterPac(riskParamPac)
