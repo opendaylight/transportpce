@@ -75,6 +75,10 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                         || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
                     this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());
                 }
+            } else if (change.getRootNode().getDataAfter() != null && change.getRootNode().getDataBefore() == null) {
+                Nodes nodesAft = change.getRootNode().getDataAfter();
+                this.tapiNetworkModelService.createTapiNode(nodesAft.getNodeId(),
+                    nodesAft.getNodeInfo().getOpenroadmVersion().getIntValue(), nodesAft);
             }
         }
     }
