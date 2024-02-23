@@ -375,7 +375,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
 
         assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
@@ -389,8 +389,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeForRoadmWhenRoadmNeighborAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
-        tapiFullFactory.convertRoadmNode(roadmC, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
+        tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
 
         List<Link> rdmTordmLinkList = ortopoLinks.values().stream()
             .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
@@ -448,7 +448,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         }
         tapiFactory.convertNode(otnMuxA, networkPortListA);
         tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
-        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet);
+        tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         List<Link> xponderOutLinkList = ortopoLinks.values().stream()
             .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
             .filter(lk1 -> ((lk1.getSource().getSourceNode().equals(otnMuxA.getNodeId())

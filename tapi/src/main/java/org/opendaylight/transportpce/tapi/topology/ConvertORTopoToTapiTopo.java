@@ -148,6 +148,8 @@ public class ConvertORTopoToTapiTopo {
             .getBytes(Charset.forName("UTF-8"))).toString());
         Name nodeName =  new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA)
             .build();
+        Name nodeName2 =  new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA)
+            .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(OpenroadmNodeType.ROADM.getName()).build();
         Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
@@ -184,7 +186,7 @@ public class ConvertORTopoToTapiTopo {
         // build RDM infra node abstraction
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node rdmNode = new NodeBuilder()
             .setUuid(nodeUuid)
-            .setName(Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType))
+            .setName(Map.of(nodeName.key(), nodeName, nodeName2.key(), nodeName2, nameNodeType.key(), nameNodeType))
             .setLayerProtocolName(nodeLayerProtocols)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)

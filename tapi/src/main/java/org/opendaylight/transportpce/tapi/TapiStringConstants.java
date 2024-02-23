@@ -13,7 +13,13 @@ public final class TapiStringConstants {
     public static final String OMS_RDM_RDM_LINK = "tapi-rdm-rdm-link";
     public static final String OMS_XPDR_RDM_LINK = "tapi-xpdr-rdm-link";
     public static final String OTN_XPDR_XPDR_LINK = "tapi-otn-xpdr-xpdr-link";
+    public static final String VALUE_NAME_OTN_XPDR_XPDR_LINK = "otn link name";
+    public static final String VALUE_NAME_OTS_XPDR_RDM_LINK = "Xpdr to roadm link";
+    public static final String VALUE_NAME_OMS_RDM_RDM_LINK = "OMS link name";
+    public static final String VALUE_NAME_ROADM_NODE = "roadm node name";
+    public static final String VALUE_NAME_XPDR_NODE = "dsr/odu node name";
     public static final String T0_MULTILAYER = "T0 - Multi-layer topology";
+    public static final String T0_TAPI_MULTILAYER = "T0 - Tapi-Multi-layer Abstracted topology";
     public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";
     public static final String TPDR_100G = "Transponder 100GE";
     public static final String DSR = "DSR";
