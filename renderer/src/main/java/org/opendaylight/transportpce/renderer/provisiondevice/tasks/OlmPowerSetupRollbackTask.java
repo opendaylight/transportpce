@@ -44,6 +44,8 @@ public class OlmPowerSetupRollbackTask extends RollbackTask {
                 .setNodes(this.powerSetupInput.getNodes())
                 .setServiceName(this.powerSetupInput.getServiceName())
                 .setWaveNumber(this.powerSetupInput.getWaveNumber())
+                .setLowerSpectralSlotNumber(this.powerSetupInput.getLowerSpectralSlotNumber())
+                .setHigherSpectralSlotNumber(this.powerSetupInput.getHigherSpectralSlotNumber())
                 .build();
 
         Future<RpcResult<ServicePowerTurndownOutput>> powerTurndownResultFuture =
