@@ -337,7 +337,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         assertNotNull(topology, "Topology should not be null");
-        // 2 Nodes per Xpdr/Spdr node (DSR-ODU & PHOT) + 3 Node per Roadm
+        // 2 ROADM Nodes, 2 XPDR Nodes, 6 SPDR Nodes
         assertEquals(10, topology.getNode().size(), "Node list size should be 10");
         List<Map<NameKey, Name>> nodeNames = topology.getNode().values().stream()
             .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA))
