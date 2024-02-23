@@ -77,6 +77,7 @@ public final class TopologyUtils {
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
+    private String topologicalMode;
     public static final String NOOPMODEDECLARED = "No operational mode declared in Topo for Tp {}, assumes by default ";
 
     public TopologyUtils(NetworkTransactionService networkTransactionService, DataBroker dataBroker,
@@ -85,6 +86,8 @@ public final class TopologyUtils {
         this.dataBroker = dataBroker;
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
+        // TODO: Initially set topological mode to Full. Shall be set through the setter at controller initialization
+        this.topologicalMode = "Full";
     }
 
     public Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
@@ -138,10 +141,11 @@ public final class TopologyUtils {
     public Topology createFullOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(Charset.forName("UTF-8"))).toString());
+        String topoType = this.topologicalMode.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
+            : TapiStringConstants.T0_TAPI_MULTILAYER;
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(topoType.getBytes(Charset.forName("UTF-8"))).toString());
         Name name = new NameBuilder()
-            .setValue(TapiStringConstants.T0_FULL_MULTILAYER)
+            .setValue(topoType)
             .setValueName("TAPI Topology Name")
             .build();
         if (openroadmTopo != null) {
@@ -212,28 +216,38 @@ public final class TopologyUtils {
                     .equals(OpenroadmNodeType.ROADM))
                 .count() > 0) {
                 // map roadm nodes
-                for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
-                        .Node roadm:openroadmNet.nonnullNode().values().stream()
-                    .filter(nt -> nt
-                        .augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
-                        .getNodeType()
-                        .equals(OpenroadmNodeType.ROADM))
-                    .collect(Collectors.toList())) {
-                    tapiFullFactory.convertRoadmNode(roadm, openroadmTopo);
+                if (this.topologicalMode.equals("Full")) {
+                    for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
+                        .network.Node roadm:openroadmNet.nonnullNode().values().stream()
+                        .filter(nt -> nt
+                            .augmentation(
+                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
+                            .getNodeType()
+                            .equals(OpenroadmNodeType.ROADM))
+                        .collect(Collectors.toList())) {
+                        tapiFullFactory.convertRoadmNode(roadm, openroadmTopo, "Full");
+                        this.tapiSips.putAll(tapiFullFactory.getTapiSips());
+                        tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
+                        tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
+                        // map roadm to roadm link
+                        List<Link> rdmTordmLinkList = linkList.stream()
+                            .filter(lk -> lk.augmentation(Link1.class).getLinkType()
+                                .equals(OpenroadmLinkType.ROADMTOROADM))
+                            .collect(Collectors.toList());
+                        tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
+                        tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
+                    }
+                } else {
+                    tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
                     this.tapiSips.putAll(tapiFullFactory.getTapiSips());
                     tapiNodeList.putAll(tapiFullFactory.getTapiNodes());
                     tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
                 }
+
             } else {
                 LOG.warn("No roadm nodes exist in the network");
             }
-            // map roadm to roadm link
-            List<Link> rdmTordmLinkList = linkList.stream()
-                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
-                .collect(Collectors.toList());
-            tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
-            tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
+
             // map xpdr_input to roadm and xpdr_output to roadm links.
             xponderInLinkList.addAll(xponderOutLinkList);
             tapiFullFactory.convertXpdrToRdmLinks(xponderInLinkList);
@@ -241,27 +255,19 @@ public final class TopologyUtils {
 
             // Retrieve created sips map in TapiFactory when mapping all the nodes
             this.tapiSips.putAll(tapiFullFactory.getTapiSips());
-            var topo = new TopologyBuilder()
-                .setName(Map.of(name.key(), name))
-                .setUuid(topoUuid)
-                .setNode(tapiNodeList)
-                .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
-                    LayerProtocolName.DSR))
-                .setLink(tapiLinkList).build();
-            LOG.error("TOPOUTIL, Initial FullTopology Builder.build = {}", topo.toString());
             return new TopologyBuilder()
                 .setName(Map.of(name.key(), name))
                 .setUuid(topoUuid)
                 .setNode(tapiNodeList)
                 .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
-                    LayerProtocolName.DSR))
+                    LayerProtocolName.DSR, LayerProtocolName.DIGITALOTN))
                 .setLink(tapiLinkList).build();
         }
         return new TopologyBuilder()
             .setName(Map.of(name.key(), name))
             .setUuid(topoUuid)
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.ODU,
-                LayerProtocolName.DSR))
+                LayerProtocolName.DSR, LayerProtocolName.DIGITALOTN))
             .build();
     }
 
@@ -376,6 +382,14 @@ public final class TopologyUtils {
 
     public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
         return tapiSips;
+    }
+
+    public void setTopologicalMode(String topoMode) {
+        this.topologicalMode = topoMode;
+    }
+
+    public String getTopologicalMode() {
+        return topologicalMode;
     }
 
 }
