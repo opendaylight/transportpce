@@ -227,6 +227,24 @@
       "parentUuid": "cecabd7b_a63fd172",
       "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee761ad1_d96118ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-23T14:04:32Z",
+      "side": 1,
+      "message": "I forgot to precise these commands were run from the \u0027./renderer\u0027 folder.",
+      "parentUuid": "d5cad021_5c8d1c7f",
+      "revId": "2752a4bf415303e5f1bcd5604d76816cf0bf531d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
