@@ -108,7 +108,7 @@ public class TapiLinkImpl implements TapiLink {
             case TapiStringConstants.OMS_RDM_RDM_LINK:
                 LOG.info("Roadm to roadm link");
                 linkName
-                    .setValueName("OMS link name")
+                    .setValueName(TapiStringConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                     .setValue(linkKey);
                 break;
             case TapiStringConstants.TRANSITIONAL_LINK:
@@ -118,7 +118,7 @@ public class TapiLinkImpl implements TapiLink {
                     .setValue(linkKey);
                 break;
             case TapiStringConstants.OMS_XPDR_RDM_LINK:
-                LOG.info("Xpdr to roadm link");
+                LOG.info(TapiStringConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
                 linkName
                     .setValueName("XPDR-RDM link name")
                     .setValue(linkKey);
@@ -126,7 +126,7 @@ public class TapiLinkImpl implements TapiLink {
             case TapiStringConstants.OTN_XPDR_XPDR_LINK:
                 LOG.info("OTN Xpdr to roadm link");
                 linkName
-                    .setValueName("otn link name")
+                    .setValueName(TapiStringConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
                     .setValue(linkKey);
                 break;
             default:
