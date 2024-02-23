@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.tapi.topology;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,11 +20,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengths;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.PpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.TxTtpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
@@ -66,17 +72,29 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITAL
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrumBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrum;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrum;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULECANNOTFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.InterRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.AssociatedNodeRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.AssociatedNodeRuleGroupBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.AssociatedNodeRuleGroupKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
@@ -206,37 +224,148 @@ public class ConvertORToTapiTopology {
         tapiNodes.put(dsrNode.key(), dsrNode);
     }
 
-    public Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(
-            String topoType, Uuid nodeUuid, String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
+    public Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(String topoType, Uuid nodeUuid,
+            String subNodeName, List<OwnedNodeEdgePointKey> onepl, FORWARDINGRULE forwardingRule, int index) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
-                nepMap = new HashMap<>();
-        for (OwnedNodeEdgePoint onep : onepl) {
-            var nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                    .node.rule.group.NodeEdgePointBuilder()
+            nepMap = new HashMap<>();
+        for (OwnedNodeEdgePointKey onepKey : onepl) {
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
+                nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
+                    .NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(nodeUuid)
-                .setNodeEdgePointUuid(onep.key().getUuid())
+                .setNodeEdgePointUuid(onepKey.getUuid())
                 .build();
             nepMap.put(nep.key(), nep);
         }
+        String nrgNameValue = String.join("-", subNodeName, "node-rule-group-" + index);
+        //Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
+        Set<RuleType> ruleTypes = new HashSet<>(Set.of(RuleType.FORWARDING));
+        Map<RuleKey, Rule> ruleList = new HashMap<>();
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
-            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-            .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
+            .setForwardingRule(forwardingRule)
+            .setRuleType(ruleTypes)
+            .build();
+        ruleList.put(rule.key(), rule);
+        Name nrgName = new NameBuilder()
+            .setValueName("nrg name")
+            .setValue(nrgNameValue)
             .build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((
-                    topoType.equals("Abstracted") ? "rdm infra node rule group" : orNodeId + " node rule group")
+            .setName(Map.of(nrgName.key(), nrgName))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue)
                 .getBytes(Charset.forName("UTF-8"))).toString()))
-            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+            .setRule(ruleList)
             .setNodeEdgePoint(nepMap)
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
 
-    public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(
-            int nb, LayerProtocolName layerProtocol, String tpId, String nodeid,
+    public Map<NodeRuleGroupKey, NodeRuleGroup> createAllNodeRuleGroupForRdmNode(String topoType, Uuid nodeUuid,
+            String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
+        List<OwnedNodeEdgePoint> otsNepList = new ArrayList<>();
+        LOG.info("Creating NRG for {} {}", topoType, otsNepList.toString());
+        if (topoType.equals("T0ML")) {
+            otsNepList = onepl.stream().collect(Collectors.toList());
+        } else {
+            otsNepList = onepl.stream()
+                .filter(onep -> onep.getName().keySet().contains(new NameKey("PHOTONIC_MEDIA_OTSNodeEdgePoint")))
+                .collect(Collectors.toList());
+        }
+        List<OwnedNodeEdgePointKey> degOnepKeyList = new ArrayList<>();
+        List<String> srgNames = new ArrayList<>();
+        Map<OwnedNodeEdgePointKey,String> srgMap = new HashMap<>();
+        for (OwnedNodeEdgePoint onep : otsNepList) {
+            String onepName = onep.getName().get(new NameKey(
+                topoType.equals("T0ML") ? "NodeEdgePoint name"
+                    : "PHOTONIC_MEDIA_OTSNodeEdgePoint")).getValue();
+            String subNodeName = topoType.equals("T0ML") ? "ROADMINFRA-SRG-PP"
+                : String.join("-", onepName.split("\\+")[0], onepName.split("\\+")[2]);
+            if (subNodeName.contains("DEG")) {
+                subNodeName = subNodeName.split("\\-TTP")[0];
+                degOnepKeyList.add(onep.key());
+            } else if (subNodeName.contains("SRG")) {
+                subNodeName = subNodeName.split("\\-PP")[0];
+                srgMap.put(onep.key(), subNodeName);
+                if (!srgNames.contains(subNodeName)) {
+                    srgNames.add(subNodeName);
+                }
+            }
+        }
+        int index = 0;
+        Map<NodeRuleGroupKey, NodeRuleGroup> globalNrgMap = new  HashMap<>();
+        if (topoType.equals("Full")) {
+            globalNrgMap.putAll(
+                createNodeRuleGroupForRdmNode(topoType, nodeUuid, String.join("-", orNodeId, "DEG"), degOnepKeyList,
+                    FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, index));
+            index++;
+        }
+        for (String srgName : srgNames) {
+            globalNrgMap.putAll(createNodeRuleGroupForRdmNode(topoType, nodeUuid, srgName,
+                srgMap.entrySet().stream()
+                    .filter(item -> item.getValue().equals(srgName))
+                    .map(item -> item.getKey())
+                    .collect(Collectors.toList()),
+                    // For T0ML we consider any port of ROADM INFRA can connect to potentially any other port
+                    //topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
+                    topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
+                    // Whereas for Abstracted or Full Topology we consider any port of the same SRG can not forward to
+                   // another port of the same SRG. Connectivity between SRGS will be defined through inter-rule-group
+                    : FORWARDINGRULECANNOTFORWARDACROSSGROUP.VALUE, index));
+            index++;
+            LOG.debug("AllNodeRuleGroup : creating a NRG for {}", srgName);
+        }
+        return globalNrgMap;
+    }
+
+    public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForRdmNode(
+                String topoType, Uuid nodeUuid,String orNodeId, List<NodeRuleGroupKey> nrgList) {
+        Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>();
+        for (NodeRuleGroupKey nrgKey : nrgList) {
+            AssociatedNodeRuleGroup associatedNrg = new AssociatedNodeRuleGroupBuilder()
+                .setTopologyUuid(tapiTopoUuid)
+                .setNodeUuid(nodeUuid)
+                .setNodeRuleGroupUuid(nrgKey.getUuid())
+                .build();
+            associatedNrgMap.put(associatedNrg.key(), associatedNrg);
+        }
+        String irgNameValue =
+            !topoType.equals("Full")
+                ? "rdm infra inter rule group-"
+                : orNodeId + " inter rule group-";
+        Set<RuleType> ruleTypes = new HashSet<>(Set.of(RuleType.FORWARDING));
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.RuleKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule> ruleMap
+            = new HashMap<>();
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule
+            = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.RuleBuilder()
+            .setLocalId("forward")
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(ruleTypes)
+            .build();
+        ruleMap.put(rule.key(), rule);
+
+        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap = new HashMap<>();
+
+        Name irgName = new NameBuilder()
+            .setValueName("irg name")
+            .setValue(irgNameValue)
+            .build();
+        InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue)
+                .getBytes(Charset.forName("UTF-8"))).toString()))
+            .setName(Map.of(irgName.key(), irgName))
+            .setRule(ruleMap)
+            .setAssociatedNodeRuleGroup(associatedNrgMap)
+            .build();
+        interRuleGroupMap.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
+        return interRuleGroupMap;
+    }
+
+    public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(int nb,
+            LayerProtocolName layerProtocol, String tpId, String nodeid,
             Collection<SupportedInterfaceCapability> supportedInterfaceCapability,
             OperationalState operState, AdministrativeState adminState) {
         // add them to SIP context
@@ -556,84 +685,399 @@ public class ConvertORToTapiTopology {
         if (tpAug == null || tpAug.getXpdrNetworkAttributes() == null) {
             return null;
         }
+//<<<<<<< HEAD
+//        var xnattWvlgth = tpAug.getXpdrNetworkAttributes().getWavelength();
+//        return xnattWvlgth == null || xnattWvlgth.getFrequency() == null || xnattWvlgth.getWidth() == null
+//            ? null
+//            : new HashMap<>(Map.of(
+//                xnattWvlgth.getFrequency().getValue().doubleValue(),
+//                xnattWvlgth.getWidth().getValue().doubleValue()));
+//=======
+        XpdrNetworkAttributes xnatt = tpAug.getXpdrNetworkAttributes();
+        //Map<Double,Double> freqWidthMap = new HashMap<>();
         var xnattWvlgth = tpAug.getXpdrNetworkAttributes().getWavelength();
         return xnattWvlgth == null || xnattWvlgth.getFrequency() == null || xnattWvlgth.getWidth() == null
             ? null
             : new HashMap<>(Map.of(
-                xnattWvlgth.getFrequency().getValue().doubleValue(),
-                xnattWvlgth.getWidth().getValue().doubleValue()));
+                (xnatt.getWavelength().getFrequency().getValue().doubleValue()
+                    - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2),
+                (xnatt.getWavelength().getFrequency().getValue().doubleValue()
+                    - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2)));
+//        if (xnatt.getWavelength() != null && xnatt.getWavelength().getFrequency() != null
+//                && xnatt.getWavelength().getWidth() != null) {
+//            freqWidthMap.put(
+//                (xnatt.getWavelength().getFrequency().getValue().doubleValue()
+//                - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2),
+//                (xnatt.getWavelength().getFrequency().getValue().doubleValue()
+//                - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2));
+//            return freqWidthMap;
+//        }
+//        return null;
+//>>>>>>> refactoTapi2.4 Final touch
     }
 
     public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
+        if (tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1.class) == null || tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
+                .network.topology.rev230526.TerminationPoint1.class).getPpAttributes() == null) {
+            return null;
+        }
         PpAttributes ppAtt = tp.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
             .getPpAttributes();
-        return ppAtt == null || ppAtt.getUsedWavelength() == null
-                || ppAtt.getUsedWavelength().entrySet().iterator().next() == null
-            ? null
-            : new HashMap<>(Map.of(
-            ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency().getValue().doubleValue(),
-            ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency().getValue().doubleValue()));
+        Map<Double,Double> freqMap = new HashMap<>();
+        if (ppAtt != null && ppAtt.getUsedWavelength() != null
+                && ppAtt.getUsedWavelength().entrySet().iterator().next() != null) {
+            Double centFreq = ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency()
+                .getValue().doubleValue();
+            Double width = ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getWidth()
+                .getValue().doubleValue();
+            freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            return freqMap;
+        }
+        return null;
     }
 
-    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(
-            String nodeId, Map<Double, Double> freqWidthMap, List<OperationalModeKey> operModeList,
-            Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
-        if (!String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
-                && !String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
-            return onepBldr;
+    public Map<Double, Double> getTTPUsedFreqMap(TerminationPoint tp) {
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
+        Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        if (tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1.class) == null || tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
+                .network.topology.rev230526.TerminationPoint1.class).getTxTtpAttributes() == null) {
+            return null;
         }
-        //Creating OTS & OTSI_MC NEP specific attributes
-        double naz = 0.01;
-        Uint64 supLoFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz));
-        Uint64 supUpFreq = Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz));
-        boolean boolParam;
-        Uint64 upFreq;
-        Uint64 loFreq;
-        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-        if (freqWidthMap == null || freqWidthMap.isEmpty()) {
-            upFreq = Uint64.valueOf(0);
-            loFreq = Uint64.valueOf(0);
-            boolParam = false;
-            AvailableSpectrum  aspec =
-                new AvailableSpectrumBuilder().setUpperFrequency(supUpFreq).setLowerFrequency(supLoFreq).build();
-            spectrumPac.setAvailableSpectrum(new HashMap<>(Map.of(
-                new AvailableSpectrumKey(aspec.getLowerFrequency(), aspec.getUpperFrequency()), aspec)));
+        TxTtpAttributes txttpAtt = tp.augmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
+            .getTxTtpAttributes();
+        Map<Double,Double> freqMap = new HashMap<>();
+        if (txttpAtt.getUsedWavelengths() != null
+                && txttpAtt.getUsedWavelengths().entrySet().iterator().next() != null) {
+            for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas :
+                    txttpAtt.getUsedWavelengths().entrySet()) {
+                Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
+                Double width = usedLambdas.getValue().getWidth()
+                    .getValue().doubleValue();
+                freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            }
+            return freqMap;
+        } else if (txttpAtt.getAvailFreqMaps() != null
+                && txttpAtt.getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", freqBitSet);
+            freqBitSet = txttpAtt.getAvailFreqMaps().entrySet().stream()
+                .filter(afm -> afm.getKey().toString().equals(GridConstant.C_BAND))
+                .findFirst().orElseThrow().getValue().getFreqMap();
+            for (int i = 0; i < GridConstant.EFFECTIVE_BITS; i++) {
+                if (freqBitSet[i] == 0) {
+                    freqBitSet[i] = 1;
+                } else {
+                    freqBitSet[i] = 0;
+                }
+            }
+            return getFreqMapFromBitSet(freqBitSet);
         } else {
-            upFreq = Uint64.valueOf(Math.round(
-                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                    + (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
-            loFreq = Uint64.valueOf(Math.round(
-                    freqWidthMap.keySet().iterator().next().doubleValue() * 1E09
-                    - (freqWidthMap.entrySet().iterator().next().getValue().doubleValue() * 1E06) / 2));
-            boolParam = true;
+            return null;
         }
-        return onepBldr
-            .setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(sicColl, operModeList))
-            .setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(boolParam, sicColl,operModeList))
-            .addAugmentation(
+    }
+
+    public Map<Double, Double> getTTPAvailableFreqMap(TerminationPoint tp) {
+        if (tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1.class) == null || tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
+                    .network.topology.rev230526.TerminationPoint1.class).getTxTtpAttributes() == null) {
+            return null;
+        }
+        TxTtpAttributes txttpAtt = tp.augmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
+            .getTxTtpAttributes();
+        if (txttpAtt.getAvailFreqMaps() != null
+                && txttpAtt.getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", byteArray);
+            byteArray = txttpAtt.getAvailFreqMaps().entrySet().stream()
+                .filter(afm -> afm.getKey().toString().equals(GridConstant.C_BAND))
+                .findFirst().orElseThrow().getValue().getFreqMap();
+            return getFreqMapFromBitSet(byteArray);
+        } else {
+            return null;
+        }
+    }
+
+    public Map<Double, Double> getTTP11AvailableFreqMap(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+        if (tp == null || tp.getTxTtpAttributes() == null) {
+            return null;
+        }
+        TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
+        if (txttpAtt.getAvailFreqMaps() != null
+                && txttpAtt.getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", byteArray);
+            byteArray = txttpAtt.getAvailFreqMaps().entrySet().stream()
+                .filter(afm -> afm.getKey().toString().equals(GridConstant.C_BAND))
+                .findFirst().orElseThrow().getValue().getFreqMap();
+            return getFreqMapFromBitSet(byteArray);
+        } else {
+            return null;
+        }
+    }
+
+    public Map<Double, Double> getPP11UsedWavelength(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+        if (tp == null || tp.getPpAttributes() == null) {
+            return null;
+        }
+        PpAttributes ppAtt = tp.getPpAttributes();
+        Map<Double,Double> freqMap = new HashMap<>();
+        if (ppAtt.getUsedWavelength() != null && ppAtt.getUsedWavelength().entrySet().iterator().next() != null) {
+            Double centFreq = ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getFrequency()
+                .getValue().doubleValue();
+            Double width = ppAtt.getUsedWavelength().entrySet().iterator().next().getValue().getWidth()
+                .getValue().doubleValue();
+            freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            return freqMap;
+        }
+        return null;
+    }
+
+    public Map<Double, Double> getTTP11UsedFreqMap(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
+        Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        if (tp == null || tp.getTxTtpAttributes() == null) {
+            return null;
+        }
+        TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
+        Map<Double,Double> freqMap = new HashMap<>();
+        if (txttpAtt.getUsedWavelengths() != null
+                && txttpAtt.getUsedWavelengths().entrySet().iterator().next() != null) {
+            for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas :
+                    txttpAtt.getUsedWavelengths().entrySet()) {
+                Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
+                Double width = usedLambdas.getValue().getWidth()
+                    .getValue().doubleValue();
+                freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            }
+            return freqMap;
+        } else if (txttpAtt.getAvailFreqMaps() != null
+                && txttpAtt.getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", freqBitSet);
+            freqBitSet = txttpAtt.getAvailFreqMaps().entrySet().stream()
+                .filter(afm -> afm.getKey().toString().equals(GridConstant.C_BAND))
+                .findFirst().orElseThrow().getValue().getFreqMap();
+            for (int i = 0; i < GridConstant.EFFECTIVE_BITS; i++) {
+                if (freqBitSet[i] == 0) {
+                    freqBitSet[i] = 1;
+                } else {
+                    freqBitSet[i] = 0;
+                }
+            }
+            return getFreqMapFromBitSet(freqBitSet);
+        } else {
+            return null;
+        }
+    }
+
+    public Map<Double, Double> getFreqMapFromBitSet(byte[] byteArray) {
+        // Provides a Map <LowerFreq, HigherFreq> describing start and stop frequencies of all slots that are available
+        // in the ByteArray describing the spectrum : bit sets initially sets to 1/true
+        // In case the byte array has been inverted before calling this method, it provides respectively a map
+        // describing all occupied slots!
+        Map<Double,Double> freqMap = new HashMap<>();
+        Double startFreq = GridConstant.START_EDGE_FREQUENCY;
+        Double stopFreq = 0.0;
+        boolean occupied = false;
+        if (byteArray[0] == 0) {
+            occupied = true;
+        }
+        for (int index = 0 ; index < GridConstant.EFFECTIVE_BITS ; index++) {
+            if (byteArray[index] == 1 && occupied) {
+                startFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
+                stopFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
+                occupied = false;
+            } else if (byteArray[index] == 0 && !occupied) {
+                stopFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
+                occupied = true;
+            }
+            if (stopFreq.doubleValue() > startFreq.doubleValue() && occupied) {
+                freqMap.put(startFreq, stopFreq);
+                startFreq = stopFreq;
+            }
+            if ((index == GridConstant.EFFECTIVE_BITS - 1) && (startFreq.doubleValue() == stopFreq.doubleValue())
+                    && !occupied) {
+                stopFreq = GridUtils.getStopFrequencyFromIndex(index).doubleValue();
+                freqMap.put(startFreq, stopFreq);
+            }
+        }
+        return freqMap;
+    }
+
+    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId,
+            Map<Double, Double> freqMap, List<OperationalModeKey> operModeList,
+            Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
+        if (String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
+                || String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
+            LOG.debug("Entering LOOP Step1");
+            // Creating OTS & OTSI_MC NEP specific attributes
+            onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(
+                sicColl,operModeList));
+            SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+            OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
+            if (freqMap == null || freqMap.isEmpty()) {
+//                TODO: verify if we need to fill OcupiedSpectrum as follows when no lambda provisioned
+//                ospecBd
+//                    .setUpperFrequency(Uint64.valueOf(0))
+//                    .setLowerFrequency(Uint64.valueOf(0));
+                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
+                    false, sicColl,operModeList));
+                double naz = 0.01;
+                AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
+                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
+                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
+                    .build();
+                Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
+                aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
+                    aspec.getUpperFrequency()), aspec);
+                spectrumPac.setAvailableSpectrum(aspecMap);
+            } else {
+                LOG.debug("Entering LOOP Step2");
+                onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
+                    true, sicColl,operModeList));
+                Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
+                for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
+                    ospecBd
+                        .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
+                        .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                }
+                OccupiedSpectrum ospec = ospecBd.build();
+                ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec);
+                spectrumPac.setOccupiedSpectrum(ospecMap);
+            }
+            LOG.debug("Entering LOOP Step3");
+            double nazz = 0.01;
+            SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
+                .build();
+            Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
+            sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
+                sspec.getUpperFrequency()), sspec);
+            spectrumPac.setSupportableSpectrum(sspecMap);
+            LOG.debug("Entering LOOP Step4");
+            PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
+                .setSpectrumCapabilityPac(spectrumPac.build())
+                .build();
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
                 new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                        .OwnedNodeEdgePoint1Builder()
-                    .setPhotonicMediaNodeEdgePointSpec(
-                        new PhotonicMediaNodeEdgePointSpecBuilder()
-                            .setSpectrumCapabilityPac(
-                                spectrumPac
-                                    .setOccupiedSpectrum(new HashMap<>(Map.of(
-                                        new OccupiedSpectrumKey(loFreq, upFreq),
-                                        new OccupiedSpectrumBuilder()
-                                            .setUpperFrequency(upFreq)
-                                            .setLowerFrequency(loFreq)
-                                            .build())))
-                                    .setSupportableSpectrum(new HashMap<>(Map.of(
-                                        new SupportableSpectrumKey(supLoFreq, supUpFreq),
-                                        new SupportableSpectrumBuilder()
-                                            .setUpperFrequency(supUpFreq)
-                                            .setLowerFrequency(supLoFreq)
-                                            .build())))
-                                    .build())
-                            .build())
-                    .build());
+                    .OwnedNodeEdgePoint1Builder()
+                    .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
+                    .build();
+            LOG.info("creating Photonic NEP SPEC for node {} and nep {}", nodeId, onep1.toString());
+            onepBldr.addAugmentation(onep1);
+            LOG.info("Entering LOOP Step5");
+        }
+        return onepBldr;
+    }
+
+
+    public OwnedNodeEdgePointBuilder addPhotSpecToRoadmOnep(String nodeId,
+            Map<Double, Double> usedFreqMap, Map<Double, Double> availableFreqMap,
+            OwnedNodeEdgePointBuilder onepBldr, String keyword) {
+        if (String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)
+                || String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OMS).equals(keyword)) {
+            // Creating OTS/OMS NEP specific attributes
+            SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+            if ((usedFreqMap == null || usedFreqMap.isEmpty())
+                    && (availableFreqMap == null || availableFreqMap.isEmpty())) {
+                double naz = 0.01;
+                AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
+                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
+                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
+                    .build();
+                Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
+                aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
+                    aspec.getUpperFrequency()), aspec);
+                spectrumPac.setAvailableSpectrum(aspecMap);
+            } else {
+                if (availableFreqMap != null && !availableFreqMap.isEmpty()) {
+                    Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
+                    AvailableSpectrumBuilder  aspecBd = new AvailableSpectrumBuilder();
+                    for (Map.Entry<Double, Double> frequency : availableFreqMap.entrySet()) {
+                        aspecBd
+                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
+                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                        AvailableSpectrum aspec = aspecBd.build();
+                        aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
+                            aspec.getUpperFrequency()), aspec);
+                    }
+                    spectrumPac.setAvailableSpectrum(aspecMap);
+                }
+                if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
+                    Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
+                    OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
+                    for (Map.Entry<Double, Double> frequency : usedFreqMap.entrySet()) {
+                        ospecBd
+                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
+                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                        OccupiedSpectrum ospec = ospecBd.build();
+                        ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
+                            ospec.getUpperFrequency()), ospec);
+                    }
+                    spectrumPac.setOccupiedSpectrum(ospecMap);
+                }
+            }
+            double nazz = 0.01;
+            SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
+                .build();
+            Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
+            sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
+                sspec.getUpperFrequency()), sspec);
+            spectrumPac.setSupportableSpectrum(sspecMap);
+
+            PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
+                .setSpectrumCapabilityPac(spectrumPac.build())
+                .build();
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
+                    new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                    .OwnedNodeEdgePoint1Builder()
+                    .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
+                    .build();
+            onepBldr.addAugmentation(onep1);
+            LOG.debug("Add Photonic Node Edge point Spec to {} including available Spectrum {} = ",
+                onepBldr.getName().toString(), onep1.getPhotonicMediaNodeEdgePointSpec().getSpectrumCapabilityPac()
+                    .getAvailableSpectrum().toString());
+        }
+        return onepBldr;
+//            .setSupportedPayloadStructure(createSupportedPayloadStructureForPhtncMedia(sicColl, operModeList))
+//          .setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(boolParam, sicColl,operModeList))
+//            .addAugmentation(
+//                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+//                        .OwnedNodeEdgePoint1Builder()
+//                    .setPhotonicMediaNodeEdgePointSpec(
+//                        new PhotonicMediaNodeEdgePointSpecBuilder()
+//                            .setSpectrumCapabilityPac(
+//                                spectrumPac
+//                                    .setOccupiedSpectrum(new HashMap<>(Map.of(
+//                                        new OccupiedSpectrumKey(loFreq, upFreq),
+//                                        new OccupiedSpectrumBuilder()
+//                                            .setUpperFrequency(upFreq)
+//                                            .setLowerFrequency(loFreq)
+//                                            .build())))
+//                                    .setSupportableSpectrum(new HashMap<>(Map.of(
+//                                        new SupportableSpectrumKey(supLoFreq, supUpFreq),
+//                                        new SupportableSpectrumBuilder()
+//                                            .setUpperFrequency(supUpFreq)
+//                                            .setLowerFrequency(supLoFreq)
+//                                            .build())))
+//                                    .build())
+//                            .build())
+//                    .build());
     }
 
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
@@ -879,7 +1323,12 @@ public class ConvertORToTapiTopology {
                 .setRiskCharacteristicName("risk characteristic")
                 .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
                 .build();
+            Name nrgName = new NameBuilder()
+                .setValueName("nrg name")
+                .setValue("odu node rule group " + count)
+                .build();
             NodeRuleGroup nodeRuleGroup1 = new NodeRuleGroupBuilder()
+                .setName(Map.of(nrgName.key(), nrgName))
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes(("dsr node rule group " + count)
                     .getBytes(Charset.forName("UTF-8"))).toString()))
                 .setRule(ruleList)
@@ -962,6 +1411,7 @@ public class ConvertORToTapiTopology {
             onepBldr = addPayloadStructureAndPhotSpecToOnep(
                 this.ietfNodeId, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
         }
+        LOG.debug("ConvertORToTapiTopology 1294, onep = {}", onepBldr.build().toString());
         return onepBldr.build();
     }
 
@@ -969,7 +1419,7 @@ public class ConvertORToTapiTopology {
         String nodeid, Collection<SupportedInterfaceCapability> supportedInterfaceCapability,
         OperationalState operState, AdministrativeState adminState) {
     // TODO: what value should be set in total capacity and available capacity??
-    // LOG.info("SIP name = {}", String.join("+", nodeid, tp.getTpId().getValue()));
+        LOG.debug("SIP name = {}", String.join("+", nodeid, tpId));
         Name sipName = new NameBuilder()
             .setValueName("SIP name")
             .setValue(String.join("+", nodeid, tpId))
