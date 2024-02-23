@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.common.util.concurrent.FluentFuture;
@@ -1000,7 +1001,12 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     }
 
     private void checkNodeRuleGroupForRdmInfra(List<NodeRuleGroup> nrgList, int nbNeps) {
-        assertEquals(1, nrgList.size(), "RDM infra node - OTSi should contain a single node rule groups");
+        // if no XPDR is connected, no OTS is created and no NodeRuleGroup is created
+        assertTrue(nrgList.size() <= 1, "RDM infra node - OTSi should contain maximum one node rule groups");
+        // When a nrg is present it shall respect the following
+        if (nrgList.isEmpty()) {
+            return;
+        }
         if (nbNeps > 0) {
             List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
             assertEquals(nbNeps, nodeEdgePointList.size(),
