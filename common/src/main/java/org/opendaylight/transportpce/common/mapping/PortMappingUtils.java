@@ -99,6 +99,8 @@ public final class PortMappingUtils {
         "{} : unable to {} mapping for {}";
     public static final String UNABLE_MC_CAPA_LOGMSG =
         "{} : unable to create MC capabilities";
+    public static final String UNABLE_TO_SAVE_CONNECTIONMAP_LOGMSG =
+        "{} : unable to save connection map";
     public static final String UNSUPPORTED_DIR_LOGMSG =
         "{} : port {} on {} - unsupported Direction {}";
     public static final String UPDATE = "update";
