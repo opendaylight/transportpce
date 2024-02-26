@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dd2486c_fc843a73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-26T11:30:09Z",
+      "side": 1,
+      "message": "all the relation chain LGTM\nThanks Joakim",
+      "revId": "2bcfc471310c70dfa8ca213773c306a434ae6911",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
