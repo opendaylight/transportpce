@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bee1748f_a747f0e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-02-26T09:55:44Z",
+      "side": 1,
+      "message": "Thanks for your review Guillaume. Could you be more precise about your expectation. Please look at may answer. Did not catch the point and where you want to go. Thanks",
+      "revId": "9671f8efdb4c6a775daa19f00b83e374884b1091",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
