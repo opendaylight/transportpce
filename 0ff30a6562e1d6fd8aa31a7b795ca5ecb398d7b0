@@ -16,6 +16,23 @@
       "message": "13:28:54   buildcontroller: OK (171.00\u003dsetup[9.37]+cmd[161.64] seconds)\n13:28:54   testsPCE: OK (348.30\u003dsetup[100.30]+cmd[248.00] seconds)\n13:28:54   sims121: OK (14.77\u003dsetup[10.90]+cmd[3.86] seconds)\n13:28:54   build_karaf_tests121: OK (48.84\u003dsetup[11.12]+cmd[37.72] seconds)\n13:28:54   tests121: OK (2184.81\u003dsetup[7.32]+cmd[2177.49] seconds)\n13:28:54   sims221: OK (14.17\u003dsetup[11.15]+cmd[3.01] seconds)\n13:28:54   build_karaf_tests221: OK (72.87\u003dsetup[11.67]+cmd[61.19] seconds)\n13:28:54   tests_tapi: OK (940.73\u003dsetup[16.64]+cmd[924.09] seconds)\n13:28:54   tests221: OK (2933.54\u003dsetup[8.09]+cmd[2925.45] seconds)\n13:28:54   sims71: OK (13.34\u003dsetup[11.14]+cmd[2.21] seconds)\n13:28:54   build_karaf_tests71: OK (68.49\u003dsetup[23.18]+cmd[45.31] seconds)\n13:28:54   tests71: OK (481.79\u003dsetup[6.61]+cmd[1.08,474.10] seconds)\n13:28:54   build_karaf_tests_hybrid: OK (80.01\u003dsetup[12.85]+cmd[67.15] seconds)\n13:28:54   tests_hybrid: OK (966.74\u003dsetup[7.23]+cmd[4.81,954.69] seconds)\n13:28:54   buildlighty: OK (27.21\u003dsetup[6.46]+cmd[20.75] seconds)\n13:28:54   docs: OK (29.92\u003dsetup[28.02]+cmd[1.90] seconds)\n13:28:54   docs-linkcheck: FAIL code 1 (31.22\u003dsetup[28.01]+cmd[3.20] seconds)\n13:28:54   checkbashisms: OK (39.88\u003dsetup[2.62]+cmd[36.29,0.98] seconds)\n13:28:54   pre-commit: OK (45.51\u003dsetup[4.89]+cmd[34.12,6.50] seconds)\n13:28:54   pylint: OK (32.17\u003dsetup[5.60]+cmd[26.57] seconds)",
       "revId": "0ff30a6562e1d6fd8aa31a7b795ca5ecb398d7b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974a857e_6462444a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-26T09:28:06Z",
+      "side": 1,
+      "message": "+ other committers for feedback: hello, can you see anything that prevents this change and this relation chain from being merged ?",
+      "revId": "0ff30a6562e1d6fd8aa31a7b795ca5ecb398d7b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
