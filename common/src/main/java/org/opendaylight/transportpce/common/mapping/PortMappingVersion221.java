@@ -33,6 +33,9 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.connectionmap.Factory;
+import org.opendaylight.transportpce.common.mapping.connectionmap.StorageFactory;
+import org.opendaylight.transportpce.common.mapping.connectionmap.storage.Storage;
 import org.opendaylight.transportpce.common.srg.revision.WaveLengthDuplication;
 import org.opendaylight.transportpce.common.srg.revision.WaveLengthDuplicationRev181019;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev260612.Network;
@@ -175,6 +178,12 @@ public class PortMappingVersion221 {
                 }
                 // Wavelength duplication
                 wld = WaveLengthDuplicationRev181019.instantiate(srgs);
+
+                Optional<OrgOpenroadmDevice> device = readConnectionMapFromDevice(nodeId);
+                if (device.isEmpty() || !saveConnectionMapToDatastore(nodeId, device.orElseThrow())) {
+                    LOG.warn(PortMappingUtils.UNABLE_TO_SAVE_CONNECTIONMAP_LOGMSG, nodeId);
+                    return false;
+                }
                 break;
             case Xpdr:
                 if (!createXpdrPortMapping(nodeId, portMapList)) {
@@ -1302,5 +1311,26 @@ public class PortMappingVersion221 {
             .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
+
+    private Optional<OrgOpenroadmDevice> readConnectionMapFromDevice(String nodeId) {
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .build();
+        Optional<OrgOpenroadmDevice> device = this.deviceTransactionManager.getDataFromDevice(
+            nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
+            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+
+        LOG.info("Device data retrieved for nodeId {}", nodeId);
+
+        return device;
+    }
+
+    private boolean saveConnectionMapToDatastore(String nodeId, OrgOpenroadmDevice device) {
+        Factory factory = new StorageFactory();
+
+        Storage storage = factory.storage(dataBroker);
+
+        return storage.saveRev181019(nodeId, device.nonnullConnectionMap());
     }
 }
