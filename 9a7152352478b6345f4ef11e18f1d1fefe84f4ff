@@ -51,6 +51,24 @@
       "message": "previous formatting was better IMO.\nODL namespace can be very long.",
       "revId": "9a7152352478b6345f4ef11e18f1d1fefe84f4ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ed8a186_ae37bf19",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/notification/Notification.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-27T15:26:27Z",
+      "side": 1,
+      "message": "You got a point. I updated the implementing class so I updated the interface to \"match it\".\nIn the implementing class, not having \") {\" on a separate line between parameter list and method body made the code look \"messy\". IMO, it was harder to spot where the parameter list ended and the method body began. I experimented with different levels of indentation but couldn\u0027t decide which was the best option. Hence I opted for the solution at hand.\n\nExample:\n\n    public RendererRpcResultSp buildNotification(\n        ServicePathNotificationTypes servicePathNotificationTypes,\n        String serviceName,\n        RpcStatusEx rpcStatusEx,\n        String message,\n        PathDescription pathDescription,\n        Link notifLink,\n        Set\u003cString\u003e supportedLinks,\n        String serviceType) {\n\n        RendererRpcResultSpBuilder builder \u003d\n            new RendererRpcResultSpBuilder()\n                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)\n                .setStatusMessage(message)\n                .setServiceType(serviceType);\n                \nAnyway, browsed the code and 8 spaces seems to be used a lot, so I\u0027ll update to that.",
+      "parentUuid": "8e93eb81_956a7b08",
+      "revId": "9a7152352478b6345f4ef11e18f1d1fefe84f4ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
