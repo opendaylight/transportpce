@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ffb7020_59350b1f",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:55:07Z",
+      "side": 1,
+      "message": "import order error reported by checkstyle",
+      "revId": "bc4291c935eba722506cbb3d0b80a3a0a8065e9f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
