@@ -52,6 +52,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1d5499_a6addff8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/notification/Notification.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-27T07:07:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3cc1610f_8aae550f",
+      "revId": "2bcfc471310c70dfa8ca213773c306a434ae6911",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d754dba_ca7e8956",
@@ -69,6 +87,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c907f0_2d3bc6c9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OlmPowerTurnDownTask.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-27T07:07:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d754dba_ca7e8956",
+      "revId": "2bcfc471310c70dfa8ca213773c306a434ae6911",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84da632f_1b95f8b0",
@@ -82,6 +118,24 @@
       "writtenOn": "2024-02-26T11:31:30Z",
       "side": 1,
       "message": "idem etc",
+      "revId": "2bcfc471310c70dfa8ca213773c306a434ae6911",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f991cc97_4edd2c28",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OlmPowerTurnDownTask.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-27T07:07:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84da632f_1b95f8b0",
       "revId": "2bcfc471310c70dfa8ca213773c306a434ae6911",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
