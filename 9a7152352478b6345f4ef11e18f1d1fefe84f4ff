@@ -16,6 +16,41 @@
       "message": "Thanks for you feedback! Committed a slight code reformat.",
       "revId": "9a7152352478b6345f4ef11e18f1d1fefe84f4ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5da4c93_308467b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:45:51Z",
+      "side": 1,
+      "message": "You\u0027re welcome.",
+      "parentUuid": "523242cf_fad35414",
+      "revId": "9a7152352478b6345f4ef11e18f1d1fefe84f4ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e93eb81_956a7b08",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/notification/Notification.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:45:51Z",
+      "side": 1,
+      "message": "previous formatting was better IMO.\nODL namespace can be very long.",
+      "revId": "9a7152352478b6345f4ef11e18f1d1fefe84f4ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
