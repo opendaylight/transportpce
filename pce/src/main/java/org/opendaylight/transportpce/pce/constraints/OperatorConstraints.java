@@ -34,6 +34,8 @@ public class OperatorConstraints {
 
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(OperatorConstraints.class);
+    private static final String SPECTRUM_LOG_MSG =
+        "Specific Spectrum filling Rules have been defined for {} the spectrum range {} - {}";
     private NetworkTransactionService networkTransaction;
 
     public OperatorConstraints(NetworkTransactionService networkTransaction) {
@@ -54,48 +56,74 @@ public class OperatorConstraints {
         try {
             if (networkTransaction.read(LogicalDatastoreType.CONFIGURATION, sfIID).get().isPresent()) {
                 SpectrumFilling spectrumConstraint = networkTransaction
-                    .read(LogicalDatastoreType.CONFIGURATION, sfIID).get().orElseThrow();
+                    .read(LogicalDatastoreType.CONFIGURATION, sfIID)
+                    .get().orElseThrow();
                 if (spectrumConstraint.getSpectrumFillingRules().isEmpty()) {
                     return referenceBitSet;
                 }
+                if (customerName == null) {
+                    for (Map.Entry<SpectrumFillingRulesKey, SpectrumFillingRules> rule:
+                            spectrumConstraint.getSpectrumFillingRules().entrySet()) {
+                        var spectrumRangeOfAppl = rule.getValue().getSpectrumRangeOfAppliance();
+                        var dedicatedCustomer = spectrumRangeOfAppl.getDedicatedCustomer();
+                        if (dedicatedCustomer == null || dedicatedCustomer.isEmpty()) {
+                            continue;
+                        }
+                        // Spectrum portion is dedicated to some customers that do not include this one
+                        FrequencyTHz startFreq = spectrumRangeOfAppl.getStartEdgeFrequency();
+                        FrequencyTHz stopFreq = spectrumRangeOfAppl.getStopEdgeFrequency();
+                        referenceBitSet.set(
+                            GridUtils.getIndexFromFrequency(startFreq.getValue()),
+                            GridUtils.getIndexFromFrequency(stopFreq.getValue()),
+                            false);
+                        LOG.info(SPECTRUM_LOG_MSG,
+                            "other customers, preventing the customer from using", startFreq, stopFreq);
+                    }
+                    return referenceBitSet;
+                }
+
                 for (Map.Entry<SpectrumFillingRulesKey, SpectrumFillingRules> rule:
                         spectrumConstraint.getSpectrumFillingRules().entrySet()) {
-                    FrequencyTHz startFreq = rule.getValue().getSpectrumRangeOfAppliance().getStartEdgeFrequency();
-                    FrequencyTHz stopFreq = rule.getValue().getSpectrumRangeOfAppliance().getStopEdgeFrequency();
-                    if (customerName != null
-                            && rule.getValue().getSpectrumRangeOfAppliance().getNonAuthorizedCustomer() != null
-                            && rule.getValue().getSpectrumRangeOfAppliance().getNonAuthorizedCustomer()
-                                .contains(customerName)) {
+                    var spectrumRangeOfAppl = rule.getValue().getSpectrumRangeOfAppliance();
+                    FrequencyTHz startFreq = spectrumRangeOfAppl.getStartEdgeFrequency();
+                    FrequencyTHz stopFreq = spectrumRangeOfAppl.getStopEdgeFrequency();
+                    var nonAuthorizedCustomer = spectrumRangeOfAppl.getNonAuthorizedCustomer();
+                    if (nonAuthorizedCustomer != null && nonAuthorizedCustomer.contains(customerName)) {
                         //Customer shall not be put in this spectrum portion
                         referenceBitSet.set(
                             GridUtils.getIndexFromFrequency(startFreq.getValue()),
-                            GridUtils.getIndexFromFrequency(stopFreq.getValue()), false);
-                        LOG.info("Specific Spectrum filling Rules have been defined for customer {}, exluding it from "
-                            + "the spectrum range {} - {} ", customerName, startFreq.toString(), stopFreq.toString());
-                    } else if (customerName != null
-                            && rule.getValue().getSpectrumRangeOfAppliance().getDedicatedCustomer() != null
-                            && rule.getValue().getSpectrumRangeOfAppliance()
-                                .getDedicatedCustomer().contains(customerName)) {
+                            GridUtils.getIndexFromFrequency(stopFreq.getValue()),
+                            false);
+                        LOG.info(SPECTRUM_LOG_MSG,
+                            "customer " + customerName + ", exluding it from", startFreq, stopFreq);
+                        continue;
+                    }
+                    var dedicatedCustomer = spectrumRangeOfAppl.getDedicatedCustomer();
+                    if (dedicatedCustomer == null || dedicatedCustomer.isEmpty()) {
+                        continue;
+                    }
+                    if (dedicatedCustomer.contains(customerName)) {
                         // Spectrum portion is dedicated to customers including this one
                         referenceBitSet.set(
                             GridUtils.getIndexFromFrequency(startFreq.getValue()),
-                            GridUtils.getIndexFromFrequency(stopFreq.getValue()), true);
-                        LOG.info("Specific Spectrum filling Rules have been defined for customer {}, to dedicate "
-                            + "spectrum range {} - {} to it ", customerName, startFreq.toString(), stopFreq.toString());
-                    } else if (rule.getValue().getSpectrumRangeOfAppliance().getDedicatedCustomer() != null
-                            && !rule.getValue().getSpectrumRangeOfAppliance().getDedicatedCustomer().isEmpty()) {
-                        // Spectrum portion is dedicated to some customers that do not include this one
-                        referenceBitSet.set(
-                            GridUtils.getIndexFromFrequency(startFreq.getValue()),
-                            GridUtils.getIndexFromFrequency(stopFreq.getValue()), false);
-                        LOG.info("Specific Spectrum filling Rules have been defined for other customers, preventing"
-                            + " the customer to use spectrum range {}--{}", startFreq.toString(), stopFreq.toString());
+                            GridUtils.getIndexFromFrequency(stopFreq.getValue()),
+                            true);
+                        LOG.info(SPECTRUM_LOG_MSG,
+                            "customer " + customerName + ", to dedicate", startFreq, stopFreq + " to it");
+                        continue;
                     }
+                    // Spectrum portion is dedicated to some customers that do not include this one
+                    referenceBitSet.set(
+                        GridUtils.getIndexFromFrequency(startFreq.getValue()),
+                        GridUtils.getIndexFromFrequency(stopFreq.getValue()),
+                        false);
+                    LOG.info(SPECTRUM_LOG_MSG,
+                        "other customers, preventing the customer from using", startFreq, stopFreq);
                 }
                 return referenceBitSet;
             }
         } catch (InterruptedException | ExecutionException e1) {
-            LOG.error("Exception caught handling Spectrum filling Rules {} ", e1.getCause().toString());
+            LOG.error("Exception caught handling Spectrum filling Rules ", e1.getCause());
         }
         LOG.info("Did not succeed finding any Specific Spectrum filling Rules defined in Configuration Datastore");
         return referenceBitSet;
