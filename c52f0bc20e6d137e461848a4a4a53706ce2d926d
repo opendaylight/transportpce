@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a92a4f_f555178c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "a variable for tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class) would be welcome IMO",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8815ded_1da8b48d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "336fa70c_5f5999d7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "indent -4 here",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d49189_225cde7d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "and indent -4 setter \u0026 build also",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "444b4bae_285b0a20",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "indent +4 here",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d543eb3_b8bf3b71",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "LF here is a bit more difficult to read than after UUID.nameUUIDFromBytes( IMO",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86abe3fa_0e8dacb0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "LF after \u003d would be more appropriate here IMO",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdfdfb9_0c14553d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "putting .build() on a separate line would be more coherent with vertical style here IMO",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fadb4624_c3271b91",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-27T09:44:01Z",
+      "side": 1,
+      "message": "Though possible, .toString() should not be specified.\nThis is reported by Sonar. The formatter is expected to be take care of that",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
