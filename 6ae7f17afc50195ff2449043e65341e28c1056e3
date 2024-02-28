@@ -103,6 +103,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce2722e6_926dd17b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-28T10:03:32Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e8c9185_576cdffa",
@@ -116,6 +133,24 @@
       "writtenOn": "2024-02-15T15:19:43Z",
       "side": 1,
       "message": "indent +4 here",
+      "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cac62639_ec51efe0",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-28T10:03:32Z",
+      "side": 1,
+      "message": "addressed in https://git.opendaylight.org/gerrit/c/transportpce/+/110393/",
+      "parentUuid": "0e8c9185_576cdffa",
       "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -137,6 +172,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d50dd92_6c286b29",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-28T10:03:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1b40d1c0_e9ad4c6c",
+      "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f76b5b21_3314732f",
@@ -154,6 +207,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd3ad121_a359ba1b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-28T10:03:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f76b5b21_3314732f",
+      "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0424f97e_4554ad5e",
@@ -167,6 +238,24 @@
       "writtenOn": "2024-02-15T15:19:43Z",
       "side": 1,
       "message": "idem",
+      "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d637887c_530d0420",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-28T10:03:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0424f97e_4554ad5e",
       "revId": "6ae7f17afc50195ff2449043e65341e28c1056e3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
