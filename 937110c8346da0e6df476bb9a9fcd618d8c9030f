@@ -33,6 +33,24 @@
       "message": "@Joakim LGTM but there is a merge conflict because ofother contributions merged. Please can you take care of the rebase ?",
       "revId": "937110c8346da0e6df476bb9a9fcd618d8c9030f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e08863ba_5cf16916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-02-29T15:14:22Z",
+      "side": 1,
+      "message": "Done. Also, there is an issue with a yang name change. Seems to affect master if I\u0027m not mistaken. Committed a fix for that as well.",
+      "parentUuid": "a70bf6e9_e5215fa7",
+      "revId": "937110c8346da0e6df476bb9a9fcd618d8c9030f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
