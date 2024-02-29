@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer.port;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 
 public interface Factory {
 
