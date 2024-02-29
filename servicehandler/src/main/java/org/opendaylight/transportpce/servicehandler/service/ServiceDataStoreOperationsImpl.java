@@ -90,7 +90,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         try {
             LOG.info("initializing service registry");
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
-            transaction.put(
+            transaction.merge(
                 LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifier.create(ServiceList.class),
                 new ServiceListBuilder().build());
@@ -105,7 +105,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         try {
             LOG.info("initializing temp service registry");
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
-            transaction.put(
+            transaction.merge(
                 LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifier.create(TempServiceList.class),
                 new TempServiceListBuilder().build());
