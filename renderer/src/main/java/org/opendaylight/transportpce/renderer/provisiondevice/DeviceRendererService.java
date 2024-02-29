@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
+import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackInput;
@@ -45,6 +46,35 @@ public interface DeviceRendererService {
     ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction);
 
     /**
+     * This method set's wavelength path based on following steps.
+     *
+     * <p>
+     * For each node:
+     * 1. Create Och interface on source termination point.
+     * 2. Create Och interface on destination termination point.
+     * 3. Create cross connect between source and destination tps created in step 1
+     *    and 2.
+     *
+     * Naming convention used for OCH interfaces name : tp-wavenumber Naming
+     * convention used for cross connect name : src-dest-wavenumber
+     * </p>
+     *
+     * @param input
+     *            Input parameter from the service-path yang model
+     * @param direction
+     *            Service Path direction
+     * @param transactionHistory
+     *            Object tracking created interface(s) and connection(s).
+     *
+     * @return Result list of all nodes if request successful otherwise specific
+     *         reason of failure.
+     */
+    ServicePathOutput setupServicePath(
+            ServicePathInput input,
+            ServicePathDirection direction,
+            History transactionHistory);
+
+    /**
      * This method removes wavelength path based on following steps.
      *
      * <p>
@@ -71,6 +101,14 @@ public interface DeviceRendererService {
      * @return Success flag and nodes which failed to rollback
      */
     RendererRollbackOutput rendererRollback(RendererRollbackInput input);
+
+    /**
+     * Rollback created interfaces and cross connects specified by transaction history.
+     *
+     * @param transactionHistory The transaction history in need of rollback.
+     * @return Success flag and nodes which failed to rollback
+     */
+    RendererRollbackOutput rendererRollback(History transactionHistory);
 
     /**
      * This method creates the basis of ots and oms interfaces on a specific ROADM degree.

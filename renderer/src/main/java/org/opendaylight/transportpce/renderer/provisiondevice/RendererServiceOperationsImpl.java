@@ -36,10 +36,14 @@ import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.NetworkDeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OtnDeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackResultMessage;
+import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
+import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.TransactionHistory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
@@ -370,9 +374,12 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             servicePathDataAtoZ.getServicePathInput().getServiceName(),
             RpcStatusEx.Pending,
             RENDERING_DEVICES_A_Z_MSG);
+
+        History transactionHistory = new TransactionHistory();
         ListenableFuture<DeviceRenderingResult> atozrenderingFuture =
             this.executor.submit(
-                new DeviceRenderingTask(this.deviceRenderer, servicePathDataAtoZ, ServicePathDirection.A_TO_Z));
+                new DeviceRenderingTask(this.deviceRenderer, servicePathDataAtoZ, ServicePathDirection.A_TO_Z,
+                        transactionHistory));
 
         LOG.info(RENDERING_DEVICES_Z_A_MSG);
         sendNotifications(
@@ -382,7 +389,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RENDERING_DEVICES_Z_A_MSG);
         ListenableFuture<DeviceRenderingResult> ztoarenderingFuture =
             this.executor.submit(
-                new DeviceRenderingTask(this.deviceRenderer, servicePathDataZtoA, ServicePathDirection.Z_TO_A));
+                new DeviceRenderingTask(this.deviceRenderer, servicePathDataZtoA, ServicePathDirection.Z_TO_A,
+                        transactionHistory));
 
         ListenableFuture<List<DeviceRenderingResult>> renderingCombinedFuture =
             Futures.allAsList(atozrenderingFuture, ztoarenderingFuture);
@@ -403,16 +411,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         }
 
         rollbackProcessor.addTask(
-            new DeviceRenderingRollbackTask(
-                "AtoZDeviceTask",
-                ! renderingResults.get(0).isSuccess(),
-                renderingResults.get(0).getRenderedNodeInterfaces(),
-                this.deviceRenderer));
-        rollbackProcessor.addTask(
-                new DeviceRenderingRollbackTask("ZtoADeviceTask",
-                ! renderingResults.get(1).isSuccess(),
-                renderingResults.get(1).getRenderedNodeInterfaces(),
-                this.deviceRenderer));
+            new NetworkDeviceRenderingRollbackTask(
+                "RollbackTransactionHistoryTask",
+                transactionHistory,
+                ! (renderingResults.get(0).isSuccess() && renderingResults.get(1).isSuccess()),
+                deviceRenderer,
+                new RollbackResultMessage()
+            )
+        );
+
         return renderingResults;
     }
 
