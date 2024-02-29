@@ -34,6 +34,24 @@
       "parentUuid": "f8014f5a_11a4b0c5",
       "revId": "0e5ef8fc6a4023ea2cfaaf51324139fb1ea75bb0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f61a40_09f30a45",
+        "filename": "tests/install_lightynode.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-02-29T15:29:25Z",
+      "side": 1,
+      "message": "just to be clear this vote -2 is in reaction to block +2",
+      "parentUuid": "3a158325_a80882e4",
+      "revId": "0e5ef8fc6a4023ea2cfaaf51324139fb1ea75bb0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
