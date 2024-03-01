@@ -122,6 +122,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2242cad_d5459bfc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-01T10:17:59Z",
+      "side": 1,
+      "message": "It would be more cleve to place the ternary operator inside the method IMO.\n\nnew ConvertORToTapiTopology(this.tapiTopoUuid)\n                    .createNodeRuleGroupForRdmNode(\n                                 topoMode.equals(\"Full\") ? \"Full\" :  \"Abstracted\",\n                                 nodeUuid, this.ietfNodeId, oneplist.values())",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cdfdfb9_0c14553d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 1
