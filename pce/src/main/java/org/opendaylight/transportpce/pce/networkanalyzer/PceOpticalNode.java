@@ -21,6 +21,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
+import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
@@ -102,7 +103,7 @@ public class PceOpticalNode implements PceNode {
         }
     }
 
-    public void initSrgTps() {
+    public void initSrgTps(Preference portPreference) {
         this.availableSrgPp.clear();
         this.availableSrgCp.clear();
         if (!isValid()) {
@@ -141,6 +142,10 @@ public class PceOpticalNode implements PceNode {
                 case SRGTXPP:
                 case SRGTXRXPP:
                     LOG.debug("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
+                    if (!portPreference.isPreferredPort(nodeId.getValue(), tp.getTpId().getValue())) {
+                        LOG.warn("initSrgTpList: SRG-PP tp = {} is rejected by the client", tp.getTpId().getValue());
+                        break;
+                    }
                     if (isTerminationPointAvailable(nttp1)) {
                         LOG.debug("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                         this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
