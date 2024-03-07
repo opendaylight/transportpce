@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40724a6c_817b590c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-07T07:46:56Z",
+      "side": 1,
+      "message": "@Robert,\nGood news: with netconf-7.0.1 the change passed all our functional tests.\nIt remains now the lighty runtime issue: I don\u0027t know how to get the mdsal.binding.api.RpcService from LightyServices to instantiates some classes.",
+      "revId": "328026449fe6f5b91acecd73d979bf0c070a28e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d897eacb_f26df07a",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-07T07:46:56Z",
+      "side": 1,
+      "message": "LightyServices provides a mdsal.dom.api.DOMRpcService instead of a mdsal.binding.api.RpcService.\nI don\u0027t know how to get it...",
+      "range": {
+        "startLine": 174,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 37
+      },
+      "revId": "328026449fe6f5b91acecd73d979bf0c070a28e9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
