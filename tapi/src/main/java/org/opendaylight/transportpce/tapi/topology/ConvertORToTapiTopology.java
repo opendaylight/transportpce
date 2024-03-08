@@ -240,7 +240,7 @@ public class ConvertORToTapiTopology {
             nepMap.put(nep.key(), nep);
         }
         String nrgNameValue = String.join("-", subNodeName, "node-rule-group-" + index);
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
+        //Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         Set<RuleType> ruleTypes = new HashSet<>(Set.of(RuleType.FORWARDING));
         Map<RuleKey, Rule> ruleList = new HashMap<>();
         Rule rule = new RuleBuilder()
@@ -257,7 +257,7 @@ public class ConvertORToTapiTopology {
             .setName(Map.of(nrgName.key(), nrgName))
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue)
                 .getBytes(Charset.forName("UTF-8"))).toString()))
-            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+            .setRule(ruleList)
             .setNodeEdgePoint(nepMap)
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
@@ -941,7 +941,7 @@ public class ConvertORToTapiTopology {
                     aspec.getUpperFrequency()), aspec);
                 spectrumPac.setAvailableSpectrum(aspecMap);
             } else {
-                LOG.info("Entering LOOP Step2");
+                LOG.debug("Entering LOOP Step2");
                 onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForPhtncMedia(
                     true, sicColl,operModeList));
                 Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
@@ -954,7 +954,7 @@ public class ConvertORToTapiTopology {
                 ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec);
                 spectrumPac.setOccupiedSpectrum(ospecMap);
             }
-            LOG.info("Entering LOOP Step3");
+            LOG.debug("Entering LOOP Step3");
             double nazz = 0.01;
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
                 .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
@@ -965,12 +965,12 @@ public class ConvertORToTapiTopology {
             sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
                 sspec.getUpperFrequency()), sspec);
             spectrumPac.setSupportableSpectrum(sspecMap);
-            LOG.info("Entering LOOP Step4");
+            LOG.debug("Entering LOOP Step4");
             PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
                 .setSpectrumCapabilityPac(spectrumPac.build())
                 .build();
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
-                    new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
                     .OwnedNodeEdgePoint1Builder()
                     .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
                     .build();

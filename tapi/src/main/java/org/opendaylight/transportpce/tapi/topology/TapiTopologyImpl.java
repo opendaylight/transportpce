@@ -425,7 +425,8 @@ public class TapiTopologyImpl implements TapiTopologyService, TapiCommonService 
             .setUuid(topoUuid)
             .setNode(tapiNodeList)
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.DIGITALOTN))
-            .setLink(tapiLinkList).build();
+            .setLink(tapiLinkList)
+            .build();
     }
 
     public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology

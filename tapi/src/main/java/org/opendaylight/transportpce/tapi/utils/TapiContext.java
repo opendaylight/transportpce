@@ -232,8 +232,7 @@ public class TapiContext {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (!optionalOnep.isPresent()) {
-                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}", topoUuid.toString(),
-                    nodeUuid.toString());
+                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}", topoUuid, nodeUuid);
                 return;
             }
             OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();

@@ -303,8 +303,8 @@ public class ConvertORTopoToTapiFullTopo {
         }
         // create a unique ROADM tapi Node
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
-            .getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(
+            TapiStringConstants.RDM_INFRA.getBytes(Charset.forName("UTF-8"))).toString());
         Name nodeName =  new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA)
             .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
@@ -313,8 +313,8 @@ public class ConvertORTopoToTapiFullTopo {
         // Protocol Layer
         Set<LayerProtocolName> layerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         // Build tapi node
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology
-            .Node roadmNode = createRoadmTapiNode(nodeUuid,
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
+            roadmNode = createRoadmTapiNode(nodeUuid,
             Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType), layerProtocols, oneMap, "Abstracted");
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs", TapiStringConstants.RDM_INFRA, numNeps, numSips);
