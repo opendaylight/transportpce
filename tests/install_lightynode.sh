@@ -2,6 +2,8 @@
 
 #set -x
 
+PLUGIN_VERSION=${1:-19.1.0.5}
+
 #check if curl exists
 if ! [ -x "$(command -v curl)" ];then
     echo "curl is not installed." >&2
@@ -13,11 +15,22 @@ if ! [ -x "$(command -v unzip)" ];then
     exit 1
 fi
 
-PLUGIN_VERSION=18.1.0.8
+if [ -n "$2" ];then
+    echo "Using lighynode version $1 $2"
+    FILE_NAME="lighty-openroadm-device-$(echo $1 | cut -d - -f 1)-$2-bin.zip"
+    TARGET_URL="https://gitlab.com/api/v4/projects/36076125/packages/maven/io/lighty/transportpce/netconf/device/lighty-openroadm-device/$PLUGIN_VERSION/${FILE_NAME}"
+else
+    echo "Using lighynode version $PLUGIN_VERSION"
+    TARGET_URL="https://gitlab.com/api/v4/projects/36076125/packages/maven/io/lighty/transportpce/netconf/device/lighty-openroadm-device/$PLUGIN_VERSION/lighty-openroadm-device-$PLUGIN_VERSION-bin.zip"
+fi
+
 TARGET_DIR=$(dirname $0)/lightynode
 INSTALL_DIR=$TARGET_DIR/lightynode-openroadm-device
 ARTIFACT_ZIPFILE=$TARGET_DIR/artifact.zip
-TARGET_URL="https://gitlab.com/api/v4/projects/36076125/packages/maven/io/lighty/transportpce/netconf/device/lighty-openroadm-device/$PLUGIN_VERSION/lighty-openroadm-device-$PLUGIN_VERSION-bin.zip"
+if ! [ -d "$TARGET_DIR" ];then
+    echo "Creating 'lightynode' directory."
+    mkdir lightynode
+fi
 
 #clean lightynode install directory
 if [ -d "$INSTALL_DIR" ];then
@@ -28,8 +41,8 @@ fi
 #download lightynode  and install it
 #complete source code can be found at https://gitlab.com/Orange-OpenSource/lfn/odl/lightynode-simulator.git
 echo "Installing lightynode device to $INSTALL_DIR directory "
-curl --retry-delay 10 --retry 3 -sS --location --request GET $TARGET_URL -o $ARTIFACT_ZIPFILE || exit 2
-unzip -q $ARTIFACT_ZIPFILE -d $TARGET_DIR
+curl --retry-delay 10 --retry 3 -sS --fail --location --request GET $TARGET_URL -o $ARTIFACT_ZIPFILE || exit 2
+unzip -q -o $ARTIFACT_ZIPFILE -d $TARGET_DIR
 rm -f $ARTIFACT_ZIPFILE
 mv $TARGET_DIR/lighty-openroadm-device-$PLUGIN_VERSION $INSTALL_DIR
 
