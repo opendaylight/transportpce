@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -33,12 +32,14 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
+import org.opendaylight.transportpce.renderer.provisiondevice.notification.Notification;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.NetworkDeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerSetupTask;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OlmPowerTurnDownTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.OtnDeviceRenderingTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackResultMessage;
@@ -50,12 +51,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -79,7 +76,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -98,8 +94,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             "OLM power setup was not successful! Rendering and OLM will be rolled back.";
     private static final String RENDERING_DEVICES_A_Z_MSG = "Rendering devices A-Z";
     private static final String RENDERING_DEVICES_Z_A_MSG = "Rendering device Z-A";
-    private static final String TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG = "Turning down power on A-to-Z path";
-    private static final String FAILED = "Failed";
+    private static final String ATOZPATH = "A-to-Z";
+    private static final String ZTOAPATH = "Z-to-A";
     private static final String OPERATION_FAILED = "Operation Failed";
     private static final String OPERATION_SUCCESSFUL = "Operation Successful";
     private static final int NUMBER_OF_THREADS = 4;
@@ -108,7 +104,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final OtnDeviceRendererService otnDeviceRenderer;
     private final TransportpceOlmService olmService;
     private final DataBroker dataBroker;
-    private final NotificationPublishService notificationPublishService;
+    private final Notification notification;
     private final PortMapping portMapping;
     private ListeningExecutorService executor;
 
@@ -117,13 +113,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             @Reference OtnDeviceRendererService otnDeviceRenderer,
             @Reference TransportpceOlmService olmService,
             @Reference DataBroker dataBroker,
-            @Reference NotificationPublishService notificationPublishService,
+            @Reference Notification notification,
             @Reference PortMapping portMapping) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
         this.olmService = olmService;
         this.dataBroker = dataBroker;
-        this.notificationPublishService = notificationPublishService;
+        this.notification = notification;
         this.portMapping = portMapping;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         LOG.debug("RendererServiceOperationsImpl instantiated");
@@ -320,19 +316,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         return formatRateMap
             .get(input.getServiceAEnd().getServiceFormat())
             .get(serviceName);
-    }
-
-    @SuppressFBWarnings(
-            value = "UPM_UNCALLED_PRIVATE_METHOD",
-            justification = "call in call() method")
-    private ServicePowerTurndownOutput olmPowerTurndown(ServicePathInputData servicePathInputData)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-        return this.olmService
-            .servicePowerTurndown(
-                new ServicePowerTurndownInputBuilder(servicePathInputData.getServicePathInput()).build())
-            .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS)
-            .getResult();
     }
 
     @SuppressFBWarnings(
@@ -720,48 +703,48 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName, pathDescription, Action.Delete);
         ServicePathInputData servicePathInputDataZtoA =
             ModelMappingUtils.rendererCreateServiceInputZToA(serviceName, pathDescription, Action.Delete);
+
+        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ =
+            this.executor.submit(
+                new OlmPowerTurnDownTask(
+                    serviceName,
+                    ATOZPATH,
+                    olmService,
+                    servicePathInputDataAtoZ,
+                    notification
+                )
+            );
+
+        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA =
+            this.executor.submit(
+                new OlmPowerTurnDownTask(
+                    serviceName,
+                    ZTOAPATH,
+                    olmService,
+                    servicePathInputDataZtoA,
+                    notification
+                )
+            );
+
+        ListenableFuture<List<OLMRenderingResult>> olmPowerTurnDownFutures =
+            Futures.allAsList(olmPowerTurnDownFutureAtoZ, olmPowerTurnDownFutureZtoA);
+
+        List<OLMRenderingResult> olmRenderingResults;
         // OLM turn down power
         try {
-            LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceDelete,
-                serviceName,
-                RpcStatusEx.Pending,
-                TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-            // TODO add some flag rather than string
-            if (FAILED.equals(
-                    olmPowerTurndown(servicePathInputDataAtoZ)
-                        .getResult())) {
-                LOG.error("Service power turndown failed on A-to-Z path for service {}!", serviceName);
-                sendNotifications(
-                    ServicePathNotificationTypes.ServiceDelete,
-                    serviceName,
-                    RpcStatusEx.Failed,
-                    "Service power turndown failed on A-to-Z path for service");
-                return false;
-            }
-            LOG.debug("Turning down power on Z-to-A path");
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceDelete,
-                serviceName,
-                RpcStatusEx.Pending,
-                "Turning down power on Z-to-A path");
-            // TODO add some flag rather than string
-            if (FAILED.equals(
-                    olmPowerTurndown(servicePathInputDataZtoA)
-                        .getResult())) {
-                LOG.error("Service power turndown failed on Z-to-A path for service {}!", serviceName);
-                sendNotifications(
-                    ServicePathNotificationTypes.ServiceDelete,
-                    serviceName,
-                    RpcStatusEx.Failed,
-                    "Service power turndown failed on Z-to-A path for service");
-                return false;
-            }
+            LOG.info("Waiting for A-Z and Z-A OLM power turn down ...");
+            olmRenderingResults = olmPowerTurnDownFutures.get(
+                Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS
+            );
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error while turning down power!", e);
             return false;
         }
+        if (!olmRenderingResults.get(0).isSuccess() || !olmRenderingResults.get(1).isSuccess()) {
+            LOG.error("Error while turning down power!");
+            return false;
+        }
+        LOG.info("OLM power successfully turned down!");
         // delete service path with renderer
         LOG.info("Deleting service path via renderer");
         sendNotifications(
@@ -909,9 +892,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             String serviceName,
             RpcStatusEx rpcStatusEx,
             String message) {
-        send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                null, null, null, null));
+
+        notification.send(
+            servicePathNotificationTypes,
+            serviceName,
+            rpcStatusEx,
+            message
+        );
     }
 
     /**
@@ -931,60 +918,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             Link notifLink,
             Set<String> supportedLinks,
             String serviceType) {
-        send(
-            buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
-                pathDescription, notifLink, supportedLinks, serviceType));
-    }
 
-    /**
-     * Build notification containing path description information.
-     * @param servicePathNotificationTypes ServicePathNotificationTypes
-     * @param serviceName String
-     * @param rpcStatusEx RpcStatusEx
-     * @param message String
-     * @param pathDescription PathDescription
-     * @return notification with RendererRpcResultSp type.
-     */
-    private RendererRpcResultSp buildNotification(
-            ServicePathNotificationTypes servicePathNotificationTypes,
-            String serviceName,
-            RpcStatusEx rpcStatusEx,
-            String message,
-            PathDescription pathDescription,
-            Link notifLink,
-            Set<String> supportedLinks,
-            String serviceType) {
-        RendererRpcResultSpBuilder builder =
-            new RendererRpcResultSpBuilder()
-                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)
-                .setStatusMessage(message)
-                .setServiceType(serviceType);
-        if (pathDescription != null) {
-            builder
-                .setAToZDirection(pathDescription.getAToZDirection())
-                .setZToADirection(pathDescription.getZToADirection());
-        }
-        if (notifLink != null) {
-            builder.setLink(notifLink);
-        }
-        if (supportedLinks != null) {
-            builder.setLinkId(supportedLinks);
-        }
-        return builder.build();
-    }
-
-    /**
-     * Send renderer notification.
-     * @param notification Notification
-     */
-    private void send(Notification<?> notification) {
-        try {
-            LOG.info("Sending notification {}", notification);
-            notificationPublishService.putNotification(notification);
-        } catch (InterruptedException e) {
-            LOG.info("notification offer rejected: ", e);
-            Thread.currentThread().interrupt();
-        }
+        notification.send(
+            notification.buildNotification(
+                servicePathNotificationTypes,
+                serviceName,
+                rpcStatusEx,
+                message,
+                pathDescription,
+                notifLink,
+                supportedLinks,
+                serviceType
+            )
+        );
     }
 
     private Link createLinkForNotif(List<LinkTp> otnLinkTerminationPoints) {
