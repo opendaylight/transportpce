@@ -16,6 +16,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscription;
 import org.opendaylight.yangtools.yang.common.ErrorType;
@@ -41,22 +43,21 @@ public class GetNotificationSubscriptionServiceListImpl implements GetNotificati
                 .buildFuture();
         }
         if (notificationContext.getNotifSubscription() == null) {
-            return RpcResultBuilder.success(new GetNotificationSubscriptionServiceListOutputBuilder()
-                .setSubscriptionService(new HashMap<>()).build()).buildFuture();
+            return RpcResultBuilder
+                .success(new GetNotificationSubscriptionServiceListOutputBuilder()
+                    .setSubscriptionService(new HashMap<>())
+                    .build())
+                .buildFuture();
         }
-        Map<SubscriptionServiceKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-            .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService>
-                notifSubsMap = new HashMap<>();
+        Map<SubscriptionServiceKey, SubscriptionService> notifSubsMap = new HashMap<>();
         for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-                .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService
-                    subscriptionService = new org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
-                            .list.output.SubscriptionServiceBuilder(notifSubscription).build();
+            SubscriptionService subscriptionService = new SubscriptionServiceBuilder(notifSubscription).build();
             notifSubsMap.put(subscriptionService.key(), subscriptionService);
         }
-        return RpcResultBuilder.success(new GetNotificationSubscriptionServiceListOutputBuilder()
-            .setSubscriptionService(notifSubsMap).build()).buildFuture();
+        return RpcResultBuilder
+            .success(
+                new GetNotificationSubscriptionServiceListOutputBuilder().setSubscriptionService(notifSubsMap).build())
+            .buildFuture();
     }
 
 }

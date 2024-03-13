@@ -76,16 +76,16 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Test
     void getNotificationsServiceEmptyDataTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
-                new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080").invoke(
-                        new GetNotificationsProcessServiceInputBuilder().build());
+            new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080")
+                .invoke(new GetNotificationsProcessServiceInputBuilder().build());
         assertNull(result.get().getResult().getNotificationsProcessService(), "Should be null");
     }
 
     @Test
     void getNotificationsServiceTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<GetNotificationsProcessServiceOutput>> result =
-                new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080")
-            .invoke(new GetNotificationsProcessServiceInputBuilder()
+            new GetNotificationsProcessServiceImpl(converterProcess, "localhost:8080")
+                .invoke(new GetNotificationsProcessServiceInputBuilder()
                     .setGroupId("groupId")
                     .setIdConsumer("consumerId")
                     .setConnectionType(ConnectionType.Service)
@@ -96,8 +96,8 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Test
     void getNotificationsAlarmServiceTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<GetNotificationsAlarmServiceOutput>> result =
-                new GetNotificationsAlarmServiceImpl(converterAlarm, "localhost:8080")
-            .invoke(new GetNotificationsAlarmServiceInputBuilder()
+            new GetNotificationsAlarmServiceImpl(converterAlarm, "localhost:8080")
+                .invoke(new GetNotificationsAlarmServiceInputBuilder()
                     .setGroupId("groupId")
                     .setIdConsumer("consumerId")
                     .setConnectionType(ConnectionType.Service)
@@ -108,8 +108,8 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Test
     void createTapiNotificationSubscriptionServiceTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-                new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager)
-            .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
+            new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager)
+                .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
         assertNotNull(result.get().getResult().getSubscriptionService().getUuid().toString(),
             "Should receive UUID for subscription service");
     }
@@ -120,8 +120,8 @@ public class NbiNotificationsImplTest extends AbstractTest {
                 new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager)
             .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
         ListenableFuture<RpcResult<GetNotificationListOutput>> result2 =
-                new GetNotificationListImpl(converterTapi, "localhost:8080", networkTransactionService, topicManager)
-            .invoke(new GetNotificationListInputBuilder()
+            new GetNotificationListImpl(converterTapi, "localhost:8080", networkTransactionService, topicManager)
+                .invoke(new GetNotificationListInputBuilder()
                     .setTimeRange(null)
                     .setSubscriptionId(result.get().getResult().getSubscriptionService().getUuid())
                     .build());

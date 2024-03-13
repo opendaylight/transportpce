@@ -15,6 +15,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceDetailsOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.details.output.SubscriptionServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscriptionKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -38,7 +39,8 @@ public class GetNotificationSubscriptionServiceDetailsImpl implements GetNotific
         if (input == null || input.getUuid() == null) {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Missing input parameters").buildFuture();
+                .withError(ErrorType.RPC, "Missing input parameters")
+                .buildFuture();
         }
         Uuid notifSubsUuid = input.getUuid();
         NotificationContext notificationContext = nbiNotifications.getNotificationContext();
@@ -47,22 +49,28 @@ public class GetNotificationSubscriptionServiceDetailsImpl implements GetNotific
                 .withError(ErrorType.APPLICATION, "Notification context is empty")
                 .buildFuture();
         }
-        if (notificationContext.getNotifSubscription() == null) {
-            return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
-                .setSubscriptionService(new org.opendaylight.yang.gen.v1
-                    .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
-                        .details.output.SubscriptionServiceBuilder().build()).build()).buildFuture();
+        var subsc = notificationContext.getNotifSubscription();
+        if (subsc == null) {
+            return RpcResultBuilder
+                .success(
+                    new GetNotificationSubscriptionServiceDetailsOutputBuilder()
+                        .setSubscriptionService(new SubscriptionServiceBuilder().build())
+                        .build())
+                .buildFuture();
         }
-        if (!notificationContext.getNotifSubscription().containsKey(new NotifSubscriptionKey(notifSubsUuid))) {
-            return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
-                .withError(ErrorType.APPLICATION,
-                    "Notification subscription service doesnt exist").buildFuture();
+        if (subsc.containsKey(new NotifSubscriptionKey(notifSubsUuid))) {
+            return RpcResultBuilder
+                .success(
+                    new GetNotificationSubscriptionServiceDetailsOutputBuilder()
+                        .setSubscriptionService(
+                            new SubscriptionServiceBuilder(subsc.get(new NotifSubscriptionKey(notifSubsUuid))).build())
+                        .build())
+                .buildFuture();
         }
-        return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
-            .setSubscriptionService(new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.details.output
-                .SubscriptionServiceBuilder(notificationContext.getNotifSubscription().get(
-                    new NotifSubscriptionKey(notifSubsUuid))).build()).build()).buildFuture();
+        return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
+            .withError(ErrorType.APPLICATION, "Notification subscription service doesnt exist")
+            .buildFuture();
+
     }
 
 }

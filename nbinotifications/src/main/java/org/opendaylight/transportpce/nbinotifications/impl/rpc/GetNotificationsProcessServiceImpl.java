@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.nbinotifications.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.List;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.consumer.Subscriber;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationServiceDeserializer;
@@ -44,13 +43,15 @@ public class GetNotificationsProcessServiceImpl implements GetNotificationsProce
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.success(new GetNotificationsProcessServiceOutputBuilder().build()).buildFuture();
         }
-        Subscriber<NotificationProcessService, NotificationsProcessService> subscriber = new Subscriber<>(
-                input.getIdConsumer(), input.getGroupId(), server, converterService,
-                NotificationServiceDeserializer.class);
-        List<NotificationsProcessService> notificationServiceList = subscriber
-                .subscribe(input.getConnectionType().getName(), NotificationsProcessService.QNAME);
-        return RpcResultBuilder.success(new GetNotificationsProcessServiceOutputBuilder()
-                .setNotificationsProcessService(notificationServiceList).build()).buildFuture();
+        return RpcResultBuilder
+            .success(
+                new GetNotificationsProcessServiceOutputBuilder()
+                    .setNotificationsProcessService(
+                        new Subscriber<NotificationProcessService, NotificationsProcessService>(
+                                input.getIdConsumer(), input.getGroupId(), server, converterService,
+                                NotificationServiceDeserializer.class)
+                            .subscribe(input.getConnectionType().getName(), NotificationsProcessService.QNAME))
+                    .build())
+            .buildFuture();
     }
-
 }
