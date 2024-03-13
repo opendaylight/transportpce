@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.nbinotifications.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.List;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.consumer.Subscriber;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceDeserializer;
@@ -44,13 +43,15 @@ public class GetNotificationsAlarmServiceImpl implements GetNotificationsAlarmSe
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder().build()).buildFuture();
         }
-        Subscriber<NotificationAlarmService, NotificationsAlarmService> subscriber = new Subscriber<>(
-                input.getIdConsumer(), input.getGroupId(), server, converterAlarmService,
-                NotificationAlarmServiceDeserializer.class);
-        List<NotificationsAlarmService> notificationAlarmServiceList = subscriber
-                .subscribe("alarm" + input.getConnectionType().getName(), NotificationsAlarmService.QNAME);
-        return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder()
-                .setNotificationsAlarmService(notificationAlarmServiceList).build()).buildFuture();
+        return RpcResultBuilder
+            .success(new GetNotificationsAlarmServiceOutputBuilder()
+                .setNotificationsAlarmService(
+                    new Subscriber<NotificationAlarmService, NotificationsAlarmService>(
+                            input.getIdConsumer(), input.getGroupId(), server, converterAlarmService,
+                            NotificationAlarmServiceDeserializer.class)
+                        .subscribe("alarm" + input.getConnectionType().getName(), NotificationsAlarmService.QNAME))
+                .build())
+            .buildFuture();
     }
 
 }
