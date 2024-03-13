@@ -49,8 +49,11 @@ public class GetNotificationsProcessServiceImpl implements GetNotificationsProce
                 NotificationServiceDeserializer.class);
         List<NotificationsProcessService> notificationServiceList = subscriber
                 .subscribe(input.getConnectionType().getName(), NotificationsProcessService.QNAME);
-        return RpcResultBuilder.success(new GetNotificationsProcessServiceOutputBuilder()
-                .setNotificationsProcessService(notificationServiceList).build()).buildFuture();
+        return RpcResultBuilder
+            .success(
+                new GetNotificationsProcessServiceOutputBuilder()
+                    .setNotificationsProcessService(notificationServiceList)
+                    .build())
+            .buildFuture();
     }
-
 }

@@ -49,8 +49,11 @@ public class GetNotificationsAlarmServiceImpl implements GetNotificationsAlarmSe
                 NotificationAlarmServiceDeserializer.class);
         List<NotificationsAlarmService> notificationAlarmServiceList = subscriber
                 .subscribe("alarm" + input.getConnectionType().getName(), NotificationsAlarmService.QNAME);
-        return RpcResultBuilder.success(new GetNotificationsAlarmServiceOutputBuilder()
-                .setNotificationsAlarmService(notificationAlarmServiceList).build()).buildFuture();
+        return RpcResultBuilder
+            .success(new GetNotificationsAlarmServiceOutputBuilder()
+                .setNotificationsAlarmService(notificationAlarmServiceList)
+                .build())
+            .buildFuture();
     }
 
 }
