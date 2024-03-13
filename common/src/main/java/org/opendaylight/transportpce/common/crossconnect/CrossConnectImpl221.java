@@ -67,18 +67,32 @@ public class CrossConnectImpl221 {
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
-    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
-            .openroadm.device.OduConnection> getOtnCrossConnect(String deviceId, String connectionNumber) {
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
+                .org.openroadm.device.container.org.openroadm.device.OduConnection> getOtnCrossConnect(
+            String deviceId, String connectionNumber) {
         //TODO Change it to Operational later for real device
         return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION,
                 generateOduConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
-    public Optional<String> postCrossConnect(String deviceId, String srcTp, String destTp,
-                                             SpectrumInformation spectrumInformation) {
+    public Optional<String> postCrossConnect(
+            String deviceId, String srcTp, String destTp, SpectrumInformation spectrumInformation) {
+        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
+        DeviceTransaction deviceTx;
+        try {
+            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+            if (deviceTxOpt.isEmpty()) {
+                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
+                return Optional.empty();
+            }
+            deviceTx = deviceTxOpt.orElseThrow();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
+            return Optional.empty();
+        }
         String connectionNumber = spectrumInformation.getIdentifierFromParams(srcTp, destTp);
-        RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder()
+        RoadmConnections rdmConn = new RoadmConnectionsBuilder()
                 .setConnectionName(connectionNumber)
                 .setOpticalControlMode(OpticalControlMode.Off)
                 .setSource(new SourceBuilder()
@@ -86,30 +100,16 @@ public class CrossConnectImpl221 {
                         .build())
                 .setDestination(new DestinationBuilder()
                         .setDstIf(spectrumInformation.getIdentifierFromParams(destTp,"nmc"))
-                        .build());
-
-        InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionName()))
-            .build();
-
-        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
-        DeviceTransaction deviceTx;
-        try {
-            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.orElseThrow();
-            } else {
-                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
-                return Optional.empty();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
-            return Optional.empty();
-        }
-
+                        .build())
+                .build();
         // post the cross connect on the device
-        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, rdmConnectionIID, rdmConnBldr.build());
+        deviceTx.merge(
+            LogicalDatastoreType.CONFIGURATION,
+            InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
+                .build(),
+            rdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -119,51 +119,49 @@ public class CrossConnectImpl221 {
                     spectrumInformation.getHigherSpectralSlotNumber());
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}. Exception: ", rdmConnBldr.build(), e);
+            LOG.warn("Failed to post {}. Exception: ", rdmConn, e);
         }
         return Optional.empty();
     }
 
-
     public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn) {
         List<String> interfList = new ArrayList<>();
         Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionName);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
-                .openroadm.device.OduConnection> otnXc = getOtnCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
         if (xc.isPresent()) {
             interfList.add(xc.orElseThrow().getSource().getSrcIf());
             interfList.add(xc.orElseThrow().getDestination().getDstIf());
             interfList.add(xc.orElseThrow().getSource().getSrcIf().replace("nmc", "mc"));
             interfList.add(xc.orElseThrow().getDestination().getDstIf().replace("nmc", "mc"));
-        } else if (otnXc.isPresent()) {
+        } else {
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
+                    .org.openroadm.device.container.org.openroadm.device.OduConnection> otnXc =
+                getOtnCrossConnect(deviceId, connectionName);
+            if (otnXc.isEmpty()) {
+                LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
+                return null;
+            }
             interfList.add(otnXc.orElseThrow().getSource().getSrcIf());
             interfList.add(otnXc.orElseThrow().getDestination().getDstIf());
-        } else {
-            LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
-            return null;
         }
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.orElseThrow();
-            } else {
+            if (deviceTxOpt.isEmpty()) {
                 LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
                 return null;
             }
+            deviceTx = deviceTxOpt.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
             return null;
         }
 
         // post the cross connect on the device
-        if (isOtn) {
-            deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateOduConnectionIID(connectionName));
-        } else {
-            deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateRdmConnectionIID(connectionName));
-        }
+        deviceTx.delete(
+            LogicalDatastoreType.CONFIGURATION,
+            isOtn ? generateOduConnectionIID(connectionName) : generateRdmConnectionIID(connectionName));
         FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -177,98 +175,95 @@ public class CrossConnectImpl221 {
     }
 
 
-    public List<Ports> getConnectionPortTrail(String nodeId, String srcTp, String destTp,
-                                              int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
+    public List<Ports> getConnectionPortTrail(
+            String nodeId, String srcTp, String destTp, int lowerSpectralSlotNumber, int higherSpectralSlotNumber)
             throws OpenRoadmInterfaceException {
-        String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
-                String.valueOf(lowerSpectralSlotNumber),
-                String.valueOf(higherSpectralSlotNumber));
-        String connectionName = generateConnectionName(srcTp, destTp, spectralSlotName);
         Optional<MountPoint> mountPointOpt = deviceTransactionManager.getDeviceMountPoint(nodeId);
         List<Ports> ports = null;
-        MountPoint mountPoint;
-        if (mountPointOpt.isPresent()) {
-            mountPoint = mountPointOpt.orElseThrow();
-        } else {
+        if (mountPointOpt.isEmpty()) {
             LOG.error("Failed to obtain mount point for device {}!", nodeId);
             return Collections.emptyList();
         }
+        MountPoint mountPoint = mountPointOpt.orElseThrow();
         final Optional<RpcService> service = mountPoint.getService(RpcService.class);
-        if (!service.isPresent()) {
+        if (service.isEmpty()) {
             LOG.error("Failed to get RpcService for node {}", nodeId);
         }
+        String connectionName = generateConnectionName(srcTp, destTp,
+            String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
+                String.valueOf(lowerSpectralSlotNumber), String.valueOf(higherSpectralSlotNumber)));
         GetConnectionPortTrail rpcService = service.orElseThrow().getRpc(GetConnectionPortTrail.class);
         final Future<RpcResult<GetConnectionPortTrailOutput>> portTrailOutput = rpcService.invoke(
                 new GetConnectionPortTrailInputBuilder()
                     .setConnectionName(connectionName)
                     .build());
-        if (portTrailOutput != null) {
-            try {
-                RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();
-                GetConnectionPortTrailOutput connectionPortTrailOutput = connectionPortTrailOutputRpcResult.getResult();
-                if (connectionPortTrailOutput == null) {
-                    throw new OpenRoadmInterfaceException(String.format("RPC get connection port trail called on"
-                            + " node %s returned null!", nodeId));
-                }
-                LOG.info("Getting port trail for node {}'s connection number {}", nodeId, connectionName);
-                ports = connectionPortTrailOutput.getPorts();
-                for (Ports port : ports) {
-                    LOG.info("{} - Circuit pack {} - Port {}", nodeId, port.getCircuitPackName(), port.getPortName());
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.warn("Exception caught", e);
-            }
-        } else {
+        if (portTrailOutput == null) {
             LOG.warn("Port trail is null in getConnectionPortTrail for nodeId {}", nodeId);
+            return Collections.emptyList();
         }
-        return ports != null ? ports : Collections.emptyList();
+        try {
+            RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();
+            GetConnectionPortTrailOutput connectionPortTrailOutput = connectionPortTrailOutputRpcResult.getResult();
+            if (connectionPortTrailOutput == null) {
+                throw new OpenRoadmInterfaceException(String.format(
+                    "RPC get connection port trail called on node %s returned null!", nodeId));
+            }
+            LOG.info("Getting port trail for node {}'s connection number {}", nodeId, connectionName);
+            ports = connectionPortTrailOutput.getPorts();
+            for (Ports port : ports) {
+                LOG.info("{} - Circuit pack {} - Port {}", nodeId, port.getCircuitPackName(), port.getPortName());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.warn("Exception caught", e);
+        }
+        return ports == null ? Collections.emptyList() : ports;
     }
 
 
     public boolean setPowerLevel(String deviceId, OpticalControlMode mode, Decimal64 powerValue, String ctName) {
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctName);
-        if (rdmConnOpt.isPresent()) {
-            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow());
-            rdmConnBldr.setOpticalControlMode(mode);
-            if (powerValue != null) {
-                rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
-            }
-            RoadmConnections newRdmConn = rdmConnBldr.build();
-
-            Future<Optional<DeviceTransaction>> deviceTxFuture =
-                    deviceTransactionManager.getDeviceTransaction(deviceId);
-            DeviceTransaction deviceTx;
-            try {
-                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-                if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.orElseThrow();
-                } else {
-                    LOG.error("Transaction for device {} was not found!", deviceId);
-                    return false;
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Unable to get transaction for device {}!", deviceId, e);
+        if (rdmConnOpt.isEmpty()) {
+            LOG.warn("Roadm-Connection is null in set power level ({})", ctName);
+            return false;
+        }
+        RoadmConnections newRdmConn =
+            powerValue == null
+                ? new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow())
+                    .setOpticalControlMode(mode)
+                    .build()
+                : new RoadmConnectionsBuilder(rdmConnOpt.orElseThrow())
+                    .setOpticalControlMode(mode)
+                    .setTargetOutputPower(new PowerDBm(powerValue))
+                    .build();
+        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
+        DeviceTransaction deviceTx;
+        try {
+            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+            if (deviceTxOpt.isEmpty()) {
+                LOG.error("Transaction for device {} was not found!", deviceId);
                 return false;
             }
-
-            // post the cross connect on the device
-            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier
+            deviceTx = deviceTxOpt.orElseThrow();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Unable to get transaction for device {}!", deviceId, e);
+            return false;
+        }
+        // post the cross connect on the device
+        deviceTx.merge(
+            LogicalDatastoreType.CONFIGURATION,
+            InstanceIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(ctName))
-                .build();
-            deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
-            FluentFuture<? extends @NonNull CommitInfo> commit =
-                    deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-            try {
-                commit.get();
-                LOG.info("Roadm connection power level successfully set ");
-                return true;
-            } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Failed to post {}", newRdmConn, ex);
-            }
-
-        } else {
-            LOG.warn("Roadm-Connection is null in set power level ({})", ctName);
+                .build(),
+            newRdmConn);
+        FluentFuture<? extends @NonNull CommitInfo> commit =
+                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+        try {
+            commit.get();
+            LOG.info("Roadm connection power level successfully set ");
+            return true;
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.warn("Failed to post {}", newRdmConn, ex);
         }
         return false;
     }
@@ -293,42 +288,43 @@ public class CrossConnectImpl221 {
 
     public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node) {
         String deviceId = node.getNodeId();
+        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
+        DeviceTransaction deviceTx;
+        try {
+            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+            if (deviceTxOpt.isEmpty()) {
+                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
+                return Optional.empty();
+            }
+            deviceTx = deviceTxOpt.orElseThrow();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
+            return Optional.empty();
+        }
         List<String> sortedCreatedOduInterfaces = new ArrayList<>(createdOduInterfaces);
         sortedCreatedOduInterfaces.sort((s1,s2) -> s1.compareTo(s2));
         String srcTp = sortedCreatedOduInterfaces.get(0);
         String dstTp = sortedCreatedOduInterfaces.get(1);
         // Strip the service name from the src and dst
         String oduXConnectionName = srcTp.split(":")[0] + "-x-" + dstTp.split(":")[0];
-        OduConnectionBuilder oduConnectionBuilder = new OduConnectionBuilder()
+        OduConnection oduConnection = new OduConnectionBuilder()
                 .setConnectionName(oduXConnectionName)
-                .setDestination(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
-                        .DestinationBuilder().setDstIf(dstTp).build())
-                .setSource(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
-                        .SourceBuilder().setSrcIf(srcTp).build())
-                .setDirection(Direction.Bidirectional);
-
-        InstanceIdentifier<OduConnection> oduConnectionIID = InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(OduConnection.class, new OduConnectionKey(oduConnectionBuilder.getConnectionName()))
-            .build();
-
-        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
-        DeviceTransaction deviceTx;
-        try {
-            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.orElseThrow();
-            } else {
-                LOG.error(DEV_TRANSACTION_NOT_FOUND, deviceId);
-                return Optional.empty();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error(UNABLE_DEV_TRANSACTION, deviceId, e);
-            return Optional.empty();
-        }
-
+                .setDestination(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
+                        .odu.connection.DestinationBuilder().setDstIf(dstTp).build())
+                .setSource(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
+                        .odu.connection.SourceBuilder().setSrcIf(srcTp).build())
+                .setDirection(Direction.Bidirectional)
+                .build();
         // post the cross connect on the device
-        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, oduConnectionIID, oduConnectionBuilder.build());
+        deviceTx.merge(
+            LogicalDatastoreType.CONFIGURATION,
+            InstanceIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(OduConnection.class, new OduConnectionKey(oduXConnectionName))
+                .build(),
+            oduConnection);
         FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
@@ -336,7 +332,7 @@ public class CrossConnectImpl221 {
             LOG.info("Otn-connection successfully created: {}", oduXConnectionName);
             return Optional.of(oduXConnectionName);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}.", oduConnectionBuilder.build(), e);
+            LOG.warn("Failed to post {}.", oduConnection, e);
         }
         return Optional.empty();
     }
