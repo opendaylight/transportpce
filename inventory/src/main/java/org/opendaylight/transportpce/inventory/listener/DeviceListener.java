@@ -52,7 +52,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                     .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
                     .count();
-            LOG.debug("DL Modification Type {}", device.getRootNode().modificationType().toString());
+            LOG.debug("DL Modification Type {}", device.getRootNode().modificationType());
             LOG.debug("DL Capability Count {}", count);
             LOG.debug("DL Connection Status {}", connectionStatus);
             LOG.debug("DL device.getRootNode().getDataBefore() {}", device.getRootNode().dataBefore());
@@ -111,16 +111,16 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      */
     private static List<DataTreeModification<Node>> getRealDevicesOnly(Collection<DataTreeModification<Node>> changes) {
         return changes.stream()
-                .filter(change -> (change.getRootNode().dataAfter() != null
+                .filter(change ->
+                    (change.getRootNode().dataAfter() != null
                         && !StringConstants.DEFAULT_NETCONF_NODEID
-                        .equalsIgnoreCase(change.getRootNode().dataAfter().key().getNodeId().getValue())
+                            .equalsIgnoreCase(change.getRootNode().dataAfter().key().getNodeId().getValue())
                         && change.getRootNode().dataAfter().augmentation(NetconfNode.class) != null)
-                        || (change.getRootNode().dataBefore() != null
-                        && !StringConstants.DEFAULT_NETCONF_NODEID.equalsIgnoreCase(
-                        change.getRootNode().dataBefore().key().getNodeId().getValue())
-                        && change.getRootNode().dataBefore().augmentation(NetconfNode.class) != null
-
-                )).collect(Collectors.toList());
+                    || (change.getRootNode().dataBefore() != null
+                        && !StringConstants.DEFAULT_NETCONF_NODEID
+                            .equalsIgnoreCase(change.getRootNode().dataBefore().key().getNodeId().getValue())
+                        && change.getRootNode().dataBefore().augmentation(NetconfNode.class) != null))
+                .collect(Collectors.toList());
     }
 
     /**
