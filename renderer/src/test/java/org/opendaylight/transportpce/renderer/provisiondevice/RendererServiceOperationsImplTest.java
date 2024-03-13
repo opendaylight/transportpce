@@ -30,10 +30,11 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
+import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPm;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
@@ -41,6 +42,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownOutputBuilder;
@@ -106,11 +108,27 @@ public class RendererServiceOperationsImplTest {
     void serviceImplementationTerminationPointAsResourceTtp2() throws InterruptedException, ExecutionException {
         ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.TTP_TOKEN);
-        ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
-                .setSuccess(true);
-        doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(any(), any(), any());
+        ServicePathOutput mockServicePathOutput = new ServicePathOutputBuilder()
+                .setResult("success")
+                .setSuccess(true)
+                .build();
+        doReturn(mockServicePathOutput).when(this.deviceRenderer).setupServicePath(any(), any(), any());
         when(rpcService.getRpc(ServicePowerSetup.class)).thenReturn(servicePowerSetup);
-        doReturn(RpcResultBuilder.failed().buildFuture()).when(servicePowerSetup).invoke(any());
+        ServicePowerSetupOutput mockServicePowerSetupOutput = new ServicePowerSetupOutputBuilder()
+                .setResult("result")
+                .build();
+        doReturn(RpcResultBuilder.failed().withResult(mockServicePowerSetupOutput).buildFuture())
+            .when(servicePowerSetup).invoke(any());
+
+        when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerTurndownOutputBuilder()
+                        .setResult("result")
+                        .build())
+                .buildFuture())
+            .when(servicePowerTurndown).invoke(any());
+        when(this.deviceRenderer.rendererRollback(any(History.class)))
+            .thenReturn(new RendererRollbackOutputBuilder().setSuccess(true).build());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
                 .get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -147,7 +165,7 @@ public class RendererServiceOperationsImplTest {
     void serviceImplementationRollbackAllNecessary() throws InterruptedException, ExecutionException {
         ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
-        when(deviceRenderer.setupServicePath(any(), any()))
+        when(deviceRenderer.setupServicePath(any(), any(), any()))
                 .thenReturn(new ServicePathOutputBuilder().setResult("success").setSuccess(true).build());
         when(rpcService.getRpc(ServicePowerSetup.class)).thenReturn(servicePowerSetup);
         when(rpcService.getRpc(ServicePowerTurndown.class)).thenReturn(servicePowerTurndown);
@@ -157,8 +175,9 @@ public class RendererServiceOperationsImplTest {
         doReturn(RpcResultBuilder
                 .success(new ServicePowerTurndownOutputBuilder().setResult(ResponseCodes.SUCCESS_RESULT).build())
                 .buildFuture()).when(servicePowerTurndown).invoke(any());
-        when(deviceRenderer.rendererRollback(new RendererRollbackInputBuilder().build()))
+        when(deviceRenderer.rendererRollback(any(History.class)))
                 .thenReturn(new RendererRollbackOutputBuilder().setSuccess(true).build());
+
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input, false)
                 .get();
         assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
@@ -266,6 +285,14 @@ public class RendererServiceOperationsImplTest {
                 .setPmparameterValue("112000000000d").build());
         GetPmOutput getPmOutput = new GetPmOutputBuilder().setNodeId("node1").setMeasurements(measurementsList).build();
         when(getPm.invoke(any())).thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
+        doReturn(RpcResultBuilder
+                .success(new ServicePowerTurndownOutputBuilder()
+                        .setResult("result")
+                        .build())
+                .buildFuture())
+            .when(servicePowerTurndown).invoke(any());
+        when(this.deviceRenderer.rendererRollback(any(History.class)))
+            .thenReturn(new RendererRollbackOutputBuilder().setSuccess(true).build());
 
         ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
