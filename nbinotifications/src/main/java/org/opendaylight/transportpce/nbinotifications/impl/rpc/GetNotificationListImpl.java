@@ -67,25 +67,28 @@ public class GetNotificationListImpl implements GetNotificationList {
             LOG.info("RPC getNotificationList received");
             if (input == null || input.getSubscriptionId() == null) {
                 LOG.warn("Missing mandatory params for input {}", input);
-                return RpcResultBuilder.<GetNotificationListOutput>failed().withError(ErrorType.RPC,
-                    "Missing input parameters").buildFuture();
+                return RpcResultBuilder.<GetNotificationListOutput>failed()
+                    .withError(ErrorType.RPC, "Missing input parameters")
+                    .buildFuture();
             }
             Uuid notifSubsUuid = input.getSubscriptionId();
-            InstanceIdentifier<NotifSubscription> notifSubscriptionIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(NotificationContext.class).child(NotifSubscription.class,
-                    new NotifSubscriptionKey(notifSubsUuid)).build();
-            Optional<NotifSubscription> optionalNotifSub = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID).get();
-
+            Optional<NotifSubscription> optionalNotifSub = this.networkTransactionService
+                .read(
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                        .child(NotificationContext.class)
+                        .child(NotifSubscription.class, new NotifSubscriptionKey(notifSubsUuid))
+                        .build())
+                .get();
             if (optionalNotifSub.isEmpty()) {
                 return RpcResultBuilder.<GetNotificationListOutput>failed()
-                    .withError(ErrorType.APPLICATION,
-                        "Notification subscription doesnt exist").buildFuture();
+                    .withError(ErrorType.APPLICATION, "Notification subscription doesnt exist")
+                    .buildFuture();
             }
             NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             List<Notification> notificationTapiList = new ArrayList<>();
-            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry : notifSubscription
-                    .getSubscriptionFilter().entrySet()) {
+            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry :
+                    notifSubscription.getSubscriptionFilter().entrySet()) {
                 for (Uuid objectUuid:sfEntry.getValue().getRequestedObjectIdentifier()) {
                     if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
                         LOG.warn("Topic doesnt exist for {}", objectUuid.getValue());
@@ -98,30 +101,20 @@ public class GetNotificationListImpl implements GetNotificationList {
                     notificationTapiList.addAll(subscriber.subscribe(objectUuid.getValue(), Notification.QNAME));
                 }
             }
-//            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
-//                if (!this.topicManager.getTapiTopicMap().containsKey(objectUuid.getValue())) {
-//                    LOG.warn("Topic doesnt exist for {}", objectUuid.getValue());
-//                    continue;
-//                }
-//                LOG.info("Going to get notifications for topic {}", objectUuid.getValue());
-//                Subscriber<NotificationTapiService, Notification> subscriber = new Subscriber<>(
-//                    objectUuid.getValue(), objectUuid.getValue(), server, converterTapiService,
-//                    TapiNotificationDeserializer.class);
-//                notificationTapiList.addAll(subscriber.subscribe(objectUuid.getValue(), Notification.QNAME));
-//            }
             LOG.info("TAPI notifications = {}", notificationTapiList);
             Map<NotificationKey, Notification> notificationMap = new HashMap<>();
             for (Notification notif:notificationTapiList) {
                 notificationMap.put(notif.key(), notif);
             }
-            return RpcResultBuilder.success(new GetNotificationListOutputBuilder()
-                .setNotification(notificationMap).build()).buildFuture();
+            return RpcResultBuilder
+                .success(new GetNotificationListOutputBuilder().setNotification(notificationMap).build())
+                .buildFuture();
         } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
             LOG.error("Failed to get Notifications from Kafka", e);
         }
         return RpcResultBuilder.<GetNotificationListOutput>failed()
-            .withError(ErrorType.APPLICATION,
-                "Notifications couldnt be retrieved from Kafka server").buildFuture();
+            .withError(ErrorType.APPLICATION, "Notifications couldnt be retrieved from Kafka server")
+            .buildFuture();
     }
 
 }
