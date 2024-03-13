@@ -38,7 +38,8 @@ public class GetNotificationSubscriptionServiceDetailsImpl implements GetNotific
         if (input == null || input.getUuid() == null) {
             LOG.warn("Missing mandatory params for input {}", input);
             return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
-                .withError(ErrorType.RPC, "Missing input parameters").buildFuture();
+                .withError(ErrorType.RPC, "Missing input parameters")
+                .buildFuture();
         }
         Uuid notifSubsUuid = input.getUuid();
         NotificationContext notificationContext = nbiNotifications.getNotificationContext();
@@ -48,21 +49,33 @@ public class GetNotificationSubscriptionServiceDetailsImpl implements GetNotific
                 .buildFuture();
         }
         if (notificationContext.getNotifSubscription() == null) {
-            return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
-                .setSubscriptionService(new org.opendaylight.yang.gen.v1
-                    .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
-                        .details.output.SubscriptionServiceBuilder().build()).build()).buildFuture();
+            return RpcResultBuilder
+                .success(
+                    new GetNotificationSubscriptionServiceDetailsOutputBuilder()
+                        .setSubscriptionService(
+                            new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121
+                                    .get.notification.subscription.service .details.output.SubscriptionServiceBuilder()
+                                .build())
+                        .build())
+                .buildFuture();
         }
         if (!notificationContext.getNotifSubscription().containsKey(new NotifSubscriptionKey(notifSubsUuid))) {
             return RpcResultBuilder.<GetNotificationSubscriptionServiceDetailsOutput>failed()
-                .withError(ErrorType.APPLICATION,
-                    "Notification subscription service doesnt exist").buildFuture();
+                .withError(ErrorType.APPLICATION, "Notification subscription service doesnt exist")
+                .buildFuture();
         }
-        return RpcResultBuilder.success(new GetNotificationSubscriptionServiceDetailsOutputBuilder()
-            .setSubscriptionService(new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service.details.output
-                .SubscriptionServiceBuilder(notificationContext.getNotifSubscription().get(
-                    new NotifSubscriptionKey(notifSubsUuid))).build()).build()).buildFuture();
+        return RpcResultBuilder
+            .success(
+                new GetNotificationSubscriptionServiceDetailsOutputBuilder()
+                    .setSubscriptionService(
+                        new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121
+                                .get.notification.subscription.service.details.output.SubscriptionServiceBuilder(
+                                    notificationContext
+                                        .getNotifSubscription()
+                                        .get(new NotifSubscriptionKey(notifSubsUuid)))
+                            .build())
+                    .build())
+            .buildFuture();
     }
 
 }

@@ -41,8 +41,8 @@ public class DeleteNotificationSubscriptionServiceImpl implements DeleteNotifica
     private final NetworkTransactionService networkTransactionService;
     private final TopicManager topicManager;
 
-    public DeleteNotificationSubscriptionServiceImpl(NetworkTransactionService networkTransactionService,
-            TopicManager topicManager) {
+    public DeleteNotificationSubscriptionServiceImpl(
+            NetworkTransactionService networkTransactionService, TopicManager topicManager) {
         this.networkTransactionService = networkTransactionService;
         this.topicManager = topicManager;
     }
@@ -54,40 +54,40 @@ public class DeleteNotificationSubscriptionServiceImpl implements DeleteNotifica
             if (input == null || input.getUuid() == null) {
                 LOG.warn("Missing mandatory params for input {}", input);
                 return RpcResultBuilder.<DeleteNotificationSubscriptionServiceOutput>failed()
-                    .withError(ErrorType.RPC, "Missing input parameters").buildFuture();
+                    .withError(ErrorType.RPC, "Missing input parameters")
+                    .buildFuture();
             }
             Uuid notifSubsUuid = input.getUuid();
             InstanceIdentifier<NotifSubscription> notifSubscriptionIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(NotificationContext.class).child(NotifSubscription.class,
-                    new NotifSubscriptionKey(notifSubsUuid)).build();
-            Optional<NotifSubscription> optionalNotifSub = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID).get();
-
+                .augmentation(Context1.class)
+                .child(NotificationContext.class)
+                .child(NotifSubscription.class, new NotifSubscriptionKey(notifSubsUuid))
+                .build();
+            Optional<NotifSubscription> optionalNotifSub = this.networkTransactionService
+                .read(LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID)
+                .get();
             if (optionalNotifSub.isEmpty()) {
                 return RpcResultBuilder.<DeleteNotificationSubscriptionServiceOutput>failed()
-                    .withError(ErrorType.APPLICATION,
-                        "Notification subscription doesnt exist").buildFuture();
+                    .withError(ErrorType.APPLICATION, "Notification subscription doesnt exist")
+                    .buildFuture();
             }
             NotifSubscription notifSubscription = optionalNotifSub.orElseThrow();
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, notifSubscriptionIID);
             this.networkTransactionService.commit().get();
-            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry : notifSubscription
-                    .getSubscriptionFilter().entrySet()) {
+            for (Map.Entry<SubscriptionFilterKey, SubscriptionFilter> sfEntry :
+                    notifSubscription.getSubscriptionFilter().entrySet()) {
                 for (Uuid objectUuid:sfEntry.getValue().getRequestedObjectIdentifier()) {
                     this.topicManager.deleteTapiTopic(objectUuid.getValue());
                 }
             }
-//            for (Uuid objectUuid:notifSubscription.getSubscriptionFilter().getRequestedObjectIdentifier()) {
-//                this.topicManager.deleteTapiTopic(objectUuid.getValue());
-//            }
-            return RpcResultBuilder.success(new DeleteNotificationSubscriptionServiceOutputBuilder().build())
+            return RpcResultBuilder
+                .success(new DeleteNotificationSubscriptionServiceOutputBuilder().build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
             LOG.error("Failed to delete Notification subscription service", e);
         }
         return RpcResultBuilder.<DeleteNotificationSubscriptionServiceOutput>failed()
-            .withError(ErrorType.APPLICATION,
-                "Failed to delete notification subscription service").buildFuture();
+            .withError(ErrorType.APPLICATION, "Failed to delete notification subscription service")
+            .buildFuture();
     }
-
 }

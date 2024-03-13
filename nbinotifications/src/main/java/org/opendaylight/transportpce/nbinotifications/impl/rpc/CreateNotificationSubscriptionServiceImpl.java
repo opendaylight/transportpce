@@ -27,7 +27,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscriptionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -49,7 +48,7 @@ public class CreateNotificationSubscriptionServiceImpl implements CreateNotifica
     @Override
     public ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> invoke(
             CreateNotificationSubscriptionServiceInput input) {
-        for (Uuid uuid:input.getSubscriptionFilter().getRequestedObjectIdentifier()) {
+        for (Uuid uuid : input.getSubscriptionFilter().getRequestedObjectIdentifier()) {
             LOG.info("Adding T-API topic: {} to Kafka server", uuid.getValue());
             this.topicManager.addTapiTopic(uuid.getValue());
         }
@@ -63,15 +62,11 @@ public class CreateNotificationSubscriptionServiceImpl implements CreateNotifica
             .setRequestedObjectTypes(input.getSubscriptionFilter().getRequestedObjectTypes())
             .build();
         Uuid notifSubscriptionUuid = new Uuid(UUID.randomUUID().toString());
-        Map<SubscriptionFilterKey, SubscriptionFilter> sfmap = new HashMap<>();
-        sfmap.put(subscriptionFilter.key(), subscriptionFilter);
         SubscriptionService subscriptionService = new SubscriptionServiceBuilder()
-            .setSubscriptionFilter(sfmap)
+            .setSubscriptionFilter(new HashMap<>(Map.of(subscriptionFilter.key(), subscriptionFilter)))
             .setSubscriptionState(input.getSubscriptionState())
             .setUuid(notifSubscriptionUuid)
             .build();
-
-        NotifSubscriptionKey notifSubscriptionKey = new NotifSubscriptionKey(notifSubscriptionUuid);
         NotifSubscription notifSubscription = new NotifSubscriptionBuilder()
             .setSubscriptionState(subscriptionService.getSubscriptionState())
             .setSubscriptionFilter(subscriptionService.getSubscriptionFilter())
@@ -86,21 +81,22 @@ public class CreateNotificationSubscriptionServiceImpl implements CreateNotifica
         if (notificationContext != null && notificationContext.getNotifSubscription() != null) {
             notifSubscriptions.putAll(notificationContext.getNotifSubscription());
         }
-        notifSubscriptions.put(notifSubscriptionKey, notifSubscription);
-        NotificationContext notificationContext1 = new NotificationContextBuilder()
-            .setNotification(notificationContext == null ? new HashMap<>() : notificationContext.getNotification())
-            .setNotifSubscription(notifSubscriptions)
-            .build();
-        if (!nbiNotifications.updateNotificationContext(notificationContext1)) {
+        notifSubscriptions.put(new NotifSubscriptionKey(notifSubscriptionUuid), notifSubscription);
+        if (!nbiNotifications.updateNotificationContext(
+            new NotificationContextBuilder()
+                .setNotification(notificationContext == null ? new HashMap<>() : notificationContext.getNotification())
+                .setNotifSubscription(notifSubscriptions)
+                .build())) {
             LOG.error("Failed to update Notification context");
             return RpcResultBuilder.<CreateNotificationSubscriptionServiceOutput>failed()
-                .withError(ErrorType.RPC, "Failed to update notification context").buildFuture();
+                .withError(ErrorType.RPC, "Failed to update notification context")
+                .buildFuture();
         }
-        CreateNotificationSubscriptionServiceOutput serviceOutput =
-            new CreateNotificationSubscriptionServiceOutputBuilder()
-                .setSubscriptionService(subscriptionService)
-                .build();
-        return RpcResultBuilder.success(serviceOutput).buildFuture();
+        return RpcResultBuilder
+                .success(
+                    new CreateNotificationSubscriptionServiceOutputBuilder()
+                        .setSubscriptionService(subscriptionService)
+                        .build())
+                .buildFuture();
     }
-
 }

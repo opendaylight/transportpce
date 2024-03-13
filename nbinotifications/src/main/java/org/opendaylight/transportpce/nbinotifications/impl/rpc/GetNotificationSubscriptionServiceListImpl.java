@@ -41,22 +41,27 @@ public class GetNotificationSubscriptionServiceListImpl implements GetNotificati
                 .buildFuture();
         }
         if (notificationContext.getNotifSubscription() == null) {
-            return RpcResultBuilder.success(new GetNotificationSubscriptionServiceListOutputBuilder()
-                .setSubscriptionService(new HashMap<>()).build()).buildFuture();
+            return RpcResultBuilder
+                .success(new GetNotificationSubscriptionServiceListOutputBuilder()
+                    .setSubscriptionService(new HashMap<>())
+                    .build())
+                .buildFuture();
         }
-        Map<SubscriptionServiceKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-            .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService>
+        Map<SubscriptionServiceKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121
+                    .get.notification.subscription.service.list.output.SubscriptionService>
                 notifSubsMap = new HashMap<>();
         for (NotifSubscription notifSubscription:notificationContext.getNotifSubscription().values()) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang
-                .tapi.notification.rev221121.get.notification.subscription.service.list.output.SubscriptionService
-                    subscriptionService = new org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.notification.rev221121.get.notification.subscription.service
-                            .list.output.SubscriptionServiceBuilder(notifSubscription).build();
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121
+                    .get.notification.subscription.service.list.output.SubscriptionService subscriptionService =
+                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121
+                        .get.notification.subscription.service.list.output.SubscriptionServiceBuilder(notifSubscription)
+                    .build();
             notifSubsMap.put(subscriptionService.key(), subscriptionService);
         }
-        return RpcResultBuilder.success(new GetNotificationSubscriptionServiceListOutputBuilder()
-            .setSubscriptionService(notifSubsMap).build()).buildFuture();
+        return RpcResultBuilder
+            .success(
+                new GetNotificationSubscriptionServiceListOutputBuilder().setSubscriptionService(notifSubsMap).build())
+            .buildFuture();
     }
 
 }
