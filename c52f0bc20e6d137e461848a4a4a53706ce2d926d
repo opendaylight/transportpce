@@ -69,6 +69,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17f9561e_b9cd8a0e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T08:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28d49189_225cde7d",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "444b4bae_285b0a20",
@@ -167,6 +185,24 @@
       "writtenOn": "2024-02-27T09:44:01Z",
       "side": 1,
       "message": "Though possible, .toString() should not be specified.\nThis is reported by Sonar. The formatter is expected to be take care of that",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5375d615_ba630471",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T08:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fadb4624_c3271b91",
       "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
