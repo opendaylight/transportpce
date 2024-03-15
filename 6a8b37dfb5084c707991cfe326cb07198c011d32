@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f9fac5_a20340dd",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/rpc/CreateNotificationSubscriptionServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T13:20:19Z",
+      "side": 1,
+      "message": "notificationContext \u003d\u003d null checked twice",
+      "revId": "6a8b37dfb5084c707991cfe326cb07198c011d32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a36ad590_637fa89a",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/rpc/GetNotificationSubscriptionServiceListImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T13:20:19Z",
+      "side": 1,
+      "message": "var may be more appropriate",
+      "revId": "6a8b37dfb5084c707991cfe326cb07198c011d32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
