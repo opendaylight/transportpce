@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5918814_8bb00857",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T07:49:54Z",
+      "side": 1,
+      "message": "indent +4 here so that setters are not aligned with the builder declaration",
+      "revId": "e210ffa651fea5af090bffc3441aabb09a40b197",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a96f01_105e076a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-15T07:49:54Z",
+      "side": 1,
+      "message": "argument alignment with roadmNoade declaration is congusing IMO\n\nwhat about this rather ?\n\n        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node roadmNode \u003d\n            createRoadmTapiNode(nodeUuid, Map.of(\n                    nodeName.key(), nodeName, nameNodeType.key(), nameNodeType), layerProtocols, oneMap, \"Abstracted\");\n                    \n                    \nor this ?\n\n        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121\n                .topology.Node roadmNode \u003d\n            createRoadmTapiNode(\n                nodeUuid,\n                Map.of(\n                    nodeName.key(), nodeName, nameNodeType.key(), nameNodeType), layerProtocols, oneMap, \"Abstracted\");",
+      "revId": "e210ffa651fea5af090bffc3441aabb09a40b197",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
