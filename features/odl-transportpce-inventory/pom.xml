@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>13.0.10</version>
+    <version>13.0.11</version>
     <relativePath/>
   </parent>
 
@@ -20,8 +20,8 @@
   <name>OpenDaylight :: transportpce :: Inventory</name>
 
   <properties>
-    <mdsal.version>13.0.0</mdsal.version>
-    <netconf.version>7.0.1</netconf.version>
+    <mdsal.version>13.0.1</mdsal.version>
+    <netconf.version>7.0.2</netconf.version>
     <transportpce.models.version>20.0.0-SNAPSHOT</transportpce.models.version>
     <transportpce.db.host>localhost:3306</transportpce.db.host>
     <transportpce.db.database>transportpce</transportpce.db.database>
