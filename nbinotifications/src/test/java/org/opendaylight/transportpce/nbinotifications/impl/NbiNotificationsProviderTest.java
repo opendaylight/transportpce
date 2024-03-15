@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.google.common.collect.ClassToInstanceMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +21,7 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.test.AbstractTest;
+
 
 public class NbiNotificationsProviderTest  extends AbstractTest {
     public static NetworkTransactionService networkTransactionService;
@@ -40,7 +42,7 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
         new NbiNotificationsProvider("localhost:8080", "localhost:8080",
                 rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
                 networkTransactionService);
-        verify(rpcProviderRegistry, times(1)).registerRpcImplementations(any());
+        verify(rpcProviderRegistry, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
         verify(notificationService, times(1))
                 .registerCompositeListener(any(NotificationService.CompositeListener.class));
     }

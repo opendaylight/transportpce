@@ -16,6 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +70,7 @@ public class DeviceRendererRPCImplTest {
     @Test
     void testRpcRegistration() {
         new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRendererService);
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
+        verify(rpcProviderService, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
     }
 
     @Test
