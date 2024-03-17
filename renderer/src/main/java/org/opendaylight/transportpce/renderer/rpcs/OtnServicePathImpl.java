@@ -32,21 +32,27 @@ public class OtnServicePathImpl implements OtnServicePath {
 
     @Override
     public ListenableFuture<RpcResult<OtnServicePathOutput>> invoke(OtnServicePathInput input) {
-        if (input.getOperation() != null && input.getServiceFormat() != null && input.getServiceRate() != null) {
-            String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
-            if (input.getOperation().getIntValue() == 1) {
+        if (input.getOperation() == null || input.getServiceFormat() == null || input.getServiceRate() == null) {
+            return RpcResultBuilder
+                .success(new OtnServicePathOutputBuilder().setResult("Invalid operation").build())
+                .buildFuture();
+        }
+        String serviceType = ServiceTypes.getOtnServiceType(input.getServiceFormat(), input.getServiceRate());
+        switch (input.getOperation().getIntValue()) {
+            case 1:
                 LOG.info("Create operation request received");
                 return RpcResultBuilder.success(this.otnDeviceRendererService
                         .setupOtnServicePath(input, serviceType)).buildFuture();
-            } else if (input.getOperation().getIntValue() == 2) {
+
+            case 2:
                 LOG.info("Delete operation request received");
                 return RpcResultBuilder.success(this.otnDeviceRendererService
                         .deleteOtnServicePath(input, serviceType)).buildFuture();
-            }
-        }
-        return RpcResultBuilder
-            .success(new OtnServicePathOutputBuilder().setResult("Invalid operation").build())
-            .buildFuture();
-    }
 
+            default:
+                return RpcResultBuilder
+                    .success(new OtnServicePathOutputBuilder().setResult("Invalid operation").build())
+                    .buildFuture();
+        }
+    }
 }
