@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69d547e4_c10579c6",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/rpc/CreateNotificationSubscriptionServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-17T21:37:07Z",
+      "side": 1,
+      "message": "an intermedaite var for notificationContext.getNotifSubscription() ?",
+      "revId": "7f7e4f8716e053b117bf7ce3a890be58e35675ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e759bf7_95185655",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/rpc/CreateNotificationSubscriptionServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-17T21:37:07Z",
+      "side": 1,
+      "message": "seems some var are proxyfied here.",
+      "revId": "7f7e4f8716e053b117bf7ce3a890be58e35675ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee5754c1_82250b60",
         "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/rpc/GetNotificationsAlarmServiceImpl.java",
         "patchSetId": 3
