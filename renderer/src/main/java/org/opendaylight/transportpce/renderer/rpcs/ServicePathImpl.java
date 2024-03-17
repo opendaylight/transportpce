@@ -50,22 +50,30 @@ public class ServicePathImpl implements ServicePath {
 
     @Override
     public ListenableFuture<RpcResult<ServicePathOutput>> invoke(ServicePathInput input) {
-        if (input.getOperation() != null) {
-            if (input.getOperation().getIntValue() == 1) {
+        if (input.getOperation() == null) {
+            LOG.debug("A mandatory input argument is null");
+            return RpcResultBuilder
+                .success(new ServicePathOutputBuilder().setResult("Invalid operation").build())
+                .buildFuture();
+        }
+        switch (input.getOperation().getIntValue()) {
+            case 1:
                 LOG.info("Create operation request received");
                 return RpcResultBuilder.success(
                         this.deviceRendererService.setupServicePath(input, null))
                         .buildFuture();
-            } else if (input.getOperation().getIntValue() == 2) {
+
+            case 2:
                 LOG.info("Delete operation request received");
                 return RpcResultBuilder
                         .success(this.deviceRendererService.deleteServicePath(input))
                         .buildFuture();
-            }
-        }
-        return RpcResultBuilder
-            .success(new ServicePathOutputBuilder().setResult("Invalid operation").build())
-            .buildFuture();
-    }
 
+            default:
+                LOG.debug("Unknown operation code number");
+                return RpcResultBuilder
+                    .success(new ServicePathOutputBuilder().setResult("Invalid operation").build())
+                    .buildFuture();
+        }
+    }
 }
