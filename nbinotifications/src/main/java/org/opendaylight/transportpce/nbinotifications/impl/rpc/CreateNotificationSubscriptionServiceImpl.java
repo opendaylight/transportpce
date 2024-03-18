@@ -11,7 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.nbinotifications.utils.TopicManager;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.CreateNotificationSubscriptionService;
@@ -38,10 +38,11 @@ import org.slf4j.LoggerFactory;
 public class CreateNotificationSubscriptionServiceImpl implements CreateNotificationSubscriptionService {
     private static final Logger LOG = LoggerFactory.getLogger(CreateNotificationSubscriptionServiceImpl.class);
 
-    private NbiNotificationsImpl nbiNotifications;
+    private NbiNotificationsProvider nbiNotifications;
     private final TopicManager topicManager;
 
-    public CreateNotificationSubscriptionServiceImpl(NbiNotificationsImpl nbiNotifications, TopicManager topicManager) {
+    public CreateNotificationSubscriptionServiceImpl(NbiNotificationsProvider nbiNotifications,
+            TopicManager topicManager) {
         this.nbiNotifications = nbiNotifications;
         this.topicManager = topicManager;
     }

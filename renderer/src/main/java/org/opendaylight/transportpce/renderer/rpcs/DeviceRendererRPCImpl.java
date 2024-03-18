@@ -8,16 +8,10 @@
 
 package org.opendaylight.transportpce.renderer.rpcs;
 
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOms;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePath;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollback;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePath;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -35,12 +29,11 @@ public class DeviceRendererRPCImpl {
     public DeviceRendererRPCImpl(@Reference RpcProviderService rpcProviderService,
             @Reference DeviceRendererService deviceRenderer,
             @Reference OtnDeviceRendererService otnDeviceRendererService) {
-        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(ServicePath.class, new ServicePathImpl(deviceRenderer))
-            .put(OtnServicePath.class, new OtnServicePathImpl(otnDeviceRendererService))
-            .put(RendererRollback.class, new RendererRollbackImpl(deviceRenderer))
-            .put(CreateOtsOms.class, new CreateOtsOmsImpl(deviceRenderer))
-            .build());
+        this.reg = rpcProviderService.registerRpcImplementations(
+                new ServicePathImpl(deviceRenderer),
+                new OtnServicePathImpl(otnDeviceRendererService),
+                new RendererRollbackImpl(deviceRenderer),
+                new CreateOtsOmsImpl(deviceRenderer));
         LOG.debug("RPC of DeviceRendererRPCImpl instantiated");
     }
 

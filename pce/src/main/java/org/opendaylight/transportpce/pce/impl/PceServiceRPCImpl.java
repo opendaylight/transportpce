@@ -7,14 +7,9 @@
  */
 package org.opendaylight.transportpce.pce.impl;
 
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserve;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequest;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -33,11 +28,10 @@ public class PceServiceRPCImpl {
     @Activate
     public PceServiceRPCImpl(@Reference RpcProviderService rpcProviderService,
             @Reference PathComputationService pathComputationService) {
-        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(CancelResourceReserve.class, new CancelResourceReserveImpl(pathComputationService))
-            .put(PathComputationRequest.class, new PathComputationRequestImpl(pathComputationService))
-            .put(PathComputationRerouteRequest.class, new PathComputationRerouteRequestImpl(pathComputationService))
-            .build());
+        this.reg = rpcProviderService.registerRpcImplementations(
+                new CancelResourceReserveImpl(pathComputationService),
+                new PathComputationRequestImpl(pathComputationService),
+                new PathComputationRerouteRequestImpl(pathComputationService));
         LOG.info("PceServiceRPCImpl instantiated");
     }
 

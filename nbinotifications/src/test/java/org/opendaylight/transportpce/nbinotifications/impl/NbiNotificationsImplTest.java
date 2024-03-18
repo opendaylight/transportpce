@@ -15,6 +15,11 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -38,8 +43,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationListOutput;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
+@ExtendWith(MockitoExtension.class)
 public class NbiNotificationsImplTest extends AbstractTest {
-    private NbiNotificationsImpl nbiNotificationsImpl;
+
+    @Mock
+    RpcProviderService rpcProviderRegistry;
+    @Mock
+    private NotificationService notificationService;
+
+    private NbiNotificationsProvider nbiNotifications;
     public static NetworkTransactionService networkTransactionService;
     private TopicManager topicManager;
     private JsonStringConverter<NotificationProcessService> converterProcess;
@@ -56,8 +68,9 @@ public class NbiNotificationsImplTest extends AbstractTest {
         topicManager.setTapiConverter(converterTapi);
         NotificationServiceDataUtils.createTapiContext(networkTransactionService);
 
-        nbiNotificationsImpl = new NbiNotificationsImpl(converterProcess, converterAlarm, converterTapi,
-            "localhost:8080", networkTransactionService, topicManager);
+        nbiNotifications = new NbiNotificationsProvider("localhost:8080", "localhost:8080",
+                rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
+                networkTransactionService);
     }
 
     @Test
@@ -95,7 +108,7 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Test
     void createTapiNotificationSubscriptionServiceTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-                new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager)
+                new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager)
             .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
         assertNotNull(result.get().getResult().getSubscriptionService().getUuid().toString(),
             "Should receive UUID for subscription service");
@@ -104,7 +117,7 @@ public class NbiNotificationsImplTest extends AbstractTest {
     @Test
     void getTapiNotificationsServiceTest() throws InterruptedException, ExecutionException {
         ListenableFuture<RpcResult<CreateNotificationSubscriptionServiceOutput>> result =
-                new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager)
+                new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager)
             .invoke(NotificationServiceDataUtils.buildNotificationSubscriptionServiceInputBuilder().build());
         ListenableFuture<RpcResult<GetNotificationListOutput>> result2 =
                 new GetNotificationListImpl(converterTapi, "localhost:8080", networkTransactionService, topicManager)
