@@ -56,7 +56,6 @@ public class ServiceRerouteImpl implements ServiceReroute {
                     LogMessages.serviceNotInDS(serviceName),
                     ResponseCodes.RESPONSE_FAILED);
         }
-        Services service = servicesObject.orElseThrow();
         Optional<ServicePaths> servicePathsObject = this.serviceDataStoreOperations.getServicePath(serviceName);
         if (servicePathsObject.isEmpty()) {
             LOG.warn("serviceReroute: {}", LogMessages.servicePathNotInDS(serviceName));
@@ -65,8 +64,8 @@ public class ServiceRerouteImpl implements ServiceReroute {
                     LogMessages.servicePathNotInDS(serviceName),
                     ResponseCodes.RESPONSE_FAILED);
         }
-        ServicePaths servicePaths = servicePathsObject.orElseThrow();
         // serviceInput for later use maybe...
+        Services service = servicesObject.orElseThrow();
         ServiceInput serviceInput = new ServiceInput(input);
         serviceInput.setServiceAEnd(service.getServiceAEnd());
         serviceInput.setServiceZEnd(service.getServiceZEnd());
@@ -76,23 +75,26 @@ public class ServiceRerouteImpl implements ServiceReroute {
         serviceInput.setSoftConstraints(service.getSoftConstraints());
         serviceInput.setCustomer(service.getCustomer());
         serviceInput.setCustomerContact(service.getCustomerContact());
-
         // Get the network xpdr termination points
+        ServicePaths servicePaths = servicePathsObject.orElseThrow();
         Map<AToZKey, AToZ> mapaToz = servicePaths.getPathDescription().getAToZDirection().getAToZ();
-        String aendtp = ((TerminationPoint) mapaToz.get(new AToZKey(String.valueOf(mapaToz.size() - 3)))
-                .getResource()
-                .getResource())
-                .getTpId();
-        String zendtp = ((TerminationPoint) mapaToz.get(new AToZKey("2"))
-                .getResource()
-                .getResource())
-                .getTpId();
-
         PathComputationRerouteRequestOutput output = this.pceServiceWrapper.performPCEReroute(
                 service.getHardConstraints(), service.getSoftConstraints(), input.getSdncRequestHeader(),
                 service.getServiceAEnd(), service.getServiceZEnd(),
-                new EndpointsBuilder().setAEndTp(aendtp).setZEndTp(zendtp).build());
-
+                new EndpointsBuilder()
+                    .setAEndTp(
+                        ((TerminationPoint) mapaToz
+                                .get(new AToZKey(String.valueOf(mapaToz.size() - 3)))
+                                .getResource()
+                                .getResource())
+                            .getTpId())
+                    .setZEndTp(
+                        ((TerminationPoint) mapaToz
+                                .get(new AToZKey("2"))
+                                .getResource()
+                                .getResource())
+                            .getTpId())
+                    .build());
         if (output == null) {
             LOG.error("serviceReroute: {}", LogMessages.PCE_FAILED);
             return ModelMappingUtils.createRerouteServiceReply(
