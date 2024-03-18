@@ -82,14 +82,12 @@ public class ServiceDeleteImpl implements ServiceDelete {
         }
         //Check presence of service to be deleted
         Optional<Services> serviceOpt = this.serviceDataStoreOperations.getService(serviceName);
-        Services service;
         if (serviceOpt.isEmpty()) {
             LOG.warn(SERVICE_DELETE_MSG, LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
-        service = serviceOpt.orElseThrow();
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListener.setInput(new ServiceInput(input));
         this.pceListener.setServiceReconfigure(false);
@@ -101,6 +99,7 @@ public class ServiceDeleteImpl implements ServiceDelete {
         this.networkListener.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput
                 serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
+        Services service = serviceOpt.orElseThrow();
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput output =
             this.rendererServiceWrapper.performRenderer(
                 serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, service);

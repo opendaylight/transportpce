@@ -151,25 +151,6 @@ public class ServicehandlerImplTest extends AbstractTest {
         verify(rpcProviderService, times(1)).registerRpcImplementations(any());
     }
 
-//    @Test
-//    void testNotImplementedRpc() throws InterruptedException, ExecutionException {
-//        ListenableFuture<RpcResult<ServiceSrlgGetOutput>> result = new ServicehandlerImpl(rpcProviderService,
-//                serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
-//                catalogDataStoreOperations, pathComputationService, rendererServiceOperations,
-//                notificationPublishService)
-//            .serviceSrlgGet(new ServiceSrlgGetInputBuilder().build());
-//
-//        result.addListener(() -> endSignal.countDown(), executorService);
-//        endSignal.await();
-//        assertNotNull(result.get());
-//        assertFalse(result.get().isSuccessful());
-//        assertNull(result.get().getResult());
-//        assertEquals(ErrorType.RPC, result.get().getErrors().get(0).getErrorType());
-//        assertEquals(ErrorSeverity.ERROR, result.get().getErrors().get(0).getSeverity());
-//        assertEquals(ErrorTag.OPERATION_NOT_SUPPORTED, result.get().getErrors().get(0).getTag());
-//        assertEquals("RPC not implemented yet", result.get().getErrors().get(0).getMessage());
-//    }
-
     @Test
     void createServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ListenableFuture<RpcResult<ServiceCreateOutput>> result =
