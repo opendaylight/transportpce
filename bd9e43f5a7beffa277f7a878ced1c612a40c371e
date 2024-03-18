@@ -16,6 +16,24 @@
       "message": "LF misplaced",
       "revId": "bd9e43f5a7beffa277f7a878ced1c612a40c371e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46ea80af_3a524e8b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-18T09:30:32Z",
+      "side": 1,
+      "message": "no indeed\nAck",
+      "parentUuid": "abda6a71_18ab84a9",
+      "revId": "bd9e43f5a7beffa277f7a878ced1c612a40c371e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
