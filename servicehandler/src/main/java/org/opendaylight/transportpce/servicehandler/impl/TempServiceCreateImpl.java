@@ -56,7 +56,7 @@ public class TempServiceCreateImpl implements TempServiceCreate {
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.TempServiceCreate);
-        if (! validationResult.isSuccess()) {
+        if (!validationResult.isSuccess()) {
             LOG.warn(TEMP_SERVICE_CREATE_MSG, LogMessages.ABORT_VALID_FAILED);
             return ModelMappingUtils.createCreateServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
