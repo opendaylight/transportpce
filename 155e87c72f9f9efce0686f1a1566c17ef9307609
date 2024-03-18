@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35420f4b_ba75e134",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-18T22:00:18Z",
+      "side": 1,
+      "message": "this variable is used only once",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93d487e6_5b75695e",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-18T22:00:18Z",
+      "side": 1,
+      "message": "!isPresent \u003d isEmpty\n\nthat said, I have another proposal below",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b767e70_fa30909f",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-18T22:00:18Z",
+      "side": 1,
+      "message": "what about this rather ?\n\n            if (notificationContextOptional.isPresent()) {\n                return notificationContextOptional.orElseThrow();\n            }\n            LOG.debug(\"notification context is empty\");\n        } catch (InterruptedException | ExecutionException e) {\n            LOG.debug(\"caught exception\", e);\n        }\n        LOG.error(\"Could not get TAPI notification context\");\n        return null;",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11711bf0_bcd50c88",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-18T22:00:18Z",
+      "side": 1,
+      "message": "this variable is used only once",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
