@@ -21,11 +21,14 @@ import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.transportpce.nbinotifications.impl.rpc.CreateNotificationSubscriptionServiceImpl;
 import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConstants;
 import org.opendaylight.transportpce.nbinotifications.serialization.NotificationAlarmServiceSerializer;
@@ -45,7 +48,13 @@ import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
 public class PublisherTest extends AbstractTest {
+
     private static NetworkTransactionService networkTransactionService;
+
+    @Mock
+    RpcProviderService rpcProviderRegistry;
+    @Mock
+    private NotificationService notificationService;
 
     private JsonStringConverter<NotificationProcessService> converterService;
     private JsonStringConverter<NotificationAlarmService> converterAlarm;
@@ -56,7 +65,7 @@ public class PublisherTest extends AbstractTest {
     private MockProducer<String, NotificationProcessService> mockProducer;
     private MockProducer<String, NotificationAlarmService> mockAlarmProducer;
     private MockProducer<String, NotificationTapiService> mockTapiProducer;
-    private NbiNotificationsImpl nbiNotificationsImpl;
+    private NbiNotificationsProvider nbiNotifications;
     private TopicManager topicManager;
 
 
@@ -85,8 +94,9 @@ public class PublisherTest extends AbstractTest {
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         topicManager.setTapiConverter(converterTapiService);
         NotificationServiceDataUtils.createTapiContext(networkTransactionService);
-        nbiNotificationsImpl = new NbiNotificationsImpl(converterService, converterAlarm, converterTapiService,
-            "localhost:8080", networkTransactionService, topicManager);
+        nbiNotifications = new NbiNotificationsProvider("localhost:8080", "localhost:8080",
+                rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
+                networkTransactionService);
     }
 
     @Test
@@ -121,7 +131,7 @@ public class PublisherTest extends AbstractTest {
             .build();
         builder.setSubscriptionFilter(subscriptionFilter);
 
-        new CreateNotificationSubscriptionServiceImpl(nbiNotificationsImpl, topicManager).invoke(builder.build());
+        new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager).invoke(builder.build());
         String json = Files.readString(Paths.get("src/test/resources/tapi_event.json"));
         NotificationTapiService notificationTapiService = converterTapiService
             .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationTapiService.QNAME),

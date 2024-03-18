@@ -11,13 +11,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.google.common.collect.ClassToInstanceMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinks;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinks;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +34,8 @@ class NetworkUtilsImplTest {
     void networkUtilsInitTest() {
         new NetworkUtilsImpl(dataBroker, rpcProvider);
 
-        verify(rpcProvider, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
+        verify(rpcProvider, times(1)).registerRpcImplementations(
+                any(DeleteLink.class), any(InitRoadmNodes.class), any(InitXpdrRdmLinks.class),
+                any(InitRdmXpdrLinks.class));
     }
 }

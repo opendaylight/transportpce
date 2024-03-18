@@ -14,7 +14,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.google.common.collect.ClassToInstanceMap;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,9 @@ public class PceServiceRPCImplTest extends AbstractTest {
     @Test
     void testRpcRegistration() {
         new PceServiceRPCImpl(rpcProviderService, pathComputationService);
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
+        verify(rpcProviderService, times(1)).registerRpcImplementations(
+                any(CancelResourceReserveImpl.class), any(PathComputationRequestImpl.class),
+                any(PathComputationRerouteRequestImpl.class));
     }
 
     @Test

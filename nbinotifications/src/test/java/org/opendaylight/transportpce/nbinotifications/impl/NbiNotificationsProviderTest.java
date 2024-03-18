@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.google.common.collect.ClassToInstanceMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +19,14 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.CreateNotificationSubscriptionServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.DeleteNotificationSubscriptionServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationListImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationSubscriptionServiceDetailsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationSubscriptionServiceListImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationsAlarmServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationsProcessServiceImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetSupportedNotificationTypesImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 
@@ -42,7 +49,15 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
         new NbiNotificationsProvider("localhost:8080", "localhost:8080",
                 rpcProviderRegistry, notificationService, getDataStoreContextUtil().getBindingDOMCodecServices(),
                 networkTransactionService);
-        verify(rpcProviderRegistry, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
+        verify(rpcProviderRegistry, times(1)).registerRpcImplementations(
+                any(GetNotificationsProcessServiceImpl.class),
+                any(GetNotificationsAlarmServiceImpl.class),
+                any(GetSupportedNotificationTypesImpl.class),
+                any(CreateNotificationSubscriptionServiceImpl.class),
+                any(DeleteNotificationSubscriptionServiceImpl.class),
+                any(GetNotificationSubscriptionServiceDetailsImpl.class),
+                any(GetNotificationSubscriptionServiceListImpl.class),
+                any(GetNotificationListImpl.class));
         verify(notificationService, times(1))
                 .registerCompositeListener(any(NotificationService.CompositeListener.class));
     }

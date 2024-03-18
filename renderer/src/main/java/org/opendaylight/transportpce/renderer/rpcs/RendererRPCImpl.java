@@ -7,13 +7,9 @@
  */
 package org.opendaylight.transportpce.renderer.rpcs;
 
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDelete;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequest;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -30,10 +26,9 @@ public class RendererRPCImpl {
     @Activate
     public RendererRPCImpl(@Reference RendererServiceOperations rendererServiceOperations,
             @Reference RpcProviderService rpcProviderService) {
-        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(ServiceImplementationRequest.class, new ServiceImplementationRequestImpl(rendererServiceOperations))
-            .put(ServiceDelete.class, new ServiceDeleteImpl(rendererServiceOperations))
-            .build());
+        this.reg = rpcProviderService.registerRpcImplementations(
+                new ServiceImplementationRequestImpl(rendererServiceOperations),
+                new ServiceDeleteImpl(rendererServiceOperations));
         LOG.debug("TransportPCEServicePathRPCImpl instantiated");
     }
 

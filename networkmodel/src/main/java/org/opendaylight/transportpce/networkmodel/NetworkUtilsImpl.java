@@ -7,8 +7,6 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +42,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
@@ -64,9 +61,15 @@ public class NetworkUtilsImpl {
     @Activate
     public NetworkUtilsImpl(@Reference DataBroker dataBroker, @Reference RpcProviderService rpcProvider) {
         this.dataBroker = dataBroker;
-        rpcReg = rpcProvider.registerRpcImplementations(getRpcClassToInstanceMap());
+        rpcReg = rpcProvider.registerRpcImplementations(
+                (DeleteLink) this::deleteLink,
+                (InitRoadmNodes) this::initRoadmNodes,
+                (InitXpdrRdmLinks) this::initXpdrRdmLinks,
+                (InitRdmXpdrLinks) this::initRdmXpdrLinks
+                );
         LOG.info("NetworkUtilsImpl instanciated");
     }
+
 
     @Deactivate
     public void close() {
@@ -157,14 +160,5 @@ public class NetworkUtilsImpl {
             LOG.error("init-rdm-xpdr-links rpc failed due to a bad input parameter");
             return RpcResultBuilder.<InitRdmXpdrLinksOutput>failed().buildFuture();
         }
-    }
-
-    public final ClassToInstanceMap<Rpc<?, ?>> getRpcClassToInstanceMap() {
-        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(DeleteLink.class, this::deleteLink)
-            .put(InitRoadmNodes.class, this::initRoadmNodes)
-            .put(InitXpdrRdmLinks.class, this::initXpdrRdmLinks)
-            .put(InitRdmXpdrLinks.class, this::initRdmXpdrLinks)
-            .build();
     }
 }
