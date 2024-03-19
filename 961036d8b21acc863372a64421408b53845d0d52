@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "671845dc_38813c52",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-19T07:58:53Z",
+      "side": 1,
+      "message": "is it still useful ?does it need to be catched ?",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e992bd5_65787c25",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-19T07:58:53Z",
+      "side": 1,
+      "message": "LF placement can be improved",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c20bb5fc_46fcbe23",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-19T07:58:53Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
