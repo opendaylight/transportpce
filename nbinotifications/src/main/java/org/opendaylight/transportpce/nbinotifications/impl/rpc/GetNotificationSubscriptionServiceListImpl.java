@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.nbinotifications.impl.rpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
 import java.util.Map;
-import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.GetNotificationSubscriptionServiceListOutput;
@@ -25,9 +25,9 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class GetNotificationSubscriptionServiceListImpl implements GetNotificationSubscriptionServiceList {
 
-    private NbiNotificationsImpl nbiNotifications;
+    private NbiNotificationsProvider nbiNotifications;
 
-    public GetNotificationSubscriptionServiceListImpl(NbiNotificationsImpl nbiNotifications) {
+    public GetNotificationSubscriptionServiceListImpl(NbiNotificationsProvider nbiNotifications) {
         this.nbiNotifications = nbiNotifications;
     }
 

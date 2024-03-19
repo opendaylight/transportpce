@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.nbinotifications.impl.rpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashSet;
 import java.util.Set;
-import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsImpl;
+import org.opendaylight.transportpce.nbinotifications.impl.NbiNotificationsProvider;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPEPROFILE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OBJECTTYPESERVICEINTERFACEPOINT;
@@ -40,9 +40,9 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class GetSupportedNotificationTypesImpl implements GetSupportedNotificationTypes {
 
-    private NbiNotificationsImpl nbiNotifications;
+    private NbiNotificationsProvider nbiNotifications;
 
-    public GetSupportedNotificationTypesImpl(NbiNotificationsImpl nbiNotifications) {
+    public GetSupportedNotificationTypesImpl(NbiNotificationsProvider nbiNotifications) {
         this.nbiNotifications = nbiNotifications;
     }
 

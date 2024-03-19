@@ -69,7 +69,9 @@ public class DeviceRendererRPCImplTest {
     @Test
     void testRpcRegistration() {
         new DeviceRendererRPCImpl(rpcProviderService, deviceRenderer, otnDeviceRendererService);
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
+        verify(rpcProviderService, times(1)).registerRpcImplementations(
+                any(ServicePathImpl.class), any(OtnServicePathImpl.class), any(RendererRollbackImpl.class),
+                any(CreateOtsOmsImpl.class));
     }
 
     @Test

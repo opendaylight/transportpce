@@ -28,6 +28,18 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetConnectionDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetConnectivityServiceDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetConnectivityServiceListImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetLinkDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetNodeDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetNodeEdgePointDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointListImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
+import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyListImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 
@@ -61,7 +73,19 @@ public class TapiProviderTest {
                 networkTransactionService, serviceDataStoreOperations,
                 tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl);
 
-        verify(rpcProviderService, times(2)).registerRpcImplementations(any());
+        verify(rpcProviderService, times(1)).registerRpcImplementations(
+                any(CreateConnectivityServiceImpl.class),
+                any(GetConnectivityServiceDetailsImpl.class),
+                any(GetConnectionDetailsImpl.class),
+                any(DeleteConnectivityServiceImpl.class),
+                any(GetConnectivityServiceListImpl.class),
+                any(GetNodeDetailsImpl.class),
+                any(GetTopologyDetailsImpl.class),
+                any(GetNodeEdgePointDetailsImpl.class),
+                any(GetLinkDetailsImpl.class),
+                any(GetTopologyListImpl.class),
+                any(GetServiceInterfacePointDetailsImpl.class),
+                any(GetServiceInterfacePointListImpl.class));
         verify(dataBroker, times(4)).registerTreeChangeListener(any(), any());
     }
 }

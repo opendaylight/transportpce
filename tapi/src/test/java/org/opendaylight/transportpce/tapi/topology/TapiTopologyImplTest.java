@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -98,8 +97,6 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Mock
     private RpcService rpcService;
-    private static ListeningExecutorService executorService;
-    private static CountDownLatch endSignal;
     private static final int NUM_THREADS = 3;
     private static NetworkTransactionService networkTransactionService;
     private static TapiContext tapiContext;
@@ -111,8 +108,8 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
-        executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
-        endSignal = new CountDownLatch(1);
+        MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
+        new CountDownLatch(1);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),

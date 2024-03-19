@@ -33,6 +33,7 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.CancelResourceReserveInputBuilder;
 
+
 @ExtendWith(MockitoExtension.class)
 public class PceServiceRPCImplTest extends AbstractTest {
 
@@ -58,7 +59,9 @@ public class PceServiceRPCImplTest extends AbstractTest {
     @Test
     void testRpcRegistration() {
         new PceServiceRPCImpl(rpcProviderService, pathComputationService);
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
+        verify(rpcProviderService, times(1)).registerRpcImplementations(
+                any(CancelResourceReserveImpl.class), any(PathComputationRequestImpl.class),
+                any(PathComputationRerouteRequestImpl.class));
     }
 
     @Test

@@ -142,8 +142,6 @@ public class TapiConnectivityImplTest extends AbstractTest {
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
-        new TapiConnectivityImpl(rpcService, tapiContext, connectivityUtils,
-                tapipceNotificationHandler, tapirendererNotificationHandler, networkTransactionService);
         LOG.info("setup done");
     }
 
