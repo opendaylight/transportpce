@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "846bf9b3_1d52394b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-19T07:57:00Z",
+      "side": 1,
+      "message": "Thanks for your review. Done",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35420f4b_ba75e134",
@@ -14,6 +31,24 @@
       "writtenOn": "2024-03-18T22:00:18Z",
       "side": 1,
       "message": "this variable is used only once",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f92706e5_b2e98a57",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-19T07:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35420f4b_ba75e134",
       "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -35,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78797613_8dc8bf24",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-19T07:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93d487e6_5b75695e",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b767e70_fa30909f",
@@ -52,6 +105,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39ca78ac_27d9c539",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-19T07:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b767e70_fa30909f",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11711bf0_bcd50c88",
@@ -65,6 +136,24 @@
       "writtenOn": "2024-03-18T22:00:18Z",
       "side": 1,
       "message": "this variable is used only once",
+      "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "241c77d7_0a3e0265",
+        "filename": "nbinotifications/src/main/java/org/opendaylight/transportpce/nbinotifications/impl/NbiNotificationsProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-19T07:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11711bf0_bcd50c88",
       "revId": "155e87c72f9f9efce0686f1a1566c17ef9307609",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
