@@ -82,44 +82,45 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         this.pceListenerImpl.setInput(input);
         this.pceListenerImpl.setServiceUuid(serviceUuid);
         this.rendererListenerImpl.setServiceUuid(serviceUuid);
-        ListenableFuture<RpcResult<ServiceCreateOutput>> output = null;
-        OperationResult validationResult = CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(
-                input);
-        if (validationResult.isSuccess()) {
-            LOG.info("input parameter of RPC create-connectivity are being handled");
-            // check uuid of SIP in tapi context
-            Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.tapiContext.getTapiContext()
-                    .getServiceInterfacePoint();
-            if (sipMap == null) {
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
-                    .withError(ErrorType.RPC, "SIP list is empty")
-                    .buildFuture();
-            }
-            if (sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst()
-                        .orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))
-                    && sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
-                        .findFirst().orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
-                LOG.info("SIPs found in sipMap");
-                // TODO: differentiate between OTN service and GbE service in TAPI
-                ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
-                if (sci == null) {
-                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
-                        .withError(ErrorType.RPC, "Couldnt map Service create input")
-                        .buildFuture();
-                }
-                LOG.info("Service Create input = {}", sci);
-                output = rpcService.getRpc(ServiceCreate.class).invoke(sci);
-                if (!output.isDone()) {
-                    return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
-                        .withError(ErrorType.RPC, "Service create RPC failed")
-                        .buildFuture();
-                }
-            } else {
-                LOG.error("Unknown UUID");
-                return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
-                    .withError(ErrorType.RPC, "SIPs do not exist in tapi context")
-                    .buildFuture();
-            }
+        OperationResult validationResult =
+            CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(input);
+        if (!validationResult.isSuccess()) {
+            return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "Failed to create service")
+                .buildFuture();
+        }
+        LOG.info("input parameter of RPC create-connectivity are being handled");
+        // check uuid of SIP in tapi context
+        Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.tapiContext.getTapiContext()
+                .getServiceInterfacePoint();
+        if (sipMap == null) {
+            return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "SIP list is empty")
+                .buildFuture();
+        }
+        if (!sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().findFirst()
+                    .orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))
+                || !sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
+                    .findFirst().orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
+            LOG.error("Unknown UUID");
+            return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "SIPs do not exist in tapi context")
+                .buildFuture();
+        }
+        LOG.info("SIPs found in sipMap");
+        // TODO: differentiate between OTN service and GbE service in TAPI
+        ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
+        if (sci == null) {
+            return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "Couldnt map Service create input")
+                .buildFuture();
+        }
+        LOG.info("Service Create input = {}", sci);
+        ListenableFuture<RpcResult<ServiceCreateOutput>> output = rpcService.getRpc(ServiceCreate.class).invoke(sci);
+        if (!output.isDone()) {
+            return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "Service create RPC failed")
+                .buildFuture();
         }
         try {
             if (output == null) {
