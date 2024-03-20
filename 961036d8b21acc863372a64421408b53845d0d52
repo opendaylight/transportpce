@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9b2ac3b_1cf875e8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T10:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "671845dc_38813c52",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e992bd5_65787c25",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45d592b4_780b51a1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T10:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e992bd5_65787c25",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c20bb5fc_46fcbe23",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-03-19T07:58:53Z",
       "side": 1,
       "message": "idem",
+      "revId": "961036d8b21acc863372a64421408b53845d0d52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0493c56_074d56a0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T10:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c20bb5fc_46fcbe23",
       "revId": "961036d8b21acc863372a64421408b53845d0d52",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
