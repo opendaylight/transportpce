@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4569b317_9ced19c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T10:05:38Z",
+      "side": 1,
+      "message": "@Olivier Ca dependencies have been updated, you need to rebase on master branch to pass CI.",
+      "revId": "eea454fa1d95f0d1882ff36a2b5a672446eeb2ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0badb3c6_eb11faa8",
