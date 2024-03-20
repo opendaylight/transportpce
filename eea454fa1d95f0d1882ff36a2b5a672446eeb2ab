@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0badb3c6_eb11faa8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "indentation regression here",
+      "revId": "eea454fa1d95f0d1882ff36a2b5a672446eeb2ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c5f75c8_54e9e39b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "indent +4 these 2 lines here to clearly separate block content from condiions",
+      "revId": "eea454fa1d95f0d1882ff36a2b5a672446eeb2ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d53759_27eaba5e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "OK\nNote also that the concatenation with  \"+\" is also discouraged in log by the same SONAR rule that toString()\nbut it does not fit in 120 char here.\nI would appreciate you propose any solution.\nFor example, You can skip checkstyle/spotbugs rules or reduce the message size, or create a String constant since this message is used at least twice",
+      "revId": "eea454fa1d95f0d1882ff36a2b5a672446eeb2ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0ccddb3_2244f626",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "eea454fa1d95f0d1882ff36a2b5a672446eeb2ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
