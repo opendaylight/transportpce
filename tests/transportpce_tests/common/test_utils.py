@@ -261,7 +261,7 @@ def install_karaf_feature(feature_name: str):
 # -b option needed below because of Karaf client bug reporte in the JIRA ticket mentioned above
     return subprocess.run([executable, '-b'],
                           input='feature:install ' + feature_name + '\n feature:list | grep '
-                          + feature_name + ' \n logout \n',
+                          + feature_name + ' \n',
                           universal_newlines=True, check=False)
 
 
@@ -734,8 +734,7 @@ def sims_update_cp_port_ntcf(sim: tuple, circuitpack: str, payload: dict):
                      username=NODES_LOGIN,
                      password=NODES_PWD) as session:
         mgr = Manager(session, timeout=120)
-        reply = mgr.edit_config(xml_body, target="candidate", default_operation="merge")
-    if "None" in str(reply):
+        mgr.edit_config(xml_body, target="candidate", default_operation="merge")
         return True
     return False
 
