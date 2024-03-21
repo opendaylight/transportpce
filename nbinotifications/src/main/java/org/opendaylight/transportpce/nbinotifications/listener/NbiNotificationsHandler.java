@@ -67,14 +67,14 @@ public class NbiNotificationsHandler {
                 .setServiceName(notification.getServiceName())
                 .setServiceZEnd(notification.getServiceZEnd());
 
-        if (notification.getIsTempService()) {
+        if (notification.getIsTempService() == null || !notification.getIsTempService()) {
+            publisher.sendEvent(notificationProcessServiceBuilder
+                .build(), notification.getConnectionType().getName());
+        } else {
             // A-to-Z and Z-to-A containers are only needed for temp-service-create notification
             publisher.sendEvent(notificationProcessServiceBuilder
                     .setAToZ(notification.getAToZ())
                     .setZToA(notification.getZToA())
-                    .build(), notification.getConnectionType().getName());
-        } else {
-            publisher.sendEvent(notificationProcessServiceBuilder
                     .build(), notification.getConnectionType().getName());
         }
     }

@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.nbinotifications.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,8 +57,8 @@ public class NbiNotificationsProvider {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(NbiNotificationsProvider.class);
-    private static Map<String, Publisher<NotificationProcessService>> publishersServiceMap =  new HashMap<>();
-    private static Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap =  new HashMap<>();
+    private Map<String, Publisher<NotificationProcessService>> publishersServiceMap;
+    private Map<String, Publisher<NotificationAlarmService>> publishersAlarmMap;
     private Registration listenerRegistration;
     private Registration rpcRegistration;
     private NetworkTransactionService networkTransactionService;
@@ -99,7 +98,7 @@ public class NbiNotificationsProvider {
         }
         JsonStringConverter<NotificationTapiService> converterTapiService =
                 new JsonStringConverter<>(bindingDOMCodecServices);
-        LOG.info("baozhi tapi converter: {}", converterTapiService);
+        LOG.info("tapi converter: {}", converterTapiService);
         topicManager.setTapiConverter(converterTapiService);
 
         rpcRegistration = rpcProviderService.registerRpcImplementations(
@@ -118,6 +117,8 @@ public class NbiNotificationsProvider {
         listenerRegistration = notificationService.registerCompositeListener(
             notificationsListener.getCompositeListener());
         topicManager.setNbiNotificationsListener(notificationsListener);
+        publishersServiceMap = topicManager.getProcessTopicMap();
+        publishersAlarmMap = topicManager.getAlarmTopicMap();
         LOG.info("NbiNotificationsProvider Session Initiated");
     }
 

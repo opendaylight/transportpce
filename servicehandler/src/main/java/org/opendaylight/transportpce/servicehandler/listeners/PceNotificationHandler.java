@@ -286,7 +286,7 @@ public class PceNotificationHandler implements PceListener {
             sendNbiNotification(
                 nbiNotificationBuilder
                     .setResponseFailed("")
-                    .setMessage("{} Service deleted !")
+                    .setMessage("Service deleted !")
                     .setOperationalState(State.Degraded)
                     .build());
         } else {

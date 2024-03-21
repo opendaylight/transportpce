@@ -270,6 +270,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
+        time.sleep(5)
 
     def test_19_get_notifications_alarm_service1(self):
         response = test_utils.transportpce_api_rpc_request(
@@ -291,6 +292,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "roadm-external"
         }))
+        time.sleep(5)
 
     def test_21_get_notifications_alarm_service1(self):
         self.test_17_get_notifications_alarm_service1()
