@@ -66,12 +66,14 @@ public final class CreateConnectivityServiceValidation {
             return OperationResult.failed(resilienceConstraintCheckResult.getMessage());
         }
 
-        LOG.info("checking TopoConstraint...");
-        Map<TopologyConstraintKey, TopologyConstraint> topoConstraintMap = input.getTopologyConstraint();
-        for (Map.Entry<TopologyConstraintKey, TopologyConstraint> topoConstraint: topoConstraintMap.entrySet()) {
-            ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint.getValue());
-            if (!topoConstraintCheckResult.hasPassed()) {
-                return OperationResult.failed(topoConstraintCheckResult.getMessage());
+        if (input.getTopologyConstraint() != null) {
+            LOG.info("checking TopoConstraint...");
+            Map<TopologyConstraintKey, TopologyConstraint> topoConstraintMap = input.getTopologyConstraint();
+            for (Map.Entry<TopologyConstraintKey, TopologyConstraint> topoConstraint: topoConstraintMap.entrySet()) {
+                ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint.getValue());
+                if (!topoConstraintCheckResult.hasPassed()) {
+                    return OperationResult.failed(topoConstraintCheckResult.getMessage());
+                }
             }
         }
         LOG.info("create-connectivity-service topo constraints compliant !");

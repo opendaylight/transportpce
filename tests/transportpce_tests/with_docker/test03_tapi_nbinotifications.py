@@ -25,6 +25,7 @@ import test_utils  # nopep8
 
 # pylint: disable=too-few-public-methods
 class UuidServices:
+
     def __init__(self):
         # pylint: disable=invalid-name
         self.pm = None
@@ -35,6 +36,7 @@ class UuidServices:
 
 # pylint: disable=too-few-public-methods
 class UuidSubscriptions:
+
     def __init__(self):
         # pylint: disable=invalid-name
         self.pm = None
@@ -84,28 +86,25 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             }
         ],
         "connectivity-constraint": {
-            "service-layer": "ETH",
             "service-type": "POINT_TO_POINT_CONNECTIVITY",
             "service-level": "Some service-level",
             "requested-capacity": {
                 "total-size": {
                     "value": "100",
-                    "unit": "GB"
+                    "unit": "tapi-common:CAPACITY_UNIT_GBPS"
                 }
             }
         },
-        "state": "Some state"
+        "state": "LOCKED",
+        "layer-protocol-name": "ETH"
     }
 
-    tapi_serv_details = {"service-id-or-name": "TBD"}
+    tapi_serv_details = {"uuid": "TBD"}
 
     cr_notif_subs_input_data = {
         "subscription-filter": {
             "requested-notification-types": [
-                "ALARM_EVENT"
-            ],
-            "requested-object-types": [
-                "CONNECTIVITY_SERVICE"
+                "NOTIFICATION_TYPE_ATTRIBUTE_VALUE_CHANGE"
             ],
             "requested-layer-protocols": [
                 "ETH"
@@ -126,14 +125,13 @@ class TransportNbiNotificationstesting(unittest.TestCase):
     }
 
     cr_get_notif_list_input_data = {
-        "subscription-id-or-name": "c07e7fd1-0377-4fbf-8928-36c17b0d0d68",
-        "time-period": "time-period"
+        "subscription-id": "c07e7fd1-0377-4fbf-8928-36c17b0d0d68",
     }
 
     processes = []
     uuid_services = UuidServices()
     uuid_subscriptions = UuidSubscriptions()
-    WAITING = 25  # nominal value is 300
+    WAITING = 20  # nominal value is 300
     NODE_VERSION_221 = '2.2.1'
 
     @classmethod
@@ -176,8 +174,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
-        # pylint: disable=consider-using-f-string
-        print("execution of {}".format(self.id().split(".")[-1]))
+        print(f'execution of {self.id().split(".")[-1]}')
 
     def test_01_connect_xpdrA(self):
         response = test_utils.mount_device("XPDR-A1", ('xpdra', self.NODE_VERSION_221))
@@ -279,9 +276,6 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         input_dict_1 = {'administrative-state': 'LOCKED',
                         'lifecycle-state': 'PLANNED',
                         'operational-state': 'DISABLED',
-                        'service-type': 'POINT_TO_POINT_CONNECTIVITY',
-                        'service-layer': 'ETH',
-                        'connectivity-direction': 'BIDIRECTIONAL'
                         }
         input_dict_2 = {'value-name': 'OpenROADM node id',
                         'value': 'XPDR-C1-XPDR1'}
@@ -305,7 +299,7 @@ class TransportNbiNotificationstesting(unittest.TestCase):
         time.sleep(1)
 
     def test_13_get_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["service-id-or-name"] = str(self.uuid_services.eth)
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -321,11 +315,10 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             'tapi-notification', 'create-notification-subscription-service', self.cr_notif_subs_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.uuid_subscriptions.eth = response['output']['subscription-service']['uuid']
-        self.assertEqual(response['output']['subscription-service']['subscription-filter']
-                         ['requested-object-types'][0], 'CONNECTIVITY_SERVICE')
-        self.assertEqual(response['output']['subscription-service']['subscription-filter']
-                         ['requested-notification-types'][0], 'ALARM_EVENT')
-        self.assertEqual(response['output']['subscription-service']['subscription-filter']
+        self.assertEqual(response['output']['subscription-service']['subscription-filter'][0]
+                         ['requested-notification-types'][0],
+                         'tapi-notification:NOTIFICATION_TYPE_ATTRIBUTE_VALUE_CHANGE')
+        self.assertEqual(response['output']['subscription-service']['subscription-filter'][0]
                          ['requested-object-identifier'][0], str(self.uuid_services.eth))
         time.sleep(2)
 
@@ -339,15 +332,19 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             "administrative-state": "outOfService",
             "port-qual": "roadm-external"
         }))
+        time.sleep(5)
 
     def test_16_get_tapi_notifications_connectivity_service_Ethernet(self):
-        self.cr_get_notif_list_input_data["subscription-id-or-name"] = str(self.uuid_subscriptions.eth)
+        self.cr_get_notif_list_input_data["subscription-id"] = str(self.uuid_subscriptions.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-notification', 'get-notification-list', self.cr_get_notif_list_input_data)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['notification'][0]['target-object-identifier'], str(self.uuid_services.eth))
-        self.assertEqual(response['output']['notification'][0]['target-object-type'], 'CONNECTIVITY_SERVICE')
+        self.assertEqual(response['output']['notification'][0]['changed-attributes'][0]['old-value'], 'UNLOCKED')
         self.assertEqual(response['output']['notification'][0]['changed-attributes'][0]['new-value'], 'LOCKED')
+        self.assertEqual(response['output']['notification'][0]['changed-attributes'][1]['value-name'],
+                         'operationalState')
+        self.assertEqual(response['output']['notification'][0]['changed-attributes'][1]['old-value'], 'ENABLED')
         self.assertEqual(response['output']['notification'][0]['changed-attributes'][1]['new-value'], 'DISABLED')
         time.sleep(2)
 
@@ -361,20 +358,29 @@ class TransportNbiNotificationstesting(unittest.TestCase):
             "administrative-state": "inService",
             "port-qual": "roadm-external"
         }))
+        time.sleep(5)
 
     def test_18_get_tapi_notifications_connectivity_service_Ethernet(self):
-        self.cr_get_notif_list_input_data["subscription-id-or-name"] = str(self.uuid_subscriptions.eth)
+        self.cr_get_notif_list_input_data["subscription-id"] = str(self.uuid_subscriptions.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-notification', 'get-notification-list', self.cr_get_notif_list_input_data)
+        if response['output']['notification'][0]['event-time-stamp'] >\
+                response['output']['notification'][1]['event-time-stamp']:
+            new_notif = response['output']['notification'][0]
+        else:
+            new_notif = response['output']['notification'][1]
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(response['output']['notification'][0]['target-object-identifier'], str(self.uuid_services.eth))
-        self.assertEqual(response['output']['notification'][0]['target-object-type'], 'CONNECTIVITY_SERVICE')
-        self.assertEqual(response['output']['notification'][0]['changed-attributes'][0]['new-value'], 'UNLOCKED')
-        self.assertEqual(response['output']['notification'][0]['changed-attributes'][1]['new-value'], 'ENABLED')
+        self.assertEqual(new_notif['target-object-identifier'], str(self.uuid_services.eth))
+        self.assertEqual(new_notif['changed-attributes'][0]['value-name'], 'administrativeState')
+        self.assertEqual(new_notif['changed-attributes'][0]['old-value'], 'LOCKED')
+        self.assertEqual(new_notif['changed-attributes'][0]['new-value'], 'UNLOCKED')
+        self.assertEqual(new_notif['changed-attributes'][1]['value-name'], 'operationalState')
+        self.assertEqual(new_notif['changed-attributes'][1]['old-value'], 'DISABLED')
+        self.assertEqual(new_notif['changed-attributes'][1]['new-value'], 'ENABLED')
         time.sleep(2)
 
     def test_19_delete_connectivity_service_Ethernet(self):
-        self.tapi_serv_details["service-id-or-name"] = str(self.uuid_services.eth)
+        self.tapi_serv_details["uuid"] = str(self.uuid_services.eth)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.tapi_serv_details)
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
