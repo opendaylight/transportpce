@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c62880a8_2dbbae3c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/TapiStringConstants.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Not only. The purpose is exactly the same as for the others for which we do not have any statement. In a next step we will need to write functional test for this flavor of the topo. Will use it as a parameter of the tests",
+      "parentUuid": "bd56cdfe_56a348a3",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0742e33_754d87d2",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
         "patchSetId": 5
@@ -119,6 +137,24 @@
       "writtenOn": "2024-03-20T08:47:31Z",
       "side": 1,
       "message": "Thanks for fixing this.\n\nAs stated in a previous change, this is reported by Sonar and is related to performance issue.\nhttps://stackoverflow.com/questions/44324597/sonarqube-invoke-methods-only-conditionally\nhttps://sonarcloud.io/organizations/default/rules?languages\u003djava\u0026open\u003djava%3AS2629\u0026q\u003dS2629\nhttps://community.sonarsource.com/t/java-rule-for-redundant-log-actions/55748",
+      "parentUuid": "30aad828_1af63654",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8761120d_75f45065",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "OK understand the SONAR issue you explained me and that I was not able to find back in the associated comment",
       "parentUuid": "30aad828_1af63654",
       "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
@@ -422,6 +458,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6647c88f_d3182bee",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19ba7ed7_8cf6c5b9",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "858508e2_21bcfcfe",
@@ -505,6 +559,24 @@
       "writtenOn": "2024-03-20T08:47:31Z",
       "side": 1,
       "message": "still onepBldr.getName().toString() is present.\nthe second argumlent is quite long and split on 2 lines, a LF after , would have eased spotting this issue.",
+      "parentUuid": "b405153b_481a62d7",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0f3b2c_a868279b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "b405153b_481a62d7",
       "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
@@ -598,6 +670,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad424ab8_05346ef7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eabda620_5e682ddd",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61b86196_647bb11a",
@@ -682,6 +772,24 @@
       "side": 1,
       "message": "nope",
       "parentUuid": "014bb06e_04e10301",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d90266e9_e077599a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da1da92f_f4c427c8",
       "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -802,6 +910,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0afb4a15_905945f9",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd7adea_fb6b3d30",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "0afb4a15_905945f9",
@@ -960,6 +1086,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45bf0589_4c0307a3",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce88f00b_5c83cb02",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "45bf0589_4c0307a3",
@@ -1195,6 +1339,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ef98f8_33c1e163",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38b111af_f40e8955",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4563d8d_0e8c47f1",
@@ -1241,6 +1403,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8e2d967_f2fa082d",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ff3e26_e3bafd5f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "e8e2d967_f2fa082d",
@@ -1301,6 +1481,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ddde0e_310a65f1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64bc610d_b3295a5b",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17183a86_8e09a007",
@@ -1347,6 +1545,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T10:12:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dde61bc6_3d4e0a47",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2da5f4e4_0bf0f29c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "dde61bc6_3d4e0a47",
@@ -1477,6 +1693,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c56a72c_082e0201",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "177d7f38_85cf2218",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6db59844_4f71338a",
@@ -1523,6 +1757,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44c10c86_19293601",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155a1840_d8222fc5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "44c10c86_19293601",
@@ -1600,6 +1852,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9e5de52_1341faff",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "153ed1b3_f15d4fab",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2af58737_4889990d",
@@ -1646,6 +1916,24 @@
         "id": 6731
       },
       "writtenOn": "2024-03-20T08:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ded33b38_904b964d",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ce63d07_83cd5606",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "ded33b38_904b964d",
@@ -1706,6 +1994,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc4031b5_6640afe7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d72fd0d5_e85ee2c6",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c58473e_3b57285e",
@@ -1755,6 +2061,24 @@
       "side": 1,
       "message": "what about this ?\n\nif (nrgList.isEmpty()) {\n     return;\n}\nif (nbNeps \u003e 0) {\n...",
       "parentUuid": "2b3f68d5_f160922e",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7127088_b91a8c87",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopoTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94524a4c_7bebe8c3",
       "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

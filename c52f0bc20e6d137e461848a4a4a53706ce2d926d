@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5706d26_9ab0086a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-03-21T17:08:35Z",
+      "side": 1,
+      "message": "Know that this does not simplify reading, but is that not in contradiction with the rule of trying as far as possible to eliminate intermediate variables and unnecessary memory allocation ?",
+      "parentUuid": "f0a92a4f_f555178c",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8815ded_1da8b48d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
         "patchSetId": 1
