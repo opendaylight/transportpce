@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "198c02cf_fd42a2ab",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-22T14:45:45Z",
+      "side": 1,
+      "message": "Nope. Intermediate variable should be avoided when only used once.\nIt is at least used twice here.\nand it will ease reading IMO since there will be not ambiguity on the fact the same augmentation appears twice in this check. w/o a variable, the long NS is much longer to read and to compare manually.",
+      "parentUuid": "a5706d26_9ab0086a",
+      "revId": "c52f0bc20e6d137e461848a4a4a53706ce2d926d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8815ded_1da8b48d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
         "patchSetId": 1

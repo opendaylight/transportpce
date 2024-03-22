@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa83dcd7_d85b6749",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/TapiStringConstants.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-22T14:45:45Z",
+      "side": 1,
+      "message": "ok, can you clarify that in the code with a TODO comment please ?",
+      "parentUuid": "c62880a8_2dbbae3c",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0742e33_754d87d2",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
         "patchSetId": 5
