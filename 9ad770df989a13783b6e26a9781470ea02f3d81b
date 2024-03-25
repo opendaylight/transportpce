@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2509b8f_852decaf",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/OtnServicePathImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T07:54:56Z",
+      "side": 1,
+      "message": "With switch statements and spotbugs activated, I have to use a default clause.\nI think your suggestion is to use java17 switch expressions (vs statement) to avoid the default clause as described at https://openjdk.org/jeps/406.\nIs this correct ?\nIf so,  I am fine with that but shouldn\u0027t we also check input.getOperation().getIntValue() is not null ?",
+      "parentUuid": "039953d0_be0b2fc2",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "9ad770df989a13783b6e26a9781470ea02f3d81b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "179020e9_db0e059b",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/ServicePathImpl.java",
         "patchSetId": 6
