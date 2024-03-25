@@ -67,7 +67,7 @@ public class ServiceRestorationImpl implements ServiceRestoration {
         LOG.info("RPC serviceRestoration received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
 
-        if (!servicesObject.isPresent()) {
+        if (servicesObject.isEmpty()) {
             LOG.warn(SERVICE_RESTORATION_MSG, LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createRestoreServiceReply(
                     LogMessages.serviceNotInDS(serviceName));
