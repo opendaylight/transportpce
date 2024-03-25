@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad0f5e72_7c8611fd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T08:11:33Z",
+      "side": 1,
+      "message": "LF misplaced",
+      "revId": "3c0a6612b4389e3b2cc9ac480ed6e686a0e7313f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
