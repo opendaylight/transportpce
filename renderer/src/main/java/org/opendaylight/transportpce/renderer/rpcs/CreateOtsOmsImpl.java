@@ -32,13 +32,13 @@ public class CreateOtsOmsImpl implements CreateOtsOms {
 
     @Override
     public ListenableFuture<RpcResult<CreateOtsOmsOutput>> invoke(CreateOtsOmsInput input) {
-        LOG.info("Request received to create oms and ots interfaces on {}: {}", input.getNodeId(), input
-            .getLogicalConnectionPoint());
+        LOG.info("Request received to create oms and ots interfaces on {}: {}",
+            input.getNodeId(), input.getLogicalConnectionPoint());
         try {
             return RpcResultBuilder.success(deviceRendererService.createOtsOms(input)).buildFuture();
         } catch (OpenRoadmInterfaceException e) {
-            LOG.error("failed to send request to create oms and ots interfaces on {}: {}", input.getNodeId(),
-                    input.getLogicalConnectionPoint(),e);
+            LOG.error("failed to send request to create oms and ots interfaces on {}: {}",
+                input.getNodeId(), input.getLogicalConnectionPoint(),e);
         }
         return RpcResultBuilder.<CreateOtsOmsOutput>failed()
             .withError(ErrorType.RPC, "to create oms and ots interfaces")
