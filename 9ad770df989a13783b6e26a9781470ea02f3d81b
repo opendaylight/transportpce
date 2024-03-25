@@ -89,6 +89,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b23d7d_27950aa0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/OtnServicePathImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T08:22:49Z",
+      "side": 1,
+      "message": "fair enough. Thanks for this much better proposal.",
+      "parentUuid": "c16e3cae_068b18a6",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "9ad770df989a13783b6e26a9781470ea02f3d81b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "179020e9_db0e059b",
@@ -102,6 +126,30 @@
       "writtenOn": "2024-03-23T07:48:39Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 53
+      },
+      "revId": "9ad770df989a13783b6e26a9781470ea02f3d81b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ff839c_cc6e26d1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/ServicePathImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T08:22:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "179020e9_db0e059b",
       "range": {
         "startLine": 59,
         "startChar": 8,
