@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2c7db07_7406c343",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-25T16:33:57Z",
+      "side": 1,
+      "message": "Could you add the JIRA ticket please?",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "079a70fb_e754ab56",
@@ -103,6 +120,24 @@
       "side": 1,
       "message": "ok, can you clarify that in the code with a TODO comment please ?",
       "parentUuid": "c62880a8_2dbbae3c",
+      "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3abcb32_1cf69ab6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/TapiStringConstants.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-25T16:33:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa83dcd7_d85b6749",
       "revId": "de05e8c4abf943ac935b96a7b90683f32111a94c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
