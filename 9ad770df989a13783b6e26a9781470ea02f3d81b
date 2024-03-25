@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c16e3cae_068b18a6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/OtnServicePathImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-25T08:15:43Z",
+      "side": 1,
+      "message": "See, my proposal without default clause.\nIdeally, we should also include the null, but I guess we need to use java-18.",
+      "parentUuid": "c2509b8f_852decaf",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "9ad770df989a13783b6e26a9781470ea02f3d81b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "179020e9_db0e059b",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/rpcs/ServicePathImpl.java",
         "patchSetId": 6
