@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27534049_1076adc8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T18:51:15Z",
+      "side": 1,
+      "message": "can be removed IMO",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "979776ef_f422b43c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T18:51:15Z",
+      "side": 1,
+      "message": "this is declared as node1 in line 284",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26df46d0_41cb27ab",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-25T18:51:15Z",
+      "side": 1,
+      "message": "misleading indentation here IMO",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
