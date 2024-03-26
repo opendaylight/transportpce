@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4db80eed_b89ab14f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-26T14:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27534049_1076adc8",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "979776ef_f422b43c",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7077100_0e3e235d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-26T14:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "979776ef_f422b43c",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26df46d0_41cb27ab",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-03-25T18:51:15Z",
       "side": 1,
       "message": "misleading indentation here IMO",
+      "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e253b387_451afd42",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-26T14:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26df46d0_41cb27ab",
       "revId": "1087219d10a30f79acd078ee259e223773a4c4da",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
