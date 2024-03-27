@@ -33,6 +33,8 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -97,6 +99,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 @Component
 public class OlmPowerServiceImpl implements OlmPowerService {
@@ -153,12 +156,17 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
     @Override
     public ServicePowerSetupOutput servicePowerSetup(ServicePowerSetupInput powerSetupInput) {
+        Subscriber errorSubscriber = new EventSubscriber();
         ServicePowerSetupOutputBuilder powerSetupOutput = new ServicePowerSetupOutputBuilder();
-        boolean successValPowerCalculation = powerMgmt.setPower(powerSetupInput);
+        boolean successValPowerCalculation = powerMgmt.setPower(powerSetupInput, errorSubscriber);
         if (successValPowerCalculation) {
             powerSetupOutput.setResult(ResponseCodes.SUCCESS_RESULT);
         } else {
-            powerSetupOutput.setResult(ResponseCodes.FAILED_RESULT);
+            powerSetupOutput.setResult(
+                String.format("OLM power setup failed (%s)",
+                    errorSubscriber.last(Level.ERROR, "OLM power setup failed due to an unknown error.")
+                )
+            );
         }
         return powerSetupOutput.build();
     }
