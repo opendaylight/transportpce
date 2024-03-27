@@ -50,16 +50,15 @@ public class InitRoadmRoadmTapiLinkImpl implements InitRoadmRoadmTapiLink {
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
             tapiNetworkUtilsImpl.getTapiTopoUuid());
-        InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
+        InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
         if (tapiNetworkUtilsImpl.putLinkInTopology(link)) {
-            output = new InitRoadmRoadmTapiLinkOutputBuilder()
-                .setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
+            output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
