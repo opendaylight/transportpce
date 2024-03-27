@@ -48,13 +48,14 @@ public class GetConnectivityServiceListImpl implements GetConnectivityServiceLis
 
         Map<ServiceKey, Service> serviceMap = new HashMap<>();
         for (ConnectivityService connectivityService: connMap.values()) {
-            Service service = new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceBuilder(
-                    connectivityService).build();
+            Service service = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .get.connectivity.service.list.output.ServiceBuilder(connectivityService)
+                .build();
             serviceMap.put(service.key(), service);
         }
-        return RpcResultBuilder.success(new GetConnectivityServiceListOutputBuilder().setService(serviceMap)
-            .build()).buildFuture();
+        return RpcResultBuilder
+            .success(new GetConnectivityServiceListOutputBuilder().setService(serviceMap).build())
+            .buildFuture();
     }
 
 }
