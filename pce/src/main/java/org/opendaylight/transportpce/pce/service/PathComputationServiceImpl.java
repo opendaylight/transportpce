@@ -74,9 +74,9 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     @Activate
     public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
-            @Reference NotificationPublishService notificationPublishService,
-            @Reference GnpyConsumer gnpyConsumer,
-            @Reference PortMapping portMapping) {
+              @Reference NotificationPublishService notificationPublishService,
+              @Reference GnpyConsumer gnpyConsumer,
+              @Reference PortMapping portMapping) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
@@ -162,17 +162,21 @@ public class PathComputationServiceImpl implements PathComputationService {
                 PceComplianceCheckResult check = PceComplianceCheck.check(input);
                 if (!check.hasPassed()) {
                     LOG.error("Path not calculated, service not compliant : {}", check.getMessage());
+                    String errMessage = String.format(
+                        "Path not calculated, service not compliant : %s",
+                        check.getMessage()
+                    );
                     sendNotifications(
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated, service not compliant",
+                        errMessage,
                         null);
                     configurationResponseCommon
                             .setAckFinalIndicator("Yes")
                             .setRequestId(input.getServiceHandlerHeader().getRequestId())
                             .setResponseCode("Path not calculated")
-                            .setResponseMessage(check.getMessage());
+                            .setResponseMessage(errMessage);
                     return output
                         .setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(null)
@@ -214,7 +218,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated",
+                        message,
                         null);
                     return output
                         .setConfigurationResponseCommon(
@@ -260,7 +264,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
                     LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
                     for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
-                            .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
+                        .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
                         LOG.debug("Impl AtoZ Notification: [{}] {}", key, atoz.getAToZ().get(key));
                     }
                 }
@@ -268,7 +272,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 if ((ztoa != null) && (ztoa.getZToA() != null)) {
                     LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
                     for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
-                            .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
+                        .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
                         LOG.debug("Impl ZtoA Notification: [{}] {}", key, ztoa.getZToA().get(key));
                     }
                 }
@@ -279,11 +283,11 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     @Override
     public ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
-            PathComputationRerouteRequestInput input) {
+        PathComputationRerouteRequestInput input) {
         return executor.submit(() -> {
             PathComputationRerouteRequestOutputBuilder output = new PathComputationRerouteRequestOutputBuilder();
             ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                    .setRequestId("none");
+                .setRequestId("none");
             PceComplianceCheckResult check = PceComplianceCheck.check(input);
             if (!check.hasPassed()) {
                 LOG.error("Path not calculated, path computation reroute request not compliant : {}",
@@ -348,7 +352,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 .build();
         }
         if (responseGnpy.getResponseType()
-                instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase) {
+            instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase) {
             LOG.info("GNPy : path is feasible");
             org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase
                     pathCase =
