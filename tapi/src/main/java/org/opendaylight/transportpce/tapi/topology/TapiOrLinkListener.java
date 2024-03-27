@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.tapi.topology;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -49,8 +48,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     private static final Logger LOG = LoggerFactory.getLogger(TapiOrLinkListener.class);
     private final TapiLink tapiLink;
     private final NetworkTransactionService networkTransactionService;
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-        .getBytes(Charset.forName("UTF-8"))).toString());
+    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+            .toString());
 
     public TapiOrLinkListener(final TapiLink tapiLink, final NetworkTransactionService networkTransactionService) {
         this.tapiLink = tapiLink;
@@ -61,54 +61,58 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Link>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Link> change : changes) {
-            if (change.getRootNode().dataBefore() == null && change.getRootNode().dataAfter() != null) {
-                LOG.info("New link in openroadm topology");
-                Link link = change.getRootNode().dataAfter();
-                // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
-                //  the opposite one. But first check the type
-                Link1 link1 = link.augmentation(Link1.class);
-                if (link1 == null) {
-                    LOG.error("No type in link. We cannot trigger the TAPI link creation");
-                    return;
-                }
-                if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                        || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))) {
-                    LOG.warn("Not triggering creation of link for type = {}", link1.getLinkType().getName());
-                    return;
-                }
-                if (!oppositeLinkExists(link1.getOppositeLink())) {
-                    LOG.warn("Opposite link doest exist. Not creating TAPI link");
-                    return;
-                }
-                LOG.info("Opposite link already in datastore. Creatin TAPI bidirectional link");
-                String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
-                String srcTp = link.getSource().getSourceTp().getValue();
-                String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
-                String destTp = link.getDestination().getDestTp().getValue();
-                putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
-                    TapiStringConstants.OMS_XPDR_RDM_LINK, getQual(srcNode), getQual(destNode),
-                    TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
-                    link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                    Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                    tapiTopoUuid));
+            if (change.getRootNode().dataBefore() != null) {
+                continue;
             }
+            Link link = change.getRootNode().dataAfter();
+            if (link == null) {
+                continue;
+            }
+            LOG.info("New link in openroadm topology");
+            // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
+            //  the opposite one. But first check the type
+            Link1 link1 = link.augmentation(Link1.class);
+            if (link1 == null) {
+                LOG.error("No type in link. We cannot trigger the TAPI link creation");
+                return;
+            }
+            if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
+                    || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))) {
+                LOG.warn("Not triggering creation of link for type = {}", link1.getLinkType().getName());
+                return;
+            }
+            if (!oppositeLinkExists(link1.getOppositeLink())) {
+                LOG.warn("Opposite link doest exist. Not creating TAPI link");
+                return;
+            }
+            LOG.info("Opposite link already in datastore. Creatin TAPI bidirectional link");
+            String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
+            String srcTp = link.getSource().getSourceTp().getValue();
+            String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
+            String destTp = link.getDestination().getDestTp().getValue();
+            putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
+                TapiStringConstants.OMS_XPDR_RDM_LINK, getQual(srcNode), getQual(destNode),
+                TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+                link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
+                Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                tapiTopoUuid));
         }
     }
 
     private void putTapiLinkInTopology(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
         LOG.info("Creating tapi link in TAPI topology context");
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-            .build();
-
-        Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid)
-            .setLink(Map.of(tapiXpdrLink.key(), tapiXpdrLink)).build();
-
         // merge in datastore
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID,
-            topology);
+        this.networkTransactionService.merge(
+            LogicalDatastoreType.OPERATIONAL,
+            InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .build(),
+            new TopologyBuilder()
+                .setUuid(this.tapiTopoUuid)
+                .setLink(Map.of(tapiXpdrLink.key(), tapiXpdrLink))
+                .build());
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -118,21 +122,21 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private String getQual(String node) {
-        if (node.contains("ROADM")) {
-            return TapiStringConstants.PHTNC_MEDIA;
-        }
-        return TapiStringConstants.XPDR;
+        return node.contains("ROADM") ? TapiStringConstants.PHTNC_MEDIA : TapiStringConstants.XPDR;
     }
 
     private boolean oppositeLinkExists(LinkId oppositeLink) {
         try {
-            InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                .augmentation(Network1.class).child(Link.class, new LinkKey(oppositeLink)).build();
-
-            Optional<Link> optLink =
-                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, linkIID).get();
-            if (!optLink.isPresent()) {
+            if (this.networkTransactionService
+                    .read(
+                        LogicalDatastoreType.CONFIGURATION,
+                        InstanceIdentifier.builder(Networks.class)
+                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .augmentation(Network1.class)
+                            .child(Link.class, new LinkKey(oppositeLink))
+                            .build())
+                    .get()
+                    .isEmpty()) {
                 LOG.error("Opposite link not found in datastore {}", oppositeLink.getValue());
                 return false;
             }
@@ -144,9 +148,8 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private String getRoadmOrXpdr(String node) {
-        if (node.contains("ROADM")) {
-            return String.join("-", node.split("-")[0], node.split("-")[1]);
-        }
-        return node;
+        return node.contains("ROADM")
+            ? String.join("-", node.split("-")[0], node.split("-")[1])
+            : node;
     }
 }
