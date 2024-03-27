@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "498c25b9_87e6bd04",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-27T13:23:59Z",
+      "side": 1,
+      "message": "toString is superfluous",
+      "revId": "b344d962de6c7b36852769802189d40e42cc7190",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
