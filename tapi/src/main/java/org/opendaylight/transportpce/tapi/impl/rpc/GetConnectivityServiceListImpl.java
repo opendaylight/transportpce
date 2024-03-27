@@ -18,6 +18,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.Service;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -48,13 +49,12 @@ public class GetConnectivityServiceListImpl implements GetConnectivityServiceLis
 
         Map<ServiceKey, Service> serviceMap = new HashMap<>();
         for (ConnectivityService connectivityService: connMap.values()) {
-            Service service = new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.connectivity.rev221121.get.connectivity.service.list.output.ServiceBuilder(
-                    connectivityService).build();
+            Service service = new ServiceBuilder(connectivityService).build();
             serviceMap.put(service.key(), service);
         }
-        return RpcResultBuilder.success(new GetConnectivityServiceListOutputBuilder().setService(serviceMap)
-            .build()).buildFuture();
+        return RpcResultBuilder
+            .success(new GetConnectivityServiceListOutputBuilder().setService(serviceMap).build())
+            .buildFuture();
     }
 
 }
