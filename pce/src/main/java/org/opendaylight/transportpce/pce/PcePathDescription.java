@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -62,7 +61,7 @@ public class PcePathDescription {
         LOG.info("In buildDescriptions: AtoZ =  {}", pathAtoZ);
         Map<AToZKey,AToZ> atozMap = new HashMap<>();
         if (pathAtoZ == null) {
-            rc.setRC(ResponseCodes.RESPONSE_FAILED);
+            rc.error("The path AtoZ is empty.");
             LOG.error("In buildDescriptions: there is empty AtoZ path");
             return rc;
         }
@@ -74,7 +73,7 @@ public class PcePathDescription {
 
         Map<ZToAKey,ZToA> ztoaMap = new HashMap<>();
         if (pathZtoA == null) {
-            rc.setRC(ResponseCodes.RESPONSE_FAILED);
+            rc.error("The path ZtoA is empty.");
             LOG.error("In buildDescriptions: there is empty ZtoA path");
             return rc;
         }
