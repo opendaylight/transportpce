@@ -325,7 +325,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     success.set(false);
                 }
             } catch (OpenRoadmInterfaceException ex) {
-                processErrorMessage("Setup service path failed! Exception:" + ex.toString(), forkJoinPool, results);
+                LOG.error("Setup service path failed! Exception: {}", ex.toString());
+                processErrorMessage("Setup service path failed! " + ex.getMessage(), forkJoinPool, results);
                 success.set(false);
             }
             NodeInterface nodeInterface = new NodeInterfaceBuilder()
@@ -341,8 +342,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }));
         try {
             forkJoinTask.get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            LOG.error("Error while setting up service paths! Process was interrupted.", e);
+            if (results.isEmpty()) {
+                results.add("Setup service path failed! Process was unexpectedly interrupted.");
+            }
+        } catch (ExecutionException e) {
             LOG.error("Error while setting up service paths!", e);
+            if (results.isEmpty()) {
+                results.add("Setup service path failed! Unexpected error during concurrent setup of nodes.");
+            }
         }
         forkJoinPool.shutdown();
 

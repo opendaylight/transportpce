@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.device.observer.Ignore;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -99,6 +101,11 @@ public class PowerMgmtImpl implements PowerMgmt {
         LOG.debug("PowerMgmtImpl instantiated with olm timers = {} - {}", this.timer1, this.timer2);
     }
 
+
+    public Boolean setPower(ServicePowerSetupInput input) {
+        return setPower(input, new Ignore());
+    }
+
     /**
      * This methods measures power requirement for turning up a WL
      * from the Spanloss at OTS transmit direction and update
@@ -106,17 +113,20 @@ public class PowerMgmtImpl implements PowerMgmt {
      *
      * @param input
      *            Input parameter from the olm servicePowerSetup rpc
+     * @param errorSubscriber
+     *            Will be notified about errors.
      *
      * @return true/false based on status of operation.
      */
     //TODO Need to Case Optical Power mode/NodeType in case of 2.2 devices
-    public Boolean setPower(ServicePowerSetupInput input) {
+    public Boolean setPower(ServicePowerSetupInput input, Subscriber errorSubscriber) {
         LOG.info("Olm-setPower initiated for input {}", input);
         String spectralSlotName = String.join(GridConstant.SPECTRAL_SLOT_SEPARATOR,
                 input.getLowerSpectralSlotNumber().toString(),
                 input.getHigherSpectralSlotNumber().toString());
         if (input.getNodes() == null) {
             LOG.error("No Nodes to configure");
+            errorSubscriber.error("No nodes to configure");
             return false;
         }
         for (int i = 0; i < input.getNodes().size(); i++) {
@@ -125,6 +135,8 @@ public class PowerMgmtImpl implements PowerMgmt {
             Nodes inputNode = this.portMapping.getNode(nodeId);
             if (inputNode == null || inputNode.getNodeInfo() == null) {
                 LOG.error("OLM-PowerMgmtImpl : Error retrieving mapping node for {}", nodeId);
+                errorSubscriber.error(
+                    String.format("OLM-PowerMgmtImpl : Error retrieving mapping node for %s", nodeId));
                 return false;
             }
             OpenroadmNodeVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
@@ -148,6 +160,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             inputNode, destTpId, nodeId, openroadmVersion.getIntValue(),
                             input.getNodes().get(i + 1).getSrcTp(), input.getNodes().get(i + 1).getNodeId());
                     if (powerVal == null) {
+                        errorSubscriber.error(String.format("No transponder power found for node %s", nodeId));
                         return false;
                     }
 
@@ -200,6 +213,12 @@ public class PowerMgmtImpl implements PowerMgmt {
                     if (spanLossTx == null || spanLossTx.intValue() < 0 || spanLossTx.intValue() > 27) {
                         LOG.error("Power Value is null: spanLossTx null or out of openROADM range [0,27] {}",
                             spanLossTx);
+                        errorSubscriber.error(
+                            String.format("spanLossTx is null or negative: %s (node %s, dest TP id %s)",
+                                spanLossTx,
+                                nodeId,
+                                destTpId)
+                        );
                         return false;
                     }
                     Decimal64 powerValue = Decimal64.valueOf(getRdmPowerValue(spanLossTx, input));
@@ -208,6 +227,11 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 connectionNumber)) {
                             LOG.error("Set Power failed for Roadm-connection: {} on Node: {}",
                                     connectionNumber, nodeId);
+                            errorSubscriber.error(
+                                String.format("Set Power failed for Roadm-connection: %s on Node: %s",
+                                    connectionNumber,
+                                    nodeId)
+                            );
                             return false;
                         }
                         LOG.info("Roadm-connection: {} updated ", connectionNumber);
@@ -221,10 +245,15 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 connectionNumber)) {
                             LOG.error("Set GainLoss failed for Roadm-connection: {} on Node: {}",
                                     connectionNumber, nodeId);
+                            errorSubscriber.error(String.format(
+                                "Set GainLoss failed for Roadm-connection: %s on Node: %s",
+                                connectionNumber, nodeId
+                            ));
                             return false;
                         }
                     } catch (InterruptedException e) {
                         LOG.error("Olm-setPower wait failed :", e);
+                        errorSubscriber.error("Olm-setPower wait failed: " + e.getMessage());
                         return false;
                     }
                     break;

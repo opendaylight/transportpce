@@ -74,9 +74,9 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     @Activate
     public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
-            @Reference NotificationPublishService notificationPublishService,
-            @Reference GnpyConsumer gnpyConsumer,
-            @Reference PortMapping portMapping) {
+                                      @Reference NotificationPublishService notificationPublishService,
+                                      @Reference GnpyConsumer gnpyConsumer,
+                                      @Reference PortMapping portMapping) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
@@ -89,11 +89,11 @@ public class PathComputationServiceImpl implements PathComputationService {
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "false positive, this method is used by public method cancelResourceReserve")
     private void sendNotifications(
-            ServicePathNotificationTypes servicePathNotificationTypes,
-            String serviceName,
-            RpcStatusEx rpcStatusEx,
-            String message,
-            PathDescription pathDescription) {
+        ServicePathNotificationTypes servicePathNotificationTypes,
+        String serviceName,
+        RpcStatusEx rpcStatusEx,
+        String message,
+        PathDescription pathDescription) {
         ServicePathRpcResultBuilder servicePathRpcResultBuilder =
             new ServicePathRpcResultBuilder()
                 .setNotificationType(servicePathNotificationTypes)
@@ -119,23 +119,23 @@ public class PathComputationServiceImpl implements PathComputationService {
             @Override
             public CancelResourceReserveOutput call() throws Exception {
                 sendNotifications(
-                        ServicePathNotificationTypes.CancelResourceReserve,
-                        input.getServiceName(),
-                        RpcStatusEx.Pending,
-                        "Service compliant, submitting cancelResourceReserve Request ...",
-                        null);
+                    ServicePathNotificationTypes.CancelResourceReserve,
+                    input.getServiceName(),
+                    RpcStatusEx.Pending,
+                    "Service compliant, submitting cancelResourceReserve Request ...",
+                    null);
                 PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer);
                 sendingPCE.cancelResourceReserve();
                 LOG.info("in PathComputationServiceImpl : {}",
-                        Boolean.TRUE.equals(sendingPCE.getSuccess())
-                            ? "ResourceReserve cancelled !"
-                            : "Cancelling ResourceReserve failed !");
+                    Boolean.TRUE.equals(sendingPCE.getSuccess())
+                        ? "ResourceReserve cancelled !"
+                        : "Cancelling ResourceReserve failed !");
                 sendNotifications(
-                        ServicePathNotificationTypes.CancelResourceReserve,
-                        input.getServiceName(),
-                        RpcStatusEx.Successful,
-                        "cancel Resource Reserve successful!",
-                        null);
+                    ServicePathNotificationTypes.CancelResourceReserve,
+                    input.getServiceName(),
+                    RpcStatusEx.Successful,
+                    "cancel Resource Reserve successful!",
+                    null);
                 return new CancelResourceReserveOutputBuilder()
                     .setConfigurationResponseCommon(
                         new ConfigurationResponseCommonBuilder()
@@ -158,21 +158,25 @@ public class PathComputationServiceImpl implements PathComputationService {
             public PathComputationRequestOutput call() throws Exception {
                 PathComputationRequestOutputBuilder output = new PathComputationRequestOutputBuilder();
                 ConfigurationResponseCommonBuilder configurationResponseCommon =
-                        new ConfigurationResponseCommonBuilder();
+                    new ConfigurationResponseCommonBuilder();
                 PceComplianceCheckResult check = PceComplianceCheck.check(input);
                 if (!check.hasPassed()) {
                     LOG.error("Path not calculated, service not compliant : {}", check.getMessage());
+                    String errMessage = String.format(
+                        "Path not calculated, service not compliant : %s",
+                        check.getMessage()
+                    );
                     sendNotifications(
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated, service not compliant",
+                        errMessage,
                         null);
                     configurationResponseCommon
-                            .setAckFinalIndicator("Yes")
-                            .setRequestId(input.getServiceHandlerHeader().getRequestId())
-                            .setResponseCode("Path not calculated")
-                            .setResponseMessage(check.getMessage());
+                        .setAckFinalIndicator("Yes")
+                        .setRequestId(input.getServiceHandlerHeader().getRequestId())
+                        .setResponseCode("Path not calculated")
+                        .setResponseMessage(errMessage);
                     return output
                         .setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(null)
@@ -214,7 +218,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated",
+                        message,
                         null);
                     return output
                         .setConfigurationResponseCommon(
@@ -239,9 +243,9 @@ public class PathComputationServiceImpl implements PathComputationService {
                     message,
                     pathDescription);
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-                        .response.parameters.sp.response.parameters.PathDescription pathDescription1 =
+                    .response.parameters.sp.response.parameters.PathDescription pathDescription1 =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-                            .response.parameters.sp.response.parameters.PathDescriptionBuilder()
+                        .response.parameters.sp.response.parameters.PathDescriptionBuilder()
                         .setAToZDirection(path.getAToZDirection())
                         .setZToADirection(path.getZToADirection())
                         .build();
@@ -260,7 +264,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
                     LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
                     for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
-                            .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
+                        .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
                         LOG.debug("Impl AtoZ Notification: [{}] {}", key, atoz.getAToZ().get(key));
                     }
                 }
@@ -268,7 +272,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 if ((ztoa != null) && (ztoa.getZToA() != null)) {
                     LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
                     for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
-                            .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
+                        .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
                         LOG.debug("Impl ZtoA Notification: [{}] {}", key, ztoa.getZToA().get(key));
                     }
                 }
@@ -279,47 +283,47 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     @Override
     public ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
-            PathComputationRerouteRequestInput input) {
+        PathComputationRerouteRequestInput input) {
         return executor.submit(() -> {
             PathComputationRerouteRequestOutputBuilder output = new PathComputationRerouteRequestOutputBuilder();
             ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                    .setRequestId("none");
+                .setRequestId("none");
             PceComplianceCheckResult check = PceComplianceCheck.check(input);
             if (!check.hasPassed()) {
                 LOG.error("Path not calculated, path computation reroute request not compliant : {}",
-                        check.getMessage());
+                    check.getMessage());
                 configurationResponseCommon
-                        .setAckFinalIndicator("Yes")
-                        .setResponseCode("Path not calculated")
-                        .setResponseMessage(check.getMessage());
+                    .setAckFinalIndicator("Yes")
+                    .setResponseCode("Path not calculated")
+                    .setResponseMessage(check.getMessage());
                 return output
-                        .setConfigurationResponseCommon(configurationResponseCommon.build())
-                        .build();
+                    .setConfigurationResponseCommon(configurationResponseCommon.build())
+                    .build();
             }
             PathComputationRequestInput pathComputationInput = new PathComputationRequestInputBuilder()
-                    .setServiceName("no_name")
-                    .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("none").build())
-                    .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
-                    .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
-                    .setHardConstraints(input.getHardConstraints())
-                    .setPceRoutingMetric(input.getPceRoutingMetric())
-                    .setResourceReserve(false)
-                    .setSoftConstraints(input.getSoftConstraints())
-                    .setRoutingMetric(input.getRoutingMetric())
-                    .build();
+                .setServiceName("no_name")
+                .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("none").build())
+                .setServiceAEnd(new ServiceAEndBuilder(input.getServiceAEnd()).build())
+                .setServiceZEnd(new ServiceZEndBuilder(input.getServiceZEnd()).build())
+                .setHardConstraints(input.getHardConstraints())
+                .setPceRoutingMetric(input.getPceRoutingMetric())
+                .setResourceReserve(false)
+                .setSoftConstraints(input.getSoftConstraints())
+                .setRoutingMetric(input.getRoutingMetric())
+                .build();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
-                    gnpyConsumer, portMapping, input.getEndpoints());
+                gnpyConsumer, portMapping, input.getEndpoints());
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
             LOG.info("PCE response: {} {}", message, responseCode);
             return output.setConfigurationResponseCommon(
                     configurationResponseCommon
-                            .setAckFinalIndicator("Yes")
-                            .setResponseCode(responseCode)
-                            .setResponseMessage(message)
-                            .build())
-                    .build();
+                        .setAckFinalIndicator("Yes")
+                        .setResponseCode(responseCode)
+                        .setResponseMessage(message)
+                        .build())
+                .build();
         });
     }
 
@@ -332,10 +336,10 @@ public class PathComputationServiceImpl implements PathComputationService {
                 .build();
         }
         if (responseGnpy.getResponseType()
-                instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCase) {
+            instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCase) {
             LOG.info("GNPy : path is not feasible");
             org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCase
-                    noPathGnpy =
+                noPathGnpy =
                 (org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.NoPathCase)
                     responseGnpy.getResponseType();
             return new GnpyResponseBuilder()
@@ -348,18 +352,18 @@ public class PathComputationServiceImpl implements PathComputationService {
                 .build();
         }
         if (responseGnpy.getResponseType()
-                instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase) {
+            instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase) {
             LOG.info("GNPy : path is feasible");
             org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase
-                    pathCase =
+                pathCase =
                 (org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.response.response.type.PathCase)
                     responseGnpy.getResponseType();
             List<org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.path.properties.PathMetric>
-                    pathMetricList =
+                pathMetricList =
                 new ArrayList<>(pathCase.getPathProperties().getPathMetric().values());
             List<PathMetric> gnpyPathMetricList = new ArrayList<>();
             for (org.opendaylight.yang.gen.v1.gnpy.path.rev220615.generic.path.properties.path.properties.PathMetric
-                    pathMetricGnpy : pathMetricList) {
+                pathMetricGnpy : pathMetricList) {
                 gnpyPathMetricList.add(
                     new PathMetricBuilder()
                         .setMetricType(pathMetricGnpy.getMetricType())

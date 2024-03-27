@@ -19,8 +19,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
@@ -54,6 +55,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class PceCalculation {
     /* Logging. */
@@ -129,25 +131,27 @@ public class PceCalculation {
 
         LOG.debug("In PceCalculation retrieveNetwork");
 
-        if (!readMdSal()) {
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+        Subscriber subscriber = new EventSubscriber();
+
+        if (!readMdSal(subscriber)) {
+            returnStructure.error(subscriber);
             return;
         }
         MapUtils.mapDiversityConstraints(allNodes, allLinks, pceHardConstraints);
 
-        if (!analyzeNw()) {
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+        if (!analyzeNw(subscriber)) {
+            returnStructure.error(subscriber);
             return;
         }
         printNodesInfo(allPceNodes);
 
-        returnStructure.setRC(ResponseCodes.RESPONSE_OK);
+        returnStructure.success();
     }
 
     private boolean parseInput() {
         if (!PceComplianceCheck.checkString(input.getServiceAEnd().getServiceFormat().getName())
-                || !PceComplianceCheck.checkString(input.getServiceZEnd().getServiceFormat().getName())
-                || !PceComplianceCheck.checkString(input.getServiceAEnd().getServiceRate().toString())) {
+            || !PceComplianceCheck.checkString(input.getServiceZEnd().getServiceFormat().getName())
+            || !PceComplianceCheck.checkString(input.getServiceAEnd().getServiceRate().toString())) {
             LOG.error("Service Format and Service Rate are required for a path calculation");
             return false;
         }
@@ -158,10 +162,10 @@ public class PceCalculation {
             serviceFormatA,
             serviceRate,
             NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
-                    && checkAendInputTxPortName()
+                && checkAendInputTxPortName()
                 ? portMapping.getMapping(
-                    input.getServiceAEnd().getNodeId(),
-                    input.getServiceAEnd().getTxDirection().getPort().getPortName())
+                input.getServiceAEnd().getNodeId(),
+                input.getServiceAEnd().getTxDirection().getPort().getPortName())
                 : null);
 
         LOG.debug("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
@@ -207,7 +211,7 @@ public class PceCalculation {
                 : input.getServiceZEnd().getNodeId();
     }
 
-    private boolean readMdSal() {
+    private boolean readMdSal(Subscriber subscriber) {
         InstanceIdentifier<Network> nwInstanceIdentifier = null;
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
@@ -241,6 +245,7 @@ public class PceCalculation {
 
         if (readTopology(nwInstanceIdentifier) == null) {
             LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
+            subscriber.event(Level.ERROR, String. format("Network is null: %s", nwInstanceIdentifier));
             return false;
         }
 
@@ -251,11 +256,12 @@ public class PceCalculation {
             LOG.warn("no otn links in otn-topology");
         } else {
             allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
-                -> l1.getSource().getSourceTp().getValue().compareTo(l2.getSource().getSourceTp().getValue()))
-                    .collect(Collectors.toList());
+                    -> l1.getSource().getSourceTp().getValue().compareTo(l2.getSource().getSourceTp().getValue()))
+                .collect(Collectors.toList());
         }
         if (allNodes == null || allNodes.isEmpty()) {
             LOG.error("readMdSal: no nodes ");
+            subscriber.event(Level.ERROR, "No nodes found in network");
             return false;
         }
         LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
@@ -263,6 +269,7 @@ public class PceCalculation {
 
         if (allLinks == null || allLinks.isEmpty()) {
             LOG.error("readMdSal: no links ");
+            subscriber.event(Level.ERROR, "No links found in network");
             return false;
         }
         LOG.info("readMdSal: network links: {} links added", allLinks.size());
@@ -282,12 +289,12 @@ public class PceCalculation {
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+            returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }
         return nw;
     }
 
-    private boolean analyzeNw() {
+    private boolean analyzeNw(Subscriber subscriber) {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
         switch (serviceType) {
@@ -308,7 +315,13 @@ public class PceCalculation {
                 LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
 
                 if (aendPceNode == null || zendPceNode == null) {
-                    LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    if (aendPceNode == null) {
+                        LOG.error("analyzeNw: Error in reading nodes: A not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: A is not present in the network");
+                    } else {
+                        LOG.error("analyzeNw: Error in reading nodes: Z not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: Z is not present in the network");
+                    }
                     return false;
                 }
                 for (Link link : allLinks) {
@@ -341,6 +354,13 @@ public class PceCalculation {
 
                 if (aendPceNode == null || zendPceNode == null) {
                     LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    if (aendPceNode == null) {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. A-node was not found in the network.");
+                    } else {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. Z-node was not found in the network.");
+                    }
                     return false;
                 }
                 for (Link link : allLinks) {
@@ -352,6 +372,11 @@ public class PceCalculation {
         LOG.info("analyzeNw: allPceNodes size {}, allPceLinks size {}", allPceNodes.size(), allPceLinks.size());
 
         if ((allPceNodes.size() == 0) || (allPceLinks.size() == 0)) {
+            if (allPceNodes.size() == 0) {
+                subscriber.event(Level.ERROR, "No nodes found in network.");
+            } else {
+                subscriber.event(Level.ERROR, "No links found in network.");
+            }
             return false;
         }
 
@@ -419,7 +444,7 @@ public class PceCalculation {
 
         if (State.OutOfService.equals(state)) {
             LOG.debug("validateLink: Link is ignored due operational state - {}",
-                    state.getName());
+                state.getName());
             return false;
         }
 
@@ -457,7 +482,7 @@ public class PceCalculation {
         }
         if (State.OutOfService.equals(node1.getOperationalState())) {
             LOG.error("getNodeType: node is ignored due to operational state - {}", node1.getOperationalState()
-                    .getName());
+                .getName());
             return;
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
@@ -525,18 +550,18 @@ public class PceCalculation {
                 if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
                     return true;
                 }
-            //fallthrough
+                //fallthrough
             case "OTU":
             case "other":
                 switch (azEndPoint) {
                     case "A":
                         return checkAendInputTxPortDeviceName()
                             && pceNode.getNodeId().getValue()
-                                .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName());
+                            .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName());
                     case "Z":
                         return checkZendInputTxPortDeviceName()
                             && pceNode.getNodeId().getValue()
-                                .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName());
+                            .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName());
                     default:
                         return false;
                 }
@@ -549,9 +574,6 @@ public class PceCalculation {
     private void validateOtnNode(Node node) {
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
-        if (node.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE")) {
-            return;
-        }
         if (node.augmentation(Node1.class) == null) {
             LOG.error("ValidateOtnNode: no node-type augmentation. Node {} is ignored", node.getNodeId().getValue());
             return;
@@ -560,18 +582,18 @@ public class PceCalculation {
         OpenroadmNodeType nodeType = node.augmentation(Node1.class).getNodeType();
         String clientPort = null;
         if (node.getNodeId().getValue().equals(anodeId)
-                && this.aendPceNode == null
-                && input.getServiceAEnd() != null
-                && input.getServiceAEnd().getRxDirection() != null
-                && input.getServiceAEnd().getRxDirection().getPort() != null
-                && input.getServiceAEnd().getRxDirection().getPort().getPortName() != null) {
+            && this.aendPceNode == null
+            && input.getServiceAEnd() != null
+            && input.getServiceAEnd().getRxDirection() != null
+            && input.getServiceAEnd().getRxDirection().getPort() != null
+            && input.getServiceAEnd().getRxDirection().getPort().getPortName() != null) {
             clientPort = input.getServiceAEnd().getRxDirection().getPort().getPortName();
         } else if (node.getNodeId().getValue().equals(znodeId)
-                && this.zendPceNode == null
-                && input.getServiceZEnd() != null
-                && input.getServiceZEnd().getRxDirection() != null
-                && input.getServiceZEnd().getRxDirection().getPort() != null
-                && input.getServiceZEnd().getRxDirection().getPort().getPortName() != null) {
+            && this.zendPceNode == null
+            && input.getServiceZEnd() != null
+            && input.getServiceZEnd().getRxDirection() != null
+            && input.getServiceZEnd().getRxDirection().getPort() != null
+            && input.getServiceZEnd().getRxDirection().getPort().getPortName() != null) {
             clientPort = input.getServiceZEnd().getRxDirection().getPort().getPortName();
         }
 
@@ -795,7 +817,7 @@ public class PceCalculation {
     private static void printNodesInfo(Map<NodeId, PceNode> allPceNodes) {
         allPceNodes.forEach(((nodeId, pceNode) -> {
             LOG.debug("In printNodes in node {} : outgoing links {} ", pceNode.getNodeId().getValue(),
-                    pceNode.getOutgoingLinks());
+                pceNode.getOutgoingLinks());
         }));
     }
 
@@ -814,11 +836,11 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
-                    && mcCapabitility.getSlotWidthGranularity() != null) {
+                && mcCapabitility.getSlotWidthGranularity() != null) {
                 return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
-                    && mcCapabitility.getSlotWidthGranularity() != null) {
+                && mcCapabitility.getSlotWidthGranularity() != null) {
                 return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
             }
         }
@@ -840,11 +862,11 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
-                    && mcCapabitility.getCenterFreqGranularity() != null) {
+                && mcCapabitility.getCenterFreqGranularity() != null) {
                 return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
             }
             if (mcCapabitility.getMcNodeName().contains(moduleName)
-                    && mcCapabitility.getCenterFreqGranularity() != null) {
+                && mcCapabitility.getCenterFreqGranularity() != null) {
                 return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
             }
         }
