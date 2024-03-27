@@ -900,7 +900,7 @@ class TransportPCEtesting(unittest.TestCase):
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('500', response['output']['configuration-response-common']['response-code'])
-        self.assertIn('No path available by PCE',
+        self.assertIn('No path found by PCE',
                       response['output']['configuration-response-common']['response-message'])
         time.sleep(2)
 

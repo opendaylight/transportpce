@@ -19,8 +19,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
@@ -54,6 +55,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class PceCalculation {
     /* Logging. */
@@ -129,19 +131,21 @@ public class PceCalculation {
 
         LOG.debug("In PceCalculation retrieveNetwork");
 
-        if (!readMdSal()) {
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+        Subscriber subscriber = new EventSubscriber();
+
+        if (!readMdSal(subscriber)) {
+            returnStructure.error(subscriber);
             return;
         }
         MapUtils.mapDiversityConstraints(allNodes, allLinks, pceHardConstraints);
 
-        if (!analyzeNw()) {
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+        if (!analyzeNw(subscriber)) {
+            returnStructure.error(subscriber);
             return;
         }
         printNodesInfo(allPceNodes);
 
-        returnStructure.setRC(ResponseCodes.RESPONSE_OK);
+        returnStructure.success();
     }
 
     private boolean parseInput() {
@@ -207,7 +211,7 @@ public class PceCalculation {
                 : input.getServiceZEnd().getNodeId();
     }
 
-    private boolean readMdSal() {
+    private boolean readMdSal(Subscriber subscriber) {
         DataObjectIdentifier<Network> nwInstanceIdentifier = null;
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
@@ -243,6 +247,7 @@ public class PceCalculation {
 
         if (readTopology(nwInstanceIdentifier) == null) {
             LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
+            subscriber.event(Level.ERROR, String. format("Network is null: %s", nwInstanceIdentifier));
             return false;
         }
 
@@ -258,6 +263,7 @@ public class PceCalculation {
         }
         if (allNodes == null || allNodes.isEmpty()) {
             LOG.error("readMdSal: no nodes ");
+            subscriber.event(Level.ERROR, "No nodes found in network");
             return false;
         }
         LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
@@ -265,6 +271,7 @@ public class PceCalculation {
 
         if (allLinks == null || allLinks.isEmpty()) {
             LOG.error("readMdSal: no links ");
+            subscriber.event(Level.ERROR, "No links found in network");
             return false;
         }
         LOG.info("readMdSal: network links: {} links added", allLinks.size());
@@ -284,12 +291,12 @@ public class PceCalculation {
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
-            returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
+            returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }
         return nw;
     }
 
-    private boolean analyzeNw() {
+    private boolean analyzeNw(Subscriber subscriber) {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
         switch (serviceType) {
@@ -310,7 +317,13 @@ public class PceCalculation {
                 LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
 
                 if (aendPceNode == null || zendPceNode == null) {
-                    LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    if (aendPceNode == null) {
+                        LOG.error("analyzeNw: Error in reading nodes: A not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: A is not present in the network");
+                    } else {
+                        LOG.error("analyzeNw: Error in reading nodes: Z not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: Z is not present in the network");
+                    }
                     return false;
                 }
                 for (Link link : allLinks) {
@@ -343,6 +356,13 @@ public class PceCalculation {
 
                 if (aendPceNode == null || zendPceNode == null) {
                     LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    if (aendPceNode == null) {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. A-node was not found in the network.");
+                    } else {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. Z-node was not found in the network.");
+                    }
                     return false;
                 }
                 for (Link link : allLinks) {
@@ -354,6 +374,11 @@ public class PceCalculation {
         LOG.info("analyzeNw: allPceNodes size {}, allPceLinks size {}", allPceNodes.size(), allPceLinks.size());
 
         if ((allPceNodes.size() == 0) || (allPceLinks.size() == 0)) {
+            if (allPceNodes.size() == 0) {
+                subscriber.event(Level.ERROR, "No nodes found in network.");
+            } else {
+                subscriber.event(Level.ERROR, "No links found in network.");
+            }
             return false;
         }
 

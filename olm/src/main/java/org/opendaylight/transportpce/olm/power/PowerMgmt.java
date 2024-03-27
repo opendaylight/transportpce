@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.olm.power;
 
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 
@@ -24,6 +25,18 @@ public interface PowerMgmt {
      * @return true/false based on status of operation.
      */
     Boolean setPower(ServicePowerSetupInput input);
+
+    /**
+     * This methods measures power requirement for turning up a WL
+     * from the Spanloss at OTS transmit direction and update
+     * roadm-connection target-output-power.
+     *
+     * @param input
+     *            Input parameter from the olm servicePowerSetup rpc
+     *
+     * @return true/false based on status of operation.
+     */
+    Boolean setPower(ServicePowerSetupInput input, Subscriber errorSubscriber);
 
     /**
      * This methods turns down power a WL by performing
