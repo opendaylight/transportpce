@@ -47,7 +47,7 @@ public class PceResultTest extends AbstractTest {
     @Test
     void calcMessageTest() {
         pceResult.setCalcMessage("some-message");
-        pceResult.setRC("200");
+        pceResult.success();
         assertEquals(pceResult.getMessage(), "Path is calculated by PCE");
     }
 

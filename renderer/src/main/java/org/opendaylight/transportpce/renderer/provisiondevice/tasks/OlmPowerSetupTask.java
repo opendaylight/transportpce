@@ -38,7 +38,7 @@ public class OlmPowerSetupTask implements Callable<OLMRenderingResult> {
         RpcResult<ServicePowerSetupOutput> result = fr.get();
         if (result == null) {
             LOG.warn("Result is NULL");
-            return OLMRenderingResult.failed("Operation Failed");
+            return OLMRenderingResult.failed("OLM power setup operation failed");
         }
 
         LOG.debug("Result: {}", result.getResult());
@@ -47,7 +47,7 @@ public class OlmPowerSetupTask implements Callable<OLMRenderingResult> {
             return OLMRenderingResult.ok();
         } else {
             LOG.warn("OLM power setup not successfully finished");
-            return OLMRenderingResult.failed("Operation Failed");
+            return OLMRenderingResult.failed(result.getResult().getResult());
         }
     }
 
