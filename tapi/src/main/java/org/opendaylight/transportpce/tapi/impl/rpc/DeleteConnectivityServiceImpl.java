@@ -9,11 +9,9 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -31,6 +29,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Cont
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.DeleteConnectivityServiceOutput;
@@ -61,84 +60,88 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
 
     @Override
     public ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> invoke(DeleteConnectivityServiceInput input) {
-        List<String> serviceName = null;
-        if (input.getUuid() != null) {
-            try {
-                serviceName = getNameFromUuid(input.getUuid(), "Service");
-            } catch (ExecutionException e) {
-                LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
-                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-                        .withError(ErrorType.RPC, "Failed to delete Service").buildFuture();
-            } catch (NoSuchElementException e) {
-                LOG.error("Service {} to be deleted not found in the DataStore", e.getMessage());
-                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-                        .withError(ErrorType.RPC, "Failed to delete Service").buildFuture();
-            }
-            LOG.debug("The service {}, of name {} has been found in the DS", input.getUuid().toString(), serviceName);
-            try {
-                Uuid serviceUuid = input.getUuid();
-                this.tapiContext.deleteConnectivityService(serviceUuid);
-                ListenableFuture<RpcResult<ServiceDeleteOutput>> output = rpcService.getRpc(ServiceDelete.class)
-                        .invoke(new ServiceDeleteInputBuilder()
-                                .setServiceDeleteReqInfo(
-                                        new ServiceDeleteReqInfoBuilder().setServiceName(input.getUuid().getValue())
-                                                .setTailRetention(ServiceDeleteReqInfo.TailRetention.No).build())
-                                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request-1")
-                                        .setNotificationUrl("notification url").setRequestSystemId("appname")
-                                        .setRpcAction(RpcActions.ServiceDelete).build())
-                                .build());
-                RpcResult<ServiceDeleteOutput> rpcResult = output.get();
-                if (!rpcResult.getResult().getConfigurationResponseCommon().getResponseCode()
-                        .equals(ResponseCodes.RESPONSE_FAILED)) {
-                    LOG.info("Service is being deleted and devices are being rolled back");
-                    return RpcResultBuilder.success(new DeleteConnectivityServiceOutputBuilder().build()).buildFuture();
-                }
-                LOG.error("Failed to delete service. Deletion process failed");
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Failed to delete service.", e);
-                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-                        .withError(ErrorType.RPC, "Failed to delete Service").buildFuture();
-            }
+        if (input.getUuid() == null) {
+            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                .withError(ErrorType.RPC, "Failed to delete Service, service uuid in input is null")
+                .buildFuture();
         }
-        return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
-                .withError(ErrorType.RPC, "Failed to delete Service, service uuid in input is null").buildFuture();
+        Uuid serviceUuid = input.getUuid();
+        List<String> serviceName;
+        try {
+            serviceName = getNameFromUuid(serviceUuid, "Service");
+        } catch (ExecutionException | NoSuchElementException e) {
+            LOG.error("Service {} to be deleted not found in the DataStore", serviceUuid, e);
+            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service")
+                    .buildFuture();
+        }
+        LOG.debug("The service {}, of name {} has been found in the DS", serviceUuid, serviceName);
+        try {
+            this.tapiContext.deleteConnectivityService(serviceUuid);
+            RpcResult<ServiceDeleteOutput> rpcResult =
+                rpcService.getRpc(ServiceDelete.class)
+                    .invoke(new ServiceDeleteInputBuilder()
+                            .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
+                                    .setServiceName(input.getUuid().getValue())
+                                    .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
+                                    .build())
+                            .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                                    .setRequestId("request-1")
+                                    .setNotificationUrl("notification url")
+                                    .setRequestSystemId("appname")
+                                    .setRpcAction(RpcActions.ServiceDelete)
+                                    .build())
+                            .build())
+                    .get();
+            if (rpcResult.getResult().getConfigurationResponseCommon().getResponseCode()
+                    .equals(ResponseCodes.RESPONSE_FAILED)) {
+                LOG.error("Failed to delete service. Deletion process failed");
+                return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service, service uuid in input is null")
+                    .buildFuture();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to delete service.", e);
+            return RpcResultBuilder.<DeleteConnectivityServiceOutput>failed()
+                    .withError(ErrorType.RPC, "Failed to delete Service")
+                    .buildFuture();
+        }
+        LOG.info("Service is being deleted and devices are being rolled back");
+        return RpcResultBuilder.success(new DeleteConnectivityServiceOutputBuilder().build()).buildFuture();
     }
 
     public List<String> getNameFromUuid(Uuid uuid, String typeOfNode)
             throws ExecutionException, NoSuchElementException {
-        Map<NameKey, Name> nameMap = new HashMap<>();
-        if ("Service".equals(typeOfNode)) {
-            ConnectivityService conServ = null;
-            InstanceIdentifier<ConnectivityService> nodeIID = InstanceIdentifier.builder(Context.class)
-                    .augmentation(
-                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                    .child(ConnectivityContext.class).child(ConnectivityService.class, new ConnectivityServiceKey(uuid))
-                    .build();
-            ListenableFuture<Optional<ConnectivityService>> conServFuture = this.networkTransactionService
-                    .read(LogicalDatastoreType.OPERATIONAL, nodeIID);
-            try {
-                conServ = conServFuture.get().orElseThrow();
-            } catch (InterruptedException e) {
-                LOG.error("GetNamefromUuid Interrupt exception: Service not in Datastore, Interruption of the process");
-                Thread.currentThread().interrupt();
-                // TODO: investigate on how to throw Interrupted exception (generate a check
-                // violation error)
-            } catch (ExecutionException e) {
-                throw new ExecutionException("Unable to get from mdsal service: "
-                        + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
-            } catch (NoSuchElementException e) {
-                throw new NoSuchElementException("Unable to get from mdsal service: "
-                        + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
-                // return null;
-            }
-            nameMap = conServ.getName();
+        if (!typeOfNode.equals("Service")) {
+            return new ArrayList<>();
         }
-
+        InstanceIdentifier<ConnectivityService> nodeIID = InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(ConnectivityContext.class)
+                .child(ConnectivityService.class, new ConnectivityServiceKey(uuid))
+                .build();
         List<String> nameList = new ArrayList<>();
-        for (Map.Entry<NameKey, Name> entry : nameMap.entrySet()) {
-            nameList.add(entry.getValue().getValue());
+        try {
+            Map<NameKey, Name> nameMap = this.networkTransactionService
+                .read(LogicalDatastoreType.OPERATIONAL, nodeIID)
+                .get().orElseThrow().getName();
+            for (Map.Entry<NameKey, Name> entry : nameMap.entrySet()) {
+                nameList.add(entry.getValue().getValue());
+            }
+            //TODO another structure (stream ?) might be more indicated here
+        } catch (InterruptedException e) {
+            LOG.error("GetNamefromUuid Interrupt exception: Service not in Datastore, Interruption of the process");
+            Thread.currentThread().interrupt();
+            // TODO: investigate on how to throw Interrupted exception (generate a check
+            // violation error)
+        } catch (ExecutionException e) {
+            throw new ExecutionException("Unable to get from mdsal service: "
+                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Unable to get from mdsal service: "
+                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
         }
-        LOG.debug("The service name of service {}, is {}", uuid.toString(), nameList.toString());
+        LOG.debug("The service name of service {}, is {}", uuid, nameList);
         return nameList;
     }
 
