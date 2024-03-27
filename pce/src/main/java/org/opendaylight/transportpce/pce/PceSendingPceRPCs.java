@@ -120,6 +120,7 @@ public class PceSendingPceRPCs {
     private void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints,
             PceConstraintMode mode) {
 
+        rc = new PceResult();
         PceCalculation nwAnalizer = new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc,
                 portMapping, endpoints);
         nwAnalizer.retrievePceNetwork();
@@ -275,7 +276,13 @@ public class PceSendingPceRPCs {
         } else {
             LOG.info("In pceSendingPceRPC: the new path computed by GNPy is not valid");
             this.success = false;
-            this.message = "No path available";
+            if (rc.getLocalCause() != null) {
+                this.message = String.format("No path available (%s)", rc.getLocalCause());
+                LOG.error("No path available ({})", rc.getLocalCause());
+            } else {
+                this.message = "No path available (the new path computed by GNPy is not valid)";
+                LOG.error("No path available (the new path computed by GNPy is not valid)");
+            }
             this.responseCode = ResponseCodes.RESPONSE_FAILED;
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(null).setZToADirection(null));
         }

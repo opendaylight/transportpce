@@ -105,7 +105,7 @@ public class PceGraph {
             return false;
         }
         // validate found paths
-        pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+        pceResult.error();
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
@@ -169,6 +169,7 @@ public class PceGraph {
     private boolean runKgraphs(Graph<String, PceGraphEdge> weightedGraph) {
 
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
+            pceResult.error("Unable to create a valid weighted graph to calculate the shortest path.");
             return false;
         }
         PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
@@ -185,7 +186,7 @@ public class PceGraph {
         if (allWPaths.isEmpty()) {
             LOG.info(" In runKgraphs : algorithm didn't find any path");
             pceResult.setLocalCause(LocalCause.NO_PATH_EXISTS);
-            pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+            pceResult.error("No path found by algorithm.");
             return false;
         }
 

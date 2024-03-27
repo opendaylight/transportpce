@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant.CatalogNodeType;
@@ -85,7 +84,7 @@ public class PostAlgoPathValidator {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
-            pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+            pceResult.error("Empty path");
             return pceResult;
         }
         int spectralWidthSlotNumber =
@@ -107,7 +106,7 @@ public class PostAlgoPathValidator {
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
                         && spectrumAssignment.getStopIndex().equals(Uint16.valueOf(0))) {
-                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.error("No frequencies available.");
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
                 }
@@ -132,7 +131,7 @@ public class PostAlgoPathValidator {
                             StringConstants.SERVICE_DIRECTION_ZA, cu);
                     if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
                             || margin2 == Double.NEGATIVE_INFINITY) {
-                        pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                        pceResult.error(String.format("OSNR out of range (%s - %s)", margin1, margin2));
                         pceResult.setLocalCause(PceResult.LocalCause.OUT_OF_SPEC_OSNR);
                         return pceResult;
                     }
@@ -148,19 +147,19 @@ public class PostAlgoPathValidator {
                 // Check if MaxLatency is defined in the hard constraints
                 if (pceHardConstraints.getMaxLatency() != -1
                         && !checkLatency(pceHardConstraints.getMaxLatency(), path)) {
-                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.error("Latency is too high according to pce hard constraints.");
                     pceResult.setLocalCause(PceResult.LocalCause.TOO_HIGH_LATENCY);
                     return pceResult;
                 }
                 // Check if nodes are included in the hard constraints
                 if (!checkInclude(path, pceHardConstraints, mode)) {
-                    pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                    pceResult.error("Nodes in path are not included in pce hard constraints.");
                     pceResult.setLocalCause(PceResult.LocalCause.HD_NODE_INCLUDE);
                     return pceResult;
                 }
                 // TODO here other post algo validations can be added
                 // more data can be sent to PceGraph module via PceResult structure if required
-                pceResult.setRC(ResponseCodes.RESPONSE_OK);
+                pceResult.success();
                 pceResult.setLocalCause(PceResult.LocalCause.NONE);
                 return pceResult;
             case StringConstants.SERVICE_TYPE_100GE_M:
@@ -171,14 +170,14 @@ public class PostAlgoPathValidator {
                         StringConstants.SERVICE_TYPE_10GE, 8,
                         StringConstants.SERVICE_TYPE_1GE, 1)
                     .get(serviceType);
-                pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                pceResult.error();
                 pceResult.setServiceType(serviceType);
                 Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
                 Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot, tribSlotNb);
                 List<OpucnTribSlotDef> resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
                 if (resultTribPortTribSlot.get(0) != null && resultTribPortTribSlot.get(1) != null) {
                     pceResult.setResultTribPortTribSlot(resultTribPortTribSlot);
-                    pceResult.setRC(ResponseCodes.RESPONSE_OK);
+                    pceResult.success();
                     LOG.info("In PostAlgoPathValidator: found TribPort {} - tribSlot {} - tribSlotNb {}",
                         tribPort, tribSlot, tribSlotNb);
                 }
@@ -188,12 +187,12 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_100GE_S:
-                pceResult.setRC(ResponseCodes.RESPONSE_OK);
+                pceResult.success();
                 pceResult.setServiceType(serviceType);
                 LOG.info("In PostAlgoPathValidator: ODU4/ODUCn path found {}", path);
                 return pceResult;
             default:
-                pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+                pceResult.error(String.format("Unsupported service type %s", serviceType));
                 LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
                     serviceType, path);
                 return pceResult;

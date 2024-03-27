@@ -34,6 +34,8 @@ import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.Notification;
+import org.opendaylight.transportpce.renderer.provisiondevice.result.Message;
+import org.opendaylight.transportpce.renderer.provisiondevice.result.WeightedResultMessage;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
@@ -639,7 +641,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
                 RpcStatusEx.Failed,
-                DEVICE_RENDERING_ROLL_BACK_MSG);
+                resultMessage(renderingResults));
             return false;
         }
         olmPowerSetup(
@@ -653,7 +655,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
                 RpcStatusEx.Failed,
-                OLM_ROLL_BACK_MSG);
+                resultMessage(renderingResults));
             return false;
         }
         // run service activation test twice - once on source node and once on
@@ -960,5 +962,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             default:
                 return null;
         }
+    }
+
+    private String resultMessage(List<DeviceRenderingResult> renderingResults) {
+        Message weightedResultMessage = new WeightedResultMessage(
+                "Setup service path failed due to an unknown error"
+        );
+
+        return weightedResultMessage.resultMessage(renderingResults);
     }
 }
