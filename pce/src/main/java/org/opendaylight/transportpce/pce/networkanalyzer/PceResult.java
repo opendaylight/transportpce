@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 import java.math.BigDecimal;
 import java.util.List;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
@@ -18,6 +19,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class PceResult {
     private static final Logger LOG = LoggerFactory.getLogger(PceResult.class);
@@ -43,21 +45,50 @@ public class PceResult {
     private AToZDirection atozdirection = null;
     private ZToADirection ztoadirection = null;
 
-    public void setRC(String rc) {
-        switch (rc) {
-            case ResponseCodes.RESPONSE_OK :
-                calcMessage = "Path is calculated by PCE";
-                calcStatus = true;
-                responseCode = ResponseCodes.RESPONSE_OK;
-                break;
-            case ResponseCodes.RESPONSE_FAILED :
-                responseCode = ResponseCodes.RESPONSE_FAILED;
-                calcStatus = false;
-                calcMessage = "No path available by PCE";
-                break;
-            default:
-                LOG.error("setRC: RespondeCodes unknown");
+    /**
+     * Set the state of this object to "Success".
+     */
+    public void success() {
+        calcMessage = "Path is calculated by PCE";
+        calcStatus = true;
+        responseCode = ResponseCodes.RESPONSE_OK;
+        localCause = LocalCause.NONE;
+    }
+
+    /**
+     * Set the state of this object to error.
+     */
+    public void error() {
+        error("");
+    }
+
+    /**
+     * Set the state of this object to "error".
+     *
+     * <p>The message is intended to be consumed by a client giving
+     * the client an idea what went wrong. In an ideal world the
+     * client should be able to act on the message by adjusting
+     * something "on the outside" (e.g. API input, device settings etc.)
+     * Technical details out of the clients control ( e.g. source code information etc.)
+     * is of no use to the client.
+     *
+     * <p>If an empty error message is given a default message is used:
+     *      'No path available by PCE'.
+     *
+     * @param errMessage Error message describing the error.
+     */
+    public void error(String errMessage) {
+        responseCode = ResponseCodes.RESPONSE_FAILED;
+        calcStatus = false;
+        calcMessage = errMessage;
+
+        if (errMessage == null || errMessage.isEmpty()) {
+            calcMessage = "No path available byPCE";
         }
+    }
+
+    public void error(Subscriber errorMessageSubscriber) {
+        error(errorMessageSubscriber.last(Level.ERROR));
     }
 
     public String toString() {
