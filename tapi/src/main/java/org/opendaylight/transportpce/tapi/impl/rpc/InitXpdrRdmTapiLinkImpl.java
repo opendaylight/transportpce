@@ -50,16 +50,15 @@ public class InitXpdrRdmTapiLinkImpl implements InitXpdrRdmTapiLink {
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
             tapiNetworkUtilsImpl.getTapiTopoUuid());
-        InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create link in topology")
                 .buildFuture();
         }
+        InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
         if (tapiNetworkUtilsImpl.putLinkInTopology(link)) {
-            output = new InitXpdrRdmTapiLinkOutputBuilder()
-                .setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
+            output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
     }

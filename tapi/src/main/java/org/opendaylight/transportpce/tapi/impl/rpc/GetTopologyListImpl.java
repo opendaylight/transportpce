@@ -15,6 +15,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Ge
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -35,9 +37,7 @@ public class GetTopologyListImpl implements GetTopologyList {
     public ListenableFuture<RpcResult<GetTopologyListOutput>> invoke(GetTopologyListInput input) {
         // TODO Auto-generated method stub
         // TODO -> maybe we get errors when having CEPs?
-        Map<TopologyKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
-                topologyMap = this.tapiContext.getTopologyContext();
+        Map<TopologyKey, Topology> topologyMap = this.tapiContext.getTopologyContext();
         if (topologyMap.isEmpty()) {
             LOG.error("No topologies exist in tapi context");
             return RpcResultBuilder.<GetTopologyListOutput>failed()
@@ -47,11 +47,9 @@ public class GetTopologyListImpl implements GetTopologyList {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology>
                 newTopoMap = new HashMap<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-                topo:topologyMap.values()) {
+        for (Topology topo : topologyMap.values()) {
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology
-                newTopo = new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder(topo).build();
+                    newTopo = new TopologyBuilder(topo).build();
             newTopoMap.put(newTopo.key(), newTopo);
         }
         return RpcResultBuilder
