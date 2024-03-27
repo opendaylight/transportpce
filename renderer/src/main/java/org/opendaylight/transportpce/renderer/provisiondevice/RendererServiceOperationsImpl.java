@@ -34,6 +34,8 @@ import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.Notification;
+import org.opendaylight.transportpce.renderer.provisiondevice.result.Message;
+import org.opendaylight.transportpce.renderer.provisiondevice.result.WeightedResultMessage;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingTask;
@@ -473,7 +475,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @SuppressFBWarnings(
             value = "UPM_UNCALLED_PRIVATE_METHOD",
             justification = "call in call() method")
-    private void olmPowerSetup(
+    private List<OLMRenderingResult> olmPowerSetup(
             RollbackProcessor rollbackProcessor,
             ServicePowerSetupInput powerSetupInputAtoZ,
             ServicePowerSetupInput powerSetupInputZtoA, boolean isTempService) {
@@ -484,7 +486,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         // if the service create is a temp-service, OLM will be skipped
         if (isTempService) {
             LOG.info("For temp-service create OLM is not computed and skipped");
-            return;
+            return new ArrayList<>();
         }
         LOG.info("Olm power setup A-Z");
         sendNotifications(
@@ -508,7 +510,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         ListenableFuture<List<OLMRenderingResult>> olmFutures =
                 Futures.allAsList(olmPowerSetupFutureAtoZ, olmPowerSetupFutureZtoA);
 
-        List<OLMRenderingResult> olmResults;
+        List<OLMRenderingResult> olmResults = new ArrayList<>();
         try {
             LOG.info("Waiting for A-Z and Z-A OLM power setup ...");
             olmResults = olmFutures.get(Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -518,14 +520,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     ServicePathNotificationTypes.ServiceImplementationRequest,
                     powerSetupInputAtoZ.getServiceName(),
                     RpcStatusEx.Pending,
-                    OLM_ROLL_BACK_MSG);
+                    olmResultMessage(olmResults));
             rollbackProcessor.addTask(
                     new OlmPowerSetupRollbackTask("AtoZOLMTask", true, rpcService.getRpc(ServicePowerTurndown.class),
                         powerSetupInputAtoZ));
             rollbackProcessor.addTask(
                     new OlmPowerSetupRollbackTask("ZtoAOLMTask", true, rpcService.getRpc(ServicePowerTurndown.class),
                         powerSetupInputZtoA));
-            return;
+            return olmResults;
         }
         rollbackProcessor.addTask(new OlmPowerSetupRollbackTask(
                 "AtoZOLMTask", !olmResults.get(0).isSuccess(), rpcService.getRpc(ServicePowerTurndown.class),
@@ -533,6 +535,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         rollbackProcessor.addTask(new OlmPowerSetupRollbackTask(
                 "ZtoAOLMTask", !olmResults.get(1).isSuccess(), rpcService.getRpc(ServicePowerTurndown.class),
                 powerSetupInputZtoA));
+
+        return olmResults;
     }
 
     @SuppressFBWarnings(
@@ -640,7 +644,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
                 RpcStatusEx.Failed,
-                DEVICE_RENDERING_ROLL_BACK_MSG);
+                resultMessage(renderingResults));
             return false;
         }
         olmPowerSetup(
@@ -654,7 +658,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
                 RpcStatusEx.Failed,
-                OLM_ROLL_BACK_MSG);
+                resultMessage(renderingResults));
             return false;
         }
         // run service activation test twice - once on source node and once on
@@ -961,5 +965,25 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             default:
                 return null;
         }
+    }
+
+    private String olmResultMessage(List<OLMRenderingResult> renderingResults) {
+        Message weightedResultMessage = new WeightedResultMessage();
+
+        return weightedResultMessage.olmRenderingResultMessage(
+            renderingResults,
+            "OLM power setup failed",
+            ""
+        );
+    }
+
+    private String resultMessage(List<DeviceRenderingResult> renderingResults) {
+        Message weightedResultMessage = new WeightedResultMessage();
+
+        return weightedResultMessage.deviceRenderingResultMessage(
+            renderingResults,
+            "Setup service path failed due to an unknown error",
+            ""
+        );
     }
 }

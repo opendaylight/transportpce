@@ -9,6 +9,8 @@
 package org.opendaylight.transportpce.pce;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -39,6 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 /*
  * Class for Sending
@@ -120,6 +123,7 @@ public class PceSendingPceRPCs {
     private void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints,
             PceConstraintMode mode) {
 
+        rc = new PceResult();
         PceCalculation nwAnalizer = new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc,
                 portMapping, endpoints);
         nwAnalizer.retrievePceNetwork();
@@ -153,7 +157,8 @@ public class PceSendingPceRPCs {
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
                 rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
                 clientInput);
-        graph.calcPath();
+        Subscriber errorSubscriber = new EventSubscriber();
+        graph.calcPath(errorSubscriber);
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {
             LOG.warn("In pathComputationWithConstraints : Graph return without Path ");
@@ -162,16 +167,17 @@ public class PceSendingPceRPCs {
                 && (hardConstraints.getPceMetrics() == PceMetric.HopCount)
                 && (hardConstraints.getMaxLatency() != -1)) {
                 hardConstraints.setPceMetrics(PceMetric.PropagationDelay);
-                graph = patchRerunGraph(graph);
+                graph = patchRerunGraph(graph, errorSubscriber);
             }
 
             if (rc.getLocalCause() == PceResult.LocalCause.HD_NODE_INCLUDE) {
                 graph.setKpathsToBring(graph.getKpathsToBring() * 10);
-                graph = patchRerunGraph(graph);
+                graph = patchRerunGraph(graph, errorSubscriber);
             }
 
             if (!rc.getStatus()) {
                 LOG.error("In pathComputationWithConstraints, graph.calcPath: result = {}", rc);
+                rc.error(errorSubscriber.first(Level.ERROR, "No path found by PCE.", 3));
                 return;
             }
         }
@@ -181,6 +187,7 @@ public class PceSendingPceRPCs {
         rc = description.getReturnStructure();
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, description: result = {}", rc);
+            rc.error(errorSubscriber.first(Level.ERROR, "No path found by PCE.", 3));
         }
     }
 
@@ -275,16 +282,22 @@ public class PceSendingPceRPCs {
         } else {
             LOG.info("In pceSendingPceRPC: the new path computed by GNPy is not valid");
             this.success = false;
-            this.message = "No path available";
+            if (rc.getLocalCause() != null) {
+                this.message = String.format("No path available (%s)", rc.getLocalCause());
+                LOG.error("No path available ({})", rc.getLocalCause());
+            } else {
+                this.message = "No path available (the new path computed by GNPy is not valid)";
+                LOG.error("No path available (the new path computed by GNPy is not valid)");
+            }
             this.responseCode = ResponseCodes.RESPONSE_FAILED;
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(null).setZToADirection(null));
         }
     }
 
-    private PceGraph patchRerunGraph(PceGraph graph) {
+    private PceGraph patchRerunGraph(PceGraph graph, Subscriber errorSubscriber) {
         LOG.info("In pathComputation patchRerunGraph : rerun Graph with metric = PROPAGATION-DELAY ");
         graph.setConstrains(pceHardConstraints);
-        graph.calcPath();
+        graph.calcPath(errorSubscriber);
         return graph;
     }
 

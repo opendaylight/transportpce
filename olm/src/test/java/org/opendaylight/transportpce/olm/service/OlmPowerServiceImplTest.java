@@ -88,7 +88,7 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     void testServicePowerSetupSuccess() {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
-        when(this.powerMgmt.setPower(any())).thenReturn(true);
+        when(this.powerMgmt.setPower(any(), any())).thenReturn(true);
         ServicePowerSetupOutput result = this.olmPowerService.servicePowerSetup(input);
         assertEquals(new ServicePowerSetupOutputBuilder().setResult("Success").build(), result);
         assertEquals("Success", result.getResult());
@@ -97,9 +97,9 @@ class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     void testServicePowerSetupFailed() {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
-        when(this.powerMgmt.setPower(any())).thenReturn(false);
+        when(this.powerMgmt.setPower(any(), any())).thenReturn(false);
         ServicePowerSetupOutput output = this.olmPowerService.servicePowerSetup(input);
-        assertEquals("Failed", output.getResult());
+        assertEquals("OLM power setup failed (OLM power setup failed due to an unknown error.)", output.getResult());
     }
 
     @Test

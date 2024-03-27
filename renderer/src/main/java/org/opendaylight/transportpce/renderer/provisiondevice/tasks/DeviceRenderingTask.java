@@ -58,7 +58,7 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} service path failed.", operation);
-            return DeviceRenderingResult.failed("Operation Failed");
+            return DeviceRenderingResult.failed(output.getResult());
         }
         LOG.info("Device rendering {} service path finished successfully.", operation);
         return DeviceRenderingResult.ok(olmList, new ArrayList<>(output.nonnullNodeInterface().values()),

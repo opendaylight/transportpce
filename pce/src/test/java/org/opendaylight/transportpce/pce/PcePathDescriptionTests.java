@@ -74,7 +74,7 @@ public class PcePathDescriptionTests extends AbstractTest {
         pceLink.setClientA("XPONDER-CLIENT");
 
         pceResult = new PceResult();
-        pceResult.setRC("200");
+        pceResult.success();
         pceResult.setRate(Long.valueOf(1));
         pceResult.setServiceType(StringConstants.SERVICE_TYPE_100GE_T);
         pceResult.setMaxFreq(new BigDecimal("195.900"));

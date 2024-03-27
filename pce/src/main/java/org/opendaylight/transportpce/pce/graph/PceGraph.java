@@ -25,6 +25,8 @@ import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.device.observer.Ignore;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.input.ClientInput;
@@ -92,6 +94,10 @@ public class PceGraph {
     }
 
     public boolean calcPath() {
+        return calcPath(new Ignore());
+    }
+
+    public boolean calcPath(Subscriber errorSubscriber) {
 
         LOG.info(" In PCE GRAPH calcPath : K SHORT PATHS algorithm ");
 
@@ -105,7 +111,7 @@ public class PceGraph {
             return false;
         }
         // validate found paths
-        pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+        pceResult.error();
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
@@ -119,6 +125,7 @@ public class PceGraph {
             if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
                 LOG.info("Path is validated");
             } else {
+                errorSubscriber.error(pceResult.getMessage());
                 LOG.warn("In calcPath: post algo validations DROPPED the path {}; for following cause: {}",
                     path, pceResult.getLocalCause());
                 continue;
@@ -169,6 +176,7 @@ public class PceGraph {
     private boolean runKgraphs(Graph<String, PceGraphEdge> weightedGraph) {
 
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
+            pceResult.error("Unable to create a valid weighted graph to calculate the shortest path.");
             return false;
         }
         PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
@@ -185,7 +193,7 @@ public class PceGraph {
         if (allWPaths.isEmpty()) {
             LOG.info(" In runKgraphs : algorithm didn't find any path");
             pceResult.setLocalCause(LocalCause.NO_PATH_EXISTS);
-            pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+            pceResult.error("No path found by algorithm.");
             return false;
         }
 

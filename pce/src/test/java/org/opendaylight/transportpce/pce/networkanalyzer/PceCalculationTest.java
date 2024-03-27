@@ -51,7 +51,7 @@ public class PceCalculationTest extends AbstractTest {
 
     @BeforeEach
     void setUp() throws ExecutionException, InterruptedException {
-        pceResult.setRC("200");
+        pceResult.success();
         PceTestUtils.writeNetworkIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData.getPCERequest(),
