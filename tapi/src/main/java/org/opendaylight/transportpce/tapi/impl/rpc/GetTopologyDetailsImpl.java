@@ -53,7 +53,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -81,6 +80,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
@@ -111,34 +112,39 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> invoke(GetTopologyDetailsInput input) {
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology;
-        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
-            Charset.forName("UTF-8"))).toString());
-        if (input.getTopologyId().equals(topologyUuidFull)) {
-            Context context = this.tapiContext.getTapiContext();
-            Map<TopologyKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
-                topologyMap = context.augmentation(Context1.class).getTopologyContext().getTopology();
+        var topoId = input.getTopologyId();
+        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+            .toString());
+        if (topologyUuidFull.equals(topoId)) {
+            Map<TopologyKey, Topology> topologyMap =
+                this.tapiContext.getTapiContext().augmentation(Context1.class).getTopologyContext().getTopology();
             if (topologyMap == null || !topologyMap.containsKey(new TopologyKey(topologyUuidFull))) {
-                LOG.error("Topology {} not found in datastore", input.getTopologyId());
+                LOG.error("Topology {} not found in datastore", topoId);
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Invalid Topology name")
                     .buildFuture();
             }
-            topology = topologyMap.get(new TopologyKey(input.getTopologyId()));
-            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                .setTopology(this.topologyUtils.transformTopology(topology))
-                .build())
+            return RpcResultBuilder
+                .success(
+                    new GetTopologyDetailsOutputBuilder()
+                        .setTopology(
+                            this.topologyUtils.transformTopology(
+                                topologyMap.get(new TopologyKey(topoId))))
+                        .build())
                 .buildFuture();
         }
-        Uuid topologyUuidTapiAbs = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(
-            Charset.forName("UTF-8"))).toString());
-        if (input.getTopologyId().equals(topologyUuidTapiAbs)) {
+        if (new Uuid(UUID.nameUUIDFromBytes(
+                        TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+                    .toString())
+                .equals(topoId)) {
             try {
-                LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
-                topology = createAbsTopologyFromTapiTopo();
-                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                LOG.info("Building TAPI Topology abstraction for {}", topoId);
+                return RpcResultBuilder
+                    .success(
+                        new GetTopologyDetailsOutputBuilder()
+                            .setTopology(this.topologyUtils.transformTopology(createAbsTopologyFromTapiTopo()))
+                            .build())
                     .buildFuture();
             } catch (TapiTopologyException e) {
                 LOG.error("error building TAPI topology");
@@ -147,63 +153,73 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                     .buildFuture();
             }
         }
-        Uuid topologyUuid100G = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
-            Charset.forName("UTF-8"))).toString());
-        Uuid topologyUuidAbs = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
-            Charset.forName("UTF-8"))).toString());
-        if (topologyUuid100G.equals(input.getTopologyId()) || topologyUuidAbs.equals(input.getTopologyId())) {
-            try {
-                LOG.info("Building TAPI Topology abstraction for {}", input.getTopologyId());
-                topology = createAbstractedOtnTopology();
-                if (input.getTopologyId().equals(topologyUuidAbs)) {
-                    return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                        .setTopology(this.topologyUtils.transformTopology(topology)).build())
-                        .buildFuture();
-                }
-                topology = createAbstracted100GTpdrTopology(topology);
-                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
-                    .buildFuture();
-            } catch (TapiTopologyException e) {
-                LOG.error("error building TAPI topology");
-                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                    .withError(ErrorType.RPC, "Error building topology")
+        try {
+            if (new Uuid(UUID.nameUUIDFromBytes(
+                            TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+                        .toString())
+                    .equals(topoId)) {
+                LOG.info("Building TAPI Topology abstraction for {}", topoId);
+                return RpcResultBuilder
+                    .success(
+                        new GetTopologyDetailsOutputBuilder()
+                            .setTopology(this.topologyUtils.transformTopology(createAbstractedOtnTopology()))
+                            .build())
                     .buildFuture();
             }
+            if (new Uuid(UUID.nameUUIDFromBytes(
+                            TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8")))
+                        .toString())
+                    .equals(topoId)) {
+                LOG.info("Building TAPI Topology abstraction for {}", topoId);
+                return RpcResultBuilder
+                    .success(
+                        new GetTopologyDetailsOutputBuilder()
+                            .setTopology(
+                                this.topologyUtils.transformTopology(
+                                    createAbstracted100GTpdrTopology(createAbstractedOtnTopology())))
+                            .build())
+                    .buildFuture();
+            }
+            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Invalid Topology name")
+                .buildFuture();
+        } catch (TapiTopologyException e) {
+            LOG.error("error building TAPI topology");
+            return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
+                .withError(ErrorType.RPC, "Error building topology")
+                .buildFuture();
         }
-        return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-            .withError(ErrorType.RPC, "Invalid Topology name")
-            .buildFuture();
     }
 
-    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-            createAbstracted100GTpdrTopology(org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology) {
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> dsrNodes = topology
-                .nonnullNode().values().stream()
-                .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
-                .collect(Collectors.toList());
+    public Topology createAbstracted100GTpdrTopology(Topology topology) {
         List<OwnedNodeEdgePoint> nep100GTpdrList = new ArrayList<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node2 : dsrNodes) {
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node2 :
+                topology.nonnullNode().values().stream()
+                    .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+                    .collect(Collectors.toList())) {
             List<OwnedNodeEdgePoint> nepList = node2.getOwnedNodeEdgePoint().values().stream()
                     .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr")))
                     .collect(Collectors.toList());
             nep100GTpdrList.addAll(nepList);
         }
-        Name topoName = new NameBuilder().setValue(TapiStringConstants.TPDR_100G).setValueName("TAPI Topology Name")
+        Name topoName = new NameBuilder()
+                .setValue(TapiStringConstants.TPDR_100G)
+                .setValueName("TAPI Topology Name")
                 .build();
-        Uuid topoUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8")))
+            .toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
-                createTapiNode(nep100GTpdrList, topoUuid);
-        return new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder()
-                .setName(Map.of(topoName.key(), topoName)).setUuid(topoUuid).setNode(Map.of(node.key(), node))
-                .setLayerProtocolName(Set.of(LayerProtocolName.DSR, LayerProtocolName.ETH)).build();
+            createTapiNode(nep100GTpdrList, topoUuid);
+        return new TopologyBuilder()
+            .setName(Map.of(topoName.key(), topoName))
+            .setUuid(topoUuid)
+            .setNode(Map.of(node.key(), node))
+            .setLayerProtocolName(Set.of(LayerProtocolName.DSR, LayerProtocolName.ETH))
+            .build();
     }
 
-    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-            createAbstractedOtnTopology() throws TapiTopologyException {
+    public Topology createAbstractedOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
         List<Link> linkList = new ArrayList<>();
@@ -278,19 +294,19 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .build();
         LOG.info("TOPOABSTRACTED : the list of node is as follows {}", tapiNodeList.toString());
         this.tapiSips.putAll(tapiAbstractFactory.getTapiSips());
-        return new org.opendaylight.yang.gen.v1.urn
-                .onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder()
-            .setName(Map.of(name.key(), name)).setUuid(topoUuid).setNode(tapiNodeList)
+        return new TopologyBuilder()
+            .setName(Map.of(name.key(), name))
+            .setUuid(topoUuid)
+             .setNode(tapiNodeList)
             .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.DIGITALOTN))
             .setLink(tapiLinkList)
             .build();
     }
 
-    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-            createAbsTopologyFromTapiTopo() throws TapiTopologyException {
+    public Topology createAbsTopologyFromTapiTopo() throws TapiTopologyException {
         Uuid refTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology tapiFullTopo =
+        Topology tapiFullTopo =
             this.tapiContext
                 .getTopologyContext().entrySet().stream().filter(topo -> topo.getKey().getUuid().equals(refTopoUuid))
                 .findAny().orElseThrow().getValue();
@@ -312,8 +328,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_TAPI_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
         LOG.info("ABSTRACTED TAPI TOPOLOGY : the list of node is as follows {}", tapiNodeList);
-        return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context
-                .TopologyBuilder()
+        return new TopologyBuilder()
             .setName(Map.of(name.key(), name))
             .setUuid(topoUuid)
             .setNode(tapiNodeList)
