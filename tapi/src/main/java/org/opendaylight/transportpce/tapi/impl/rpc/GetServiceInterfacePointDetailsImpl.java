@@ -14,7 +14,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetS
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.GetServiceInterfacePointDetailsOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.details.output.SipBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
@@ -35,7 +35,6 @@ public class GetServiceInterfacePointDetailsImpl implements GetServiceInterfaceP
     @Override
     public ListenableFuture<RpcResult<GetServiceInterfacePointDetailsOutput>> invoke(
             GetServiceInterfacePointDetailsInput input) {
-        Uuid sipUuid = input.getUuid();
         Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips =
             this.tapiContext.getTapiContext().getServiceInterfacePoint();
         if (sips == null || sips.isEmpty()) {
@@ -43,17 +42,16 @@ public class GetServiceInterfacePointDetailsImpl implements GetServiceInterfaceP
                 .withError(ErrorType.RPC, "No sips in datastore")
                 .buildFuture();
         }
-        if (!sips.containsKey(new ServiceInterfacePointKey(sipUuid))) {
+        var sipKey = new ServiceInterfacePointKey(input.getUuid());
+        if (!sips.containsKey(sipKey)) {
             return RpcResultBuilder.<GetServiceInterfacePointDetailsOutput>failed()
                 .withError(ErrorType.RPC, "Sip doesnt exist in datastore")
                 .buildFuture();
         }
-        var outSip = new org.opendaylight.yang.gen.v1.urn
-                    .onf.otcc.yang.tapi.common.rev221121.get.service._interface.point.details.output.SipBuilder(
-                        sips.get(new ServiceInterfacePointKey(sipUuid)))
-                    .build();
         return RpcResultBuilder
-                .success(new GetServiceInterfacePointDetailsOutputBuilder().setSip(outSip).build())
+                .success(new GetServiceInterfacePointDetailsOutputBuilder()
+                    .setSip(new SipBuilder(sips.get(sipKey)).build())
+                    .build())
                 .buildFuture();
     }
 
