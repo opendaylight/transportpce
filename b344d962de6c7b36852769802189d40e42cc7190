@@ -16,6 +16,24 @@
       "message": "toString is superfluous",
       "revId": "b344d962de6c7b36852769802189d40e42cc7190",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6b9281_e9a0949d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-27T14:29:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "498c25b9_87e6bd04",
+      "revId": "b344d962de6c7b36852769802189d40e42cc7190",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
