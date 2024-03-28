@@ -19,6 +19,8 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.openroadminterfaces.message.ErrorMessage;
+import org.opendaylight.transportpce.common.openroadminterfaces.message.Message;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
@@ -42,29 +44,33 @@ public class OpenRoadmInterfacesImpl121 {
 
     private final DeviceTransactionManager deviceTransactionManager;
 
+    private final Message error = new ErrorMessage("1.2.1");
+
     public OpenRoadmInterfacesImpl121(DeviceTransactionManager deviceTransactionManager) {
         this.deviceTransactionManager = deviceTransactionManager;
     }
 
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+        String ifName = ifBuilder.getName();
         DeviceTransaction deviceTx;
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             if (deviceTxOpt.isPresent()) {
                 deviceTx = deviceTxOpt.orElseThrow();
             } else {
-                throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                    nodeId));
+                throw new OpenRoadmInterfaceException(error.failedCreatingInterfaceNoComNoTxTrans(nodeId, ifName));
             }
-        } catch (InterruptedException | ExecutionException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                nodeId), e);
+        } catch (InterruptedException e) {
+            throw new OpenRoadmInterfaceException(
+                    error.failedCreatingInterfaceComInterruptedNoTrans(nodeId, ifName), e);
+        } catch (ExecutionException e) {
+            throw new OpenRoadmInterfaceException(error.failedCreatingInterfaceNoComNoTrans(nodeId, ifName), e);
         }
 
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Interface.class, new InterfaceKey(ifBuilder.getName()))
+            .child(Interface.class, new InterfaceKey(ifName))
             .build();
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
@@ -85,7 +91,7 @@ public class OpenRoadmInterfacesImpl121 {
         };
         try {
             txSubmitFuture.get();
-            LOG.info("Successfully posted/deleted interface {} on node {}", ifBuilder.getName(), nodeId);
+            LOG.info("Successfully posted/deleted interface {} on node {}", ifName, nodeId);
             // this check is not needed during the delete operation
             // during the delete operation, ifBuilder does not contain supporting-cp and supporting-port
             if (ifBuilder.getSupportingCircuitPackName() != null && ifBuilder.getSupportingPort() != null) {
@@ -94,12 +100,13 @@ public class OpenRoadmInterfacesImpl121 {
                     devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
                 }
                 LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
-                    ifBuilder.getName(), ifBuilder.getSupportingPort());
+                    ifName, ifBuilder.getSupportingPort());
             }
             timer.interrupt();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
-                .getName(), nodeId), e);
+        } catch (InterruptedException e) {
+            throw new OpenRoadmInterfaceException(error.failedCreatingInterfaceComInterrupted(nodeId, ifName), e);
+        } catch (ExecutionException e) {
+            throw new OpenRoadmInterfaceException(error.failedCreatingInterfaceNoCom(nodeId, ifName), e);
         }
     }
 

@@ -30,6 +30,10 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.device.observer.Ignore;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
+import org.opendaylight.transportpce.common.openroadminterfaces.message.ErrorMessage;
+import org.opendaylight.transportpce.common.openroadminterfaces.message.Message;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
@@ -181,24 +185,55 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
     @Override
     public <T extends DataObject> Optional<T> getDataFromDevice(String deviceId,
             LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<T> path, long timeout, TimeUnit timeUnit) {
+
+        return getDataFromDevice(
+                deviceId,
+                logicalDatastoreType,
+                path,
+                timeout,
+                timeUnit,
+                new Ignore(),
+                new ErrorMessage("x.x.x")
+        );
+    }
+
+    @Override
+    public <T extends DataObject> Optional<T> getDataFromDevice(
+            String deviceId,
+            LogicalDatastoreType logicalDatastoreType,
+            InstanceIdentifier<T> path,
+            long timeout,
+            TimeUnit timeUnit,
+            Subscriber subscriber,
+            Message errorMessage
+    ) {
         Optional<DeviceTransaction> deviceTxOpt;
         try {
             deviceTxOpt = getDeviceTransaction(deviceId, timeout, timeUnit).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Exception thrown while getting transaction for device {}!", deviceId, e);
+            subscriber.error(errorMessage.failedReadingFromDeviceNoComNoTxTrans(deviceId));
             return Optional.empty();
         }
         if (deviceTxOpt.isPresent()) {
             DeviceTransaction deviceTx = deviceTxOpt.orElseThrow();
             try {
                 return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            } catch (InterruptedException e) {
+                LOG.error("Attempt to read from device {}! IID: {} was interrupted", deviceId, path, e);
+                subscriber.error(errorMessage.failedReadingFromDeviceNoComInterrupted(deviceId));
+            } catch (ExecutionException e) {
                 LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
+                subscriber.error(errorMessage.failedReadingFromDeviceNoCom(deviceId));
+            } catch (TimeoutException e) {
+                LOG.error("Timeout reading data from device {}! IID: {}", deviceId, path, e);
+                subscriber.error(errorMessage.failedReadingFromDeviceTimeout(deviceId));
             } finally {
                 deviceTx.commit(maxDurationToGetData, TimeUnit.MILLISECONDS);
             }
         } else {
             LOG.error("Could not obtain transaction for device {}!", deviceId);
+            subscriber.error(String.format("Communication failed on %s", deviceId));
         }
         return Optional.empty();
     }

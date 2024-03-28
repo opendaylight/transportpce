@@ -13,6 +13,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
+import org.opendaylight.transportpce.common.openroadminterfaces.message.Message;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -153,6 +155,22 @@ public interface DeviceTransactionManager {
      */
     <T extends DataObject> Optional<T> getDataFromDevice(String deviceId, LogicalDatastoreType logicalDatastoreType,
             InstanceIdentifier<T> path, long timeout, TimeUnit timeUnit);
+
+    /**
+     * Returns data from device from specified path. Creates new device transaction, gets data via it and closes
+     * transaction.
+     * Adds a subscriber to
+     * {@link #getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
+     */
+    <T extends DataObject> Optional<T> getDataFromDevice(
+            String deviceId,
+            LogicalDatastoreType logicalDatastoreType,
+            InstanceIdentifier<T> path,
+            long timeout,
+            TimeUnit timeUnit,
+            Subscriber subscriber,
+            Message errorMessage
+    );
 
     /**
      * Checks if device with specified ID is mounted.
