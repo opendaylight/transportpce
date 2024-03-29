@@ -119,13 +119,18 @@ public class TapiTopologyImplTest extends AbstractTest {
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.PORTMAPPING_FILE);
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
+        Uuid topologyUuidFull = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
+            .getBytes(Charset.forName("UTF-8"))).toString());
+        //tapiLink = new TapiLinkImpl(networkTransactionService, topologyUuidFull);
         tapiLink = new TapiLinkImpl(networkTransactionService);
         serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getDataStoreContextUtil().getDataBroker());
         tapiContext = new TapiContext(networkTransactionService);
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService);
+            networkTransactionService,
+            new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
+                .toString()));
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();

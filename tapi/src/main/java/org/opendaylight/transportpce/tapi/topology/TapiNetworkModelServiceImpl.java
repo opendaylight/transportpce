@@ -31,6 +31,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
@@ -158,14 +159,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelServiceImpl.class);
 
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(StandardCharsets.UTF_8)).toString());
+    private final Uuid tapiTopoUuid = TapiProvider.TAPI_TOPO_UUID;
+    private static final String TOPOLOGICAL_MODE = TapiProvider.TOPOLOGICAL_MODE;
     private final NetworkTransactionService networkTransactionService;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
     private final ConvertORToTapiTopology tapiFactory;
-    private String topologicalMode;
-    private final ConvertORTopoToTapiFullTopo tapiFullFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
 
@@ -179,8 +178,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
         this.tapiLink = tapiLink;
-        this.tapiFullFactory = new ConvertORTopoToTapiFullTopo(tapiTopoUuid, tapiLink);
-        this.topologicalMode = tapiFullFactory.getTopologicalMode();
+
     }
 
     @Override
@@ -220,7 +218,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // Transform LCPs into ONEP
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap =
                 new HashMap<>(transformSrgToOnep(orNodeId, mapSrg));
-            LOG.debug("CreateTapiNode NetworkModelServiceImpl, TopologicalMode = {}", topologicalMode);
+            LOG.debug("CreateTapiNode NetworkModelServiceImpl, TopologicalMode = {}", TOPOLOGICAL_MODE);
             LOG.debug("TAPINETWORKMODELSERVICEIMPL call transformSRGtoONEP (OrNodeId {} ", orNodeId);
             LOG.debug("TAPINETWORKMODELSERVICEIMPL SRG OTSNode of retrieved OnepMap {} ",
                 onepMap.entrySet().stream().filter(e -> e.getValue()
@@ -230,7 +228,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
                         .build()))
                 .collect(Collectors.toList()));
-            if (topologicalMode.equals("Full")) {
+            if (TOPOLOGICAL_MODE.equals("Full")) {
                 onepMap.putAll(transformDegToOnep(orNodeId, mapDeg));
                 LOG.debug("TAPINETWORKMODELSERVICEIMPL DEG+SRG OTSNode of retrieved OnepMap {} ",
                     onepMap.entrySet().stream().filter(e -> e.getValue()
@@ -635,7 +633,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return;
         }
         if (nodeId.contains("ROADM")) {
-            if (topologicalMode.equals("Full")) {
+            if (TOPOLOGICAL_MODE.equals("Full")) {
              // Node is in photonic media layer and UUID can be built from nodeId + PHTN_MEDIA
                 Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
                     TapiStringConstants.PHTNC_MEDIA)).getBytes(StandardCharsets.UTF_8)).toString());
@@ -1024,9 +1022,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
             .build();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId, onepMap.values());
+            = tapiFactory.createAllNodeRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, onepMap.values());
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId,
+            = tapiFactory.createInterRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId,
                 nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         return new NodeBuilder()
             .setUuid(nodeUuid)

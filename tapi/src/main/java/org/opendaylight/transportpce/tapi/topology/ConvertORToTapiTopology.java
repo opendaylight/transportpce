@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,6 +61,12 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.payl
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ClientNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ClientNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ParentNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ParentNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
@@ -69,6 +76,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
@@ -521,6 +530,108 @@ public class ConvertORToTapiTopology {
         return sps.stream().distinct().toList();
     }
 
+    public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier) {
+        String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
+        String nodeNepId = String.join("+",id.split("\\+")[0], TapiStringConstants.PHTNC_MEDIA);
+        String extendedNepId = (lowerFreqIndex == 0 && higherFreqIndex == 0)
+            ? nepId
+            : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
+        LOG.info("NEP = {}", nepId);
+        Name cepName = new NameBuilder()
+            .setValueName("ConnectionEndPoint name")
+            .setValue(extendedNepId)
+            .build();
+        ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nepId.getBytes(StandardCharsets.UTF_8))
+                .toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nodeNepId.getBytes(StandardCharsets.UTF_8))
+                .toString()))
+            .setTopologyUuid(this.tapiTopoUuid)
+            .build();
+        String clientQualifier = "";
+
+        switch (qualifier) {
+            case TapiStringConstants.PHTNC_MEDIA_OTS:
+                clientQualifier = TapiStringConstants.PHTNC_MEDIA_OMS;
+                break;
+            case TapiStringConstants.PHTNC_MEDIA_OMS:
+                clientQualifier = TapiStringConstants.MC;
+                break;
+            case TapiStringConstants.MC:
+                clientQualifier = TapiStringConstants.OTSI_MC;
+                break;
+            default:
+                LOG.debug("not currently handling client NEP for OTSiMC CEP {}", nepId);
+                break;
+        }
+//        switch (qualifier) {
+//            case TapiStringConstants.PHTNC_MEDIA_OTS:
+//                clientQualifier = TapiStringConstants.PHTNC_MEDIA_OMS;
+//                break;
+//            case TapiStringConstants.PHTNC_MEDIA_OMS:
+//                clientQualifier = TapiStringConstants.MC;
+//                OwnedNodeEdgePoint onepMC = createRoadmNep(id.split("\\+")[0], id.split("\\+")[1],
+//                    false, OperationalState.ENABLED, AdministrativeState.UNLOCKED, clientQualifier);
+//                putRdmNepInTopologyContext(id.split("\\+")[0], id.split("\\+")[1], TapiStringConstants.MC, onepMC);
+//                break;
+//            case TapiStringConstants.MC:
+//                clientQualifier = TapiStringConstants.OTSI_MC;
+//                OwnedNodeEdgePoint onepOTSiMC = createRoadmNep(id.split("\\+")[0], id.split("\\+")[1],
+//                    false, OperationalState.ENABLED, AdministrativeState.UNLOCKED, clientQualifier);
+//                putRdmNepInTopologyContext(id.split("\\+")[0], id.split("\\+")[1],
+//                    TapiStringConstants.OTSI_MC, onepOTSiMC);
+//                break;
+//            default:
+//                LOG.debug("not currently handling client NEP for OTSiMC CEP {}", nepId);
+//                break;
+//        }
+        ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", id.split("\\+")[0], clientQualifier, id.split("\\+")[1]))
+                        .getBytes(StandardCharsets.UTF_8))
+                .toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nodeNepId.getBytes(StandardCharsets.UTF_8))
+                .toString()))
+            .setTopologyUuid(this.tapiTopoUuid)
+            .build();
+        // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
+        // TODO: add parent ONEP??
+        ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", "CEP", extendedNepId)).getBytes(StandardCharsets.UTF_8))
+                .toString()))
+            .setParentNodeEdgePoint(pnep)
+            .setName(Map.of(cepName.key(), cepName))
+            .setConnectionPortRole(PortRole.SYMMETRIC)
+            .setDirection(Direction.BIDIRECTIONAL)
+            .setOperationalState(OperationalState.ENABLED)
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA);
+        switch (qualifier) {
+            case TapiStringConstants.PHTNC_MEDIA_OTS:
+                cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
+                break;
+            case TapiStringConstants.PHTNC_MEDIA_OMS:
+                cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);
+                break;
+            case TapiStringConstants.MC:
+                cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIERMC.VALUE);
+                break;
+            case TapiStringConstants.OTSI_MC:
+                cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE);
+                break;
+            default:
+                break;
+        }
+
+        return TapiStringConstants.OTSI_MC.equals(qualifier)
+            ? cepBldr.build()
+            : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+    }
+
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = "SF_SWITCH_FALLTHROUGH",
         justification = "Voluntarily No break in switchcase where comment is inserted in following method")
     public List<SupportedCepLayerProtocolQualifierInstances> createSupportedCepLayerProtocolQualifier(
@@ -927,8 +1038,8 @@ public class ConvertORToTapiTopology {
             LOG.debug("Entering LOOP Step3");
             double nazz = 0.01;
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
                     + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
                 .build();
             Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
@@ -1001,8 +1112,8 @@ public class ConvertORToTapiTopology {
             }
             double nazz = 0.01;
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
                     + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
                 .build();
             Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
@@ -1359,6 +1470,36 @@ public class ConvertORToTapiTopology {
         }
         LOG.debug("ConvertORToTapiTopology 1360, onep = {}", onepBldr.build());
         return onepBldr.build();
+    }
+
+    public OwnedNodeEdgePoint createRoadmNep(String orNodeId, String tpId, boolean withSip,
+            OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
+        //TODO : complete implementation with SIP
+        Name nepName = new NameBuilder()
+                .setValueName(TapiStringConstants.PHTNC_MEDIA + "NodeEdgePoint")
+                .setValue(String.join("+", orNodeId, nepPhotonicSublayer, tpId))
+                .build();
+        return new OwnedNodeEdgePointBuilder()
+            .setUuid(
+                new Uuid(UUID.nameUUIDFromBytes(
+                        (String.join("+", orNodeId, nepPhotonicSublayer,tpId)).getBytes(StandardCharsets.UTF_8))
+                    .toString()))
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+            .setName(Map.of(nepName.key(), nepName))
+            .setSupportedCepLayerProtocolQualifierInstances(
+                new ArrayList<>(List.of(
+                    new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                        .setLayerProtocolQualifier(
+                            TapiStringConstants.MC.equals(nepPhotonicSublayer)
+                                ? PHOTONICLAYERQUALIFIERMC.VALUE
+                                : PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
+                        .setNumberOfCepInstances(Uint64.valueOf(1))
+                        .build())))
+            .setDirection(Direction.BIDIRECTIONAL)
+            .setLinkPortRole(PortRole.SYMMETRIC)
+            .setAdministrativeState(adminState).setOperationalState(operState)
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .build();
     }
 
     private ServiceInterfacePoint createSIP(Uuid sipUuid, LayerProtocolName layerProtocol, String tpId,
