@@ -16,6 +16,52 @@
       "message": "recheck",
       "revId": "e8f626b1ea252748b7fe679c9a18bf6d2d6179e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cac33a0_1e6f4afd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-29T11:37:35Z",
+      "side": 1,
+      "message": "should be on the previous line",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "e8f626b1ea252748b7fe679c9a18bf6d2d6179e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "834e90b3_02503212",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetServiceInterfacePointDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-29T11:37:35Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 53,
+        "startChar": 20,
+        "endLine": 53,
+        "endChar": 70
+      },
+      "revId": "e8f626b1ea252748b7fe679c9a18bf6d2d6179e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
