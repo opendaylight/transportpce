@@ -22,6 +22,30 @@
       },
       "revId": "489f92b555423e76208fac38e7a4d0222ac793fb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17fa2887_7915e8f6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-29T12:16:50Z",
+      "side": 1,
+      "message": "I can\u0027t see it either, even before this refacto.\nThere was a break at the end of the while block... so I converted \"while\" to  \"if \" !\nBug ? 😊",
+      "parentUuid": "6b852d35_a57c3f82",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 51
+      },
+      "revId": "489f92b555423e76208fac38e7a4d0222ac793fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
