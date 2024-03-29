@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
@@ -52,9 +53,13 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true, service = TapiContext.class)
 public class TapiContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiContext.class);
@@ -62,9 +67,11 @@ public class TapiContext {
     public static final String NODE_NOT_PRESENT = "Node is not present in datastore";
     private final NetworkTransactionService networkTransactionService;
 
-    public TapiContext(NetworkTransactionService networkTransactionService) {
+    @Activate
+    public TapiContext(@Reference NetworkTransactionService networkTransactionService) {
         this.networkTransactionService = networkTransactionService;
         createTapiContext();
+        LOG.info("TapiContext initialized");
     }
 
     private void createTapiContext() {
@@ -230,17 +237,24 @@ public class TapiContext {
             LOG.info("ONEP found = {}", onep);
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
+            Map<ConnectionEndPointKey, ConnectionEndPoint> existingCepMap = new HashMap<>();
             if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null
                     && onep1.getCepList().getConnectionEndPoint().containsKey(new ConnectionEndPointKey(cep.key()))) {
-                LOG.info("CEP already in topology, skipping merge");
-                return;
+                existingCepMap.putAll(onep1.getCepList().getConnectionEndPoint());
+                LOG.info("CEP already in topology, but may need to be updated with new OMS parameters");
+                LOG.debug("TAPICONTEXT254, Cep List is as follows {} ", existingCepMap);
+                //LOG.info("CEP already in topology, skipping merge");
+                LOG.debug("TAPICONTEXT256, passed cep for update is as follows {} ", cep);
             }
             // Updated ONEP
+            existingCepMap.put(cep.key(), cep);
+            LOG.debug("TAPICONTEXT262, UpdateCep List is as follows {} ", existingCepMap);
+            CepList cepList = new CepListBuilder().setConnectionEndPoint(existingCepMap).build();
             OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder(onep)
-                .addAugmentation(new OwnedNodeEdgePoint1Builder()
-                    .setCepList(new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build())
-                    .build())
-                .build();
+                    .addAugmentation(onep1 == null
+                        ? new OwnedNodeEdgePoint1Builder().setCepList(cepList).build()
+                        : new OwnedNodeEdgePoint1Builder(onep1).setCepList(cepList).build())
+                    .build();
             LOG.info("New ONEP is {}", newOnep);
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, newOnep);
