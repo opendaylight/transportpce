@@ -31,9 +31,11 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
@@ -72,24 +74,39 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Port
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.cep.list.connection.end.point.OtsMediaConnectionEndPointSpec;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.impairments.ImpairmentRouteEntry;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrum;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrum;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULECANNOTFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.AssociatedNodeRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,7 +207,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
             .toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        tapiLink = new TapiLinkImpl(networkTransactionService);
+        tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
         LOG.info("TEST SETUP READY");
     }
 
@@ -283,7 +300,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             new Uuid(UUID.nameUUIDFromBytes(
                     (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(Charset.forName("UTF-8")))
                 .toString()),
-            "roadm", "ROADM-A1");
+            "roadm", "ROADM-A1",
+            false);
     }
 
     @Test
@@ -315,7 +333,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(Charset.forName("UTF-8")))
                 .toString()),
-            "roadm", "ROADM-A1");
+            "roadm", "ROADM-A1",
+            true);
         String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
         String roadmC1seed = "ROADM-C1+PHOTONIC_MEDIA";
         String roadmA1deg2seed = roadmA1seed + "_OTS+DEG2-TTP-TXRX";
@@ -371,7 +390,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
              new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(Charset.forName("UTF-8")))
                 .toString()),
-            "roadm", "ROADM-A1");
+            "roadm", "ROADM-A1",
+            false);
         String spdrSA1seed = "SPDR-SA1-XPDR1";
         String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
         String spdrSA1tpseed = spdrSA1seed + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1";
@@ -520,7 +540,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private void checkOtsiNode(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node,
-            Uuid nodeUuid, String otsiNodeType, String nodeId) {
+            Uuid nodeUuid, String otsiNodeType, String nodeId, boolean includingCep) {
         if (!node.getUuid().equals(nodeUuid)) {
             LOG.info("ERRORUUID on Node.getNodeId {}, NodeId {}", node.getName(), nodeId);
             LOG.info("ERRORUUID TapiUuid {}, transmitted Node Uuid {}", node.getUuid(), nodeUuid);
@@ -582,27 +602,64 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 //                assertEquals(0, nepsOtsimc.size(), "Roadm node should have 10 OTSiMC NEPs");
                 assertEquals(12, nepsPhot.size(), "Roadm node should have 12 PHOT_MEDIA NEPs (2x4 OTS +2x(OTS+OMS)");
                 // For Degree node
-                String mcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX";
-                checkNepOtsiRdmNode(
-                    getOnep("DEG1-TTP", nepsOMS),
-                    new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-                    mcnepUuidSeed, pmOMSnep , false);
-                String otmcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX";
-                checkNepOtsiRdmNode(
-                    getOnep("DEG1-TTP", nepsOTS),
-                    new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-                    otmcnepUuidSeed, pmOTSnep, false);
+//<<<<<<< HEAD
+//                String mcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX";
+//                checkNepOtsiRdmNode(
+//                    getOnep("DEG1-TTP", nepsOMS),
+//                    new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
+//                    mcnepUuidSeed, pmOMSnep , false);
+//                String otmcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX";
+//                checkNepOtsiRdmNode(
+//                    getOnep("DEG1-TTP", nepsOTS),
+//                    new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
+//                    otmcnepUuidSeed, pmOTSnep, false);
+//                // For srg node
+//                String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
+//                checkNepOtsiRdmNode(
+//                    getOnep("SRG1-PP1", nepsOTS),
+//                    new Uuid(UUID.nameUUIDFromBytes(otscnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
+//                    otscnepUuidSeed, pmOTSnep, false);
+//                String otscnep4UuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX";
+//                checkNepOtsiRdmNode(
+//                    getOnep("SRG1-PP3", nepsOTS),
+//                    new Uuid(UUID.nameUUIDFromBytes(otscnep4UuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
+//                    otscnep4UuidSeed, pmOTSnep, false);
+//=======
+                OwnedNodeEdgePoint nepOmsDeg = getOnep("DEG2-TTP", nepsOMS);
+                Uuid omsNepDegUuid = new Uuid(
+                    UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX").getBytes(Charset
+                        .forName("UTF-8"))).toString());
+                checkNepOtsiRdmNode(nepOmsDeg, omsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX",
+                    "PHOTONIC_MEDIA_OMSNodeEdgePoint", false);
+                OwnedNodeEdgePoint nepOtsDeg = getOnep("DEG2-TTP", nepsOTS);
+                Uuid otsNepDegUuid = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX")
+                    .getBytes(Charset.forName("UTF-8"))).toString());
+                LOG.info("Line797, NEP {} with UUID put in checkCepOtsi Rdm Node {}",
+                    String.join("+", nodeId, "PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"), otsNepDegUuid);
+                checkNepOtsiRdmNode(nepOtsDeg, otsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                    "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
+                OwnedNodeEdgePoint omsNep3 = getOnep("DEG2-TTP", nepsOMS);
+                LOG.info("Node tested in 800 is Node {}", node);
+                if (includingCep) {
+                    checkCepOtsiRdmNode(nepOmsDeg, omsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX",
+                        "PHOTONIC_MEDIA_OMSNodeEdgePoint", false);
+                    LOG.info("Calling CheckCepOtsiRdmNode for NodeId {}, NepUuid {}", nodeId, otsNepDegUuid);
+                    checkCepOtsiRdmNode(nepOtsDeg, otsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                        "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
+                }
+
                 // For srg node
-                String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
-                checkNepOtsiRdmNode(
-                    getOnep("SRG1-PP1", nepsOTS),
-                    new Uuid(UUID.nameUUIDFromBytes(otscnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-                    otscnepUuidSeed, pmOTSnep, false);
-                String otscnep4UuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX";
-                checkNepOtsiRdmNode(
-                    getOnep("SRG1-PP3", nepsOTS),
-                    new Uuid(UUID.nameUUIDFromBytes(otscnep4UuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-                    otscnep4UuidSeed, pmOTSnep, false);
+                OwnedNodeEdgePoint nepOtsSrg = getOnep("SRG1-PP1", nepsOTS);
+                Uuid otsNepUuidSrg = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX")
+                    .getBytes(Charset.forName("UTF-8"))).toString());
+                checkNepOtsiRdmNode(nepOtsSrg, otsNepUuidSrg, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX",
+                    "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
+                OwnedNodeEdgePoint nepOtsSrg2 = getOnep("SRG1-PP3", nepsOTS);
+                Uuid otsNepUuidSrg2 = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX")
+                    .getBytes(Charset.forName("UTF-8"))).toString());
+                checkNepOtsiRdmNode(nepOtsSrg2, otsNepUuidSrg2, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX",
+                    "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
+//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getName().entrySet().iterator().next().getValue().toString()
                         .compareTo(nrg2.getName().entrySet().iterator().next().getValue().toString()))
@@ -610,6 +667,9 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 LOG.info("NODERULEGROUP List nrgLIst4 is as follows {}", nrgList4);
                 List<Integer> nepNumber = new ArrayList<>(List.of(2, 4, 4));
                 checkNodeRuleGroupForRdm(nrgList4, nepNumber);
+                List<InterRuleGroup> irgList = node.nonnullInterRuleGroup().values().stream()
+                    .collect(Collectors.toList());
+                checkInterRuleGroupForRdm(irgList);
                 return;
             case "switch":
                 nepSize = 4;
@@ -796,6 +856,20 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         rawCheckNodeRuleGroupOTsi("Tpdr", nrgList, enepUuid, inepUuid, nodeUuid);
     }
 
+    private void checkInterRuleGroupForRdm(List<InterRuleGroup> irgList) {
+        assertEquals(1, irgList.size(), "RDM infra node - OTS should contain 1 inter rule group");
+        List<AssociatedNodeRuleGroup> anrgList = new ArrayList<>(irgList.get(0).getAssociatedNodeRuleGroup().values());
+        assertEquals(3, anrgList.size(), "RDM infra node inter-rule-group should contain 3 associated nrg");
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule>
+            ruleList = new ArrayList<>(irgList.get(0).nonnullRule().values());
+        assertEquals(1, ruleList.size(), "inter-rule-group should contain a single rule");
+        assertEquals("forward", ruleList.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+        assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
+            "the rule type should be 'FORWARDING'");
+        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
+                    "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
+    }
+
     private void checkNodeRuleGroupForMuxOTSi(
             List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
         rawCheckNodeRuleGroupOTsi("Mux", nrgList, enepUuid, inepUuid, nodeUuid);
@@ -867,6 +941,27 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             false, nep, nepUuid, portName, nepName, withSip);
     }
 
+//    private void checkNepOtsiNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+//            boolean withSip) {
+//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
+//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
+//        assertEquals(portName, nameList.get(0).getValue(), "value of OTSi nep should be '" + portName + "'");
+//        assertEquals(nepName, nameList.get(0).getValueName(), "value-name of OTSi nep should be '" + nepName + "'");
+//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
+//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
+//                .getSupportedCepLayerProtocolQualifierInstances();
+//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
+//            lpql.add(entry.getLayerProtocolQualifier());
+//        }
+//        assertEquals(2, lpql.size(), "OTSi nep should support 2 kind of cep");
+//        assertThat("OTSi nep should support 2 kind of cep",
+//            lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE, PHOTONICLAYERQUALIFIEROTSi.VALUE));
+//        assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
+//            "OTSi nep should be of PHOTONIC_MEDIA protocol type");
+//        checkCommonPartOfNep(nep, withSip);
+//        checkPhotPartOfNep(nep);
+//    }
+
     private void checkNepOtsiRdmNode(
             OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName, boolean withSip) {
         if (!nep.getUuid().equals(nepUuid)) {
@@ -876,6 +971,99 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 ? List.of(PHOTONICLAYERQUALIFIEROMS.VALUE)
                 : nepName.contains("OTS") ? List.of(PHOTONICLAYERQUALIFIEROTS.VALUE) : null,
             LayerProtocolName.PHOTONICMEDIA, false, nep, nepUuid, portName, nepName, withSip);
+//=======
+//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
+//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
+//        assertEquals(portName, nameList.get(0).getValue(),
+//            "value of OTSi nep should be '" + portName + "'");
+//        assertEquals(nepName, nameList.get(0).getValueName(),
+//            "value-name of OTSi nep should be '" + nepName + "'");
+//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
+//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
+//                .getSupportedCepLayerProtocolQualifierInstances();
+//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
+//            lpql.add(entry.getLayerProtocolQualifier());
+//        }
+//        if (nepName.contains("OMS")) {
+//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
+//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE));
+//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
+//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
+//            checkPhotPartOfNep(nep);
+//        } else if (nepName.contains("OTS")) {
+//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
+//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROTS.VALUE));
+//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
+//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
+//            checkPhotPartOfNep(nep);
+//        }
+//        checkCommonPartOfNep(nep, withSip);
+    }
+
+
+    private void checkCepOtsiRdmNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
+            boolean withSip) {
+        if (!nep.getUuid().equals(nepUuid)) {
+            LOG.info("ERRORUUIDNEP on Nep {}, expected {}", nep.getName(), portName);
+        }
+        if (nep.augmentation(OwnedNodeEdgePoint1.class) == null) {
+            LOG.info("checkCepOtsiRdmNode1211 No CEPList augmentation found for Nep UUID {}, {}", nepUuid,
+                nep.getName());
+            return;
+        }
+        Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(
+            nep.augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint());
+        assertEquals(nepUuid, cepMap.entrySet().iterator().next().getValue().getParentNodeEdgePoint()
+            .getNodeEdgePointUuid(), "Cep parent NodeEdgePoint shall be the tested Nep");
+        if (nepName.contains("OMS")) {
+            assertEquals(1, cepMap.size(), "OMS nep of RDM infra node should support only 1 OMS cep");
+            assertEquals(LayerProtocolName.PHOTONICMEDIA, cepMap.entrySet().iterator().next().getValue()
+                .getLayerProtocolName(), "OMS cep LPN shall be PHOTONIC_MEDIA");
+            assertEquals(PHOTONICLAYERQUALIFIEROMS.VALUE, cepMap.entrySet().iterator().next().getValue()
+                .getLayerProtocolQualifier(), "OMS cep LPQ shall be PHOTONIC_MEDIA_OMS");
+        } else if (nepName.contains("OTS")) {
+            assertEquals(1, cepMap.size(), "OTS nep of RDM infra node should support only 1 OTS cep");
+            assertEquals(LayerProtocolName.PHOTONICMEDIA, cepMap.entrySet().iterator().next().getValue()
+                .getLayerProtocolName(), "OTS cep LPN shall be PHOTONIC_MEDIA");
+            assertEquals(PHOTONICLAYERQUALIFIEROTS.VALUE, cepMap.entrySet().iterator().next().getValue()
+                .getLayerProtocolQualifier(), "OTS cep LPQ shall be PHOTONIC_MEDIA_OTS");
+            OtsMediaConnectionEndPointSpec otsMcSpec = cepMap.entrySet().iterator().next().getValue()
+                .augmentationOrElseThrow(ConnectionEndPoint2.class).getOtsMediaConnectionEndPointSpec();
+
+            List<ImpairmentRouteEntry> iroIngress = otsMcSpec.getOtsImpairments().stream()
+                .filter(imp -> imp.getIngressDirection()).collect(Collectors.toList())
+                .iterator().next().getImpairmentRouteEntry();
+            assertEquals(9999, iroIngress.iterator().next().getOtsConcentratedLoss().getConcentratedLoss()
+                .doubleValue(), "OTS-media-CEP-spec shall be present with 9999 concentrated loss");
+            assertEquals(0.0, iroIngress.iterator().next().getOtsFiberSpanImpairments().getConnectorIn().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 connectorInLoss loss");
+            assertEquals(0.0, iroIngress.iterator().next().getOtsFiberSpanImpairments().getConnectorOut().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 connectorOutLoss loss");
+            assertEquals(9999, iroIngress.iterator().next().getOtsFiberSpanImpairments().getLength().intValue(),
+                "OTS-media-CEP-spec shall be present with 9999 length");
+            assertEquals(0, iroIngress.iterator().next().getOtsFiberSpanImpairments().getPmd().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 pmd");
+            assertEquals(9999.0, iroIngress.iterator().next().getOtsFiberSpanImpairments().getTotalLoss().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 9999 Total loss");
+
+            List<ImpairmentRouteEntry> iroEgress = otsMcSpec.getOtsImpairments().stream()
+                .filter(imp -> !imp.getIngressDirection()).collect(Collectors.toList())
+                .iterator().next().getImpairmentRouteEntry();
+            assertEquals(9999, iroEgress.iterator().next().getOtsConcentratedLoss().getConcentratedLoss()
+                .doubleValue(), "OTS-media-CEP-spec shall be present with 9999 concentrated loss");
+            assertEquals(0.0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getConnectorIn().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 connectorInLoss loss");
+            assertEquals(0.0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getConnectorOut().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 connectorOutLoss loss");
+            assertEquals(9999, iroEgress.iterator().next().getOtsFiberSpanImpairments().getLength().intValue(),
+                "OTS-media-CEP-spec shall be present with 9999 length");
+            assertEquals(0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getPmd().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 0 pmd");
+            assertEquals(9999.0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getTotalLoss().doubleValue(),
+                "OTS-media-CEP-spec shall be present with 9999 concentrated loss");
+        }
+//        checkCommonPartOfNep(nep, withSip);
+//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
     }
 
     private void rawCheckNep(List<LAYERPROTOCOLQUALIFIER> lpqList, LayerProtocolName lpn, boolean anyInList,
@@ -924,8 +1112,41 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             "link-port-role of client nep should be SYMMETRIC");
     }
 
-    private void checkOmsLink(
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link,
+    private void checkPhotPartOfNep(OwnedNodeEdgePoint nep) {
+
+        var onep1 = nep.augmentation(
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1.class);
+
+        Map<SupportableSpectrumKey, SupportableSpectrum> supSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
+            .getSpectrumCapabilityPac().getSupportableSpectrum();
+
+        double naz = 0.01;
+        assertEquals(supSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getLowerFrequency()
+            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz))).doubleValue(),
+            "Lower Freq of supportable spectrum shall be 191.325 THz");
+        assertEquals(supSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getUpperFrequency()
+            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz))).doubleValue(),
+            "Higher Freq of supportable spectrum shall be 196.100 THz");
+
+        Map<AvailableSpectrumKey, AvailableSpectrum> availSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
+            .getSpectrumCapabilityPac().getAvailableSpectrum();
+        assertEquals(availSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getLowerFrequency()
+            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz))).doubleValue(),
+            "In absence of service provisionning Lower Freq of available spectrum shall be 191.325 THz");
+        assertEquals(availSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getUpperFrequency()
+            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz))).doubleValue(),
+            "In absence of service provisionning Higher Freq of available spectrum shall be 191.325 THz");
+
+        Map<OccupiedSpectrumKey, OccupiedSpectrum> occSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
+            .getSpectrumCapabilityPac().getOccupiedSpectrum();
+        assertEquals(occSpectrum, null,
+            "In absence of service provisionning occupied spectrum shall be null");
+
+    }
+
+    private void checkOmsLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link,
             Uuid node1Uuid, Uuid node2Uuid, Uuid tp1Uuid, Uuid tp2Uuid, Uuid linkUuid, String linkName) {
         assertEquals(linkName, link.getName().get(new NameKey("OMS link name")).getValue(), "bad name for the link");
         linkNepsCheck(link, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid);
