@@ -37,6 +37,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
@@ -176,7 +177,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
             .getBytes(Charset.forName("UTF-8"))).toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
-        tapiLink = new TapiLinkImpl(networkTransactionService);
+        tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
         LOG.info("TEST SETUP READY");
     }
 

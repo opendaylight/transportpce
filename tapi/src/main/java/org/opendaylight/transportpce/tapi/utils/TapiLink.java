@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import java.util.Map;
 import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -14,6 +15,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Admi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 
 public interface TapiLink {
@@ -34,4 +36,6 @@ public interface TapiLink {
     String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId);
 
     String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId);
+
+    Map<Map<String, String>, ConnectionEndPoint> getCepMap();
 }
