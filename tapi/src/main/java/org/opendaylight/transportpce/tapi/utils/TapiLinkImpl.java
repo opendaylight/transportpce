@@ -7,18 +7,29 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.topology.ConvertORToTapiTopology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
@@ -31,6 +42,16 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capa
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.TotalPotentialCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.cep.list.connection.end.point.OtsMediaConnectionEndPointSpec;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.cep.list.connection.end.point.OtsMediaConnectionEndPointSpecBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.impairment.route.entry.OtsConcentratedLossBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.impairment.route.entry.OtsFiberSpanImpairments;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.impairment.route.entry.OtsFiberSpanImpairmentsBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.impairments.ImpairmentRouteEntry;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.impairments.ImpairmentRouteEntryBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.media.connection.end.point.spec.OtsImpairments;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.media.connection.end.point.spec.OtsImpairmentsBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.ProtectionType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RestorationPolicy;
@@ -57,6 +78,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.va
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanismBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
+import org.opendaylight.yangtools.yang.common.Uint64;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -68,19 +90,22 @@ public class TapiLinkImpl implements TapiLink {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiLinkImpl.class);
     private final NetworkTransactionService networkTransactionService;
+//  private ConvertORToTapiTopology tapiFactory;
 
     @Activate
     public TapiLinkImpl(@Reference NetworkTransactionService networkTransactionService) {
+//        public TapiLinkImpl(@Reference NetworkTransactionService networkTransactionService, Uuid tapiTopoUuid) {
         this.networkTransactionService = networkTransactionService;
+//        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
     }
 
-    public Link createTapiLink(String srcNodeid, String srcTpId, String dstNodeId, String dstTpId, String linkType,
+    public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
                                String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
                                String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
                                Set<String> transLayerNameList, Uuid tapiTopoUuid) {
         Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
-        String sourceNodeKey = String.join("+", srcNodeid, srcNodeQual);
-        String sourceNepKey = String.join("+", srcNodeid, srcTpQual, srcTpId);
+        String sourceNodeKey = String.join("+", srcNodeId, srcNodeQual);
+        String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         Uuid sourceUuidNode = new Uuid(UUID.nameUUIDFromBytes(sourceNodeKey.getBytes(Charset.forName("UTF-8")))
             .toString());
         Uuid sourceUuidTp = new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(Charset.forName("UTF-8")))
@@ -107,9 +132,16 @@ public class TapiLinkImpl implements TapiLink {
         switch (linkType) {
             case TapiStringConstants.OMS_RDM_RDM_LINK:
                 LOG.info("Roadm to roadm link");
+                LOG.info("TAPILinkImpl Building LinkId {}", buildORLinkId(
+                    String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
+                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)
+                    .toString());
                 linkName
                     .setValueName(TapiStringConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                     .setValue(linkKey);
+                createCepForLink(getORLinkFromLinkId(buildORLinkId(
+                    String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
+                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)));
                 break;
             case TapiStringConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
@@ -155,6 +187,7 @@ public class TapiLinkImpl implements TapiLink {
             .setValidationRobustness("validation robustness")
             .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
             .build();
+        LOG.info("In TapiLInkImpl, create tapiLink {} of type {}", linkKey, linkType);
         return new LinkBuilder()
             .setUuid(new Uuid(
                 UUID.nameUUIDFromBytes(linkKey.getBytes(Charset.forName("UTF-8"))).toString()))
@@ -187,6 +220,210 @@ public class TapiLinkImpl implements TapiLink {
             .setValidationMechanism(Map.of(validationMechanism.key(), validationMechanism))
             .build();
     }
+
+    public LinkId buildORLinkId(String srcNode, String srcTp, String destNode, String destTp) {
+        LOG.info("InTapiLinkImpl, retrieves link ID {} from source and destination Nodes & tps",
+            LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp));
+        return LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
+    }
+
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+            .topology.rev180226.networks.network.Link getORLinkFromLinkId(LinkId linkId) {
+
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                .topology.rev180226.networks.network.Link> linkIID = InstanceIdentifier.builder(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                    .rev180226.Networks.class)
+                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                    .rev180226.networks.Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .augmentation(Network1.class)
+                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                    .topology.rev180226.networks.network.Link.class, new org.opendaylight.yang.gen.v1.urn.ietf.params
+                    .xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey(linkId))
+                .build();
+        try {
+            Optional<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                .topology.rev180226.networks.network.Link> link = this.networkTransactionService.read(
+                LogicalDatastoreType.CONFIGURATION, linkIID).get();
+            if (!link.isPresent()) {
+                LOG.error("Link {} not present in the datastore", linkId);
+                return null;
+            }
+            //return link
+            return link.orElseThrow();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed getting Link data from Datastore",e);
+        }
+        return null;
+    }
+
+    public void createCepForLink(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+            .topology.rev180226.networks.network.Link link) {
+        //retrieve OMS from OR link for both end
+        //Build OTS media connection End Point spec
+        //Build Cep and put them in DataStore
+        Map<String,Double> lossPoutcorrect = NetworkUtils.calcSpanLoss(link);
+        Decimal64 linkLoss = Decimal64.valueOf("9999");
+        if (lossPoutcorrect != null && lossPoutcorrect.containsKey("SpanLoss")) {
+            linkLoss = Decimal64.valueOf(lossPoutcorrect.entrySet().stream()
+                .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue().doubleValue(),
+                RoundingMode.UP);
+        }
+        Map<String, Double> pmd = NetworkUtils.calcCDandPMD(link);
+        Decimal64 pmdValue = Decimal64.valueOf("9999");
+        if (pmd != null && pmd.containsKey("PMD")) {
+            pmdValue = Decimal64.valueOf(pmd.entrySet().stream().filter(res -> res.getKey()
+                .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
+        }
+        Decimal64 oppLinkLoss;
+        OtsFiberSpanImpairments otsFSimp = new OtsFiberSpanImpairmentsBuilder()
+            .setConnectorIn(Decimal64.valueOf("0"))
+            .setConnectorOut(Decimal64.valueOf("0"))
+            .setLength(
+                NetworkUtils.calcLength(link) != null
+                    ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(link)))
+                    : Uint64.valueOf(9999))
+            .setPmd(pmdValue)
+            .setTotalLoss(linkLoss)
+            .build();
+        OtsFiberSpanImpairments otsFSimpOppLink;
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+                .Link1.class).getOppositeLink() == null) {
+            otsFSimpOppLink = otsFSimp;
+            oppLinkLoss = linkLoss;
+        } else {
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                .topology.rev180226.networks.network.Link oppLink = getORLinkFromLinkId(
+                link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+                    .Link1.class).getOppositeLink());
+            Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
+            oppLinkLoss = Decimal64.valueOf("9999");
+            if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
+                oppLinkLoss = Decimal64.valueOf(opplossPoutcorrect.entrySet().stream()
+                    .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue().doubleValue(),
+                    RoundingMode.UP);
+            }
+            Map<String, Double> opppmd = NetworkUtils.calcCDandPMD(link);
+            Decimal64 opppmdValue = Decimal64.valueOf("9999");
+            if (opppmd != null && opppmd.containsKey("PMD")) {
+                opppmdValue = Decimal64.valueOf(opppmd.entrySet().stream().filter(res -> res.getKey()
+                    .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
+            }
+            otsFSimpOppLink = new OtsFiberSpanImpairmentsBuilder()
+                .setConnectorIn(Decimal64.valueOf("0"))
+                .setConnectorOut(Decimal64.valueOf("0"))
+                .setLength(NetworkUtils.calcLength(oppLink) != null
+                        ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(oppLink)))
+                        : Uint64.valueOf(9999))
+                .setPmd(opppmdValue)
+                .setTotalLoss(oppLinkLoss)
+                .build();
+        }
+
+        ImpairmentRouteEntry ire = new ImpairmentRouteEntryBuilder()
+            .setOtsConcentratedLoss(new OtsConcentratedLossBuilder()
+                .setConcentratedLoss(linkLoss).build())
+            .setOtsFiberSpanImpairments(otsFSimp)
+            .build();
+        ImpairmentRouteEntry ire2 = new ImpairmentRouteEntryBuilder()
+            .setOtsConcentratedLoss(new OtsConcentratedLossBuilder()
+                .setConcentratedLoss(oppLinkLoss).build())
+            .setOtsFiberSpanImpairments(otsFSimpOppLink)
+            .build();
+        List<OtsImpairments> otsImpairmentListA = new ArrayList<>(List.of(
+            new OtsImpairmentsBuilder()
+                .setImpairmentRouteEntry(List.of(ire))
+                .setIngressDirection(true)
+                .build(),
+            new OtsImpairmentsBuilder()
+                .setImpairmentRouteEntry(List.of(ire2))
+                .setIngressDirection(false)
+                .build()));
+        List<OtsImpairments> otsImpairmentListZ = new ArrayList<>(List.of(
+            new OtsImpairmentsBuilder()
+                .setImpairmentRouteEntry(List.of(ire))
+                .setIngressDirection(false)
+                .build(),
+            new OtsImpairmentsBuilder()
+                .setImpairmentRouteEntry(List.of(ire2))
+                .setIngressDirection(true)
+                .build()));
+        OtsMediaConnectionEndPointSpec omCepSpecA = new OtsMediaConnectionEndPointSpecBuilder()
+            .setOtsImpairments(otsImpairmentListA).build();
+        OtsMediaConnectionEndPointSpec omCepSpecZ = new OtsMediaConnectionEndPointSpecBuilder()
+            .setOtsImpairments(otsImpairmentListZ).build();
+        LOG.debug("OtsMediaConnectionEndSpec for link {} on A end is {}",link.getLinkId(), omCepSpecA);
+        LOG.debug("OtsMediaConnectionEndSpec for link {} on Z end is {}}",link.getLinkId(), omCepSpecZ);
+
+
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(new Uuid(UUID.nameUUIDFromBytes(
+            TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()));
+
+        ConnectionEndPoint cepNodeAots = tapiFactory.createCepRoadm(0, 0,
+            String.join("+",link.getSource().getSourceNode().getValue(),link.getSource().getSourceTp().getValue()),
+            TapiStringConstants.PHTNC_MEDIA_OTS, omCepSpecA);
+        putRdmCepInTopologyContext(link.getSource().getSourceNode().getValue(),
+            link.getSource().getSourceTp().toString(), TapiStringConstants.PHTNC_MEDIA_OTS,
+            (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint)
+            cepNodeAots);
+        LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), omCepSpecA);
+        ConnectionEndPoint cepNodeAoms = tapiFactory.createCepRoadm(0, 0,
+            String.join("+",link.getSource().getSourceNode().getValue(),link.getSource().getSourceTp().getValue()),
+            TapiStringConstants.PHTNC_MEDIA_OMS, null);
+        putRdmCepInTopologyContext(link.getSource().getSourceNode().getValue(),
+            link.getSource().getSourceTp().toString(), TapiStringConstants.PHTNC_MEDIA_OMS,
+            (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint)
+            cepNodeAoms);
+        LOG.info("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
+        ConnectionEndPoint cepNodeZots = tapiFactory.createCepRoadm(0, 0, String.join("+",link.getDestination()
+                .getDestNode().getValue(), link.getDestination().getDestTp().getValue()),
+            TapiStringConstants.PHTNC_MEDIA_OTS, omCepSpecZ);
+        putRdmCepInTopologyContext(link.getDestination().getDestNode().getValue(),
+            link.getDestination().getDestTp().toString(), TapiStringConstants.PHTNC_MEDIA_OTS,
+            (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint)
+            cepNodeZots);
+        LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), omCepSpecZ);
+        ConnectionEndPoint cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+",link.getDestination()
+                .getDestNode().getValue(), link.getDestination().getDestTp().getValue()),
+            TapiStringConstants.PHTNC_MEDIA_OMS, null);
+        putRdmCepInTopologyContext(link.getDestination().getDestNode().getValue(),
+            link.getDestination().getDestTp().toString(), TapiStringConstants.PHTNC_MEDIA_OMS,
+            (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint)
+            cepNodeZoms);
+        LOG.info("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
+
+    }
+
+//    private String getSupportingNodeFromNodeId(String overlayNodeId) {
+//
+//        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+//                .rev180226.networks.network.Node> nodeIID = InstanceIdentifier.builder(
+//            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+//                    .rev180226.Networks.class)
+//                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+//                    .rev180226.networks.Network.class,
+//                    new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+//                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+//                    .rev180226.networks.network.Node.class,
+//                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
+//                        .network.NodeKey(new NodeId(overlayNodeId)))
+//            .build();
+//        try {
+//            Optional<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+//                .rev180226.networks.network.Node> node = this.networkTransactionService.read(
+//                LogicalDatastoreType.CONFIGURATION, nodeIID).get();
+//            if (!node.isPresent()) {
+//                LOG.error("Node {} not present in the datastore", node);
+//                return null;
+//            }
+//            //return node
+//            return node.orElseThrow().getSupportingNode().entrySet().stream()
+//                .findFirst().orElseThrow().getKey().toString();
+//        } catch (InterruptedException | ExecutionException e) {
+//            LOG.error("Failed getting Mapping data from portMapping",e);
+//        }
+//        return null;
+//    }
 
     @Override
     public AdministrativeState setTapiAdminState(String adminState) {
@@ -305,5 +542,22 @@ public class TapiLinkImpl implements TapiLink {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
         }
+    }
+
+    public void putRdmCepInTopologyContext(String nodeId, String tpId, String qual, org.opendaylight.yang.gen.v1.urn
+            .onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint cep) {
+        String nepId = String.join("+", nodeId, qual, tpId);
+        String nodeNepId = String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA);
+        LOG.info("NEP id before Merge = {}", nepId);
+        LOG.info("Node of NEP id before Merge = {}", nodeNepId);
+        // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
+        TapiContext tapiContext = new TapiContext(networkTransactionService);
+        tapiContext.updateTopologyWithCep(
+            new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()),
+            //nodeUuid,
+            new Uuid(UUID.nameUUIDFromBytes(nodeNepId.getBytes(StandardCharsets.UTF_8)).toString()),
+            //nepUuid,
+            new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()), cep);
     }
 }

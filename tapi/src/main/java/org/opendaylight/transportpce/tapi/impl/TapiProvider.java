@@ -7,9 +7,11 @@
  */
 package org.opendaylight.transportpce.tapi.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -21,6 +23,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
@@ -55,6 +58,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.ServiceInterfacePoints;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.Registration;
@@ -84,6 +88,9 @@ public class TapiProvider {
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network.class,
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class)
         .child(Link.class);
+    public static final Uuid TAPI_TOPO_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+    public static final String TOPOLOGICAL_MODE = "Full";
     private final DataBroker dataBroker;
     private final NetworkTransactionService networkTransactionService;
     private final ServiceDataStoreOperations serviceDataStoreOperations;
@@ -110,10 +117,11 @@ public class TapiProvider {
         LOG.info("TapiProvider Session Initiated");
         TapiContext tapiContext = new TapiContext(this.networkTransactionService);
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
+        //TapiLink tapiLink = new TapiLinkImpl(this.networkTransactionService, TAPI_TOPO_UUID);
         TapiLink tapiLink = new TapiLinkImpl(this.networkTransactionService);
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
-                tapiContext, this.networkTransactionService);
+                tapiContext, this.networkTransactionService, TAPI_TOPO_UUID);
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
                 tapiContext, this.serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();

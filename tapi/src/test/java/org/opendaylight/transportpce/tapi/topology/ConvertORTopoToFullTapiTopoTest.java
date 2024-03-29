@@ -198,6 +198,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
             Charset.forName("UTF-8"))).toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
+        //tapiLink = new TapiLinkImpl(networkTransactionService, topologyUuid);
         tapiLink = new TapiLinkImpl(networkTransactionService);
         LOG.info("TEST SETUP READY");
     }
