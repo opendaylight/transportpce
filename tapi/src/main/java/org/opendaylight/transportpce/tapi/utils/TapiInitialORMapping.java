@@ -49,9 +49,9 @@ public class TapiInitialORMapping {
         // creation of both topologies but with the fully roadm infrastructure.
         try {
             LOG.info("Performing initial mapping between OR and TAPI models.");
-            Topology t0FullMultiLayer = this.topologyUtils.createFullOtnTopology();
+            Topology t0topology = this.topologyUtils.createOtnTopology();
             Map<TopologyKey, Topology> topologyMap = new HashMap<>();
-            topologyMap.put(t0FullMultiLayer.key(), t0FullMultiLayer);
+            topologyMap.put(t0topology.key(), t0topology);
             this.tapiContext.updateTopologyContext(topologyMap);
             Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = this.topologyUtils.getSipMap();
             this.tapiContext.updateSIPContext(sipMap);
