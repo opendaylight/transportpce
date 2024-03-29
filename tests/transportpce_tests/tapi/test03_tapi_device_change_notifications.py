@@ -125,6 +125,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # pylint: disable=unsubscriptable-object
+
         cls.init_failed = False
         os.environ['JAVA_MIN_MEM'] = '1024M'
         os.environ['JAVA_MAX_MEM'] = '4096M'
