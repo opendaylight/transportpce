@@ -8,11 +8,11 @@
 package org.opendaylight.transportpce.tapi.provider;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+//import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
+//import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
 import com.google.common.util.concurrent.Futures;
 import java.util.Optional;
@@ -42,6 +42,8 @@ import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyListImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 
 @ExtendWith(MockitoExtension.class)
 public class TapiProviderTest {
@@ -64,14 +66,18 @@ public class TapiProviderTest {
     private TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler;
     @Mock
     private TapiNetworkModelService tapiNetworkModelServiceImpl;
+    @Mock
+    private TapiLink tapilink;
+    @Mock
+    private TapiContext tapiContext;
 
     @Test
     void testInitRegisterTapiToRpcRegistry() {
         when(networkTransactionService.read(any(), any())).thenReturn(Futures.immediateFuture(Optional.empty()));
-        doReturn(emptyFluentFuture()).when(networkTransactionService).commit();
+//        doReturn(emptyFluentFuture()).when(networkTransactionService).commit();
         new TapiProvider(dataBroker, rpcProviderService, rpcService, notificationService, notificationPublishService,
                 networkTransactionService, serviceDataStoreOperations,
-                tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl);
+                tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl, tapilink, tapiContext);
 
         verify(rpcProviderService, times(1)).registerRpcImplementations(
                 any(CreateConnectivityServiceImpl.class),
