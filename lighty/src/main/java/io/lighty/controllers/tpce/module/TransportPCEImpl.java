@@ -76,6 +76,7 @@ import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelServiceImpl;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
+import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.yangtools.concepts.Registration;
@@ -218,7 +219,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
         if (activateTapi) {
             LOG.info("Creating tapi beans ...");
-            TapiLink tapiLink = new TapiLinkImpl(networkTransaction);
+            TapiContext tapiContext = new TapiContext(networkTransaction);
+            TapiLink tapiLink = new TapiLinkImpl(networkTransaction, tapiContext);
             new TapiNetworkUtilsImpl(rpcProviderService, networkTransaction, tapiLink);
             tapiProvider = new TapiProvider(
                     dataBroker,
@@ -233,7 +235,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                             networkTransaction,
                             deviceTransactionManager,
                             tapiLink,
-                            notificationPublishService));
+                            notificationPublishService),
+                    tapiLink,
+                    tapiContext);
             rpcRegistrations.add(tapiProvider.getRegisteredRpcs());
         }
         if (activateNbiNotification) {
