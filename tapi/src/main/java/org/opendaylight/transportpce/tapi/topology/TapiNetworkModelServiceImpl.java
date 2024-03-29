@@ -31,6 +31,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
@@ -158,14 +159,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelServiceImpl.class);
 
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(StandardCharsets.UTF_8)).toString());
+    private final Uuid tapiTopoUuid = TapiProvider.TAPI_TOPO_UUID;
+    private static final String TOPOLOGICAL_MODE = TapiProvider.TOPOLOGICAL_MODE;
     private final NetworkTransactionService networkTransactionService;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
     private final ConvertORToTapiTopology tapiFactory;
-    private String topologicalMode;
-    private final ConvertORTopoToTapiFullTopo tapiFullFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
 
@@ -179,8 +178,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
         this.tapiLink = tapiLink;
-        this.tapiFullFactory = new ConvertORTopoToTapiFullTopo(tapiTopoUuid, tapiLink);
-        this.topologicalMode = tapiFullFactory.getTopologicalMode();
+
     }
 
     @Override
@@ -220,7 +218,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // Transform LCPs into ONEP
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap =
                 new HashMap<>(transformSrgToOnep(orNodeId, mapSrg));
-            LOG.debug("CreateTapiNode NetworkModelServiceImpl, TopologicalMode = {}", topologicalMode);
+            LOG.debug("CreateTapiNode NetworkModelServiceImpl, TopologicalMode = {}", TOPOLOGICAL_MODE);
             LOG.debug("TAPINETWORKMODELSERVICEIMPL call transformSRGtoONEP (OrNodeId {} ", orNodeId);
             LOG.debug("TAPINETWORKMODELSERVICEIMPL SRG OTSNode of retrieved OnepMap {} ",
                 onepMap.entrySet().stream().filter(e -> e.getValue()
@@ -230,7 +228,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
                         .build()))
                 .collect(Collectors.toList()));
-            if (topologicalMode.equals("Full")) {
+            if (TOPOLOGICAL_MODE.equals("Full")) {
                 onepMap.putAll(transformDegToOnep(orNodeId, mapDeg));
                 LOG.debug("TAPINETWORKMODELSERVICEIMPL DEG+SRG OTSNode of retrieved OnepMap {} ",
                     onepMap.entrySet().stream().filter(e -> e.getValue()
@@ -253,6 +251,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Map<LinkKey, Link> rdm2rdmLinks = this.linkDiscovery.readLLDP(new NodeId(orNodeId), orNodeVersion,
                     this.tapiTopoUuid);
                 if (!rdm2rdmLinks.isEmpty()) {
+                    Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
+                    addCepToOnep(onepMap, cepMap);
                     mergeLinkinTopology(rdm2rdmLinks);
                 }
             } else {
@@ -325,6 +325,31 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         } catch (InterruptedException e) {
             LOG.error("Could not send notification");
         }
+    }
+
+    private void addCepToOnep(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap,
+            Map<Map<String, String>, ConnectionEndPoint> cepMap) {
+        LOG.debug("TAPINetModServImpl332, Entering addCepToOnep, with cepMap {} and onepMapKeyList {}", cepMap,
+            onepMap.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()));
+        for (Map.Entry<Map<String, String>, ConnectionEndPoint> cepEntry : cepMap.entrySet()) {
+            if (!onepMap.entrySet().stream().map(onep -> onep.getKey().toString()).collect(Collectors.toList())
+                .contains(cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getKey())) {
+                continue;
+            }
+            OwnedNodeEdgePoint ownedNep = onepMap.entrySet().stream()
+                .filter(onep -> onep.getKey().getUuid().toString()
+                    .equals(cepEntry.getKey().entrySet().stream().findAny().orElseThrow().getKey()))
+                .map(Map.Entry::getValue).findFirst().orElseThrow();
+            CepList cepList = new CepListBuilder()
+                .setConnectionEndPoint(Map.of(cepEntry.getValue().key(), cepEntry.getValue())).build();
+            OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+            OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder(ownedNep)
+                    .addAugmentation(onep1Bldr)
+                    .build();
+            onepMap.put(newOnep.key(), newOnep);
+            LOG.info("TAPINetModServImpl345, getting out of addCepToOnep with no Exception");
+        }
+
     }
 
     private Map<ChangedAttributesKey, ChangedAttributes> getChangedAttributes(List<Uuid> changedOneps,
@@ -517,7 +542,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformSrgToOnep(String orNodeId,
                 Map<String, List<Mapping>> mapSrg) {
-        LOG.debug("CREATENEP transformSrgToOnep, ListOfMapping {}, of NodeId {} ", mapSrg, orNodeId);
+        LOG.debug("TAPINETMODSERVIMPL CREATENEP transformSrgToOnep, ListOfMapping {}, of NodeId {} ",
+            mapSrg, orNodeId);
         Map<String, TerminationPoint1> tpMap = new HashMap<>();
         //List<TerminationPoint> tpList = new ArrayList<>();
         for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
@@ -544,13 +570,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     tpMap.put(tpId, getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId));
                     LOG.debug("LCP {} is not empty for augmentation TP1", tpId);
                 } else {
-                    LOG.error("CREATENEP transformSrgToOnep, No Tp1 found in topology for LCP {}, of NodeId {} ",
+                    LOG.debug("CREATENEP transformSrgToOnep, No Tp1 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
                 }
                 if (getNetworkTerminationPoint11FromDatastore(overlayNodeId, tpId) != null) {
-                    LOG.info("LCP {} is not empty for augmentation TP11", tpId);
+                    LOG.debug("LCP {} is not empty for augmentation TP11", tpId);
                 } else {
-                    LOG.error("CREATENEP transformSrgToOnep, No Tp11 found in topology for LCP {}, of NodeId {} ",
+                    LOG.debug("CREATENEP transformSrgToOnep, No Tp11 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
                 }
             }
@@ -562,7 +588,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformDegToOnep(String orNodeId,
                 Map<String, List<Mapping>> mapDeg) {
-        LOG.debug("CREATENEP transformDegToOnep, ListOfMapping {}, of NodeId {} ",
+        LOG.debug("TAPINETMODSERVIMPL CREATENEP transformDegToOnep, ListOfMapping {}, of NodeId {} ",
             mapDeg.toString(), orNodeId);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> degOnepMap = new HashMap<>();
         Map<String, TerminationPoint1> tpMap = new HashMap<>();
@@ -635,7 +661,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return;
         }
         if (nodeId.contains("ROADM")) {
-            if (topologicalMode.equals("Full")) {
+            if (TOPOLOGICAL_MODE.equals("Full")) {
              // Node is in photonic media layer and UUID can be built from nodeId + PHTN_MEDIA
                 Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
                     TapiStringConstants.PHTNC_MEDIA)).getBytes(StandardCharsets.UTF_8)).toString());
@@ -1024,9 +1050,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
             .build();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId, onepMap.values());
+            = tapiFactory.createAllNodeRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, onepMap.values());
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId,
+            = tapiFactory.createInterRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId,
                 nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         return new NodeBuilder()
             .setUuid(nodeUuid)
@@ -1406,7 +1432,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // Admin and oper state common for all tps
             OpenroadmTpType tpType = entry.getValue().getTpType();
             // PHOTONIC MEDIA nep
-            LOG.debug("PHOTO NEP = {}", String.join("+", nodeId, nepPhotonicSublayer,
+            LOG.debug("TAPINETMODSERIMPL PHOTO NEP = {}", String.join("+", nodeId, nepPhotonicSublayer,
                 entry.getKey()));
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
@@ -1443,9 +1469,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         usedFreqMap = tapiFactory.getPP11UsedWavelength(
                             getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E09,
-                                GridConstant.START_EDGE_FREQUENCY * 1E09
-                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06);
+                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E12,
+                                GridConstant.START_EDGE_FREQUENCY * 1E12
+                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09);
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} for Node {}, tp {}",
                                 usedFreqMap.toString(), nodeId, tpMap.toString());
@@ -1470,7 +1496,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 LOG.debug("calling add Photonic NEP spec for Roadm");
                 onepBd = tapiFactory.addPhotSpecToRoadmOnep(nodeId, usedFreqMap, availableFreqMap, onepBd,
-                    nepPhotonicSublayer);
+                    String.join("+", nodeId, nepPhotonicSublayer));
             }
             AdminStates admin = entry.getValue().getAdministrativeState();
             State oper = entry.getValue().getOperationalState();
@@ -1525,7 +1551,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<TerminationPoint> tpOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
             if (tpOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading tp {} , empty list",tpIID);
+                LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);
                 return null;
             }
             LOG.debug("SUCCES getting LCP TP for NodeId {} TpId {} while creating NEP in TapiNetworkModelServiceImpl",
@@ -1566,7 +1592,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<TerminationPoint1> tpOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
             if (tpOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading tp {} , empty list",tpIID);
+                LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);
                 return null;
             }
             LOG.debug("SUCCES getting LCP TP1 for NodeId {} TpId {} while creating NEP in TapiNetworkModelServiceImpl",
@@ -1603,7 +1629,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1>
                 tpOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
             if (tpOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading tp {} , empty list",tpIID);
+                LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);
                 return null;
             }
             LOG.debug("SUCCESS getting LCP TP11 for NodeId {} TpId {} while creating NEP in TapiNetworkModelServiceImpl"

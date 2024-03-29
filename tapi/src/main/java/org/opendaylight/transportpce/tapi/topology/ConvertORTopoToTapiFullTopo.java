@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
@@ -40,6 +41,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1Builder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
@@ -79,7 +85,7 @@ public class ConvertORTopoToTapiFullTopo {
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
-    private static String topologicalMode;
+    private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
 
 
     public ConvertORTopoToTapiFullTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
@@ -88,9 +94,6 @@ public class ConvertORTopoToTapiFullTopo {
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
-        if (topologicalMode == null) {
-            ConvertORTopoToTapiFullTopo.topologicalMode = "Full";
-        }
     }
 
     public void convertRdmToRdmLinks(
@@ -140,6 +143,9 @@ public class ConvertORTopoToTapiFullTopo {
                 this.tapiTopoUuid);
             linksToNotConvert.add(lnk1OppLnk.getValue());
             tapiLinks.put(tapLink.key(), tapLink);
+            Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
+            LOG.debug("CONVERTTOFULL147, cepMap is {}", cepMap);
+            addCepToOnepAndNode(cepMap);
         }
     }
 
@@ -149,6 +155,50 @@ public class ConvertORTopoToTapiFullTopo {
             convertRoadmNodeFull(roadm, openroadmTopo);
         } else {
             convertRoadmNodeAbstracted(openroadmTopo);
+        }
+    }
+
+    private void addCepToOnepAndNode(Map<Map<String, String>, ConnectionEndPoint> cepMap) {
+
+        for (Map.Entry<Map<String, String>, ConnectionEndPoint> cepEntry : cepMap.entrySet()) {
+            String nepNodeId = cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getValue();
+            LOG.debug("CONVERTTOFULL165, Node UUID is {}", nepNodeId);
+            List<NodeKey> listKey = tapiNodes.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
+            //.forEach(Function.identity().toString());
+            LOG.debug("CONVERTTOFULL168, TapiNode Keys are {}", tapiNodes
+                .entrySet().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList()));
+            LOG.debug("CONVERTTOFULL172, TapiNode Keys are {}", tapiNodes
+                .entrySet().stream()
+                .map(nep -> nep.getValue().getName().toString())
+                .collect(Collectors.toList()));
+            if (!listKey.toString().contains(nepNodeId)) {
+                LOG.info("ConvertToFullLINE178, ListKey {} of TapiNodes does not contain NodeUuid {}",
+                    listKey, nepNodeId);
+            }
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node = tapiNodes
+                .entrySet().stream()
+                .filter(theNode -> theNode.getKey().getUuid().toString().equals(nepNodeId))
+                .map(Map.Entry::getValue).findFirst().orElseThrow();
+            var onepMap = node.getOwnedNodeEdgePoint();
+            OwnedNodeEdgePoint ownedNep = onepMap.entrySet().stream()
+                .filter(onep -> onep.getKey().getUuid().toString()
+                    .equals(cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getKey()))
+                .map(Map.Entry::getValue).findFirst().orElseThrow();
+            CepList cepList = new CepListBuilder()
+                .setConnectionEndPoint(Map.of(cepEntry.getValue().key(), cepEntry.getValue())).build();
+            OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+            OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder(ownedNep)
+                    .addAugmentation(onep1Bldr)
+                    .build();
+            onepMap.put(newOnep.key(), newOnep);
+            var newNode = new  org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology
+                    .NodeBuilder(node)
+                .setOwnedNodeEdgePoint(onepMap)
+                .build();
+            this.tapiNodes.put(newNode.key(), newNode);
+            LOG.debug("CONVERTTOFULL201, successfully create node {} with CepList {} ", newNode.getName(), cepList);
         }
     }
 
@@ -420,7 +470,36 @@ public class ConvertORTopoToTapiFullTopo {
                     break;
             }
             //List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
-            OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
+
+//          OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
+
+
+            AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
+            State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
+            Name nepName = new NameBuilder()
+                .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
+                .setValue(String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
+                .build();
+            OwnedNodeEdgePointBuilder onepBdd = new OwnedNodeEdgePointBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
+                    .getBytes(Charset.forName("UTF-8"))).toString()))
+                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+                .setName(Map.of(nepName.key(), nepName))
+                .setSupportedCepLayerProtocolQualifierInstances(
+                    new ArrayList<>(List.of(
+                        new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(
+                                TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
+                                    ? PHOTONICLAYERQUALIFIEROMS.VALUE
+                                    : PHOTONICLAYERQUALIFIEROTS.VALUE)
+                            .setNumberOfCepInstances(Uint64.valueOf(1))
+                            .build())))
+                .setDirection(Direction.BIDIRECTIONAL)
+                .setLinkPortRole(PortRole.SYMMETRIC)
+                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
+                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
+                .setLifecycleState(LifecycleState.INSTALLED);
+
             if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
                     && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
                 ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
@@ -434,9 +513,9 @@ public class ConvertORTopoToTapiFullTopo {
                     case SRGTXRXPP:
                         usedFreqMap = tapiFactory.getPPUsedWavelength(tp);
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E09,
-                                GridConstant.START_EDGE_FREQUENCY * 1E09
-                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06);
+                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E12,
+                                GridConstant.START_EDGE_FREQUENCY * 1E12
+                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09);
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
                                 usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
@@ -456,35 +535,12 @@ public class ConvertORTopoToTapiFullTopo {
                         break;
                 }
                 LOG.debug("calling add Photonic NEP spec for Roadm");
-                onepBd = tapiFactory.addPhotSpecToRoadmOnep(
-                    nodeId, usedFreqMap, availableFreqMap, onepBd, nepPhotonicSublayer);
+                onepBdd = tapiFactory.addPhotSpecToRoadmOnep(
+                    nodeId, usedFreqMap, availableFreqMap, onepBdd, String.join("+", nodeId, nepPhotonicSublayer));
             }
-            AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
-            State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
-            Name nepName = new NameBuilder()
-                .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
-                .setValue(String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
-                .build();
-            OwnedNodeEdgePoint onep = onepBd
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
-                    .getBytes(Charset.forName("UTF-8"))).toString()))
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifierInstances(
-                    new ArrayList<>(List.of(
-                        new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                            .setLayerProtocolQualifier(
-                                TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
-                                    ? PHOTONICLAYERQUALIFIEROMS.VALUE
-                                    : PHOTONICLAYERQUALIFIEROTS.VALUE)
-                            .setNumberOfCepInstances(Uint64.valueOf(1))
-                            .build())))
-                .setDirection(Direction.BIDIRECTIONAL)
-                .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
-                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
-                .setLifecycleState(LifecycleState.INSTALLED)
-                .build();
+
+            OwnedNodeEdgePoint onep = onepBdd.build();
+            LOG.debug("ConvertORToTapiTopology.populateNepsForRdmNode onep is {}", onep);
             onepMap.put(onep.key(), onep);
         }
         return onepMap;
