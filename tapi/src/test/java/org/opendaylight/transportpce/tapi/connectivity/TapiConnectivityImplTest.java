@@ -16,7 +16,9 @@ import static org.mockito.Mockito.when;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -39,6 +41,7 @@ import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
+import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
@@ -59,6 +62,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.CreateConnectivityServiceInputBuilder;
@@ -138,7 +142,9 @@ public class TapiConnectivityImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapilink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService);
+            networkTransactionService,
+            new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
+          .toString()));
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
