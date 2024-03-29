@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b852d35_a57c3f82",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-03-29T09:44:59Z",
+      "side": 1,
+      "message": "I don\u0027t see how you hande the case when getModifiedChildren could return several DataObjectModification...",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 51
+      },
+      "revId": "489f92b555423e76208fac38e7a4d0222ac793fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
