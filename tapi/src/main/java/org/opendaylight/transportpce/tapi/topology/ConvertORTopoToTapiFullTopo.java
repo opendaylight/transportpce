@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
@@ -79,7 +80,7 @@ public class ConvertORTopoToTapiFullTopo {
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
-    private static String topologicalMode;
+    private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
 
 
     public ConvertORTopoToTapiFullTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
@@ -88,9 +89,6 @@ public class ConvertORTopoToTapiFullTopo {
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
-        if (topologicalMode == null) {
-            ConvertORTopoToTapiFullTopo.topologicalMode = "Full";
-        }
     }
 
     public void convertRdmToRdmLinks(

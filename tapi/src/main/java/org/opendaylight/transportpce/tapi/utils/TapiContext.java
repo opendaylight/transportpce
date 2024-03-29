@@ -53,9 +53,13 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(immediate = true, service = TapiContext.class)
 public class TapiContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiContext.class);
@@ -63,9 +67,11 @@ public class TapiContext {
     public static final String NODE_NOT_PRESENT = "Node is not present in datastore";
     private final NetworkTransactionService networkTransactionService;
 
-    public TapiContext(NetworkTransactionService networkTransactionService) {
+    @Activate
+    public TapiContext(@Reference NetworkTransactionService networkTransactionService) {
         this.networkTransactionService = networkTransactionService;
         createTapiContext();
+        LOG.info("TapiContext initialized");
     }
 
     private void createTapiContext() {
@@ -232,7 +238,8 @@ public class TapiContext {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (!optionalOnep.isPresent()) {
-                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}", topoUuid, nodeUuid);
+                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}, Nep Uuid {}",
+                    topoUuid, nodeUuid, nepUuid);
                 return;
             }
             OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();

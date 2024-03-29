@@ -29,6 +29,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingKey;
@@ -53,7 +54,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
@@ -77,7 +77,7 @@ public final class TopologyUtils {
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
-    private String topologicalMode;
+    private static final String TOPOLOGICAL_MODE = TapiProvider.TOPOLOGICAL_MODE;
     public static final String NOOPMODEDECLARED = "No operational mode declared in Topo for Tp {}, assumes by default ";
 
     public TopologyUtils(NetworkTransactionService networkTransactionService, DataBroker dataBroker,
@@ -87,7 +87,6 @@ public final class TopologyUtils {
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
         // TODO: Initially set topological mode to Full. Shall be set through the setter at controller initialization
-        this.topologicalMode = "Full";
     }
 
     public Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
@@ -138,10 +137,10 @@ public final class TopologyUtils {
         return nameList;
     }
 
-    public Topology createFullOtnTopology() throws TapiTopologyException {
+    public Topology createOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
-        String topoType = this.topologicalMode.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
+        String topoType = TOPOLOGICAL_MODE.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
             : TapiStringConstants.T0_TAPI_MULTILAYER;
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(topoType.getBytes(Charset.forName("UTF-8"))).toString());
         Name name = new NameBuilder()
@@ -216,7 +215,7 @@ public final class TopologyUtils {
                     .equals(OpenroadmNodeType.ROADM))
                 .count() > 0) {
                 // map roadm nodes
-                if (this.topologicalMode.equals("Full")) {
+                if (TOPOLOGICAL_MODE.equals("Full")) {
                     for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
                         .network.Node roadm:openroadmNet.nonnullNode().values().stream()
                         .filter(nt -> nt
@@ -339,11 +338,6 @@ public final class TopologyUtils {
         for (Node node: topology.nonnullNode().values()) {
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
             for (OwnedNodeEdgePoint onep: node.nonnullOwnedNodeEdgePoint().values()) {
-//                    OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
-//                    if (onep1 == null) {
-//                        onepMap.put(onep.key(), onep);
-//                        continue;
-//                    }
                 OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder()
                         .setUuid(onep.getUuid())
                         .setLayerProtocolName(onep.getLayerProtocolName())
@@ -382,14 +376,6 @@ public final class TopologyUtils {
 
     public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
         return tapiSips;
-    }
-
-    public void setTopologicalMode(String topoMode) {
-        this.topologicalMode = topoMode;
-    }
-
-    public String getTopologicalMode() {
-        return topologicalMode;
     }
 
 }
