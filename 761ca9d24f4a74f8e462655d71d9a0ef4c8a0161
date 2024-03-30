@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec65fd06_e366d06f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-03-30T12:16:20Z",
+      "side": 1,
+      "message": "@Jonas Thanks for the feedback. This is an iso-functional refactoring of the current code base. It does not change the current bevahior. I am adding my colleagues who designed it to answer your question.\n@Olivier + Gilles + Christophe please can you have a look at Jonas\u0027comments ?",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e8d4e54_a562119c",
