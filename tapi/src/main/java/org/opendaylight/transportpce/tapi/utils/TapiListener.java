@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import java.util.Iterator;
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
@@ -22,6 +21,9 @@ import org.slf4j.LoggerFactory;
 public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoints> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiListener.class);
+    private static final String SE_JAVA_INTF =
+        "interface org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928"
+            + ".service._interface.points.ServiceEndPoint";
 
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<ServiceInterfacePoints>> changes) {
@@ -39,28 +41,23 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
                     break;
                 case SUBTREE_MODIFIED:
                     LOG.info("onDataTreeChanged in TapiListener : SUBTREE_MODIFIED");
-                    Iterator<? extends DataObjectModification<? extends DataObject>> iterator =
-                        rootSIP.getModifiedChildren(ServiceEndPoint.class).iterator();
-                    if (!iterator.hasNext()) {
-                        break;
-                    }
-                    DataObjectModification<? extends DataObject> dom = iterator.next();
-                    // to delete existing child entry
-                    DataObject dataAfter = dom.dataAfter();
-                    if (dataAfter == null) {
-                        MappingUtils.deleteMapEntry(((ServiceEndPoint) dom.dataBefore()).getUuid());
+                    for (DataObjectModification<? extends DataObject> dom :
+                            rootSIP.getModifiedChildren(ServiceEndPoint.class)) {
+                        // to delete existing child entry
+                        DataObject dataAfter = dom.dataAfter();
+                        if (dataAfter == null) {
+                            MappingUtils.deleteMapEntry(((ServiceEndPoint) dom.dataBefore()).getUuid());
+                            MappingUtils.afficheMap();
+                            continue;
+                        }
+                        // to add new child entry
+                        if (dom.dataBefore() != null || dom.dataType().toString().compareTo(SE_JAVA_INTF) != 0) {
+                            LOG.error("data input type is not a valid 'service-end-point'");
+                            continue;
+                        }
+                        MappingUtils.addMapSEP((ServiceEndPoint) dataAfter);
                         MappingUtils.afficheMap();
-                        break;
                     }
-                    // to add new child entry
-                    if (dom.dataBefore() != null || dom.dataType().toString().compareTo(
-                            "interface org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928"
-                                + ".service._interface.points.ServiceEndPoint") != 0) {
-                        LOG.error("data input type is not a valid 'service-end-point'");
-                        break;
-                    }
-                    MappingUtils.addMapSEP((ServiceEndPoint) dataAfter);
-                    MappingUtils.afficheMap();
                     break;
                 case DELETE:
                     LOG.info("onDataTreeChanged in TapiListener : DELETE");
