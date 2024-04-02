@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29f69705_bf5fff5a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-04-02T12:46:10Z",
+      "side": 1,
+      "message": "You are right, this is definitely not the best way to proceed! Created a Jira User Story TRNSPRTPCE-791 to correct this (I guess this is unfortunately not the only place where we manage it this way). We will inject this story in the next sprint (that will be open after we end migration to Ca.",
+      "parentUuid": "8e8d4e54_a562119c",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a653b35b_dfeca527",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2024-03-29T20:56:21Z",
       "side": 1,
       "message": "This seems to put very strict limitations on what a node-id can be. Is that really the intention.",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e127f7c_c1dc68b6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-04-02T12:46:10Z",
+      "side": 1,
+      "message": "OpenROADM introduces a constraint on the way the node-id is formed in R 2.2.1 and higher. So, yes, this is a strong limitation but associated with the way it is handled in OR, not in tpce.",
+      "parentUuid": "a653b35b_dfeca527",
       "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
