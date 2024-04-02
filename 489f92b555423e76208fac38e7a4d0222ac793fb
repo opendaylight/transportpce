@@ -46,6 +46,30 @@
       },
       "revId": "489f92b555423e76208fac38e7a4d0222ac793fb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b88ba73_e82898b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-02T06:51:20Z",
+      "side": 1,
+      "message": "addressed in https://git.opendaylight.org/gerrit/c/transportpce/+/111169 on top of this change",
+      "parentUuid": "17fa2887_7915e8f6",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 51
+      },
+      "revId": "489f92b555423e76208fac38e7a4d0222ac793fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
