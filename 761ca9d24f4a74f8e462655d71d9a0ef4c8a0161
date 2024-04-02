@@ -86,6 +86,24 @@
       "parentUuid": "a653b35b_dfeca527",
       "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "355837cc_20b524ab",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-04-02T13:03:26Z",
+      "side": 1,
+      "message": "I don\u0027t think that is correct. OpenROADM constrains which characters can be used but here you assume e.g. that the node-id contains two \"-\". That is not an OpenROADM constraint.",
+      "parentUuid": "7e127f7c_c1dc68b6",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
