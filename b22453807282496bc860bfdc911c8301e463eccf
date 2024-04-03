@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5b5b274_7ce16ca6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-03T14:34:36Z",
+      "side": 1,
+      "message": "tp.getValue() called multiple times",
+      "revId": "b22453807282496bc860bfdc911c8301e463eccf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2ca7424_1657ba21",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-03T14:34:36Z",
+      "side": 1,
+      "message": "built twice",
+      "revId": "b22453807282496bc860bfdc911c8301e463eccf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
