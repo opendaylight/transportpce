@@ -206,10 +206,9 @@ public class ConvertORToTapiTopology {
         Name nameDsr = new NameBuilder().setValueName("dsr/odu node name").setValue(nodeIdXpdr).build();
         Name namePhot = new NameBuilder().setValueName("otsi node name").setValue(nodeIdXpdr).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(this.ietfNodeType.getName()).build();
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                .topology.Node dsrNode =
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node dsrNode =
             createTapiNode(
-                Map.of(nameDsr.key(), nameDsr, namePhot.key(), namePhot,nameNodeType.key(), nameNodeType),
+                Map.of(nameDsr.key(), nameDsr, namePhot.key(), namePhot, nameNodeType.key(), nameNodeType),
                 //dsrLayerProtocols
                 Set.of(LayerProtocolName.DSR, LayerProtocolName.ODU,
                        LayerProtocolName.DIGITALOTN, LayerProtocolName.PHOTONICMEDIA));
@@ -227,11 +226,10 @@ public class ConvertORToTapiTopology {
             String subNodeName, List<OwnedNodeEdgePointKey> onepl, FORWARDINGRULE forwardingRule, int index) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
-            nepMap = new HashMap<>();
+                nepMap = new HashMap<>();
         for (OwnedNodeEdgePointKey onepKey : onepl) {
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint
-                nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group
-                    .NodeEdgePointBuilder()
+            var nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                    .node.rule.group.NodeEdgePointBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(nodeUuid)
                 .setNodeEdgePointUuid(onepKey.getUuid())
@@ -239,47 +237,38 @@ public class ConvertORToTapiTopology {
             nepMap.put(nep.key(), nep);
         }
         String nrgNameValue = String.join("-", subNodeName, "node-rule-group-" + index);
-        //Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
-        Set<RuleType> ruleTypes = new HashSet<>(Set.of(RuleType.FORWARDING));
-        Map<RuleKey, Rule> ruleList = new HashMap<>();
         Rule rule = new RuleBuilder()
             .setLocalId("forward")
             .setForwardingRule(forwardingRule)
-            .setRuleType(ruleTypes)
+            .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
             .build();
-        ruleList.put(rule.key(), rule);
         Name nrgName = new NameBuilder()
             .setValueName("nrg name")
             .setValue(nrgNameValue)
             .build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
             .setName(Map.of(nrgName.key(), nrgName))
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue)
-                .getBytes(Charset.forName("UTF-8"))).toString()))
-            .setRule(ruleList)
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
             .setNodeEdgePoint(nepMap)
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
 
-    public Map<NodeRuleGroupKey, NodeRuleGroup> createAllNodeRuleGroupForRdmNode(String topoType, Uuid nodeUuid,
-            String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
-        List<OwnedNodeEdgePoint> otsNepList = new ArrayList<>();
-        LOG.info("Creating NRG for {} {}", topoType, otsNepList.toString());
-        if (topoType.equals("T0ML")) {
-            otsNepList = onepl.stream().collect(Collectors.toList());
-        } else {
-            otsNepList = onepl.stream()
-                .filter(onep -> onep.getName().keySet().contains(new NameKey("PHOTONIC_MEDIA_OTSNodeEdgePoint")))
-                .collect(Collectors.toList());
-        }
+    public Map<NodeRuleGroupKey, NodeRuleGroup> createAllNodeRuleGroupForRdmNode(
+            String topoType, Uuid nodeUuid, String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
+        List<OwnedNodeEdgePoint> otsNepList = topoType.equals("T0ML") ? onepl.stream().collect(Collectors.toList())
+                : onepl.stream()
+                    .filter(onep -> onep.getName().keySet().contains(new NameKey("PHOTONIC_MEDIA_OTSNodeEdgePoint")))
+                    .collect(Collectors.toList());
+        LOG.info("Creating NRG for {} {}", topoType, otsNepList);
         List<OwnedNodeEdgePointKey> degOnepKeyList = new ArrayList<>();
         List<String> srgNames = new ArrayList<>();
         Map<OwnedNodeEdgePointKey,String> srgMap = new HashMap<>();
         for (OwnedNodeEdgePoint onep : otsNepList) {
-            String onepName = onep.getName().get(new NameKey(
-                topoType.equals("T0ML") ? "NodeEdgePoint name"
-                    : "PHOTONIC_MEDIA_OTSNodeEdgePoint")).getValue();
+            String onepName = onep.getName()
+                .get(new NameKey(topoType.equals("T0ML") ? "NodeEdgePoint name" : "PHOTONIC_MEDIA_OTSNodeEdgePoint"))
+                .getValue();
             String subNodeName = topoType.equals("T0ML") ? "ROADMINFRA-SRG-PP"
                 : String.join("-", onepName.split("\\+")[0], onepName.split("\\+")[2]);
             if (subNodeName.contains("DEG")) {
@@ -302,17 +291,21 @@ public class ConvertORToTapiTopology {
             index++;
         }
         for (String srgName : srgNames) {
-            globalNrgMap.putAll(createNodeRuleGroupForRdmNode(topoType, nodeUuid, srgName,
+            globalNrgMap.putAll(createNodeRuleGroupForRdmNode(
+                topoType,
+                nodeUuid,
+                srgName,
                 srgMap.entrySet().stream()
                     .filter(item -> item.getValue().equals(srgName))
                     .map(item -> item.getKey())
                     .collect(Collectors.toList()),
-                    // For T0ML we consider any port of ROADM INFRA can connect to potentially any other port
-                    //topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
-                    topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
-                    // Whereas for Abstracted or Full Topology we consider any port of the same SRG can not forward to
-                   // another port of the same SRG. Connectivity between SRGS will be defined through inter-rule-group
-                    : FORWARDINGRULECANNOTFORWARDACROSSGROUP.VALUE, index));
+                // For T0ML we consider any port of ROADM INFRA can connect to potentially any other port
+                //topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
+                topoType.equals("T0ML") ? FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
+                    : FORWARDINGRULECANNOTFORWARDACROSSGROUP.VALUE,
+                // Whereas for Abstracted or Full Topology we consider any port of the same SRG can not forward to
+                // another port of the same SRG. Connectivity between SRGS will be defined through inter-rule-group
+                index));
             index++;
             LOG.debug("AllNodeRuleGroup : creating a NRG for {}", srgName);
         }
@@ -320,7 +313,7 @@ public class ConvertORToTapiTopology {
     }
 
     public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForRdmNode(
-                String topoType, Uuid nodeUuid,String orNodeId, List<NodeRuleGroupKey> nrgList) {
+            String topoType, Uuid nodeUuid,String orNodeId, List<NodeRuleGroupKey> nrgList) {
         Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>();
         for (NodeRuleGroupKey nrgKey : nrgList) {
             AssociatedNodeRuleGroup associatedNrg = new AssociatedNodeRuleGroupBuilder()
@@ -330,41 +323,25 @@ public class ConvertORToTapiTopology {
                 .build();
             associatedNrgMap.put(associatedNrg.key(), associatedNrg);
         }
-        String irgNameValue =
-            topoType.equals("Full")
-                ? orNodeId + " inter rule group-"
-                : "rdm infra inter rule group-";
-        Set<RuleType> ruleTypes = new HashSet<>(Set.of(RuleType.FORWARDING));
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.RuleKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule> ruleMap
-            = new HashMap<>();
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule
-            = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.RuleBuilder()
-                .setLocalId("forward")
-                .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-                .setRuleType(ruleTypes)
-                .build();
-        ruleMap.put(rule.key(), rule);
-
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap = new HashMap<>();
-
-        Name irgName = new NameBuilder()
-            .setValueName("irg name")
-            .setValue(irgNameValue)
+        var rule = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                .inter.rule.group.RuleBuilder()
+            .setLocalId("forward")
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
             .build();
+        String irgNameValue = topoType.equals("Full") ? orNodeId + " inter rule group-" : "rdm infra inter rule group-";
+        Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
         InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue)
-                .getBytes(Charset.forName("UTF-8"))).toString()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
             .setName(Map.of(irgName.key(), irgName))
-            .setRule(ruleMap)
+            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
             .setAssociatedNodeRuleGroup(associatedNrgMap)
             .build();
-        interRuleGroupMap.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
-        return interRuleGroupMap;
+        return new HashMap<>(Map.of(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup));
     }
 
-    public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(int nb,
-            LayerProtocolName layerProtocol, String tpId, String nodeid,
+    public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(
+            int nb, LayerProtocolName layerProtocol, String tpId, String nodeid,
             Collection<SupportedInterfaceCapability> supportedInterfaceCapability,
             OperationalState operState, AdministrativeState adminState) {
         // add them to SIP context
@@ -726,9 +703,10 @@ public class ConvertORToTapiTopology {
             return null;
         }
         TxTtpAttributes txttpAtt = termPoint1.getTxTtpAttributes();
-        Map<Double,Double> freqMap = new HashMap<>();
         if (txttpAtt.getUsedWavelengths() != null
                 && txttpAtt.getUsedWavelengths().entrySet().iterator().next() != null) {
+        //TODO these checks here and below probably needs to be reworked
+            Map<Double,Double> freqMap = new HashMap<>();
             for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas :
                     txttpAtt.getUsedWavelengths().entrySet()) {
                 Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
@@ -737,7 +715,8 @@ public class ConvertORToTapiTopology {
                 freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
             }
             return freqMap;
-        } else if (txttpAtt.getAvailFreqMaps() != null
+        }
+        if (txttpAtt.getAvailFreqMaps() != null
                 && txttpAtt.getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND)) {
             byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
             LOG.debug("Creation of Bitset {}", freqBitSet);
@@ -752,9 +731,8 @@ public class ConvertORToTapiTopology {
                 }
             }
             return getFreqMapFromBitSet(freqBitSet);
-        } else {
-            return null;
         }
+        return null;
     }
 
     public Map<Double, Double> getTTPAvailableFreqMap(TerminationPoint tp) {
