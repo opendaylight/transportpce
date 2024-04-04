@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c05050e5_33f77b20",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-04-04T10:08:53Z",
+      "side": 1,
+      "message": "Here you have the same problem with too restrictive node-id matching.",
+      "revId": "b95b0643d0e0a83c4d4b9399982866a3337e4c40",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
