@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb262cb2_5db5464d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-04T07:17:20Z",
+      "side": 1,
+      "message": "multiple identical checks in these blocks",
+      "revId": "b22453807282496bc860bfdc911c8301e463eccf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5b5b274_7ce16ca6",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
         "patchSetId": 4
