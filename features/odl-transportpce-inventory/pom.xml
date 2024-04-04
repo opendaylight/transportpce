@@ -21,7 +21,7 @@
 
   <properties>
     <mdsal.version>13.0.1</mdsal.version>
-    <netconf.version>7.0.3</netconf.version>
+    <netconf.version>7.0.4</netconf.version>
     <transportpce.models.version>20.0.0-SNAPSHOT</transportpce.models.version>
     <transportpce.db.host>localhost:3306</transportpce.db.host>
     <transportpce.db.database>transportpce</transportpce.db.database>
