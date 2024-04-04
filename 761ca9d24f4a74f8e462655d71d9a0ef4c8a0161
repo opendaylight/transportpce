@@ -158,6 +158,24 @@
       "parentUuid": "547d5cd2_51e2c67f",
       "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbbf6f56_58d63ae1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-04-04T13:02:24Z",
+      "side": 1,
+      "message": "But the node-id/name is not an internal naming convention? It\u0027s selected by the user when adding a device to the Netconf topology?",
+      "parentUuid": "4a1f4f08_4e3e6fef",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
