@@ -53,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afc1469_413ad8ec",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-04-04T12:29:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "29f69705_bf5fff5a",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a653b35b_dfeca527",
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "Yes, you must be right. Anyway, this is an internal name that we use for topology, relying on the name on the field devices. So as far as we produce that name in tpce through portmapping, the fact that we use an internal naming convention does not affect the naming convention that shall be used on the device, and I don\u0027t think this is a great issue.",
       "parentUuid": "355837cc_20b524ab",
+      "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1f4f08_4e3e6fef",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-04-04T12:29:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "547d5cd2_51e2c67f",
       "revId": "761ca9d24f4a74f8e462655d71d9a0ef4c8a0161",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
