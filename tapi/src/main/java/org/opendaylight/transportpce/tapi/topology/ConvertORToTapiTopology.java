@@ -46,6 +46,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -511,136 +512,86 @@ public class ConvertORToTapiTopology {
             switch (lpn.getName()) {
                 case "ETH":
                 case "DSR":
-                    switch (ifCapType) {
-                        case "If1GEODU0":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPEGigE.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If10GEODU2e":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If10GEODU2":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If10GE":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE10GigELAN.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If100GEODU4":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If100GE":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(DIGITALSIGNALTYPE100GigE.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "IfOCHOTU4ODU4":
-                        case "IfOCH":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        default:
-                            LOG.error("IfCapability type not managed");
-                            break;
+                    Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>> ethDsrMap = Map.of(
+                        "If1GEODU0", Map.of(
+                            ODUTYPEODU0.VALUE, Uint64.valueOf(1), DIGITALSIGNALTYPEGigE.VALUE, Uint64.valueOf(1)),
+                        "If10GEODU2e", Map.of(
+                            ODUTYPEODU2E.VALUE, Uint64.valueOf(1), DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(1)),
+                        "If10GEODU2", Map.of(
+                            ODUTYPEODU2.VALUE, Uint64.valueOf(1), DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(1)),
+                        "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(1)),
+                        "If100GEODU4", Map.of(
+                            ODUTYPEODU4.VALUE, Uint64.valueOf(1), DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(1)),
+                        "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)),
+                        "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)));
+                    if (!ethDsrMap.containsKey(ifCapType)) {
+                        LOG.error("IfCapability type {} not managed", ifCapType);
+                        break;
+                    }
+                    for (Map.Entry<LAYERPROTOCOLQUALIFIER, Uint64> entry: ethDsrMap.get(ifCapType).entrySet()) {
+                        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(entry.getKey())
+                            .setNumberOfCepInstances(entry.getValue())
+                            .build());
                     }
                     break;
                 case "ODU":
-                    switch (ifCapType) {
-                        case "If1GEODU0":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU0.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If10GEODU2e":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU2E.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If10GEODU2":
-                        case "If10GE":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU2.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        case "If100GEODU4":
-                        case "If100GE":
-                        case "IfOCHOTU4ODU4":
-                        case "IfOCH":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODU4.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        default:
-                            LOG.error("IfCapability type not managed");
-                            break;
+                    Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>> oduMap = Map.of(
+                        "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.valueOf(1)),
+                        "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.valueOf(1)),
+                        "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.valueOf(1)),
+                        "If10GE", Map.of(ODUTYPEODU2.VALUE, Uint64.valueOf(1)),
+                        "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)),
+                        "If100GE", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)),
+                        "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(1)));
+                    if (!oduMap.containsKey(ifCapType)) {
+                        LOG.error("IfCapability type {} not managed", ifCapType);
+                        break;
+                    }
+                    for (Map.Entry<LAYERPROTOCOLQUALIFIER, Uint64> entry: oduMap.get(ifCapType).entrySet()) {
+                        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(entry.getKey())
+                            .setNumberOfCepInstances(entry.getValue())
+                            .build());
                     }
                     break;
                 case "PHOTONIC_MEDIA":
-                    switch (ifCapType) {
-                        case "IfOCHOTUCnODUCn":
-                        case "IfOtsiOtucnOducn":
-                        case "IfOCHOTUCnODUCnRegen":
-                        case "IfOCHOTUCnODUCnUniregen":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(ODUTYPEODUCN.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(OTUTYPEOTUCN.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                        //fallthrough
-                        case "IfOCH":
-                        case "IfOCHOTU4ODU4":
-                        case "IfOCHOTU4ODU4Regen":
-                        case "IfOCHOTU4ODU4Uniregen":
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                                .setNumberOfCepInstances(Uint64.valueOf(1))
-                                .build());
-                            break;
-                        default:
-                            break;
+                    Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>> photoMedMap = Map.of(
+                        "IfOCHOTUCnODUCn",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                        "IfOtsiOtucnOducn",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTUCnODUCnRegen",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTUCnODUCnUniregen",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                        "IfOCH",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTU4ODU4",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTU4ODU4Regen",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
+                        "IfOCHOTU4ODU4Uniregen",
+                            Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                                PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)));
+                    if (!photoMedMap.containsKey(ifCapType)) {
+                        LOG.error("IfCapability type {} not managed", ifCapType);
+                        break;
+                    }
+                    for (Map.Entry<LAYERPROTOCOLQUALIFIER, Uint64> entry: photoMedMap.get(ifCapType).entrySet()) {
+                        sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setLayerProtocolQualifier(entry.getKey())
+                            .setNumberOfCepInstances(entry.getValue())
+                            .build());
                     }
                     break;
                 default:
