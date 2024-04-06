@@ -11,12 +11,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.google.common.collect.ClassToInstanceMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+
 
 @ExtendWith(MockitoExtension.class)
 class NetworkUtilsImplTest {
@@ -29,6 +31,6 @@ class NetworkUtilsImplTest {
     void networkUtilsInitTest() {
         new NetworkUtilsImpl(dataBroker, rpcProvider);
 
-        verify(rpcProvider, times(1)).registerRpcImplementations(any());
+        verify(rpcProvider, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
     }
 }

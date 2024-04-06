@@ -14,6 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.google.common.collect.ClassToInstanceMap;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev230925.CancelResourceReserveInputBuilder;
+
 
 @ExtendWith(MockitoExtension.class)
 public class PceServiceRPCImplTest extends AbstractTest {
@@ -59,7 +61,7 @@ public class PceServiceRPCImplTest extends AbstractTest {
 
     @Test
     void testRpcRegistration() {
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any());
+        verify(rpcProviderService, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
     }
 
     @Test

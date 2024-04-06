@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.mdsal.common.api.CommitInfo.emptyFluentFuture;
 
+import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.util.concurrent.Futures;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ public class TapiProviderTest {
                 networkTransactionService, serviceHandler, serviceDataStoreOperations,
                 tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl);
 
-        verify(rpcProviderRegistry, times(2)).registerRpcImplementations(any());
+        verify(rpcProviderRegistry, times(2)).registerRpcImplementations(any(ClassToInstanceMap.class));
         verify(dataBroker, times(4)).registerDataTreeChangeListener(any(), any());
     }
 }
