@@ -613,7 +613,7 @@ public class ConvertORToTapiTopology {
                 (xnatt.getWavelength().getFrequency().getValue().doubleValue()
                     - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2),
                 (xnatt.getWavelength().getFrequency().getValue().doubleValue()
-                    - xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2)));
+                    + xnatt.getWavelength().getWidth().getValue().doubleValue() * 0.001 / 2)));
     }
 
     public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
