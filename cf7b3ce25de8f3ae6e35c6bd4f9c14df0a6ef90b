@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "cf7b3ce25de8f3ae6e35c6bd4f9c14df0a6ef90b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb62ea45_12eedf38",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-08T06:19:44Z",
+      "side": 1,
+      "message": "please rebase on top of https://git.opendaylight.org/gerrit/c/transportpce/+/111259",
+      "revId": "cf7b3ce25de8f3ae6e35c6bd4f9c14df0a6ef90b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
