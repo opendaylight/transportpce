@@ -20,6 +20,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11481996_7ca35fc2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-08T06:17:38Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be .getAToZMaxFrequency() rather ?",
+      "revId": "b95b0643d0e0a83c4d4b9399982866a3337e4c40",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbed202f_80711916",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-08T06:17:38Z",
+      "side": 1,
+      "message": "IMO                       GridUtils.getLowerSpectralIndexFromFrequency(pathDescription.getAToZDirection()\n                            .getAToZMinFrequency().getValue())\n                            \n and     GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()\n                            .getAToZMaxFrequency().getValue()) deserves intermediate variables",
+      "revId": "b95b0643d0e0a83c4d4b9399982866a3337e4c40",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c05050e5_33f77b20",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 1
