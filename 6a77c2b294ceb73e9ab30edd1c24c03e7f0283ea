@@ -50,6 +50,24 @@
       "message": "Thanks. Does not really understand why this bug was still there since locally I have a corrected version, but it might comes from the numerous merge conflicts we experienced in the last days. You ve got it. This is the way it shall work.",
       "revId": "6a77c2b294ceb73e9ab30edd1c24c03e7f0283ea",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d58363_cae0b27b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-10T11:13:40Z",
+      "side": 1,
+      "message": "Thanks for the confirmation Olivier.\nLet\u0027s merge this if so.",
+      "parentUuid": "6e25d2dc_8f27c3ba",
+      "revId": "6a77c2b294ceb73e9ab30edd1c24c03e7f0283ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
