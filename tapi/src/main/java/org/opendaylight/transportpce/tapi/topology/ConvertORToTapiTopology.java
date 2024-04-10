@@ -590,8 +590,7 @@ public class ConvertORToTapiTopology {
         }
         Double freqValue = freq.getValue().doubleValue();
         Double widthValue = width.getValue().doubleValue();
-        Double value = freqValue - widthValue * 0.001 / 2;
-        return new HashMap<>(Map.of(value, value));
+        return new HashMap<>(Map.of(freqValue - widthValue * 0.001 / 2, freqValue + widthValue * 0.001 / 2));
     }
 
     public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
