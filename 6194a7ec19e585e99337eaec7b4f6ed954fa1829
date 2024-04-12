@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f5e0c90_b281e5bf",
+        "filename": "debug_tools/openconfig_proprietary_hijackingproxy.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-12T13:56:02Z",
+      "side": 1,
+      "message": "reverse these 2 lines",
+      "revId": "6194a7ec19e585e99337eaec7b4f6ed954fa1829",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
