@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14a1c9cb_d94fe417",
+        "filename": "debug_tools/openconfig_proprietary_hijackingproxy.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-12T13:58:35Z",
+      "side": 1,
+      "message": "cf https://git.opendaylight.org/gerrit/c/transportpce/+/74952/1/tests/debug_tools/netconf_TCP_SSH_hijackingproxy.pl",
+      "revId": "6194a7ec19e585e99337eaec7b4f6ed954fa1829",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f5e0c90_b281e5bf",
         "filename": "debug_tools/openconfig_proprietary_hijackingproxy.pl",
         "patchSetId": 1
