@@ -12,6 +12,7 @@
 
 use strict;
 use warnings;
+
 #use diagnostics;  #uncomment this line for more details when encountering warnings
 use Net::OpenSSH;
 use FileHandle;
@@ -20,15 +21,19 @@ use Getopt::Long qw(:config no_ignore_case bundling);
 use IO::Socket;
 use Net::hostent;
 
-my ($host, $help, $usage,  $proxy_port, $login, $password, $kidpid, $ssh_subsocket, $simpleproxy,
-    $pid, $ssh_handle, $client, $server, $capabilities, $hello_message, $verbose);
+my (
+    $host,        $help,         $usage,         $proxy_port,
+    $login,       $password,     $kidpid,        $ssh_subsocket,
+    $simpleproxy, $pid,          $ssh_handle,    $client,
+    $server,      $capabilities, $hello_message, $verbose
+);
 
-GetOptions (
-    "h|help" =>\$help,
-    "p|port=i"=>\$proxy_port,
-    "s|simpleproxy" =>\$simpleproxy,
-    "v|verbose" =>\$verbose,
-    "C|capabilities=s"=>\$capabilities
+GetOptions(
+    "h|help"           => \$help,
+    "p|port=i"         => \$proxy_port,
+    "s|simpleproxy"    => \$simpleproxy,
+    "v|verbose"        => \$verbose,
+    "C|capabilities=s" => \$capabilities
 );
 $usage = "
 USAGE: netconf_TCP_SSH_hijackproxy.pl [-h|--help] [-p|--port <port_number>] [-s|--simpleproxy] [-v|--verbose] [-C|--capabilities <custom_hello_file.xml>] <[login[:password]@]host[:port]> [login] [password]
@@ -59,39 +64,42 @@ if ($help) {
     exit(0);
 }
 
-unless (@ARGV >= 1) {
+unless ( @ARGV >= 1 ) {
     print $usage;
     exit(0);
 }
 
-($host, $login, $password) = @ARGV;
+( $host, $login, $password ) = @ARGV;
 
 #netconf default port is no 22 but 830
-if ($host !~ /:[0-9]+$/) { $host.=':830'; }
+if ( $host !~ /:[0-9]+$/ ) { $host .= ':830'; }
 
-if (!defined($proxy_port)) { $proxy_port = 9000; }
+if ( !defined($proxy_port) ) { $proxy_port = 9000; }
 
-my $connection_string=$host;
+my $connection_string = $host;
 if ($password) {
-   $connection_string=$login.":".$password."@".$connection_string;
-} elsif ($login) {
-   $connection_string=$login."@".$connection_string;
+    $connection_string = $login . ":" . $password . "@" . $connection_string;
+}
+elsif ($login) {
+    $connection_string = $login . "@" . $connection_string;
 }
 
 #retrieving hello custom file if any
-if ((!defined ($simpleproxy))&&(defined ($capabilities))) {
-    open(CAPABILITIES,'<',$capabilities) or die ("can not open $capabilities") ;
+if ( ( !defined($simpleproxy) ) && ( defined($capabilities) ) ) {
+    open( CAPABILITIES, '<', $capabilities )
+      or die("can not open $capabilities");
     while (<CAPABILITIES>) {
         $hello_message .= $_;
     }
-    chop $hello_message; # removing EOF
-    $hello_message.="]]>]]>";
+    chop $hello_message;    # removing EOF
+    $hello_message .= "]]>]]>";
     close(CAPABILITIES);
 }
 
 # the following regex are used to modify some part of the server messages relayed to the client
 # you can adapt it to your needs, some examples have been commented.
-my %regex_hash=(
+my %regex_hash = (
+
 # replace oo-device v1.2 by v1.2.1
 #   'module=org-openroadm-device&amp;revision=2016-10-14.*<\/capability>'=>'s/&amp;revision=2016-10-14/&amp;revision=2017-02-06/',
 #   '<schema><identifier>org-openroadm-device<\/identifier><version>2016-10-14'=>'s@<schema><identifier>org-openroadm-device</identifier><version>2016-10-14@<schema><identifier>org-openroadm-device</identifier><version>2017-02-06@',
@@ -100,105 +108,119 @@ my %regex_hash=(
 # add the ietf-netconf capability to the hello handshake - without it, ODL netconf mountpoints can not work
 #    '<\/capabilities>'=>'s@</capabilities>@\n<capability>urn:ietf:params:xml:ns:yang:ietf-netconf?module=ietf-netconf&amp;revision=2011-06-01</capability>\n</capabilities>@',
 # add the right notifications capabilities to the hello handshake + provide another solution for the ietf-netconf capability
-    '<\/capabilities>'=>'s@</capabilities>@\n<capability>urn:ietf:params:xml:ns:netmod:notification?module=nc-notifications&amp;revision=2008-07-14</capability>\n<capability>urn:ietf:params:xml:ns:netconf:notification:1.0?module=notifications&amp;revision=2008-07-14</capability>\n<capability>urn:ietf:params:xml:ns:netconf:base:1.0?module=ietf-netconf&amp;revision=2011-06-01</capability>\n</capabilities>@'
+    '<\/capabilities>' =>
+'s@</capabilities>@\n<capability>urn:ietf:params:xml:ns:netmod:notification?module=nc-notifications&amp;revision=2008-07-14</capability>\n<capability>urn:ietf:params:xml:ns:netconf:notification:1.0?module=notifications&amp;revision=2008-07-14</capability>\n<capability>urn:ietf:params:xml:ns:netconf:base:1.0?module=ietf-netconf&amp;revision=2011-06-01</capability>\n</capabilities>@'
 );
 
-if (defined ($simpleproxy)) { %regex_hash=(); }
+if ( defined($simpleproxy) ) { %regex_hash = (); }
 
 my %compiled_regex_hash;
-foreach my $keyword (keys %regex_hash){
-    eval ('$compiled_regex_hash{$keyword}= qr/'.$keyword.'/;');
+foreach my $keyword ( keys %regex_hash ) {
+    eval( '$compiled_regex_hash{$keyword}= qr/' . $keyword . '/;' );
 }
 
-$server = IO::Socket::INET->new( Proto     => 'tcp',
-                                 LocalPort => $proxy_port,
-                                 Listen    => SOMAXCONN,
-                                 Reuse     => 1);
+$server = IO::Socket::INET->new(
+    Proto     => 'tcp',
+    LocalPort => $proxy_port,
+    Listen    => SOMAXCONN,
+    Reuse     => 1
+);
 die "can't setup server" unless $server;
 print STDERR "[Proxy server $0 accepting clients: Ctrl-C to stop]\n";
 
+while ( $client = $server->accept() ) {
+    $client->autoflush(1);
+    my $hostinfo = gethostbyaddr( $client->peeraddr );
+    printf STDERR "[Incoming connection from %s]\n",
+      $hostinfo->name || $client->peerhost;
 
-while ($client = $server->accept()) {
-  $client->autoflush(1);
-  my $hostinfo = gethostbyaddr($client->peeraddr);
-  printf STDERR "[Incoming connection from %s]\n", $hostinfo->name || $client->peerhost;
+    print STDERR "[relaying to " . $connection_string . "]\n";
 
+    $ssh_handle = Net::OpenSSH->new(
+        $connection_string,
+        master_opts         => [ -o => 'StrictHostKeyChecking=no' ],
+        timeout             => 500,
+        kill_ssh_on_timeout => 500
+    );
 
-print STDERR "[relaying to ".$connection_string."]\n";
+    #netconf requires a specific socket
+    ( $ssh_subsocket, $pid ) =
+      $ssh_handle->open2socket( { ssh_opts => '-s' }, 'netconf' );
+    die "can't establish connection: exiting\n" unless defined($ssh_subsocket);
 
-$ssh_handle = Net::OpenSSH->new($connection_string,
-                                master_opts => [-o => 'StrictHostKeyChecking=no'],
-                                timeout => 500, kill_ssh_on_timeout => 500);
+    print STDERR "[Connected]\n";
 
-#netconf requires a specific socket
-($ssh_subsocket, $pid) = $ssh_handle->open2socket({ssh_opts => '-s'}, 'netconf');
-die "can't establish connection: exiting\n" unless defined($ssh_subsocket);
+    # split the program into two processes, identical twins
+    die "can't fork: $!" unless defined( $kidpid = fork() );
 
-print STDERR "[Connected]\n";
-
-# split the program into two processes, identical twins
-die "can't fork: $!" unless defined($kidpid = fork());
-
-$|=1;
+    $| = 1;
 
 # the if{} block runs only in the parent process (server output relayed to the client)
-if (!$kidpid) {
+    if ( !$kidpid ) {
 
-    # copy the socket to standard output
-    my $buf;
+        # copy the socket to standard output
+        my $buf;
 
-    if (defined ($hello_message)) {
-        #retrieve the server hello but do not relay it
-        while (my $nread = sysread($ssh_subsocket,$buf,400)) {
+        if ( defined($hello_message) ) {
+
+            #retrieve the server hello but do not relay it
+            while ( my $nread = sysread( $ssh_subsocket, $buf, 400 ) ) {
+                $ssh_subsocket->flush();
+                if ( $buf =~ /]]>]]>/ ) { last }
+            }
+
+            #send a custom hello message instead
+            print $client $hello_message;
+            if ( defined($verbose) ) { print STDOUT $hello_message; }
+        }
+
+#while (<$ssh_subsocket>) {
+#buffer seems not totally flushed when using the usual syntax above (nor when using autoflush)
+        while ( my $nread = sysread( $ssh_subsocket, $buf, 400 ) ) {
+            foreach my $keyword ( keys %regex_hash ) {
+                if ( $buf =~ $compiled_regex_hash{$keyword} ) {
+                    print STDERR 'found regex '
+                      . $keyword
+                      . ": replacing '\n"
+                      . $buf
+                      . "\n' by '\n";
+                    eval( '$buf =~ ' . $regex_hash{$keyword} . ';' );
+                    print STDERR $buf . "\n'\n";
+                }
+            }
+            print $client $buf;
             $ssh_subsocket->flush();
-            if ($buf =~ /]]>]]>/) { last };
-        };
-        #send a custom hello message instead
-        print $client $hello_message;
-        if (defined($verbose))  { print STDOUT  $hello_message; }
+            if ( defined($verbose) ) { print STDOUT $buf; }
+
+        }
+
+        kill( "TERM", $kidpid );    # send SIGTERM to child
     }
 
-    #while (<$ssh_subsocket>) {
-    #buffer seems not totally flushed when using the usual syntax above (nor when using autoflush)
-    while (my $nread = sysread($ssh_subsocket,$buf,400)) {
-        foreach my $keyword (keys %regex_hash){
-           if($buf =~ $compiled_regex_hash{$keyword}){
-               print STDERR 'found regex '.$keyword.": replacing '\n".$buf."\n' by '\n";
-               eval ('$buf =~ '.$regex_hash{$keyword}.';');
-               print STDERR $buf."\n'\n";
-           }
-        }
-        print $client $buf;
-        $ssh_subsocket->flush();
-        if (defined($verbose))  { print STDOUT  $buf; }
-
-    };
-
-    kill("TERM", $kidpid);              # send SIGTERM to child
-}
 # the else{} block runs only in the child process (client input relayed to the server)
-else {
+    else {
 
-   $ssh_subsocket->autoflush(1);
-   sleep 1;                             # wait needed for ensuring STDOUT buffer is not melt
-   my $buf;
+        $ssh_subsocket->autoflush(1);
+        sleep 1;    # wait needed for ensuring STDOUT buffer is not melt
+        my $buf;
 
-   #while (defined (my $buf = <$client>)) {
-   #usual syntax above used in verbose mode results into flush problems
-   while (my $nread = sysread($client,$buf,400)) {
-      print $ssh_subsocket $buf;
-      $client->flush();
-      if (defined($verbose))  { print STDOUT  $buf; }
-   }continue {}
+        #while (defined (my $buf = <$client>)) {
+        #usual syntax above used in verbose mode results into flush problems
+        while ( my $nread = sysread( $client, $buf, 400 ) ) {
+            print $ssh_subsocket $buf;
+            $client->flush();
+            if ( defined($verbose) ) { print STDOUT $buf; }
+        }
+        continue { }
 
-   close $client;
+        close $client;
 
-}
+    }
 
-$|=0;
+    $| = 0;
 
-sleep 2;
-kill("TERM", $kidpid);                  # send SIGTERM to child
+    sleep 2;
+    kill( "TERM", $kidpid );    # send SIGTERM to child
 
 }
 
