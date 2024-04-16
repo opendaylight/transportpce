@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ec71873_ff891600",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T12:31:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09e624bc_5846dd67",
+      "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ebb1b86_1fff723d",
@@ -35,6 +53,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b38243d_23ef8acd",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T12:31:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ebb1b86_1fff723d",
+      "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00832faf_c7d5ac39",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-04-16T09:26:51Z",
       "side": 1,
       "message": "needs to be reworked to avoid pattern split",
+      "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2926d8ba_7b566d0c",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T12:31:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00832faf_c7d5ac39",
       "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
