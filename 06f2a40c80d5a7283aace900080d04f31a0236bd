@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f57df80b_ea6bc237",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T14:56:56Z",
+      "side": 1,
+      "message": "add a few comments here",
+      "revId": "06f2a40c80d5a7283aace900080d04f31a0236bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "566c1433_b3e7cd9d",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T14:56:56Z",
+      "side": 1,
+      "message": "verbose mode ?",
+      "revId": "06f2a40c80d5a7283aace900080d04f31a0236bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
