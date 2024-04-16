@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e624bc_5846dd67",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T09:22:28Z",
+      "side": 1,
+      "message": "missing \u0027\\\u0027 for dot escaping and \u0027g\u0027 for trailing pattern w/o LF",
+      "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ebb1b86_1fff723d",
+        "filename": "debug_tools/openconfig_hijackingproxy.pl",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-16T09:22:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "2b205699b6cf813c3e380775906831b4b31ecb62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
