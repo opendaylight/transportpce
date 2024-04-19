@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ae868c_20a279ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-04-19T06:26:56Z",
+      "side": 1,
+      "message": "Thanks @Guillaume for working on this. We will try to test it out next week.",
+      "revId": "153aec72a283892b572afe7abb2dac7877ce2333",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c5ba693_5cb67f0a",
+        "filename": "debug_tools/README.openconfig_hijackingproxy.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-04-19T06:26:56Z",
+      "side": 1,
+      "message": "This is a clever workaround. Thanks for identifying this.",
+      "revId": "153aec72a283892b572afe7abb2dac7877ce2333",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
