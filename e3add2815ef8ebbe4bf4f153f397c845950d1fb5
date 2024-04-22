@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "984d76fa_1b05c88e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T13:05:55Z",
+      "side": 1,
+      "message": "yep. There is definitely room for more refactoring in this class.",
+      "parentUuid": "e056d385_6a21d0d2",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b80445a7_e6ebe28a",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2024-04-22T12:13:23Z",
       "side": 1,
       "message": "this intermediate variable is superfluous IMO.",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff856fba_09db12f2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T13:05:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b80445a7_e6ebe28a",
       "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
