@@ -56,6 +56,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
@@ -82,7 +83,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private NetworkTransactionService networkTransactionService;
     private final R2RLinkDiscovery linkDiscovery;
     private final PortMapping portMapping;
-    private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
     // Variables for creating and sending topology update notification
     private final NotificationPublishService notificationPublishService;
@@ -99,7 +99,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
         this.portMapping = portMapping;
-        this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.notificationPublishService = notificationPublishService;
         this.topologyChanges = new HashMap<TopologyChangesKey, TopologyChanges>();
@@ -147,7 +146,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId),
                                                                                 firstMount);
             if (topologyShard != null) {
-                this.topologyShardMountedDevice.put(nodeId, topologyShard);
                 for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
                     LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
                         NetworkUtils.OVERLAY_NETWORK_ID);
@@ -208,6 +206,20 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (!this.portMapping.isNodeExist(nodeId)) {
                 return false;
             }
+            List<Node> allNodes = new ArrayList<>();
+            List<Link> allLinks = new ArrayList<>();
+            InstanceIdentifier<Network> nwIID = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .build();
+            Optional<Network> nwOptional =
+                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwIID).get();
+            if (nwOptional.isPresent()) {
+                Network nw = nwOptional.orElseThrow();
+                allNodes = nw.nonnullNode().values().stream().collect(Collectors.toList());
+                allLinks = nw.augmentation(Network1.class)
+                    .nonnullLink().values().stream().collect(Collectors.toList());
+            }
+
             NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
 
             LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
@@ -217,30 +229,39 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .build();
             this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode);
 
-            TopologyShard topologyShard = this.topologyShardMountedDevice.get(nodeId);
-            if (topologyShard != null) {
-                for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
-                    LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .child(Node.class, openRoadmTopologyNode.key())
-                        .build();
-                    this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
+            for (Node openRoadmTopologyNode : allNodes) {
+                for (SupportingNode snode : openRoadmTopologyNode.nonnullSupportingNode().values()) {
+                    if (NetworkUtils.UNDERLAY_NETWORK_ID.equals(snode.getNetworkRef().getValue())
+                            && nodeId.equals(snode.getNodeRef().getValue())) {
+                        LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
+                            NetworkUtils.OVERLAY_NETWORK_ID);
+                        InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(Networks.class)
+                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .child(Node.class, openRoadmTopologyNode.key())
+                            .build();
+                        this.networkTransactionService.delete(
+                            LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
+                    }
                 }
-                for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
-                    LOG.info("deleting link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .augmentation(Network1.class)
-                        .child(Link.class, openRoadmTopologyLink.key())
-                        .build();
-                    this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
-                }
-            } else {
-                LOG.warn("TopologyShard for node '{}' is not present", nodeId);
             }
+
+            for (Link openRoadmTopologyLink : allLinks) {
+                String sourceNode = openRoadmTopologyLink.getSource().getSourceNode().getValue();
+                if (!sourceNode.substring(0, sourceNode.lastIndexOf("-")).equals(nodeId)) {
+                    String destNode = openRoadmTopologyLink.getDestination().getDestNode().getValue();
+                    if (!destNode.substring(0, destNode.lastIndexOf("-")).equals(nodeId)) {
+                        continue;
+                    }
+                LOG.info("deleting link {} in {}",
+                    openRoadmTopologyLink.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, openRoadmTopologyLink.key())
+                    .build();
+                this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
+            }
+
             @Nullable
             OpenroadmNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
             @Nullable
