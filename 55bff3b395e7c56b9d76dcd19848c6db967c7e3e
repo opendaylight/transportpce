@@ -16,6 +16,24 @@
       "message": "missing one closing bracket here",
       "revId": "55bff3b395e7c56b9d76dcd19848c6db967c7e3e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eeed364_522beb13",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-04-22T13:11:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fd519624_04a129a4",
+      "revId": "55bff3b395e7c56b9d76dcd19848c6db967c7e3e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
