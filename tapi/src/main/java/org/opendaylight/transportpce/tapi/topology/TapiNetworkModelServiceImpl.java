@@ -44,7 +44,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
@@ -141,7 +140,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint64;
@@ -192,7 +190,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         this.sipMap.clear();
         LOG.info("Mapping of node {}: {}", orNodeId, node.getMapping().values());
-
         // check type of device, check version and create node mapping
         switch (node.getNodeInfo().getNodeType()) {
             case Rdm:
@@ -202,11 +199,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Map<String, List<Mapping>> mapSrg = new HashMap<>();
                 List<Mapping> mappingList = new ArrayList<>(node.nonnullMapping().values());
                 mappingList.sort(Comparator.comparing(Mapping::getLogicalConnectionPoint));
-
-                List<String> nodeShardList = getRoadmNodelist(mappingList);
-
                 // populate degree and srg LCP map
-                for (String str : nodeShardList) {
+                for (String str : getRoadmNodelist(mappingList)) {
                     List<Mapping> interList = mappingList.stream()
                         .filter(x -> x.getLogicalConnectionPoint().contains(str))
                         .collect(Collectors.toList());
@@ -250,7 +244,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
                                     .setNumberOfCepInstances(Uint64.valueOf(1))
                                     .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                                .build()))
+                                    .build()))
                         .collect(Collectors.toList()));
                 LOG.debug("TAPINETWORKMODELSERVICEIMPL DEG+SRG complete retrieved OnepMap {} ", onepMap);
                 // create tapi Node
@@ -271,33 +265,36 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 break;
 
             case Xpdr:
-                List<Mapping> networkMappings = node.nonnullMapping().values().stream()
-                        .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
-                        .collect(Collectors.toList());
+                var valStream = node.nonnullMapping().values().stream();
                 Map<Integer, String> xpdrMap = new HashMap<>();
-                for (Mapping mapping : networkMappings) {
+                for (Mapping mapping :
+                        valStream
+                            .filter(k -> k.getLogicalConnectionPoint().contains("NETWORK"))
+                            .collect(Collectors.toList())) {
                     Integer xpdrNb =
                         Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
-                    String nodeId = node.getNodeId() + TapiStringConstants.XXPDR + xpdrNb;
-                    if (!xpdrMap.containsKey(xpdrNb)) {
-                        List<Mapping> xpdrNetMaps = node.nonnullMapping().values()
-                            .stream().filter(k -> k.getLogicalConnectionPoint()
-                                .contains("XPDR" + xpdrNb + TapiStringConstants.NETWORK)).collect(Collectors.toList());
-                        List<Mapping> xpdrClMaps = node.nonnullMapping().values()
-                            .stream().filter(k -> k.getLogicalConnectionPoint()
-                                .contains("XPDR" + xpdrNb + TapiStringConstants.CLIENT)).collect(Collectors.toList());
-                        xpdrMap.put(xpdrNb, node.getNodeId());
-                        // create switching pool
-                        OduSwitchingPools oorOduSwitchingPool = createSwitchPoolForXpdr(
-                            mapping.getXpdrType().getIntValue(), xpdrClMaps, xpdrNetMaps, xpdrNb);
-                        // node transformation
-                        Map<NodeKey, Node> nodeMap = new HashMap<>(
-                            transformXpdrToTapiNode(
-                                nodeId, xpdrClMaps, xpdrNetMaps, mapping.getXpdrType(), oorOduSwitchingPool));
-                        // add nodes and sips to tapi context
-                        mergeNodeinTopology(nodeMap);
-                        mergeSipsinContext(this.sipMap);
+                    if (xpdrMap.containsKey(xpdrNb)) {
+                        continue;
                     }
+                    List<Mapping> xpdrNetMaps = valStream
+                        .filter(k -> k.getLogicalConnectionPoint()
+                            .contains("XPDR" + xpdrNb + TapiStringConstants.NETWORK))
+                        .collect(Collectors.toList());
+                    List<Mapping> xpdrClMaps = valStream
+                        .filter(k -> k.getLogicalConnectionPoint()
+                            .contains("XPDR" + xpdrNb + TapiStringConstants.CLIENT))
+                        .collect(Collectors.toList());
+                    xpdrMap.put(xpdrNb, node.getNodeId());
+                    // add nodes and sips to tapi context
+                    mergeNodeinTopology(new HashMap<>(
+                        // node transformation
+                        transformXpdrToTapiNode(
+                            node.getNodeId() + TapiStringConstants.XXPDR + xpdrNb,
+                            xpdrClMaps, xpdrNetMaps, mapping.getXpdrType(),
+                            // create switching pool
+                            createSwitchPoolForXpdr(
+                                mapping.getXpdrType(), xpdrClMaps, xpdrNetMaps, xpdrNb))));
+                    mergeSipsinContext(this.sipMap);
                 }
                 LOG.info("TAPI node for or node {} successfully merged", orNodeId);
                 break;
@@ -319,16 +316,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     @SuppressWarnings("rawtypes")
     private void sendNotification(List<Uuid> changedOneps, Mapping mapping) {
-        Notification notification = new NotificationBuilder()
-            .setNotificationType(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
-//            .setTargetObjectType(ObjectType.NODEEDGEPOINT)
-            //TODO: Change this : modification in Models 2.4 does not provide for Object type Node EdgePoint
-            .setTargetObjectType(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE)
-            .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
-            .setUuid(tapiTopoUuid)
-            .build();
         try {
-            notificationPublishService.putNotification(notification);
+            notificationPublishService.putNotification(
+                new NotificationBuilder()
+                    .setNotificationType(NOTIFICATIONTYPEATTRIBUTEVALUECHANGE.VALUE)
+                    // .setTargetObjectType(ObjectType.NODEEDGEPOINT)
+                    //TODO: Change this : modification in Models 2.4 does not provide for Object type Node EdgePoint
+                    .setTargetObjectType(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE)
+                    .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
+                    .setUuid(tapiTopoUuid)
+                    .build());
         } catch (InterruptedException e) {
             LOG.error("Could not send notification");
         }
@@ -340,7 +337,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         for (Uuid nep : changedOneps) {
             changedAttributes.put(
                 new ChangedAttributesKey(nep.getValue()),
-                new ChangedAttributesBuilder().setValueName(nep.getValue())
+                new ChangedAttributesBuilder()
+                    .setValueName(nep.getValue())
                     .setOldValue(mapping.getPortOperState().equals("InService") ? "OutOfService" : "InService")
                     .setNewValue(mapping.getPortOperState())
                     .build());
@@ -350,18 +348,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private void updateLinks(List<Uuid> changedOneps, Mapping mapping) {
         try {
-            InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-                    .augmentation(Context1.class).child(TopologyContext.class)
-                    .child(Topology.class, new TopologyKey(tapiTopoUuid))
-                    .build();
             Optional<Topology> optTopology =
-                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, topoIID).get();
+                this.networkTransactionService.read(
+                        LogicalDatastoreType.OPERATIONAL,
+                        InstanceIdentifier.builder(Context.class)
+                            .augmentation(Context1.class)
+                            .child(TopologyContext.class)
+                            .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                            .build())
+                    .get();
             if (optTopology.isEmpty()) {
                 LOG.error("Could not update TAPI links");
                 return;
             }
             int nbAffectedLinks = 0;
-            LOG.info("UUIDofAffectedONEPS = {} ", changedOneps.toString());
+            LOG.info("UUIDofAffectedONEPS = {} ", changedOneps);
             for (Link link : optTopology.orElseThrow().nonnullLink().values()) {
                 List<Uuid> linkNeps = Objects.requireNonNull(link.getNodeEdgePoint()).values().stream()
                         .map(NodeEdgePointRef::getNodeEdgePointUuid)
@@ -370,14 +371,19 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 if (Collections.disjoint(changedOneps, linkNeps)) {
                     continue;
                 }
-                InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
-                        .augmentation(Context1.class).child(TopologyContext.class)
+                this.networkTransactionService.merge(
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
-                        .child(Link.class, new LinkKey(link.getUuid())).build();
-                Link linkblr = new LinkBuilder().setUuid(link.getUuid())
+                        .child(Link.class, new LinkKey(link.getUuid()))
+                        .build(),
+                    new LinkBuilder()
+                        .setUuid(link.getUuid())
                         .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
-                        .setOperationalState(transformOperState(mapping.getPortOperState())).build();
-                this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, linkIID, linkblr);
+                        .setOperationalState(transformOperState(mapping.getPortOperState()))
+                        .build());
                 nbAffectedLinks++ ;
             }
             LOG.info("AffectedLinksNb = {} ", nbAffectedLinks);
@@ -391,37 +397,43 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         List<Uuid> changedOneps = new ArrayList<>();
         for (Uuid nodeUuid : uuids) {
             try {
-                InstanceIdentifier<Node> nodeIID = InstanceIdentifier.builder(Context.class)
-                        .augmentation(Context1.class).child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
-                        .build();
                 Optional<Node> optionalNode =
-                    this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, nodeIID).get();
+                    this.networkTransactionService.read(
+                            LogicalDatastoreType.OPERATIONAL,
+                            InstanceIdentifier.builder(Context.class)
+                                .augmentation(Context1.class)
+                                .child(TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Node.class, new NodeKey(nodeUuid))
+                                .build())
+                        .get();
                 if (optionalNode.isEmpty()) {
                     continue;
                 }
-                Node node = optionalNode.orElseThrow();
-                List<OwnedNodeEdgePoint> oneps = node.getOwnedNodeEdgePoint().values().stream()
+                for (OwnedNodeEdgePoint onep : optionalNode.orElseThrow().getOwnedNodeEdgePoint().values().stream()
                         .filter(onep -> ((Name) onep.getName().values().toArray()[0]).getValue()
                                 .contains(mapping.getLogicalConnectionPoint()))
-                        .collect(Collectors.toList());
-                for (OwnedNodeEdgePoint onep : oneps) {
+                        .collect(Collectors.toList())) {
                     changedOneps.add(onep.getUuid());
                     updateSips(mapping, onep);
-                    CepList cepList = getUpdatedCeps(mapping, onep);
-                    InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
-                            .augmentation(Context1.class).child(TopologyContext.class)
+                    this.networkTransactionService.merge(
+                        LogicalDatastoreType.OPERATIONAL,
+                        InstanceIdentifier.builder(Context.class)
+                            .augmentation(Context1.class)
+                            .child(TopologyContext.class)
                             .child(Topology.class, new TopologyKey(tapiTopoUuid))
                             .child(Node.class, new NodeKey(nodeUuid))
                             .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
-                            .build();
-                    OwnedNodeEdgePoint onepblr = new OwnedNodeEdgePointBuilder().setUuid(onep.getUuid())
-                            .addAugmentation(new OwnedNodeEdgePoint1Builder().setCepList(cepList).build())
+                            .build(),
+                        new OwnedNodeEdgePointBuilder()
+                            .setUuid(onep.getUuid())
+                            .addAugmentation(
+                                new OwnedNodeEdgePoint1Builder().setCepList(getUpdatedCeps(mapping, onep)).build())
                             .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
-                            .setOperationalState(transformOperState(mapping.getPortOperState())).build();
-                    this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onepblr);
+                            .setOperationalState(transformOperState(mapping.getPortOperState()))
+                            .build());
                     LOG.info("UpdatedNEP {} of UUID {} to ADMIN {} OPER {}",
-                        onep.getName().toString(), onep.getUuid(),
+                        onep.getName(), onep.getUuid(),
                         transformAdminState(mapping.getPortAdminState()),
                         transformOperState(mapping.getPortOperState()));
                 }
@@ -449,10 +461,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> entry : onep1CepListConnEndPoint.entrySet()) {
-            ConnectionEndPoint cep = new ConnectionEndPointBuilder(entry.getValue())
+            cepMap.put(
+                entry.getKey(),
+                new ConnectionEndPointBuilder(entry.getValue())
                     .setOperationalState(transformOperState(mapping.getPortOperState()))
-                    .build();
-            cepMap.put(entry.getKey(), cep);
+                    .build());
         }
         return new CepListBuilder().setConnectionEndPoint(cepMap).build();
     }
@@ -466,11 +479,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         if (nodeId.contains("PDR")) {
             LOG.debug("ANALYSING change in {}", nodeId);
-            int xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
-            String xpdrNodeId = nodeId + TapiStringConstants.XXPDR + xpdrNb;
             return new ArrayList<>(List.of(new Uuid(
                 UUID.nameUUIDFromBytes(
-                        (String.join("+", xpdrNodeId, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
+                        (String.join("+",
+                                //xpdrNodeId,
+                                nodeId + TapiStringConstants.XXPDR
+                                    // + xpdrNb,
+                                    + Integer.parseInt(
+                                        mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]),
+                                TapiStringConstants.XPDR))
+                            .getBytes(StandardCharsets.UTF_8))
                     .toString())));
         }
         LOG.error("Updating this device is currently not supported");
@@ -478,65 +496,62 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private void updateSips(Mapping mapping, OwnedNodeEdgePoint onep) {
-        if (onep.getMappedServiceInterfacePoint() == null || onep.getMappedServiceInterfacePoint().size() == 0) {
+        if (onep.getMappedServiceInterfacePoint() == null) {
             return;
         }
-        //TODO remove onep.getMappedServiceInterfacePoint().size() == 0 check -> a for-loop on empty list won't harm
         for (MappedServiceInterfacePoint msip : onep.getMappedServiceInterfacePoint().values()) {
-            InstanceIdentifier<ServiceInterfacePoint> sipIID = InstanceIdentifier
+            this.networkTransactionService.merge(
+                LogicalDatastoreType.OPERATIONAL,
+                InstanceIdentifier
                     .builder(Context.class)
                     .child(ServiceInterfacePoint.class,
                             new ServiceInterfacePointKey(msip.getServiceInterfacePointUuid()))
-                    .build();
-            ServiceInterfacePoint sipblr = new ServiceInterfacePointBuilder()
+                    .build(),
+                new ServiceInterfacePointBuilder()
                     .setUuid(msip.getServiceInterfacePointUuid())
                     .setAdministrativeState(transformAdminState(mapping.getPortAdminState()))
-                    .setOperationalState(transformOperState(mapping.getPortOperState())).build();
-            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, sipIID, sipblr);
+                    .setOperationalState(transformOperState(mapping.getPortOperState()))
+                    .build());
         }
-
     }
 
     private Map<NodeKey, Node> transformXpdrToTapiNode(String nodeId, List<Mapping> xpdrClMaps,
             List<Mapping> xpdrNetMaps, XpdrNodeTypes xponderType, OduSwitchingPools oorOduSwitchingPool) {
         Map<NodeKey, Node> nodeMap = new HashMap<>();
         LOG.info("creation of a DSR/ODU node for {}", nodeId);
-        Uuid nodeUuidDsr = new Uuid(
-            UUID.nameUUIDFromBytes(
-                    (String.join("+", nodeId, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
-                .toString());
+        String nameVal = String.join("+", nodeId, TapiStringConstants.XPDR);
+        Uuid nodeUuidDsr = new Uuid(UUID.nameUUIDFromBytes(nameVal.getBytes(StandardCharsets.UTF_8)).toString());
         Name nameDsr = new NameBuilder()
                 .setValueName("dsr/odu node name")
-                .setValue(String.join("+", nodeId, TapiStringConstants.XPDR))
+                .setValue(nameVal)
                 .build();
         Name nameOtsi =  new NameBuilder()
                 .setValueName("otsi node name")
-                .setValue(String.join("+", nodeId, TapiStringConstants.XPDR))
+                .setValue(nameVal)
                 .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(getNodeType(xponderType)).build();
         Set<LayerProtocolName> dsrLayerProtocols = Set.of(
             LayerProtocolName.DSR, LayerProtocolName.ODU,
             LayerProtocolName.DIGITALOTN, LayerProtocolName.PHOTONICMEDIA);
         Node dsrNode = createTapiXpdrNode(
-                Map.of(nameDsr.key(), nameDsr, nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
-                dsrLayerProtocols, nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
+            Map.of(nameDsr.key(), nameDsr, nameOtsi.key(), nameOtsi, nameNodeType.key(), nameNodeType),
+            dsrLayerProtocols, nodeId, nodeUuidDsr, xpdrClMaps, xpdrNetMaps, xponderType, oorOduSwitchingPool);
         nodeMap.put(dsrNode.key(), dsrNode);
         return nodeMap;
     }
 
     private OduSwitchingPools createSwitchPoolForXpdr(
-            int xpdrType, List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
+            XpdrNodeTypes xpdrType, List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
         //TODO are switching pool correct here??
         switch (xpdrType) {
-            case 1:
-                // Tpdr
+            case Tpdr:
                 return createTpdrSwitchPool(xpdrNetMaps);
-            case 2:
-                // Mux
+            case Mpdr:
                 return createMuxSwitchPool(xpdrClMaps, xpdrNetMaps, xpdrNb);
-            case 3:
-                // Switch
+            case Switch:
                 return createSwtchSwitchPool(xpdrClMaps, xpdrNetMaps, xpdrNb);
+            // case Regen:
+            // case RegenUni:
             default:
                 LOG.warn("Xpdr type {} not supported", xpdrType);
         }
@@ -559,37 +574,40 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 int counter = 50;
                 do {
-                    counter--;
+                    var netTP1fromDS = getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId);
+                    if (netTP1fromDS != null) {
+                        //tpList.add(netTP1fromDS);
+                        tpMap.put(tpId, netTP1fromDS);
+                        LOG.debug("LCP {} is not empty for augmentation TP1", tpId);
+                        break;
+                    }
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         LOG.debug("Waiting until PP is backported in Topology, Exception raised", e);
                     }
-                } while (getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId) == null && counter != 0);
-                if (getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId) != null) {
-                    //tpList.add(getNetworkTerminationPointFromDatastore(overlayNodeId, tpId));
-                    tpMap.put(tpId, getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId));
-                    LOG.debug("LCP {} is not empty for augmentation TP1", tpId);
-                } else {
+                    counter--;
+                } while (counter > 0);
+                if (counter == 0) {
                     LOG.error("CREATENEP transformSrgToOnep, No Tp1 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
                 }
-                if (getNetworkTerminationPoint11FromDatastore(overlayNodeId, tpId) != null) {
-                    LOG.info("LCP {} is not empty for augmentation TP11", tpId);
-                } else {
+                if (getNetworkTerminationPoint11FromDatastore(overlayNodeId, tpId) == null) {
                     LOG.error("CREATENEP transformSrgToOnep, No Tp11 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
+                } else {
+                    LOG.info("LCP {} is not empty for augmentation TP11", tpId);
                 }
             }
         }
         LOG.debug("TransformSRGToONep for tps {}, of NodeId {} ",
-            tpMap.entrySet().stream().map(tp -> tp.getKey()).collect(Collectors.toList()).toString(), orNodeId);
+            tpMap.entrySet().stream().map(tp -> tp.getKey()).collect(Collectors.toList()), orNodeId);
         return populateNepsForRdmNode(orNodeId, tpMap, false, TapiStringConstants.PHTNC_MEDIA_OTS);
     }
 
-    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformDegToOnep(String orNodeId,
-                Map<String, List<Mapping>> mapDeg) {
+    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformDegToOnep(
+                String orNodeId, Map<String, List<Mapping>> mapDeg) {
         LOG.debug("CREATENEP transformDegToOnep, ListOfMapping {}, of NodeId {} ", mapDeg, orNodeId);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> degOnepMap = new HashMap<>();
         Map<String, TerminationPoint1> tpMap = new HashMap<>();
@@ -713,13 +731,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return;
         }
         Map<ServiceInterfacePointKey, ServiceInterfacePoint> sips = context.getServiceInterfacePoint();
-        if (sips != null) {
-            for (ServiceInterfacePoint sip:sips.values()) {
-                if (sip.getName().values().stream().anyMatch(name -> name.getValue().contains(nodeId))) {
-                    // Update state of services that have this sip as an endpoint and also connections
-                    updateConnectivityServicesState(sip.getUuid(), nodeId);
-                    deleteSipFromTopo(sip.getUuid());
-                }
+        if (sips == null) {
+            return;
+        }
+        for (ServiceInterfacePoint sip:sips.values()) {
+            if (sip.getName().values().stream().anyMatch(name -> name.getValue().contains(nodeId))) {
+                // Update state of services that have this sip as an endpoint and also connections
+                updateConnectivityServicesState(sip.getUuid(), nodeId);
+                deleteSipFromTopo(sip.getUuid());
             }
         }
     }
@@ -738,17 +757,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 .setRuleType(ruleTypes)
                 .build();
         ruleList.put(rule.key(), rule);
-        if (!(layerProtocols.contains(LayerProtocolName.DSR)
-                && layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA))) {
-            LOG.error("Undefined LayerProtocolName for {} node {}", nameMap.get(nameMap.keySet().iterator().next())
-                .getValueName(), nameMap.get(nameMap.keySet().iterator().next()).getValue());
+        if (!layerProtocols.contains(LayerProtocolName.DSR)
+                || !layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA)) {
+            LOG.error("Undefined LayerProtocolName for {} node {}",
+                nameMap.get(nameMap.keySet().iterator().next()).getValueName(),
+                nameMap.get(nameMap.keySet().iterator().next()).getValue());
         }
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         onepl.putAll(createXpdrDsrOduNeps(nodeId, xpdrClMaps, xpdrNetMaps, xponderType));
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = createNodeRuleGroupForDsrNode(
-                    nodeId, oorOduSwitchingPool, ruleList, onepl);
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList =
+            createNodeRuleGroupForDsrNode(nodeId, oorOduSwitchingPool, ruleList, onepl);
         onepl.putAll(createXpdrPhtnMdNeps(nodeId, xpdrNetMaps));
-        LOG.debug("TapiNetworkModelServiceImpl line 721, total NEP map = {}", onepl.toString());
+        LOG.debug("TapiNetworkModelServiceImpl line 721, total NEP map = {}", onepl);
 
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
@@ -794,19 +814,19 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 builtNode.getOwnedNodeEdgePoint().entrySet()) {
             if (entry.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
                         .filter(sclpqi -> sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
-                        .collect(Collectors.toList()).isEmpty()
-                    || entry.getValue().augmentationOrElseThrow(
-                                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                            .OwnedNodeEdgePoint1.class) == null
-                    || entry.getValue().augmentationOrElseThrow(
-                                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                            .OwnedNodeEdgePoint1.class).getPhotonicMediaNodeEdgePointSpec() == null) {
+                        .collect(Collectors.toList()).isEmpty()) {
                 continue;
             }
-            pmnepspecList.add(entry.getValue()
-                .augmentationOrElseThrow(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                        .OwnedNodeEdgePoint1.class)
-                .getPhotonicMediaNodeEdgePointSpec());
+            var aug1 = entry.getValue().augmentationOrElseThrow(
+                                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                            .OwnedNodeEdgePoint1.class);
+            if (aug1 == null) {
+                continue;
+            }
+            var phMedNepSpec = aug1.getPhotonicMediaNodeEdgePointSpec();
+            if (phMedNepSpec != null) {
+                pmnepspecList.add(phMedNepSpec);
+            }
         }
         LOG.debug("TapiNetworkModelServiceImpl line 775, List of non empty PMNEPSEC is = {}", pmnepspecList);
         return builtNode;
@@ -842,14 +862,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         // OTSi_MC Nep creation on otsi node
         for (int i = 0; i < xpdrNetMaps.size(); i++) {
-            Uuid nepUuid3 = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", nodeId, TapiStringConstants.OTSI_MC,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint())).getBytes(StandardCharsets.UTF_8)).toString());
-            Name onedName = new NameBuilder()
-                .setValueName("PhotMedNodeEdgePoint")
-                .setValue(String.join("+", nodeId, TapiStringConstants.OTSI_MC,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint()))
-                .build();
+            String onedNameVal =
+                String.join("+", nodeId, TapiStringConstants.OTSI_MC, xpdrNetMaps.get(i).getLogicalConnectionPoint());
+            Uuid nepUuid3 = new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString());
+            Name onedName = new NameBuilder().setValueName("PhotMedNodeEdgePoint").setValue(onedNameVal).build();
 
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
@@ -868,20 +884,17 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         return onepl;
     }
 
-    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createXpdrDsrOduNeps(String nodeId, List<Mapping> xpdrClMaps,
-                                                                                List<Mapping> xpdrNetMaps,
-                                                                                XpdrNodeTypes xponderType) {
+    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createXpdrDsrOduNeps(
+            String nodeId, List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, XpdrNodeTypes xponderType) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
         // client nep creation on DSR node
         for (int i = 0; i < xpdrClMaps.size(); i++) {
-            LOG.info("Client NEP = {}",
-                String.join("+", nodeId, TapiStringConstants.DSR, xpdrClMaps.get(i).getLogicalConnectionPoint()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", nodeId, TapiStringConstants.DSR,
-                    xpdrClMaps.get(i).getLogicalConnectionPoint())).getBytes(StandardCharsets.UTF_8)).toString());
-            NameBuilder nameBldr = new NameBuilder().setValue(String.join("+", nodeId,
-                TapiStringConstants.DSR, xpdrClMaps.get(i).getLogicalConnectionPoint()));
-            Name name = nameBldr
+            String nepvalue =
+                String.join("+", nodeId, TapiStringConstants.DSR, xpdrClMaps.get(i).getLogicalConnectionPoint());
+            LOG.info("Client NEP = {}", nepvalue);
+            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nepvalue.getBytes(StandardCharsets.UTF_8)).toString());
+            Name name = new NameBuilder()
+                .setValue(nepvalue)
                 .setValueName(OpenroadmNodeType.TPDR.getName().equalsIgnoreCase(xponderType.getName())
                         ? "100G-tpdr" : "NodeEdgePoint_C")
                 .build();
@@ -896,17 +909,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         // network nep creation on I_ODU node
         for (int i = 0; i < xpdrNetMaps.size(); i++) {
-            LOG.info("iODU NEP = {}", String.join("+", nodeId, TapiStringConstants.I_ODU,
-                xpdrNetMaps.get(i).getLogicalConnectionPoint()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", nodeId, TapiStringConstants.I_ODU,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint())).getBytes(StandardCharsets.UTF_8)).toString());
+            String onedNameVal =
+                String.join("+", nodeId, TapiStringConstants.I_ODU, xpdrNetMaps.get(i).getLogicalConnectionPoint());
+            LOG.info("iODU NEP = {}", onedNameVal);
+            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString());
             Name onedName = new NameBuilder()
                 .setValueName("iNodeEdgePoint_N")
-                .setValue(String.join("+", nodeId, TapiStringConstants.I_ODU,
-                    xpdrNetMaps.get(i).getLogicalConnectionPoint()))
+                .setValue(onedNameVal)
                 .build();
-
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrNetMaps.get(i).getSupportedInterfaceCapability());
             OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid, xpdrNetMaps.get(i).getLogicalConnectionPoint(),
@@ -919,20 +929,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         // network nep creation on E_ODU node
         for (int i = 0; i < xpdrClMaps.size(); i++) {
-            LOG.info("eODU NEP = {}", String.join("+", nodeId, TapiStringConstants.E_ODU,
-                xpdrClMaps.get(i).getLogicalConnectionPoint()));
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", nodeId, TapiStringConstants.E_ODU,
-                    xpdrClMaps.get(i).getLogicalConnectionPoint())).getBytes(StandardCharsets.UTF_8)).toString());
+            String onedNameVal =
+                String.join("+", nodeId, TapiStringConstants.E_ODU, xpdrClMaps.get(i).getLogicalConnectionPoint());
+            LOG.info("eODU NEP = {}", onedNameVal);
+            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(onedNameVal.getBytes(StandardCharsets.UTF_8)).toString());
             Name onedName = new NameBuilder()
                 .setValueName("eNodeEdgePoint_N")
-                .setValue(
-                    String.join("+", nodeId, TapiStringConstants.E_ODU, xpdrClMaps.get(i).getLogicalConnectionPoint()))
+                .setValue(onedNameVal)
                 .build();
-
             List<SupportedIfCapability> newSupIfCapList =
                     new ArrayList<>(xpdrClMaps.get(i).getSupportedInterfaceCapability());
-
             OwnedNodeEdgePoint onep = createNep(nodeId, nepUuid, xpdrClMaps.get(i).getLogicalConnectionPoint(),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, true,
@@ -991,14 +997,18 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         if (opModeList == null || opModeList.isEmpty()) {
             for (SupportedInterfaceCapability sic : sicColl) {
-                String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
-                if (("IfOCHOTUCnODUCn").equals(ifCapType) || ("IfOCHOTUCnODUCnUniregen").equals(ifCapType)
-                        || ("IfOCHOTUCnODUCnRegen").equals(ifCapType)) {
-                //TODO use switch / case block
-                    keyedOpModeList.add(new OperationalModeKey("400G"));
-                    LOG.warn(TopologyUtils.NOOPMODEDECLARED + "400G rate available", tpid);
-                    break;
+                switch (sic.getIfCapType().toString().split("\\{")[0]) {
+                    case "IfOCHOTUCnODUCn":
+                    case "IfOCHOTUCnODUCnUniregen":
+                    case "IfOCHOTUCnODUCnRegen":
+                        //TODO use switch / case block
+                        keyedOpModeList.add(new OperationalModeKey("400G"));
+                        LOG.warn(TopologyUtils.NOOPMODEDECLARED + "400G rate available", tpid);
+                        break;
+                    default:
+                        continue;
                 }
+                break;
             }
             keyedOpModeList.add(new OperationalModeKey("100G"));
             LOG.warn(TopologyUtils.NOOPMODEDECLARED + "100G rate available", tpid);
@@ -1008,10 +1018,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         Map<Double, Double> freqWidthMap = new HashMap<>();
-        if (getNetworkTerminationPointFromDatastore(nodeId, tpid) != null) {
-            freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
-        } else {
+        if (getNetworkTerminationPointFromDatastore(nodeId, tpid) == null) {
             LOG.error("CREATENEP, No Tp found in topology for LCP {}, of NodeId {} ", tpid, nodeId);
+        } else {
+            freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
         }
         onepBldr = tapiFactory.addPayloadStructureAndPhotSpecToOnep(
                 nodeId, freqWidthMap, keyedOpModeList, sicColl, onepBldr, keyword);
@@ -1059,10 +1069,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         RiskParameterPac riskParamPac = new RiskParameterPacBuilder()
             .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
             .build();
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId, onepMap.values());
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId,
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
+            tapiFactory.createAllNodeRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId, onepMap.values());
+        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap =
+            tapiFactory.createInterRuleGroupForRdmNode(topologicalMode, nodeUuid, orNodeId,
                 nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         return new NodeBuilder()
             .setUuid(nodeUuid)
@@ -1122,30 +1132,26 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             tpId = new TpId("XPDR" + xpdrNb + TapiStringConstants.NETWORK + i);
             tpl.add(tpId);
         }
-        Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         NonBlockingList nbl = new NonBlockingListBuilder()
             .setNblNumber(Uint16.valueOf(1))
             .setTpList(tpl)
             .build();
-        nbMap.put(nbl.key(),nbl);
         return new OduSwitchingPoolsBuilder()
             .setSwitchingPoolNumber(Uint16.valueOf(1))
             .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
-            .setNonBlockingList(nbMap)
+            .setNonBlockingList(new HashMap<>(Map.of(nbl.key(),nbl)))
             .build();
     }
 
     private OduSwitchingPools createMuxSwitchPool(List<Mapping> xpdrClMaps, List<Mapping> xpdrNetMaps, Integer xpdrNb) {
         Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         for (int i = 1; i <= xpdrClMaps.size(); i++) {
-            Set<TpId> tpList = new HashSet<>();
-            TpId tpId = new TpId("XPDR" + xpdrNb + TapiStringConstants.CLIENT + i);
-            tpList.add(tpId);
-            tpId = new TpId("XPDR" + xpdrNb + "-NETWORK1");
-            tpList.add(tpId);
             NonBlockingList nbl = new NonBlockingListBuilder()
                 .setNblNumber(Uint16.valueOf(i))
-                .setTpList(tpList)
+                .setTpList(
+                    new HashSet<>(Set.of(
+                        new TpId("XPDR" + xpdrNb + TapiStringConstants.CLIENT + i),
+                        new TpId("XPDR" + xpdrNb + "-NETWORK1"))))
                 .setAvailableInterconnectBandwidth(Uint32.valueOf(xpdrNetMaps.size() * 10L))
                 .setInterconnectBandwidthUnit(Uint32.valueOf(1000000000))
                 .build();
@@ -1168,31 +1174,30 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         LOG.debug("ONEPL = {}", onepl.values());
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
+        Uuid nodeUuid = new Uuid(
+            UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.DSR)).getBytes(StandardCharsets.UTF_8))
+                .toString());
         int count = 1;
         for (NonBlockingList nbl : oorOduSwitchingPool.nonnullNonBlockingList().values()) {
             LOG.info("Non blocking list = {}", nbl);
             Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
             for (TpId tp : nbl.getTpList()) {
-                LOG.info("EDOU TP = {}", String.join("+", nodeId, TapiStringConstants.E_ODU, tp.getValue()));
-                LOG.info("DSR TP = {}", String.join("+", nodeId, TapiStringConstants.DSR, tp.getValue()));
-                Uuid tpUuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
-                    TapiStringConstants.E_ODU, tp.getValue())).getBytes(StandardCharsets.UTF_8)).toString());
-                Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId,
-                    TapiStringConstants.DSR, tp.getValue())).getBytes(StandardCharsets.UTF_8)).toString());
+                String tpUuidSd = String.join("+", nodeId, TapiStringConstants.E_ODU, tp.getValue());
+                LOG.info("EDOU TP = {}", tpUuidSd);
+                Uuid tpUuid = new Uuid(UUID.nameUUIDFromBytes(tpUuidSd.getBytes(StandardCharsets.UTF_8)).toString());
+                String tp1UuidSd = String.join("+", nodeId, TapiStringConstants.DSR, tp.getValue());
+                LOG.info("DSR TP = {}", tp1UuidSd);
+                Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes(tp1UuidSd.getBytes(StandardCharsets.UTF_8)).toString());
                 if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuid))
                         && onepl.containsKey(new OwnedNodeEdgePointKey(tp1Uuid))) {
                     NodeEdgePoint nep1 = new NodeEdgePointBuilder()
                         .setTopologyUuid(this.tapiTopoUuid)
-                        .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
-                                (String.join("+", nodeId,TapiStringConstants. DSR)).getBytes(StandardCharsets.UTF_8))
-                            .toString()))
+                        .setNodeUuid(nodeUuid)
                         .setNodeEdgePointUuid(tp1Uuid)
                         .build();
                     NodeEdgePoint nep2 = new NodeEdgePointBuilder()
                         .setTopologyUuid(this.tapiTopoUuid)
-                        .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
-                                (String.join("+", nodeId,TapiStringConstants. DSR)).getBytes(StandardCharsets.UTF_8))
-                            .toString()))
+                        .setNodeUuid(nodeUuid)
                         .setNodeEdgePointUuid(tpUuid)
                         .build();
                     nepList.put(nep1.key(), nep1);
@@ -1233,14 +1238,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private String getNodeType(XpdrNodeTypes xponderType) {
-        switch (xponderType.getIntValue()) {
-            //TODO use enum directly
-            case 1:
+        switch (xponderType) {
+            case Tpdr:
                 return OpenroadmNodeType.TPDR.getName();
-            case 2:
+            case Mpdr:
                 return OpenroadmNodeType.MUXPDR.getName();
-            case 3:
+            case Switch:
                 return OpenroadmNodeType.SWITCH.getName();
+            //case Regen:
+            //case RegenUni:
             default:
                 LOG.info("XpdrType {} not supported", xponderType);
                 return null;
@@ -1251,16 +1257,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         LOG.info("Creating tapi node in TAPI topology context");
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class)
-            .child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-            .build();
-
-        Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build();
-
         // merge in datastore
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID, topology);
+        this.networkTransactionService.merge(
+            LogicalDatastoreType.OPERATIONAL,
+            InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .build(),
+            new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build());
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -1273,15 +1278,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         LOG.info("Creating tapi node in TAPI topology context");
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
-            .build();
-
-        Topology topology = new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build();
-
         // merge in datastore
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, topoIID, topology);
+        this.networkTransactionService.merge(
+            LogicalDatastoreType.OPERATIONAL,
+            InstanceIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .build(),
+            new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build());
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -1294,12 +1299,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
-            ContextBuilder contextBuilder = new ContextBuilder();
-            contextBuilder.setServiceInterfacePoint(sips);
-            InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
             // merge in datastore
             this.networkTransactionService.merge(
-                LogicalDatastoreType.OPERATIONAL, contextIID, contextBuilder.build());
+                LogicalDatastoreType.OPERATIONAL,
+                InstanceIdentifier.builder(Context.class).build(),
+                new ContextBuilder().setServiceInterfacePoint(sips).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIPs merged successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -1308,12 +1312,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private void deleteLinkFromTopo(Uuid linkUuid) {
-        // TODO: check if this IID is correct
         try {
-            InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(TopologyContext.class).child(Topology.class,
-                    new TopologyKey(this.tapiTopoUuid)).child(Link.class, new LinkKey(linkUuid)).build();
-            this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, linkIID);
+            this.networkTransactionService.delete(
+                LogicalDatastoreType.OPERATIONAL,
+                // TODO: check if this IID is correct
+                InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class)
+                    .child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(Link.class, new LinkKey(linkUuid)).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI link deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -1322,12 +1329,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private void deleteNodeFromTopo(Uuid nodeUuid) {
-        // TODO: check if this IID is correct
         try {
-            InstanceIdentifier<Node> nodeIDD = InstanceIdentifier.builder(Context.class)
-                .augmentation(Context1.class).child(TopologyContext.class).child(Topology.class,
-                    new TopologyKey(this.tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid)).build();
-            this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, nodeIDD);
+            this.networkTransactionService.delete(
+                LogicalDatastoreType.OPERATIONAL,
+                // TODO: check if this IID is correct
+                InstanceIdentifier.builder(Context.class)
+                    .augmentation(Context1.class)
+                    .child(TopologyContext.class)
+                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(Node.class, new NodeKey(nodeUuid)).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI Node deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -1338,9 +1348,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private void deleteSipFromTopo(Uuid sipUuid) {
         // TODO: check if this IID is correct
         try {
-            InstanceIdentifier<ServiceInterfacePoint> sipIID = InstanceIdentifier.builder(Context.class)
-                    .child(ServiceInterfacePoint.class, new ServiceInterfacePointKey(sipUuid)).build();
-            this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, sipIID);
+            this.networkTransactionService.delete(
+                LogicalDatastoreType.OPERATIONAL,
+                InstanceIdentifier.builder(Context.class)
+                    .child(ServiceInterfacePoint.class, new ServiceInterfacePointKey(sipUuid))
+                    .build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIP deleted successfully.");
         } catch (InterruptedException | ExecutionException e) {
@@ -1381,12 +1393,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             .anyMatch(endPoint -> endPoint.getServiceInterfacePoint().getServiceInterfacePointUuid()
                         .equals(sipUuid))) {
                     LOG.info("Service using SIP of node {} identified. Update state of service", nodeId);
-                    ConnectivityService updService = new ConnectivityServiceBuilder(service)
-                        .setAdministrativeState(AdministrativeState.LOCKED)
-                        .setOperationalState(OperationalState.DISABLED)
-                        .setLifecycleState(LifecycleState.PENDINGREMOVAL)
-                        .build();
-                    updateConnectivityService(updService);
+                    updateConnectivityService(
+                        new ConnectivityServiceBuilder(service)
+                            .setAdministrativeState(AdministrativeState.LOCKED)
+                            .setOperationalState(OperationalState.DISABLED)
+                            .setLifecycleState(LifecycleState.PENDINGREMOVAL)
+                            .build());
                 }
             }
         }
@@ -1396,22 +1408,25 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         for (Connection connection:connMap.values()) {
             if (connection.getName().values().stream().anyMatch(name -> name.getValue().contains(nodeId))) {
-                Connection updConn = new ConnectionBuilder(connection)
-                    .setLifecycleState(LifecycleState.PENDINGREMOVAL)
-                    .setOperationalState(OperationalState.DISABLED)
-                    .build();
-                updateConnection(updConn);
+                updateConnection(
+                    new ConnectionBuilder(connection)
+                        .setLifecycleState(LifecycleState.PENDINGREMOVAL)
+                        .setOperationalState(OperationalState.DISABLED)
+                        .build());
             }
         }
     }
 
     private void updateConnection(Connection updConn) {
-        // TODO: check if this IID is correct
-        InstanceIdentifier<Connection> connectionIID = InstanceIdentifier.builder(Context.class)
+        this.networkTransactionService.merge(
+            LogicalDatastoreType.OPERATIONAL,
+            // TODO: check if this IID is correct
+            InstanceIdentifier.builder(Context.class)
                 .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                .child(ConnectivityContext.class).child(Connection.class,
-                        new ConnectionKey(updConn.getUuid())).build();
-        this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID, updConn);
+                .child(ConnectivityContext.class)
+                .child(Connection.class, new ConnectionKey(updConn.getUuid()))
+                .build(),
+            updConn);
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -1439,7 +1454,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
             // Admin and oper state common for all tps
-            OpenroadmTpType tpType = entry.getValue().getTpType();
             // PHOTONIC MEDIA nep
             LOG.debug("PHOTO NEP = {}", String.join("+", nodeId, nepPhotonicSublayer, entry.getKey()));
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
@@ -1460,14 +1474,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 default:
                     break;
             }
-
             List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
             OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
             if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
                     && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
                 Map<Double,Double> usedFreqMap = new HashMap<>();
                 Map<Double,Double> availableFreqMap = new HashMap<>();
-                switch (tpType) {
+                switch (entry.getValue().getTpType()) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
                     case SRGRXPP:
@@ -1482,7 +1495,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                     + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06);
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} for Node {}, tp {}",
-                                usedFreqMap.toString(), nodeId, tpMap.toString());
+                                usedFreqMap, nodeId, tpMap);
                             onepMap.putAll(populateNepsForRdmNode(nodeId,
                                 new HashMap<>(Map.of(entry.getKey(), entry.getValue())),
                                 true, TapiStringConstants.MC));
@@ -1506,24 +1519,22 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 onepBd = tapiFactory.addPhotSpecToRoadmOnep(
                         nodeId, usedFreqMap, availableFreqMap, onepBd, nepPhotonicSublayer);
             }
-            AdminStates admin = entry.getValue().getAdministrativeState();
-            State oper = entry.getValue().getOperationalState();
+            String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, entry.getKey());
             Name nepName = new NameBuilder()
                 .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
-                .setValue(String.join("+", nodeId, nepPhotonicSublayer, entry.getKey()))
+                .setValue(nepNameValue)
                 .build();
             OwnedNodeEdgePoint onep = onepBd
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(
-                        (String.join("+", nodeId, nepPhotonicSublayer, entry.getKey()))
-                            .getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(nepNameValue.getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
                 .setDirection(Direction.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
-                .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
+                .setAdministrativeState(
+                    this.tapiLink.setTapiAdminState(entry.getValue().getAdministrativeState().getName()))
+                .setOperationalState(
+                    this.tapiLink.setTapiOperationalState(entry.getValue().getOperationalState().getName()))
                 .setLifecycleState(LifecycleState.INSTALLED)
                 .build();
             LOG.debug("ROADMNEPPopulation TapiNetworkModelServiceImpl populate NEP {} for Node {}",
@@ -1559,7 +1570,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<TerminationPoint> tpOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
             if (tpOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading tp {} , empty list",tpIID);
+                LOG.error("readMdSal: Error reading tp {} , empty list", tpIID);
                 return null;
             }
             LOG.debug("SUCCES getting LCP TP for NodeId {} TpId {} while creating NEP in TapiNetworkModelServiceImpl",
@@ -1616,8 +1627,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
             .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1>
-                tpIID = InstanceIdentifier.builder(Networks.class)
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1> tpIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
