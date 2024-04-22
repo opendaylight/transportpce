@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7c88262_f5a667e5",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:38:33Z",
+      "side": 0,
+      "message": "Thanks for having taken care of these FIXME comments ! 😊",
+      "revId": "5abf8d766bfa79ede8ff46cbab9c70f6b5553f30",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
