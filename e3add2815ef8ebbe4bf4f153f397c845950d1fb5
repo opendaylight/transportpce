@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95ab487_ed5c0534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "LGTM. Thanks.\n\nHere are in comments a few possible improvements.\nHope this helps",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32c754a3_944dc31e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "this intermediate variable is superfluous IMO.",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80445a7_e6ebe28a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "this intermediate variable is superfluous IMO.",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b89c2644_24b27981",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "please indent + 4 this line to clearly separate body block from conditions",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "935744a2_4f67139e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "this intermdiate variable is superfluous IMO",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a04ebc0_9bc2c01a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-22T12:13:23Z",
+      "side": 1,
+      "message": "please indent + 4 this line to clearly separate body block from conditions\n\nand what about a guard clause instead ?\n\n            for (Link openRoadmTopologyLink : allLinks) {\n                String sourceNode \u003d openRoadmTopologyLink.getSource().getSourceNode().getValue();             \n                if (!sourceNode.substring(0, sourceNode.lastIndexOf(\"-\")).equals(nodeId) {\n                    String destNode \u003d openRoadmTopologyLink.getDestination().getDestNode().getValue();\n                    if (!destNode.substring(0, destNode.lastIndexOf(\"-\")).equals(nodeId)) {\n                        continue;\n                    }\n                }\n                LOG.info(\"deleting link {} in {}\",\n                    openRoadmTopologyLink.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);\n                this.networkTransactionService.delete(\n                    LogicalDatastoreType.CONFIGURATION,\n                    InstanceIdentifier.builder(Networks.class)\n                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))\n                        .augmentation(Network1.class)\n                        .child(Link.class, openRoadmTopologyLink.key())\n                        .build());\n            }",
+      "revId": "e3add2815ef8ebbe4bf4f153f397c845950d1fb5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
