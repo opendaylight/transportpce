@@ -206,9 +206,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                     try {
                         if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), powerValue,
                                 connectionNumber)) {
-                            LOG.info("Set Power failed for Roadm-connection: {} on Node: {}",
+                            LOG.error("Set Power failed for Roadm-connection: {} on Node: {}",
                                     connectionNumber, nodeId);
-                            // FIXME shouldn't it be LOG.error
                             return false;
                         }
                         LOG.info("Roadm-connection: {} updated ", connectionNumber);
@@ -220,9 +219,9 @@ public class PowerMgmtImpl implements PowerMgmt {
 
                         if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.GainLoss.getName(), powerValue,
                                 connectionNumber)) {
-                            LOG.warn("Setting power-control mode off failed for Roadm-connection: {}",
-                                connectionNumber);
-                            // FIXME no return false in that case?
+                            LOG.error("Set GainLoss failed for Roadm-connection: {} on Node: {}",
+                                    connectionNumber, nodeId);
+                            return false;
                         }
                     } catch (InterruptedException e) {
                         LOG.error("Olm-setPower wait failed :", e);
