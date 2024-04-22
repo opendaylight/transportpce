@@ -26,13 +26,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.glob
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPac;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.RiskParameterPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
@@ -72,15 +69,10 @@ public class ConvertTapiTopoToAbstracted {
             new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
         Name nameNodeType =
             new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
-        Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = pruneTapiRoadmNeps();
         var tapiFactory = new ConvertORToTapiTopology(this.refTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
             tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap =
-            tapiFactory.createInterRuleGroupForRdmNode(
-                "Abstracted", nodeUuid, null,
-                nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -98,23 +90,25 @@ public class ConvertTapiTopoToAbstracted {
             .setRiskCharacteristicName("risk characteristic")
             .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
             .build();
-        RiskParameterPac riskParamPac = new RiskParameterPacBuilder()
-            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-            .build();
         // build RDM infra node abstraction
         Node rdmNode = new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType))
-            .setLayerProtocolName(nodeLayerProtocols)
+            .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(onepMap)
             .setNodeRuleGroup(nodeRuleGroupMap)
-            .setInterRuleGroup(interRuleGroupMap)
+            .setInterRuleGroup(
+                tapiFactory.createInterRuleGroupForRdmNode(
+                    "Abstracted", nodeUuid, null,
+                    nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList())))
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setRiskParameterPac(riskParamPac)
+            .setRiskParameterPac(new RiskParameterPacBuilder()
+                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .build())
             .build();
         purgeTapiNodes();
         tapiNodes.put(rdmNode.key(), rdmNode);
@@ -131,16 +125,11 @@ public class ConvertTapiTopoToAbstracted {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         for (Node node : tapiPhotonicNodes) {
             for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
-                if (entry.getValue().getName().values().stream()
-                            .filter(name -> name.getValueName().equals("PHOTONIC_MEDIA_OTSNodeEdgePoint")).count() > 0
-                        && entry.getValue().getName().values().stream()
-                            .filter(name -> name.getValue().contains("DEG")).count() == 0) {
-                    onepMap.put(entry.getKey(), entry.getValue());
-                }
-                if (entry.getValue().getName().values().stream()
-                        .filter(name -> name.getValueName().equals("OTSI_MCNodeEdgePoint")).count() > 0
-                    && entry.getValue().getName().values().stream()
-                        .filter(name -> name.getValue().contains("DEG")).count() == 0) {
+                var valStream = entry.getValue().getName().values().stream();
+                if ((valStream.filter(name -> name.getValueName().equals("PHOTONIC_MEDIA_OTSNodeEdgePoint")).count() > 0
+                            && valStream.filter(name -> name.getValue().contains("DEG")).count() == 0)
+                        || (valStream.filter(name -> name.getValueName().equals("OTSI_MCNodeEdgePoint")).count() > 0
+                            && valStream.filter(name -> name.getValue().contains("DEG")).count() == 0)) {
                     onepMap.put(entry.getKey(), entry.getValue());
                 }
             }
