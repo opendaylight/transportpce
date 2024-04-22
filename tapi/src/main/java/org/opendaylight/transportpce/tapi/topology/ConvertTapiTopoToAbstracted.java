@@ -52,8 +52,7 @@ import org.slf4j.LoggerFactory;
 public class ConvertTapiTopoToAbstracted {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConvertTapiTopoToAbstracted.class);
-    private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
-        tapiNodes;
+    private Map<NodeKey, Node> tapiNodes;
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private Uuid refTopoUuid;
@@ -67,19 +66,20 @@ public class ConvertTapiTopoToAbstracted {
 
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Name nodeName =  new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA)
-            .build();
-        Name nameNodeType = new NameBuilder().setValueName("Node Type")
-            .setValue(OpenroadmNodeType.ROADM.getName()).build();
+        Uuid nodeUuid = new Uuid(
+            UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA.getBytes(Charset.forName("UTF-8"))).toString());
+        Name nodeName =
+            new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
+        Name nameNodeType =
+            new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
         Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = pruneTapiRoadmNeps();
         var tapiFactory = new ConvertORToTapiTopology(this.refTopoUuid);
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
-            = tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
-        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
-            = tapiFactory.createInterRuleGroupForRdmNode("Abstracted", nodeUuid, null,
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
+            tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
+        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap =
+            tapiFactory.createInterRuleGroupForRdmNode(
+                "Abstracted", nodeUuid, null,
                 nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
@@ -122,27 +122,25 @@ public class ConvertTapiTopoToAbstracted {
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> pruneTapiRoadmNeps() {
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiPhotonicNodes
-            = this.tapiNodes.values().stream()
+        List<Node> tapiPhotonicNodes = this.tapiNodes.values().stream()
                 .filter(n -> n.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA)
                     && !n.getLayerProtocolName().contains(LayerProtocolName.DIGITALOTN)
                     && !n.getLayerProtocolName().contains(LayerProtocolName.DSR)
                     && !n.getLayerProtocolName().contains(LayerProtocolName.ODU))
                 .collect(Collectors.toList());
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node
-            : tapiPhotonicNodes) {
+        for (Node node : tapiPhotonicNodes) {
             for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
                 if (entry.getValue().getName().values().stream()
                             .filter(name -> name.getValueName().equals("PHOTONIC_MEDIA_OTSNodeEdgePoint")).count() > 0
-                        && !(entry.getValue().getName().values().stream()
-                            .filter(name -> name.getValue().contains("DEG")).count() > 0)) {
+                        && entry.getValue().getName().values().stream()
+                            .filter(name -> name.getValue().contains("DEG")).count() == 0) {
                     onepMap.put(entry.getKey(), entry.getValue());
                 }
                 if (entry.getValue().getName().values().stream()
                         .filter(name -> name.getValueName().equals("OTSI_MCNodeEdgePoint")).count() > 0
-                    && !(entry.getValue().getName().values().stream()
-                        .filter(name -> name.getValue().contains("DEG")).count() > 0)) {
+                    && entry.getValue().getName().values().stream()
+                        .filter(name -> name.getValue().contains("DEG")).count() == 0) {
                     onepMap.put(entry.getKey(), entry.getValue());
                 }
             }
@@ -164,18 +162,15 @@ public class ConvertTapiTopoToAbstracted {
     }
 
 
-    public void setTapiNodes(Map<NodeKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeMap) {
+    public void setTapiNodes(Map<NodeKey, Node> nodeMap) {
         this.tapiNodes.putAll(nodeMap);
     }
 
-    public Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
-            getTapiNodes() {
+    public Map<NodeKey, Node> getTapiNodes() {
         return tapiNodes;
     }
 
-    public void setTapiLinks(Map<LinkKey,
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> linkMap) {
+    public void setTapiLinks(Map<LinkKey, Link> linkMap) {
         this.tapiLinks.putAll(linkMap);
     }
 
