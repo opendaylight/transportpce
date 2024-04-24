@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3fff355_a3a30581",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-24T14:05:13Z",
+      "side": 1,
+      "message": "comment line to remove",
+      "revId": "08ead37254f0968bd2bc169ab03c00f49005bdbe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
