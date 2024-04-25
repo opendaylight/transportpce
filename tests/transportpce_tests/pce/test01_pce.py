@@ -91,7 +91,7 @@ class TransportPCEtesting(unittest.TestCase):
                 print("sample files content loaded")
 
         cls.processes = test_utils.start_tpce()
-        time.sleep(5)
+        time.sleep(10)
 
     @classmethod
     def tearDownClass(cls):
