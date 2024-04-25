@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "70899edd_442d6102",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-25T06:59:58Z",
+      "side": 1,
+      "message": "Thanks for this. Would it be possible to have some (Junit or python black-box) tests to ensure this problem does not come back later ?",
+      "revId": "a82f3157e77974c9c9cdf75404af81a09b8336e1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "de6dace6_ad126260",
