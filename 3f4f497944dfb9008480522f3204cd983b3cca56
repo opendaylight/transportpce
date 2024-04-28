@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d219c28_1fec7fe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-04-28T15:27:16Z",
+      "side": 1,
+      "message": "docs-linkcheck false positive\n\n7:25:01   buildcontroller: OK (164.17\u003dsetup[8.36]+cmd[155.80] seconds)\n17:25:01   testsPCE: OK (320.31\u003dsetup[76.56]+cmd[243.75] seconds)\n17:25:01   sims121: OK (20.56\u003dsetup[16.52]+cmd[4.04] seconds)\n17:25:01   build_karaf_tests121: OK (60.34\u003dsetup[16.43]+cmd[43.90] seconds)\n17:25:01   tests121: OK (2203.20\u003dsetup[7.16]+cmd[2196.04] seconds)\n17:25:01   sims221: OK (21.06\u003dsetup[16.42]+cmd[4.64] seconds)\n17:25:01   build_karaf_tests221: OK (62.28\u003dsetup[8.93]+cmd[53.35] seconds)\n17:25:01   tests_tapi: OK (821.90\u003dsetup[17.80]+cmd[804.09] seconds)\n17:25:01   tests221: OK (2922.87\u003dsetup[6.75]+cmd[2916.12] seconds)\n17:25:01   sims71: OK (12.37\u003dsetup[9.43]+cmd[2.94] seconds)\n17:25:01   build_karaf_tests71: OK (59.99\u003dsetup[10.61]+cmd[49.38] seconds)\n17:25:01   tests71: OK (418.43\u003dsetup[7.85]+cmd[410.58] seconds)\n17:25:01   build_karaf_tests_hybrid: OK (75.91\u003dsetup[9.09]+cmd[66.82] seconds)\n17:25:01   tests_hybrid: OK (837.71\u003dsetup[7.08]+cmd[830.62] seconds)\n17:25:01   buildlighty: OK (115.37\u003dsetup[6.47]+cmd[108.90] seconds)\n17:25:01   docs: OK (33.43\u003dsetup[31.54]+cmd[1.89] seconds)\n17:25:01   docs-linkcheck: FAIL code 1 (34.75\u003dsetup[31.54]+cmd[3.20] seconds)\n17:25:01   checkbashisms: OK (58.86\u003dsetup[2.33]+cmd[55.84,0.68] seconds)\n17:25:01   pre-commit: OK (69.02\u003dsetup[4.27]+cmd[19.49,37.46,7.80] seconds)\n17:25:01   pylint: OK (22.36\u003dsetup[3.77]+cmd[18.58] seconds)",
+      "revId": "3f4f497944dfb9008480522f3204cd983b3cca56",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5abb9d44_f2d6a1c3",
