@@ -37,7 +37,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Re
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.ResilienceTypeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
@@ -74,34 +73,32 @@ public class TapiLinkImpl implements TapiLink {
         this.networkTransactionService = networkTransactionService;
     }
 
-    public Link createTapiLink(String srcNodeid, String srcTpId, String dstNodeId, String dstTpId, String linkType,
-                               String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
-                               String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-                               Set<String> transLayerNameList, Uuid tapiTopoUuid) {
-        Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
-        String sourceNodeKey = String.join("+", srcNodeid, srcNodeQual);
+    public Link createTapiLink(
+            String srcNodeid, String srcTpId, String dstNodeId, String dstTpId,
+            String linkType,
+            String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
+            String adminState, String operState,
+            Set<LayerProtocolName> layerProtoNameList, Set<String> transLayerNameList,
+            Uuid tapiTopoUuid) {
         String sourceNepKey = String.join("+", srcNodeid, srcTpQual, srcTpId);
-        Uuid sourceUuidNode = new Uuid(UUID.nameUUIDFromBytes(sourceNodeKey.getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid sourceUuidTp = new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(Charset.forName("UTF-8")))
-            .toString());
-        String destNodeKey = String.join("+", dstNodeId, dstNodeQual);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
-        Uuid destUuidNode = new Uuid(UUID.nameUUIDFromBytes(destNodeKey.getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid destUuidTp = new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(Charset.forName("UTF-8"))).toString());
         NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
             .setTopologyUuid(tapiTopoUuid)
-            .setNodeUuid(sourceUuidNode)
-            .setNodeEdgePointUuid(sourceUuidTp)
+            .setNodeUuid(
+                new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", srcNodeid, srcNodeQual).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setNodeEdgePointUuid(
+                new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(Charset.forName("UTF-8"))).toString()))
             .build();
-        nepList.put(sourceNep.key(), sourceNep);
         NodeEdgePoint destNep = new NodeEdgePointBuilder()
             .setTopologyUuid(tapiTopoUuid)
-            .setNodeUuid(destUuidNode)
-            .setNodeEdgePointUuid(destUuidTp)
+            .setNodeUuid(
+                new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", dstNodeId, dstNodeQual).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setNodeEdgePointUuid(
+                new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(Charset.forName("UTF-8"))).toString()))
             .build();
-        nepList.put(destNep.key(), destNep);
         NameBuilder linkName = new NameBuilder();
         // TODO: variables for each type
         switch (linkType) {
@@ -161,7 +158,8 @@ public class TapiLinkImpl implements TapiLink {
             .setName(Map.of(linkName.build().key(), linkName.build()))
             .setTransitionedLayerProtocolName(transLayerNameList)
             .setLayerProtocolName(layerProtoNameList)
-            .setNodeEdgePoint(nepList)
+            .setNodeEdgePoint(
+                new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
             .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                     new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
@@ -228,38 +226,57 @@ public class TapiLinkImpl implements TapiLink {
 
     @Override
     public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
-        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
-            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
-            .build();
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA_OTS, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
-        InstanceIdentifier<OwnedNodeEdgePoint> onep1IID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(node1Uuid))
-            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
-            .build();
+        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+            .toString());
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
+                String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
+                    .getBytes(Charset.forName("UTF-8")))
+            .toString());
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onep1IID).get();
-            if (!optionalOnep.isPresent() || !optionalOnep1.isPresent()) {
-                LOG.error("One of the 2 neps doesnt exist in the datastore: {} OR {}", nepUuid, nep1Uuid);
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Node.class, new NodeKey(
+                            new Uuid(UUID.nameUUIDFromBytes(
+                                    String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                        .getBytes(Charset.forName("UTF-8")))
+                                .toString())))
+                        .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                        .build())
+                .get();
+            if (optionalOnep.isEmpty()) {
+                LOG.error("Nep {} does not exist in the datastore", nepUuid);
                 return null;
             }
-            return optionalOnep.orElseThrow().getOperationalState().equals(
-                        optionalOnep1.orElseThrow().getOperationalState())
-                ? optionalOnep.orElseThrow().getOperationalState().getName() : OperationalState.DISABLED.getName();
+            Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
+                        .getBytes(Charset.forName("UTF-8")))
+                .toString());
+            Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Node.class, new NodeKey(
+                            new Uuid(UUID.nameUUIDFromBytes(
+                                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                        .getBytes(Charset.forName("UTF-8")))
+                                .toString())))
+                        .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
+                        .build())
+                .get();
+            if (optionalOnep1.isEmpty()) {
+                LOG.error("Nep {} does not exist in the datastore", nep1Uuid);
+                return null;
+            }
+            OperationalState onepOperState = optionalOnep.orElseThrow().getOperationalState();
+            return onepOperState.equals(optionalOnep1.orElseThrow().getOperationalState())
+                ? onepOperState.getName() : OperationalState.DISABLED.getName();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
@@ -268,39 +285,59 @@ public class TapiLinkImpl implements TapiLink {
 
     @Override
     public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
-        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", srcNodeId,
-            TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId).getBytes(Charset.forName("UTF-8"))).toString());
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(nodeUuid))
-            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
-            .build();
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA).getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(String.join("+", destNodeId,
-            TapiStringConstants.PHTNC_MEDIA_OTS, destTpId).getBytes(Charset.forName("UTF-8"))).toString());
-        InstanceIdentifier<OwnedNodeEdgePoint> onep1IID = InstanceIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid)).child(Node.class, new NodeKey(node1Uuid))
-            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
-            .build();
+        Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+            .toString());
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
+                String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
+                    .getBytes(Charset.forName("UTF-8")))
+            .toString());
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
-                LogicalDatastoreType.OPERATIONAL, onep1IID).get();
-            if (!optionalOnep.isPresent() || !optionalOnep1.isPresent()) {
-                LOG.error("One of the 2 neps doesnt exist in the datastore: {} OR {}", nepUuid, nep1Uuid);
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Node.class, new NodeKey(
+                            //nodeUuid
+                            new Uuid(UUID.nameUUIDFromBytes(
+                                    String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                        .getBytes(Charset.forName("UTF-8")))
+                                .toString())))
+                        .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+                        .build())
+                .get();
+            if (optionalOnep.isEmpty()) {
+                LOG.error("Nep {} does not exist in the datastore", nepUuid);
                 return null;
             }
-            return optionalOnep.orElseThrow().getAdministrativeState().equals(
-                        optionalOnep1.orElseThrow().getAdministrativeState())
-                ? optionalOnep.orElseThrow().getAdministrativeState().getName()
-                : AdministrativeState.UNLOCKED.getName();
+            Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
+                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
+                        .getBytes(Charset.forName("UTF-8")))
+                .toString());
+            Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL,
+                    InstanceIdentifier.builder(Context.class)
+                        .augmentation(Context1.class)
+                        .child(TopologyContext.class)
+                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Node.class, new NodeKey(
+                            //node1Uuid
+                            new Uuid(UUID.nameUUIDFromBytes(
+                                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                        .getBytes(Charset.forName("UTF-8")))
+                                .toString())))
+                        .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
+                        .build())
+                .get();
+            if (optionalOnep1.isEmpty()) {
+                LOG.error("Nep {} does not exist in the datastore", nep1Uuid);
+                return null;
+            }
+            AdministrativeState onepAdminState = optionalOnep.orElseThrow().getAdministrativeState();
+            return onepAdminState.equals(optionalOnep1.orElseThrow().getAdministrativeState())
+                ? onepAdminState.getName() : AdministrativeState.UNLOCKED.getName();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed getting Mapping data from portMapping",e);
             return null;
