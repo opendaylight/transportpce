@@ -292,7 +292,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
-
         assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes
@@ -772,46 +771,48 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private void checkNodeRuleGroupForTpdrDSR(
             List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
-        assertEquals(4, nrgList.size(), "transponder DSR should contain 4 node rule group (DSR-I_ODU/I-ODU-E_ODU)");
-        for (NodeRuleGroup nodeRuleGroup : nrgList) {
-            assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
-                "each node-rule-group should contain 2 NEP for transponder DSR");
-        }
-        Integer indNrg = nrgContainsClientAndNetwork(nrgList, clientNepUuid, networkNepUuid);
-        assertNotNull("One node-rule-group shall contains client and network Neps", indNrg);
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(indNrg).nonnullNodeEdgePoint().values());
-        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
-        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
-        assertEquals(nodeEdgePointList.get(0).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node");
-        assertEquals(nodeEdgePointList.get(1).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node");
-        List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
-        assertEquals(1, rule.size(), "node-rule-group nb 1 should contain a single rule");
-        assertEquals("forward", rule.get(0).getLocalId(), "local-id of the rule should be 'forward'");
-        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
-            "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
-        assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().stream().findFirst().orElseThrow(),
-            "the rule type should be 'FORWARDING'");
+        rawCheckNodeRuleGroupDSR("Transponder", nrgList, clientNepUuid, networkNepUuid, nodeUuid);
     }
 
     private void checkNodeRuleGroupForMuxDSR(
             List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
-        assertEquals(8, nrgList.size(), "muxponder DSR should contain 8 node rule group (DSR-I_ODU/I-ODU-E_ODU)");
+        rawCheckNodeRuleGroupDSR("Muxponder", nrgList, clientNepUuid, networkNepUuid, nodeUuid);
+    }
+
+    private void rawCheckNodeRuleGroupDSR(String nodeType,
+            List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
+        int nrgListSize;
+        int nrgNb;
+        int nepClNb;
+        switch (nodeType) {
+            case "Transponder":
+                nrgListSize = 4;
+                nrgNb = 1;
+                nepClNb = 1;
+                break;
+            case "Muxponder":
+            default:
+                nrgListSize = 8;
+                nrgNb = 2;
+                nepClNb = 4;
+                break;
+        }
+        assertEquals(nrgListSize, nrgList.size(),
+            nodeType + " DSR should contain " + nrgListSize + " node rule group (DSR-I_ODU/I-ODU-E_ODU)");
         Integer indNrg = nrgContainsClientAndNetwork(nrgList, clientNepUuid, networkNepUuid);
         assertNotNull("One node-rule-group shall contains client and network Neps", indNrg);
         List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(indNrg).nonnullNodeEdgePoint().values());
-        assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+        for (int i = nrgNb - 1; i == 1; i++) {
+            assertThat("node-rule-group nb " + nrgNb + " should be between nep-client" + nepClNb + " and nep-network1",
+                nodeEdgePointList.get(i).getNodeEdgePointUuid().getValue(),
+                either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+        }
         assertEquals(nodeEdgePointList.get(0).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
+            "node-rule-group nb " + nrgNb + " should be between nep-client" + nepClNb
+                + " and nep-network1 of the same node");
         assertEquals(nodeEdgePointList.get(1).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
+            "node-rule-group nb " + nrgNb + " should be between nep-client" + nepClNb
+                + " and nep-network1 of the same node");
         List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
         assertEquals(1, rule.size(), "node-rule-group nb 2 should contain a single rule");
         assertEquals("forward", rule.get(0).getLocalId(), "local-id of the rule should be 'forward'");
@@ -820,6 +821,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().stream().findFirst().orElseThrow(),
             "the rule type should be 'FORWARDING'");
     }
+
 
     private void checkNodeRuleGroupForSwitchDSR(
             List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
@@ -883,37 +885,46 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private void checkNodeRuleGroupForTpdrOTSi(
             List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
-        assertEquals(2, nrgList.size(), "Tpdr-OTSi should contain two node rule groups");
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
-        assertEquals(2, nodeEdgePointList.size(), "Tpdr-OTSi node-rule-group should contain 2 NEP");
-        assertThat("Tpdr-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        assertThat("Tpdr-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        assertEquals(nodeUuid, nodeEdgePointList.get(0).getNodeUuid(),
-            "any item of the node-rule-group should have the same nodeUuid");
-        assertEquals(nodeUuid, nodeEdgePointList.get(1).getNodeUuid(),
-            "any item of the node-rule-group should have the same nodeUuid");
-        List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
-        assertEquals(1, ruleList.size(), "node-rule-group should contain a single rule");
-        assertEquals("forward", ruleList.get(0).getLocalId(), "local-id of the rule should be 'forward'");
-        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
-            "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
-        assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
-            "the rule type should be 'FORWARDING'");
+        rawCheckNodeRuleGroupOTsi("Tpdr", nrgList, enepUuid, inepUuid, nodeUuid);
     }
 
     private void checkNodeRuleGroupForMuxOTSi(
             List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
-        assertEquals(1, nrgList.size(), "Mux-OTSi should contain a single node rule group");
+        rawCheckNodeRuleGroupOTsi("Mux", nrgList, enepUuid, inepUuid, nodeUuid);
+    }
+
+    private void checkNodeRuleGroupForSwitchOTSi(
+            List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
+        rawCheckNodeRuleGroupOTsi("Switch", nrgList, enepUuid, inepUuid, nodeUuid);
+    }
+
+    private void rawCheckNodeRuleGroupOTsi(String nodeType,
+            List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
+        int nrgListSize;
+        String network;
+        switch (nodeType) {
+            case "Switch":
+                nrgListSize = 4;
+                network = "XPDR2-NETWORK2";
+                break;
+            case "Tpdr":
+            case "Mux":
+            default:
+                nrgListSize = 1;
+                network = "XPDR1-NETWORK1";
+                break;
+        }
+        assertEquals(nrgListSize, nrgList.size(),
+            nodeType + "-OTSi should contain " + nrgListSize + " node rule group");
         List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
-        assertEquals(2, nodeEdgePointList.size(), "Mux-OTSi node-rule-group should contain 2 NEP");
-        assertThat("Mux-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
+        for (NodeRuleGroup nodeRuleGroup : nrgList) {
+            assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
+                "each node-rule-group should contain 2 NEP for " + nodeType + "-OTSi");
+        }
+        assertThat(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network,
             nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
             either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        assertThat("Mux-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
+        assertThat(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network,
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
         assertEquals(nodeUuid, nodeEdgePointList.get(0).getNodeUuid(),
@@ -926,34 +937,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
-            "the rule type should be 'FORWARDING'");
-    }
-
-    private void checkNodeRuleGroupForSwitchOTSi(
-            List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
-        assertEquals(4, nrgList.size(), "Switch-OTSi should contain 4 node rule group");
-        for (NodeRuleGroup nodeRuleGroup : nrgList) {
-            assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
-                "each node-rule-group should contain 2 NEP for Switch-OTSi");
-        }
-        List<NodeEdgePoint> nodeEdgePointList1 = new ArrayList<>(nrgList.get(3).nonnullNodeEdgePoint().values());
-        assertThat("Switch-OTSi node-rule-group nb 4 should be between eNEP and iNEP of XPDR2-NETWORK2",
-            nodeEdgePointList1.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        assertThat("Switch-OTSi node-rule-group nb 4 should be between eNEP and iNEP of XPDR2-NETWORK2",
-            nodeEdgePointList1.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        List<NodeEdgePoint> nodeEdgePointList0 = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
-        assertEquals(nodeUuid, nodeEdgePointList0.get(0).getNodeUuid(),
-            "any item of the node-rule-group should have the same nodeUuid");
-        assertEquals(nodeUuid, nodeEdgePointList0.get(1).getNodeUuid(),
-            "any item of the node-rule-group should have the same nodeUuid");
-        List<Rule> ruleList0 = new ArrayList<>(nrgList.get(0).nonnullRule().values());
-        assertEquals(1, ruleList0.size(), "node-rule-group should contain a single rule");
-        assertEquals("forward", ruleList0.get(0).getLocalId(), "local-id of the rule should be 'forward'");
-        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList0.get(0).getForwardingRule(),
-            "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
-        assertEquals(RuleType.FORWARDING, ruleList0.get(0).getRuleType().stream().findFirst().orElseThrow(),
             "the rule type should be 'FORWARDING'");
     }
 
