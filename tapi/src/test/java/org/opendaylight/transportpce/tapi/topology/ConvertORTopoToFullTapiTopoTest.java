@@ -58,7 +58,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
@@ -309,15 +308,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
-
-        List<Link> rdmTordmLinkList = ortopoLinks.values().stream()
-            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
-            .collect(Collectors.toList());
-        tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
-
+        tapiFullFactory.convertRdmToRdmLinks(
+            ortopoLinks.values().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))
+                .collect(Collectors.toList()));
         assertEquals(2, tapiFullFactory.getTapiNodes().size(), "Node list size should be 2");
         assertEquals(1, tapiFullFactory.getTapiLinks().size(), "Link list size should be 1");
-
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
             tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());
         int myInt = -1;
@@ -331,60 +327,52 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     myInt, node.getName(), node.getUuid());
             }
         }
-        Uuid roadmaNodeUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(Charset.forName("UTF-8")))
-                .toString());
         LOG.info("ROADM node found at rank {} from getrank", getNodeRank("ROADM-A1", tapiNodes));
-        checkOtsiNode(tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)), roadmaNodeUuid, "roadm", "ROADM-A1");
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> links
-            = tapiFullFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("ROADM-A1+PHOTONIC_MEDIA".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes("ROADM-C1+PHOTONIC_MEDIA".getBytes(Charset.forName("UTF-8")))
-            .toString());
-        Uuid tp1Uuid = new Uuid(UUID.nameUUIDFromBytes("ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid tp2Uuid = new Uuid(UUID.nameUUIDFromBytes(("ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX")
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid linkUuid =
-            new Uuid(UUID.nameUUIDFromBytes(
-                "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"
-                    .getBytes(Charset.forName("UTF-8"))).toString());
-        checkOmsLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
-            "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX");
+        checkOtsiNode(
+            tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)),
+            new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
+                    .getBytes(Charset.forName("UTF-8")))
+                .toString()),
+            "roadm", "ROADM-A1");
+        String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
+        String roadmC1seed = "ROADM-C1+PHOTONIC_MEDIA";
+        String roadmA1deg2seed = roadmA1seed + "_OTS+DEG2-TTP-TXRX";
+        String roadmC1deg1seed = roadmC1seed + "_OTS+DEG1-TTP-TXRX";
+        String linkseed = roadmC1deg1seed + "to" + roadmA1deg2seed;
+        checkOmsLink(
+            tapiFullFactory.getTapiLinks().values().stream()
+                .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
+                .findFirst().orElseThrow(),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmC1seed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1deg2seed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmC1deg1seed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            linkseed);
     }
 
     @Test
     void convertNodeForRoadmWhenOtnMuxAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
         ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
-        List<String> networkPortListA = new ArrayList<>();
-        for (TerminationPoint tp : otnMuxA.augmentation(Node1.class).getTerminationPoint().values()) {
-            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-                networkPortListA.add(tp.getTpId().getValue());
-            }
-        }
-        tapiFactory.convertNode(otnMuxA, networkPortListA);
+        tapiFactory.convertNode(
+            otnMuxA,
+            otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
+                .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
+                        .equals(OpenroadmTpType.XPONDERNETWORK))
+                .map(tp -> tp.getTpId().getValue())
+                .collect(Collectors.toList()));
         tapiFullFactory.setTapiNodes(tapiFactory.getTapiNodes());
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
-        List<Link> xponderOutLinkList = ortopoLinks.values().stream()
-            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-            .filter(lk1 -> ((lk1.getSource().getSourceNode().equals(otnMuxA.getNodeId())
-                    || lk1.getSource().getSourceNode().getValue().contains(roadmA.getNodeId().getValue()))
-                && (lk1.getDestination().getDestNode().equals(otnMuxA.getNodeId())
-                    || lk1.getDestination().getDestNode().getValue().contains(roadmA.getNodeId().getValue()))))
-            .collect(Collectors.toList());
-        List<Link> xponderInLinkList = ortopoLinks.values().stream()
-            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
-            .filter(lk1 -> ((lk1.getSource().getSourceNode().equals(otnMuxA.getNodeId())
-                    || lk1.getSource().getSourceNode().getValue().contains(roadmA.getNodeId().getValue()))
-                && (lk1.getDestination().getDestNode().equals(otnMuxA.getNodeId())
-                    || lk1.getDestination().getDestNode().getValue().contains(roadmA.getNodeId().getValue()))))
-            .collect(Collectors.toList());
-        xponderInLinkList.addAll(xponderOutLinkList);
-        tapiFullFactory.convertXpdrToRdmLinks(xponderInLinkList);
+        tapiFullFactory.convertXpdrToRdmLinks(
+            ortopoLinks.values().stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)
+                    || lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
+                .filter(lk1 -> ((lk1.getSource().getSourceNode().equals(otnMuxA.getNodeId())
+                        || lk1.getSource().getSourceNode().getValue().contains(roadmA.getNodeId().getValue()))
+                    && (lk1.getDestination().getDestNode().equals(otnMuxA.getNodeId())
+                        || lk1.getDestination().getDestNode().getValue().contains(roadmA.getNodeId().getValue()))))
+                .collect(Collectors.toList()));
         assertEquals(2, tapiFullFactory.getTapiNodes().size(),
             "Node list size should be 2 (XPDR, DSR-ODU merged; ROADM)");
         assertEquals(1, tapiFullFactory.getTapiLinks().size(),
@@ -397,33 +385,28 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             nodeMap.values().stream()
                 .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
                 .collect(Collectors.toList());
-        Uuid roadmNodeUuid = new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
-            .getBytes(Charset.forName("UTF-8"))).toString());
-        checkOtsiNode(tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)), roadmNodeUuid, "roadm", "ROADM-A1");
-        Uuid node1Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8")))
-                .toString());
-        Uuid node2Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("ROADM-A1+PHOTONIC_MEDIA".getBytes(Charset.forName("UTF-8")))
-                .toString());
-        LOG.info("ROADM-A1+PHOTONIC_MEDIA UUID is {}", node2Uuid);
-        Uuid tp1Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1"
+        checkOtsiNode(tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)),
+             new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(Charset.forName("UTF-8")))
-                .toString());
-        Uuid tp2Uuid = new Uuid(
-            UUID.nameUUIDFromBytes(("ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRX").getBytes(Charset.forName("UTF-8")))
-                .toString());
-        Uuid linkUuid =
-            new Uuid(UUID.nameUUIDFromBytes(
-                "ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1"
-                    .getBytes(Charset.forName("UTF-8"))).toString());
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> links
-            = tapiFullFactory.getTapiLinks().values().stream()
-            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
-            .collect(Collectors.toList());
-        checkXpdrRdmLink(links.get(0), node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, linkUuid,
-            "ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP2-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1");
+                .toString()),
+            "roadm", "ROADM-A1");
+        String spdrSA1seed = "SPDR-SA1-XPDR1";
+        String roadmA1seed = "ROADM-A1+PHOTONIC_MEDIA";
+        String spdrSA1tpseed = spdrSA1seed + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1";
+        String roadmA1tpseed = roadmA1seed + "_OTS+SRG1-PP2-TXRX";
+        String linkseed = spdrSA1tpseed + "to" + roadmA1tpseed;
+        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(Charset.forName("UTF-8"))).toString());
+        LOG.info("{} UUID is {}",roadmA1seed, node2Uuid);
+        checkXpdrRdmLink(
+            tapiFullFactory.getTapiLinks().values().stream()
+                .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
+                .findFirst().orElseThrow(),
+            new Uuid(UUID.nameUUIDFromBytes((spdrSA1seed + "+XPONDER").getBytes(Charset.forName("UTF-8"))).toString()),
+            node2Uuid,
+            new Uuid(UUID.nameUUIDFromBytes(spdrSA1tpseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1tpseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            linkseed);
     }
 
     private void rawConvertNode(Node node0, String dsrNodeType, String nodeId) {
@@ -458,6 +441,39 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             + " DIGITALOTN, PHOTONICMEDIA");
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
             node.getLayerProtocolName(), hasItems(LayerProtocolName.DSR, LayerProtocolName.ODU));
+        int enepsNsize = 4;
+        int inepsNsize = 1;
+        int nepsCsize = 4;
+        String namekey = "NodeEdgePoint_C";
+        int nepsCindex = 2;
+        int xpdrNb = 1;
+        int clientNb = 3;
+        int enepsNindex = 3;
+        int inepsNindex = 0;
+        switch (dsrNodeType) {
+            case "switch":
+                inepsNsize = 4;
+                xpdrNb = 2;
+                clientNb = 4;
+                enepsNindex = 2;
+                inepsNindex = 3;
+                break;
+            case "mux":
+                break;
+            case "tpdr":
+                enepsNsize = 2;
+                inepsNsize = 2;
+                nepsCsize = 2;
+                namekey = "100G-tpdr";
+                nepsCindex = 0;
+                clientNb = 1;
+                enepsNindex = 0;
+                inepsNindex = 1;
+                break;
+            default:
+                fail();
+                break;
+        }
         List<OwnedNodeEdgePoint> inepsN = node.nonnullOwnedNodeEdgePoint().values().stream()
             .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint_N")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
@@ -466,103 +482,59 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             .filter(n -> n.getName().containsKey(new NameKey("eNodeEdgePoint_N")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
-        List<OwnedNodeEdgePoint> nepsC;
+        var keyfilter = new NameKey(namekey);
+        List<OwnedNodeEdgePoint> nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
+            .filter(n -> n.getName().containsKey(keyfilter))
+            .sorted((nep5, nep6) -> nep5.getUuid().getValue().compareTo(nep6.getUuid().getValue()))
+            .collect(Collectors.toList());
+        assertEquals(enepsNsize, enepsN.size(), dsrNodeType + "-DSR node should have " + enepsNsize
+            + " eNEPs network");
+        assertEquals(inepsNsize, inepsN.size(), dsrNodeType + "-DSR node should have " + inepsNsize
+            + " iNEPs network");
+        assertEquals(nepsCsize, nepsC.size(), dsrNodeType + "-DSR node should have " + nepsCsize
+            + " NEPs client");
+        OwnedNodeEdgePoint nep5 = nepsC.get(nepsCindex);
+        String cl1NepUuidSeed = nodeId + "+DSR+XPDR" + xpdrNb + "-CLIENT" + clientNb;
+        Uuid client1NepUuid =
+            new Uuid(UUID.nameUUIDFromBytes(cl1NepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
         switch (dsrNodeType) {
             case "switch":
-                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
-                    .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
-                    .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
-                    .collect(Collectors.toList());
-                assertEquals(4, enepsN.size(), "Switch-DSR node should have 4 eNEPs network");
-                assertEquals(4, inepsN.size(), "Switch-DSR node should have 4 iNEPs network");
-                assertEquals(4, nepsC.size(), "Switch-DSR node should have 4 NEPs client");
-                OwnedNodeEdgePoint nep1 = nepsC.get(2);
-                Uuid client4NepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepClient100GSwitch(nep1, client4NepUuid, nodeId + "+DSR+XPDR2-CLIENT4", "NodeEdgePoint_C");
-                OwnedNodeEdgePoint enep2 = enepsN.get(2);
-                OwnedNodeEdgePoint inep2 = inepsN.get(3);
-                Uuid enetworkNepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                Uuid inetworkNepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepeODU4(enep2, enetworkNepUuid, nodeId + "+eODU+XPDR2-CLIENT4", "eNodeEdgePoint_N", false);
-                checkNepNetworkODU4(inep2, inetworkNepUuid, nodeId + "+iODU+XPDR2-NETWORK1", "iNodeEdgePoint_N", true);
-                List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
-                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
-                    .collect(Collectors.toList());
-// keep trace of the previous test performed before the structure of the NRG was modified
-//                checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, enetworkNepUuid, node9Uuid);
-                checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, inetworkNepUuid, node9Uuid);
+                checkNepClient100GSwitch(nep5, client1NepUuid, cl1NepUuidSeed, namekey);
                 break;
             case "mux":
-                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
-                    .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
-                    .sorted((nep3, nep4) -> nep3.getUuid().getValue().compareTo(nep4.getUuid().getValue()))
-                    .collect(Collectors.toList());
-                assertEquals(4, enepsN.size(), "Mux-DSR node should have 4 eNEP network");
-                assertEquals(1, inepsN.size(), "Mux-DSR node should have 1 iNEP network");
-                assertEquals(4, nepsC.size(), "Mux-DSR node should have 4 NEPs client");
-                OwnedNodeEdgePoint nep3 = nepsC.get(2);
-                Uuid client3NepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepClient10G(nep3, client3NepUuid, nodeId + "+DSR+XPDR1-CLIENT3", "NodeEdgePoint_C");
-                OwnedNodeEdgePoint enep4 = enepsN.get(3);
-                OwnedNodeEdgePoint inep4 = inepsN.get(0);
-                Uuid eclientNepUuid2 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                Uuid inetworkNepUuid2 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepeODU4(enep4, eclientNepUuid2, nodeId + "+eODU+XPDR1-CLIENT3", "eNodeEdgePoint_N", false);
-                checkNepNetworkODU4(inep4, inetworkNepUuid2, nodeId + "+iODU+XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    true);
-                List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
-                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
-                    .collect(Collectors.toList());
-// keep trace of the previous test performed before the structure of the NRG was modified
-//                checkNodeRuleGroupForMuxDSR(nrgList2, client3NepUuid, eclientNepUuid2, node9Uuid);
-                checkNodeRuleGroupForMuxDSR(nrgList2, client3NepUuid, inetworkNepUuid2, node9Uuid);
+                checkNepClient10G(nep5, client1NepUuid, cl1NepUuidSeed, namekey);
                 break;
             case "tpdr":
-                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
-                    .filter(n -> n.getName().containsKey(new NameKey("100G-tpdr")))
-                    .sorted((nep5, nep6) -> nep5.getUuid().getValue().compareTo(nep6.getUuid().getValue()))
-                    .collect(Collectors.toList());
-                assertEquals(2, enepsN.size(), "Tpdr-DSR node should have 2 eNEPs network");
-                assertEquals(2, inepsN.size(), "Tpdr-DSR node should have 2 iNEPs network");
-                assertEquals(2, nepsC.size(), "Tpdr-DSR node should have 2 NEPs client");
-                OwnedNodeEdgePoint nep5 = nepsC.get(0);
-                Uuid client1NepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepClient100GTpdr(nep5, client1NepUuid, nodeId + "+DSR+XPDR1-CLIENT1", "100G-tpdr");
-                OwnedNodeEdgePoint enep6 = enepsN.get(0);
-                OwnedNodeEdgePoint inep6 = inepsN.get(1);
-                Uuid enetworkNepUuid3 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+eODU+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                Uuid inetworkNepUuid3 = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
-                        .toString());
-                checkNepeODU4(enep6, enetworkNepUuid3, nodeId + "+eODU+XPDR1-CLIENT1", "eNodeEdgePoint_N", false);
-                checkNepNetworkODU4(inep6, inetworkNepUuid3, nodeId + "+iODU+XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    true);
-                List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
-                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
-                    .collect(Collectors.toList());
-// keep trace of the previous test performed before the structure of the NRG was modified
-//                checkNodeRuleGroupForTpdrDSR(nrgList3, client1NepUuid, enetworkNepUuid3, node9Uuid);
+            default:
+                checkNepClient100GTpdr(nep5, client1NepUuid, cl1NepUuidSeed, namekey);
+                break;
+        }
+        String enetNepUuidSeed = nodeId + "+eODU+XPDR" + xpdrNb + "-CLIENT" + clientNb;
+        OwnedNodeEdgePoint enep6 = enepsN.get(enepsNindex);
+        Uuid enetworkNepUuid3 =
+            new Uuid(UUID.nameUUIDFromBytes(enetNepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+        checkNepeODU4(enep6, enetworkNepUuid3, enetNepUuidSeed, "eNodeEdgePoint_N", false);
+        OwnedNodeEdgePoint inep6 = inepsN.get(inepsNindex);
+        String inetNepUuidSeed = nodeId + "+iODU+XPDR" + xpdrNb + "-NETWORK1";
+        Uuid inetworkNepUuid3 =
+            new Uuid(UUID.nameUUIDFromBytes(inetNepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+        checkNepNetworkODU4(inep6, inetworkNepUuid3, inetNepUuidSeed, "iNodeEdgePoint_N", true);
+        List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
+            .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+            .collect(Collectors.toList());
+        switch (dsrNodeType) {
+            case "switch":
+                checkNodeRuleGroupForSwitchDSR(nrgList3, client1NepUuid, inetworkNepUuid3, node9Uuid);
+                break;
+            case "mux":
+                checkNodeRuleGroupForMuxDSR(nrgList3, client1NepUuid, inetworkNepUuid3, node9Uuid);
+                break;
+            case "tpdr":
+            default:
                 checkNodeRuleGroupForTpdrDSR(nrgList3, client1NepUuid, inetworkNepUuid3, node9Uuid);
                 break;
-            default:
-                fail();
-                break;
+            // keep trace of the previous test performed before the structure of the NRG was modified
+            //enetworkNepUuid3,
         }
     }
 
