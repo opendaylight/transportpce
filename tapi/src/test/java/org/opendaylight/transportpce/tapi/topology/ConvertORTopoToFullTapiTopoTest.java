@@ -130,14 +130,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1"))))
             .get().orElseThrow();
 
-        /*KeyedInstanceIdentifier<Node, NodeKey> muxCIID = InstanceIdentifier.create(Networks.class)
-            .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
-                .class, new NetworkKey(new NetworkId("otn-topology")))
-            .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")));
-        FluentFuture<Optional<Node>> muxCFuture = dataBroker.newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, muxCIID);
-        muxCFuture.get().orElseThrow();*/
-
         otnSwitch = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
@@ -175,14 +167,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                         new NetworkKey(new NetworkId("otn-topology")))
                     .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1"))))
             .get().orElseThrow();
-
-        /*InstanceIdentifier<Network1> linksIID = InstanceIdentifier.create(Networks.class)
-            .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
-                .class, new NetworkKey(new NetworkId("otn-topology")))
-            .augmentation(Network1.class);
-        FluentFuture<Optional<Network1>> linksFuture = dataBroker.newReadOnlyTransaction()
-            .read(LogicalDatastoreType.CONFIGURATION, linksIID);
-        linksFuture.get().orElseThrow().getLink();*/
 
         ortopoLinks = dataBroker.newReadOnlyTransaction()
             .read(
@@ -608,11 +592,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     getOnep("DEG1-TTP", nepsOTS),
                     new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     otmcnepUuidSeed, pmOTSnep, false);
-                // TODO the test below is redundant with the first one
-                checkNepOtsiRdmNode(
-                    getOnep("DEG1-TTP", nepsOMS),
-                    new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-                    mcnepUuidSeed, pmOMSnep, false);
                 // For srg node
                 String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
                 checkNepOtsiRdmNode(
@@ -738,11 +717,16 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         }
         assertEquals(nrgListSize, nrgList.size(),
             nodeType + " DSR should contain " + nrgListSize + " node rule group (DSR-I_ODU/I-ODU-E_ODU)");
-        Integer indNrg = nrgContainsClientAndNetwork(nrgList, clientNepUuid, networkNepUuid);
-        assertNotNull("One node-rule-group shall contains client and network Neps", indNrg);
+        NodeRuleGroup nrgCltAndNet = nrgList.stream()
+                .filter(nrg -> nrg.nonnullNodeEdgePoint().values().stream()
+                        .map(nep -> nep.getNodeEdgePointUuid())
+                        .collect(Collectors.toList())
+                        .containsAll(List.of(clientNepUuid, networkNepUuid)))
+                .findFirst().orElseThrow();
+        assertNotNull("One node-rule-group shall contains client and network Neps", nrgCltAndNet);
         List<NodeEdgePoint> nodeEdgePointList;
         if (nodeType.equals("Switch")) {
-            assertEquals(8, nrgList.get(indNrg).getNodeEdgePoint().size(), "Switch-DSR nrg should contain 8 NEP");
+            assertEquals(8, nrgCltAndNet.getNodeEdgePoint().size(), "Switch-DSR nrg should contain 8 NEP");
             nodeEdgePointList = nrgList.get(0).nonnullNodeEdgePoint().values().stream()
                 .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
                     .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
@@ -759,11 +743,10 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals(networkNepUuid, nodeEdgePointList.get(6).getNodeEdgePointUuid(),
                 "in the sorted node-rule-group, nep number 7 should be XPDR2-NETWORK1");
             assertEquals(clientNepUuid, nodeEdgePointList.get(5).getNodeEdgePointUuid(),
-                "in the sorted node-rule-group, nep number 4 should be XPDR2-CLIENT4");
-                //TODO nep number 6 rather ?
+                "in the sorted node-rule-group, nep number 6 should be XPDR2-CLIENT4");
             //TODO regroup with else condition ?
         } else {
-            nodeEdgePointList = new ArrayList<>(nrgList.get(indNrg).nonnullNodeEdgePoint().values());
+            nodeEdgePointList = new ArrayList<>(nrgCltAndNet.nonnullNodeEdgePoint().values());
             for (int i : nepUuidCheckList) {
                 assertThat("node-rule-group nb " + nrgNb + " should be between nep-client" + nepClNb
                         + " and nep-network1",
@@ -1026,7 +1009,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node getNode(
             String searchedChar,
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeList) {
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node foundNode = null;
         for (var node : nodeList) {
             for (Name name : node.getName().values()) {
                 if (name.getValue().contains(searchedChar)) {
@@ -1037,23 +1019,4 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         LOG.info("pattern '{}' not found in list of nodes", searchedChar);
         return null;
     }
-
-    private Integer nrgContainsClientAndNetwork(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid) {
-        // 1 NRG should at least contain the NEP of interest in the NEP List
-        Integer indexNrg = 0;
-        for (NodeRuleGroup nrg : nrgList) {
-            Boolean foundClient = false;
-            Boolean foundNetwork = false;
-            for (NodeEdgePoint nep : nrg.nonnullNodeEdgePoint().values()) {
-                foundClient = foundClient || nep.getNodeEdgePointUuid().equals(clientNepUuid);
-                foundNetwork = foundNetwork || nep.getNodeEdgePointUuid().equals(networkNepUuid);
-            }
-            if (foundClient && foundNetwork) {
-                return indexNrg;
-            }
-            indexNrg++;
-        }
-        return null;
-    }
-
 }
