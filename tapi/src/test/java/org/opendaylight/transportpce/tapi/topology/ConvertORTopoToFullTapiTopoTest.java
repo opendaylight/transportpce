@@ -296,7 +296,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
             tapiFullFactory.getTapiNodes().values().stream().collect(Collectors.toList());
         checkOtsiNode(
-            tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)),
+            getNode("ROADM-A1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes(
                     (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(Charset.forName("UTF-8")))
                 .toString()),
@@ -327,9 +327,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     myInt, node.getName(), node.getUuid());
             }
         }
-        LOG.info("ROADM node found at rank {} from getrank", getNodeRank("ROADM-A1", tapiNodes));
         checkOtsiNode(
-            tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)),
+            getNode("ROADM-A1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(Charset.forName("UTF-8")))
                 .toString()),
@@ -385,7 +384,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             nodeMap.values().stream()
                 .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
                 .collect(Collectors.toList());
-        checkOtsiNode(tapiNodes.get(getNodeRank("ROADM-A1", tapiNodes)),
+        checkOtsiNode(getNode("ROADM-A1", tapiNodes),
              new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
                     .getBytes(Charset.forName("UTF-8")))
                 .toString()),
@@ -602,28 +601,28 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 // For Degree node
                 String mcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX";
                 checkNepOtsiRdmNode(
-                    nepsOMS.get(getRank("DEG1-TTP", nepsOMS)),
+                    getOnep("DEG1-TTP", nepsOMS),
                     new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     mcnepUuidSeed, pmOMSnep , false);
                 String otmcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX";
                 checkNepOtsiRdmNode(
-                    nepsOTS.get(getRank("DEG1-TTP", nepsOTS)),
+                    getOnep("DEG1-TTP", nepsOTS),
                     new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     otmcnepUuidSeed, pmOTSnep, false);
                 // TODO the test below is redundant with the first one
                 checkNepOtsiRdmNode(
-                    nepsOMS.get(getRank("DEG1-TTP", nepsOMS)),
+                    getOnep("DEG1-TTP", nepsOMS),
                     new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     mcnepUuidSeed, pmOMSnep, false);
                 // For srg node
                 String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
                 checkNepOtsiRdmNode(
-                    nepsOTS.get(getRank("SRG1-PP1", nepsOTS)),
+                    getOnep("SRG1-PP1", nepsOTS),
                     new Uuid(UUID.nameUUIDFromBytes(otscnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     otscnepUuidSeed, pmOTSnep, false);
                 String otscnep4UuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX";
                 checkNepOtsiRdmNode(
-                    nepsOTS.get(getRank("SRG1-PP3", nepsOTS)),
+                    getOnep("SRG1-PP3", nepsOTS),
                     new Uuid(UUID.nameUUIDFromBytes(otscnep4UuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
                     otscnep4UuidSeed, pmOTSnep, false);
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
@@ -1013,15 +1012,16 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         return new NodeBuilder(initialNode).addAugmentation(tpdr1Bldr.setTerminationPoint(tps).build()).build();
     }
 
-    private int getRank(String searchedChar, List<OwnedNodeEdgePoint> onepList) {
-        return rawRank(
-            searchedChar, onepList.stream().map(entry -> entry.getName().values()).collect(Collectors.toList()));
+    private OwnedNodeEdgePoint getOnep(String searchedChar, List<OwnedNodeEdgePoint> onepList) {
+        return onepList.get(rawRank(
+            searchedChar, onepList.stream().map(entry -> entry.getName().values()).collect(Collectors.toList())));
     }
 
-    private int getNodeRank(String searchedChar,
-        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeList) {
-        return rawRank(
-            searchedChar, nodeList.stream().map(entry -> entry.getName().values()).collect(Collectors.toList()));
+    private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node getNode(
+            String searchedChar,
+            List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodeList) {
+        return nodeList.get(rawRank(
+            searchedChar, nodeList.stream().map(entry -> entry.getName().values()).collect(Collectors.toList())));
     }
 
     private int rawRank(String searchedChar, List<Collection<Name>> nameCL) {
@@ -1038,6 +1038,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         }
         LOG.info("searched Char {} found at rank {}", searchedChar, foundAtRank);
         return foundAtRank;
+        //TODO do we really need to log this index -> report this directly in getOne and getNode
     }
 
     private Integer nrgContainsClientAndNetwork(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid) {
