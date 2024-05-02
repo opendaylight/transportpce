@@ -154,7 +154,6 @@ public class CrossConnectImpl121 {
                 String.valueOf(lowerSpectralSlotNumber), String.valueOf(higherSpectralSlotNumber));
         String connectionName = generateConnectionNumber(srcTp, destTp, spectralSlotName);
         Optional<MountPoint> mountPointOpt = deviceTransactionManager.getDeviceMountPoint(nodeId);
-        List<Ports> ports = null;
         MountPoint mountPoint;
         if (mountPointOpt.isPresent()) {
             mountPoint = mountPointOpt.orElseThrow();
@@ -172,6 +171,7 @@ public class CrossConnectImpl121 {
         portTrainInputBuilder.setConnectionNumber(connectionName);
         final Future<RpcResult<GetConnectionPortTrailOutput>> portTrailOutput = rpcService.getConnectionPortTrail(
                 portTrainInputBuilder.build());
+        List<Ports> ports = null;
         if (portTrailOutput != null) {
             try {
                 RpcResult<GetConnectionPortTrailOutput> connectionPortTrailOutputRpcResult = portTrailOutput.get();

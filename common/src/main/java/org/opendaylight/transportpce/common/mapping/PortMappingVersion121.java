@@ -111,7 +111,6 @@ public class PortMappingVersion121 {
 
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "1.2.1");
-        List<Mapping> portMapList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class).child(Info.class).build();
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType
@@ -127,6 +126,7 @@ public class PortMappingVersion121 {
         }
         postPortMapping(nodeId, nodeInfo, null, null);
 
+        List<Mapping> portMapList = new ArrayList<>();
         switch (deviceInfo.getNodeType()) {
 
             case Rdm:

@@ -196,8 +196,6 @@ public class R2RTapiLinkDiscovery {
                                  String remoteInterfaceName, Uuid tapiTopoUuid) {
         String srcTpTx = null;
         String srcTpRx = null;
-        String destTpTx = null;
-        String destTpRx = null;
         // Find which degree is associated with ethernet interface
         Integer srcDegId = getDegFromInterface(nodeId, interfaceName);
         if (srcDegId == null) {
@@ -229,6 +227,8 @@ public class R2RTapiLinkDiscovery {
         // Check whether degree is Unidirectional or Bidirectional by counting
         // number of
         // circuit-packs under degree subtree
+        String destTpTx = null;
+        String destTpRx = null;
         Direction destinationDirection = getDegreeDirection(destDegId, destNodeId);
         if (Direction.NotApplicable == destinationDirection) {
             LOG.error("Tapi R2R Link Couldnt find degree direction for nodeId: {} and degree: {}",

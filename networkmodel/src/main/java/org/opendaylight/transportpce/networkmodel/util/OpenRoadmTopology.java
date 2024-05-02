@@ -103,7 +103,6 @@ public final class OpenRoadmTopology {
     }
 
     public static TopologyShard createRdmTopologyShard(Nodes mappingNode, boolean firstMount) {
-        List<Node> nodes = new ArrayList<>();
         LOG.info("creating rdm node in openroadmtopology for node {}",
                 mappingNode.getNodeId());
         // transform flat mapping list to per degree and per srg mapping lists
@@ -131,6 +130,7 @@ public final class OpenRoadmTopology {
                 LOG.error("unknow element");
             }
         }
+        List<Node> nodes = new ArrayList<>();
         // create degree nodes
         for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
             nodes.add(

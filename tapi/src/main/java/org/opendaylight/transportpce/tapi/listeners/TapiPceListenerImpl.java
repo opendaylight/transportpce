@@ -174,7 +174,6 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
 
     private Map<ConnectionKey, Connection> createConnectionsAndCepsForService(PathDescription pathDescription,
                                                                               LayerProtocolName serviceProtName) {
-        Map<ConnectionKey, Connection> connectionServMap = new HashMap<>();
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
         //  and XPDR NETWORK TTPs (if any). From the path description. This will help to build the uuid of the CEPs
         //  and the connections
@@ -266,6 +265,7 @@ public class TapiPceListenerImpl implements TransportpcePceListener {
         //  this needs to be changed
 
         // TODO: OpenROADM getNodeType from the NamesList to verify what needs to be created
+        Map<ConnectionKey, Connection> connectionServMap = new HashMap<>();
         OpenroadmNodeType openroadmNodeType = getOpenRoadmNodeType(xpdrNodelist);
         switch (serviceProtName) {
             case PHOTONICMEDIA:
