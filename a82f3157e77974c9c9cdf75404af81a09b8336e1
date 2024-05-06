@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f60a9d67_99f7e41a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-06T11:00:17Z",
+      "side": 1,
+      "message": "I\u0027ve addressed it in \nhttps://git.opendaylight.org/gerrit/c/transportpce/+/111637/1",
+      "parentUuid": "70899edd_442d6102",
+      "revId": "a82f3157e77974c9c9cdf75404af81a09b8336e1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "de6dace6_ad126260",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
