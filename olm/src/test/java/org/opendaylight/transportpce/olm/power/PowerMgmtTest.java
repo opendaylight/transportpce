@@ -345,4 +345,46 @@ class PowerMgmtTest {
         verify(this.crossConnect, times(2))
                 .setPowerLevel(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyString());
     }
+
+    @Test
+    void testSetPowerForRoadmAEndGainLossFailure() throws OpenRoadmInterfaceException {
+        when(this.portMapping.getNode("roadm-A"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
+                        List.of("srg1-A", "deg2-A")));
+        when(this.deviceTransactionManager
+                .getDataFromDevice(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.any()))
+            .thenReturn(Optional.empty());
+        Interface interfOts = new InterfaceBuilder()
+                .setName("interface name")
+                .addAugmentation(
+                        new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                            .Interface1Builder()
+                    .setOts(new OtsBuilder()
+                            .setSpanLossTransmit(new RatioDB(Decimal64.valueOf("6")))
+                            .build())
+                    .build())
+                .build();
+        when(this.crossConnect
+                .setPowerLevel(Mockito.anyString(), Mockito.matches(OpticalControlMode.Power.getName()),
+                    Mockito.any(), Mockito.anyString()))
+            .thenReturn(true);
+        when(this.openRoadmInterfaces.getInterface(Mockito.anyString(), Mockito.anyString()))
+            .thenReturn(Optional.of(interfOts));
+        when(this.crossConnect
+                .setPowerLevel(Mockito.anyString(), Mockito.matches(OpticalControlMode.GainLoss.getName()),
+                    Mockito.any(), Mockito.anyString()))
+            .thenReturn(false);
+        ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                .getServicePowerSetupInputForOneNode("roadm-A", "srg1-A", "deg2-A");
+        boolean result = this.powerMgmt.setPower(input);
+        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
+                Mockito.matches(OpticalControlMode.Power.getName()), eq(Decimal64.valueOf("-3.00")),
+                Mockito.matches("srg1-A-deg2-A-761:768"));
+        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
+                Mockito.matches(OpticalControlMode.GainLoss.getName()), eq(Decimal64.valueOf("-3.00")),
+                Mockito.matches("srg1-A-deg2-A-761:768"));
+        assertEquals(false, result);
+    }
+
+
 }
