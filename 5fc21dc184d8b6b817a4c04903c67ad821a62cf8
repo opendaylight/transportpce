@@ -33,6 +33,193 @@
       "message": "Hello, Ready for review!",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2711eea_f1140752",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "thx Olivier. Here are some comments. hope this helps",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f214629_1340b80c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "IMHO \"null;\\nlink1 \u003d\\n\" is superfluous",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98840d87_f3a24c79",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "a variable for Math.ceil(linkLength / GLASSCELERITY) would be useful IMO",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d954da10_92164c27",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "useless intermediate var IMO",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4a925b_2d267195",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e866e85e_4e7f3ccd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "var is more apprioriate here since we have the complete NS in the builder\n\nI am not convinced we need an intermediate variable here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82655d20_99352c69",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "indentation issues here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b563201_5eda619a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "bug correction ?",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e42731d1_c01d91af",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "what about a ternary operator here ?\n\nit would allow to remove an intermediate variable at line 269",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "066acfb3_fb43e16f",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "no real modification here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64453384_a51296c0",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-14T15:04:57Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
