@@ -122,6 +122,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cece8446_ef2324d1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "please use a separate change for this kind of modifications\nThey might be backported to stable branches.",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6048be81_2401434d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "what about this indentation rather ?\n\n    private Map\u003corg.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121\n                    .cep.list.ConnectionEndPointKey,\n                ConnectionEndPoint\u003e createRoadmCepsAndClientNeps(\n                    String roadm, int lowerFreqIndex, int higherFreqIndex, String rdmTp, boolean withOMS) {\n                    \n                    \nAlso importing ConnectionEndPointKey for the whole class might be appropriate here IMHO - it seems there is no other object with the same name",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e866e85e_4e7f3ccd",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
         "patchSetId": 5
@@ -156,6 +190,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd345549_24ac1b13",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "parenthesis are superfluoous with a ternary operator here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b563201_5eda619a",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
         "patchSetId": 5
@@ -173,6 +224,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f637a61_7e0eb84f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "please use an oneliner declaration or put a LF before .build() to ease reading",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ea9733_76f022a1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "indentation issue here\nconditions must not be aligned with code block",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e42731d1_c01d91af",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
         "patchSetId": 5
@@ -184,6 +269,74 @@
       "writtenOn": "2024-05-14T15:04:57Z",
       "side": 1,
       "message": "what about a ternary operator here ?\n\nit would allow to remove an intermediate variable at line 269",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec6822f3_bb173f74",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "(! isPresent) \u003d isEmpty",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c469bf8_666a1cbf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed98529a_48605c9d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "indentation issue",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "461bd8fd_1da721ca",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-15T07:34:26Z",
+      "side": 1,
+      "message": "indentation issue here",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
