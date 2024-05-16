@@ -275,6 +275,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50cac4a2_20cf2658",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-16T08:40:12Z",
+      "side": 1,
+      "message": "NS split - please prefer LF position after the revision date to ease models migrations",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec6822f3_bb173f74",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
         "patchSetId": 5
@@ -286,6 +303,23 @@
       "writtenOn": "2024-05-15T07:34:26Z",
       "side": 1,
       "message": "(! isPresent) \u003d isEmpty",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d334f69b_3184de71",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-16T08:40:12Z",
+      "side": 1,
+      "message": "NS split\n\netc",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
