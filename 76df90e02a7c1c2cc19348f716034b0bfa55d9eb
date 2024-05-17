@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d451c318_153518a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-17T12:35:55Z",
+      "side": 1,
+      "message": "please can you rebase on top of https://git.opendaylight.org/gerrit/c/transportpce/+/111712/1?",
+      "revId": "76df90e02a7c1c2cc19348f716034b0bfa55d9eb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67d1d22f_abbc127b",
