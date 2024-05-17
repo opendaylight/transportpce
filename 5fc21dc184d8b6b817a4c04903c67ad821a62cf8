@@ -559,6 +559,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68231bd6_f0423d03",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T10:38:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50cac4a2_20cf2658",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec6822f3_bb173f74",
@@ -607,6 +625,24 @@
       "writtenOn": "2024-05-16T08:40:12Z",
       "side": 1,
       "message": "NS split\n\netc",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e766bf17_55f23daf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T10:38:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d334f69b_3184de71",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -729,6 +765,24 @@
       "writtenOn": "2024-05-16T21:06:28Z",
       "side": 1,
       "message": ".toString() is superfluous",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d5702be_a5fb8ef3",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T10:38:47Z",
+      "side": 1,
+      "message": "OK, done",
+      "parentUuid": "3a7df051_5ccfe55c",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
