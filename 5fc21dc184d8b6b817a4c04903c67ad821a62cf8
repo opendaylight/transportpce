@@ -770,6 +770,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3e67cee_08de70e5",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-17T09:08:09Z",
+      "side": 1,
+      "message": "please have a look at this\nhttps://git.opendaylight.org/gerrit/gitweb?p\u003dtransportpce.git;a\u003dblob;f\u003dtests/transportpce_tests/common/test_utils.py;h\u003db43346f87cef9ca3bb277a1d590cda21c18be54d;hb\u003de132359dcbc62357ff8f71f57a2f027b2ba29418#l212\n\nyou can set the variable NO_ODL_STARTUP in your shell environment to prevent the tests from launching a controller instance",
+      "parentUuid": "c55ae612_32d7ed07",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64453384_a51296c0",
         "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
         "patchSetId": 5
