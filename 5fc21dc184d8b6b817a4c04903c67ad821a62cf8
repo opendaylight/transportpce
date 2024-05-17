@@ -52,6 +52,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96008988_cd886ee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Thanks Guillaume for your review. Addressed most your comments in patchset 6. Please check if the proposal fits to your expectations, and give me your feedback on non resolved comments to tell if my justifications make sense. Thanks!",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f214629_1340b80c",
@@ -65,6 +82,24 @@
       "writtenOn": "2024-05-14T15:04:57Z",
       "side": 1,
       "message": "IMHO \"null;\\nlink1 \u003d\\n\" is superfluous",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "127427a6_5ae0df57",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "You are right! Corrected",
+      "parentUuid": "8f214629_1340b80c",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +121,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d599321_14388ab1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "OK, done",
+      "parentUuid": "98840d87_f3a24c79",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d954da10_92164c27",
@@ -103,6 +156,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c17ea4_4e1ef95f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "OK, variable removed",
+      "parentUuid": "d954da10_92164c27",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa4a925b_2d267195",
@@ -116,6 +187,24 @@
       "writtenOn": "2024-05-14T15:04:57Z",
       "side": 1,
       "message": "idem",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31398c42_0e35c030",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/NetworkUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "OK, variable removed",
+      "parentUuid": "fa4a925b_2d267195",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -139,6 +228,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6faeede6_5852cc73",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Guillaume, this a simple correction that absolutely does not affect the code. Nobody will die from not having the correction in other branch. Applying this kind of rule is IMHO counterproductive because we have limited time. If we had to make one change each time a so simple correction is made at the end nobody would do it since this has absolutely no impact : this is just a typo. While correcting it when we see it as one part of the current work does not consume time and allows improving code on the fly.",
+      "parentUuid": "cece8446_ef2324d1",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6048be81_2401434d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 5
@@ -150,6 +257,24 @@
       "writtenOn": "2024-05-15T07:34:26Z",
       "side": 1,
       "message": "what about this indentation rather ?\n\n    private Map\u003corg.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121\n                    .cep.list.ConnectionEndPointKey,\n                ConnectionEndPoint\u003e createRoadmCepsAndClientNeps(\n                    String roadm, int lowerFreqIndex, int higherFreqIndex, String rdmTp, boolean withOMS) {\n                    \n                    \nAlso importing ConnectionEndPointKey for the whole class might be appropriate here IMHO - it seems there is no other object with the same name",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c3acf7_f919e526",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Sure! I guess I had at a time some issues with my editor and that this is the reason for not importing it. Corrected.",
+      "parentUuid": "6048be81_2401434d",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -171,6 +296,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "826bb272_1b38ed8f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Sure, corrected",
+      "parentUuid": "e866e85e_4e7f3ccd",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82655d20_99352c69",
@@ -188,6 +331,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0b7ca2d_1fd3ec39",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetNodeDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Corrected",
+      "parentUuid": "82655d20_99352c69",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd345549_24ac1b13",
@@ -201,6 +362,24 @@
       "writtenOn": "2024-05-15T07:34:26Z",
       "side": 1,
       "message": "parenthesis are superfluoous with a ternary operator here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f41c9e9e_b49fb96a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "OK, corrected!",
+      "parentUuid": "bd345549_24ac1b13",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -224,6 +403,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "962ffc2d_b87f7759",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Yes, but only apply to a code that can be considered as consistent in the very last step of migration to tapi2.4, which means no real interest to backport in previous version since this is part of a code that is still not activated. Will be used when we will create the topology file for T-API.",
+      "parentUuid": "3b563201_5eda619a",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f637a61_7e0eb84f",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
         "patchSetId": 5
@@ -235,6 +432,24 @@
       "writtenOn": "2024-05-15T07:34:26Z",
       "side": 1,
       "message": "please use an oneliner declaration or put a LF before .build() to ease reading",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20994043_6784f091",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "corrected.",
+      "parentUuid": "6f637a61_7e0eb84f",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -256,6 +471,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35b5aac7_40b55fa0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Yep, corrected!",
+      "parentUuid": "c0ea9733_76f022a1",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e42731d1_c01d91af",
@@ -269,6 +502,24 @@
       "writtenOn": "2024-05-14T15:04:57Z",
       "side": 1,
       "message": "what about a ternary operator here ?\n\nit would allow to remove an intermediate variable at line 269",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b26b4d4_16eaf08e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Don\u0027t like, but OK, done!",
+      "parentUuid": "e42731d1_c01d91af",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -307,6 +558,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c6cf07_9e07f4f7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Ok, thanks! corrected",
+      "parentUuid": "ec6822f3_bb173f74",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d334f69b_3184de71",
@@ -341,6 +610,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb47348_35b85bbe",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Corrected.",
+      "parentUuid": "7c469bf8_666a1cbf",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed98529a_48605c9d",
@@ -358,6 +645,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dd07943_c24dd8cd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Yep, corrected",
+      "parentUuid": "ed98529a_48605c9d",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "461bd8fd_1da721ca",
@@ -371,6 +676,24 @@
       "writtenOn": "2024-05-15T07:34:26Z",
       "side": 1,
       "message": "indentation issue here",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6282fe76_895205be",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Yep, done!",
+      "parentUuid": "461bd8fd_1da721ca",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -411,6 +734,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c55ae612_32d7ed07",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "Agree, but in fact this separation is introduced to avoid mistakes while debugging: the following part of the code needs to be commented when debugging as tpce is launched in another terminal to check logs. Separating the part that needs to be commented allows avoiding mistake while de-commenting the code : this is to avoid de-commenting (by mistake) the previous line :  # pylint: disable\u003dunsubscriptable-object",
+      "parentUuid": "066acfb3_fb43e16f",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64453384_a51296c0",
         "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
         "patchSetId": 5
@@ -422,6 +763,24 @@
       "writtenOn": "2024-05-14T15:04:57Z",
       "side": 1,
       "message": "idem",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9f07005_50138ccc",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-17T08:37:34Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "64453384_a51296c0",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
