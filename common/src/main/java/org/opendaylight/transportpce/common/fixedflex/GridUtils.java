@@ -67,7 +67,7 @@ public final class GridUtils {
     }
 
     /**
-     * Compute the start frequency in TGz for the given index.
+     * Compute the start frequency in THz for the given index.
      * @param index int
      * @return the start frequency in THz for the provided index.
      */
@@ -77,7 +77,7 @@ public final class GridUtils {
     }
 
     /**
-     * Compute the stop frequency in TGz for the given index.
+     * Compute the stop frequency in THz for the given index.
      * @param index int
      * @return the stop frequency in THz for the provided index.
      */
