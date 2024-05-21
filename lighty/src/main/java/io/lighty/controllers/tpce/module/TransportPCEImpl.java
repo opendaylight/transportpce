@@ -15,6 +15,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -170,7 +171,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 mappingUtils,
                 portMapping);
         //FIXME: need mdsal.binding;api.RpcService from LightyServices
-        RpcService rpcService = lightyServices.getRpcService();
+        RpcService rpcService = lightyServices.getRpcConsumerRegistry();
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, dataBroker,
                 new NotificationSender(notificationPublishService),
@@ -233,7 +234,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                             deviceTransactionManager,
                             tapiLink,
                             notificationPublishService));
-            rpcRegistrations.addAll(tapiProvider.getRegisteredRpcs());
+            rpcRegistrations.add(tapiProvider.getRegisteredRpcs());
         }
         if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
