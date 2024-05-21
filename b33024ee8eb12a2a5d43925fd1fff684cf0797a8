@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2748f618_f9630338",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-21T13:07:26Z",
+      "side": 1,
+      "message": "Added the Jira ticket which seems the most appropriate. Thanks for having isolated this change!",
+      "revId": "b33024ee8eb12a2a5d43925fd1fff684cf0797a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
