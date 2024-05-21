@@ -934,8 +934,8 @@ public class ConvertORToTapiTopology {
                 createAvailablePayloadStructureForPhtncMedia(true, sicColl,operModeList));
             for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
                 ospecBd
-                    .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
-                    .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                    .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E12)))
+                    .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E12)));
             }
             OccupiedSpectrum ospec = ospecBd.build();
             spectrumPac.setOccupiedSpectrum(
