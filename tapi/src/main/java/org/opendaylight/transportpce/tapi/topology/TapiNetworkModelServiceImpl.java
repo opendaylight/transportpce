@@ -919,7 +919,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             List<SupportedIfCapability> sicList, List<String> opModeList,
             OperationalState operState, AdministrativeState adminState) {
         List<SupportedInterfaceCapability> sicListTemp = new ArrayList<>();
-        List<OperationalModeKey> keyedOpModeList = new ArrayList<>();
         for (SupportedIfCapability supInterCapa : sicList) {
             sicListTemp.add(new SupportedInterfaceCapabilityBuilder()
                     .withKey(new SupportedInterfaceCapabilityKey(supInterCapa))
@@ -947,6 +946,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         if (!keyword.contains(TapiStringConstants.OTSI_MC) && !keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
             return onepBldr.build();
         }
+        List<OperationalModeKey> keyedOpModeList = new ArrayList<>();
         if (opModeList == null || opModeList.isEmpty()) {
             for (SupportedInterfaceCapability sic : sicColl) {
                 switch (sic.getIfCapType().toString().split("\\{")[0]) {
