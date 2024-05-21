@@ -16,6 +16,24 @@
       "message": "no JIRA ticket ?",
       "revId": "a9bec7393ee6ca5ac0e18194cb2cc5df0ee70f40",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b3e99fb_70737307",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-21T13:01:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e234619b_e2873302",
+      "revId": "a9bec7393ee6ca5ac0e18194cb2cc5df0ee70f40",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
