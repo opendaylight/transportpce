@@ -901,9 +901,9 @@ public class ConvertORToTapiTopology {
                     false, sicColl,operModeList));
                 double naz = 0.01;
                 AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
-                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
-                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
+                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz)))
+                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz)))
                     .build();
                 Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
                 aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
@@ -916,8 +916,8 @@ public class ConvertORToTapiTopology {
                 Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
                 for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
                     ospecBd
-                        .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
-                        .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                        .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue())))
+                        .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue())));
                 }
                 OccupiedSpectrum ospec = ospecBd.build();
                 ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec);
@@ -926,9 +926,9 @@ public class ConvertORToTapiTopology {
             LOG.debug("Entering LOOP Step3");
             double nazz = 0.01;
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + nazz)))
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + nazz)))
                 .build();
             Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
             sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
@@ -962,9 +962,9 @@ public class ConvertORToTapiTopology {
                     && (availableFreqMap == null || availableFreqMap.isEmpty())) {
                 double naz = 0.01;
                 AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
-                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + naz)))
-                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz)))
+                    .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz)))
+                    .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                        + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz)))
                     .build();
                 Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
                 aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
@@ -976,8 +976,8 @@ public class ConvertORToTapiTopology {
                     AvailableSpectrumBuilder  aspecBd = new AvailableSpectrumBuilder();
                     for (Map.Entry<Double, Double> frequency : availableFreqMap.entrySet()) {
                         aspecBd
-                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
-                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue())))
+                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue())));
                         AvailableSpectrum aspec = aspecBd.build();
                         aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
                             aspec.getUpperFrequency()), aspec);
@@ -989,8 +989,8 @@ public class ConvertORToTapiTopology {
                     OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
                     for (Map.Entry<Double, Double> frequency : usedFreqMap.entrySet()) {
                         ospecBd
-                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E09)))
-                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E09)));
+                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue())))
+                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue())));
                         OccupiedSpectrum ospec = ospecBd.build();
                         ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
                             ospec.getUpperFrequency()), ospec);
@@ -1000,9 +1000,9 @@ public class ConvertORToTapiTopology {
             }
             double nazz = 0.01;
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09 + nazz)))
-                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E09
-                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + nazz)))
+                .setLowerFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + nazz)))
+                .setUpperFrequency(Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
+                    + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + nazz)))
                 .build();
             Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
             sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
