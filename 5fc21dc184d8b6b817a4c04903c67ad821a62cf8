@@ -437,6 +437,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6977df1_ecfd75e2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopology.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-21T12:40:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "962ffc2d_b87f7759",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f637a61_7e0eb84f",
@@ -840,6 +858,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd79d990_a8d2ee32",
+        "filename": "tests/transportpce_tests/tapi/test02_full_topology.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-21T12:40:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3e67cee_08de70e5",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64453384_a51296c0",
@@ -871,6 +907,24 @@
       "side": 1,
       "message": "idem",
       "parentUuid": "64453384_a51296c0",
+      "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47897ae5_1cb89a8a",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-21T12:40:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9f07005_50138ccc",
       "revId": "5fc21dc184d8b6b817a4c04903c67ad821a62cf8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
