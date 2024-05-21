@@ -212,10 +212,6 @@ public class R2RLinkDiscovery {
 
     public boolean createR2RLink(NodeId nodeId, String interfaceName, String remoteSystemName,
                                  String remoteInterfaceName) {
-        String srcTpTx = null;
-        String srcTpRx = null;
-        String destTpTx = null;
-        String destTpRx = null;
         // Find which degree is associated with ethernet interface
         Integer srcDegId = getDegFromInterface(nodeId, interfaceName);
         if (srcDegId == null) {
@@ -225,6 +221,8 @@ public class R2RLinkDiscovery {
         // Check whether degree is Unidirectional or Bidirectional by counting
         // number of
         // circuit-packs under degree subtree
+        String srcTpTx = null;
+        String srcTpRx = null;
         Direction sourceDirection = getDegreeDirection(srcDegId, nodeId);
         if (Direction.NotApplicable == sourceDirection) {
             LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", nodeId, srcDegId);
@@ -246,6 +244,8 @@ public class R2RLinkDiscovery {
         // Check whether degree is Unidirectional or Bidirectional by counting
         // number of
         // circuit-packs under degree subtree
+        String destTpTx = null;
+        String destTpRx = null;
         Direction destinationDirection = getDegreeDirection(destDegId, destNodeId);
         if (Direction.NotApplicable == destinationDirection) {
             LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", destNodeId, destDegId);
@@ -293,10 +293,6 @@ public class R2RLinkDiscovery {
 
     public boolean deleteR2RLink(NodeId nodeId, String interfaceName, String remoteSystemName,
                                  String remoteInterfaceName) {
-        String srcTpTx = null;
-        String srcTpRx = null;
-        String destTpTx = null;
-        String destTpRx = null;
         // Find which degree is associated with ethernet interface
         Integer srcDegId = getDegFromInterface(nodeId, interfaceName);
         if (srcDegId == null) {
@@ -305,6 +301,8 @@ public class R2RLinkDiscovery {
         }
         // Check whether degree is Unidirectional or Bidirectional by counting number of
         // circuit-packs under degree subtree
+        String srcTpTx = null;
+        String srcTpRx = null;
         Direction sourceDirection = getDegreeDirection(srcDegId, nodeId);
         if (Direction.NotApplicable == sourceDirection) {
             LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", nodeId, srcDegId);
@@ -325,6 +323,8 @@ public class R2RLinkDiscovery {
         }
         // Check whether degree is Unidirectional or Bidirectional by counting number of
         // circuit-packs under degree subtree
+        String destTpTx = null;
+        String destTpRx = null;
         Direction destinationDirection = getDegreeDirection(destDegId, destNodeId);
         if (Direction.NotApplicable == destinationDirection) {
             LOG.error("Couldnt find degree direction for nodeId: {} and degree: {}", destNodeId, destDegId);
