@@ -46,7 +46,6 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
         String openROADMversion = "";
         List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
         for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
-            String nodeId = device.getRootNode().dataAfter().key().getNodeId().getValue();
             NetconfNode netconfNode = device.getRootNode().dataAfter().augmentation(NetconfNode.class);
             ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
@@ -58,6 +57,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
             LOG.debug("DL device.getRootNode().getDataBefore() {}", device.getRootNode().dataBefore());
             LOG.debug("DL device.getRootNode().getDataAfter() {}", device.getRootNode().dataAfter());
 
+            String nodeId = device.getRootNode().dataAfter().key().getNodeId().getValue();
             if (isCreate(device)) {
                 LOG.info("Node {} was created", nodeId);
                 try {

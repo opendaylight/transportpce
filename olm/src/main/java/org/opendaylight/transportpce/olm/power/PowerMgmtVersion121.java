@@ -106,7 +106,6 @@ public final class PowerMgmtVersion121 {
     public static Map<String, Double> getSRGRxPowerRange(String nodeId, String srgId,
             DeviceTransactionManager deviceTransactionManager,
             String circuitPackName, String portName) {
-        Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.debug("Coming inside SRG power range");
         LOG.debug("Mapping object exists.");
         InstanceIdentifier<Ports> portIID = InstanceIdentifier
@@ -119,6 +118,7 @@ public final class PowerMgmtVersion121 {
         Optional<Ports> portObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        Map<String, Double> powerRangeMap = new HashMap<>();
         if (portObject.isPresent()) {
             Ports port = portObject.orElseThrow();
             if (port.getRoadmPort() != null) {
