@@ -17,6 +17,8 @@ linkcheck_ignore = [
     # LFN CI connectivy issue with tox wiki URL
     'https://tox.wiki',
     # OpenROADM white paper often has connectivity issues from the Gate
-    'https://0201.nccdn.net/1_2/000/000/134/c50/Open-ROADM-MSA-release-2-Device-White-paper-v1-1.pdf'
+    'https://0201.nccdn.net/1_2/000/000/134/c50/Open-ROADM-MSA-release-2-Device-White-paper-v1-1.pdf',
+    # it seems that the lighty.io site certificate has expired.
+    'https://lighty.io/'
 ]
 linkcheck_timeout = 300
