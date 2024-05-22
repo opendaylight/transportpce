@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc125609_cb18f07e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-05-22T08:16:04Z",
+      "side": 1,
+      "message": "It seems there is a certifciate issue with https://lighty.io web site.\nI\u0027m temporarily ignoring its url in docs-linkcheck.",
+      "revId": "756bb5dc6f21f367208c0b4eaeb73b7e9aca262c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
