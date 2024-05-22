@@ -85,6 +85,24 @@
       "parentUuid": "2692906c_cb50a04d",
       "revId": "756bb5dc6f21f367208c0b4eaeb73b7e9aca262c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "207249bb_1e6d6741",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-22T14:24:37Z",
+      "side": 1,
+      "message": "Thanks Miroslav. No harm done. 1 day outage is quite acceptable compared to jenkins  infra connectivity issues... Have a nice day.",
+      "parentUuid": "1de32492_782b92d3",
+      "revId": "756bb5dc6f21f367208c0b4eaeb73b7e9aca262c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
