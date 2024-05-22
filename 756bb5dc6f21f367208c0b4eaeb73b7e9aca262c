@@ -50,6 +50,23 @@
       "message": "recheck",
       "revId": "756bb5dc6f21f367208c0b4eaeb73b7e9aca262c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6aaef30_0b7ff6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-05-22T12:31:10Z",
+      "side": 1,
+      "message": "tests121 are ok locally",
+      "revId": "756bb5dc6f21f367208c0b4eaeb73b7e9aca262c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
