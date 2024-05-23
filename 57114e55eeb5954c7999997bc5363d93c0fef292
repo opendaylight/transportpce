@@ -87,6 +87,24 @@
       "parentUuid": "6eac015c_a2521be7",
       "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6901c143_b639f35e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-23T14:17:28Z",
+      "side": 1,
+      "message": "Hi Jonas, we talked about this change today at our weekly meeting and we may have questions. Would it be possible for you to join us at the meeting next week (donnections details on ODL wiki) ?",
+      "parentUuid": "c6d45962_b068a3fc",
+      "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
