@@ -50,6 +50,23 @@
       "message": "Everything looks OK on the gate with the exception of test121 which fails (test3)\nAll tests 121 pass locally (1 to 6)\n\nrecheck",
       "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc199cb_6901f45f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-05-23T16:42:01Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
