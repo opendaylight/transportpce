@@ -67,6 +67,176 @@
       "message": "recheck",
       "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1e4f9a7_b3428575",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "Thanks for the rebase and the good work.\nThis is mostly OK to me  but there \u0027s a few issues introduced by the rebase...\nAlso Would it be possible to cherry-pick this on master before merging ?",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db203e74_43aee171",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "revision date split from NS body",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9718c784_38a246c9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "misleading indentations here\nthis intermediate variable is not needed IMO",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c17efd70_b7a5d516",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "misleading indentation here",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8283f668_421dd171",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "revision date split from NS body",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743ae9e6_5b70f2c6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "827455b1_178190be",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "forgotten merge conflict resolution deletion ?\nanyway, this comment should bot be kept according to SONAR rules",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1abac4fd_4b8ff63e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "is this other comment still useful ?",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f428985_fe3828db",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8160026_d21aa59d",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-05-24T12:31:21Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "6c0e9acb81418600ff974c7a1b4f97b4d48bb5d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
