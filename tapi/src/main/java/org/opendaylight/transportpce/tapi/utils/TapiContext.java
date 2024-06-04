@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +36,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
@@ -524,7 +526,7 @@ public class TapiContext {
 
     private boolean isUsedByOtherService(Connection connection, Uuid serviceUuid) {
         Map<ConnectivityServiceKey, ConnectivityService> connServicesMap = getConnectivityServices();
-        if (connServicesMap == null) {
+        if (connServicesMap.isEmpty()) {
             LOG.info("isUsedByOtherService: No service in tapi context!");
             return false;
         }
@@ -591,27 +593,42 @@ public class TapiContext {
         }
     }
 
+    /**
+     * This method attempts to read the TAPI connectivity context from the data store.
+     *
+     * @return a non-null {@link Map} of {@link ConnectivityServiceKey} to
+     *         {@link ConnectivityService}.
+     *         Returns {@link Collections#emptyMap()} if no connectivity context exists.
+     *
+     * @throws TapiDataStoreIOException if the connectivity context could not be
+     *         read from the datastore, or if the datastore read operation fails
+     *         due to an {@link InterruptedException} or {@link ExecutionException}.
+     */
     public Map<ConnectivityServiceKey, ConnectivityService> getConnectivityServices() {
         try {
             // First read connectivity service with service uuid and update info
-            Optional<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                    .context.ConnectivityContext> optConnContext =
+            Optional<ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
                         DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
-                            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                                    .context.ConnectivityContext.class)
+                            .child(ConnectivityContext.class)
                             .build())
                     .get();
-            if (optConnContext.isEmpty()) {
-                LOG.error("Connectivity context not found in tapi context");
-                return null;
+
+            //Prevent IntelliJ from warning about optConnContext potentially being null.
+            if (Optional.ofNullable(optConnContext).orElse(Optional.empty()).isEmpty()) {
+                LOG.info("Connectivity context not found in tapi context");
+                return Collections.emptyMap();
             }
-            return optConnContext.orElseThrow().getConnectivityService();
+
+            //orElseThrow required by checkstyle. Should typically not happen since we're checking for null above.
+            ConnectivityContext connectivityContext = optConnContext.orElseThrow();
+
+            return Optional.ofNullable(connectivityContext.getConnectivityService()).orElse(Collections.emptyMap());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Connectivity context not found in tapi context. Error:", e);
-            return null;
+            throw new TapiDataStoreIOException("Failed reading connectivity context from datastore", e);
         }
     }
 
