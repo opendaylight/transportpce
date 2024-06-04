@@ -155,7 +155,6 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
             .setEndPoint(createEndPoints(input.getEndPoint()))
             .build();
         // add to tapi context
-        this.tapiContext.updateConnectivityContext(Map.of(service.key(), service), new HashMap<>());
         LOG.info("Created locked service in Datastore. Waiting for PCE and Renderer to complete tasks...");
         // return ConnectivityServiceCreateOutput
         return RpcResultBuilder.success(
