@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -348,8 +349,16 @@ public final class ConnectivityUtils {
         LOG.info("EndPoints of connectivity services = {}", endPointMap);
         // Services Names
         this.serviceName = service.getServiceName();
-        this.serviceUuid =
-            new Uuid(UUID.nameUUIDFromBytes(service.getServiceName().getBytes(StandardCharsets.UTF_8)).toString());
+        //If the service name is a UUID, we use it as the serviceUuid, otherwise we generate a UUID based
+        // on the service name.
+        Pattern uuidRegex =
+                Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(service.getServiceName()).matches()) {
+            this.serviceUuid = new Uuid(service.getServiceName());
+        } else {
+            this.serviceUuid = new Uuid(
+                    UUID.nameUUIDFromBytes(service.getServiceName().getBytes(StandardCharsets.UTF_8)).toString());
+        }
         Name name =
             new NameBuilder().setValueName("Connectivity Service Name").setValue(serviceName).build();
         // Population of the ConnectionVsService list of services, with their supporting services
@@ -1796,8 +1805,10 @@ public final class ConnectivityUtils {
             LOG.debug("CU line 1800 updating Available Capacity for Nep {}, nonNullAvailableCapa and TotalSize", nepId);
             if (initialCapa >= capacityDecrement) {
                 tsbBldr.setValue(Decimal64.valueOf((initialCapa - capacityDecrement), RoundingMode.DOWN));
-                LOG.debug("CU line 1801 updating Available Capacity for Nep {}, from {} to {}",
+                LOG.info("CU line 1801 updating Available Capacity for Nep {}, from {} to {}",
                     nepId, initialCapa, initialCapa - capacityDecrement);
+            } else {
+                tsbBldr.setValue(Decimal64.valueOf(0.0, RoundingMode.DOWN));
             }
         } else {
             LOG.debug("CU line 1802 updating Available Capacity for Nep {}, NullAvailableCapa or TotalSize", nepId);
