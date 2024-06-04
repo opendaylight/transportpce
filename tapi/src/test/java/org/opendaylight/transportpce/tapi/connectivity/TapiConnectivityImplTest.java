@@ -151,7 +151,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
     void createConnServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         when(rpcService.getRpc(any()))
             .thenReturn(new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils,
-                    tapipceNotificationHandler, tapirendererNotificationHandler));
+                    tapirendererNotificationHandler));
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result = rpcService
                 .getRpc(CreateConnectivityService.class).invoke(new CreateConnectivityServiceInputBuilder().build());
         result.addListener(new Runnable() {
@@ -185,7 +185,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
 
         ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> result =
                     new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils,
-                        tapipceNotificationHandler, tapirendererNotificationHandler)
+                        tapirendererNotificationHandler)
                 .invoke(input);
         LOG.info("INPUT= {}", input.toString());
         RpcResult<CreateConnectivityServiceOutput> rpcResult = result.get();
