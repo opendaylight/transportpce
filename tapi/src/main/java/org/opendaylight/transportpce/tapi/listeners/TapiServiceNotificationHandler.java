@@ -10,7 +10,9 @@ package org.opendaylight.transportpce.tapi.listeners;
 import java.util.Set;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
+import org.opendaylight.transportpce.tapi.openroadm.service.Service;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,17 +20,26 @@ public class TapiServiceNotificationHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiServiceNotificationHandler.class);
     private final DataBroker dataBroker;
+    private final Service openRoadmService;
 
-    public TapiServiceNotificationHandler(DataBroker dataBroker) {
+    public TapiServiceNotificationHandler(DataBroker dataBroker, Service openRoadmService) {
         this.dataBroker = dataBroker;
+        this.openRoadmService = openRoadmService;
     }
 
     public CompositeListener getCompositeListener() {
-        return new CompositeListener(Set.of(
-            new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)));
+        return new CompositeListener(
+                Set.of(
+                        new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)
+                )
+        );
     }
 
     private void onServiceRpcResultSh(ServiceRpcResultSh notification) {
         LOG.info("Avoid dataBroker error {}", dataBroker.getClass().getCanonicalName());
+        LOG.debug("Received notification: {}", notification);
+        if (notification.getStatus().equals(RpcStatusEx.Successful)) {
+            openRoadmService.copyServiceToTAPI(notification.getServiceName());
+        }
     }
 }
