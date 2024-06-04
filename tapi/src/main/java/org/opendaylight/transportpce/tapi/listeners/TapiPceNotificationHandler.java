@@ -86,7 +86,8 @@ public class TapiPceNotificationHandler {
         switch (servicePathRpcResult.getNotificationType().getIntValue()) {
             /* path-computation-request. */
             case 1:
-                onPathComputationResult(notification);
+                //onPathComputationResult(notification);
+                LOG.info("JT: Ignoring path-computation-request notification, as it is not implemented yet");
                 break;
             /* cancel-resource-reserve. */
             case 2:
@@ -101,7 +102,8 @@ public class TapiPceNotificationHandler {
      * Process path computation request result.
      * @param notification the result notification.
      */
-    private void onPathComputationResult(ServicePathRpcResult notification) {
+    @SuppressFBWarnings("UPM")
+    public void onPathComputationResult(ServicePathRpcResult notification) {
         this.connectionFullMap.clear();
         LOG.info("PCE '{}' Notification received : {}",servicePathRpcResult.getNotificationType().getName(),
             notification);
@@ -196,7 +198,7 @@ public class TapiPceNotificationHandler {
         return servicePathRpcResult.getStatusMessage() == notification.getStatusMessage();
     }
 
-
+    @SuppressWarnings("checkstyle:UPM_UNCALLED_PRIVATE_METHOD")
     public void updateTopologyWithCep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, ConnectionEndPoint cep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
@@ -243,6 +245,7 @@ public class TapiPceNotificationHandler {
         }
     }
 
+    @SuppressWarnings("checkstyle:UPM_UNCALLED_PRIVATE_METHOD")
     public void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
