@@ -18,6 +18,7 @@ import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.Service;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
@@ -61,24 +62,36 @@ public class TapiInitialORMapping {
         }
     }
 
-    public void performServInitialMapping() {
+    public boolean performServInitialMapping() {
         Optional<ServiceList> optOrServices = this.serviceDataStoreOperations.getServices();
         if (!optOrServices.isPresent()) {
             LOG.error("Couldnt obtain OR services from datastore");
-            return;
+            return false;
         }
-        ServiceList orServices = optOrServices.orElseThrow();
+
+        return performServInitialMapping(optOrServices.orElseThrow());
+    }
+
+    public boolean performServInitialMapping(String serviceName) {
+        LOG.info("Convert OpenROADM service {} to TAPI", serviceName);
+        Optional<Services> optService = this.serviceDataStoreOperations.getService(serviceName);
+        if (!optService.isPresent()) {
+            LOG.warn("Service {} not found in datastore, aborting.", serviceName);
+            return false;
+        }
+        Services services = optService.orElseThrow();
+        ServiceListBuilder serviceListBuilder = new ServiceListBuilder();
+        serviceListBuilder.setServices(Map.of(services.key(), services));
+
+        return performServInitialMapping(serviceListBuilder.build());
+    }
+
+    public boolean performServInitialMapping(ServiceList orServices) {
         if (orServices.getServices() == null) {
             LOG.info("No services in datastore. No mapping needed");
-            return;
+            return false;
         }
-        /*
-        Map<ServicesKey, Services> orderedServices = orServices.getServices().entrySet().stream()
-            .sorted(Comparator.comparing(serv -> serv.getValue().getServiceAEnd().getServiceFormat().getName()))
-            .collect(Collectors.toMap(Map.Entry::getKey,
-                Map.Entry::getValue, (left, right) -> left, LinkedHashMap::new));
 
-         */
         Map<ServicesKey, Services> orderedServices = new TreeMap<>(Comparator.comparing(s ->
             orServices.getServices().get(s).getServiceAEnd().getServiceFormat().getName()).reversed());
         orderedServices.putAll(orServices.getServices());
@@ -93,5 +106,7 @@ public class TapiInitialORMapping {
         }
         // Put in datastore connectivity services and connections
         this.tapiContext.updateConnectivityContext(connServMap, this.connectivityUtils.getConnectionFullMap());
+
+        return true;
     }
 }
