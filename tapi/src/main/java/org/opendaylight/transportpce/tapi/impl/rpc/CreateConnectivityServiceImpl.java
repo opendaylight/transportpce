@@ -16,7 +16,6 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
-import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
@@ -60,16 +59,13 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
     private final RpcService rpcService;
     private final TapiContext tapiContext;
     private final ConnectivityUtils connectivityUtils;
-    private TapiPceNotificationHandler pceListenerImpl;
     private TapiRendererNotificationHandler rendererListenerImpl;
 
     public CreateConnectivityServiceImpl(RpcService rpcService, TapiContext tapiContext,
-            ConnectivityUtils connectivityUtils, TapiPceNotificationHandler pceListenerImpl,
-            TapiRendererNotificationHandler rendererListenerImpl) {
+            ConnectivityUtils connectivityUtils, TapiRendererNotificationHandler rendererListenerImpl) {
         this.rpcService = rpcService;
         this.tapiContext = tapiContext;
         this.connectivityUtils = connectivityUtils;
-        this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
     }
 
@@ -78,8 +74,6 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         // TODO: later version of TAPI models include Name as an input parameter in connectivity.yang
         LOG.info("RPC create-connectivity received: {}", input.getEndPoint());
         Uuid serviceUuid = new Uuid(UUID.randomUUID().toString());
-        this.pceListenerImpl.setInput(input);
-        this.pceListenerImpl.setServiceUuid(serviceUuid);
         this.rendererListenerImpl.setServiceUuid(serviceUuid);
         OperationResult validationResult =
             CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(input);
@@ -155,7 +149,6 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
             .setEndPoint(createEndPoints(input.getEndPoint()))
             .build();
         // add to tapi context
-        this.tapiContext.updateConnectivityContext(Map.of(service.key(), service), new HashMap<>());
         LOG.info("Created locked service in Datastore. Waiting for PCE and Renderer to complete tasks...");
         // return ConnectivityServiceCreateOutput
         return RpcResultBuilder.success(

@@ -39,6 +39,7 @@ import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotification
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
+import org.opendaylight.transportpce.tapi.openroadm.service.OpenRoadmService;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
@@ -108,6 +109,7 @@ public class TapiProvider {
     private Registration servicehandlerlistenerRegistration;
     private Registration tapinetworkmodellistenerRegistration;
 
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     @Activate
     public TapiProvider(@Reference DataBroker dataBroker,
             @Reference RpcProviderService rpcProviderService,
@@ -137,13 +139,12 @@ public class TapiProvider {
                 tapiContext, this.serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
         tapiInitialORMapping.performServInitialMapping();
-        TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker, connectivityUtils);
+        TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker);
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
 
         rpcRegistration = rpcProviderService.registerRpcImplementations(
-                new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils, pceListenerImpl,
-                        rendererListenerImpl),
+                new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils, rendererListenerImpl),
                 new GetConnectivityServiceDetailsImpl(tapiContext),
                 new GetConnectionDetailsImpl(tapiContext),
                 new DeleteConnectivityServiceImpl(rpcService, tapiContext, networkTransactionService),
@@ -176,7 +177,14 @@ public class TapiProvider {
         rendererlistenerRegistration = notificationService
             .registerCompositeListener(rendererListenerImpl.getCompositeListener());
         LOG.debug("Renderer Listener Registration in TapiProvider : {}", rendererlistenerRegistration);
-        TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(dataBroker);
+        TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(
+                dataBroker,
+                new OpenRoadmService(
+                        dataBroker,
+                        networkTransactionService,
+                        serviceDataStoreOperations,
+                        tapiContext)
+        );
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
         LOG.debug("SH Listener Registration in TapiProvider : {}", servicehandlerlistenerRegistration);
