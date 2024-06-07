@@ -788,7 +788,8 @@ public class ConvertORToTapiTopology {
                     startFreq = stopFreq;
                 }
             } else {
-                if (index == GridConstant.EFFECTIVE_BITS - 1 && startFreq.doubleValue() == stopFreq.doubleValue()) {
+                if (index == GridConstant.EFFECTIVE_BITS - 1
+                        && Double.compare(startFreq.doubleValue(), stopFreq.doubleValue()) == 0) {
                     stopFreq = GridUtils.getStopFrequencyFromIndex(index).doubleValue();
                     freqMap.put(startFreq, stopFreq);
                 }
