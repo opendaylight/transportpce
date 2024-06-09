@@ -41,6 +41,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.NodeRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
@@ -144,9 +146,8 @@ public class ConvertORTopoToTapiTopo {
 
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    TapiStringConstants.RDM_INFRA.getBytes(Charset.forName("UTF-8")))
-                .toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
+            .getBytes(Charset.forName("UTF-8"))).toString());
         Name nodeName =
             new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
         Name nodeName2 =
@@ -163,6 +164,9 @@ public class ConvertORTopoToTapiTopo {
         var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode("T0ML", nodeUuid, null, onepMap.values());
+        Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
+            = tapiFactory.createInterRuleGroupForRdmNode("T0ML", nodeUuid, null,
+                nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -190,9 +194,7 @@ public class ConvertORTopoToTapiTopo {
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(onepMap)
             .setNodeRuleGroup(nodeRuleGroupMap)
-            .setInterRuleGroup(
-                tapiFactory.createInterRuleGroupForRdmNode("T0ML", nodeUuid, null,
-                    nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList())))
+            .setInterRuleGroup(interRuleGroupMap)
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setRiskParameterPac(
