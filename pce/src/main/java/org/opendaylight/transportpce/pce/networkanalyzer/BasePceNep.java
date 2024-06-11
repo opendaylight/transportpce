@@ -12,9 +12,11 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -30,6 +32,7 @@ public class BasePceNep {
     private DirectionType nepDirection;
     private BitSet frequenciesBitSet;
     private LayerProtocolName lpn;
+    private LAYERPROTOCOLQUALIFIER lpq;
     private AdministrativeState adminState;
     private OperationalState operationalState;
     private Map<Uuid, Name> connectedLink = new HashMap<>();
@@ -38,10 +41,12 @@ public class BasePceNep {
     private OpenroadmTpType tpType;
     private Map<Uuid, Name> virtualNep = new HashMap<>();
     private List<Uuid> nodeRuleGroupUuid = new ArrayList<>();
+    private List<Uuid> indirectNrgUuid = new ArrayList<>();
     private Uuid cepOtsUuid;
     private Uuid cepOmsUuid;
     private OtsMediaConnectionEndPointSpec otsSpec;
     private OmsConnectionEndPointSpec omsSpec;
+    private List<Uuid> verticallyConnectedNep = new ArrayList<>();
     // private Uuid subNodeUuid;
     /*
      * Basic NEP object used in various list to describe OMS and OTS Logical
@@ -62,12 +67,21 @@ public class BasePceNep {
         this.tpType = orTpType;
     }
 
+    public void setVerticallyConnectedNep(List<Uuid> uuidList) {
+        this.verticallyConnectedNep.addAll(uuidList);
+    }
+
     public void setVirtualNep(Map<Uuid, Name> virtNepId) {
         this.virtualNep = virtNepId;
     }
 
-    public void setNodeRuleGroupUuid(Uuid ndrgUuid) {
-        this.nodeRuleGroupUuid.add(ndrgUuid);
+    public void setNodeRuleGroupUuid(Uuid nrgUuid) {
+        this.nodeRuleGroupUuid.add(nrgUuid);
+    }
+
+    public void setIndirectNRGUuid(List<Uuid> indNrgUuid) {
+        this.indirectNrgUuid.addAll(indNrgUuid);
+        this.indirectNrgUuid.stream().distinct().collect(Collectors.toList());
     }
 
     public void setClientNep(Uuid clientNepId) {
@@ -96,6 +110,10 @@ public class BasePceNep {
 
     public void setLpn(LayerProtocolName lpname) {
         this.lpn = lpname;
+    }
+
+    public void setLpq(LAYERPROTOCOLQUALIFIER lpqname) {
+        this.lpq = lpqname;
     }
 
     public void setAdminState(AdministrativeState as) {
@@ -138,6 +156,10 @@ public class BasePceNep {
         return this.lpn;
     }
 
+    public LAYERPROTOCOLQUALIFIER getLpq() {
+        return this.lpq;
+    }
+
     public AdministrativeState getAdminState() {
         return this.adminState;
     }
@@ -162,12 +184,20 @@ public class BasePceNep {
         return this.tpType;
     }
 
+    public List<Uuid> getVerticallyConnectedNep() {
+        return this.verticallyConnectedNep;
+    }
+
     public final Map<Uuid, Name> getVirtualNep() {
         return this.virtualNep;
     }
 
     public List<Uuid> getNodeRuleGroupUuid() {
         return this.nodeRuleGroupUuid;
+    }
+
+    public List<Uuid> getindirectNrgUuid() {
+        return this.indirectNrgUuid;
     }
 
     public Uuid getcepOtsUuid() {

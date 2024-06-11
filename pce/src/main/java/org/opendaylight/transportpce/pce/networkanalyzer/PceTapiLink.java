@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
@@ -134,10 +135,10 @@ public class PceTapiLink implements Serializable {
     public PceTapiLink(Name linkName, Uuid linkUuid, Uuid sourceTpUuid, Uuid destTpUuid, PceNode nodeX, PceNode nodeY) {
 
         LOG.debug("PceLink: : PceLink start ");
+        this.sourceIndex = 0;
         this.linkId = linkUuid;
         this.linkName = linkName;
         this.direction = ForwardingDirection.BIDIRECTIONAL;
-        qualifyLinkType(nodeX, nodeY);
         this.sourceNodeId = nodeX.getNodeUuid();
         this.destNodeId = nodeY.getNodeUuid();
         this.sourceTpId = sourceTpUuid;
@@ -156,22 +157,29 @@ public class PceTapiLink implements Serializable {
         this.powerCorrection = 0.0;
         this.cd = 0.0;
         this.pmd2 = 0.0;
+        qualifyLinkType(nodeX, nodeY);
 
         LOG.debug("PceLink: created PceLink  {}", linkId);
     }
 
     private void qualifyLinkType(PceNode nodeX, PceNode nodeY) {
+
+        LOG.info("PCETAPILINK line 167 NodeXListofNEP {}", nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
+            .collect(Collectors.toList()));
+        LOG.info("PCETAPILINK line 167 NodeYListofNEP {}", nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
+            .collect(Collectors.toList()));
+        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {}", sourceTpId, destTpId);
         OpenroadmTpType sourceTpType = OpenroadmTpType.EXTPLUGGABLETP;
         OpenroadmTpType destTpType = OpenroadmTpType.EXTPLUGGABLETP;
         if (sourceIndex == 0) {
-            sourceTpType = nodeX.getListOfNep().stream().filter(bpn -> sourceNodeId.equals(bpn.getNepCepUuid()))
+            sourceTpType = nodeX.getListOfNep().stream().filter(bpn -> sourceTpId.equals(bpn.getNepCepUuid()))
                 .findFirst().orElseThrow().getTpType();
-            destTpType = nodeY.getListOfNep().stream().filter(bpn -> sourceNodeId.equals(bpn.getNepCepUuid()))
+            destTpType = nodeY.getListOfNep().stream().filter(bpn -> destTpId.equals(bpn.getNepCepUuid()))
                 .findFirst().orElseThrow().getTpType();
         } else if (sourceIndex == 1) {
-            sourceTpType = nodeY.getListOfNep().stream().filter(bpn -> sourceNodeId.equals(bpn.getNepCepUuid()))
+            sourceTpType = nodeY.getListOfNep().stream().filter(bpn -> sourceTpId.equals(bpn.getNepCepUuid()))
                 .findFirst().orElseThrow().getTpType();
-            destTpType = nodeX.getListOfNep().stream().filter(bpn -> sourceNodeId.equals(bpn.getNepCepUuid()))
+            destTpType = nodeX.getListOfNep().stream().filter(bpn -> destTpId.equals(bpn.getNepCepUuid()))
                 .findFirst().orElseThrow().getTpType();
         } else {
             LOG.error("TapiPceLink: Error proceeding Link {} for which source and dest NEP can not be identified ",
