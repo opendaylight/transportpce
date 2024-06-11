@@ -684,6 +684,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         LOG.debug("TransformSRGToONep for tps {}, of NodeId {} ",
             tpMap.entrySet().stream().map(tp -> tp.getKey()).collect(Collectors.toList()), orNodeId);
+
         return populateNepsForRdmNode(true, orNodeId, tpMap, true, TapiStringConstants.PHTNC_MEDIA_OTS);
     }
 
