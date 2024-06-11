@@ -753,6 +753,11 @@ public class ConvertORToTapiTopology {
                     .build());
             }
         }
+        if (key.contains("OTSi")) {
+            sclpqiList = sclpqiList.stream()
+                .filter(sclpqi -> !sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
+                .collect(Collectors.toList());
+        }
         return sclpqiList.stream().distinct().toList();
     }
 
