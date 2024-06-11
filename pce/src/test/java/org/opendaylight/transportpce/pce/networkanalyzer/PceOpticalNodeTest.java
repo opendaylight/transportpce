@@ -110,7 +110,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         assertTrue(pceOpticalNode.checkTP("testTP"));
         assertNull(pceOpticalNode.getAvailableTribPorts());
         assertNull(pceOpticalNode.getAvailableTribPorts());
-        assertNull(pceOpticalNode.getXpdrClient("test"));
+        assertNull(pceOpticalNode.getXpdrNWfromClient("test"));
     }
 
     @Test
