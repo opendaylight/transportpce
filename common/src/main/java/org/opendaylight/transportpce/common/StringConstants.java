@@ -82,14 +82,17 @@ public final class StringConstants {
     public static final String OPTICALCHANNEL = "OPTICAL_CHANNEL";
 
     public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.of(
-        SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
-        SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
-        SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
-        SERVICE_TYPE_OTU4, Uint64.valueOf(100),
-        SERVICE_TYPE_OTUC4, Uint64.valueOf(400),
-        SERVICE_TYPE_OTUC3, Uint64.valueOf(300),
-        SERVICE_TYPE_OTUC2, Uint64.valueOf(200),
-        SERVICE_TYPE_400GE, Uint64.valueOf(400));
+
+        StringConstants.SERVICE_TYPE_1GE, Uint64.valueOf(1),
+        StringConstants.SERVICE_TYPE_10GE, Uint64.valueOf(10),
+        StringConstants.SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_OTU4, Uint64.valueOf(100),
+        StringConstants.SERVICE_TYPE_400GE, Uint64.valueOf(400),
+        StringConstants.SERVICE_TYPE_OTUC4, Uint64.valueOf(400),
+        StringConstants.SERVICE_TYPE_OTUC3, Uint64.valueOf(300),
+        StringConstants.SERVICE_TYPE_OTUC2, Uint64.valueOf(200));
 
     public static final Map<String, FiberType> FIBER_TYPES_TABLE = Map.ofEntries(
         entry("SMF", FiberType.Smf),

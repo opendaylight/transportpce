@@ -525,7 +525,7 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public String getXpdrClient(String tp) {
+    public String getXpdrNWfromClient(String tp) {
         return this.clientPerNwTp.get(tp);
     }
 
