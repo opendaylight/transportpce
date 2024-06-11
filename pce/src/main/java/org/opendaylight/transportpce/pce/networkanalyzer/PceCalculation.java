@@ -740,8 +740,8 @@ public class PceCalculation {
                         "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (dest.getXpdrClient(pcelink.getDestTP().getValue()) != null) {
-                    pcelink.setClientZ(dest.getXpdrClient(pcelink.getDestTP().getValue()));
+                if (dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()) != null) {
+                    pcelink.setClientZ(dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -757,8 +757,8 @@ public class PceCalculation {
                         "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (source.getXpdrClient(pcelink.getSourceTP().getValue()) != null) {
-                    pcelink.setClientA(source.getXpdrClient(pcelink.getSourceTP().getValue()));
+                if (source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()) != null) {
+                    pcelink.setClientA(source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -788,11 +788,11 @@ public class PceCalculation {
 
         switch (pceOtnLink.getlinkType()) {
             case OTNLINK:
-                if (source.getXpdrClient(pceOtnLink.getSourceTP().getValue()) != null) {
-                    pceOtnLink.setClientA(source.getXpdrClient(pceOtnLink.getSourceTP().getValue()));
+                if (source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()) != null) {
+                    pceOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()));
                 }
-                if (dest.getXpdrClient(pceOtnLink.getDestTP().getValue()) != null) {
-                    pceOtnLink.setClientZ(dest.getXpdrClient(pceOtnLink.getDestTP().getValue()));
+                if (dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()) != null) {
+                    pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()));
                 }
                 allPceLinks.put(linkId, pceOtnLink);
                 source.addOutgoingLink(pceOtnLink);
