@@ -33,7 +33,7 @@ public interface PceNode {
 
     String getRdmSrgClient(String tp, String direction);
 
-    String getXpdrClient(String tp);
+    String getXpdrNWfromClient(String tp);
 
     boolean checkTP(String tp);
 
