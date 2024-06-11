@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
+//import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -98,8 +98,10 @@ public class TapiOpticalNode {
 //    private Endpoints endpoints;
 
     private List<BasePceNep> allOtsNep = new ArrayList<>();
-    private List<BasePceNep> srgOtsNep = new ArrayList<>();
-    private List<BasePceNep> degOtsNep = new ArrayList<>();
+    //private List<BasePceNep> srgOtsNep = new ArrayList<>();
+    private Map<Uuid, BasePceNep> mmSrgOtsNep = new HashMap<>();
+    //private List<BasePceNep> degOtsNep = new ArrayList<>();
+    private Map<Uuid, BasePceNep> mmDegOtsNep = new HashMap<>();
     private List<BasePceNep> degOmsNep = new ArrayList<>();
     private List<BasePceNep> nwOtsNep = new ArrayList<>();
     private List<BasePceNep> clientDsrNep = new ArrayList<>();
@@ -269,10 +271,10 @@ public class TapiOpticalNode {
         // NEP with OTS, no OMS are PPS --> if InService and no MC (occupancy)
         // --> put in srgOtsNep
         // NEP with OTS and OMS are TTPs --> In service --> Put them in
-        // degOtsNep
+        // mmDegOtsNep
         // Relies on checkOtsNepAvailable
         Map<DirectionType, OpenroadmTpType> direction;
-        LOG.debug("initRoadmIlaTps: getting tps from ROADM node {}", this.nodeUuid);
+        LOG.info("TONline275: initRoadmIlaTps: getting tps from ROADM node {}", this.nodeName);
         // for each of the photonic OwnedNEP which Operational state is enable
         // and spectrum is not fully used
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNepList = this.node.getOwnedNodeEdgePoint();
@@ -280,57 +282,89 @@ public class TapiOpticalNode {
             if (LayerProtocolName.PHOTONICMEDIA.equals(ownedNep.getValue().getLayerProtocolName())
                 && OperationalState.ENABLED.equals(ownedNep.getValue().getOperationalState())
                 && checkAvailableSpectrum(ownedNep.getValue().getUuid(), true)) {
-                // If the NEP is an OTS NEP, scans the list of CEP, Adds to
-                // otsLcpList each CEP which owns an otsCEPspec
+                // If the NEP is an OTS NEP, and owns a Cep List (not the case of PP NEPs),
+                // scans the list of CEP, adds to otsLcpList each CEP which owns an otsCEPspec
                 // and fills allOtsNep with all information it retrieves from
                 // the CEP
-                if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
-                    .filter(sclpqi -> PHOTONICLAYERQUALIFIEROTS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
-                    .findAny() != null) {
-                    for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep.getValue()
-                        .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint().entrySet()) {
-                        if (cep.getValue().augmentation(ConnectionEndPoint2.class)
-                            .getOtsMediaConnectionEndPointSpec() != null) {
+                if (!ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
+                        .filter(sclpqi -> PHOTONICLAYERQUALIFIEROTS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
+                        .findAny().isEmpty()) {
+                    var otsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
+                    if (ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class) == null
+                            || ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() == null) {
+                        otsNep.setOperationalState(OperationalState.ENABLED);
+                        otsNep.setAdminState(AdministrativeState.UNLOCKED);
+                        allOtsNep.add(otsNep);
+                    } else {
+                        for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep.getValue()
+                                .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                                .entrySet()) {
                             var otsCep = new BasePceNep(cep.getValue().getUuid(), cep.getValue().getName());
-                            otsCep.setParentNep(cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
+                            //otsCep.setParentNep(cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
+                            otsCep.setParentNep(ownedNep.getKey().getUuid());
                             otsCep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
                             otsLcpList.add(otsCep);
-                            var otsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
+                            LOG.info("TONline306: initRoadmIlaTps: OTS Cep added to otsLcpList  {}",
+                                otsCep.getName());
                             otsNep.setCepOtsUuid(cep.getValue().getUuid());
                             otsNep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
                             otsNep.setOperationalState(OperationalState.ENABLED);
-                            otsNep.setCepOtsSpec(cep.getValue().augmentation(ConnectionEndPoint2.class)
-                                .getOtsMediaConnectionEndPointSpec());
-                            // check if spectrum shall be populated here
-                            allOtsNep.add(otsNep);
-                            break;
+                            otsNep.setAdminState(AdministrativeState.UNLOCKED);
+                            if (cep.getValue().augmentation(ConnectionEndPoint2.class) != null
+                                    && cep.getValue().augmentation(ConnectionEndPoint2.class)
+                                    .getOtsMediaConnectionEndPointSpec() != null) {
+                                otsNep.setCepOtsSpec(cep.getValue().augmentation(ConnectionEndPoint2.class)
+                                    .getOtsMediaConnectionEndPointSpec());
+                                // check if spectrum shall be populated here
+                                //Goes out of the loop as soon it has found a OtsMediaConnectionEndPointSpec
+                                break;
+                            }
                         }
+                        allOtsNep.add(otsNep);
                     }
+                    LOG.info("TONline323: initRoadmIlaTps: OTS nep added to AllOTSNep  {}", otsNep.getName());
                 }
                 // If the NEP is an OMS NEP, scans the list of CEP, Adds to
                 // oMsLcpList each CEP which owns an omsCEPspec
                 // and fills degOmsNep with all information it retrieves from
                 // the CEP
-                if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
+                if (!ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
                     .filter(sclpqi -> PHOTONICLAYERQUALIFIEROMS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
-                    .findAny() != null) {
-                    for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep2 : ownedNep.getValue()
-                        .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint().entrySet()) {
-                        if (cep2.getValue().augmentation(ConnectionEndPoint3.class)
-                            .getOmsConnectionEndPointSpec() != null) {
+                    .findAny().isEmpty()) {
+
+                    LOG.info("TONline335: initRoadmIlaTps: OMS NEP {} has been found", ownedNep.getValue().getName());
+                    var omsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
+                    if (ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class) == null
+                            || ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() == null) {
+                        omsNep.setOperationalState(OperationalState.ENABLED);
+                        omsNep.setAdminState(AdministrativeState.UNLOCKED);
+                        omsNep.setTpType(OpenroadmTpType.DEGREETXRXTTP);
+                        direction = calculateDirection(ownedNep.getValue(), null, TpType.TTP);
+                        omsNep.setDirection(direction.keySet().iterator().next());
+                        omsNep.setTpType(direction.values().iterator().next());
+                        direction.clear();
+                        degOmsNep.add(omsNep);
+                        LOG.info("TONline347: initRoadmIlaTps: OMS NEP {} NO augment", ownedNep.getValue().getName());
+                    } else {
+                        LOG.info("TONline348: initRoadmIlaTps: OMS NEP {} has augment", ownedNep.getValue().getName());
+                        for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep2 : ownedNep.getValue()
+                                .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                                .entrySet()) {
                             var omsCep = new BasePceNep(cep2.getValue().getUuid(), cep2.getValue().getName());
-                            omsCep.setParentNep(cep2.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
+                            //omsCep.setParentNep(cep2.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
+                            omsCep.setParentNep(ownedNep.getKey().getUuid());
                             omsCep.setClientNep(cep2.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
                             omsLcpList.add(omsCep);
-                            var omsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
+                            LOG.info("TONline355: initRoadmIlaTps: OMS Cep added to omsLcpList  {}",
+                                omsCep.getName());
                             omsNep.setCepOmsUuid(cep2.getValue().getUuid());
                             // TODO: Qualify next line which seems to be wrong :
                             // the parent nep of the cep is the NEP
                             // itself, not its parent NEP!!!! See if used
-                            // somewhere ortherwise remove the line
+                            // somewhere otherwise remove the line
                             // omsNep.setParentNep(cep2.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
                             omsNep.setClientNep(cep2.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
@@ -340,24 +374,40 @@ public class TapiOpticalNode {
                             omsNep.setDirection(direction.keySet().iterator().next());
                             omsNep.setTpType(direction.values().iterator().next());
                             direction.clear();
-                            omsNep.setCepOmsSpec(cep2.getValue().augmentation(ConnectionEndPoint3.class)
-                                .getOmsConnectionEndPointSpec());
-                            degOmsNep.add(omsNep);
-                            break;
+                            if (cep2.getValue().augmentation(ConnectionEndPoint3.class) != null
+                                    && cep2.getValue().augmentation(ConnectionEndPoint3.class)
+                                    .getOmsConnectionEndPointSpec() != null) {
+                                omsNep.setCepOmsSpec(cep2.getValue().augmentation(ConnectionEndPoint3.class)
+                                    .getOmsConnectionEndPointSpec());
+                                //Goes out of the loop as soon it has found a OtsMediaConnectionEndPointSpec
+                                break;
+                            }
                         }
+                        degOmsNep.add(omsNep);
                     }
+                    LOG.info("TONline376: initRoadmIlaTps: OMS nep added to degOMSNep  {}", omsNep.getName());
                 }
             }
         }
-        // Loop to Fill srgOtsNep and degOtsNep from allOtsNep, relying on
+        // Loop to Fill mmSrgOtsNep and mmDegOtsNep from allOtsNep, relying on
         // information (parent NEP) present in
         // otsLcpList, and set direction, tpType and spectrum use
+        LOG.debug("TONline394: initRoadmIlaTps: OmsNepList Nep {}",
+            degOmsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.debug("TONline396: initRoadmIlaTps: OmsNepUuidList Nep {}",
+            degOmsNep.stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList()));
+        LOG.debug("TONline398: initRoadmIlaTps: OtsCepList ClientNeps {}",
+            otsLcpList.stream().map(BasePceNep::getClientNep).collect(Collectors.toList()));
         boolean isDegreeNep;
         for (BasePceNep otsCep : otsLcpList) {
             isDegreeNep = false;
+            LOG.info("TONline399: initRoadmIlaTps: scan OtsCepList : Ots Cep {}", otsCep.getName());
+            LOG.info("TONline399: initRoadmIlaTps: scan OtsCepList : Ots CepClientNep {}", otsCep.getClientNep());
             for (BasePceNep omsNep : degOmsNep) {
-                if (omsNep.getNepCepUuid() == otsCep.getClientNep()) {
+                if (omsNep.getNepCepUuid().equals(otsCep.getClientNep())) {
                     // The OTS NEP is a degree NEP
+                    LOG.info("TONline400: initRoadmIlaTps: identifiedOMS nep {} as client of Ots Cep ",
+                        omsNep.getName());
                     BasePceNep otsNep = allOtsNep.stream().filter(bpn -> otsCep.getParentNep()
                         .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
                     direction = calculateDirection(
@@ -368,11 +418,16 @@ public class TapiOpticalNode {
                     otsNep.setTpType(direction.values().iterator().next());
                     otsNep.setFrequencyBitset(buildBitsetFromSpectrum(otsNep.getNepCepUuid()));
                     otsNep.setCepOtsSpec(otsCep.getCepOtsSpec());
-                    degOtsNep.add(otsNep);
+                    mmDegOtsNep.put(otsNep.getNepCepUuid(), otsNep);
+                    //degOtsNep.add(otsNep);
+                    LOG.info("TONline413: initRoadmIlaTps: OTS nep from allOTsNep added to mmDegOTSNep  {}",
+                        otsNep.getName());
                     isDegreeNep = true;
                     break;
                 }
             }
+            LOG.info("TONline420: initRoadmIlaTps: no identifiedOMS nep as client of Ots Cep {} ",
+                otsCep.getName());
             if (!isDegreeNep) {
                 BasePceNep otsNep = allOtsNep.stream().filter(bpn -> otsCep.getParentNep().equals(bpn.getNepCepUuid()))
                     .findFirst().orElseThrow();
@@ -388,9 +443,18 @@ public class TapiOpticalNode {
                 otsNep.setDirection(direction.keySet().iterator().next());
                 otsNep.setTpType(direction.values().iterator().next());
                 otsNep.setFrequencyBitset(buildBitsetFromSpectrum(otsNep.getNepCepUuid()));
-                srgOtsNep.add(otsNep);
+                mmSrgOtsNep.put(otsNep.getNepCepUuid(), otsNep);
+                //srgOtsNep.add(otsNep);
+                LOG.info("TONline423: initRoadmIlaTps: OTS nep from allOTsNep added to mmSrgOTSNep  {}",
+                    otsNep.getName());
             }
         }
+        LOG.info("TONline448: initRoadmIlaTps: mmDegOTSNEP  {}",
+            mmDegOtsNep.values().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("TONline450: initRoadmIlaTps: mmDegOMSNEP  {}",
+            degOmsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("TONline452: initRoadmIlaTps: mmSrgOTSNEP  {}",
+            mmSrgOtsNep.values().stream().map(BasePceNep::getName).collect(Collectors.toList()));
     }
 
     private void initIlaTps() {
@@ -450,7 +514,7 @@ public class TapiOpticalNode {
         // This method allows creating all corresponding CTPs whether they have
         // already been created from node rule
         // group in buildVirtualCpsAndCtps() or not.
-        if (degOtsNep == null) {
+        if (mmDegOtsNep == null) {
             return;
         }
         // Use an index of 100 to avoid generating Virtual NEP with the same Id
@@ -458,15 +522,26 @@ public class TapiOpticalNode {
         // generated in buildVirtualCpsAndCtps follow during their creation an
         // index numbering that is associated with
         // the NodeRuleGroup, which is not the case here
-        int degreeNumber = 100;
-        for (BasePceNep otsNep : degOtsNep) {
+        //int degreeNumber = 100;
+//        Map<Uuid, BasePceNep> mmDegOtsNep = degOtsNep.stream()
+//            .collect(Collectors.toMap(BasePceNep::getNepCepUuid, Function.identity()));
+        LOG.info("TONLine524 mmDegOtsNep {}", mmDegOtsNep.entrySet().stream()
+            .map(nep -> nep.getValue().getName().entrySet().iterator().next().getValue().getValue())
+            .collect(Collectors.toList()));
+        //for (BasePceNep otsNep : degOtsNep) {
+        for (Map.Entry<Uuid, BasePceNep> otsNep : mmDegOtsNep.entrySet()) {
             // For each Degree OTN NEP, if a virtual NEP was not already
             // created, creates a virtual node corresponding
             // to the degree CTP
-            if (otsNep.getVirtualNep() == null || otsNep.getVirtualNep().isEmpty()) {
-                Map<Uuid, Name> vnepId = createNodeOrVnepId(String.valueOf(degreeNumber), "-DEG", false);
-                // Add in DegOtsNep Map the virtual node associated to the block
-                otsNep.setVirtualNep(vnepId);
+            if ((otsNep.getValue().getVirtualNep() == null || otsNep.getValue().getVirtualNep().isEmpty())
+                && otsNep.getValue().getName().entrySet().iterator().next().getValue().getValue().contains("TTP")) {
+                LOG.info("TONLine530 input for createNodeOrVnepId {}",
+                    otsNep.getValue().getName().entrySet().iterator().next().getValue().getValue().split("\\-TTP")[0]);
+                Map<Uuid, Name> vnepId = createNodeOrVnepId(
+                    otsNep.getValue().getName().entrySet().iterator().next().getValue().getValue().split("\\-TTP")[0],
+                    "DEG", false);
+                // Add in mmDegOtsNep Map the virtual node associated to the block
+                otsNep.getValue().setVirtualNep(vnepId);
                 Map<NameKey, Name> vnepNameMap = new HashMap<>();
                 vnepNameMap.put(vnepId.entrySet().iterator().next().getValue().key(),
                     vnepId.entrySet().iterator().next().getValue());
@@ -474,9 +549,10 @@ public class TapiOpticalNode {
                 virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
                 virtualNep.setOperationalState(OperationalState.ENABLED);
                 virtualNep.setTpType(OpenroadmTpType.DEGREETXRXCTP);
-                virtualNep.setParentNep(otsNep.getNepCepUuid());
-                degOtsNep.add(virtualNep);
-                degreeNumber++;
+                virtualNep.setParentNep(otsNep.getKey());
+                mmDegOtsNep.put(virtualNep.getNepCepUuid(), virtualNep);
+                //degOtsNep.add(virtualNep);
+                //degreeNumber++;
             }
         }
     }
@@ -485,10 +561,10 @@ public class TapiOpticalNode {
         Map<NodeRuleGroupKey, NodeRuleGroup> nrgList = this.node.getNodeRuleGroup();
         int virtualNepId = 0;
         // Make from list of OTS NEP a Map which simplifies its management
-        Map<Uuid, BasePceNep> mmSrgOtsNep = srgOtsNep.stream()
-            .collect(Collectors.toMap(BasePceNep::getNepCepUuid, Function.identity()));
-        Map<Uuid, BasePceNep> mmDegOtsNep = degOtsNep.stream()
-            .collect(Collectors.toMap(BasePceNep::getNepCepUuid, Function.identity()));
+//        Map<Uuid, BasePceNep> mmSrgOtsNep = srgOtsNep.stream()
+//            .collect(Collectors.toMap(BasePceNep::getNepCepUuid, Function.identity()));
+//        Map<Uuid, BasePceNep> mmDegOtsNep = degOtsNep.stream()
+//            .collect(Collectors.toMap(BasePceNep::getNepCepUuid, Function.identity()));
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrg : nrgList.entrySet()) {
             // For each NodeRuleGroup [uuid], we check if some of the rule
             // [local-id] are a forwarding rule
@@ -529,7 +605,7 @@ public class TapiOpticalNode {
                 // Regular blocking add/drop block or
                 // non blocking for ContentionLess Add/Drop), we check if it
                 // applies to OTS NEPs (finding them
-                // in mSrgOtsNep or mDegOtsNep Map) and store keys of considered
+                // in mmSrgOtsNep or mmDegOtsNep Map) and store keys of considered
                 // NEP in ots<Srg/Deg>NepKeyList
                 List<NodeEdgePointKey> otsSrgNepKeyList = nrg.getValue().getNodeEdgePoint().entrySet().stream()
                     .filter(nep -> mmSrgOtsNep.containsKey(nep.getValue().getNodeEdgePointUuid()))
@@ -550,14 +626,36 @@ public class TapiOpticalNode {
                 virtualNepId++;
                 if (!(otsSrgNepKeyList == null || otsSrgNepKeyList.isEmpty())) {
                     Map<Uuid, Name> vnepId1;
-                    vnepId1 = createNodeOrVnepId(String.valueOf(virtualNepId), "-SRG", false);
-                    for (BasePceNep otsNep : srgOtsNep) {
+                    //vnepId1 = createNodeOrVnepId(String.valueOf(virtualNepId), "-SRG", false);
+                    String otsNepName = mmSrgOtsNep.entrySet().stream()
+                        .filter(bpn -> otsSrgNepKeyList.stream()
+                                .map(NodeEdgePointKey::getNodeEdgePointUuid).collect(Collectors.toList())
+                                .contains(bpn.getKey()))
+                        .findAny().orElseThrow().getValue()
+                            .getName().entrySet().iterator().next().getValue().getValue();
+                    vnepId1 = createNodeOrVnepId(otsNepName.split("\\-PP")[0], "SRG", false);
+                    if (blocking) {
+                        Map<NameKey, Name> vnepNameMap1 = new HashMap<>();
+                        vnepNameMap1.put(vnepId1.entrySet().iterator().next().getValue().key(),
+                            vnepId1.entrySet().iterator().next().getValue());
+                        BasePceNep virtualNep = new BasePceNep(vnepId1.entrySet().iterator().next().getKey(),
+                            vnepNameMap1);
+                        virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
+                        virtualNep.setOperationalState(OperationalState.ENABLED);
+                        virtualNep.setTpType(OpenroadmTpType.SRGTXRXCP);
+                        // contrary to DEG CTPs, do not define a unique
+                        // Parent NEP as there are multiple PPs
+                        mmSrgOtsNep.put(virtualNep.getNepCepUuid(), virtualNep);
+                        //srgOtsNep.add(virtualNep);
+                    }
+                    for (Map.Entry<Uuid, BasePceNep> otsNep : mmSrgOtsNep.entrySet()) {
+                    //for (BasePceNep otsNep : srgOtsNep) {
                         // TODO: verify consistency of the following if test
                         if (otsSrgNepKeyList.stream().filter(nepkey -> nepkey.getNodeEdgePointUuid()
-                            .equals(otsNep.getNepCepUuid())).findAny().isPresent()) {
+                            .equals(otsNep.getKey())).findAny().isPresent()) {
                             // We store the NodeRuleGroup Id whatever is the
                             // forwarding condition
-                            otsNep.setNodeRuleGroupUuid(nrg.getKey().getUuid());
+                            otsNep.getValue().setNodeRuleGroupUuid(nrg.getKey().getUuid());
                             // We store the virtual NEP Id, only if we have a
                             // blocking condition, as the possibility
                             // for a PP to forward traffic to a TTP may be coded
@@ -568,36 +666,51 @@ public class TapiOpticalNode {
                             if (blocking) {
                                 // Add in srgOtsNep Map the virtual node
                                 // associated to the block
-                                otsNep.setVirtualNep(vnepId1);
-                                Map<NameKey, Name> vnepNameMap1 = new HashMap<>();
-                                vnepNameMap1.put(vnepId1.entrySet().iterator().next().getValue().key(),
-                                    vnepId1.entrySet().iterator().next().getValue());
-                                BasePceNep virtualNep = new BasePceNep(vnepId1.entrySet().iterator().next().getKey(),
-                                    vnepNameMap1);
-                                virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
-                                virtualNep.setOperationalState(OperationalState.ENABLED);
-                                virtualNep.setTpType(OpenroadmTpType.SRGTXRXCP);
-                                // contrary to DEG CTPs, do not define a unique
-                                // Parent NEP as there are multiple PPs
-                                srgOtsNep.add(virtualNep);
+                                otsNep.getValue().setVirtualNep(vnepId1);
+//                                Map<NameKey, Name> vnepNameMap1 = new HashMap<>();
+//                                vnepNameMap1.put(vnepId1.entrySet().iterator().next().getValue().key(),
+//                                    vnepId1.entrySet().iterator().next().getValue());
+//                                BasePceNep virtualNep = new BasePceNep(vnepId1.entrySet().iterator().next().getKey(),
+//                                    vnepNameMap1);
+//                                virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
+//                                virtualNep.setOperationalState(OperationalState.ENABLED);
+//                                virtualNep.setTpType(OpenroadmTpType.SRGTXRXCP);
+//                                // contrary to DEG CTPs, do not define a unique
+//                                // Parent NEP as there are multiple PPs
+//                                srgOtsNep.add(virtualNep);
                             }
                         }
                     }
                 }
                 if (!(otsDegNepKeyList == null || otsDegNepKeyList.isEmpty()) && !blocking) {
-                    Map<Uuid, Name> vnepId2;
-                    vnepId2 = createNodeOrVnepId(String.valueOf(virtualNepId), "-DEG", false);
-                    for (BasePceNep otsNep : degOtsNep) {
+//                    Map<Uuid, Name> vnepId2;
+//                    //vnepId2 = createNodeOrVnepId(String.valueOf(virtualNepId), "-DEG", false);
+//                    String otsNepName = mmDegOtsNep.entrySet().stream()
+//                        .filter(bpn -> otsDegNepKeyList.stream()
+//                                .map(NodeEdgePointKey::getNodeEdgePointUuid).collect(Collectors.toList())
+//                                .contains(bpn.getKey()))
+//                        .findAny().orElseThrow().getValue()
+//                            .getName().entrySet().iterator().next().getValue().getValue();
+//                    vnepId2 = createNodeOrVnepId(otsNepName.split("\\-TTP")[0], "DEG", false);
+                    Map<Uuid, BasePceNep> tempVirtualBpnMap = new HashMap<>();
+                    for (Map.Entry<Uuid, BasePceNep> otsNep : mmDegOtsNep.entrySet()) {
+                    //for (BasePceNep otsNep : degOtsNep) {
+                        //for each otsNep (there are several deegrees, create a virtualNepId CTP
+                        Map<Uuid, Name> vnepId2;
+                        //vnepId2 = createNodeOrVnepId(String.valueOf(virtualNepId), "-DEG", false);
+                        String otsNepName = otsNep.getValue()
+                                .getName().entrySet().iterator().next().getValue().getValue();
+                        vnepId2 = createNodeOrVnepId(otsNepName.split("\\-TTP")[0], "DEG", false);
                         // TODO: verify consistency of the following if test
                         if (otsDegNepKeyList.stream().filter(nepkey -> nepkey.getNodeEdgePointUuid()
-                            .equals(otsNep.getNepCepUuid())).findAny().isPresent()) {
-                            otsNep.setNodeRuleGroupUuid(nrg.getKey().getUuid());
+                            .equals(otsNep.getKey())).findAny().isPresent()) {
+                            otsNep.getValue().setNodeRuleGroupUuid(nrg.getKey().getUuid());
                             // We store the virtual NEP Id, only if we have a
                             // non blocking condition
                             if (!blocking) {
                                 // Add in DegOtsNep Map the virtual node
                                 // associated to the block
-                                otsNep.setVirtualNep(vnepId2);
+                                otsNep.getValue().setVirtualNep(vnepId2);
                                 Map<NameKey, Name> vnepNameMap2 = new HashMap<>();
                                 vnepNameMap2.put(vnepId2.entrySet().iterator().next().getValue().key(),
                                     vnepId2.entrySet().iterator().next().getValue());
@@ -606,11 +719,23 @@ public class TapiOpticalNode {
                                 virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
                                 virtualNep.setOperationalState(OperationalState.ENABLED);
                                 virtualNep.setTpType(OpenroadmTpType.DEGREETXRXCTP);
-                                virtualNep.setParentNep(otsNep.getNepCepUuid());
-                                degOtsNep.add(virtualNep);
+                                virtualNep.setParentNep(otsNep.getKey());
+                                tempVirtualBpnMap.put(vnepId2.entrySet().iterator().next().getKey(), virtualNep);
+                                //degOtsNep.add(virtualNep);
                             }
                         }
                     }
+                    mmDegOtsNep.putAll(tempVirtualBpnMap);
+                    LOG.info("TONLine723 mmDegOtsNep NepName in BuiltvirtualCP andCtps{}",
+                        mmDegOtsNep.entrySet().stream()
+                            .map(nep -> nep.getValue().getName().entrySet().iterator().next().getValue().getValue())
+                            .collect(Collectors.toList()));
+                    LOG.info("TONLine727 mmDegOtsNep VirtualNepName declared at the end of BuiltvirtualCP andCtps{}",
+                        mmDegOtsNep.entrySet().stream()
+                            .map(nep -> nep.getValue().getVirtualNep()).collect(Collectors.toList()));
+                    LOG.info("TONLine730 DegOtsNep VirtualNepName declared at the end of BuiltvirtualCP andCtps{}",
+                        mmDegOtsNep.values().stream().map(nep -> nep.getName().entrySet().iterator().next().getValue()
+                            .getValue()).collect(Collectors.toList()));
                 }
             } else {
                 // No forwarding condition defined
@@ -620,24 +745,26 @@ public class TapiOpticalNode {
     }
 
     // Complement this method to have the PP order
-    private Map<Uuid, Name> createNodeOrVnepId(String indentifier, String extension, boolean isNode) {
+    private Map<Uuid, Name> createNodeOrVnepId(String identifier, String extension, boolean isNode) {
         String tpType;
-        if ("-SRG".equals(extension)) {
-            tpType = "-CP";
-        } else if ("-DEG".equals(extension)) {
-            tpType = "-CTP";
+        if ("SRG".equals(extension)) {
+            tpType = "CP";
+        } else if ("DEG".equals(extension)) {
+            tpType = "CTP";
         } else {
             tpType = "";
         }
         Name name;
         if (isNode) {
-            name = new NameBuilder().setValueName("VirtualNepName")
-                .setValue(String.join("+", nodeName.getValue(), extension, indentifier))
+            name = new NameBuilder().setValueName("VirtualNodeName")
+                .setValue(String.join("+", nodeName.getValue(), (extension + identifier)))
                 .build();
         } else {
+//            name = new NameBuilder().setValueName("VirtualNepName")
+//                .setValue(String.join("+", nodeName.getValue(), extension, identifier,
+//                    tpType)).build();
             name = new NameBuilder().setValueName("VirtualNepName")
-                .setValue(String.join("+", nodeName.getValue(), extension, indentifier,
-                    tpType)).build();
+                .setValue(String.join("-", identifier, tpType)).build();
         }
         Map<Uuid, Name> id = new HashMap<>();
         Uuid uuid = new Uuid(UUID.nameUUIDFromBytes(name.getValue().getBytes(Charset.forName("UTF-8"))).toString());
@@ -645,12 +772,37 @@ public class TapiOpticalNode {
         return id;
     }
 
+    private void printBpnListImportantParameters() {
+        Map<String, String> srgNepAndVnepMap = new HashMap<>();
+//        for (BasePceNep bpn : srgOtsNep) {
+//            srgNepAndVnepMap.put(bpn.getName().entrySet().iterator().next().getValue().getValue(),
+//                bpn.getVirtualNep() == null || bpn.getVirtualNep().isEmpty()
+//                    ? "xxxxx"
+//                    : bpn.getVirtualNep().entrySet().iterator().next().getValue().getValue());
+//        }
+        for (BasePceNep bpn : mmSrgOtsNep.values()) {
+            srgNepAndVnepMap.put(bpn.getName().entrySet().iterator().next().getValue().getValue(),
+                bpn.getVirtualNep() == null || bpn.getVirtualNep().isEmpty()
+                    ? "xxxxx"
+                    : bpn.getVirtualNep().entrySet().iterator().next().getValue().getValue());
+        }
+        LOG.info("TONLine 732 :Names of NEPs and their associated Virtual NEP in SRGOTSNEP are {}", srgNepAndVnepMap);
+        Map<String, String> degNepAndVnepMap = new HashMap<>();
+        for (BasePceNep bpn : mmDegOtsNep.values()) {
+            degNepAndVnepMap.put(bpn.getName().entrySet().iterator().next().getValue().getValue(),
+                bpn.getVirtualNep() == null || bpn.getVirtualNep().isEmpty()
+                    ? "xxxxx"
+                    : bpn.getVirtualNep().entrySet().iterator().next().getValue().getValue());
+        }
+        LOG.info("TONLine 740 : Names of NEPs and their associated Virtual NEP in DEGOTSNEP are {}", degNepAndVnepMap);
+    }
+
     private void buildInternalLinksMap() {
-        // Process for creation of link between CTPs is not the same as from CP
-        // to CTP. Between CTPs we need to
-        // examine the node rule group defined for OTS Nep considering virtual
+        // Process for creation of link between CTPs is not the same as from CP to CTP.
+        //  Between CTPs we need to examine the node rule group defined for OTS Nep considering virtual
         // CTP have already been created
         // whereas for CP to CTP it is base on inter rule groups
+        printBpnListImportantParameters();
         Map<Uuid, IntLinkObj> intLinkMap = new HashMap<>();
         Map<NodeRuleGroupKey, NodeRuleGroup> nrgList = this.node.getNodeRuleGroup();
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrg : nrgList.entrySet()) {
@@ -716,13 +868,30 @@ public class TapiOpticalNode {
                                 .getNodeRuleGroupUuid())).getNodeEdgePoint());
                             indexMap++;
                         }
-                        if (indexMap > 2) {
-                            LOG.error("Error managing InterRuleGroup in node {}, as InterRule Group defined from more "
-                                + "than 2 node-rule-groups is not currently managed. Additional node-rule-groups will "
-                                + "not be considered!", this.nodeName);
-                        }
+//                        if (indexMap > 2) {
+//                           LOG.error("Error managing InterRuleGroup in node {}, as InterRule Group defined from more "
+//                               + "than 2 node-rule-groups is not currently managed. Additional node-rule-groups will "
+//                               + "not be considered!", this.nodeName);
+//                        }
+                        Map<Integer, Map<NodeEdgePointKey, NodeEdgePoint>> subIntercoMapI = new HashMap<>();
+
                         if (NodeTypes.Rdm.equals(this.commonNodeType)) {
-                            intLinkMap.putAll(createIrgPartialMesh(intercoNepMap));
+                            LOG.info("TONLine879 IntLinkMap size = {}", intercoNepMap.keySet().size());
+                            for (int index = 0 ; index < intercoNepMap.keySet().size() - 1; index++) {
+                                for (int subIx = index + 1 ; subIx < intercoNepMap.keySet().size(); subIx ++) {
+                                    LOG.info("TONLine881 IntLinkMap Loop index = {} subIx = {} ", index, subIx);
+                                    subIntercoMapI.clear();
+                                    subIntercoMapI.put(0, intercoNepMap.get(index));
+                                    subIntercoMapI.put(1, intercoNepMap.get(subIx));
+                                    intLinkMap.putAll(createIrgPartialMesh(subIntercoMapI));
+                                }
+                            }
+                            LOG.info("TONLine888 IntLinkMap of {} links as follows orgTpList = {} dstTpList = {}",
+                                intLinkMap.size(),
+                                intLinkMap.values().stream()
+                                    .map(IntLinkObj::getOrgTpUuid).collect(Collectors.toList()),
+                                intLinkMap.values().stream()
+                                    .map(IntLinkObj::getDestTpUuid).collect(Collectors.toList()));
                         }
                     }
                 }
@@ -748,7 +917,7 @@ public class TapiOpticalNode {
             nepOrder++;
         }
         nepOrder = 1;
-        String orgNodeType;
+        String orgNodeType = "";
         String destNodeType;
         // IndexedNepList is used to create the Mesh : for each Nep of the list,
         // will create links between the Virtual
@@ -756,30 +925,56 @@ public class TapiOpticalNode {
         // virtualNEPs associated with any NEP of higher
         // rank in IndexedNepList
         for (Map.Entry<Integer, Uuid> nepUuid : indexedNepList.entrySet()) {
-            BasePceNep orgBpn = srgOtsNep.stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
-                .findFirst().orElseThrow();
-            orgNodeType = "SRG";
-            if (orgBpn == null) {
-                orgBpn = degOtsNep.stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+            LOG.info("TONLine855 mmSrgOtsNep Uuid list {}", mmSrgOtsNep.values().stream()
+                .map(BasePceNep::getNepCepUuid).collect(Collectors.toList()));
+            LOG.info("TONLine857 mmDegOtsNep Uuid list {}", mmDegOtsNep.values().stream()
+                .map(BasePceNep::getNepCepUuid).collect(Collectors.toList()));
+            LOG.info("TONLine859 indexedNepList Uuid list {}", indexedNepList);
+            BasePceNep orgBpn = null;
+            if (!mmSrgOtsNep.values().stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+                    .collect(Collectors.toList()).isEmpty()) {
+                orgBpn = mmSrgOtsNep.values().stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+                    .findFirst().orElseThrow();
+                orgNodeType = "SRG";
+            } else if (!mmDegOtsNep.values().stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+                .collect(Collectors.toList()).isEmpty()) {
+                orgBpn = mmDegOtsNep.values().stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
                     .findFirst().orElseThrow();
                 orgNodeType = "DEG";
+            } else {
+                LOG.info("Nep {} not included in srg/Deg Nep List, this nep may not be connected to existing link",
+                    nepUuid);
             }
+//            BasePceNep orgBpn = srgOtsNep.stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+//                .findFirst().orElseThrow();
+//            orgNodeType = "SRG";
+//            if (orgBpn == null) {
+//                orgBpn = degOtsNep.stream().filter(bpn -> nepUuid.getValue().equals(bpn.getNepCepUuid()))
+//                    .findFirst().orElseThrow();
+//                orgNodeType = "DEG";
+//            }
             if (orgBpn == null) {
-                break;
+                nepOrder++;
+                continue;
             }
             Uuid orgVnepUuid = orgBpn.getVirtualNep().entrySet().iterator().next().getKey();
             String orgVnepName = orgBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
+            LOG.debug("createNrgPartialMesh, scanning NEP, destinationVnep UUID is {}, destination Vnep Name is {}",
+                orgVnepUuid, orgVnepName);
 
             // The second for loop is scanning any Nep of higher rank than the
             // current NEP of the first for loop
+            if (nepOrder >= indexedNepList.size() - 1) {
+                break;
+            }
             for (int nnO = nepOrder; nnO < indexedNepList.size() - 1; nnO++) {
                 String nepId = indexedNepList.get(nnO).getValue();
-                BasePceNep destBpn = srgOtsNep.stream()
+                BasePceNep destBpn = mmSrgOtsNep.values().stream()
                     .filter(bpn -> nepId.equals(bpn.getNepCepUuid().toString()))
                     .findFirst().orElseThrow();
                 destNodeType = "SRG";
                 if (destBpn == null) {
-                    destBpn = degOtsNep.stream()
+                    destBpn = mmDegOtsNep.values().stream()
                         .filter(bpn -> nepId.equals(bpn.getNepCepUuid().toString()))
                         .findFirst().orElseThrow();
                     destNodeType = "DEG";
@@ -788,6 +983,9 @@ public class TapiOpticalNode {
                     break;
                 }
                 Uuid destVnepUuid = orgBpn.getVirtualNep().entrySet().iterator().next().getKey();
+                String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
+                LOG.debug("createNrgPartialMesh, scanning NEP, destinationVnep UUID is {}, destination Vnep Name is {}",
+                    destVnepUuid, destVnepName);
                 uuidSortedList.clear();
                 uuidSortedList.add(orgVnepUuid.toString());
                 uuidSortedList.add(destVnepUuid.toString());
@@ -795,7 +993,6 @@ public class TapiOpticalNode {
                 // order to avoid creating 2 times the same
                 // link Org-Dest & Dest-Org
                 Collections.sort(uuidSortedList);
-                String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
                 if (orgVnepUuid.toString().equals(uuidSortedList.get(0))) {
                     Map<Uuid, Name> linkId = createLinkId(orgVnepName, destVnepName);
                     intLinkMap.put(linkId.entrySet().iterator().next().getKey(),
@@ -810,8 +1007,6 @@ public class TapiOpticalNode {
             }
             nepOrder++;
         }
-        // Remove comment on line below : eclipse bug generating error on n when
-        // activated
         return intLinkMap;
     }
 
@@ -828,50 +1023,57 @@ public class TapiOpticalNode {
     private void addCpCtpOutgoingLink(Uuid orgVnepId, Uuid destVnepId, String orgNodeType, String destNodeType,
         Map<Uuid, Name> linkId) {
         if ("SRG".equals(orgNodeType)) {
-            srgOtsNep.stream().filter(bpn -> orgVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
+            mmSrgOtsNep.values().stream().filter(bpn -> orgVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
                 .setConnectedInternalLinks(linkId);
         }
         if ("DEG".equals(orgNodeType)) {
-            degOtsNep.stream().filter(bpn -> orgVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
+            mmDegOtsNep.values().stream().filter(bpn -> orgVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
                 .setConnectedInternalLinks(linkId);
         }
         if ("SRG".equals(destNodeType)) {
-            srgOtsNep.stream().filter(bpn -> destVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
-                .setConnectedInternalLinks(linkId);
+            mmSrgOtsNep.values().stream().filter(bpn -> destVnepId.equals(bpn.getNepCepUuid())).findFirst()
+                .orElseThrow().setConnectedInternalLinks(linkId);
         }
         if ("DEG".equals(destNodeType)) {
-            degOtsNep.stream().filter(bpn -> destVnepId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
-                .setConnectedInternalLinks(linkId);
+            mmDegOtsNep.values().stream().filter(bpn -> destVnepId.equals(bpn.getNepCepUuid())).findFirst()
+                .orElseThrow().setConnectedInternalLinks(linkId);
         }
     }
 
     private Map<Uuid, PceTapiOpticalNode> splitDegNodes() {
+        LOG.info("TONLine982 mmDegOtsNep Uuid list {}", mmDegOtsNep.values().stream()
+            .map(BasePceNep::getNepCepUuid).collect(Collectors.toList()));
+        LOG.info("TONLine984 mmDegOtsNep TpType list {}", mmDegOtsNep.values().stream()
+            .map(BasePceNep::getTpType).collect(Collectors.toList()));
+        LOG.info("TONLine986 mmdegOtsNep Name list {}", mmDegOtsNep.values().stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
         List<Map<Uuid, Name>> vvNepIdList = new ArrayList<>();
         // List<PceTapiOpticalNode> degList = new ArrayList<>();
         Map<Uuid, PceTapiOpticalNode> degMap = new HashMap<>();
         Map<Uuid, Name> vvNepIdMap = new HashMap<>();
-        // Build a list of VirtualNEP contained in degOtsNep
-        for (BasePceNep bpn : degOtsNep) {
+        // Build a list of VirtualNEP contained in mmDegOtsNep
+        for (BasePceNep bpn : mmDegOtsNep.values()) {
             if (bpn.getTpType().equals(OpenroadmTpType.DEGREETXRXCTP)) {
                 vvNepIdMap.clear();
                 vvNepIdMap.put(bpn.getNepCepUuid(), bpn.getName().entrySet().iterator().next().getValue());
                 vvNepIdList.add(vvNepIdMap);
             }
         }
+        LOG.info("TONLine994 vNepIdMap {}", vvNepIdList);
         List<Integer> indexList = new ArrayList<>();
         int index;
         int subindex = 100;
         // For each virtual NEP of the list, Builds a degXOtsNep list of
-        // BasePceNode which is a subset of degOtsNep,
+        // BasePceNode which is a subset of mmDegOtsNep,
         // containing all BasePceNep that have it declared as Virtual NEP
         for (Map<Uuid, Name> vvNepId : vvNepIdList) {
             Uuid vvNepUuid = vvNepId.keySet().stream().findFirst().orElseThrow();
-            List<BasePceNep> degXOtsNep = degOtsNep.stream()
+            List<BasePceNep> degXOtsNep = mmDegOtsNep.values().stream()
                 .filter(bpn -> bpn.getNepCepUuid().equals(vvNepUuid) || bpn.getVirtualNep().containsKey(vvNepUuid))
                 .collect(Collectors.toList());
             String vvNepString = vvNepId.entrySet().iterator().next().getValue().getValue();
-            index = Integer.decode(vvNepString.substring(vvNepString.indexOf("-DEG", 0) + 1,
-                vvNepString.indexOf("-CTP", 0) - 1));
+            index = Integer.decode(vvNepString.substring(vvNepString.indexOf("+DEG", 0) + 4,
+                vvNepString.indexOf("-CTP", 0) - 0));
             Map<Uuid, Name> nodeId;
             if (indexList.contains(index)) {
                 LOG.debug("Error generating Node Index for {}, from Virtual NEP {}, as index {} is already used",
@@ -887,7 +1089,8 @@ public class TapiOpticalNode {
             // defined by this VirtualNep
 
             var degNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.DEGREE,
-                version, slotWidthGranularity, centralFreqGranularity, degXOtsNep, nodeId, deviceNodeId);
+                version, slotWidthGranularity, centralFreqGranularity, degXOtsNep, nodeId, nodeName.getValue());
+//                version, slotWidthGranularity, centralFreqGranularity, degXOtsNep, nodeId, deviceNodeId);
             Map<Uuid, Uuid> vnepToSubNode = new HashMap<>();
             for (BasePceNep bpn : degXOtsNep) {
                 if (vvNepUuid.equals(bpn.getNepCepUuid())) {
@@ -900,35 +1103,48 @@ public class TapiOpticalNode {
             // degKey.put(nodeId.keySet().iterator().next(), deviceNodeId);
             // degMap.put(degKey, degNode);
             degMap.put(nodeId.keySet().iterator().next(), degNode);
+            LOG.info("TONLine1037 CREATEDEGNODE {}", degNode.getSupClliNodeId());
+            LOG.info("TONLine1037 CREATEDEGNODE {}", degNode.getAdminState());
+            LOG.info("TONLine1037 CREATEDEGNODE {}", degNode.getCentralFreqGranularity());
+            LOG.info("TONLine1037 CREATEDEGNODE {}", degNode.getNodeId());
+            LOG.info("TONLine1037 CREATEDEGNODE {}", degNode.getState());
+            LOG.info("TONLine1038 creating Node {}", nodeId);
         }
         return degMap;
     }
 
     private Map<Uuid, PceTapiOpticalNode> splitSrgNodes() {
+        LOG.info("TONLine1052 mmSrgOtsNep Uuid list {}", mmSrgOtsNep.values().stream()
+            .map(BasePceNep::getNepCepUuid).collect(Collectors.toList()));
+        LOG.info("TONLine1054 mmSrgOtsNep TpType list {}", mmSrgOtsNep.values().stream()
+            .map(BasePceNep::getTpType).collect(Collectors.toList()));
+        LOG.info("TONLine1056 mmSrgOtsNep Name list {}", mmSrgOtsNep.values().stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
         List<Map<Uuid, Name>> vvNepIdList = new ArrayList<>();
         Map<Uuid, PceTapiOpticalNode> srgMap = new HashMap<>();
-        // Build a list of VirtualNEP contained in srgOtsNep
-        for (BasePceNep bpn : srgOtsNep) {
+        // Build a list of VirtualNEP contained in mmSrgOtsNep
+        for (BasePceNep bpn : mmSrgOtsNep.values()) {
             if (bpn.getTpType().equals(OpenroadmTpType.SRGTXRXCP)) {
                 Map<Uuid, Name> vvNepIdMap = new HashMap<>();
                 vvNepIdMap.put(bpn.getNepCepUuid(), bpn.getName().entrySet().iterator().next().getValue());
                 vvNepIdList.add(vvNepIdMap);
             }
         }
+        LOG.info("TONLine1068 vNepIdMap {}", vvNepIdList);
         List<Integer> indexList = new ArrayList<>();
         int index;
         int subindex = 100;
         // For each virtual NEP of the list, Builds a srgXOtsNep list of
-        // BasePceNode which is a subset of srgOtsNep,
+        // BasePceNode which is a subset of mmSrgOtsNep,
         // containing all BasePceNep that have it declared as Virtual NEP
         for (Map<Uuid, Name> vvNepId : vvNepIdList) {
             Uuid vvNepUuid = vvNepId.keySet().stream().findFirst().orElseThrow();
-            List<BasePceNep> srgXOtsNep = srgOtsNep.stream()
+            List<BasePceNep> srgXOtsNep = mmSrgOtsNep.values().stream()
                 .filter(bpn -> bpn.getNepCepUuid().equals(vvNepUuid) || bpn.getVirtualNep().containsKey(vvNepUuid))
                 .collect(Collectors.toList());
             String vvNepString = vvNepId.entrySet().iterator().next().getValue().getValue();
-            index = Integer.decode(vvNepString.substring(vvNepString.indexOf("-SRG", 0) + 1,
-                vvNepString.indexOf("-CP", 0) - 1));
+            index = Integer.decode(vvNepString.substring(vvNepString.indexOf("+SRG", 0) + 4,
+                vvNepString.indexOf("-CP", 0) - 0));
             Map<Uuid, Name> nodeId;
             if (indexList.contains(index)) {
                 LOG.debug("Error generating Node Index for {}, from Virtual NEP {}, as index {} is already used",
@@ -943,7 +1159,13 @@ public class TapiOpticalNode {
             // Creates a new PceTapiOpticalNode corresponding to the degree
             // defined by this VirtualNep
             var srgNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.SRG,
-                version, slotWidthGranularity, centralFreqGranularity, srgXOtsNep, nodeId, deviceNodeId);
+                version, slotWidthGranularity, centralFreqGranularity, srgXOtsNep, nodeId, nodeName.getValue());
+//                version, slotWidthGranularity, centralFreqGranularity, srgXOtsNep, nodeId, deviceNodeId);
+            LOG.info("TONLine1147 new PceTapiON {}, list of nep is {}",
+                srgNode.getNodeId(),
+                srgNode.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+            //srgNode.initSrgTps();
+            //srgNode.initFrequenciesBitSet();
             Map<Uuid, Uuid> vnepToSubNode = new HashMap<>();
             for (BasePceNep bpn : srgXOtsNep) {
                 if (vvNepUuid.equals(bpn.getNepCepUuid())) {
@@ -956,6 +1178,8 @@ public class TapiOpticalNode {
             // srgMap.put(srgKey, srgNode);
             // srgList.add(srgNode);
             srgMap.put(nodeId.keySet().iterator().next(), srgNode);
+            LOG.info("TONLine1095 CREATESRGNODE {}", srgNode);
+            LOG.info("TONLine1097 creating Node {}", nodeId);
         }
         return srgMap;
     }
@@ -963,25 +1187,28 @@ public class TapiOpticalNode {
     private Map<DirectionType, OpenroadmTpType> calculateDirection(
         OwnedNodeEdgePoint ownedNep, ConnectionEndPoint cep, TpType tpType) {
         String nodeType;
+        String finalTpType = tpType.toString();
         Direction directionEnum;
         boolean isNep = false;
         switch (tpType) {
             case PP:
             case CP:
-                nodeType = "SRG-";
+                nodeType = "SRG";
                 break;
             case TTP:
             case CTP:
-                nodeType = "DEGREE-";
+                nodeType = "DEGREE";
                 break;
             case NW:
-                nodeType = "NW-";
+                nodeType = "XPONDER";
+                finalTpType = "NETWORK";
                 break;
             case CLIENT:
-                nodeType = "CLIENT-";
+                nodeType = "XPONDER";
+                finalTpType = "CLIENT";
                 break;
             default:
-                nodeType = "UNDEFINED-";
+                nodeType = "UNDEFINED";
         }
         // The default direction is set to BIDIRECTIONAL
         // direction = "BIDIRECTIONAL";
@@ -1006,20 +1233,22 @@ public class TapiOpticalNode {
         String directionCode;
         switch (directionEnum) {
             case BIDIRECTIONAL:
-                directionCode = "TXRX-";
+                directionCode = "TXRX";
                 break;
             case SINK:
-                directionCode = "RX-";
+                directionCode = "RX";
                 break;
             case SOURCE:
-                directionCode = "TX-";
+                directionCode = "TX";
                 break;
             default:
-                directionCode = "TXRX-";
+                directionCode = "TXRX";
         }
+        directionCode = nodeType.equals("XPONDER") ? "" : directionCode;
         Map<DirectionType, OpenroadmTpType> dirTpType = new HashMap<>();
         dirTpType.put(DirectionType.valueOf(directionEnum.toString()),
-            OpenroadmTpType.valueOf(nodeType + directionCode + tpType.toString()));
+            //OpenroadmTpType.
+            OpenroadmTpType.valueOf(nodeType + directionCode + finalTpType));
         return dirTpType;
     }
 
@@ -1029,8 +1258,10 @@ public class TapiOpticalNode {
             return;
         }
         // Detect A and Z
-        if (aaanodeId.getValue().contains(node.getUuid().toString())
-            || zzznodeId.getValue().contains(node.getUuid().toString())) {
+//        if (aaanodeId.getValue().contains(node.getUuid().toString())
+//            || zzznodeId.getValue().contains(node.getUuid().toString())) {
+        if (aaanodeId.getValue().equals(node.getUuid().getValue())
+            || zzznodeId.getValue().equals(node.getUuid().getValue())) {
             LOG.info("validateAZxponder TAPI: A or Z node detected == {}, {}", node.getUuid().toString(),
                 node.getName().toString());
             initTapiXndrTps(serviceFormat, aaanodeId, zzznodeId, aaaPortId, zzzPortId);
@@ -1068,12 +1299,14 @@ public class TapiOpticalNode {
             return;
         }
         Map<DirectionType, OpenroadmTpType> direction;
+        Double serviceRate = StringConstants.SERVICE_TYPE_RATE.get(this.serviceType).doubleValue();
+        LOG.debug("initTapiXndrTps: service rate is {}", serviceRate);
         LOG.debug("initTapiXndrTps: getting tps from TSP node {}", this.nodeUuid);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNepList = this.node.getOwnedNodeEdgePoint();
         for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNep : ownedNepList.entrySet()) {
             if (LayerProtocolName.PHOTONICMEDIA.equals(ownedNep.getValue().getLayerProtocolName())
-                && OperationalState.ENABLED.equals(ownedNep.getValue().getOperationalState())
-                && isNepWithGoodCapabilities(ownedNep.getValue().getUuid())) {
+                    && OperationalState.ENABLED.equals(ownedNep.getValue().getOperationalState())
+                    && isNepWithGoodCapabilities(ownedNep.getValue().getUuid())) {
                 if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
                     .filter(sclpqi -> PHOTONICLAYERQUALIFIEROTSiMC.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
                     .findAny() != null) {
@@ -1084,57 +1317,69 @@ public class TapiOpticalNode {
                     // the node or what is already provisioned on the node
                     // (current assumption)
                     // TODO: Need to change OTSI to OTSI Mc in 2.4
-                    invalidNwNepList.add(ownedNep.getKey().getUuid());
-                    // TODO: at the end scan the list of invalid NW port and
-                    // remove the NEP from which they client/Parent
-                    continue;
+                    if (checkUsedSpectrum(ownedNep.getValue().getUuid(), true)
+                            && ownedNep.getValue().getAvailablePayloadStructure().stream()
+                                .filter(aps -> aps.getCapacity().getValue().doubleValue() >= serviceRate)
+                                .collect(Collectors.toList()).isEmpty()) {
+                        invalidNwNepList.add(ownedNep.getKey().getUuid());
+                        // TODO: at the end scan the list of invalid NW port and
+                        // remove the NEP from which they client/Parent
+                        continue;
+                    }
                 }
-                if (checkUsedSpectrum(ownedNep.getValue().getUuid(), true)) {
-                    invalidNwNepList.add(ownedNep.getKey().getUuid());
-                    continue;
-                }
+//                if (checkUsedSpectrum(ownedNep.getValue().getUuid(), true)) {
+//                    invalidNwNepList.add(ownedNep.getKey().getUuid());
+//                    continue;
+//                }
                 if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
                     .filter(sclpqi -> PHOTONICLAYERQUALIFIEROTS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
                     .findAny() != null) {
                     for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep.getValue()
                         .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint().entrySet()) {
-                        // We check if there is OTS level
-                        // (ConnectionEndPoint2.class) CEP to get its child NEP
-                        // Which shall exist even if no service is provisioned.
+//                         We check if there is OTS level
+//                         (ConnectionEndPoint2.class) CEP to get its child NEP
+                        // OTS level CEP shall exist even if no service is provisioned.
                         // if no service provisioned the client NEP shall not be
                         // parent of any CEP
-                        if (cep.getValue().augmentation(ConnectionEndPoint2.class)
-                            .getOtsMediaConnectionEndPointSpec() != null) {
-                            var otsCep = new BasePceNep(cep.getValue().getUuid(), cep.getValue().getName());
-                            otsCep.setParentNep(cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
-                            otsCep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
-                                .getNodeEdgePointUuid());
-                            otsLcpNWList.add(otsCep);
-                            // If the client NEP of the CEP is already used we
-                            // do not record the CEP in nwOtsCEP
-                            if (invalidNwNepList.contains(cep.getValue().getClientNodeEdgePoint().keySet().iterator()
-                                .next().getNodeEdgePointUuid())) {
-                                break;
-                            }
-                            var otsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
-                            otsNep.setCepOtsUuid(cep.getValue().getUuid());
-                            otsNep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
-                                .getNodeEdgePointUuid());
-                            otsNep.setOperationalState(ownedNep.getValue().getOperationalState());
-                            direction = calculateDirection(ownedNep.getValue(), null, TpType.CLIENT);
-                            otsNep.setDirection(direction.keySet().iterator().next());
-                            otsNep.setTpType(direction.values().iterator().next());
-                            direction.clear();
-                            otsNep.setAdminState(ownedNep.getValue().getAdministrativeState());
-                            otsNep.setFrequencyBitset(buildBitsetFromSpectrum(ownedNep.getValue().getUuid()));
-                            nwOtsNep.add(otsNep);
+//                        if (cep.getValue().augmentation(ConnectionEndPoint2.class)
+//                            .getOtsMediaConnectionEndPointSpec() != null) {
+                        var otsCep = new BasePceNep(cep.getValue().getUuid(), cep.getValue().getName());
+                        otsCep.setParentNep(cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid());
+                        otsCep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
+                            .getNodeEdgePointUuid());
+                        otsLcpNWList.add(otsCep);
+                        // If the client NEP of the CEP is already used we
+                        // do not record the CEP in nwOtsCEP
+                        if (invalidNwNepList.contains(cep.getValue().getClientNodeEdgePoint().keySet().iterator()
+                            .next().getNodeEdgePointUuid())) {
                             break;
                         }
+                        var otsNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
+                        otsNep.setCepOtsUuid(cep.getValue().getUuid());
+                        otsNep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
+                            .getNodeEdgePointUuid());
+                        otsNep.setOperationalState(ownedNep.getValue().getOperationalState());
+                        direction = calculateDirection(ownedNep.getValue(), null, TpType.NW);
+                        otsNep.setDirection(direction.keySet().iterator().next());
+                        otsNep.setTpType(direction.values().iterator().next());
+                        direction.clear();
+                        otsNep.setAdminState(ownedNep.getValue().getAdministrativeState());
+                        otsNep.setFrequencyBitset(buildBitsetFromSpectrum(ownedNep.getValue().getUuid()));
+                        nwOtsNep.add(otsNep);
+                        break;
+//                        }
                     }
                 }
                 // Client Port support DSR protocol layer
             } else if (LayerProtocolName.DSR.equals(ownedNep.getValue().getLayerProtocolName())
                 && OperationalState.ENABLED.equals(ownedNep.getValue().getOperationalState())) {
+                // TODO : activate following 6 lines of the code after capacity is populated in the topology
+//                if (ownedNep.getValue().getAvailableCapacity() == null
+//                        || ownedNep.getValue().getAvailableCapacity().getTotalSize().getValue() == null
+//                        || !(ownedNep.getValue().getAvailableCapacity().getTotalSize().getValue().doubleValue() > 0)){
+//                    // The DSR Nep is not eligible since it has already a service mapped on it with no available capa
+//                    continue;
+//                }
                 var clientNep = new BasePceNep(ownedNep.getValue().getUuid(), ownedNep.getValue().getName());
                 direction = calculateDirection(ownedNep.getValue(), null, TpType.CLIENT);
                 clientNep.setDirection(direction.keySet().iterator().next());
@@ -1145,6 +1390,17 @@ public class TapiOpticalNode {
                 clientDsrNep.add(clientNep);
             }
         }
+        LOG.info("TONLine1379 clientDsrNep {}", clientDsrNep.stream()
+            .map(nep -> nep.getName().entrySet().iterator().next().getValue().getValue())
+            .collect(Collectors.toList()));
+        LOG.info("TONLine1382 nwOtsNep {}", nwOtsNep.stream()
+            .map(nep -> nep.getName().entrySet().iterator().next().getValue().getValue())
+            .collect(Collectors.toList()));
+        LOG.info("TONLine1385 otsLcpNWList {}", otsLcpNWList.stream()
+            .map(nep -> nep.getName().entrySet().iterator().next().getValue().getValue())
+            .collect(Collectors.toList()));
+        LOG.info("TONLine1388 invalidNwNepList {}", invalidNwNepList);
+
         // Purge otsLcpNwList and nwOTsNEP list since NEP associated to OTS and
         // OTSIMC may not appear in the
         // expected order
@@ -1162,34 +1418,64 @@ public class TapiOpticalNode {
                 + "all valid NW ports validated", node.getUuid().toString(), node.getName().toString());
             return;
         }
-        Uuid portId = nwOtsNep
-            .stream().filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
-            .findFirst().orElseThrow()
-            .getNepCepUuid();
-        if (portId == null) {
+
+        Uuid portId = null;
+        if (!nwOtsNep.stream()
+                .filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
+                .findAny().isEmpty()) {
+            portId = nwOtsNep.stream()
+                .filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
+                .findFirst().orElseThrow().getNepCepUuid();
+        } else if (!clientDsrNep.stream()
+                .filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
+                .findFirst().isEmpty()) {
             portId = clientDsrNep
                 .stream().filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
-                .findFirst().orElseThrow()
-                .getNepCepUuid();
-            if (portId != null) {
-                portType = "client";
-                LOG.debug("InitTapiXndr launched for Node of Id {}, name {}, {} port {} validated for a/z end."
-                    + "Calling purgeXndrPortList to remove all NW ports that are not good candidates (not connected"
-                    + "to the client port of the service request",
-                    node.getUuid().toString(), node.getName().toString(), portType, portId);
-                nwOtsNep = purgeXndrPortList(portId, nwOtsNep);
-                return;
-            } else {
-                portType = "";
-                LOG.error("InitTapiXndr launched for Node of Id {}, name {}, but no port validated for a/z end",
-                    node.getUuid().toString(), node.getName().toString());
-                return;
-            }
+                .findFirst().orElseThrow().getNepCepUuid();
+            portType = "client";
+            LOG.info("TONLine1421 InitTapiXndr launched for Node of Id {}, name {}, {} port {} validated for a/z end."
+                + "Calling purgeXndrPortList to remove all NW ports that are not good candidates (not connected"
+                + "to the client port of the service request",
+                node.getUuid().toString(), node.getName().toString(), portType, portId);
+            nwOtsNep = purgeXndrPortList(portId, nwOtsNep);
+            LOG.info("TONLine1426 A/Z is client port, nwOtsNep after purge is {}", nwOtsNep.stream()
+                .map(nep -> nep.getName().entrySet().iterator().next().getValue().getValue())
+                .collect(Collectors.toList()));
+            return;
+        } else {
+            LOG.error("TONLine1444 InitTapiXndr launched for Node of Id {}, name {}, but no port validated for a/z end",
+                node.getUuid().toString(), node.getName().toString());
+            return;
+
         }
+//        Uuid portId = nwOtsNep
+//            .stream().filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
+//            .findFirst().orElseThrow()
+//            .getNepCepUuid();
+//        if (portId == null) {
+//            portId = clientDsrNep
+//                .stream().filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
+//                .findFirst().orElseThrow()
+//                .getNepCepUuid();
+//            if (portId != null) {
+//                portType = "client";
+//                LOG.debug("InitTapiXndr launched for Node of Id {}, name {}, {} port {} validated for a/z end."
+//                    + "Calling purgeXndrPortList to remove all NW ports that are not good candidates (not connected"
+//                    + "to the client port of the service request",
+//                    node.getUuid().toString(), node.getName().toString(), portType, portId);
+//                nwOtsNep = purgeXndrPortList(portId, nwOtsNep);
+//                return;
+//            } else {
+//                portType = "";
+//                LOG.error("InitTapiXndr launched for Node of Id {}, name {}, but no port validated for a/z end",
+//                    node.getUuid().toString(), node.getName().toString());
+//                return;
+//            }
+//        }
         // Applies to condition portId found in nwOtsNep, meaning service
         // applies to NW
         // port of the Xponder
-        LOG.debug("InitTapiXndr launched for Node of Id {}, name {}, {} port {} validated for a/z end",
+        LOG.info("TONLine1463 InitTapiXndr launched for Node of Id {}, name {}, {} port {} validated for a/z end",
             node.getUuid().toString(), node.getName().toString(), portType, portId);
         BasePceNep bpNEP = nwOtsNep.stream()
             .filter(bpn -> (bpn.getNepCepUuid().equals(aportId) || bpn.getNepCepUuid().equals(zportId)))
@@ -1255,7 +1541,7 @@ public class TapiOpticalNode {
             if (fwdRuleKeyList == null || fwdRuleKeyList.isEmpty()) {
                 // If the Node Rule Group (NRG) does not contain any forwarding
                 // rule, we go to next NRG
-                break;
+                continue;
             } else {
                 // We have one or several forwarding rule(s)
                 if (nrg.getValue().getNodeEdgePoint().entrySet().stream()
@@ -1289,8 +1575,9 @@ public class TapiOpticalNode {
             }
             // When no forwarding Rule defined go to next NodeRuleGroup
         }
-        LOG.debug("purgeXndrPortList: nrgList contains {}", nrgList.toString());
-        LOG.debug("purgeXndrPortList: nrgOfNwNepMap contains {}", nrgOfNwNepMap.toString());
+        LOG.info("TONLine1571 purgeXndrPortList: nrgList (Client, no nw ports) contains {}", nrgList);
+        LOG.info("TONLine1572 purgeXndrPortList: nrgOfNwNepMap (NW, no Client) contains {}", nrgOfNwNepMap);
+        LOG.info("TONLine1573 purgeXndrPortList: totalNwOtsNepIdList (NW & Client) contains {}", totalNwOtsNepIdList);
         // All NRGs have been analyzed
         if (!totalNwOtsNepIdList.isEmpty()) {
             // We found some NW ports associated with the client port in one or
@@ -1298,6 +1585,8 @@ public class TapiOpticalNode {
             List<Uuid> totalNwOtsNepUuidList = totalNwOtsNepIdList.stream()
                 .map(NodeEdgePointKey::getNodeEdgePointUuid)
                 .collect(Collectors.toList());
+            LOG.info("TONLine1581 purgeXndrPortList: List(UUID) of NW Port connected to ClientPortId {}",
+                totalNwOtsNepUuidList);
             netOtsNep = netOtsNep.stream()
                 .filter(bpn -> totalNwOtsNepUuidList.contains(bpn.getNepCepUuid()))
                 .collect(Collectors.toList());
@@ -1308,7 +1597,7 @@ public class TapiOpticalNode {
         }
         // Did not succeed to find client port and NW ports in the same NRG,
         // need to process Inter Rule Group
-
+        LOG.info("TONLine1593 purgeXndrPortList: did not succeed to find client port and NW ports in the same NRG");
         Map<InterRuleGroupKey, InterRuleGroup> irgMap = this.node.getInterRuleGroup();
         for (Map.Entry<InterRuleGroupKey, InterRuleGroup> irg : irgMap.entrySet()) {
             // For each NodeRuleGroup [uuid], we check if some of the rule
@@ -1364,6 +1653,17 @@ public class TapiOpticalNode {
 
     private void createLinksFromIlMap() {
         for (Map.Entry<Uuid, IntLinkObj> linkTBC : internalLinkMap.entrySet()) {
+            LOG.info("TONLine1571 Link to be configure = {}", linkTBC);
+            LOG.info("TONLine1572 bindingVNepToSubnodeMap = {}", bindingVNepToSubnodeMap);
+            LOG.info("TONLine1574 Link to be configure ORG = {} DEST = {}",
+                linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid());
+            LOG.info("TONLine1575 Link to be configure PceNodeORG = {} PceNodeDEST = {}",
+                bindingVNepToSubnodeMap.entrySet().stream()
+                .filter(vts -> vts.getKey()
+                    .equals(linkTBC.getValue().getDestTpUuid())).findFirst().orElseThrow().getValue(),
+                bindingVNepToSubnodeMap.entrySet().stream()
+                .filter(vts -> vts.getKey()
+                    .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue());
             this.pceInternalLinkMap.put(linkTBC.getKey(),
                 new PceTapiLink(linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue(),
                     linkTBC.getKey(), linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid(),
@@ -1372,7 +1672,7 @@ public class TapiOpticalNode {
                             .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue()),
                     pceNodeMap.get(bindingVNepToSubnodeMap.entrySet().stream()
                         .filter(vts -> vts.getKey()
-                            .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue())));
+                            .equals(linkTBC.getValue().getDestTpUuid())).findFirst().orElseThrow().getValue())));
 
         }
     }
@@ -1419,13 +1719,15 @@ public class TapiOpticalNode {
     private boolean checkOtsNepAvailable(Uuid otsNepUuid) {
         // Check that used spectrum is empty or null which is the condition of
         // availability for a PP
+        //TODO: provide implementation for this method
         return true;
     }
 
     private boolean isNepWithGoodCapabilities(Uuid nepUuid) {
-        if (StringConstants.UNKNOWN_MODE.equals(getXpdrOperationalMode(nepUuid))) {
-            return false;
-        }
+        //TODO:implement this function from profiles
+//        if (StringConstants.UNKNOWN_MODE.equals(getXpdrOperationalMode(nepUuid))) {
+//            return false;
+//        }
         return true;
     }
 
@@ -1463,6 +1765,12 @@ public class TapiOpticalNode {
         // TODO: Currently not used with something else than NEP. Complete
         // function if needed
         // for other LCP, or remove isNEP
+        LOG.info("Analysing LCP of NEP {}", ooNep.getName());
+        if (ooNep.augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                .OwnedNodeEdgePoint1.class) == null) {
+            LOG.info("TONline1521: checkAvailableSpectrum: noAugmentationONEP1 for nep {}", ooNep.getName());
+            return false;
+        }
         Map<AvailableSpectrumKey, AvailableSpectrum> aaSpectrum = ooNep.augmentation(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1.class)
             .getPhotonicMediaNodeEdgePointSpec().getSpectrumCapabilityPac().nonnullAvailableSpectrum();
@@ -1474,6 +1782,7 @@ public class TapiOpticalNode {
                     // If the one of the boundaries is included in C band, this
                     // is a spectrum portion of interest
                     availableCbandSpectrum = true;
+                    LOG.info("TONline1535: checkAvailableSpectrum: nep {} has available spectrum", ooNep.getName());
                 }
             }
         }
@@ -1516,38 +1825,79 @@ public class TapiOpticalNode {
         nepMap2 = intercoNepMap.get(1);
         String orgNodeType;
         String destNodeType;
+        BasePceNep orgBpn = null;
         for (Map.Entry<NodeEdgePointKey, NodeEdgePoint> nep1 : nepMap1.entrySet()) {
-            BasePceNep orgBpn = srgOtsNep.stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
-                .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
-            orgNodeType = "SRG";
-            if (orgBpn == null) {
-                orgBpn = degOtsNep.stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+            if (!mmSrgOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+                    .equals(bpn.getNepCepUuid())).collect(Collectors.toList()).isEmpty()) {
+                orgBpn = mmSrgOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+                    .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+                orgNodeType = "SRG";
+            } else if (!mmDegOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+                .equals(bpn.getNepCepUuid())).collect(Collectors.toList()).isEmpty()) {
+                orgBpn = mmDegOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
                     .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
                 orgNodeType = "DEG";
-            }
-            if (orgBpn == null) {
+            } else {
+                LOG.info("Nep {} not included in interconnecMap, this nep may not be connected to existing link",
+                    nep1.getKey());
                 break;
             }
+
+//            BasePceNep orgBpn = mmSrgOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+//                .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+//            orgNodeType = "SRG";
+//            if (orgBpn == null) {
+//                orgBpn = mmDegOtsNep.values().stream().filter(bpn -> nep1.getKey().getNodeEdgePointUuid()
+//                    .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+//                orgNodeType = "DEG";
+//            }
+//            if (orgBpn == null) {
+//                break;
+//            }
             Uuid orgVnepUuid = orgBpn.getVirtualNep().entrySet().iterator().next().getKey();
             String orgVnepName = orgBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
+            LOG.debug("createIrgPartialMesh, scanning NEP, destinationVnep UUID is {}, destination Vnep Name is {}",
+                orgVnepUuid, orgVnepName);
+
+            BasePceNep destBpn = null;
             for (Map.Entry<NodeEdgePointKey, NodeEdgePoint> nep2 : nepMap2.entrySet()) {
-                BasePceNep destBpn = srgOtsNep.stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
-                    .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
-                destNodeType = "SRG";
-                if (destBpn == null) {
-                    destBpn = degOtsNep.stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+                if (!mmSrgOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+                        .equals(bpn.getNepCepUuid())).collect(Collectors.toList()).isEmpty()) {
+                    destBpn = mmSrgOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+                        .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+                    destNodeType = "SRG";
+                } else if (!mmDegOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+                    .equals(bpn.getNepCepUuid())).collect(Collectors.toList()).isEmpty()) {
+                    destBpn = mmDegOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
                         .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
                     destNodeType = "DEG";
-                }
-                if (destBpn == null) {
+                } else {
+                    LOG.info("Nep {} not included in interconnecMap, this nep may not be connected to existing link",
+                        nep2.getKey());
                     break;
                 }
+
+
+//            for (Map.Entry<NodeEdgePointKey, NodeEdgePoint> nep2 : nepMap2.entrySet()) {
+//                BasePceNep destBpn = mmSrgOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+//                    .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+//                destNodeType = "SRG";
+//                if (destBpn == null) {
+//                    destBpn = mmDegOtsNep.values().stream().filter(bpn -> nep2.getKey().getNodeEdgePointUuid()
+//                        .equals(bpn.getNepCepUuid())).findFirst().orElseThrow();
+//                    destNodeType = "DEG";
+//                }
+//                if (destBpn == null) {
+//                    break;
+//                }
                 Uuid destVnepUuid = destBpn.getVirtualNep().entrySet().iterator().next().getKey();
+                String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
+                LOG.debug("createIrgPartialMesh, scanning NEP, destinationVnep UUID is {}, destination Vnep Name is {}",
+                    destVnepUuid, destVnepName);
                 uuidSortedList.clear();
                 uuidSortedList.add(orgVnepUuid.toString());
                 uuidSortedList.add(destVnepUuid.toString());
                 Collections.sort(uuidSortedList);
-                String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
                 if (orgVnepUuid.toString().equals(uuidSortedList.get(0))) {
                     Map<Uuid, Name> linkId = createLinkId(orgVnepName, destVnepName);
                     internLinkMap.put(linkId.entrySet().iterator().next().getKey(),
@@ -1566,6 +1916,42 @@ public class TapiOpticalNode {
 
     public Map<Uuid, PceTapiOpticalNode> getPceNodeMap() {
         return this.pceNodeMap;
+    }
+
+    public Boolean isValid() {
+        return this.valid;
+    }
+
+    public NodeTypes getCommonNodeType() {
+        return this.commonNodeType;
+    }
+
+    public List<BasePceNep> getDegOtsNep() {
+        return this.mmDegOtsNep.values().stream().collect(Collectors.toList());
+    }
+
+    public List<BasePceNep> getDegOmsNep() {
+        return this.degOmsNep;
+    }
+
+    public List<BasePceNep> getSrgOtsNep() {
+        return this.mmSrgOtsNep.values().stream().collect(Collectors.toList());
+    }
+
+    public List<BasePceNep> getnetOtsNep() {
+        return this.nwOtsNep;
+    }
+
+    public List<BasePceNep> getClientDsrNep() {
+        return this.clientDsrNep;
+    }
+
+    public Map<Uuid,IntLinkObj> getInternalLinkMap() {
+        return this.internalLinkMap;
+    }
+
+    public Map<Uuid, PceTapiLink> getPceInternalLinkMap() {
+        return this.pceInternalLinkMap;
     }
 
     private static final class IntLinkObj {

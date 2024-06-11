@@ -91,7 +91,8 @@ public class PceTapiOpticalNode implements PceNode {
 
         this.serviceType = serviceType;
         this.node = node;
-        this.nodeName = node.getName().entrySet().iterator().next().getValue();
+//        this.nodeName = node.getName().entrySet().iterator().next().getValue();
+        this.nodeName = nodeId.entrySet().iterator().next().getValue();
         this.nodeType = nodeType;
         this.nodeUuid = nodeId.entrySet().iterator().next().getKey();
         this.deviceNodeId = deviceNodeId;
@@ -130,7 +131,7 @@ public class PceTapiOpticalNode implements PceNode {
             this.availableSrgPp.put(bpn.getNepCepUuid().toString(),bpn.getTpType());
         }
         for (BasePceNep bpn : cpOtsNep) {
-            this.availableSrgPp.put(bpn.getNepCepUuid().toString(),bpn.getTpType());
+            this.availableSrgCp.put(bpn.getNepCepUuid().toString(),bpn.getTpType());
         }
 
         if (this.availableSrgPp.isEmpty() || this.availableSrgCp.isEmpty()) {
@@ -148,7 +149,7 @@ public class PceTapiOpticalNode implements PceNode {
             return;
         }
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
-        // to set all bits to 0 (used) or 1 (available)
+        // to set all bits to 0 (used/false) or 1 (available/true)
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
         List<BitSet> bitsetList;
         switch (this.nodeType) {
@@ -226,7 +227,7 @@ public class PceTapiOpticalNode implements PceNode {
             tp, this.nodeName, this.nodeUuid);
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
-            LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list", tp);
+            LOG.error("getRdmSrgClient: tp {} not found in SRG CPterminationPoint list", tp);
             return null;
         }
         List<BasePceNep> ppList = listOfNep.stream()
@@ -377,7 +378,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     @Override
     public NodeId getNodeId() {
-        return null;
+        return  new NodeId(nodeName.toString());
     }
 
     @Override
@@ -413,6 +414,10 @@ public class PceTapiOpticalNode implements PceNode {
     @Override
     public String getXpdrClient(String tp) {
         return this.clientPerNwTp.get(tp);
+    }
+
+    public List<String> getXpdrAvailNW() {
+        return this.availableXpndrNWTps;
     }
 
     @Override
