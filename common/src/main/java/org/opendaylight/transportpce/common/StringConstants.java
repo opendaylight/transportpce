@@ -56,6 +56,8 @@ public final class StringConstants {
     public static final String UNKNOWN_MODE = "Unknown Mode";
 
     public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.of(
+        StringConstants.SERVICE_TYPE_1GE, Uint64.valueOf(1),
+        StringConstants.SERVICE_TYPE_10GE, Uint64.valueOf(10),
         StringConstants.SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
         StringConstants.SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
         StringConstants.SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
