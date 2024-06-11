@@ -162,6 +162,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final ConvertORToTapiTopology tapiFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
+    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
 
     @Activate
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -173,6 +174,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
         this.tapiLink = tapiLink;
+        this.srgOtsCepMap = new HashMap<>();
 
     }
 
@@ -619,7 +621,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         LOG.debug("TransformSRGToONep for tps {}, of NodeId {} ",
             tpMap.entrySet().stream().map(tp -> tp.getKey()).collect(Collectors.toList()), orNodeId);
-        return populateNepsForRdmNode(orNodeId, tpMap, false, TapiStringConstants.PHTNC_MEDIA_OTS);
+        return populateNepsForRdmNode(orNodeId, tpMap, true, TapiStringConstants.PHTNC_MEDIA_OTS);
     }
 
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> transformDegToOnep(
@@ -1491,7 +1493,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
             Name nepName =
                 new NameBuilder().setValueName(nepPhotonicSublayer + "NodeEdgePoint").setValue(nepNameValue).build();
-            OwnedNodeEdgePoint onep = onepBd
+            onepBd
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes(nepNameValue.getBytes(Charset.forName("UTF-8"))).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
@@ -1502,13 +1504,39 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     this.tapiLink.setTapiAdminState(entry.getValue().getAdministrativeState().getName()))
                 .setOperationalState(
                     this.tapiLink.setTapiOperationalState(entry.getValue().getOperationalState().getName()))
-                .setLifecycleState(LifecycleState.INSTALLED)
-                .build();
-            LOG.debug("ROADMNEPPopulation TapiNetworkModelServiceImpl populate NEP {} for Node {}",
+                .setLifecycleState(LifecycleState.INSTALLED);
+//                .build();
+            // Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
+            // Map<Map<String nepId, String NodeId>, ConnectionEndPoint>
+            // Identify that we have an SRG through withSip set to true only for SRG
+            if (withSip) {
+                //TODO: currently do not add extension corresponding to channel to OTSiMC/MC CEP on OTS CEP. Although
+                //not really required (One CEP per Tp) could complete with extension affecting High/lowFrequencyIndex
+                //This affection would be done in the switch case on nepPhotonicSublayer
+                int highFrequencyIndex = 0;
+                int lowFrequencyIndex = 0;
+                var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
+                    String.join("+", nodeId, entry.getKey()), nepPhotonicSublayer, null);
+                LOG.info("TopoInitialMapping, populateNepsForRdmNode, creating CEP for SRG");
+                var uuidMap = new HashMap<>(Map.of(
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, nepPhotonicSublayer, entry.getKey()))
+                        .getBytes(Charset.forName("UTF-8"))).toString()).toString(),
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA))
+                        .getBytes(Charset.forName("UTF-8"))).toString()).toString()));
+                this.srgOtsCepMap.put(uuidMap, cep);
+                CepList cepList = new CepListBuilder()
+                    .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
+                OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+                LOG.info("TapiNetworkModelServiceImpl populateNepFor Rdm, Node {} SRG tp {}, building Cep for"
+                    + " corresponding NEP {}", nodeId, entry.getKey(), cep);
+                onepBd.addAugmentation(onep1Bldr);
+            }
+            OwnedNodeEdgePoint onep = onepBd.build();
+            LOG.info("ROADMNEPPopulation TapiNetworkModelServiceImpl populate NEP {} for Node {}",
                 onep.getName().entrySet(), nodeId);
             onepMap.put(onep.key(), onep);
         }
-        LOG.debug("ROADMNEPPopulation FINISH for Node {}", nodeId);
+        LOG.info("ROADMNEPPopulation FINISH for Node {}", nodeId);
         return onepMap;
     }
 
