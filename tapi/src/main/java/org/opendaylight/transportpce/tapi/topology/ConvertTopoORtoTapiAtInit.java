@@ -547,14 +547,7 @@ public class ConvertTopoORtoTapiAtInit {
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifierInstances(
-                    new ArrayList<>(List.of(
-                        new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                            .setLayerProtocolQualifier(
-                                TapiConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
-                                    ? PHOTONICLAYERQUALIFIEROMS.VALUE
-                                    : PHOTONICLAYERQUALIFIEROTS.VALUE)
-                            .setNumberOfCepInstances(Uint64.ONE)
-                            .build())))
+                    new ArrayList<>(List.of(sclpqiBd.build())))
                 .setDirection(Direction.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(this.tapiLink.setTapiAdminState(admin.getName()))
