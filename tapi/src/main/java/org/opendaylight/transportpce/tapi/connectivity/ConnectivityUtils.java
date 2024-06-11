@@ -1153,8 +1153,8 @@ public final class ConnectivityUtils {
             String spcXpdrNetwork =
                 xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             // There should be 1 network tp per xpdr
-            // Create 2 ceps per Xpdr in the OTS, OTSiMC and in the I_OTU layer, as well as a top
-            //connection  iOTU between the xpdrs
+            // Create 2 ceps per Xpdr in the OTS, OTSiMC and in the I_OTU layer, as well as top
+            //connections  OTSiMC and iOTU between the xpdrs
             ConnectionEndPoint netCep1 = createCepXpdr(0, 0, spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS,
                     TapiConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
             putXpdrCepInTopologyContext(
