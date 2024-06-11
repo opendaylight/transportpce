@@ -1018,7 +1018,7 @@ public final class ConnectivityUtils {
             List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
             .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap1 = new HashMap<>();
-        // Create 2 ceps per Xpdr in the I_ODU and in the I_OTU, as well as a top
+        // Create 2 ceps per Xpdr in the I_ODU layer, as well as a top
         // connection iODU between the xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating iODU ceps and xc for xpdr {}", xpdr);
@@ -1075,7 +1075,7 @@ public final class ConnectivityUtils {
                 xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             // There should be 1 network tp per xpdr
             // Create 2 ceps per Xpdr in the OTS, OTSiMC and in the I_OTU layer, as well as a top
-            // connection iODU and iOTU between the xpdrs
+            // connection iOTU between the xpdrs
             ConnectionEndPoint netCep1 = createCepXpdr(0, 0, spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS,
                     TapiConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
             putXpdrCepInTopologyContext(
