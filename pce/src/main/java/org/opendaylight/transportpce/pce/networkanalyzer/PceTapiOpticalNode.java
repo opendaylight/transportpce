@@ -13,6 +13,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -39,8 +40,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Admi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
 //import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.end.point.*;
 import org.slf4j.Logger;
@@ -90,7 +93,8 @@ public class PceTapiOpticalNode implements PceNode {
 
         this.serviceType = serviceType;
         this.node = node;
-        this.nodeName = node.getName().entrySet().iterator().next().getValue();
+//        this.nodeName = node.getName().entrySet().iterator().next().getValue();
+        this.nodeName = nodeId.entrySet().iterator().next().getValue();
         this.nodeType = nodeType;
         this.nodeUuid = nodeId.entrySet().iterator().next().getKey();
         this.deviceNodeId = deviceNodeId;
@@ -98,7 +102,8 @@ public class PceTapiOpticalNode implements PceNode {
         this.listOfNep = nepList;
         this.adminState = node.getAdministrativeState();
         this.operationalState = node.getOperationalState();
-        this.valid = false;
+
+        this.valid = true;
         this.mcCapability = mcCapability;
     }
 
@@ -125,10 +130,10 @@ public class PceTapiOpticalNode implements PceNode {
                 || bpn.getTpType().equals(OpenroadmTpType.SRGTXCP) || bpn.getTpType().equals(OpenroadmTpType.SRGTXRXCP))
             .collect(Collectors.toList());
         for (BasePceNep bpn : ppOtsNep) {
-            this.availableSrgPp.put(bpn.getNepCepUuid().toString(),bpn.getTpType());
+            this.availableSrgPp.put(bpn.getNepCepUuid().getValue(),bpn.getTpType());
         }
         for (BasePceNep bpn : cpOtsNep) {
-            this.availableSrgPp.put(bpn.getNepCepUuid().toString(),bpn.getTpType());
+            this.availableSrgCp.put(bpn.getNepCepUuid().getValue(),bpn.getTpType());
         }
 
         if (this.availableSrgPp.isEmpty() || this.availableSrgCp.isEmpty()) {
@@ -142,13 +147,11 @@ public class PceTapiOpticalNode implements PceNode {
     }
 
     public void initFrequenciesBitSet() {
-        if (!isValid()) {
-            return;
-        }
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
-        // to set all bits to 0 (used) or 1 (available)
+        // to set all bits to 0 (used/false) or 1 (available/true)
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
         List<BitSet> bitsetList;
+        LOG.info("PTONLine155 Entering InitFreqBitset, for Node {}, nodeType {}", deviceNodeId, nodeType);
         switch (this.nodeType) {
             case SRG :
                 bitsetList = listOfNep.stream()
@@ -158,6 +161,9 @@ public class PceTapiOpticalNode implements PceNode {
                 .map(BasePceNep::getFrequenciesBitSet)
                 .collect(Collectors.toList());
                 for (BitSet bitSet : bitsetList) {
+                    if (bitSet == null) {
+                        continue;
+                    }
                     freqBitSet.and(bitSet);
                 }
                 this.frequenciesBitSet = freqBitSet;
@@ -170,6 +176,9 @@ public class PceTapiOpticalNode implements PceNode {
                 .map(BasePceNep::getFrequenciesBitSet)
                 .collect(Collectors.toList());
                 for (BitSet bitSet : bitsetList) {
+                    if (bitSet == null) {
+                        continue;
+                    }
                     freqBitSet.and(bitSet);
                 }
                 this.frequenciesBitSet = freqBitSet;
@@ -180,6 +189,9 @@ public class PceTapiOpticalNode implements PceNode {
                 .map(BasePceNep::getFrequenciesBitSet)
                 .collect(Collectors.toList());
                 for (BitSet bitSet : bitsetList) {
+                    if (bitSet == null) {
+                        continue;
+                    }
                     freqBitSet.and(bitSet);
                 }
                 this.frequenciesBitSet = freqBitSet;
@@ -188,34 +200,221 @@ public class PceTapiOpticalNode implements PceNode {
                 LOG.error("initFrequenciesBitSet: unsupported node type {} in node {}", this.nodeType, this);
                 break;
         }
+        LOG.debug("PTONLine203 InitFreqBitset, for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
     }
 
     public void initXndrTps(ServiceFormat serviceFormat) {
-        LOG.debug("PceTapiOticalNode: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+        LOG.info("PTONLine 207: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+        LOG.info("PTONLine209: initXndrTps for node : {}, ListOfNep : {}", this.nodeName,
+            listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
         if (!isValid()) {
+            LOG.info("PTONLine 209: initXndrTps Non valid node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
             return;
         }
         if (listOfNep.isEmpty()) {
-            LOG.error("PceTapiOticalNode/initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
+            LOG.error("PTONLine 212/initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
                  this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
-
+        LOG.info("PTONLine 218: nwOtsNep Protocols : {}", listOfNep.stream()
+            .map(BasePceNep::getLpn).collect(Collectors.toList()));
         List<BasePceNep> nwOtsNep = listOfNep.stream()
-            .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
-                || bpn.getTpType().equals(OpenroadmTpType.EXTPLUGGABLETP))
+            .filter(bpn -> ((bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
+                    || bpn.getTpType().equals(OpenroadmTpType.EXTPLUGGABLETP)
+                && (bpn.getLpq() != null
+                    && bpn.getLpq().equals(PHOTONICLAYERQUALIFIEROTS.VALUE)))))
             .collect(Collectors.toList());
         List<BasePceNep> clientOtsNep = listOfNep.stream()
             .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERCLIENT))
             .collect(Collectors.toList());
         for (BasePceNep bpn : nwOtsNep) {
-            this.availableXpndrNWTps.add(bpn.getNepCepUuid().toString());
+            this.availableXpndrNWTps.add(bpn.getNepCepUuid().getValue());
         }
-        for (BasePceNep bpn : clientOtsNep) {
-            // TODO: See if we can find a clever way to select network port rather than using the first
-            this.clientPerNwTp.put(bpn.getNepCepUuid().toString(), this.availableXpndrNWTps.get(0));
+        for (BasePceNep cbpn : clientOtsNep) {
+            List<Uuid> clientNrgUuidList = cbpn.getNodeRuleGroupUuid();
+            LOG.info("PTONLine 235: clientNrgUuidList : {}", clientNrgUuidList);
+            if (clientNrgUuidList == null || clientNrgUuidList.isEmpty()) {
+                continue;
+            }
+            Uuid nwConnectedNepUuid = null;
+            //First we check if a NW NEP includes a NRG common to the client ots NEP
+            for (BasePceNep nwbpn : nwOtsNep) {
+                List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
+                if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
+                    continue;
+                }
+                List<Uuid> commonNrgUuidList = clientNrgUuidList.stream()
+                    .filter(uuid -> nwNrgUuidList.contains(uuid))
+                    .collect(Collectors.toList());
+                //if we have common NRGs the NW Nep is  sharing the same NRGs and we can leave NW NEP Loop
+                if (commonNrgUuidList != null && !commonNrgUuidList.isEmpty()) {
+                    nwConnectedNepUuid = nwbpn.getNepCepUuid();
+                    //As soon we have found a NW NEP sharing an NRG with the client NEP we stop scanning
+                    //clientNrgUuidList
+                    break;
+                }
+//                for (Uuid nrgUuid : clientNrgUuidList) {
+//                    if (nwNrgUuidList.contains(nrgUuid)) {
+//                        nwConnectedNepUuid = nwbpn.getNepCepUuid();
+//                        //As soon we have found a NW NEP sharing an NRG with the client NEP we stop scanning
+//                        //clientNrgUuidList
+//                        break;
+//                    }
+//                }
+                //NW connected NEP found means we can stop searching for such NW Nep
+//                if (nwConnectedNepUuid != null) {
+//                    break;
+//                }
+            }
+            //If at the end of the scan of potential NW NEP candidate we identified one (Muxponder case)
+            if (nwConnectedNepUuid != null) {
+                //We add to clientPerNwNep the client Nep Uuid as well as the connected NW NEP Uuid
+                this.clientPerNwTp.put(cbpn.getNepCepUuid().getValue(), nwConnectedNepUuid.getValue());
+            //Otherwise we may have a different option such as for a switch and we need to find a IRG that interconnects
+            //NRGs of Client to NRGs of Network ports
+            } else {
+//                for (BasePceNep nwbpn : nwOtsNep) {
+//                    List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
+//                    if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
+//                        continue;
+//                    }
+//                    List<Uuid> commonNrgUuidList = clientNrgUuidList.stream()
+//                        .filter(uuid -> nwNrgUuidList.contains(uuid))
+//                        .collect(Collectors.toList());
+//                    if (commonNrgUuidList == null || commonNrgUuidList.isEmpty()) {
+//                        continue;
+//                    }
+//                    for (Uuid comUuid : commonNrgUuidList) {
+//                        if(!node.getInterRuleGroup().entrySet().stream()
+//                                .filter(irg -> !irg.getValue().getAssociatedNodeRuleGroup().entrySet().stream()
+//                                    .map(Map.Entry::getKey)
+//                                    .filter(key -> key.getNodeRuleGroupUuid().equals(comUuid))
+//                                    .collect(Collectors.toList()).isEmpty())
+//                                .collect(Collectors.toList()).isEmpty()) {
+//                            nwConnectedNepUuid = nwbpn.getNepCepUuid();
+//                            this.clientPerNwTp.put(cbpn.getNepCepUuid().getValue(), nwConnectedNepUuid.getValue());
+//                            break;
+//                        }
+//
+//                    }
+//                    if (nwConnectedNepUuid != null) {
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+
+                for (Uuid nrgUuid : clientNrgUuidList) {
+                //  for each NRG we build a list of IRG key, that corresponds to IRG that includes the client NRG
+                    List<InterRuleGroupKey> irgKeyList = node.getInterRuleGroup().entrySet().stream()
+                          .filter(irg -> !irg.getValue().getAssociatedNodeRuleGroup().entrySet().stream()
+                              .map(Map.Entry::getKey)
+                              .filter(key -> key.getNodeRuleGroupUuid().equals(nrgUuid))
+                              .collect(Collectors.toList()).isEmpty())
+                          .collect(Collectors.toList())
+                          .stream().map(Entry::getKey).collect(Collectors.toList());
+
+//                    List<InterRuleGroupKey> irgKeyList = node.getInterRuleGroup().entrySet().stream()
+//                        .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(nrgUuid))
+//                        .collect(Collectors.toList())
+//                        .stream().map(Entry::getKey).collect(Collectors.toList());
+                    if (irgKeyList != null && !irgKeyList.isEmpty()) {
+                        //For each of IRG key, we check if corresponding IRG would include an NRG that corresponds
+                        //to one of the NW NEP, meaning it would be interconnected to the client NEP via the IRG that
+                        //interconnects their respective NRGs
+//                        for (InterRuleGroupKey irgKey : irgKeyList) {
+                        for (BasePceNep nwbpn : nwOtsNep) {
+                            List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
+                            LOG.info("PTONLine 328: nwNrgUuidList : {}", nwNrgUuidList);
+                            if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
+                                continue;
+                            }
+                            for (Uuid nwNrgUuid : nwNrgUuidList) {
+                                    //For each NRG of the NW NEP under analysis we build a list of IRG key,
+                                    //that corresponds to IRG that includes the NW Nep's NRG
+
+//                              List<InterRuleGroupKey> nwIrgKeyList = node.getInterRuleGroup().entrySet().stream()
+//                                  .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(nwNrgUuid))
+//                                        .collect(Collectors.toList())
+//                                        .stream().map(Entry::getKey).collect(Collectors.toList());
+
+                                List<InterRuleGroupKey> nwIrgKeyList = node.getInterRuleGroup().entrySet().stream()
+                                    .filter(irg -> !irg.getValue().getAssociatedNodeRuleGroup().entrySet().stream()
+                                        .map(Map.Entry::getKey)
+                                        .filter(key -> key.getNodeRuleGroupUuid().equals(nwNrgUuid))
+                                        .collect(Collectors.toList()).isEmpty())
+                                    .collect(Collectors.toList())
+                                    .stream().map(Entry::getKey).collect(Collectors.toList());
+                                for (InterRuleGroupKey nwIrgKey : nwIrgKeyList) {
+                                    if (irgKeyList.contains(nwIrgKey)) {
+                                        nwConnectedNepUuid = nwbpn.getNepCepUuid();
+                                        break;
+                                    }
+                                }
+                                if (nwConnectedNepUuid != null) {
+                                    break;
+                                }
+                            }
+                            if (nwConnectedNepUuid != null) {
+                                break;
+                            }
+                        }
+//                            if (nwConnectedNepUuid != null) {
+//                                break;
+//                            }
+//                        }
+                    }
+                    if (nwConnectedNepUuid != null) {
+                        break;
+                    }
+                }
+                if (nwConnectedNepUuid != null) {
+                    this.clientPerNwTp.put(cbpn.getNepCepUuid().getValue(), nwConnectedNepUuid.getValue());
+                    LOG.info("Found NW Nep {} connected to Client NEP {}", nwConnectedNepUuid, cbpn.getNepCepUuid());
+                } else {
+                    LOG.info("Did not succed finding a NW Nep connected to Client NEP {}", cbpn.getNepCepUuid());
+                }
+
+//                node.getInterRuleGroup().entrySet().stream()
+//                    .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(irg))
+//                for (BasePceNep nwbpn : nwOtsNep) {
+//                    List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
+//                    if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
+//                        continue;
+//                    }
+//                    for (Uuid nrgUuid : clientNrgUuidList) {
+//                        if (nwNrgUuidList.contains(nrgUuid)) {
+//                            nwConnectedNepUuid = nwbpn.getNepCepUuid();
+//                            break;
+//                        }
+//                    }
+//                    if (nwConnectedNepUuid != null) {
+//                        break;
+//                    }
+//                }
+            }
         }
+//                for (Uuid nrgUuid : nrgUuidList) {
+//                    nwNepUuid = node.getNodeRuleGroup().entrySet().stream()
+//                        .filter(nrg -> nrg.getKey().getUuid().equals(nrgUuid))
+//                        .findFirst().orElseThrow().getValue().getNodeEdgePoint().entrySet().stream()
+//                            .filter(nrgnep -> nrgnep.getKey().getNodeEdgePointUuid().equals(bpn.getNepCepUuid()))
+//                            .findAny().orElseThrow().getKey().getNodeEdgePointUuid();
+//                    if (nwNepUuid != null) {
+//                        continue;
+//                    }
+//                }
+        LOG.info("PTONLine230/initXndrTps: ListOfNep {}",
+            listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTONLine232/initXndrTps: clientOtsNep {}",
+            clientOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTONLine234/initXndrTps: nwOtsNep {}",
+            nwOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTONLine411/initXndrTps: availableXpndrNWTps {}", availableXpndrNWTps);
+        LOG.info("PTONLine413/initXndrTps: clientPerNwTp {}", clientPerNwTp);
+
+
     }
 
     @Override
@@ -224,7 +423,7 @@ public class PceTapiOpticalNode implements PceNode {
             tp, this.nodeName, this.nodeUuid);
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
-            LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list", tp);
+            LOG.error("getRdmSrgClient: tp {} not found in SRG CPterminationPoint list", tp);
             return null;
         }
         List<BasePceNep> ppList = listOfNep.stream()
@@ -375,7 +574,7 @@ public class PceTapiOpticalNode implements PceNode {
 
     @Override
     public NodeId getNodeId() {
-        return null;
+        return  new NodeId(nodeName.getValue());
     }
 
     @Override
@@ -409,8 +608,13 @@ public class PceTapiOpticalNode implements PceNode {
     }
 
     @Override
-    public String getXpdrClient(String tp) {
-        return this.clientPerNwTp.get(tp);
+    public String getXpdrNWfromClient(String tp) {
+        return this.clientPerNwTp.entrySet().stream()
+            .filter(elt -> tp.equals(elt.getKey())).findFirst().orElseThrow().getValue();
+    }
+
+    public List<String> getXpdrAvailNW() {
+        return this.availableXpndrNWTps;
     }
 
     @Override
