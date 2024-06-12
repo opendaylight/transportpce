@@ -345,7 +345,6 @@ public class PostAlgoPathValidator {
                     .getAvailableTribSlots()
                     .get(edge.link().getDestTP().getValue());
             List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
-            List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 integer : srcTsPool) {
                 if (destTsPool.contains(integer)) {
                     commonEdgeTsPoolList.add(integer);
@@ -360,6 +359,7 @@ public class PostAlgoPathValidator {
             }
             Collections.sort(commonGoodStartEdgeTsPoolList);
             boolean goodTsList = false;
+            List<Uint16> tribSlotList = new ArrayList<>();
             for (Uint16 goodStartTsPool : commonGoodStartEdgeTsPoolList) {
                 int goodStartIndex = commonEdgeTsPoolList.indexOf(Uint16.valueOf(goodStartTsPool.intValue()));
                 if (!goodTsList && commonEdgeTsPoolList.size() - goodStartIndex >= nbSlot) {
@@ -424,7 +424,6 @@ public class PostAlgoPathValidator {
                 "pwrIn", Double.valueOf(-60.0),
                 "pwrOut", Double.valueOf(-60.0)));
         double calcOnsrdB = 0;
-        double margin = 0;
         boolean transponderPresent = false;
         List<String> vertices = path.getVertexList();
         List<PceGraphEdge> edges = path.getEdgeList();
@@ -541,6 +540,7 @@ public class PostAlgoPathValidator {
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
+        double margin = 0;
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(vertices.size() - 1)));
         LOG.debug("loop of check OSNR, Path Element = {}", vertices.size() - 1);
         switch (currentNode.getORNodeType()) {
@@ -628,7 +628,6 @@ public class PostAlgoPathValidator {
                 "pwrIn", Double.valueOf(-60.0),
                 "pwrOut", Double.valueOf(-60.0)));
         double calcOnsrdB = 0;
-        double margin = 0;
         boolean transponderPresent = false;
         List<String> vertices = path.getVertexList();
         List<PceGraphEdge> edges = path.getEdgeList();
@@ -743,6 +742,7 @@ public class PostAlgoPathValidator {
                     LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported resource type in the path chain");
             }
         }
+        double margin = 0;
         PceNode currentNode = allPceNodes.get(new NodeId(vertices.get(0)));
         LOG.debug("loop of check OSNR direction ZA: Path Element = 0");
         switch (currentNode.getORNodeType()) {
