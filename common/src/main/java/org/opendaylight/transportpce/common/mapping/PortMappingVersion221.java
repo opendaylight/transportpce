@@ -125,8 +125,6 @@ public class PortMappingVersion221 {
 
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
-        List<Mapping> portMapList = new ArrayList<>();
-        Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Info.class)
@@ -145,6 +143,8 @@ public class PortMappingVersion221 {
         }
         postPortMapping(nodeId, nodeInfo, null, null, null, null);
 
+        List<Mapping> portMapList = new ArrayList<>();
+        Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
         switch (deviceInfo.getNodeType()) {
 
             case Rdm:

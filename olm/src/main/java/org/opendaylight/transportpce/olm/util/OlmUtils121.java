@@ -153,8 +153,6 @@ final class OlmUtils121 {
             extractMeasurements(List<Measurements> measurementsFromDevice, PmNamesEnum pmNamesEnum, String extension,
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location location,
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction direction) {
-        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
-            extractedMeasurements = new ArrayList<>();
         List<Measurements> pmMeasurements = measurementsFromDevice;
         Stream<Measurements> measurementStream = pmMeasurements.stream();
         if (pmNamesEnum != null) {
@@ -180,6 +178,8 @@ final class OlmUtils121 {
                 .equals(direction.getName()));
         }
         List<Measurements> filteredMeasurements = measurementStream.collect(Collectors.toList());
+        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
+                extractedMeasurements = new ArrayList<>();
         for (Measurements measure : filteredMeasurements) {
             MeasurementsBuilder measurement = new MeasurementsBuilder();
             measurement.setPmparameterName(measure.getMeasurement().getPmParameterName().getType().toString());
