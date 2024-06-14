@@ -24,8 +24,8 @@
     <application.main.class>io.lighty.controllers.tpce.Main</application.main.class>
     <application.attach.zip>true</application.attach.zip>
     <maven.deploy.skip>true</maven.deploy.skip>
-    <transportpce.version>9.1.1-SNAPSHOT</transportpce.version>
-    <transportpce.models.version>20.1.1</transportpce.models.version>
+    <transportpce.version>10.0.0-SNAPSHOT</transportpce.version>
+    <transportpce.models.version>20.1.2</transportpce.models.version>
   </properties>
 
   <dependencyManagement>

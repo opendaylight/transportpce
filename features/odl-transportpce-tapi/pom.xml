@@ -24,8 +24,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <properties>
     <mdsal.version>13.0.4</mdsal.version>
-    <netconf.version>7.0.6</netconf.version>
-    <transportpce.models.version>20.1.1</transportpce.models.version>
+    <netconf.version>7.0.7</netconf.version>
+    <transportpce.models.version>20.1.2</transportpce.models.version>
     <skip.karaf.featureTest>false</skip.karaf.featureTest>
   </properties>
 
