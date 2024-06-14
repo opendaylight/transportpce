@@ -21,8 +21,8 @@
 
   <properties>
     <mdsal.version>13.0.4</mdsal.version>
-    <netconf.version>7.0.6</netconf.version>
-    <transportpce.models.version>20.1.1</transportpce.models.version>
+    <netconf.version>7.0.7</netconf.version>
+    <transportpce.models.version>20.1.2</transportpce.models.version>
     <transportpce.db.host>localhost:3306</transportpce.db.host>
     <transportpce.db.database>transportpce</transportpce.db.database>
     <transportpce.db.username>root</transportpce.db.username>
