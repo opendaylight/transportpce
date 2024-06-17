@@ -602,29 +602,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 //                assertEquals(0, nepsOtsimc.size(), "Roadm node should have 10 OTSiMC NEPs");
                 assertEquals(12, nepsPhot.size(), "Roadm node should have 12 PHOT_MEDIA NEPs (2x4 OTS +2x(OTS+OMS)");
                 // For Degree node
-//<<<<<<< HEAD
-//                String mcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("DEG1-TTP", nepsOMS),
-//                    new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    mcnepUuidSeed, pmOMSnep , false);
-//                String otmcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("DEG1-TTP", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otmcnepUuidSeed, pmOTSnep, false);
-//                // For srg node
-//                String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("SRG1-PP1", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otscnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otscnepUuidSeed, pmOTSnep, false);
-//                String otscnep4UuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("SRG1-PP3", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otscnep4UuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otscnep4UuidSeed, pmOTSnep, false);
-//=======
                 OwnedNodeEdgePoint nepOmsDeg = getOnep("DEG2-TTP", nepsOMS);
                 Uuid omsNepDegUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX").getBytes(Charset
@@ -659,7 +636,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                     .getBytes(Charset.forName("UTF-8"))).toString());
                 checkNepOtsiRdmNode(nepOtsSrg2, otsNepUuidSrg2, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
-//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getName().entrySet().iterator().next().getValue().toString()
                         .compareTo(nrg2.getName().entrySet().iterator().next().getValue().toString()))
@@ -941,27 +917,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             false, nep, nepUuid, portName, nepName, withSip);
     }
 
-//    private void checkNepOtsiNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
-//            boolean withSip) {
-//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
-//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
-//        assertEquals(portName, nameList.get(0).getValue(), "value of OTSi nep should be '" + portName + "'");
-//        assertEquals(nepName, nameList.get(0).getValueName(), "value-name of OTSi nep should be '" + nepName + "'");
-//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
-//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
-//                .getSupportedCepLayerProtocolQualifierInstances();
-//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
-//            lpql.add(entry.getLayerProtocolQualifier());
-//        }
-//        assertEquals(2, lpql.size(), "OTSi nep should support 2 kind of cep");
-//        assertThat("OTSi nep should support 2 kind of cep",
-//            lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE, PHOTONICLAYERQUALIFIEROTSi.VALUE));
-//        assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//            "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//        checkCommonPartOfNep(nep, withSip);
-//        checkPhotPartOfNep(nep);
-//    }
-
     private void checkNepOtsiRdmNode(
             OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName, boolean withSip) {
         if (!nep.getUuid().equals(nepUuid)) {
@@ -971,33 +926,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 ? List.of(PHOTONICLAYERQUALIFIEROMS.VALUE)
                 : nepName.contains("OTS") ? List.of(PHOTONICLAYERQUALIFIEROTS.VALUE) : null,
             LayerProtocolName.PHOTONICMEDIA, false, nep, nepUuid, portName, nepName, withSip);
-//=======
-//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
-//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
-//        assertEquals(portName, nameList.get(0).getValue(),
-//            "value of OTSi nep should be '" + portName + "'");
-//        assertEquals(nepName, nameList.get(0).getValueName(),
-//            "value-name of OTSi nep should be '" + nepName + "'");
-//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
-//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
-//                .getSupportedCepLayerProtocolQualifierInstances();
-//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
-//            lpql.add(entry.getLayerProtocolQualifier());
-//        }
-//        if (nepName.contains("OMS")) {
-//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
-//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE));
-//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//            checkPhotPartOfNep(nep);
-//        } else if (nepName.contains("OTS")) {
-//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
-//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROTS.VALUE));
-//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//            checkPhotPartOfNep(nep);
-//        }
-//        checkCommonPartOfNep(nep, withSip);
     }
 
 
@@ -1062,8 +990,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals(9999.0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getTotalLoss().doubleValue(),
                 "OTS-media-CEP-spec shall be present with 9999 concentrated loss");
         }
-//        checkCommonPartOfNep(nep, withSip);
-//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
     }
 
     private void rawCheckNep(List<LAYERPROTOCOLQUALIFIER> lpqList, LayerProtocolName lpn, boolean anyInList,
