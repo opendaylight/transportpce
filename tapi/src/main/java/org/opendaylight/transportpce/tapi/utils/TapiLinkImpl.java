@@ -231,25 +231,24 @@ public class TapiLinkImpl implements TapiLink {
         return LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
     }
 
-    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-            .topology.rev180226.networks.network.Link getORLinkFromLinkId(LinkId linkId) {
+    private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+            .networks.network.Link getORLinkFromLinkId(LinkId linkId) {
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> linkIID = InstanceIdentifier.builder(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                            .networks.Network.class,
-                        new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                    .augmentation(Network1.class)
-                    .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.Link.class, new org.opendaylight.yang.gen.v1.urn.ietf.params
-                        .xml.ns.yang.ietf.network.topology.rev180226
-                        .networks.network.LinkKey(linkId))
-                    .build();
         try {
             Optional<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
                 .topology.rev180226.networks.network.Link> link = this.networkTransactionService.read(
-                LogicalDatastoreType.CONFIGURATION, linkIID).get();
+                LogicalDatastoreType.CONFIGURATION,
+                    InstanceIdentifier.builder(
+                        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                            .networks.Network.class,
+                            new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .augmentation(Network1.class)
+                        .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                            .networks.network.Link.class, new org.opendaylight.yang.gen.v1.urn.ietf.params
+                            .xml.ns.yang.ietf.network.topology.rev180226
+                            .networks.network.LinkKey(linkId))
+                        .build()).get();
             if (link.isEmpty()) {
                 LOG.error("Link {} not present in the datastore", linkId);
                 return null;
@@ -301,7 +300,7 @@ public class TapiLinkImpl implements TapiLink {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link oppLink = getORLinkFromLinkId(
                     link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
-                    .Link1.class).getOppositeLink());
+                        .Link1.class).getOppositeLink());
             Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
             oppLinkLoss = Decimal64.valueOf("9999");
             if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
@@ -401,18 +400,18 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     private String getSupportingNodeFromNodeId(String overlayNodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-                .rev180226.networks.network.Node> nodeIID = InstanceIdentifier.builder(
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-                    .rev180226.Networks.class)
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.network.Node> nodeIID = InstanceIdentifier.builder(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .Networks.class)
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.Network.class,
                     new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
-                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
-                        .network.NodeKey(new NodeId(overlayNodeId)))
-            .build();
+                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.NodeKey(new NodeId(overlayNodeId)))
+                .build();
         try {
             Optional<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                 .networks.network.Node> node = this.networkTransactionService.read(
