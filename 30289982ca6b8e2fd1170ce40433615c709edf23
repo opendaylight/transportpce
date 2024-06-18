@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc34725_60b4b144",
+        "filename": "tests/installMaven.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-06-18T08:49:17Z",
+      "side": 1,
+      "message": "it seems this script is doing a little more than installing maven\nand is debian-based OS specific\nCan we precise this somewhere ? in the file name maybe ?",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "692ed769_ca4b921b",
+        "filename": "tests/installMaven.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-06-18T08:49:17Z",
+      "side": 1,
+      "message": "perhaps \u0027or newer\u0027 might be precised ?",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
