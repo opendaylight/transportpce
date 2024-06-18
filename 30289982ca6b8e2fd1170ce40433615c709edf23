@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a22b451f_756a7abf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-06-18T08:51:16Z",
+      "side": 1,
+      "message": "maybe \u0027Bump CI scripts to ubuntu 20.04\u0027 would be more appropriate here",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5cc34725_60b4b144",
         "filename": "tests/installMaven.sh",
         "patchSetId": 1
