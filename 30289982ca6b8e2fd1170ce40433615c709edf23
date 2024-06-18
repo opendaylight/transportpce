@@ -18,6 +18,41 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8582110_481fef75",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-06-18T09:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a22b451f_756a7abf",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "587feb34_52f63d1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-06-18T09:20:02Z",
+      "side": 1,
+      "message": "Thanks for you quick review. Done",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cc34725_60b4b144",
@@ -35,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b602c582_744ea15d",
+        "filename": "tests/installMaven.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-06-18T09:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cc34725_60b4b144",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "692ed769_ca4b921b",
@@ -48,6 +101,24 @@
       "writtenOn": "2024-06-18T08:49:17Z",
       "side": 1,
       "message": "perhaps \u0027or newer\u0027 might be precised ?",
+      "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64928aa3_88ddbc24",
+        "filename": "tests/installMaven.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-06-18T09:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "692ed769_ca4b921b",
       "revId": "30289982ca6b8e2fd1170ce40433615c709edf23",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
