@@ -16,6 +16,24 @@
       "message": "this should be modified in tox.ini too \u003d\u003e vote -1",
       "revId": "ce62acaac8caf1a2782e6e3ae5bea4d6258d14f4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53ac6044_421b2231",
+        "filename": "tests/installMavenCentOS.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-06-18T08:52:49Z",
+      "side": 0,
+      "message": "my mistake tox.ini -\u003e build_controller.sh in fact",
+      "parentUuid": "88ea8829_27d8eff2",
+      "revId": "ce62acaac8caf1a2782e6e3ae5bea4d6258d14f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
