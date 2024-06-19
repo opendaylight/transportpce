@@ -33,6 +33,29 @@
       "message": "recheck",
       "revId": "28d81b0a98a8c9a7973318665fd737a1ac8aea62",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4323d36f_2ea402c5",
+        "filename": "tests/installMavenUbuntu.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2024-06-19T22:09:37Z",
+      "side": 1,
+      "message": "MVN is already available through Jenkins, no need to download this every time. You;ll need to set and use the require env variables",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 42
+      },
+      "revId": "28d81b0a98a8c9a7973318665fd737a1ac8aea62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
