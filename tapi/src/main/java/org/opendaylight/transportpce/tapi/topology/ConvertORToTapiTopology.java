@@ -41,6 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
@@ -733,8 +734,9 @@ public class ConvertORToTapiTopology {
             }
             byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
             LOG.debug("Creation of Bitset {}", freqBitSet);
+            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
             freqBitSet = txttpAttAvlFreqMaps.entrySet().stream()
-                .filter(afm -> afm.getKey().toString().equals(GridConstant.C_BAND))
+                .filter(afm -> afm.getKey().equals(availFreqMapsKey))
                 .findFirst().orElseThrow().getValue().getFreqMap();
             for (int i = 0; i < GridConstant.EFFECTIVE_BITS; i++) {
                 if (freqBitSet[i] == 0) {
