@@ -105,6 +105,64 @@
       "parentUuid": "c6d45962_b068a3fc",
       "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d6e0f9_371e2320",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-06-27T11:36:03Z",
+      "side": 1,
+      "message": "Sorry for late review. We should prevent link to be deleted. For ROADM to ROADM, this may not be an serious issue since they are discovered automatically, even if I have a clear preference on keeping them. For XPDR to ROADM, operational guys are not supposed to recreate manually the links, using the dedicated RPC, after a node has temporarly vanished from the Data store whatever is the reason for this.\n\nIn your proposal, you change radically the behaviour of this class. The links stored in the TopologyShard only concerns Non-Disagregated Node(UnderlayNode) internal links: this means Add/drop and express links for ROADMS. If tests are impacted with regards to RDMtoRDM and RDM to XPDR link this means the link you target for deletion in your proposal are links of the topology which should not be affected since they are not part of the topologyShard.",
+      "parentUuid": "6901c143_b639f35e",
+      "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "142f02bd_ad72a07a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-06-27T11:36:03Z",
+      "side": 1,
+      "message": "Sorry for late review. Thanks so much for your enhancement proposals that really help us to improve the quality of the code thanks to your experience on real equipment.\nAnswered some of your comments regarding tests and made a suggestion on a way to solve the issue. \nFrom a general standpoint, would it be possible for you to apply the change you propose also to OTN nodes, Just so that we have something consistent for all type of nodes and do not need to keep in mind that the patch only applies to ROADM nodes? Thanks!",
+      "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864bdb68_e488d672",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-06-27T11:36:03Z",
+      "side": 1,
+      "message": "Suggest to add a test on link-type to avoid deleting ROADM to ROADM and ROADM to XPDR links. Only internal links such as EXPRESS, ADD and DROP link shall be deleted",
+      "range": {
+        "startLine": 250,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 17
+      },
+      "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
