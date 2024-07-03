@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91dbcd16_e6ea1f0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-07-03T09:12:50Z",
+      "side": 1,
+      "message": "Ok, now I understand your concern about deleting non-internal links. As I see it, the main problem is that a node may be unintentionally deleted from the openroadm topology (temporarily vanish as you say) just because e.g. the netconf connection goes down. Then it is of course annoying if links disappear. This is another thing we have changed in our version so that a node is only deleted from openroadm datastores when explicitly requested. In this case I think it make sense to delete all links since the node does not exist anymore. Do you agree?\n\nI will not make any further updates to this change. If you are interested, maybe I will submit a separate change proposal related to not automatically deleting nodes from openroadm datastores when they disappear from netconf topology, as discussed above.",
+      "parentUuid": "78d6e0f9_371e2320",
+      "revId": "57114e55eeb5954c7999997bc5363d93c0fef292",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "864bdb68_e488d672",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 4
