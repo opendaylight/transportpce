@@ -24,8 +24,12 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.frequency.Available;
+import org.opendaylight.transportpce.tapi.frequency.AvailableGrid;
+import org.opendaylight.transportpce.tapi.frequency.FrequencyMath;
+import org.opendaylight.transportpce.tapi.frequency.Numeric;
+import org.opendaylight.transportpce.tapi.frequency.NumericFrequency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengths;
@@ -165,6 +169,7 @@ public class ConvertORToTapiTopology {
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private Map<String, Uuid> uuidMap;
+    private final Numeric numericFrequency;
 
     static {
         OPMODE_LOOPRATE_MAP = new TreeMap<>(Comparator.reverseOrder());
@@ -212,11 +217,23 @@ public class ConvertORToTapiTopology {
 
 
     public ConvertORToTapiTopology(Uuid tapiTopoUuid) {
+        this(
+                tapiTopoUuid,
+                new NumericFrequency(
+                        GridConstant.START_EDGE_FREQUENCY,
+                        GridConstant.EFFECTIVE_BITS,
+                        new FrequencyMath()
+                )
+        );
+    }
+
+    public ConvertORToTapiTopology(Uuid tapiTopoUuid, Numeric numericFrequency) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.uuidMap = new HashMap<>();
         this.tapiSips = new HashMap<>();
+        this.numericFrequency = numericFrequency;
     }
 
     public void convertNode(Node ietfNode, List<String> networkPorts) {
@@ -732,20 +749,28 @@ public class ConvertORToTapiTopology {
             if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
                 return null;
             }
-            byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
-            LOG.debug("Creation of Bitset {}", freqBitSet);
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", freqByteSet);
             AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-            freqBitSet = txttpAttAvlFreqMaps.entrySet().stream()
+            freqByteSet = txttpAttAvlFreqMaps.entrySet().stream()
                 .filter(afm -> afm.getKey().equals(availFreqMapsKey))
                 .findFirst().orElseThrow().getValue().getFreqMap();
-            for (int i = 0; i < GridConstant.EFFECTIVE_BITS; i++) {
-                if (freqBitSet[i] == 0) {
-                    freqBitSet[i] = 1;
-                } else {
-                    freqBitSet[i] = 0;
-                }
-            }
-            return getFreqMapFromBitSet(freqBitSet);
+
+            LOG.debug("TTP used frequency byte set ({} bytes, 0 represents 8 used frequencies): {} ",
+                    freqByteSet.length,
+                    freqByteSet
+            );
+            Available bitMap = new AvailableGrid(freqByteSet);
+
+            LOG.debug("TTP used frequency bit set (min=0, max={}, each number represents a used frequency): {} ",
+                    GridConstant.EFFECTIVE_BITS,
+                    bitMap.assignedFrequencies()
+            );
+            Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
+
+            LOG.info("TTP used frequency map {}", assignedFrequencyRanges);
+            return assignedFrequencyRanges;
+
         }
         Map<Double,Double> freqMap = new HashMap<>();
         for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
@@ -770,13 +795,29 @@ public class ConvertORToTapiTopology {
         if (avlFreqMaps == null || !avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
             return null;
         }
-        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
-        LOG.debug("Creation of Bitset {}", byteArray);
+        byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+        LOG.debug("Creation of Bitset {}", freqByteSet);
         AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-        return getFreqMapFromBitSet(
-            avlFreqMaps.entrySet().stream()
+        freqByteSet = avlFreqMaps.entrySet().stream()
                 .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                .findFirst().orElseThrow().getValue().getFreqMap());
+                .findFirst().orElseThrow().getValue().getFreqMap();
+
+
+        LOG.debug("TTP available frequency byte set ({} bytes, 0 represents 8 available frequencies): {} ",
+                freqByteSet.length,
+                freqByteSet
+        );
+        Available bitMap = new AvailableGrid(freqByteSet);
+
+        LOG.debug("TTP available frequency bit set (min=0, max={}, each number represents an available frequency): {}",
+                GridConstant.EFFECTIVE_BITS,
+                bitMap.availableFrequencies()
+        );
+        Map<Double, Double> availableFrequencyRanges = numericFrequency.availableFrequency(bitMap);
+
+        LOG.info("TTP available frequency map {}", availableFrequencyRanges);
+        return availableFrequencyRanges;
+
     }
 
     public Map<Double, Double> getTTP11AvailableFreqMap(
@@ -792,13 +833,28 @@ public class ConvertORToTapiTopology {
         if (avlFreqMaps == null || !avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
             return null;
         }
-        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
-        LOG.debug("Creation of Bitset {}", byteArray);
+        byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+        LOG.debug("Creation of Bitset {}", freqByteSet);
         AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-        return getFreqMapFromBitSet(
-            avlFreqMaps.entrySet().stream()
+        freqByteSet = avlFreqMaps.entrySet().stream()
                 .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                .findFirst().orElseThrow().getValue().getFreqMap());
+                .findFirst().orElseThrow().getValue().getFreqMap();
+
+        LOG.debug("TTP11 available frequency byte set ({} bytes, 0 represents 8 available frequencies): {} ",
+                freqByteSet.length,
+                freqByteSet
+        );
+        Available bitMap = new AvailableGrid(freqByteSet);
+
+        LOG.debug("TTP11 available frequency bit set (min=0, max={}, "
+                        + "each number represents an available frequency): {}",
+                GridConstant.EFFECTIVE_BITS,
+                bitMap.availableFrequencies()
+        );
+        Map<Double, Double> availableFrequencyRanges = numericFrequency.availableFrequency(bitMap);
+
+        LOG.info("TTP11 available frequency map {}", availableFrequencyRanges);
+        return availableFrequencyRanges;
     }
 
     public Map<Double, Double> getPP11UsedWavelength(
@@ -837,20 +893,27 @@ public class ConvertORToTapiTopology {
             if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
                 return null;
             }
-            byte[] freqBitSet = new byte[GridConstant.NB_OCTECTS];
-            LOG.debug("Creation of Bitset {}", freqBitSet);
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+            LOG.debug("Creation of Bitset {}", freqByteSet);
             AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-            freqBitSet = txttpAttAvlFreqMaps.entrySet().stream()
+            freqByteSet = txttpAttAvlFreqMaps.entrySet().stream()
                 .filter(afm -> afm.getKey().equals(availFreqMapsKey))
                 .findFirst().orElseThrow().getValue().getFreqMap();
-            for (int i = 0; i < GridConstant.EFFECTIVE_BITS; i++) {
-                if (freqBitSet[i] == 0) {
-                    freqBitSet[i] = 1;
-                } else {
-                    freqBitSet[i] = 0;
-                }
-            }
-            return getFreqMapFromBitSet(freqBitSet);
+
+            LOG.debug("TTP11 used frequency byte set ({} bytes, 0 represents 8 used frequencies): {} ",
+                    freqByteSet.length,
+                    freqByteSet
+            );
+            Available bitMap = new AvailableGrid(freqByteSet);
+
+            LOG.debug("TTP11 used frequency bit set (min=0, max={}, each number represents a used frequency): {}",
+                    GridConstant.EFFECTIVE_BITS,
+                    bitMap.assignedFrequencies()
+            );
+            Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
+
+            LOG.info("TTP11 used frequency map {}", assignedFrequencyRanges);
+            return assignedFrequencyRanges;
         }
         Map<Double,Double> freqMap = new HashMap<>();
         for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
@@ -858,47 +921,6 @@ public class ConvertORToTapiTopology {
             Double centFreq = usedLambdasValue.getFrequency().getValue().doubleValue();
             Double width = usedLambdasValue.getWidth().getValue().doubleValue();
             freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
-        }
-        return freqMap;
-    }
-
-    public Map<Double, Double> getFreqMapFromBitSet(byte[] byteArray) {
-        // Provides a Map <LowerFreq, HigherFreq> describing start and stop frequencies of all slots that are available
-        // in the ByteArray describing the spectrum : bit sets initially sets to 1/true
-        // In case the byte array has been inverted before calling this method, it provides respectively a map
-        // describing all occupied slots!
-        Map<Double,Double> freqMap = new HashMap<>();
-        Double startFreq = GridConstant.START_EDGE_FREQUENCY;
-        Double stopFreq = 0.0;
-        boolean occupied = false;
-        if (byteArray[0] == 0) {
-            occupied = true;
-        }
-        for (int index = 0 ; index < GridConstant.EFFECTIVE_BITS ; index++) {
-            if (occupied) {
-                if (byteArray[index] == 1) {
-                    startFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
-                    stopFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
-                    occupied = false;
-                }
-            } else {
-                if (byteArray[index] == 0) {
-                    stopFreq = GridUtils.getStartFrequencyFromIndex(index).doubleValue();
-                    occupied = true;
-                }
-            }
-            if (occupied) {
-                if (stopFreq.doubleValue() > startFreq.doubleValue()) {
-                    freqMap.put(startFreq, stopFreq);
-                    startFreq = stopFreq;
-                }
-            } else {
-                if (index == GridConstant.EFFECTIVE_BITS - 1
-                        && Double.compare(startFreq.doubleValue(), stopFreq.doubleValue()) == 0) {
-                    stopFreq = GridUtils.getStopFrequencyFromIndex(index).doubleValue();
-                    freqMap.put(startFreq, stopFreq);
-                }
-            }
         }
         return freqMap;
     }
