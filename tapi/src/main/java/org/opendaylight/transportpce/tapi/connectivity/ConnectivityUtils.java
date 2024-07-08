@@ -858,6 +858,10 @@ public final class ConnectivityUtils {
             ConnectionEndPoint> cepMap = new HashMap<>();
         // create ceps and x connections within xpdr
         LOG.debug("CONNECTIVITYUTILS 866 CreateXpdrCep1ConnPht");
+        if (xpdrNodelist.isEmpty()) {
+            LOG.warn("Xpdr nodes not found, skipping XPDR CEP connection");
+            return new HashMap<>();
+        }
         String slotFreqExtension = "";
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating ceps and xc for xpdr {}", xpdr);
