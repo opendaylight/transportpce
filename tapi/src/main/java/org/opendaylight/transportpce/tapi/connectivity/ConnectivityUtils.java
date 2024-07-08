@@ -1580,7 +1580,7 @@ public final class ConnectivityUtils {
     private String getIdBasedOnModelVersion(String nodeid) {
         return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*")
             ? String.join("-", nodeid.split("-")[0], nodeid.split("-")[1])
-            : nodeid.split("-")[0];
+            : nodeid.substring(0, nodeid.lastIndexOf("-"));
     }
 
     private ServiceZEnd tapiEndPointToServiceZPoint(
