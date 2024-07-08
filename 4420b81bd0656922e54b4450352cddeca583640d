@@ -16,6 +16,23 @@
       "message": "This is worth being tracked w/ a JIRA issue added to the commit message",
       "revId": "4420b81bd0656922e54b4450352cddeca583640d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a590ec_10218997",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-08T16:23:12Z",
+      "side": 1,
+      "message": "otherwise LGTM. Many thanks !\nunfortunately the CI is still broken + Gilles \u0026 Christophe.",
+      "revId": "4420b81bd0656922e54b4450352cddeca583640d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
