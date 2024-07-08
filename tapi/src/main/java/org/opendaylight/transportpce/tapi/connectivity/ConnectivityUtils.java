@@ -883,6 +883,10 @@ public final class ConnectivityUtils {
         }
         LOG.debug("CONNECTIVITYUTILS 894 CreateXpdrCep1ConnPht");
         // OTSi top connection between edge OTSI_MC Xpdr
+        if (xpdrNodelist.isEmpty()) {
+            LOG.warn("Xpdr nodes not found, skipping XPDR CEP connection");
+            return new HashMap<>();
+        }
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection =
             createTopConnection(
