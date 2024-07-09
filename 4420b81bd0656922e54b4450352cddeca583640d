@@ -33,6 +33,24 @@
       "message": "otherwise LGTM. Many thanks !\nunfortunately the CI is still broken + Gilles \u0026 Christophe.",
       "revId": "4420b81bd0656922e54b4450352cddeca583640d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a72cb6_ad1c683c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-09T09:19:54Z",
+      "side": 1,
+      "message": "mvn job passed but tox buildcontroller is failing because yum command is not found to install java 17...\nI guess this is related to CI ubuntu migration.\nI think a rebase on top of https://git.opendaylight.org/gerrit/c/transportpce/+/112222\nshould solve the issue",
+      "parentUuid": "81a590ec_10218997",
+      "revId": "4420b81bd0656922e54b4450352cddeca583640d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
