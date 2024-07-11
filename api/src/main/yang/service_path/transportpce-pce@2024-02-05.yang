@@ -188,6 +188,13 @@ module transportpce-pce {
            e.g., CLFI, CLCI, etc. This is reported against the service, but
            may not get reflected in the service in the network.";
       }
+      leaf common-id {
+            type string;
+            mandatory true;
+            description
+              "Service identifier. Unique within the context of a network.
+               Same as leafref value in model, if applicable.";
+      }
       leaf customer-name {
         type string;
         description
@@ -208,6 +215,7 @@ module transportpce-pce {
       uses transportpce-common-service-path-types:service-handler-header;
       container service-a-end {
         uses transportpce-common-service-path-types:service-endpoint-sp;
+
       }
       container service-z-end {
         uses transportpce-common-service-path-types:service-endpoint-sp;
