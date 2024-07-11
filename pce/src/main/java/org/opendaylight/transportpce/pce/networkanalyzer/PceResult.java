@@ -10,12 +10,17 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.external._interface.characteristics.SupportedOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.external._interface.characteristics.SupportedOperationalModesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirectionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +38,7 @@ public class PceResult {
     // for now it is constant returned as received from A-end
     private long rate = -1;
     private  ServiceFormat serviceFormat = ServiceFormat.OC;
+    private Map<SupportedOperationalModesKey, SupportedOperationalModes> supportedOperationalModes;
 
     public enum LocalCause {
         NONE, TOO_HIGH_LATENCY, OUT_OF_SPEC_OSNR, NO_PATH_EXISTS, INT_PROBLEM, HD_NODE_INCLUDE;
@@ -175,6 +181,32 @@ public class PceResult {
      */
     public void setMaxFreq(BigDecimal maxFreq) {
         this.maxFreq = maxFreq;
+    }
+
+    /**
+     * Set operational mode given the PCE.
+     * @param supportedOperationalModes Operational mode ID given the PCE.
+     */
+    public void setSupportedOperationalModes(Map<SupportedOperationalModesKey, SupportedOperationalModes>
+                                                     supportedOperationalModes) {
+        this.supportedOperationalModes = supportedOperationalModes;
+    }
+
+    public Map<SupportedOperationalModesKey, SupportedOperationalModes> getSupportedOperationalModes() {
+        return supportedOperationalModes;
+    }
+
+    public AToZDirection setAtoZOpticalOperationalMode(AToZDirection atozDirection, String opticalOperationalMode) {
+        LOG.info("This is oom in pceresult {}", opticalOperationalMode);
+        AToZDirectionBuilder atozDirectionBuilder = new AToZDirectionBuilder(atozDirection)
+                .setOpticalOperationalMode(opticalOperationalMode);
+        return atozDirectionBuilder.build();
+    }
+
+    public ZToADirection setZtoAOpticalOperationalMode(ZToADirection ztoaDirection, String opticalOperationalMode) {
+        ZToADirectionBuilder ztoaDirectionBuilder = new ZToADirectionBuilder(ztoaDirection)
+                .setOpticalOperationalMode(opticalOperationalMode);
+        return ztoaDirectionBuilder.build();
     }
 
 }

@@ -184,6 +184,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                     RpcStatusEx.Pending,
                     "Service compliant, submitting pathComputation Request ...",
                     null);
+                LOG.info("This is the input of the PathComputationRequestInput {}", input.getServiceAEnd());
+                // TODO: serviceAEnd and serviceZEnd contain operational-mode-id
                 PceSendingPceRPCs sendingPCE =
                     new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping);
                 sendingPCE.pathComputation();

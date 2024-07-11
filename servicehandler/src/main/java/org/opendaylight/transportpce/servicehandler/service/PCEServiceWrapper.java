@@ -51,6 +51,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev22
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.create.input.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.create.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParameters;
@@ -203,6 +205,44 @@ public class PCEServiceWrapper {
                 .build();
     }
 
+    private PathComputationRequestOutput performPCE(HardConstraints hardConstraints, SoftConstraints softConstraints,
+                                                    String commonId, SdncRequestHeader sdncRequestHeader,
+                                                    ServiceAEnd serviceAEnd, ServiceZEnd serviceZEnd,
+                                                    ServiceNotificationTypes notifType, boolean reserveResource,
+                                                    String customerName) {
+
+        LOG.info("Calling path computation for temp service.");
+        notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setCommonId(commonId)
+                .setStatus(RpcStatusEx.Pending)
+                .setStatusMessage("Service compliant, submitting PathComputation Request ...").build();
+        try {
+            notificationPublishService.putNotification(notification);
+        } catch (InterruptedException e) {
+            LOG.info(NOTIFICATION_OFFER_REJECTED_MSG, e);
+        }
+        FutureCallback<PathComputationRequestOutput> pceCallback =
+                new PathComputationRequestOutputCallback(notifType, commonId);
+
+        PathComputationRequestInput pathComputationRequestInput = createPceRequestInput(commonId, sdncRequestHeader,
+                hardConstraints, softConstraints, reserveResource, serviceAEnd, serviceZEnd, customerName);
+
+        ListenableFuture<PathComputationRequestOutput> pce = this.pathComputationService
+                .pathComputationRequest(pathComputationRequestInput);
+        Futures.addCallback(pce, pceCallback, executor);
+
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setRequestId(sdncRequestHeader.getRequestId())
+                .setResponseCode(ResponseCodes.RESPONSE_OK)
+                .setResponseMessage("PCE calculation in progress")
+                .build();
+        ResponseParameters reponseParameters = new ResponseParametersBuilder().build();
+        return new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon)
+                .setResponseParameters(reponseParameters)
+                .build();
+    }
+
     public PathComputationRerouteRequestOutput performPCEReroute(HardConstraints hardConstraints,
            SoftConstraints softConstraints, SdncRequestHeader serviceHandler, ServiceEndpoint serviceAEnd,
            ServiceEndpoint serviceZEnd,
@@ -257,6 +297,29 @@ public class PCEServiceWrapper {
             .setServiceAEnd(ModelMappingUtils.createServiceAEnd(serviceAEnd, spectrumAEndAllocation))
             .setServiceZEnd(ModelMappingUtils.createServiceZEnd(serviceZEnd, spectrumZEndAllocation))
             .build();
+    }
+
+    private PathComputationRequestInput createPceRequestInput(String commonId,
+            SdncRequestHeader serviceHandler, HardConstraints hardConstraints,
+            SoftConstraints softConstraints, Boolean reserveResource, ServiceAEnd serviceAEnd,
+            ServiceZEnd serviceZEnd, String customerName) {
+        LOG.info("Mapping TempServiceCreateInput to PCE requests");
+        ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
+        if (serviceHandler != null) {
+            serviceHandlerHeader.setRequestId(serviceHandler.getRequestId());
+        }
+        return new PathComputationRequestInputBuilder()
+                .setServiceName(commonId)
+                // TODO: Need to add commonId attribute here
+                .setResourceReserve(reserveResource)
+                .setServiceHandlerHeader(serviceHandlerHeader.build())
+                .setHardConstraints(hardConstraints)
+                .setSoftConstraints(softConstraints)
+                .setPceRoutingMetric(PceMetric.TEMetric)
+                .setCustomerName(customerName)
+                .setServiceAEnd(ModelMappingUtils.createServiceAEnd(serviceAEnd))
+                .setServiceZEnd(ModelMappingUtils.createServiceZEnd(serviceZEnd))
+                .build();
     }
 
     private PathComputationRerouteRequestInput createPceRerouteRequestInput(HardConstraints hardConstraints,

@@ -161,6 +161,9 @@ public class PcePathDescription {
         ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder().setRate(Uint32.valueOf(rc.getRate()))
                 .setModulationFormat(modulationFormat.getName())
                 .setZToA(ztoaMap);
+                // PCEResults (rc) should only contain one element in the list, which is provided by the
+                // TPCE (after GNPy)
+                //.setOpticalOperationalMode(rc.getSupportedOperationalModes().toArray()[0].toString());
         switch (rc.getServiceType()) {
             case StringConstants.SERVICE_TYPE_400GE:
             case StringConstants.SERVICE_TYPE_OTUC2:

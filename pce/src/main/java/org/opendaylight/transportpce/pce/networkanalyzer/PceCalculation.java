@@ -170,6 +170,10 @@ public class PceCalculation {
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
         returnStructure.setServiceFormat(input.getServiceAEnd().getServiceFormat());
+        // TODO: This should be changed to list and OSNR calculation should be run for every mode in this list
+        // Assumption: A and Z have the same structure of operational models
+        returnStructure.setSupportedOperationalModes(input.getServiceAEnd().nonnullRequestingInterfaceProperties()
+                .getSupportedOperationalModes());
         return true;
     }
 

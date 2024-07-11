@@ -93,6 +93,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.services.SupportingServiceHierarchy;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.services.SupportingServiceHierarchyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.services.SupportingServiceHierarchyKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RequestingInterfaceProperties;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RequestingInterfacePropertiesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirection;
@@ -303,6 +305,19 @@ public final class ModelMappingUtils {
         return serviceAEndBuilder.build();
     }
 
+    public static ServiceAEnd createServiceAEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+             .temp.service.create.input.ServiceAEnd serviceAEnd) {
+        return new ServiceAEndBuilder()
+            .setClli(serviceAEnd.getClli())
+            .setNodeId(serviceAEnd.getNodeId().getValue())
+            .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
+            .setServiceFormat(serviceAEnd.getServiceFormat())
+            .setServiceRate(serviceAEnd.getServiceRate())
+            .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
+            .setRequestingInterfaceProperties(createARip(serviceAEnd.getRequestingInterfaceProperties()))
+            .build();
+    }
+
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
             .path.computation.reroute.request.input.ServiceAEnd createServiceAEndReroute(ServiceEndpoint serviceAEnd) {
         return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
@@ -348,6 +363,19 @@ public final class ModelMappingUtils {
         return serviceZEndBuilder.build();
     }
 
+    public static ServiceZEnd createServiceZEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+             .temp.service.create.input.ServiceZEnd serviceZEnd) {
+        return new ServiceZEndBuilder()
+            .setClli(serviceZEnd.getClli())
+            .setNodeId(serviceZEnd.getNodeId().getValue())
+            .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
+            .setServiceFormat(serviceZEnd.getServiceFormat())
+            .setServiceRate(serviceZEnd.getServiceRate())
+            .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
+            .setRequestingInterfaceProperties(createZRip(serviceZEnd.getRequestingInterfaceProperties()))
+            .build();
+    }
+
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
             .path.computation.reroute.request.input.ServiceZEnd createServiceZEndReroute(ServiceEndpoint serviceZEnd) {
         return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
@@ -373,6 +401,28 @@ public final class ModelMappingUtils {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
                 .service.endpoint.TxDirection txDirection) {
         return new TxDirectionBuilder().setPort(txDirection.getPort()).build();
+    }
+
+    public static RequestingInterfaceProperties createARip(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.create
+                    .input.service.a.end.RequestingInterfaceProperties requestingInterfaceProperties) {
+        return new RequestingInterfacePropertiesBuilder()
+                .setMinFrequency(requestingInterfaceProperties.getMinFrequency())
+                .setMaxFrequency(requestingInterfaceProperties.getMaxFrequency())
+                .setMinGranularity(requestingInterfaceProperties.getMinGranularity())
+                .setSupportedOperationalModes(requestingInterfaceProperties.nonnullSupportedOperationalModes())
+                .build();
+    }
+
+    public static RequestingInterfaceProperties createZRip(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.create
+                    .input.service.z.end.RequestingInterfaceProperties requestingInterfaceProperties) {
+        return new RequestingInterfacePropertiesBuilder()
+                .setMinFrequency(requestingInterfaceProperties.getMinFrequency())
+                .setMaxFrequency(requestingInterfaceProperties.getMaxFrequency())
+                .setMinGranularity(requestingInterfaceProperties.getMinGranularity())
+                .setSupportedOperationalModes(requestingInterfaceProperties.nonnullSupportedOperationalModes())
+                .build();
     }
 
     public static ListenableFuture<RpcResult<ServiceDeleteOutput>> createDeleteServiceReply(

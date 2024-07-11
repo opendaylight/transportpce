@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.pce;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -33,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.external._interface.characteristics.SupportedOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
@@ -119,7 +122,6 @@ public class PceSendingPceRPCs {
 
     private void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints,
             PceConstraintMode mode) {
-
         PceCalculation nwAnalizer = new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc,
                 portMapping, endpoints);
         nwAnalizer.retrievePceNetwork();
@@ -189,34 +191,93 @@ public class PceSendingPceRPCs {
         PceConstraintsCalc constraints = new PceConstraintsCalc(input, networkTransaction);
         pceHardConstraints = constraints.getPceHardConstraints();
         pceSoftConstraints = constraints.getPceSoftConstraints();
+        // This computes the path based on the logical topology (not the fiber characteristics), this is
+        // independent of optical-operational-mode
         pathComputationWithConstraints(pceHardConstraints, pceSoftConstraints, PceConstraintMode.Loose);
         this.success = rc.getStatus();
         this.message = rc.getMessage();
         this.responseCode = rc.getResponseCode();
-
         AToZDirection atoz = null;
         ZToADirection ztoa = null;
+
         if (rc.getStatus()) {
             atoz = rc.getAtoZDirection();
             ztoa = rc.getZtoADirection();
         }
 
-        //Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
+        // Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
+        if (rc.getSupportedOperationalModes() == null) {
+            // Basically in the service-create, we do not have operational modes
+            // TODO: service-create can use the operational-mode-id notification from notification to provision that
+            //  mode
+            runGnpy(atoz, ztoa);
+        } else {
+            // Here is to run the for loop with each loop, sorted based on the preference for the operational mode
+            for (SupportedOperationalModes sop : rc.getSupportedOperationalModes().values().stream()
+                    .sorted(Comparator.comparing(somk -> Integer.valueOf(somk.getPreference())))
+                    .collect(Collectors.toList())) {
+                runGnpyForOperationalModes(atoz, ztoa, sop);
+                break; // TODO: here there should be a boolean and if that is true than break
+            }
+        }
+    }
+
+    public void runGnpyForOperationalModes(AToZDirection atoz, ZToADirection ztoa, SupportedOperationalModes sop) {
+        try {
+            if (gnpyConsumer.isAvailable()) {
+                // TODO: GNPY needs to read the modes and build the Utilities
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
+                        gnpyConsumer);
+                // Here we reset the atoz
+                atoz = rc.setAtoZOpticalOperationalMode(atoz, sop.getOperationalModeId());
+                // Here we reset the ztoa
+                ztoa = rc.setZtoAOpticalOperationalMode(ztoa, sop.getOperationalModeId());
+                if (rc.getStatus() && gnpyToCheckFeasiblity(atoz, ztoa, gnpy)) {
+                    setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+                    return;
+                }
+                // TODO: GNPy should not loop all the modes if one is satisfied (implementation is left in GNPY)
+                callGnpyToComputeNewPath(gnpy);
+                // Operational-modes get reassigned to rc (PCE result) based on the GNPy computation
+            } else {
+                // If GnPY is not available, we just read the first available mode and assign it
+                // Here we set the atoz
+                atoz = rc.setAtoZOpticalOperationalMode(atoz, sop.getOperationalModeId());
+                // Here we set the ztoa
+                ztoa = rc.setZtoAOpticalOperationalMode(ztoa, sop.getOperationalModeId());
+                setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+
+            }
+        } catch (GnpyException e) {
+            LOG.error("Exception raised by GNPy {}", e.getMessage());
+            // If GnPY has error, we just read the first available mode and assign it
+            // Here we set the atoz
+            atoz = rc.setAtoZOpticalOperationalMode(atoz, sop.getOperationalModeId());
+            // Here we set the ztoa
+            ztoa = rc.setZtoAOpticalOperationalMode(ztoa, sop.getOperationalModeId());
+            setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+        }
+    }
+
+
+    public void runGnpy(AToZDirection atoz, ZToADirection ztoa) {
         try {
             if (gnpyConsumer.isAvailable()) {
                 GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
                         gnpyConsumer);
-                if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
+                if (rc.getStatus() && gnpyToCheckFeasiblity(atoz, ztoa, gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;
                 }
                 callGnpyToComputeNewPath(gnpy);
+                // Operational-modes get reassigned to rc (PCE result) based on the GNPy computation
             } else {
+                // If GnPY is not available, we just read the first available mode and assign it
                 setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+
             }
-        }
-        catch (GnpyException e) {
-            LOG.error("Exception raised by GNPy {}",e.getMessage());
+        } catch (GnpyException e) {
+            LOG.error("Exception raised by GNPy {}", e.getMessage());
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
         }
     }

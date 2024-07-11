@@ -219,7 +219,6 @@ public class RendererNotificationHandler implements RendererListener {
                             .build())
                     .setOperationalState(State.InService)
                     .build());
-                LOG.debug("For the Temp service, sending notification on service-result-rpc");
                 return;
             }
         } else {
@@ -300,9 +299,10 @@ public class RendererNotificationHandler implements RendererListener {
                                             .setWidth(notification
                                                             .getAToZDirection()
                                                             .getWidth())
-                                            // TODO: here the optical operational mode should be set
-                                            // A default value is set here
-                                            .setOpticalOperationalMode("OR-W-400G-oFEC-63.1Gbd")
+                                            // Optical operational mode is provided by the TPCE
+                                            .setOpticalOperationalMode(notification
+                                                                        .getAToZDirection()
+                                                                        .getOpticalOperationalMode())
                                             // TODO: also set the GNSR, OSNR, power values
                                             .build())
                             .setZToA(new ZToABuilder()
@@ -312,14 +312,16 @@ public class RendererNotificationHandler implements RendererListener {
                                             .setWidth(notification
                                                             .getZToADirection()
                                                             .getWidth())
-                                            // TODO: here the optical operational mode should be set
-                                            // A default value is set here
-                                            .setOpticalOperationalMode("OR-W-400G-oFEC-63.1Gbd")
+                                            // Optical operational mode provided by the TPCE
+                                            .setOpticalOperationalMode(notification
+                                                                        .getZToADirection()
+                                                                        .getOpticalOperationalMode())
                                             // TODO: also set the GNSR, OSNR, power values
                                             .build())
                             .build())
                     .build();
-            LOG.info("Sending the notification for service-rpc-result {}", serviceRpcResult);
+            LOG.info("Sending the notification for service-rpc-result RendererNotificationHandler {}",
+                    serviceRpcResult);
             notificationPublishService.putNotification(serviceRpcResult);
             return serviceRpcResult;
         } catch (InterruptedException e) {
