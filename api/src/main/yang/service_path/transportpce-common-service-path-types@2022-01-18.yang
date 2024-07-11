@@ -233,6 +233,9 @@ module transportpce-common-service-path-types {
       //     uses service-lgx;
       //     uses service-tail;
     }
+    container requesting-interface-properties {
+      uses org-openroadm-common-service-types:external-interface-characteristics;
+    }
   }
 
   grouping service-handler-header {
