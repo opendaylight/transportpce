@@ -16,6 +16,23 @@
       "message": "it seems there are some infra issues in the CI now.\ntox job passed locally\n\n__ summary ___\nbuildcontroller: commands succeeded\ntestsPCE: commands succeeded\nsims121: commands succeeded\nbuild_karaf_tests121: commands succeeded\ntests121: commands succeeded\nsims221: commands succeeded\nbuild_karaf_tests221: commands succeeded\ntests_tapi: commands succeeded\nsims71: commands succeeded\nbuild_karaf_tests71: commands succeeded\ntests71: commands succeeded\ntests221: commands succeeded\nbuild_karaf_tests_hybrid: commands succeeded\ntests_hybrid: commands succeeded\nbuildlighty: commands succeeded\ndocs: commands succeeded\ndocs-linkcheck: commands succeeded\ncheckbashisms: commands succeeded\npre-commit: commands succeeded\npylint: commands succeeded\n\n\nand mvn clean w/ Junit passed too",
       "revId": "d0e0650369551c5991d6ef3ce99532cc6234c314",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e944e26_cc95d4cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-12T08:36:47Z",
+      "side": 1,
+      "message": "+ Olivier now back from vacation",
+      "revId": "d0e0650369551c5991d6ef3ce99532cc6234c314",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
