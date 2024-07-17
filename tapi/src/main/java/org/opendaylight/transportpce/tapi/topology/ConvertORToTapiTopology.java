@@ -484,6 +484,23 @@ public class ConvertORToTapiTopology {
         return aps.stream().distinct().toList();
     }
 
+    public List<AvailablePayloadStructure> createAvailablePayloadStructureForCommonNeps(
+            Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
+        List<AvailablePayloadStructure> aps = new ArrayList<>();
+        aps.add(new AvailablePayloadStructureBuilder()
+            .setMultiplexingSequence(lpnList)
+            .setNumberOfCepInstances(Uint64.valueOf(nberOfInstances))
+            .setCapacity(
+                new CapacityBuilder()
+                    .setUnit(CAPACITYUNITGBPS.VALUE)
+                    .setValue(Decimal64.valueOf((rate * (isProvisioned ? 0 : 1)), RoundingMode.DOWN))
+                    .build())
+            .build());
+
+        return aps;
+    }
+
+
     public List<SupportedPayloadStructure> createSupportedPayloadStructureForPhtncMedia(
             Collection<SupportedInterfaceCapability> sicList, List<OperationalModeKey> supportedOpModes) {
         if (supportedOpModes == null || supportedOpModes.isEmpty()) {
@@ -544,6 +561,24 @@ public class ConvertORToTapiTopology {
         }
         return sps.stream().distinct().toList();
     }
+
+
+    public List<SupportedPayloadStructure> createSupportedPayloadStructureForCommonNeps(
+            Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
+        List<SupportedPayloadStructure> sps = new ArrayList<>();
+        sps.add(new SupportedPayloadStructureBuilder()
+            .setMultiplexingSequence(lpnList)
+            .setNumberOfCepInstances(Uint64.valueOf(nberOfInstances))
+            .setCapacity(
+                new CapacityBuilder()
+                    .setUnit(CAPACITYUNITGBPS.VALUE)
+                    .setValue(Decimal64.valueOf(rate, RoundingMode.DOWN))
+                    .build())
+            .build());
+
+        return sps.stream().distinct().toList();
+    }
+
 
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec) {
