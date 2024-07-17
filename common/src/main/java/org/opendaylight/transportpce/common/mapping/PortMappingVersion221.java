@@ -398,6 +398,8 @@ public class PortMappingVersion221 {
                     .build();
                 nbMap.put(nonBlockingList.key(), nonBlockingList);
             }
+            LOG.debug("PortMappingVersion221Line401, creating switching pool number {}, type {} from Device {} ",
+                odp.getSwitchingPoolNumber(), odp.getSwitchingPoolType(), nodeId);
             switchingPoolList.add(
                 new SwitchingPoolLcpBuilder()
                     .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())

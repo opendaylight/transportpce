@@ -288,7 +288,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_14_check_sip_details(self):
         response = test_utils.transportpce_api_rpc_request(
             'tapi-common', 'get-service-interface-point-list', None)
-        self.assertEqual(len(response['output']['sip']), 72, 'There should be 72 service interface point')
+        self.assertEqual(len(response['output']['sip']), 84, 'There should be 84 service interface point')
 
 # test create connectivity service from spdrA to spdrC for Photonic_media
     def test_15_create_connectivity_service_PhotonicMedia(self):
