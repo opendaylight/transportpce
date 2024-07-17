@@ -76,6 +76,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODUCN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.OTUTYPEOTU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.OTUTYPEOTUCN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
@@ -150,7 +151,7 @@ public class ConvertORToTapiTopology {
     private static final Logger LOG = LoggerFactory.getLogger(ConvertORToTapiTopology.class);
     private static final TreeMap<Integer, String> OPMODE_LOOPRATE_MAP;
     private static final int OPMODE_LOOPRATE_MAX;
-    private static final Map<String, Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>>> LPN_MAP;
+    static final Map<String, Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>>> LPN_MAP;
     private String ietfNodeId;
     private OpenroadmNodeType ietfNodeType;
     private AdminStates ietfNodeAdminState;
@@ -181,7 +182,8 @@ public class ConvertORToTapiTopology {
                 "If100GEODU4", Map.of(
                     ODUTYPEODU4.VALUE, Uint64.valueOf(0), DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(0)),
                 "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(0)),
-                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)))),
+                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)))),
+                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0)))),
             "ODU", new HashMap<>(Map.of(
                 "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.valueOf(0)),
                 "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.valueOf(0)),
@@ -189,24 +191,32 @@ public class ConvertORToTapiTopology {
                 "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)))),
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
-                    Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1),
+                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
                 "IfOCH",
-                    Map.of(ODUTYPEODUCN.VALUE, Uint64.valueOf(1), OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1),
+                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
-                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1))))));
-        LPN_MAP.get("ETH").put("IfOCHOTU4ODU4", LPN_MAP.get("ETH").get("IfOCH"));
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
+                "IfOCHOTU4ODU4",
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0))))));
+        //LPN_MAP.get("ETH").put("IfOCHOTU4ODU4", LPN_MAP.get("ETH").get("IfOCH"));
         LPN_MAP.put("DSR", LPN_MAP.get("ETH"));
         LPN_MAP.get("ODU").put("If10GE", LPN_MAP.get("ODU").get("If10GEODU2"));
         LPN_MAP.get("ODU").put("If100GE", LPN_MAP.get("ODU").get("If100GEODU4"));
-        LPN_MAP.get("ODU").put("IfOCHOTU4ODU4", LPN_MAP.get("ODU").get("If100GEODU4"));
-        LPN_MAP.get("ODU").put("IfOCH", LPN_MAP.get("ODU").get("If100GEODU4"));
+        //LPN_MAP.get("ODU").put("IfOCHOTU4ODU4", LPN_MAP.get("ODU").get("If100GEODU4"));
+        LPN_MAP.get("ODU").put("IfOCHOTU4ODU4", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
+        //LPN_MAP.get("ODU").put("IfOCH", LPN_MAP.get("ODU").get("If100GEODU4"));
+        LPN_MAP.get("ODU").put("IfOCH", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
         LPN_MAP.get("PHOTONIC_MEDIA").put("IfOtsiOtucnOducn", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTUCnODUCn"));
         LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTUCnODUCnRegen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTUCnODUCn"));
         LPN_MAP
             .get("PHOTONIC_MEDIA").put("IfOCHOTUCnODUCnUniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTUCnODUCn"));
-        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
-        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Regen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
-        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Uniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
+        //LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
+        //LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Regen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
+        //LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Uniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCH"));
+        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Regen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
+        LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Uniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
     }
 
 
@@ -423,27 +433,29 @@ public class ConvertORToTapiTopology {
     }
 
     public List<AvailablePayloadStructure> createAvailablePayloadStructureForPhtncMedia(
-            Boolean otsiProvisioned,
+            String rate, Boolean otsiProvisioned,
             Collection<SupportedInterfaceCapability> sicList,
             List<OperationalModeKey> supportedOpModes) {
-        if (supportedOpModes == null || supportedOpModes.isEmpty()) {
-            return null;
-        }
+
         Integer nepRate = 0;
         Integer loopRate = 0;
-        for (OperationalModeKey operationalMode : supportedOpModes) {
-            for (Map.Entry<Integer, String> entry: OPMODE_LOOPRATE_MAP.entrySet()) {
-                if (operationalMode.toString().contains(entry.getValue())) {
-                    loopRate = entry.getKey();
-                    break;
+        if (supportedOpModes != null && !supportedOpModes.isEmpty()) {
+            for (OperationalModeKey operationalMode : supportedOpModes) {
+                for (Map.Entry<Integer, String> entry: OPMODE_LOOPRATE_MAP.entrySet()) {
+                    if (operationalMode.toString().contains(entry.getValue())) {
+                        loopRate = entry.getKey();
+                        break;
+                    }
+                }
+                if (loopRate > nepRate) {
+                    nepRate = loopRate;
+                    if (nepRate >= OPMODE_LOOPRATE_MAX) {
+                        break;
+                    }
                 }
             }
-            if (loopRate > nepRate) {
-                nepRate = loopRate;
-                if (nepRate >= OPMODE_LOOPRATE_MAX) {
-                    break;
-                }
-            }
+        } else {
+            nepRate = rate == null ? 0 : Integer.parseInt(rate) / 100;
         }
         List<AvailablePayloadStructure> aps = new ArrayList<>();
         Integer cepInstanceNber = otsiProvisioned ? 0 : 1;
@@ -453,7 +465,8 @@ public class ConvertORToTapiTopology {
                 case "IfOCHOTU4ODU4Regen":
                 case "IfOCHOTU4ODU4Uniregen":
                     aps.add(new AvailablePayloadStructureBuilder()
-                        .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, ODUTYPEODU4.VALUE))
+                        .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, OTUTYPEOTU4.VALUE,
+                            ODUTYPEODU4.VALUE))
                         .setNumberOfCepInstances(Uint64.valueOf(cepInstanceNber))
                         .setCapacity(
                             new CapacityBuilder()
@@ -484,27 +497,46 @@ public class ConvertORToTapiTopology {
         return aps.stream().distinct().toList();
     }
 
-    public List<SupportedPayloadStructure> createSupportedPayloadStructureForPhtncMedia(
+    public List<AvailablePayloadStructure> createAvailablePayloadStructureForCommonNeps(
+            Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
+        List<AvailablePayloadStructure> aps = new ArrayList<>();
+        aps.add(new AvailablePayloadStructureBuilder()
+            .setMultiplexingSequence(lpnList)
+            .setNumberOfCepInstances(Uint64.valueOf(nberOfInstances))
+            .setCapacity(
+                new CapacityBuilder()
+                    .setUnit(CAPACITYUNITGBPS.VALUE)
+                    .setValue(Decimal64.valueOf((rate * (isProvisioned ? 0 : 1)), RoundingMode.DOWN))
+                    .build())
+            .build());
+
+        return aps;
+    }
+
+
+    public List<SupportedPayloadStructure> createSupportedPayloadStructureForPhtncMedia(String rate,
             Collection<SupportedInterfaceCapability> sicList, List<OperationalModeKey> supportedOpModes) {
-        if (supportedOpModes == null || supportedOpModes.isEmpty()) {
-            return null;
-        }
         Integer nepRate = 0;
         Integer loopRate = 0;
-        for (OperationalModeKey operationalMode : supportedOpModes) {
-            for (Map.Entry<Integer, String> entry: OPMODE_LOOPRATE_MAP.entrySet()) {
-                if (operationalMode.toString().contains(entry.getValue())) {
-                    loopRate = entry.getKey();
-                    break;
+        if (supportedOpModes != null && !supportedOpModes.isEmpty()) {
+            for (OperationalModeKey operationalMode : supportedOpModes) {
+                for (Map.Entry<Integer, String> entry: OPMODE_LOOPRATE_MAP.entrySet()) {
+                    if (operationalMode.toString().contains(entry.getValue())) {
+                        loopRate = entry.getKey();
+                        break;
+                    }
+                }
+                if (loopRate > nepRate) {
+                    nepRate = loopRate;
+                    if (nepRate >= OPMODE_LOOPRATE_MAX) {
+                        break;
+                    }
                 }
             }
-            if (loopRate > nepRate) {
-                nepRate = loopRate;
-                if (nepRate >= OPMODE_LOOPRATE_MAX) {
-                    break;
-                }
-            }
+        } else {
+            nepRate = rate == null ? 0 : Integer.parseInt(rate) / 100;
         }
+
         List<SupportedPayloadStructure> sps = new ArrayList<>();
         for (SupportedInterfaceCapability sic : sicList) {
             String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
@@ -544,6 +576,24 @@ public class ConvertORToTapiTopology {
         }
         return sps.stream().distinct().toList();
     }
+
+
+    public List<SupportedPayloadStructure> createSupportedPayloadStructureForCommonNeps(
+            Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
+        List<SupportedPayloadStructure> sps = new ArrayList<>();
+        sps.add(new SupportedPayloadStructureBuilder()
+            .setMultiplexingSequence(lpnList)
+            .setNumberOfCepInstances(Uint64.valueOf(nberOfInstances))
+            .setCapacity(
+                new CapacityBuilder()
+                    .setUnit(CAPACITYUNITGBPS.VALUE)
+                    .setValue(Decimal64.valueOf(rate, RoundingMode.DOWN))
+                    .build())
+            .build());
+
+        return sps.stream().distinct().toList();
+    }
+
 
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec) {
@@ -898,7 +948,7 @@ public class ConvertORToTapiTopology {
         return freqMap;
     }
 
-    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId,
+    public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId, String rate,
             Map<Double, Double> freqMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
         if (!String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
@@ -912,7 +962,7 @@ public class ConvertORToTapiTopology {
         lowSupFreq += naz;
         // Creating OTS & OTSI_MC NEP specific attributes
         onepBldr.setSupportedPayloadStructure(
-            createSupportedPayloadStructureForPhtncMedia(sicColl,operModeList));
+            createSupportedPayloadStructureForPhtncMedia(rate, sicColl,operModeList));
         SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
         OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
         if (freqMap == null || freqMap.isEmpty()) {
@@ -921,7 +971,7 @@ public class ConvertORToTapiTopology {
 //                    .setUpperFrequency(Uint64.valueOf(0))
 //                    .setLowerFrequency(Uint64.valueOf(0));
             onepBldr.setAvailablePayloadStructure(
-                createAvailablePayloadStructureForPhtncMedia(false, sicColl,operModeList));
+                createAvailablePayloadStructureForPhtncMedia(rate, false, sicColl,operModeList));
             AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
                 .setLowerFrequency(Uint64.valueOf(Math.round(lowSupFreq)))
                 .setUpperFrequency(Uint64.valueOf(Math.round(upSupFreq)))
@@ -932,7 +982,7 @@ public class ConvertORToTapiTopology {
         } else {
             LOG.debug("Entering LOOP Step2");
             onepBldr.setAvailablePayloadStructure(
-                createAvailablePayloadStructureForPhtncMedia(true, sicColl,operModeList));
+                createAvailablePayloadStructureForPhtncMedia(rate, true, sicColl,operModeList));
             for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
                 ospecBd
                     .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E12)))
@@ -1322,15 +1372,60 @@ public class ConvertORToTapiTopology {
             LOG.warn("Tp supported interface doesnt exist on TP {}", oorTpIdValue);
             return null;
         }
+        Collection<SupportedInterfaceCapability> sicColl =
+            tp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values();
         TerminationPoint1 oorTpAug = oorTp.augmentation(TerminationPoint1.class);
+        String rate = "100";
+        List<OperationalModeKey> opModeList = new ArrayList<>();
+        if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
+            var tp11 = oorTp.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
+            if (tp11 == null || tp11.getXpdrNetworkAttributes() == null) {
+                for (SupportedInterfaceCapability sic : sicColl) {
+                    String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
+                    switch (ifCapType) {
+                        case "IfOCHOTUCnODUCn":
+                        case "IfOCHOTUCnODUCnUniregen":
+                        case "IfOCHOTUCnODUCnRegen":
+                            opModeList.add(new OperationalModeKey("400G"));
+                            LOG.warn(TopologyUtils.NOOPMODEDECLARED + " Assumes that by default, OTUCN is 400G capable",
+                                oorTpId);
+                            rate = "400";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                opModeList.add(new OperationalModeKey("100G"));
+                LOG.warn(TopologyUtils.NOOPMODEDECLARED + "Assumes that by default, 100G rate available", oorTpId);
+            } else {
+                opModeList = tp11.getXpdrNetworkAttributes().getSupportedOperationalModes().getOperationalMode()
+                    .keySet().stream().toList();
+                if (tp11.getXpdrNetworkAttributes().getRate() != null) {
+                    String rateIdentity = tp11.getXpdrNetworkAttributes().getRate().toString();
+                    if (rateIdentity.contains("200")) {
+                        rate = "200";
+                    } else if (rateIdentity.contains("300")) {
+                        rate = "300";
+                    } else if (rateIdentity.contains("400")) {
+                        rate = "400";
+                    } else if (rateIdentity.contains("600")) {
+                        rate = "600";
+                    } else if (rateIdentity.contains("800")) {
+                        rate = "800";
+                    } else {
+                        rate = "100";
+                    }
+                }
+            }
+        }
+
         var oorTpAugAdmState = oorTpAug.getAdministrativeState();
         AdministrativeState adminState =
             oorTpAugAdmState == null ? null : transformAsToTapiAdminState(oorTpAugAdmState.getName());
         var oorTpAugOprState = oorTpAug.getOperationalState();
         OperationalState operState =
             oorTpAugOprState == null ? null : transformOsToTapiOperationalState(oorTpAugOprState.getName());
-        Collection<SupportedInterfaceCapability> sicColl =
-            tp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values();
         OwnedNodeEdgePointBuilder onepBldr = new OwnedNodeEdgePointBuilder()
             .setUuid(this.uuidMap.get(String.join("+", keyword, oorTpIdValue)))
             .setLayerProtocolName(nepProtocol)
@@ -1346,35 +1441,53 @@ public class ConvertORToTapiTopology {
             onepBldr.setMappedServiceInterfacePoint(
                 createMSIP(1, nepProtocol, oorTpIdValue, keyword, sicColl, operState, adminState));
         }
-        if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
-            List<OperationalModeKey> opModeList = new ArrayList<>();
-            var tp11 = oorTp.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
-            if (tp11 == null || tp11.getXpdrNetworkAttributes() == null) {
-                for (SupportedInterfaceCapability sic : sicColl) {
-                    String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
-                    switch (ifCapType) {
-                        case "IfOCHOTUCnODUCn":
-                        case "IfOCHOTUCnODUCnUniregen":
-                        case "IfOCHOTUCnODUCnRegen":
-                            opModeList.add(new OperationalModeKey("400G"));
-                            LOG.warn(TopologyUtils.NOOPMODEDECLARED + "400G rate available", oorTpId);
-                            break;
-                        default:
-                            break;
-                    }
+        if (!keyword.contains(TapiStringConstants.OTSI_MC) && !keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+            if (nepProtocol.equals(LayerProtocolName.DSR)) {
+                Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
+                supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ETH").get(
+                    sicColl.stream().filter(lp -> lp.toString().contains("GE")).findFirst().orElseThrow().toString()));
+                onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
+                    false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
+                if (oorTpAug.getOperationalState().getName().equals("inService")) {
+                    onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
+                        true, Double.valueOf(0), Integer.valueOf(0), supInt.keySet()));
+                } else if (oorTpAug.getOperationalState().getName().equals("outOfService")) {
+                    onepBldr.setAvailablePayloadStructure(
+                        createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate), Integer.valueOf(1),
+                            supInt.keySet()));
                 }
-                opModeList.add(new OperationalModeKey("100G"));
-                LOG.warn(TopologyUtils.NOOPMODEDECLARED + "100G rate available", oorTpId);
-            } else {
-                opModeList = tp11.getXpdrNetworkAttributes().getSupportedOperationalModes().getOperationalMode()
-                    .keySet().stream().toList();
+            } else if ((nepProtocol.equals(LayerProtocolName.ODU) || nepProtocol.equals(LayerProtocolName.DIGITALOTN))
+                    && oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
+                Integer numberOfInstance = Integer.parseInt(rate) / 100;
+                Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
+                supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ODU").get(sicColl.stream()
+                    .filter(lp -> lp.toString().contains("ODU4")).findFirst().orElseThrow().toString()));
+                onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
+                    false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                if (tp1.getXpdrTpPortConnectionAttributes() == null
+                        || tp1.getXpdrTpPortConnectionAttributes().getTsPool() == null
+                        || tp1.getXpdrTpPortConnectionAttributes().getTsPool().isEmpty()) {
+                    onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
+                        false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                } else {
+                    if (Integer.parseInt(rate) - tp1.getXpdrTpPortConnectionAttributes().getTsPool().size() * 5 < 0) {
+                        numberOfInstance = (int) Math.round(
+                            (tp1.getXpdrTpPortConnectionAttributes().getTsPool().size() * 1.25) / 100);
+                    } else {
+                        numberOfInstance = (tp1.getXpdrTpPortConnectionAttributes().getTsPool().size() * 5) / 100;
+                    }
+                    onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
+                        false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                }
             }
+            return onepBldr.build();
+        }
+        if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
             onepBldr = addPayloadStructureAndPhotSpecToOnep(
-                this.ietfNodeId, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
+                this.ietfNodeId, rate, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
         }
         OwnedNodeEdgePoint onep = onepBldr.build();
-        LOG.debug("ConvertORToTapiTopology 1360, onep = {}", onep);
+        LOG.debug("ConvertORToTapiTopology 1485, onep = {}", onep);
         return onep;
     }
 
