@@ -131,7 +131,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'logical-connection-point': 'XPDR1-NETWORK1',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-NET', 'rate': '0',
+             'supporting-circuit-pack-name': '1/0/1-PLUG-NET', 'rate': '100',
              'port-admin-state': 'InService', 'supporting-port': '1',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT1',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
@@ -144,7 +144,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {'logical-connection-point': 'XPDR1-NETWORK2',
-             'supporting-circuit-pack-name': '1/0/2-PLUG-NET', 'rate': '0',
+             'supporting-circuit-pack-name': '1/0/2-PLUG-NET', 'rate': '100',
              'port-admin-state': 'InService', 'supporting-port': '1',
              'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT2',
              'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
