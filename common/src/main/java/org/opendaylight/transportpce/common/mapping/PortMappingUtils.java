@@ -138,6 +138,8 @@ public final class PortMappingUtils {
         .put("IfOTU2eODU2e", "10")
         .put("IfOTU3ODU3", "40")
         .put("IfOTU4ODU4", "100")
+        //Add default 100G to ifOCH that was created at the beginning of OR when no other line rate was available
+        .put("IfOCH", "100")
         .build();
 
         //new HashMap<>(Map.of(IfOTU4ODU4.VALUE, "1"));
