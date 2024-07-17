@@ -29,8 +29,12 @@ public final class TapiStringConstants {
     public static final String TPDR_100G = "Transponder 100GE";
     public static final String DSR = "DSR";
     public static final String ODU = "ODU";
+    public static final String OTU = "OTU";
     public static final String I_ODU = "iODU";
+    public static final String I_OTU = "iOTU";
     public static final String E_ODU = "eODU";
+    public static final String E_ODUCN = "eODUCN";
+    public static final String E_OTU = "eOTU";
     public static final String OTSI = "OTSi";
     public static final String E_OTSI = "eOTSi";
     public static final String I_OTSI = "iOTSi";

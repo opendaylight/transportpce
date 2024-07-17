@@ -41,7 +41,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            'connection-map-lcp': 'XPDR3-CLIENT1',
                            'supported-operational-mode': [
                                'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
-                            ],
+                           ],
                            'xpdr-type': 'tpdr',
                            'supporting-otucn': 'XPDR3-NETWORK1-OTUC1',
                            'lcp-hash-val': 'FDvaQIf2Z08='}
