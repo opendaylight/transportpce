@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b640b83e_a72eabf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T12:00:29Z",
+      "side": 1,
+      "message": "Thanks Joakim. You are right. Fine for me",
+      "revId": "af4d9731a5e3a18d46db1657885f195b3a996d68",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
