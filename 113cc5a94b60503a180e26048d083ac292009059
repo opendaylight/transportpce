@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f851a8c0_8b937be9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:38:11Z",
+      "side": 1,
+      "message": "Hi Joakim. I am a bit embarassed by this change. I have no doubt that it does things according to best practices and coding principles that I would not be able to apply myself. But at the same time, it brings a lot of abstraction, which will help to perform unitary tests as you mention, but may not simplify on my side further debugging (I still need to do a lot to have something consistent translating OR topology to T-API considering all the modeling for ots and oms that was added in R2.4).\nThe approach you follow is in my view really fixgrid focused. My feeling is that you give a lot of significance to bytes, whereas in Flexgrid approach, bytes, frequencies, and wavelength are not so significant. As any wavelength may carry signals with different width, the only element that has a real significance is the unitary slot of 6.25 GHz which is used (0) or available (1). Thus trying to build specific method that seems strongly linked with the idea of frequency is to me not in the spirit of flexgrid. \nI know that current implementation suffers from bugs (you identified one in next change) , and that it may appear a bit rustic, but it is close to the IETF proposal : the idea is to handle Bitset has Register, just as we would do it in machine-langage. It does not seem that clean, but can be very efficent, especially for path computation where we cross elements and know the occuputation on the whole path through very simple logical operations. The need to know boundaries and associated frequencies only comes at the end to populate some information in the topo and the devices (min/max freq). We don\u0027t really care of each bytes of the whole bitset separately. \nMade a few comments in the code. Please do not hesitate to participate (even punctually) to the regular call we have on Thursday afternoon at 4PM CET, so that we can discuss. Thanks!",
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fa7bf96_fcb9e966",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:38:11Z",
+      "side": 1,
+      "message": "your assumption is based on a fixgrid approach where an byte corresponds to 8 elementary slots of 6.25GHz corresponding to 50GHz. But we are now considering a flexgrid approach where a byte has no relationship with a specific frequency or wavelength, because signal of different width (50, 75, 137,5, 150 Ghz) may be present and mixed on the WDM line",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 70
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b057369_69f10cc2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:38:11Z",
+      "side": 1,
+      "message": "bit \u003c-\u003e frequency-range",
+      "range": {
+        "startLine": 27,
+        "startChar": 66,
+        "endLine": 27,
+        "endChar": 75
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf2548f_5384cef7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:38:11Z",
+      "side": 1,
+      "message": "In fact we use the ietf approach where 0 correspond to an occupied slot, not available for service creation, and 1 an empty slot available for service creation",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acb66469_bd68e0af",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:38:11Z",
+      "side": 1,
+      "message": "the opposite",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 54
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
