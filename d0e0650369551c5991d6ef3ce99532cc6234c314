@@ -33,6 +33,23 @@
       "message": "+ Olivier now back from vacation",
       "revId": "d0e0650369551c5991d6ef3ce99532cc6234c314",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dca2b140_31434f86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-07-19T13:10:44Z",
+      "side": 1,
+      "message": "Thanks Joakim. You will probably note a lot of other bugs and NPE!\nI am currently working on debugging all the process for translating OpenROADM topology to T-API topology. As T-API 2.4 is introducing many features, there is a large quantity of new code associated to those. And as I am not really skilled in Java, just a beginner, I fall into a lot of traps. \nI understand that it would ease life of other contributors if I made smaller contributions on a regular pace... But building the PCE for TAPI, and the need to test it implies to add a lot of functions to the existing classes, and it is very difficult to work through atomic commits. Testing the abstraction classes of TAPI-PCE (which I made one year ago) implies to have a consistent topology file. This last comes from existing class such as ConvertORTopoTo.... which I continue working on to build attributes that dis not exist in previous versions of TAPI. So I have no other choice than considering it as a whole, and debugging it globally switching between pce and tapi module.\nI hope to finish debugging the whole around end of September. The code I pushed recently is just for Backup purpose. And a lot of corrections will come until end of September.\nThanks for your help and comprehension, Appreciate your implication in tpce!",
+      "revId": "d0e0650369551c5991d6ef3ce99532cc6234c314",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
