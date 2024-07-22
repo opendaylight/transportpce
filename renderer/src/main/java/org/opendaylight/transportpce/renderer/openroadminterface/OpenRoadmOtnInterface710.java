@@ -157,7 +157,7 @@ public class OpenRoadmOtnInterface710 {
         oduIfBuilder.addAugmentation(oduIf1Builder.setOdu(oduBuilder.build()).build());
         // Post interface on the device
         this.openRoadmInterfaces.postOTNInterface(nodeId, oduIfBuilder);
-        LOG.info("Returning the ODU4 inteface {}", oduIfBuilder.getName());
+        LOG.info("Returning the ODU4 interface {}", oduIfBuilder.getName());
         return oduIfBuilder.getName();
     }
 
