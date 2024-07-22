@@ -37,9 +37,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev23052
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.SrgAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.SupportedOperationalModesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -233,13 +238,35 @@ public final class OpenRoadmTopology {
             if (!isOtn && m.getConnectionMapLcp() != null) {
                 ocnTp1Bldr.setAssociatedConnectionMapTp(Set.of(new TpId(m.getConnectionMapLcp())));
             }
+
             TerminationPointBuilder ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint())
-                .addAugmentation(
-                    // Add openroadm-network-topology tp augmentations
-                        ocnTp1Bldr.build());
+                // Add openroadm-common tp augmentations
+                .addAugmentation(ocnTp1Bldr.build());
+
+            if (m.getPortQual().equals("xpdr-network") && m.getSupportedOperationalMode() != null
+                    && !m.getSupportedOperationalMode().isEmpty()) {
+
+                Map<OperationalModeKey, OperationalMode> mapSopm = new HashMap<>();
+                for (String opMode : m.getSupportedOperationalMode()) {
+                    mapSopm.put(new OperationalModeKey(opMode), null);
+                }
+                XpdrNetworkAttributes xna = new XpdrNetworkAttributesBuilder()
+                    .setSupportedOperationalModes(
+                        new SupportedOperationalModesBuilder().setOperationalMode(mapSopm).build())
+                    .build();
+                // Add openroadm-network-topology tp augmentations
+                ietfTpBldr.addAugmentation(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                            .TerminationPoint1Builder()
+                        .setXpdrNetworkAttributes(xna)
+                        .build());
+            }
+
             TerminationPoint ietfTp = ietfTpBldr.build();
             tpMap.put(ietfTp.key(),ietfTp);
+
         }
+
         // Create ietf node augmentation to support ietf tp-list
         return ietfNodeBldr.addAugmentation(
             new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder()
