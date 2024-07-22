@@ -26,18 +26,18 @@ import test_utils  # nopep8
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
-    NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR1-NETWORK1",
-                           "supporting-port": "CP1-CFP0-P1",
-                           "supported-interface-capability": [
-                               "org-openroadm-port-types:if-OCH-OTU4-ODU4"
-                           ],
-                           "port-direction": "bidirectional",
-                           "port-qual": "xpdr-network",
-                           "supporting-circuit-pack-name": "CP1-CFP0",
-                           "xpdr-type": "mpdr",
-                           'lcp-hash-val': 'Swfw02qXGyI=',
+    NETWORK1_CHECK_DICT = {'logical-connection-point': 'XPDR1-NETWORK1',
+                           'supporting-circuit-pack-name': 'CP1-CFP0',
+                           'rate': '100',
                            'port-admin-state': 'InService',
-                           'port-oper-state': 'InService'}
+                           'supporting-port': 'CP1-CFP0-P1',
+                           'port-oper-state': 'InService',
+                           'supported-interface-capability': [
+                               'org-openroadm-port-types:if-OCH-OTU4-ODU4'
+                           ],
+                           'port-direction': 'bidirectional',
+                           'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
+                           'lcp-hash-val': 'Swfw02qXGyI='}
     NODE_VERSION = '2.2.1'
 
     @classmethod

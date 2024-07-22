@@ -71,19 +71,20 @@ class TransportPCERendererTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDRA01", None, None)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'OSvMgUyP+mE=', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-NETWORK1',
+             'supporting-circuit-pack-name': '1/0/1-PLUG-NET', 'rate': '0',
+             'port-admin-state': 'InService', 'supporting-port': '1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT1',
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
+             'port-qual': 'xpdr-network', 'lcp-hash-val': 'OSvMgUyP+mE='},
             response['nodes'][0]['mapping'])
         self.assertIn(
-            {'supporting-port': 'C1',
-             'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AO9UFkY/TLYw', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-CLIENT1',
+             'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT', 'rate': '0',
+             'port-admin-state': 'InService', 'supporting-port': 'C1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK1',
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
+             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYw'},
             response['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
