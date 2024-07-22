@@ -1087,6 +1087,10 @@ public class PortMappingVersion710 {
                                     .setMaxTribSlot(minMaxOpucnTribSlots.get(1))
                                     .build());
                 }
+                if (sic.getOpticalOperationalModeProfileName() != null
+                        && !sic.getOpticalOperationalModeProfileName().isEmpty()) {
+                    mpBldr.setSupportedOperationalMode(sic.getOpticalOperationalModeProfileName());
+                }
             }
             mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build())
                     .setSupportedInterfaceCapability(supportedIntf);
