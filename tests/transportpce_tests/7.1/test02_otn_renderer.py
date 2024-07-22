@@ -26,17 +26,21 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     processes = None
     NETWORK2_CHECK_DICT = {"logical-connection-point": "XPDR2-NETWORK1",
-                           "supporting-port": "L1",
-                           "supported-interface-capability": [
-                               "org-openroadm-port-types:if-otsi-otsigroup"
+                           'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
+                           'rate': '200',
+                           'supporting-port': 'L1',
+                           'port-oper-state': 'InService',
+                           'supported-interface-capability': [
+                               'org-openroadm-port-types:if-otsi-otsigroup'
                            ],
-                           "port-direction": "bidirectional",
-                           "port-qual": "switch-network",
-                           "supporting-circuit-pack-name": "1/2/2-PLUG-NET",
-                           "xpdr-type": "mpdr",
-                           'lcp-hash-val': 'LY9PxYJqUbw=',
+                           'port-direction': 'bidirectional',
+                           'port-qual': 'switch-network',
                            'port-admin-state': 'InService',
-                           'port-oper-state': 'InService'}
+                           'supported-operational-mode': [
+                               'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
+                           ],
+                           'xpdr-type': 'mpdr',
+                           'lcp-hash-val': 'LY9PxYJqUbw='}
     NODE_VERSION = '7.1'
 
     @classmethod
