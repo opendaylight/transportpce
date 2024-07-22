@@ -905,10 +905,15 @@ public class PortMappingVersion221 {
             String logicalConnectionPoint, String partnerLcp, XpdrNodeTypes xpdrNodeType) {
         Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability> supportedIntf =
             new HashSet<>();
+        Integer maxrate = 0;
+        Integer rate = 0;
         for (String sup: getSupIfCapList(port)) {
             if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
                 supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
+                rate = Integer.valueOf(PortMappingUtils.INTERFACE_RATE_MAP
+                    .get(MappingUtilsImpl.convertSupIfCapa(sup).implementedInterface().getSimpleName()));
             }
+            maxrate = (rate > maxrate) ? rate : maxrate;
         }
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
@@ -917,7 +922,8 @@ public class PortMappingVersion221 {
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
                 .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
-                .setSupportedInterfaceCapability(supportedIntf);
+                .setSupportedInterfaceCapability(supportedIntf)
+                .setRate(String.valueOf(maxrate));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }
