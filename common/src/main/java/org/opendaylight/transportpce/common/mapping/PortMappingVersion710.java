@@ -1049,16 +1049,30 @@ public class PortMappingVersion710 {
             mpBldr.setPartnerLcp(partnerLcp);
         }
         Collection<SupportedInterfaceCapability> supIntfCapaList = getSupIntfCapaList(port);
+        int maxRate = 0;
+        Integer rate;
+        int maxOpModeRate = 0;
+        int opModeRate;
         if (supIntfCapaList != null) {
             Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability>
                     supportedIntf = new HashSet<>();
             Set<String> regenProfiles = new HashSet<>();
+            rate = 0;
+            LOG.debug("PORTMapping710 line1061, SupportedInterfaceCapa {}", supIntfCapaList);
             for (SupportedInterfaceCapability sic : supIntfCapaList) {
                 // Here it could add null values and cause a null pointer exception
                 // Especially when the MappingUtilsImpl does not contain required supported-if-cap
+                LOG.debug("PORTMapping710 line1065, Scanning SupportedInterfaceCap, Interface {}", sic);
                 if (MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()) != null) {
+                    LOG.debug("PORTMapping710 line1067, Converted IfCapType,  {}",
+                        MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
                     supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString()));
+                    var rateFromMap = PortMappingUtils.INTERFACE_RATE_MAP
+                        .get(MappingUtilsImpl.convertSupIfCapa(sic.getIfCapType().toString())
+                            .implementedInterface().getSimpleName());
+                    rate = rateFromMap == null ? Integer.valueOf(0) : Integer.valueOf(rateFromMap);
                 }
+                maxRate = (rate > maxRate) ? rate : maxRate;
                 LOG.debug("This the xpdr-type {}", xpdrNodeType.getName());
                 // Here we use both types of Regen (bi/uni). Though initial support is only for bi-directional regen
                 if (xpdrNodeType == XpdrNodeTypes.Regen || xpdrNodeType == XpdrNodeTypes.RegenUni) {
@@ -1085,9 +1099,28 @@ public class PortMappingVersion710 {
                                     .setMaxTribSlot(minMaxOpucnTribSlots.get(1))
                                     .build());
                 }
+                opModeRate = 0;
+                Set<String> opModeList = sic.getOpticalOperationalModeProfileName();
+                if (opModeList != null && !opModeList.isEmpty()) {
+                    mpBldr.setSupportedOperationalMode(sic.getOpticalOperationalModeProfileName());
+                    for (String opMode : opModeList) {
+                        //Extracting Max rate (from 100Gps to 1.6 Tbps) from Operational-modes
+                        for (int subRateMultiplier = 1 ; subRateMultiplier < 17; subRateMultiplier++) {
+                            if (opMode.contains(String.valueOf(subRateMultiplier * 100))) {
+                                opModeRate = subRateMultiplier * 100;
+                            }
+                        }
+                        maxOpModeRate = (opModeRate > maxOpModeRate) ? opModeRate : maxOpModeRate;
+                    }
+                }
             }
+            // maxRate is calculated from the type of supported interfaces. However for ODUCN and OTUCN, a default
+            // value of 400G is used. If Supported Operational Mode is populated, the real maximum rate shall be
+            // extrapolated from the operational mode that contains the rate rather than from default value of 400(G)
+            maxRate = (maxOpModeRate > 0) ? maxOpModeRate : maxRate;
             mpBldr.setRegenProfiles(new RegenProfilesBuilder().setRegenProfile(regenProfiles).build())
                     .setSupportedInterfaceCapability(supportedIntf);
+            mpBldr.setRate(String.valueOf(maxRate));
         }
         if (port.getAdministrativeState() != null) {
             mpBldr.setPortAdminState(port.getAdministrativeState().name());
