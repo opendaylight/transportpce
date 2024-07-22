@@ -74,36 +74,38 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability':
-             ['org-openroadm-port-types:if-otsi-otsigroup'],
-             'supporting-port': 'L1',
-             'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-             'logical-connection-point': 'XPDR1-NETWORK1',
-             'port-qual': 'xpdr-network',
-             'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AIGiVAQ4gDil',
-             'port-admin-state': 'InService',
-             'port-oper-state': 'InService',
-             'xpdr-type': 'tpdr'
-             },
+            {
+                'logical-connection-point': 'XPDR1-NETWORK1',
+                'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
+                'rate': '200',
+                'supporting-port': 'L1',
+                'port-oper-state': 'InService',
+                'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
+                'port-direction': 'bidirectional',
+                'port-qual': 'xpdr-network',
+                'port-admin-state': 'InService',
+                'connection-map-lcp': 'XPDR1-CLIENT1',
+                'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
+                'xpdr-type': 'tpdr',
+                'lcp-hash-val': 'AIGiVAQ4gDil'
+            },
             response['mapping'])
 
     def test_05_tpdr_portmapping_CLIENT1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-400GE'],
-             'supporting-port': 'C1',
+            {'logical-connection-point': 'XPDR1-CLIENT1',
              'supporting-circuit-pack-name': '1/1/1-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR1-CLIENT1',
-             'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK1',
-             'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AODABTVSOHH0',
-             'port-admin-state': 'InService',
+             'rate': '400', 'supporting-port': 'C1',
              'port-oper-state': 'InService',
-             'xpdr-type': 'tpdr'
+             'supported-interface-capability': ['org-openroadm-port-types:if-400GE'],
+             'port-direction': 'bidirectional',
+             'port-qual': 'xpdr-client',
+             'port-admin-state': 'InService',
+             'connection-map-lcp': 'XPDR1-NETWORK1',
+             'xpdr-type': 'tpdr',
+             'lcp-hash-val': 'AODABTVSOHH0'
              },
             response['mapping']
         )
@@ -113,17 +115,18 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability':
-             ['org-openroadm-port-types:if-otsi-otsigroup'],
-             'supporting-port': 'L1',
+            {'logical-connection-point': 'XPDR2-NETWORK1',
              'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-             'logical-connection-point': 'XPDR2-NETWORK1',
-             'port-qual': 'switch-network',
-             'port-direction': 'bidirectional',
-             'lcp-hash-val': 'LY9PxYJqUbw=',
-             'port-admin-state': 'InService',
+             'rate': '200',
+             'supporting-port': 'L1',
              'port-oper-state': 'InService',
-             'xpdr-type': 'mpdr'
+             'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
+             'port-direction': 'bidirectional',
+             'port-qual': 'switch-network',
+             'port-admin-state': 'InService',
+             'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
+             'xpdr-type': 'mpdr',
+             'lcp-hash-val': 'LY9PxYJqUbw='
              },
             response['mapping'])
 
