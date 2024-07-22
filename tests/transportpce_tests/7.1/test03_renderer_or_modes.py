@@ -27,17 +27,24 @@ import test_utils  # nopep8
 class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     processes = None
-    NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR3-NETWORK1",
-                           "supporting-port": "L1",
-                           "supported-interface-capability": [
-                               "org-openroadm-port-types:if-otsi-otsigroup"
+    NETWORK1_CHECK_DICT = {'logical-connection-point': 'XPDR3-NETWORK1',
+                           'supporting-circuit-pack-name': '1/1/4-PLUG-NET',
+                           'rate': '200',
+                           'supporting-port': 'L1',
+                           'port-oper-state': 'InService',
+                           'supported-interface-capability': [
+                               'org-openroadm-port-types:if-otsi-otsigroup'
                            ],
-                           "port-direction": "bidirectional",
-                           "port-qual": "xpdr-network",
-                           "supporting-circuit-pack-name": "1/1/4-PLUG-NET",
-                           "xpdr-type": "tpdr",
-                           "port-admin-state": "InService",
-                           "port-oper-state": "InService"}
+                           'port-direction': 'bidirectional',
+                           'port-qual': 'xpdr-network',
+                           'port-admin-state': 'InService',
+                           'connection-map-lcp': 'XPDR3-CLIENT1',
+                           'supported-operational-mode': [
+                               'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
+                           ],
+                           'xpdr-type': 'tpdr',
+                           'supporting-otucn': 'XPDR3-NETWORK1-OTUC1',
+                           'lcp-hash-val': 'FDvaQIf2Z08='}
     CLIENT_CAPABILITIES = ["org-openroadm-port-types:if-100GE",
                            "org-openroadm-port-types:if-OCH-OTU4-ODU4"]
     NODE_VERSION = "7.1"
