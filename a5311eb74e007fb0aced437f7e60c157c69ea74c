@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f421997_2e4396d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "Title length \u003e 50 char\nWhat about \"Fix TAPI ConnectivityUtils code style\" ?",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2215ca5e_3614d72c",
@@ -14,6 +31,92 @@
       "writtenOn": "2024-07-22T14:20:33Z",
       "side": 1,
       "message": "Guess I address all your comments, Thanks!",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a31384c4_4b5eaf91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "Pretty much. Thanks.\nAnd I pointed a few remaining ones and there is now an issue w/ the title length \u003d\u003e verified -1 by gitlint...",
+      "parentUuid": "2215ca5e_3614d72c",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48af672_57af2210",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "add a LF after ,",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "475267de_296688f0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "add a LF after \".augmentation(Network1.class)\"",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbe06470_a70bdb89",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "add a LF after ,",
+      "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9c6226_c354a26d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiLinkImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-23T10:21:07Z",
+      "side": 1,
+      "message": "ad a LF after \".build())\"",
       "revId": "a5311eb74e007fb0aced437f7e60c157c69ea74c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
