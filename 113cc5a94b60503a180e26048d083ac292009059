@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bef9bdb_ac548c46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-07-24T09:31:54Z",
+      "side": 1,
+      "message": "Hi Olivier! Thanks for your reply. I\u0027ve been trying to digest the information you provided as best I can. Having limited experience with fibre optics, I have to confess I don\u0027t quite understand all of it. I\u0027d love to participate in the meeting, but I\u0027m currently on vacation and will not be back at the office until August 20 (Tuesday).\n\n\"The approach you follow is in my view really fixgrid focused.\"\n\nMost likely yes. I used simulated nodes while integration testing the code and I believe the nodes simulate Fixgrid, as opposed to Flexgrid. Perhaps this package should be renamed from \"tapi/frequency\" to \"tapi/frequency/fixgrid\"? If nothing else it removes the ambiguity. Flexgrid could be solved in \"tapi/frequency/flexgrid\". Common logic between the two could be placed in \"tapi/frequency\". Just a thought.\n\nRegardless, I feel I need to look into Flexgrid before I can participate in a useful solution to that problem.",
+      "parentUuid": "f851a8c0_8b937be9",
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2fa7bf96_fcb9e966",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
         "patchSetId": 11
@@ -31,6 +49,30 @@
       "writtenOn": "2024-07-19T13:38:11Z",
       "side": 1,
       "message": "your assumption is based on a fixgrid approach where an byte corresponds to 8 elementary slots of 6.25GHz corresponding to 50GHz. But we are now considering a flexgrid approach where a byte has no relationship with a specific frequency or wavelength, because signal of different width (50, 75, 137,5, 150 Ghz) may be present and mixed on the WDM line",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 70
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde9528f_5f3719b2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-07-24T09:31:54Z",
+      "side": 1,
+      "message": "Yes, flexgrid was overlooked.\n\nOn a side note, this is the downside of using these type of data arrays. They don\u0027t contain all the information needed. As a result, we need to make assumptions about the missing information.\n\nI prefer when data \"can speak for itself\", but in this case that\u0027s pretty much impossible. I imagine it would be useful to provide an array where each element is an object containing the start and stop frequency and whatever other information is relevant. That code should probably be placed in a separate class though. \n\nAs a compromise, maybe this interface should provide methods forcing the implementing class to disclose the missing details? That way classes relying on the details don\u0027t have to guess, instead they may ask for it. Probably requires a bit more work to solve flexgrid though.",
+      "parentUuid": "2fa7bf96_fcb9e966",
       "range": {
         "startLine": 20,
         "startChar": 6,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8bf2c3e7_14e1d48d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-07-24T09:31:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2b057369_69f10cc2",
+      "range": {
+        "startLine": 27,
+        "startChar": 66,
+        "endLine": 27,
+        "endChar": 75
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "daf2548f_5384cef7",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
         "patchSetId": 11
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20977b7c_91abec4f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-07-24T09:31:54Z",
+      "side": 1,
+      "message": "I understand. However, this is actually intentional. As useful as standards are, in this case the primary goal wasn\u0027t to comply with one. I think you have to look at these methods in isolation, as opposed to a global context.\n\nThe comment actually says \"This method returns a byte array representing used frequencies\". The method name is called assignedFrequencyRanges. Having 1 represent a used frequency makes perfect sense to me in this context.\n\nPerhaps the real problem is this interface doesn\u0027t specify:  \n\n    byte[] availableFrequencyRanges(); \n\nIn the above case I would very much agree with you. 1 should represent an available range.",
+      "parentUuid": "daf2548f_5384cef7",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acb66469_bd68e0af",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
         "patchSetId": 11
@@ -100,6 +190,30 @@
       "writtenOn": "2024-07-19T13:38:11Z",
       "side": 1,
       "message": "the opposite",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 54
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71316b4_1659e537",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-07-24T09:31:54Z",
+      "side": 1,
+      "message": "This was also intentional. The method assignedFrequencies() only purpose is to return a BitSet where 1 represents a used frequency (range?) and 0 represents an available frequency (range?).\n\nI felt it made sense to have 1 \u003d\u003d \"True\" \u003d\u003d \"assigned frequency range\" in this context (assignedFrequencies()).\n\nThe opposite also made sense, having \"True\" \u003d\u003d \"free frequency range\" in availableFrequencies().\n\nAs a side note, this was useful in the class NumericFrequency, where assignedFrequencies() and availableFrequencies() are used: \n\n    ...\n\n    @Override\n    public Map\u003cDouble, Double\u003e assignedFrequency(BitMap frequency) {\n        return this.frequency(frequency.assignedFrequencies());\n    }\n\n    @Override\n    public Map\u003cDouble, Double\u003e availableFrequency(BitMap frequency) {\n        return this.frequency(frequency.availableFrequencies());\n    }\n    \n    private Map\u003cDouble, Double\u003e frequency(BitSet bitSet) {\n        ...\n    }\n    \n    ...\n\n    \nThe private method frequency() doesn\u0027t care whether or not it creates a map of available or assigned frequencies. All it cares about is a BitSet representing frequency ranges, where true \u003d\u003d \"a frequency range\". Having methods returning either available or assigned frequency ranges as true made things easier.\n\nSo the point of these methods is that I needed the logic. By isolating the code, it\u0027s easily testable. I don\u0027t know if these classes are of any use in another context, but that\u0027s fine, they don\u0027t have to be imho. Although, I have noticed similar logic in TPCE regarding fixgrid, if I\u0027m not mistaken.",
+      "parentUuid": "acb66469_bd68e0af",
       "range": {
         "startLine": 44,
         "startChar": 0,
