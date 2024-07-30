@@ -80,6 +80,30 @@
       },
       "revId": "28d81b0a98a8c9a7973318665fd737a1ac8aea62",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2231db69_ca7dde25",
+        "filename": "tests/installMavenUbuntu.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-07-30T08:53:28Z",
+      "side": 1,
+      "message": "Hello I Agree w/ Gilles.\nI didn\u0027t find a clue about how to do this in releng tox verify official documentation at\nhttps://docs.releng.linuxfoundation.org/projects/global-jjb/en/latest/jjb/lf-python-jobs.html#tox-verify\n\nI wonder whether pre-build-script might be more appropriate here.",
+      "parentUuid": "d1c74506_7c7f61ac",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 42
+      },
+      "revId": "28d81b0a98a8c9a7973318665fd737a1ac8aea62",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
