@@ -15,6 +15,7 @@ if [ -z "$USE_ODL_ALT_KARAF_ENV" ]; then
     exit
 fi
 
+echo "build karaf in " $USE_ODL_ALT_KARAF_INSTALL_DIR "with " $USE_ODL_ALT_KARAF_ENV
 . $USE_ODL_ALT_KARAF_ENV
 . ./reflectwarn.sh
 cd  ../$USE_ODL_ALT_KARAF_INSTALL_DIR
