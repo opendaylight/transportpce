@@ -37,8 +37,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
@@ -59,7 +59,7 @@ public class CrossConnectImpl121Test {
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
 
         //mock responses for deviceTransactionManager calls
-        InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<RoadmConnections> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
             .build();
@@ -78,7 +78,7 @@ public class CrossConnectImpl121Test {
 
     @Test
     void postCrossConnectTest() {
-        when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.of(mountPointMock));
         when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
         when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
         when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
@@ -94,7 +94,7 @@ public class CrossConnectImpl121Test {
 
     @Test
     void setPowerLevelTest() {
-        InstanceIdentifier<RoadmConnections> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<RoadmConnections> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey("1"))
             .build();

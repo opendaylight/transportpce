@@ -40,7 +40,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.co
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,8 +133,8 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         String linkKey = String.join("to", sourceNepKey, destNepKey);
         Uuid linkUuid = new Uuid(
             UUID.nameUUIDFromBytes(linkKey.getBytes(Charset.forName("UTF-8"))).toString());
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
-                linkIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
+                linkIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(tapiTopoUuid))
             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link.class,
@@ -158,7 +158,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         // merge in datastore
         this.networkTransactionService.merge(
             LogicalDatastoreType.OPERATIONAL,
-            InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class).child(TopologyContext.class)
                 .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
                 .build(),
@@ -183,7 +183,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             if (this.networkTransactionService
                     .read(
                         LogicalDatastoreType.CONFIGURATION,
-                        InstanceIdentifier.builder(Networks.class)
+                        DataObjectIdentifier.builder(Networks.class)
                             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                             .augmentation(Network1.class)
                             .child(Link.class, new LinkKey(oppositeLink))

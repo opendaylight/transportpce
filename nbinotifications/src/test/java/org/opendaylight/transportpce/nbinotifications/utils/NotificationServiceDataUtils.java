@@ -69,7 +69,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.NwTopologyServiceBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
@@ -284,7 +284,7 @@ public final class NotificationServiceDataUtils {
             .addAugmentation(notificationContext);
 
         // todo: add notification context
-        InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
+        DataObjectIdentifier<Context> contextIID = DataObjectIdentifier.builder(Context.class).build();
         // put in datastore
         networkTransactionService.put(LogicalDatastoreType.OPERATIONAL, contextIID, contextBuilder.build());
         networkTransactionService.commit().get();

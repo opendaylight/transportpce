@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Laye
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ public class R2RTapiLinkDiscovery {
         switch (nodeVersion) {
             case 1:
                 // 1.2.1
-                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier
+                DataObjectIdentifier<Protocols> protocols121IID = DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(Protocols.class)
                     .build();
@@ -83,8 +83,8 @@ public class R2RTapiLinkDiscovery {
                 return rdm2rdmLinkCreatev121(nodeId, tapiTopoUuid, nbr121List);
             case 2:
                 // 2.2.1
-                InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                        .container.org.openroadm.device.Protocols> protocols221IID = InstanceIdentifier
+                DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm
+                        .device.container.org.openroadm.device.Protocols> protocols221IID = DataObjectIdentifier
                     .builderOfInherited(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData.class,
                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
@@ -261,7 +261,7 @@ public class R2RTapiLinkDiscovery {
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
         try {
 
@@ -294,7 +294,7 @@ public class R2RTapiLinkDiscovery {
     }
 
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
         try {
             Optional<Nodes> nodesObject = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,

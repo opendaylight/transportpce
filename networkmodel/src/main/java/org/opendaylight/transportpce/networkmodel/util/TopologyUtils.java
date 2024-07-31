@@ -44,7 +44,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +109,7 @@ public final class TopologyUtils {
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
-            InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+            DataObjectIdentifier.Builder<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
             java.util.Optional<Link> link =

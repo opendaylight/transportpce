@@ -59,7 +59,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.po
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
@@ -146,7 +146,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return Node1, null otherwise.
      */
     private Node1 getNetworkNodeFromDatastore(String nodeId) {
-        InstanceIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
+        DataObjectIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Node1> optionalNode = nodeReadTx
                 .read(LogicalDatastoreType.CONFIGURATION, nodeIID)
@@ -176,7 +176,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      */
     private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1
             getCommonNetworkNodeFromDatastore(String nodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1> nodeIID =
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1> nodeIID =
             OpenRoadmTopology.createCommonNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1> optionalNode =
@@ -221,7 +221,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID =
+        DataObjectIdentifier<TerminationPoint1> tpIID =
             InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
@@ -248,7 +248,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      */
     private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1
             getCommonNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1>
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1>
             tpIID = OpenRoadmTopology.createCommonNetworkTerminationPointIIDBuilder(nodeId, tpId).build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1>

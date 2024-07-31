@@ -61,7 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,11 +108,11 @@ public class GnpyTopoImpl {
      */
     private void extractTopo() throws GnpyException {
         // Define the instance identifier of the OpenRoadm topology
-        InstanceIdentifier<Network> insIdOpenRoadmTopo = InstanceIdentifier
+        DataObjectIdentifier<Network> insIdOpenRoadmTopo = DataObjectIdentifier
                 .builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
         // Define the instance identifier of the OpenRoadm network
-        InstanceIdentifier<Network> insIdrOpenRoadmNet = InstanceIdentifier
+        DataObjectIdentifier<Network> insIdrOpenRoadmNet = DataObjectIdentifier
                 .builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
         try {

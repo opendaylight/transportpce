@@ -21,9 +21,6 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingAdapterFactory;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.adapter.spi.AdapterFactory;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.mdsal.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMNotificationPublishService;
@@ -35,8 +32,11 @@ import org.opendaylight.mdsal.dom.broker.SerializedDOMDataBroker;
 import org.opendaylight.mdsal.dom.spi.FixedDOMSchemaService;
 import org.opendaylight.mdsal.dom.spi.store.DOMStore;
 import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStoreFactory;
-import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
-import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
+import org.opendaylight.yangtools.binding.data.codec.impl.BindingCodecContext;
+import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
+import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
+import org.opendaylight.yangtools.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 
 public class DataStoreContextImpl implements DataStoreContext {

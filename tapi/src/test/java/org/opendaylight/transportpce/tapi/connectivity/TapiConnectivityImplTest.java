@@ -127,7 +127,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         endSignal = new CountDownLatch(1);
         // Need to have datastore populated to enable the mapping from TAPI to OR
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
+            TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II.build());
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),

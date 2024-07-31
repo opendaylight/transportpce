@@ -62,7 +62,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -514,12 +514,13 @@ public final class OpenRoadmTopology {
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
-            InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+            DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .augmentation(Network1.class)
-                .child(Link.class, new LinkKey(linkId));
+                .child(Link.class, new LinkKey(linkId))
+                .build();
             java.util.Optional<Link> link =
-                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,linkIID.build()).get();
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,linkIID).get();
             if (link.isEmpty()) {
                 LOG.error("No link found for given LinkId: {}", linkId);
                 return false;
@@ -527,7 +528,7 @@ public final class OpenRoadmTopology {
             LinkBuilder linkBuilder = new LinkBuilder(link.orElseThrow());
             networkTransactionService.merge(
                 LogicalDatastoreType.CONFIGURATION,
-                linkIID.build(),
+                linkIID,
                 linkBuilder
                     .removeAugmentation(Link1.class)
                     .addAugmentation(
@@ -552,9 +553,9 @@ public final class OpenRoadmTopology {
      * @param tpId String
      * @return InstanceIdentifierBuilder
      */
-    public static InstanceIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+    public static DataObjectIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
@@ -573,8 +574,8 @@ public final class OpenRoadmTopology {
      * @param nodeId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<Node1> createNetworkNodeIID(String nodeId) {
-        return InstanceIdentifier.builder(Networks.class)
+    public static DataObjectIdentifier<Node1> createNetworkNodeIID(String nodeId) {
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
@@ -587,9 +588,9 @@ public final class OpenRoadmTopology {
      * @param nodeId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+    public static DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .Node1> createCommonNetworkNodeIID(String nodeId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.networkmodel;
 import java.util.ArrayList;
 import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
@@ -39,10 +38,11 @@ import org.slf4j.LoggerFactory;
 public class NetworkModelProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelProvider.class);
-    private static final InstanceIdentifier<Mapping> MAPPING_II = InstanceIdentifier.create(Network.class)
+    private static final InstanceIdentifier<Mapping> MAPPING_II = InstanceIdentifier.builder(Network.class)
         .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network
                 .Nodes.class)
-        .child(Mapping.class);
+        .child(Mapping.class)
+        .build();
 
     private final DataBroker dataBroker;
     private final NetConfTopologyListener topologyListener;
@@ -82,11 +82,13 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
         listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)),
+                LogicalDatastoreType.OPERATIONAL,
+                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class).build(),
                 topologyListener));
         listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
+                LogicalDatastoreType.CONFIGURATION,
+                MAPPING_II,
+                portMappingListener));
         serviceHandlerListenerRegistration = notificationService.registerCompositeListener(
             new ServiceHandlerListener(frequenciesService).getCompositeListener());
     }

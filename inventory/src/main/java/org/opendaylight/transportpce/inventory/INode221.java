@@ -76,7 +76,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.TxMsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.TxMsiKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +96,7 @@ public class INode221 {
 
     public boolean addNode(String deviceId) {
 
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+        DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Info.class)
             .build();
@@ -201,7 +201,7 @@ public class INode221 {
     }
 
     public void getRoadmShelves(String nodeId) throws InterruptedException, ExecutionException {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
@@ -236,7 +236,7 @@ public class INode221 {
     }
 
     public void getCircuitPacks(String nodeId) throws InterruptedException, ExecutionException {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -914,7 +914,7 @@ public class INode221 {
 
     private void persistDevInterfaces(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -957,7 +957,7 @@ public class INode221 {
 
     private void persistDevProtocols(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+        DataObjectIdentifier<Protocols> protocolsIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Protocols.class)
             .build();
@@ -1006,7 +1006,7 @@ public class INode221 {
 
     private void persistDevProtocolLldpPortConfig(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+        DataObjectIdentifier<Protocols> protocolsIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Protocols.class)
             .build();
@@ -1052,7 +1052,7 @@ public class INode221 {
 
     private void persistDevProtocolLldpNbrList(String nodeId, Connection connection) {
 
-        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier
+        DataObjectIdentifier<Protocols> protocolsIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Protocols.class)
             .build();
@@ -1109,7 +1109,7 @@ public class INode221 {
 
     private void persistDevInternalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1158,7 +1158,7 @@ public class INode221 {
 
     private void persistDevExternalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1210,7 +1210,7 @@ public class INode221 {
 
     private void persistDevPhysicalLinks(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1259,7 +1259,7 @@ public class INode221 {
 
     private void persistDevDegree(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1393,7 +1393,7 @@ public class INode221 {
 
     private void persistDevSrg(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1491,7 +1491,7 @@ public class INode221 {
 
     private void persistDevRoadmConnections(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
@@ -1547,7 +1547,7 @@ public class INode221 {
 
     private void persistDevConnectionMap(String nodeId, Connection connection) {
 
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =

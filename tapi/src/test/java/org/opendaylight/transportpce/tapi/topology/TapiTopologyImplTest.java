@@ -111,7 +111,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         new CountDownLatch(1);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
+            TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II.build());
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),

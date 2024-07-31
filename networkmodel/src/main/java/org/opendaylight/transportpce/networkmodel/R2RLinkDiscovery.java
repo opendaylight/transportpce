@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.conta
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfName;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class R2RLinkDiscovery {
     public boolean readLLDP(NodeId nodeId, String nodeVersion) {
         switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_1_2_1:
-                InstanceIdentifier<Protocols> protocols121IID = InstanceIdentifier
+                DataObjectIdentifier<Protocols> protocols121IID = DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(Protocols.class)
                     .build();
@@ -79,8 +79,8 @@ public class R2RLinkDiscovery {
                 // try to create rdm2rdm link
                 return rdm2rdmLinkCreatedv121(nodeId, nbr121List);
             case OPENROADM_DEVICE_VERSION_2_2_1:
-                InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
-                        .container.org.openroadm.device.Protocols> protocols221IID = InstanceIdentifier
+                DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm
+                        .device.container.org.openroadm.device.Protocols> protocols221IID = DataObjectIdentifier
                     .builderOfInherited(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData.class,
                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
@@ -188,8 +188,9 @@ public class R2RLinkDiscovery {
     }
 
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId.getValue()))
+            .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.orElseThrow().getMapping() != null)) {
@@ -343,8 +344,9 @@ public class R2RLinkDiscovery {
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId.getValue()))
+            .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.orElseThrow().getCpToDegree() != null)) {

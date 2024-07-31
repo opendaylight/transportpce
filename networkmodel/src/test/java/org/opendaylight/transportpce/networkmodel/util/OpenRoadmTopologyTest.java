@@ -67,7 +67,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 
@@ -223,7 +223,7 @@ public class OpenRoadmTopologyTest {
                 .build())
             .addAugmentation(link1)
             .build();
-        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .augmentation(Network1.class)
             .child(Link.class, new LinkKey(linkId))
@@ -254,7 +254,7 @@ public class OpenRoadmTopologyTest {
         String destTp = "SRG1-CP-TXRX";
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
 
-        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .augmentation(Network1.class)
             .child(Link.class, new LinkKey(linkId))
@@ -274,7 +274,7 @@ public class OpenRoadmTopologyTest {
         String destTp = "SRG1-CP-TXRX";
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
 
-        InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .augmentation(Network1.class)
             .child(Link.class, new LinkKey(linkId))

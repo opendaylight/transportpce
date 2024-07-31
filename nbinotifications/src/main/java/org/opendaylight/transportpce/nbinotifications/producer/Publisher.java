@@ -17,7 +17,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.nbinotifications.serialization.ConfigConstants;
 import org.opendaylight.transportpce.nbinotifications.utils.NbiNotificationsUtils;
-import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

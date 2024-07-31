@@ -40,7 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,8 +229,9 @@ public class PceConstraintsCalc {
 
     private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
         Optional<PathDescription> result = Optional.empty();
-        InstanceIdentifier<ServicePaths> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
-                .child(ServicePaths.class, new ServicePathsKey(serviceName));
+        DataObjectIdentifier<ServicePaths> pathDescriptionIID = DataObjectIdentifier.builder(ServicePathList.class)
+                .child(ServicePaths.class, new ServicePathsKey(serviceName))
+                .build();
         try {
             LOG.info("PCE diversity constraints: Getting path description for service {}", serviceName);
             ServicePaths servicePaths =
