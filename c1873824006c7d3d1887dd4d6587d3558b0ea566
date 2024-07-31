@@ -16,6 +16,23 @@
       "message": "rerun-gha",
       "revId": "c1873824006c7d3d1887dd4d6587d3558b0ea566",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "100707c3_1cedec24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-07-31T08:18:46Z",
+      "side": 1,
+      "message": "Given that the TPCE CI has been broken for a while, and that at the same time, other actions are being carried out on the releng project side to have maven on the tox-verify job, I already merge this change and we will adapt things later.\nThank you for your review.",
+      "revId": "c1873824006c7d3d1887dd4d6587d3558b0ea566",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
