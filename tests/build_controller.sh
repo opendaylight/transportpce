@@ -7,7 +7,7 @@ current_dir=$PWD
 cd $(dirname $0)
 
 #install maven and JDK11 on the Gate since they are not there by default
-which mvn >/dev/null || ./installMavenCentOS.sh
+which mvn >/dev/null || ./installMavenUbuntu.sh
 cd ../
 
 if [ "$USE_LIGHTY" != "True" ]; then
