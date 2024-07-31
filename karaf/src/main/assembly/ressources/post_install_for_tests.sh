@@ -2,7 +2,7 @@
 
 cd $(dirname $0)
 
-sed 's/2550/ODL_AKKA_PORT/' ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-akkaconf.xml >akka-default_template.conf
+sed 's/2550/ODL_AKKA_PORT/' ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-pekkoconf.xml >akka-default_template.conf
 sed 's/8181/ODL_RESTCONF_PORT/' ../etc/org.ops4j.pax.web.cfg > org.ops4j.pax.web._template.cfg
 sed 's/8181/ODL_RESTCONF_PORT/' ../etc/jetty.xml > jetty_template.xml
 sed 's/8101/ODL_SHELL_PORT/' ../etc/org.apache.karaf.shell.cfg > org.apache.karaf.shell._template.cfg
