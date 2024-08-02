@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac225fb_22b2bee2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-08-02T15:00:23Z",
+      "side": 1,
+      "message": "Hello Robert,\n\nI started the migration of TPCE to Scandium.\nAs mentioned in the commit message, I didn\u0027t manage correctly the handling of DataObjectIdentifier in the NetworkModelProvider and TapiProvider classes, so these classes can no longer be instantiated.\n\nIf you could have a look at it, I would appréciate.\nMany thanks in advance\n\n[INFO] Running org.opendaylight.transportpce.networkmodel.NetworkModelProviderTest\nOpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended\n[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.441 s \u003c\u003c\u003c FAILURE! -- in org.opendaylight.transportpce.networkmodel.NetworkModelProviderTest\n[ERROR] org.opendaylight.transportpce.networkmodel.NetworkModelProviderTest.networkmodelProviderInitTest -- Time elapsed: 1.406 s \u003c\u003c\u003c ERROR!\njava.lang.IllegalArgumentException: Cannot make inexact step KeylessStep[type\u003dinterface org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node, caseType\u003dnull]\n\tat org.opendaylight.yangtools.binding.impl.AbstractDataObjectIdentifierBuilder.appendItem(AbstractDataObjectIdentifierBuilder.java:73)\n\tat org.opendaylight.yangtools.binding.impl.AbstractDataObjectReferenceBuilder.appendItem(AbstractDataObjectReferenceBuilder.java:111)\n\tat org.opendaylight.yangtools.binding.impl.DataObjectIdentifierBuilder.append(DataObjectIdentifierBuilder.java:43)\n\tat org.opendaylight.yangtools.binding.impl.DataObjectIdentifierBuilderWithKey.append(DataObjectIdentifierBuilderWithKey.java:39)\n\tat org.opendaylight.yangtools.binding.impl.DataObjectIdentifierBuilderWithKey.append(DataObjectIdentifierBuilderWithKey.java:18)\n\tat org.opendaylight.yangtools.binding.impl.AbstractDataObjectIdentifierBuilder.child(AbstractDataObjectIdentifierBuilder.java:49)\n\tat org.opendaylight.transportpce.networkmodel.NetworkModelProvider.init(NetworkModelProvider.java:86)\n\tat org.opendaylight.transportpce.networkmodel.NetworkModelProvider.\u003cinit\u003e(NetworkModelProvider.java:72)\n\tat org.opendaylight.transportpce.networkmodel.NetworkModelProviderTest.networkmodelProviderInitTest(NetworkModelProviderTest.java:62)",
+      "revId": "ca25a8f62470a4ede2a7e408174b56930040ae74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
