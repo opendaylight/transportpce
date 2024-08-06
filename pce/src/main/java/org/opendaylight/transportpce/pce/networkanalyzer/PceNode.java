@@ -75,4 +75,7 @@ public interface PceNode {
      * @return Decimal64.
      */
     BigDecimal getCentralFreqGranularity();
+
+
+
 }
