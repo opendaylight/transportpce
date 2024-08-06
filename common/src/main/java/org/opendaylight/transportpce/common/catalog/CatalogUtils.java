@@ -182,6 +182,68 @@ public class CatalogUtils {
         return spacing;
     }
 
+
+    /**
+     * This method retrieves ADD/DROP operational mode from the given External TPDR mode.
+     *
+     * @param operationalModeId
+     *            operational-mode-Id of the Xponder (OR or Specific)
+     *
+     * @return ADD/DROP operational-mode-id
+     * @throws RuntimeException
+     *             if operationalModeId is not described in the catalog
+     */
+    public String getAddDropModeExternalXpdr(String operationalModeId) {
+        String addDropOperMode;
+        if (operationalModeId.startsWith("OR")) {
+            InstanceIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = InstanceIdentifier
+                    .builder(OperationalModeCatalog.class)
+                    .child(OpenroadmOperationalModes.class)
+                    .child(XpondersPluggables.class)
+                    .child(XponderPluggableOpenroadmOperationalMode.class,
+                            new XponderPluggableOpenroadmOperationalModeKey(operationalModeId))
+                    .build();
+            try {
+                Optional<XponderPluggableOpenroadmOperationalMode> omOptional =
+                        networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (omOptional.isEmpty()) {
+                    LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
+                    return null;
+                }
+                XponderPluggableOpenroadmOperationalMode orTspOM = omOptional.orElseThrow();
+                addDropOperMode = orTspOM.nonnullTXOOBOsnr().keySet().toArray()[0].toString();
+                LOG.info("This is the add/drop mode for the {} is {}", operationalModeId, addDropOperMode);
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
+                throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
+            }
+        } else {
+            // In other cases, means the mode is a non OpenROADM specific Operational Mode
+            InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
+                    .builder(OperationalModeCatalog.class)
+                    .child(SpecificOperationalModes.class)
+                    .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
+                    .build();
+            try {
+                var somOptional =
+                        networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+                if (somOptional.isEmpty()) {
+                    LOG.error("readMdSal: Error reading Operational Mode Catalog {} , empty list", omCatalogIid);
+                    return null;
+                }
+                SpecificOperationalMode speTspOM = somOptional.orElseThrow();
+                addDropOperMode = speTspOM.nonnullTXOOBOsnr().keySet().toArray()[0].toString();
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("readMdSal: Error reading Operational Mode Catalog {} , Mode does not exist", omCatalogIid);
+                throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
+            }
+        }
+
+        LOG.info("Supporting Operational Mode {} and associated ADD/DROP mode {}", operationalModeId, addDropOperMode);
+        return addDropOperMode;
+    }
+
+
     /**
      * This method retrieves performance parameters associated with a Xponder TX.
      *
