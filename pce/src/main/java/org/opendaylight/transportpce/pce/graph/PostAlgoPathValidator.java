@@ -81,7 +81,7 @@ public class PostAlgoPathValidator {
         justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
-            String serviceType, PceConstraintMode mode) {
+            String serviceType, PceConstraintMode mode, String supportedOperatingMode) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -127,9 +127,9 @@ public class PostAlgoPathValidator {
                 CatalogUtils cu = new CatalogUtils(networkTransactionService);
                 if (cu.isCatalogFilled()) {
                     double margin1 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                            StringConstants.SERVICE_DIRECTION_AZ, cu);
+                            StringConstants.SERVICE_DIRECTION_AZ, cu, supportedOperatingMode);
                     double margin2 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
-                            StringConstants.SERVICE_DIRECTION_ZA, cu);
+                            StringConstants.SERVICE_DIRECTION_ZA, cu, supportedOperatingMode);
                     if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
                             || margin2 == Double.NEGATIVE_INFINITY) {
                         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
@@ -142,8 +142,8 @@ public class PostAlgoPathValidator {
                         this.tpceCalculatedMargin);
                 } else {
                     this.tpceCalculatedMargin = 0.0;
-                    LOG.info("In PostAlgoPathValidator: Operational mode Catalog not filled, delegate OSNR calculation"
-                        + " to GNPy and margin set to 0");
+                    LOG.info("In PostAlgoPathValidator: Operational mode Catalog not filled, "
+                            + "delegate OSNR calculation to GNPy and margin set to 0");
                 }
                 // Check if MaxLatency is defined in the hard constraints
                 if (pceHardConstraints.getMaxLatency() != -1
@@ -400,12 +400,12 @@ public class PostAlgoPathValidator {
     }
 
     private double checkOSNR(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
+            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu, String som) {
         switch (direction) {
             case StringConstants.SERVICE_DIRECTION_AZ:
-                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu);
+                return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu, som);
             case StringConstants.SERVICE_DIRECTION_ZA:
-                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu);
+                return checkOSNRza(path, allPceNodes, allPceLinks, serviceType, cu, som);
             default:
                 LOG.error("PostAlgoPathValidator.CheckOSNR : unsupported direction {}", direction);
                 return 0.0;
@@ -423,7 +423,7 @@ public class PostAlgoPathValidator {
      * @return the calculated margin according to the Transponder performances and path impairments.
      */
     private double checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu, String som) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -601,10 +601,8 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
-        if (!transponderPresent) {
-            LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
-                + "that optical tunnel degradations are compatible with external transponder performances");
-            return 0.0;
+        if ((!transponderPresent) & (som != null)) {
+            calExternalXpdrOSNR(cu, signal, som, currentNode);
         }
         double delta = margin - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode results in a residual margin of {} dB, according "
@@ -627,7 +625,7 @@ public class PostAlgoPathValidator {
      * @return the calculated margin according to the Transponder performances and path impairments.
      */
     private double checkOSNRza(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu, String som) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -802,10 +800,8 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
-        if (!transponderPresent) {
-            LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
-                + "that optical tunnel degradations are compatible with external transponder performances");
-            return 0.0;
+        if ((!transponderPresent) & (som != null)) {
+            calExternalXpdrOSNR(cu, signal, som, currentNode);
         }
         double delta = margin - SYS_MARGIN;
         LOG.info("In checkOSNR: Transponder Operational mode results in a residual margin of {} dB, according "
@@ -880,6 +876,20 @@ public class PostAlgoPathValidator {
             calcOnsrdB);
     }
 
+    private void calExternalXpdrOSNR(CatalogUtils cu, Map<String, Double> signal, String som, PceNode currentNode) {
+        String adnMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+        // If the operational mode of the ADD/DROP MUX is not consistent nor declared in the topology (Network TP)
+        // Operational mode is set by default to standard opMode for ADD SRGs
+        double calcOnsrLin = cu.getPceTxTspParameters(som, adnMode);
+        LOG.info("External transponder mode is {} and the add/drop mode is {} which has TX OSNR of {} dB",
+               som, adnMode, getOsnrDbfromOnsrLin(calcOnsrLin));
+        // Return the Tx ONSR of the Xponder which results from IB and OOB OSNR contributions
+        // and the spacing associated with Xponder operational mode that is needed to calculate OSNR
+        signal.put("spacing", Double.valueOf(cu.getPceTxTspChannelSpacing(som)));
+        signal.put("calcOnsrLin", Double.valueOf(calcOnsrLin));
+    }
+
+
     private void calcXpdrOSNR(
             CatalogUtils cu, Map<String, Double> signal, String nwTpId, String serviceType,
             PceNode currentNode, PceNode nextNode, String vertice, int pathElement) {
@@ -927,7 +937,11 @@ public class PostAlgoPathValidator {
     private void calcAddContrib(
             CatalogUtils cu, Map<String, Double> signal, PceNode currentNode, PceLink pceLink) {
         //calculation of the SRG contribution for Add
+        LOG.info("Operational mode on the current node {} is {}", currentNode.getNodeId(),
+                currentNode.getOperationalMode());
+        // Default mode on the node is UNKNOW mode
         String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
+        // TODO: Check if the SRG-mode on the port is in accordance with TX
         // If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
         // Operational mode is set by default to standard opMode for ADD/DROP SRGs
         CatalogNodeType cnt = CatalogConstant.CatalogNodeType.ADD;

@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.graph;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.external._interface.characteristics.SupportedOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -109,21 +111,38 @@ public class PceGraph {
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
-            PostAlgoPathValidator papv = new PostAlgoPathValidator(
-                    networkTransactionService,
-                    spectrumConstraint,
-                    clientInput);
-            pceResult = papv.checkPath(
-                    path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
-            this.margin = papv.getTpceCalculatedMargin();
-            if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
-                LOG.info("Path is validated");
-            } else {
-                LOG.warn("In calcPath: post algo validations DROPPED the path {}; for following cause: {}",
-                    path, pceResult.getLocalCause());
-                continue;
-            }
 
+            // TODO: Here is where operational-mode-id from the temp-service-create
+            LOG.info("This is the operational-mode-ids from the input {}", pceResult.getSupportedOperationalModes());
+            if (pceResult.getSupportedOperationalModes() == null) {
+                PostAlgoPathValidator papv = new PostAlgoPathValidator(
+                        networkTransactionService,
+                        spectrumConstraint,
+                        clientInput);
+                if (performPapv(papv, path, null)) {
+                    LOG.info("kth-Path is post validated");
+                } else {
+                    continue;
+                }
+            } else {
+                for (SupportedOperationalModes sop : pceResult.getSupportedOperationalModes().values().stream()
+                        .sorted(Comparator.comparing(somk -> Integer.valueOf(somk.getPreference())))
+                        .collect(Collectors.toList())) {
+                    PostAlgoPathValidator papv = new PostAlgoPathValidator(
+                            networkTransactionService,
+                            spectrumConstraint,
+                            clientInput);
+                    if (performPapv(papv, path, sop.getOperationalModeId())) {
+                        LOG.info("In calcPath: post algo validation path is validated for {}",
+                                sop.getOperationalModeId());
+                        break;
+                    } else {
+                        LOG.warn("In calcPath: post algo validations DROPPED the operational mode {} for path {}",
+                                sop, path);
+                    }
+
+                }
+            }
             // build pathAtoZ
             pathAtoZ.clear();
             for (PceGraphEdge edge : path.getEdgeList()) {
@@ -164,6 +183,24 @@ public class PceGraph {
         }
         LOG.info("In calcPath : pceResult {}", pceResult);
         return (pceResult.getStatus());
+    }
+
+
+    private boolean performPapv(PostAlgoPathValidator papv, GraphPath<String, PceGraphEdge> path, String sop) {
+
+        pceResult = papv.checkPath(
+                path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode, sop);
+        // This margin will be used to evaluate the operational-mode
+        this.margin = papv.getTpceCalculatedMargin();
+        if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
+            LOG.info("Path is validated");
+        } else {
+            LOG.warn("In calcPath: post algo validations DROPPED the path {}; for following cause: {}",
+                    path, pceResult.getLocalCause());
+            return false;
+        }
+
+        return true;
     }
 
     private boolean runKgraphs(Graph<String, PceGraphEdge> weightedGraph) {
