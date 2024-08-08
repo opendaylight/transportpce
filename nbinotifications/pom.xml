@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.4</version>
+    <version>14.0.1</version>
     <relativePath/>
   </parent>
 
@@ -22,7 +22,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <transportpce.models.version>20.1.2</transportpce.models.version>
+    <transportpce.models.version>21.0.0-SNAPSHOT</transportpce.models.version>
     <kafka.version>3.7.0</kafka.version>
   </properties>
 
@@ -34,6 +34,13 @@
         <version>${transportpce.models.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.opendaylight.yangtools</groupId>
+         <artifactId>yang-data-spi</artifactId>
+         <version>14.0.2</version>
+         <type>pom</type>
+         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -74,8 +81,8 @@
       <artifactId>yang-data-codec-gson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>yang-binding</artifactId>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-spec</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
@@ -86,8 +93,8 @@
       <artifactId>mdsal-binding-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-dom-codec-spi</artifactId>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-data-codec-spi</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -120,8 +127,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-generator</artifactId>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-generator</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
