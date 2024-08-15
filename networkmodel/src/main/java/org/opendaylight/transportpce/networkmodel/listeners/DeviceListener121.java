@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -18,7 +18,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScan
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
-import org.opendaylight.yangtools.yang.binding.DataObjectStep;
+import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,15 +59,13 @@ public class DeviceListener121 {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
-            switch (edit.getTarget().getTargetType().getSimpleName()) {
+            InstanceIdentifier<DataObject> path = InstanceIdentifier.unsafeOf(
+                    (List<? extends DataObjectStep<?>>) edit.getTarget().steps());
+            LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
+            switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":
-                    LinkedList<DataObjectStep<?>> path = new LinkedList<>();
-                    edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
-                    String portName = InstanceIdentifier.keyOf(portIID).getPortName();
-                    path.removeLast();
-                    InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.unsafeOf(path);
-                    String cpName = InstanceIdentifier.keyOf(cpIID).getCircuitPackName();
+                    String portName = path.firstKeyOf(Ports.class).getPortName();
+                    String cpName = path.firstKeyOf(CircuitPacks.class).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
                     if (oldMapping == null) {
@@ -84,7 +83,7 @@ public class DeviceListener121 {
                     thread.start();
                     break;
                 default:
-                    LOG.debug("modification of type {} not managed yet", edit.getTarget().getTargetType());
+                    LOG.debug("modification of type {} not managed yet", edit.getTarget().getClass());
                     break;
             }
         }

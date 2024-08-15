@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import org.opendaylight.mdsal.binding.dom.adapter.CurrentAdapterSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
-import org.opendaylight.mdsal.binding.runtime.api.BindingRuntimeContext;
-import org.opendaylight.mdsal.binding.runtime.spi.BindingRuntimeHelpers;
-import org.opendaylight.yangtools.yang.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
-import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
+import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectReference;
+import org.opendaylight.yangtools.binding.data.codec.api.BindingNormalizedNodeSerializer;
+import org.opendaylight.yangtools.binding.data.codec.impl.BindingCodecContext;
+import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
+import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
+import org.opendaylight.yangtools.binding.runtime.api.BindingRuntimeContext;
+import org.opendaylight.yangtools.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
@@ -70,7 +70,7 @@ public final class JsonUtil {
                         JSONCodecFactorySupplier.RFC7951.getShared(schemaCtx));) {
             jsonParser.parse(reader);
             YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-            Entry<InstanceIdentifier<?>, DataObject> entry =
+            Entry<DataObjectReference<?>, DataObject> entry =
                 codecRegistry.fromNormalizedNode(yangId, resultHolder.getResult().data());
             return entry == null ? null : entry.getValue();
         } catch (IOException | IllegalArgumentException e) {

@@ -31,9 +31,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacksKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.EditOperationType;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 @ExtendWith(MockitoExtension.class)
 public class DeviceListener221Test {
@@ -44,13 +46,28 @@ public class DeviceListener221Test {
     void testOnChangeNotificationWhenPortUpdated() throws InterruptedException {
         ChangeNotification notification = mock(ChangeNotification.class);
         Mapping oldMapping = mock(Mapping.class);
-        ImmutableList<Edit> editList = createEditList();
+        ImmutableList<Edit> editList = createEditListWithPort();
         when(notification.getEdit()).thenReturn(editList);
         when(portMapping.getMapping("node1", "circuit-pack1", "port1")).thenReturn(oldMapping);
 
         DeviceListener221 listener = new DeviceListener221("node1", portMapping);
         listener.onChangeNotification(notification);
         verify(portMapping, times(1)).getMapping("node1", "circuit-pack1", "port1");
+        Thread.sleep(3000);
+        verify(portMapping, times(1)).updateMapping("node1", oldMapping);
+    }
+
+    @Test
+    void testOnChangeNotificationWhenInterfaceUpdated() throws InterruptedException {
+        ChangeNotification notification = mock(ChangeNotification.class);
+        Mapping oldMapping = mock(Mapping.class);
+        ImmutableList<Edit> editList = createEditListWithInterface();
+        when(notification.getEdit()).thenReturn(editList);
+        when(portMapping.getMappingFromOtsInterface("node1", "interface-1")).thenReturn(oldMapping);
+
+        DeviceListener221 listener = new DeviceListener221("node1", portMapping);
+        listener.onChangeNotification(notification);
+        verify(portMapping, times(1)).getMappingFromOtsInterface("node1", "interface-1");
         Thread.sleep(3000);
         verify(portMapping, times(1)).updateMapping("node1", oldMapping);
     }
@@ -76,8 +93,8 @@ public class DeviceListener221Test {
         verify(portMapping, never()).updateMapping(anyString(), any());
     }
 
-    private ImmutableList<Edit> createEditList() {
-        InstanceIdentifier<Ports> portId = InstanceIdentifier
+    private ImmutableList<Edit> createEditListWithPort() {
+        DataObjectIdentifier<Ports> portId = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
             .child(Ports.class, new PortsKey("port1"))
@@ -90,8 +107,21 @@ public class DeviceListener221Test {
         return editList;
     }
 
+    private ImmutableList<Edit> createEditListWithInterface() {
+        DataObjectIdentifier<Interface> interfaceId = DataObjectIdentifier
+            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            .child(Interface.class, new InterfaceKey("interface-1"))
+            .build();
+        Edit edit = new EditBuilder()
+            .setOperation(EditOperationType.Merge)
+            .setTarget(interfaceId)
+            .build();
+        ImmutableList<Edit> editList = ImmutableList.of(edit);
+        return editList;
+    }
+
     private ImmutableList<Edit> createBadEditList() {
-        InstanceIdentifier<CircuitPacks> cpId = InstanceIdentifier
+        DataObjectIdentifier<CircuitPacks> cpId = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
             .build();

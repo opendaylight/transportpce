@@ -89,7 +89,7 @@ final class OlmUtils221 {
         if (resourceKeyIID == null) {
             return pmOutputBuilder;
         }
-        CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
+        CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID.toIdentifier(),
                 convertResourceTypeEnum(input.getResourceType()),"");
         InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
 
