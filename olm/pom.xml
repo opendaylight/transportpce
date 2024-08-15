@@ -13,7 +13,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.4</version>
+    <version>14.0.2</version>
     <relativePath/>
   </parent>
 
@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>20.1.2</transportpce.models.version>
+    <transportpce.models.version>21.0.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -86,6 +86,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>yang-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-spec</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
     </dependency>
@@ -96,10 +100,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
       <artifactId>mdsal-common-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>yang-binding</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
@@ -126,13 +126,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-yang-types</artifactId>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-generator</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal</groupId>
-      <artifactId>mdsal-binding-generator</artifactId>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc6991-ietf-yang-types</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

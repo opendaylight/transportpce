@@ -84,7 +84,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.conta
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfigKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
-import org.opendaylight.yangtools.yang.binding.Augmentation;
+import org.opendaylight.yangtools.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;

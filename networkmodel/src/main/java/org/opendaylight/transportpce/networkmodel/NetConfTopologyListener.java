@@ -36,9 +36,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.streams.Stream;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.ConnectionOper.ConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240120.connection.oper.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev231121.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.ConnectionOper.ConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.connection.oper.available.capabilities.AvailableCapability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240611.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetConfTopologyListener.class);
-    private static final String RPC_SERVICE_FAILED = "Failed to get RpcService for node {}";
     private final NetworkModelService networkModelService;
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -125,7 +124,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         MountPoint mountPoint = mountPointOpt.orElseThrow();
         final Optional<NotificationService> notificationService = mountPoint.getService(NotificationService.class);
         if (notificationService.isEmpty()) {
-            LOG.error(RPC_SERVICE_FAILED, nodeId);
+            LOG.error("Failed to get NotificationService for node {}", nodeId);
             return;
         }
         NodeRegistration nodeRegistration =
@@ -139,7 +138,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     private void onDeviceDisConnected(final String nodeId) {
         LOG.info("onDeviceDisConnected: {}", nodeId);
-        this.registrations.remove(nodeId).unregisterListeners();
+        if (this.registrations.containsKey(nodeId)) {
+            this.registrations.remove(nodeId).unregisterListeners();
+        }
     }
 
     private boolean subscribeStream(MountPoint mountPoint, String nodeId) {
@@ -149,7 +150,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         }
         final CreateSubscription rpcService = service.orElseThrow().getRpc(CreateSubscription.class);
         if (rpcService == null) {
-            LOG.error(RPC_SERVICE_FAILED, nodeId);
+            LOG.error("Failed to get RpcService for node {}", nodeId);
             return false;
         }
         // Set the default stream as OPENROADM
