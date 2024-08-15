@@ -33,7 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.EditOperationType;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 @ExtendWith(MockitoExtension.class)
 public class DeviceListener121Test {
@@ -77,7 +77,7 @@ public class DeviceListener121Test {
     }
 
     private ImmutableList<Edit> createEditList() {
-        InstanceIdentifier<Ports> portId = InstanceIdentifier
+        DataObjectIdentifier<Ports> portId = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
             .child(Ports.class, new PortsKey("port1"))
@@ -91,7 +91,7 @@ public class DeviceListener121Test {
     }
 
     private ImmutableList<Edit> createBadEditList() {
-        InstanceIdentifier<CircuitPacks> cpId = InstanceIdentifier
+        DataObjectIdentifier<CircuitPacks> cpId = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("circuit-pack1"))
             .build();

@@ -70,7 +70,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
-import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -290,7 +290,8 @@ public final class OlmTransactionUtils {
                     InstanceIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
-                        .build())
+                        .build()
+                        .toIdentifier())
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
@@ -325,7 +326,8 @@ public final class OlmTransactionUtils {
                     InstanceIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
-                        .build())
+                        .build()
+                        .toIdentifier())
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")

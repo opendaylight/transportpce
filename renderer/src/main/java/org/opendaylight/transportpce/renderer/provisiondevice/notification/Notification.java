@@ -28,7 +28,7 @@ public interface Notification {
     /**
      * Send renderer notification.
      */
-    void send(org.opendaylight.yangtools.yang.binding.Notification notification);
+    void send(org.opendaylight.yangtools.binding.Notification notification);
 
     /**
      * Build notification containing path description information.
