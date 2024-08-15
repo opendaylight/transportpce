@@ -29,8 +29,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestoration;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreate;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceDelete;
+import org.opendaylight.yangtools.binding.Rpc;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.Rpc;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +25,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
-import org.opendaylight.yangtools.yang.binding.DataObjectStep;
+import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
@@ -71,15 +71,13 @@ public class DeviceListener710 {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
-            LinkedList<DataObjectStep<?>> path = new LinkedList<>();
-            switch (edit.getTarget().getTargetType().getSimpleName()) {
+            InstanceIdentifier<DataObject> path = InstanceIdentifier.unsafeOf(
+                    (List<? extends DataObjectStep<?>>) edit.getTarget().steps());
+            LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
+            switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":
-                    edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<Ports> portIID = InstanceIdentifier.unsafeOf(path);
-                    String portName = InstanceIdentifier.keyOf(portIID).getPortName();
-                    path.removeLast();
-                    InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.unsafeOf(path);
-                    String cpName = InstanceIdentifier.keyOf(cpIID).getCircuitPackName();
+                    String portName = path.firstKeyOf(Ports.class).getPortName();
+                    String cpName = path.firstKeyOf(CircuitPacks.class).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
                     if (oldMapping == null) {
@@ -98,22 +96,18 @@ public class DeviceListener710 {
                     break;
                 case "OduSwitchingPools":
                     LOG.info("odu-switching-pools modified on device {}", nodeId);
-                    edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    ospIID = InstanceIdentifier.unsafeOf(path);
+                    ospIID = path.firstIdentifierOf(OduSwitchingPools.class);
                     break;
                 case "PortList":
-                    edit.getTarget().getPathArguments().forEach(p -> path.add(p));
-                    InstanceIdentifier<PortList> plIID = InstanceIdentifier.unsafeOf(path);
-                    path.removeLast();
-                    InstanceIdentifier<NonBlockingList> nblIID = InstanceIdentifier.unsafeOf(path);
-                    Uint16 nblNb = InstanceIdentifier.keyOf(nblIID).getNblNumber();
+                    InstanceIdentifier<PortList> plIID = path.firstIdentifierOf(PortList.class);
+                    Uint16 nblNb = path.firstKeyOf(NonBlockingList.class).getNblNumber();
                     List<InstanceIdentifier<PortList>> iidList = nbliidMap.containsKey(nblNb)
                         ? nbliidMap.get(nblNb) : new ArrayList<>();
                     iidList.add(plIID);
                     nbliidMap.put(nblNb, iidList);
                     break;
                 default:
-                    LOG.debug("modification of type {} not managed yet", edit.getTarget().getTargetType());
+                    LOG.debug("modification of type {} not managed yet", edit.getTarget().getClass());
                     break;
             }
         }
