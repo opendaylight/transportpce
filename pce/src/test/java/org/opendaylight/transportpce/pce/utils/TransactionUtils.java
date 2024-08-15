@@ -74,8 +74,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
-import org.opendaylight.yangtools.yang.binding.Augmentation;
-import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.binding.Augmentation;
+import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -259,7 +259,7 @@ public final class TransactionUtils {
             .build();
         CurrentPmEntry currentPmEntryA = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpA.key(),cpA))
-                .setPmResourceInstance(interfaceIIDA)
+                .setPmResourceInstance(interfaceIIDA.toIdentifier())
                 .setPmResourceType(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum
                                 .Interface)
@@ -289,7 +289,7 @@ public final class TransactionUtils {
             .build();
         CurrentPmEntry currentPmEntryC = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpC.key(),cpC))
-                .setPmResourceInstance(interfaceIIDC)
+                .setPmResourceInstance(interfaceIIDC.toIdentifier())
                 .setPmResourceType(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum
                                 .Interface)

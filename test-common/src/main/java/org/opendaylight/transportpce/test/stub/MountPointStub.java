@@ -8,11 +8,12 @@
 package org.opendaylight.transportpce.test.stub;
 
 import java.util.Optional;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.BindingService;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.RpcService;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public class MountPointStub implements MountPoint {
 
@@ -41,7 +42,8 @@ public class MountPointStub implements MountPoint {
     }
 
     @Override
-    public InstanceIdentifier<?> getIdentifier() {
+    public @NonNull DataObjectIdentifier<?> getIdentifier() {
         throw new UnsupportedOperationException();
     }
+
 }

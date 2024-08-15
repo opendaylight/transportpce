@@ -491,8 +491,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.internal_server_error)
         self.assertIn(
             {"error-type": "rpc", "error-tag": "operation-failed",
-             "error-message": "No services exist in datastore",
-             "error-info": "<severity>error</severity>"},
+             "error-message": "No services exist in datastore"},
             response['output']['errors']['error'])
 
     def test_26_get_no_openroadm_services(self):

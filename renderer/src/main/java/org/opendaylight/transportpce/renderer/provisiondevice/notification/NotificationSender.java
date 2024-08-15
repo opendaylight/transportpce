@@ -60,7 +60,7 @@ public class NotificationSender implements Notification {
      * Send renderer notification.
      * @param notification Notification
      */
-    public void send(org.opendaylight.yangtools.yang.binding.Notification notification) {
+    public void send(org.opendaylight.yangtools.binding.Notification notification) {
         try {
             LOG.info("Sending notification {}", notification);
             notificationPublishService.putNotification(notification);
