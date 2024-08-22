@@ -90,6 +90,30 @@
       },
       "revId": "ce62acaac8caf1a2782e6e3ae5bea4d6258d14f4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe2273e8_f9b58edc",
+        "filename": "tox.ini",
+        "patchSetId": 12
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-08-22T07:58:19Z",
+      "side": 1,
+      "message": "agreed\nadressed in https://git.opendaylight.org/gerrit/c/transportpce/+/112222",
+      "parentUuid": "f9c04390_6f92c15a",
+      "range": {
+        "startLine": 413,
+        "startChar": 22,
+        "endLine": 413,
+        "endChar": 49
+      },
+      "revId": "ce62acaac8caf1a2782e6e3ae5bea4d6258d14f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ],
   "submitRequirementResults": [
