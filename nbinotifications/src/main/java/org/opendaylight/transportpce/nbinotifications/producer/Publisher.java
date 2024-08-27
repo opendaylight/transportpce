@@ -30,6 +30,7 @@ public class Publisher<T extends DataObject> {
     public Publisher(String id, String publisherServer, JsonStringConverter<T> serializer, Class<?> serializerConf) {
         Properties properties = NbiNotificationsUtils.loadProperties("publisher.properties");
         properties.put(ProducerConfig.CLIENT_ID_CONFIG, id);
+        properties.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, 600000);
         if (publisherServer != null && !publisherServer.isBlank()) {
             properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, publisherServer);
         }
