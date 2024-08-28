@@ -73,7 +73,12 @@ public final class GridUtils {
      */
     public static BigDecimal getStartFrequencyFromIndex(int index) {
         int nvalue = index - 284;
-        return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY + (nvalue * GridConstant.GRANULARITY / 1000));
+
+        return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY).add(
+                        BigDecimal.valueOf(GridConstant.GRANULARITY)
+                                .multiply(BigDecimal.valueOf(nvalue))
+                                .divide(BigDecimal.valueOf(1000))
+                );
     }
 
     /**
@@ -82,7 +87,8 @@ public final class GridUtils {
      * @return the stop frequency in THz for the provided index.
      */
     public static BigDecimal getStopFrequencyFromIndex(int index) {
-        return getStartFrequencyFromIndex(index).add(BigDecimal.valueOf(GridConstant.GRANULARITY / 1000));
+        return getStartFrequencyFromIndex(index)
+                .add(BigDecimal.valueOf(GridConstant.GRANULARITY).divide(BigDecimal.valueOf(1000)));
     }
 
     /**
@@ -93,9 +99,16 @@ public final class GridUtils {
      *         index not in range of 0 GridConstant.EFFECTIVE_BITS
      */
     public static int getIndexFromFrequency(Decimal64 atozMinFrequency) {
-        double nvalue = (atozMinFrequency.doubleValue() - GridConstant.CENTRAL_FREQUENCY)
-            * (1000 / GridConstant.GRANULARITY);
-        int index =  (int) Math.round(nvalue + 284);
+
+        BigDecimal nvalue = (
+                                BigDecimal.valueOf(atozMinFrequency.doubleValue())
+                                .subtract(BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY))
+                            ).multiply(
+                                    BigDecimal.valueOf(1000)
+                                    .divide(BigDecimal.valueOf(GridConstant.GRANULARITY))
+                            );
+
+        int index = (int) Math.round(nvalue.add(BigDecimal.valueOf(284)).doubleValue());
         if (index < 0 || index > GridConstant.EFFECTIVE_BITS) {
             throw new IllegalArgumentException("Frequency not in range " + atozMinFrequency);
         }

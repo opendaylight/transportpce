@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.ServiceRateConstant;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.ServicePathInput;
@@ -213,5 +214,44 @@ public class GridUtilsTest {
             GridUtils.initSpectrumInformationFromServicePathInput(new ServicePathInputBuilder().build());
         });
         assertEquals("low and higher spectral slot numbers cannot be null", exception.getMessage());
+    }
+
+
+    @Test
+    void startFrequencyTest() {
+
+        BigDecimal startFrequency = BigDecimal.valueOf(191.325);
+        BigDecimal granularity = BigDecimal.valueOf(0.00625);
+
+        for (int i = 0; i < 768; i++) {
+            BigDecimal index = BigDecimal.valueOf(i);
+            BigDecimal expected = startFrequency.add(granularity.multiply(index));
+            BigDecimal found = GridUtils.getStartFrequencyFromIndex(i);
+            Assert.assertTrue(
+                    "Expected frequency " + expected + " but found " + found,
+                    expected.compareTo(found) == 0
+            );
+
+        }
+
+    }
+
+    @Test
+    void stopFrequencyTest() {
+
+        BigDecimal startFrequency = BigDecimal.valueOf(191.325);
+        BigDecimal granularity = BigDecimal.valueOf(0.00625);
+
+        for (int i = 0; i < 768; i++) {
+            BigDecimal index = BigDecimal.valueOf(i + 1);
+            BigDecimal expected = startFrequency.add(granularity.multiply(index));
+            BigDecimal found = GridUtils.getStopFrequencyFromIndex(i);
+            Assert.assertTrue(
+                    "Expected frequency " + expected + " but found " + found,
+                    expected.compareTo(found) == 0
+            );
+
+        }
+
     }
 }
