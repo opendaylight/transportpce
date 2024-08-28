@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0e520a7_b1a8ae0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-28T08:33:56Z",
+      "side": 1,
+      "message": "The \"byte focused approach\" is gone. Instead, individual bits in the byte is taken into consideration.",
+      "parentUuid": "3bef9bdb_ac548c46",
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fa7bf96_fcb9e966",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Yes, flexgrid was overlooked.\n\nOn a side note, this is the downside of using these type of data arrays. They don\u0027t contain all the information needed. As a result, we need to make assumptions about the missing information.\n\nI prefer when data \"can speak for itself\", but in this case that\u0027s pretty much impossible. I imagine it would be useful to provide an array where each element is an object containing the start and stop frequency and whatever other information is relevant. That code should probably be placed in a separate class though. \n\nAs a compromise, maybe this interface should provide methods forcing the implementing class to disclose the missing details? That way classes relying on the details don\u0027t have to guess, instead they may ask for it. Probably requires a bit more work to solve flexgrid though.",
       "parentUuid": "2fa7bf96_fcb9e966",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 70
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74a5099f_debd2929",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-28T08:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bde9528f_5f3719b2",
       "range": {
         "startLine": 20,
         "startChar": 6,
@@ -130,6 +172,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ec810d0_66d48c88",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-28T08:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bf2c3e7_14e1d48d",
+      "range": {
+        "startLine": 27,
+        "startChar": 66,
+        "endLine": 27,
+        "endChar": 75
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daf2548f_5384cef7",
@@ -177,6 +243,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7d90df0_7ddce332",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-28T08:33:56Z",
+      "side": 1,
+      "message": "The logic is reversed. i.e. the interface has been renamed to \"Available\" and the method was renamed to availableFrequencyRanges().",
+      "parentUuid": "20977b7c_91abec4f",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acb66469_bd68e0af",
@@ -214,6 +304,30 @@
       "side": 1,
       "message": "This was also intentional. The method assignedFrequencies() only purpose is to return a BitSet where 1 represents a used frequency (range?) and 0 represents an available frequency (range?).\n\nI felt it made sense to have 1 \u003d\u003d \"True\" \u003d\u003d \"assigned frequency range\" in this context (assignedFrequencies()).\n\nThe opposite also made sense, having \"True\" \u003d\u003d \"free frequency range\" in availableFrequencies().\n\nAs a side note, this was useful in the class NumericFrequency, where assignedFrequencies() and availableFrequencies() are used: \n\n    ...\n\n    @Override\n    public Map\u003cDouble, Double\u003e assignedFrequency(BitMap frequency) {\n        return this.frequency(frequency.assignedFrequencies());\n    }\n\n    @Override\n    public Map\u003cDouble, Double\u003e availableFrequency(BitMap frequency) {\n        return this.frequency(frequency.availableFrequencies());\n    }\n    \n    private Map\u003cDouble, Double\u003e frequency(BitSet bitSet) {\n        ...\n    }\n    \n    ...\n\n    \nThe private method frequency() doesn\u0027t care whether or not it creates a map of available or assigned frequencies. All it cares about is a BitSet representing frequency ranges, where true \u003d\u003d \"a frequency range\". Having methods returning either available or assigned frequency ranges as true made things easier.\n\nSo the point of these methods is that I needed the logic. By isolating the code, it\u0027s easily testable. I don\u0027t know if these classes are of any use in another context, but that\u0027s fine, they don\u0027t have to be imho. Although, I have noticed similar logic in TPCE regarding fixgrid, if I\u0027m not mistaken.",
       "parentUuid": "acb66469_bd68e0af",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 54
+      },
+      "revId": "113cc5a94b60503a180e26048d083ac292009059",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "297969b4_357c91f6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/BitMap.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-28T08:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a71316b4_1659e537",
       "range": {
         "startLine": 44,
         "startChar": 0,
