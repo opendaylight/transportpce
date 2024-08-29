@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "423ac3fc_bdddb17c",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopologyTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-29T13:14:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8dc308e9_52c95458",
+      "revId": "9d73f6bf98bc64c113f0cf30b567fa0590c32c05",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b0acd7a_382e629e",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-28T08:03:16Z",
       "side": 1,
       "message": "idem",
+      "revId": "9d73f6bf98bc64c113f0cf30b567fa0590c32c05",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ad41321_b7f7437e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopologyTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-08-29T13:14:15Z",
+      "side": 1,
+      "message": "terminationPoint1 is also used in getTTP11UsedFreqMap() and getTTP11AvailableFreqMap().",
+      "parentUuid": "5b0acd7a_382e629e",
       "revId": "9d73f6bf98bc64c113f0cf30b567fa0590c32c05",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
