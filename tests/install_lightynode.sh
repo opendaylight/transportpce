@@ -32,6 +32,11 @@ if ! [ -d "$TARGET_DIR" ];then
     mkdir lightynode
 fi
 
+if [ -e $INSTALL_DIR/lighty-openroadm-device-$PLUGIN_VERSION.jar ];then
+    echo "lightynode simulator in version $PLUGIN_VERSION is alreay installed"
+    exit 0
+fi
+
 #clean lightynode install directory
 if [ -d "$INSTALL_DIR" ];then
     echo "Removing $INSTALL_DIR directory"
