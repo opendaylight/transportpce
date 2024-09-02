@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44272b36_57522cc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T16:29:00Z",
+      "side": 1,
+      "message": "Thanks for your help in solving TAPI bugs! LGTM.",
+      "revId": "4821842d6d9e1e36319a8b523e74952823be0229",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
