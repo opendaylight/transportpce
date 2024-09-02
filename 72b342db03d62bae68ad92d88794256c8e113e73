@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "159811d3_221aea3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T16:11:41Z",
+      "side": 1,
+      "message": "About previous comments, after looking at the change that sits on top of this one, I think the renaming of some of the classes to reflect more what\u0027s in, may be done in a further step, just to avoid additional unnecessary work. Thanks!",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac96ff27_ac06219f",
