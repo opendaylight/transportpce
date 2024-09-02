@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78891eba_e3157203",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T13:01:16Z",
+      "side": 1,
+      "message": "Thanks Joakim for this refacto.\nThis looks to me much less abstracted and easier to understand than previous version.\nI have two main comments : \n1) Classes naming :  Available, Numeric and Math are still very abstracted and does not really reflect what it does. In this change it is understandable, but at the end when we will call the methods in other Tapi classes, it does not give an idea of what it does. So continuing your approach, I would suggest finding some names in connection with what it does. As an example (it is a suggestion, not supposed to be the best naming!):\nAvailable --\u003e GridUsage, AvailableGrid --\u003e GridUsageImpl\nMath --\u003e FreqAndIndex, FrequencyMath --\u003e FreqAndIndexImpl\nNumeric --\u003e FreqRange, NumericFrequency --\u003e FreqRangeImpl\n2) I may have missed something, but I don\u0027t see the value of using signed bytes vs unsigned to described Bytes spectrum usage. Especially if we consider that there is potentially 3 options to code signed bytes, and that you are using 2 complements option : so to assimilate what you put in your comments we need to translate it. Why not simply using unsigned bytes? Have you planned to make specific operations that signed bytes would simplify ?\nThanks!",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac96ff27_ac06219f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/NumericFrequency.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T13:01:16Z",
+      "side": 1,
+      "message": "Not so clear to me even if I understand the spirit. What about something more in line with the names of the methods provided in the interfaces, like : \n\n// Provides a Map \u003cLowerFreq, HigherFreq\u003e describing start and stop frequencies \n// of contiguous unitary slots set to 1/true in the BitSet : \n//   _ If the Bitset corresponds to available slots, the map provides boundaries of\n//     available spectrum portions\n//   _ If the Bitset corresponds to assigned slots, the map provides boundaries of \n//     occupied spectrum portions\n?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 41
+      },
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
