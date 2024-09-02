@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88f76a86_883eff49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T16:06:05Z",
+      "side": 1,
+      "message": "Thank you Joakim for this valuable change, and the associated unit test suite!\nAll LGTM. The change I recommended regarding the class names in the change below could probably be done in a later phase to avoid unnecessary additional work! Will modify these comments accordingly.",
+      "revId": "00aaa31f56452e351d1c08809ec3f89b52992c87",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
