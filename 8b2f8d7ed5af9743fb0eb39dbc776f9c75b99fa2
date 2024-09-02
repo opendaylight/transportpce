@@ -16,6 +16,23 @@
       "message": "Thanks Joakim LGTM",
       "revId": "8b2f8d7ed5af9743fb0eb39dbc776f9c75b99fa2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58abca89_23723164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T12:00:57Z",
+      "side": 1,
+      "message": "Thanks for this correction Joakim. Also LGTM!",
+      "revId": "8b2f8d7ed5af9743fb0eb39dbc776f9c75b99fa2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
