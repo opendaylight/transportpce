@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e639de53_557cacc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T14:58:08Z",
+      "side": 1,
+      "message": "Sorry, forgot one comment",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac96ff27_ac06219f",
@@ -36,6 +53,29 @@
         "startChar": 0,
         "endLine": 51,
         "endChar": 41
+      },
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a2c3b60_0654004a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/AvailableGridTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-02T14:58:08Z",
+      "side": 1,
+      "message": "Looks confusing to me. Why do you name \"available\" a variable that corresponds to what is assigned and vice-versa ?",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 67
       },
       "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
