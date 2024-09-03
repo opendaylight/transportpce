@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2024-07-19 {
+    description
+       "Change leaf supporting-odu4 to leaf-list to support ODUCn";
+  }
   revision 2023-12-21 {
     description
        "Add leaflist supported-operational-mode to lcp";
@@ -236,7 +240,7 @@ module transportpce-portmapping {
             "OTUCn interface provisioned on the port for B100G support. This includes
             OTUC2, OTUC3, OTUC4";
         }
-      leaf supporting-odu4 {
+      leaf-list supporting-odu4 {
           type string;
           description
             "ODU4 interface provisioned on the port";

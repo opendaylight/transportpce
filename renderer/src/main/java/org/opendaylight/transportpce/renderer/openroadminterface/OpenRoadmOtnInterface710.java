@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.attributes.rev200327.parent.odu.allocation.parent.odu.allocation.trib.slots.choice.OpucnBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Off;
@@ -157,7 +157,7 @@ public class OpenRoadmOtnInterface710 {
         oduIfBuilder.addAugmentation(oduIf1Builder.setOdu(oduBuilder.build()).build());
         // Post interface on the device
         this.openRoadmInterfaces.postOTNInterface(nodeId, oduIfBuilder);
-        LOG.info("Returning the ODU4 inteface {}", oduIfBuilder.getName());
+        LOG.info("Returning the ODU4 interface {}", oduIfBuilder.getName());
         return oduIfBuilder.getName();
     }
 

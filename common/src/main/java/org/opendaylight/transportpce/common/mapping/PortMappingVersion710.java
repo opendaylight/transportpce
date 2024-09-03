@@ -33,31 +33,31 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.cp.to.degree.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.cp.to.degree.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.cp.to.degree.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mc.capabilities.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mpdr.restrictions.grp.MpdrRestrictionsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.regen.profiles.grp.RegenProfilesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.SwitchingPoolLcpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.SwitchingPoolLcpKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.switching.pool.lcp.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.cp.to.degree.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.cp.to.degree.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.cp.to.degree.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mc.capabilities.McCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mpdr.restrictions.grp.MpdrRestrictionsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.regen.profiles.grp.RegenProfilesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.switching.pool.lcp.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.alarm.pm.types.rev191129.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.CircuitPack;
@@ -977,6 +977,7 @@ public class PortMappingVersion710 {
             .setSupportingOdu4(null)
             .setSupportingOducn(null)
             .setSupportingOtucn(null);
+        Set<String> odu4Interfaces = new HashSet<>();
         for (Interfaces interfaces : port.getInterfaces()) {
             Optional<Interface> openRoadmInterface = getInterfaceFromDevice(nodeId,
                 interfaces.getInterfaceName());
@@ -1009,12 +1010,13 @@ public class PortMappingVersion710 {
                 String interfaceName = interfaces.getInterfaceName();
                 String suffix = interfaceName.substring(interfaceName.lastIndexOf("-") + 1);
                 if (suffix.equals("ODU4")) {
-                    mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+                    odu4Interfaces.add(interfaces.getInterfaceName());
                 } else if (suffix.contains("ODUC")) {
                     mpBldr.setSupportingOducn(interfaces.getInterfaceName());
                 }
             }
         }
+        mpBldr.setSupportingOdu4(odu4Interfaces);
         return mpBldr;
     }
 

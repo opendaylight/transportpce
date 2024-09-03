@@ -177,7 +177,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_09_get_portmapping_NETWORK1(self):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.NETWORK1_CHECK_DICT["supporting-odu4"] = "XPDR1-NETWORK1-ODU4"
+        self.NETWORK1_CHECK_DICT["supporting-odu4"] = ["XPDR1-NETWORK1-ODU4"]
         self.NETWORK1_CHECK_DICT["supporting-otu4"] = "XPDR1-NETWORK1-OTU"
         self.assertIn(
             self.NETWORK1_CHECK_DICT,
