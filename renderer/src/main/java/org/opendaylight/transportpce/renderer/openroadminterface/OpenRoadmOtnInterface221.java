@@ -15,7 +15,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240719.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
@@ -142,7 +142,8 @@ public class OpenRoadmOtnInterface221 {
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2e" + ":" + serviceName);
         if (mapping.getSupportingOdu4() != null) {
-            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
+            //in R 2.2.1, only one interface is expected since OTUCn is not supported
+            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4().iterator().next());
         }
         if (mapping.getSupportingEthernet() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
@@ -218,7 +219,7 @@ public class OpenRoadmOtnInterface221 {
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU0" + ":" + servicename);
         if (mapping.getSupportingOdu4() != null) {
-            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
+            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4().iterator().next());
         }
         if (mapping.getSupportingEthernet() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
@@ -294,7 +295,7 @@ public class OpenRoadmOtnInterface221 {
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(mapping, OtnOdu.VALUE,
             logicalConnPoint + "-ODU2" + ":" + servicename);
         if (mapping.getSupportingOdu4() != null) {
-            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4());
+            oduInterfaceBldr.setSupportingInterface(mapping.getSupportingOdu4().iterator().next());
         }
         if (mapping.getSupportingEthernet() != null) {
             oduInterfaceBldr.setSupportingInterface(mapping.getSupportingEthernet());
