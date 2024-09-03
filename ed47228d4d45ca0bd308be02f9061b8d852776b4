@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b13fd33_10582c7a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopologyTest.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-03T12:55:13Z",
+      "side": 1,
+      "message": "useless import now",
+      "revId": "ed47228d4d45ca0bd308be02f9061b8d852776b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
