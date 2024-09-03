@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75e9fc19_41be7453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-03T11:51:04Z",
+      "side": 1,
+      "message": "Thanks Olivier for taking the time to review!\n\n1)\n\"Available, Numeric and Math are still very abstracted and does not really reflect what it does.\"\n\nWell, they are interfaces and as such they are not supposed to \"do anything\" apart from specifying a \"contract\" to be implemented by a class. Meaning, specifying methods that do something. I also intentionally avoid naming classes based on what they do (I leave that to the methods). Instead I try to name them according to what they are or represent or model. Oftentimes I omit information in class names that can be found in the package name (in this case tapi/frequency). Otherwise you can end up with every class in a package having the same prefix/suffix making them more or less redundant.\n\nAfter all, java.lang.Math is very different from transportpce.tapi.frequency.Math.\n\nWith that said though, perhaps the current interface names are a bit too vague.\n\n    Available --\u003e GridUsage, AvailableGrid --\u003e GridUsageImpl\n\nFair point, Available is probably too vague. Both GridUsage or Grid would work, although the word \"Usage\" rubs me the wrong way. However, both names could be implemented by classes like AvailableGrid and UsedGrid. But the class name GridUsageImpl is just as vague as the interface it\u0027s implementing. Does it represent the available or used grid? It\u0027s an important distinction and I feel the class name should reflect it. The suffix \"Impl\" doesn\u0027t really add anything useful and all in all the name GridUsageImpl is far more ambiguous than the class AvailableGrid, imho. \n\n    Math --\u003e FreqAndIndex, FrequencyMath --\u003e FreqAndIndexImpl\n\nThe name FreqAndIndex is too specific and are trying to communicate the methods (or behaviour) within it. Having a tight coupling between the interface name and the methods usually makes it awkward to update the interface later on. Should we rename the interface simply because we added or removed a method? As an example, if we add a method such as owner() to a Vehicle interface, isn\u0027t it still a Vehicle? Do the interface name really need to communicate that the interface specifies a method by which one may get the vehicle owner information?\n\n    Numeric --\u003e FreqRange, NumericFrequency --\u003e FreqRangeImpl\n\nI agree the interface name Numeric in this case can be improved. However, I\u0027m not a fan of abbreviations. Secondly, I find the name FreqRange too specific for the interface and is perhaps more suitable for the implementing class. I\u0027m leaning towards the interface \"Range\" or \"Interval\" and the implementing class \"FrequencyRange\" or FrequencyInterval.\n\n2)\n\"I may have missed something, but I don\u0027t see the value of using signed bytes vs unsigned to described Bytes spectrum usage.\"\n\nThe byte data type is an 8-bit signed two\u0027s complement integer. It has a minimum value of -128 and a maximum value of 127 (inclusive):\nhttps://docs.oracle.com/javase%2Ftutorial%2F/java/nutsandbolts/datatypes.html\n\nWith that said, I\u0027m simply working with what I have at my disposal. Consider the method getTTPUsedFreqMap(TerminationPoint tp) in the class ConvertORToTapiTopology:\n\n    public Map\u003cDouble, Double\u003e getTTPUsedFreqMap(TerminationPoint tp) {\n\n        ...\n        byte[] freqBitSet \u003d new byte[GridConstant.NB_OCTECTS];\n        ...\n        freqBitSet \u003d txttpAttAvlFreqMaps.entrySet().stream()\n                        .filter(afm -\u003e afm.getKey().equals(availFreqMapsKey))\n                        .findFirst().orElseThrow().getValue().getFreqMap();\n        ...\n\n    }\n\nfreqBitSet is an array containing signed bytes. As inconvenient as it may seem, it is what we have to work with. It\u0027s possible to get the unsigned counterpart by using something like Byte.toUnsignedInt(...), but in this case it\u0027s more of a pointless step sideways since we want to convert to a BitSet anyway.\n\n\"...and that you are using 2 complements option : so to assimilate what you put in your comments we need to translate it.\"\n\nI\u0027m sorry, but you lost me. Can you elaborate what you mean?",
+      "parentUuid": "78891eba_e3157203",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac96ff27_ac06219f",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/NumericFrequency.java",
         "patchSetId": 18
@@ -65,6 +83,30 @@
       "writtenOn": "2024-09-02T13:01:16Z",
       "side": 1,
       "message": "Not so clear to me even if I understand the spirit. What about something more in line with the names of the methods provided in the interfaces, like : \n\n// Provides a Map \u003cLowerFreq, HigherFreq\u003e describing start and stop frequencies \n// of contiguous unitary slots set to 1/true in the BitSet : \n//   _ If the Bitset corresponds to available slots, the map provides boundaries of\n//     available spectrum portions\n//   _ If the Bitset corresponds to assigned slots, the map provides boundaries of \n//     occupied spectrum portions\n?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 41
+      },
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb86fd98_b8f16b83",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/NumericFrequency.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-03T11:51:04Z",
+      "side": 1,
+      "message": "Good point. I have to confess I found this comment rather confusing. The method is a refactored version from an existing method in ConvertORToTapiTopology. I was lazy and kept this comment as is. I think we could get rid of it altogether.",
+      "parentUuid": "ac96ff27_ac06219f",
       "range": {
         "startLine": 48,
         "startChar": 0,
@@ -88,6 +130,30 @@
       "writtenOn": "2024-09-02T14:58:08Z",
       "side": 1,
       "message": "Looks confusing to me. Why do you name \"available\" a variable that corresponds to what is assigned and vice-versa ?",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 67
+      },
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7281c53e_0b9a2536",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/AvailableGridTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-03T11:51:04Z",
+      "side": 1,
+      "message": "Thanks, you\u0027re right, it is confusing. My mistake. I think this is a case of refactoring gone wrong.",
+      "parentUuid": "4a2c3b60_0654004a",
       "range": {
         "startLine": 153,
         "startChar": 0,
