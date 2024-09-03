@@ -33,6 +33,24 @@
       "message": "there is a checkstyle error following the intermediate variable removal.\nTxTtpAttributes import is now useless in Junit.\n\n09:06:39 [ERROR] src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORToTapiTopologyTest.java:[22,8] (imports) UnusedImports: Unused import - org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.TxTtpAttributes.",
       "revId": "00aaa31f56452e351d1c08809ec3f89b52992c87",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1302ee0c_065868e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-03T13:28:17Z",
+      "side": 1,
+      "message": "You\u0027re right. Uploaded a fix for it.",
+      "parentUuid": "8b4acff7_aeee902f",
+      "revId": "00aaa31f56452e351d1c08809ec3f89b52992c87",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
