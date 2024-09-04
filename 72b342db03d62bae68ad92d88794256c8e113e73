@@ -70,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96567650_456e40d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-04T14:49:31Z",
+      "side": 1,
+      "message": "Hi Joakim. Thanks for your prompt answer! I globaly agree with your comments about interfaces, implementation \u0026 methods. Yes it shall not try to reflect what the methods do. \n\nHowever, having an idea of what it deals with is helpfull. Taking the example of Available, as the some of the methods in are related to availability, and some others to assignement (the opposite), \"Available\" is confusing to me.\n\nThe Impl extension is what we have been using until now, completing the interface name, to name the class where the implementation of the interface is done. This was the reason of suggesting this names. Don\u0027t know if this is a common usage, or just a naming convention that we agreed on. But at least, it respects what\u0027s already there.\nMath is confusing to me because it already exist in a completely different context. What it suggests to me is an interface that defines the signature of mathematic methods that apply to a specific type. FreqAndIndex reflect the fact that we provide a set of methods handling relationship between the two items. Not exactely what they do.\nFor numeric vs FreqRange, yes this last reflects what the implementation does, but if we apply the convention we have been using until now with Impl, I don\u0027t see this as an issue.\n\nHowever, whatever we decide, this can be done in a second step, to avoid reworking other changes on top of it.\n\nAbout the bytes, Sorry I did not realized that this comes from the type we have been using and that it was defining signed 2\u0027s complement integer. I though it was generic and could be use for both signed or unsigned int. My mistake, forget it! When I say we need to translate it, I meant that my mind is not so agile  to decode live from the binary writing what is the corresponding decimal value and inversely!",
+      "parentUuid": "75e9fc19_41be7453",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac96ff27_ac06219f",
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "Good point. I have to confess I found this comment rather confusing. The method is a refactored version from an existing method in ConvertORToTapiTopology. I was lazy and kept this comment as is. I think we could get rid of it altogether.",
       "parentUuid": "ac96ff27_ac06219f",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 41
+      },
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f7578d_5465d120",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/NumericFrequency.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-04T14:49:31Z",
+      "side": 1,
+      "message": "The first line of the comment contained an information about the fact that the key is the start freq and the value the stop. It could have been valuable to keep it...However, it can be easily deduced from the code itself. I agree on the fact that I am sometimes a bit verbose in my comments!",
+      "parentUuid": "cb86fd98_b8f16b83",
       "range": {
         "startLine": 48,
         "startChar": 0,
