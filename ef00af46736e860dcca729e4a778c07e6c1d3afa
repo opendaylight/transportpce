@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea29f5b_8802669f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-09-05T10:34:57Z",
+      "side": 1,
+      "message": "Some functional tests are failing on the CI, but locally everything seems ok.",
+      "revId": "ef00af46736e860dcca729e4a778c07e6c1d3afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
