@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a58cec6c_cabfaccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-05T10:50:52Z",
+      "side": 1,
+      "message": "\"Impl extension is what we have been using until now, completing the interface name, to name the class where the implementation of the interface is done\"\n\nI understand. My concern is the suggested naming convention implies and requires a one to one relationship between the interface and the implementing class to work. However, there are no such technical restrictions in java. Java supports a one to many relationship. This opens up the possibility for polymorphism. By enforcing the naming convention, you\u0027re needlessly limiting your options and closing the door on a very useful and powerful feature in OOP. Therefore, this kind of self imposed restrictions serves no useful purpose, whether intentional or not, imho.\n\n\"Math is confusing to me because it already exist in a completely different context. What it suggests to me is an interface that defines the signature of mathematic methods that apply to a specific type.\"\n\nExactly, different contexts. I\u0027m not saying Math was the better option. I\u0027m saying I think you have to view interfaces/and classes relative to the package/module they belong to, as opposed to a global context. The argument \"Math\" is used elsewhere is irrelevant, imho. A problem like that could easily be created by including a new module or resolved by removing a module.\n\nOftentimes most of the classes are only useful within a package, even though they may not be forbidden or restricted to be used elsewhere. Sometimes only a few classes are of potential use elsewhere. Trying to name classes so they fit into multiple contexts at once is usually not practical or useful. Sometimes it might even be counterproductive. \n\nAs an example, a registered User in the \"account\" package could be Name, Address, Phone number and Email. But in the \"newsletter\" package, a User (email recipient or sender) could be Name and Email only. Simply because the e-mail server has no use for a physical address or phone number. Both of these two packages/modules could have separate interfaces called \"User\". That\u0027s fine, and viewed within their respective packages, while ignoring the rest of the application, it might seem perfectly logical. By separating the two interfaces, they can be updated and used independently. In the end, different models fulfil different requirements, despite potentially having similar names. Taking those differences into account is more important than having globally unique names, imho.",
+      "parentUuid": "96567650_456e40d3",
+      "revId": "72b342db03d62bae68ad92d88794256c8e113e73",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac96ff27_ac06219f",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/NumericFrequency.java",
         "patchSetId": 18
