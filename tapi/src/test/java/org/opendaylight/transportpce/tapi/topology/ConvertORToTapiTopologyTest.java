@@ -17,9 +17,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.tapi.frequency.grid.Math;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.PpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.PpAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.TxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.pp.attributes.UsedWavelength;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
@@ -81,7 +87,7 @@ class ConvertORToTapiTopologyTest {
 
     @Test
     void getTTPAvailableFreqMap() {
-        Map<Double, Double> expected = Map.of(191.325, 196.075);
+        Map<Double, Double> expected = Map.of(191.325, 196.07);
         Assertions.assertEquals(expected, convertORToTapiTopology.getTTPAvailableFreqMap(terminationPoint));
     }
 
@@ -97,4 +103,29 @@ class ConvertORToTapiTopologyTest {
         Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11AvailableFreqMap(terminationPoint1));
     }
 
+    @Test
+    void getPP11UsedWavelength() {
+
+        UsedWavelengthBuilder usedWavelengthBuilder = new UsedWavelengthBuilder();
+        usedWavelengthBuilder.setIndex(760)
+                .setFrequency(FrequencyTHz.getDefaultInstance("196.075"))
+                .setWidth(FrequencyGHz.getDefaultInstance("50"));
+
+        UsedWavelength usedWavelength = usedWavelengthBuilder.build();
+
+        PpAttributesBuilder ppAttributesBuilder = new PpAttributesBuilder();
+        PpAttributes ppAttributes = ppAttributesBuilder
+                .setUsedWavelength(Map.of(usedWavelength.key(), usedWavelength))
+                .build();
+
+        TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder();
+        TerminationPoint1 tp = terminationPoint1Builder
+                .setPpAttributes(ppAttributes)
+                .build();
+
+        Map<Double, Double> expected = Map.of(196.05, 196.1);
+        Assertions.assertEquals(expected, convertORToTapiTopology.getPP11UsedWavelength(tp));
+        Assertions.assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedWavelength(tp)));
+
+    }
 }
