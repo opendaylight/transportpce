@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.tapi.frequency;
+package org.opendaylight.transportpce.tapi.frequency.grid;
 
 import java.util.BitSet;
 import java.util.Map;
