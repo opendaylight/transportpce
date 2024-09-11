@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.tapi.frequency;
+package org.opendaylight.transportpce.tapi.frequency.grid;
 
 import java.util.BitSet;
 import java.util.LinkedHashMap;
@@ -32,19 +32,19 @@ public class NumericFrequency implements Numeric {
 
     @Override
     public Map<Double, Double> assignedFrequency(Available frequency) {
-        return this.range(frequency.assignedFrequencies());
+        return range(frequency.assignedFrequencies());
     }
 
     @Override
     public Map<Double, Double> availableFrequency(Available frequency) {
-        return this.range(frequency.availableFrequencies());
+        return range(frequency.availableFrequencies());
     }
 
     /**
      * Note: This code is mostly copied as is from the original
      * class ConvertORToTapiTopology.java as part of refactoring.
      */
-    private Map<Double, Double> range(BitSet bitSet) {
+    public Map<Double, Double> range(BitSet bitSet) {
 
         Map<Double,Double> freqMap = new LinkedHashMap<>();
 
