@@ -329,6 +329,9 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
+        if (portMap.getSupportedInterfaceCapability() == null || portMap.getSupportedInterfaceCapability().isEmpty()) {
+            return null;
+        }
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OCH interface
             return createOpenRoadmOchInterface(nodeId, logicalConnPoint, spectrumInformation);
