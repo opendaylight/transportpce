@@ -17,6 +17,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Factory;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
@@ -558,10 +562,10 @@ public class ConvertTopoORtoTapiAtInit {
                 .setLifecycleState(LifecycleState.INSTALLED);
 
             ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
-
+            Factory frequencyFactory = new TeraHertzFactory();
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
-                Map<Double,Double> usedFreqMap = new HashMap<>();
-                Map<Double,Double> availableFreqMap = new HashMap<>();
+                Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
+                Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
                 switch (tpType) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
@@ -570,9 +574,13 @@ public class ConvertTopoORtoTapiAtInit {
                     case SRGTXRXPP:
                         usedFreqMap = tapiFactory.getPPUsedWavelength(tp);
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E12,
-                                GridConstant.START_EDGE_FREQUENCY * 1E12
-                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09);
+                            availableFreqMap.put(
+                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
+                                    frequencyFactory.frequency(
+                                            GridConstant.START_EDGE_FREQUENCY,
+                                            GridConstant.GRANULARITY,
+                                            GridConstant.EFFECTIVE_BITS)
+                            );
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
                                 usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
@@ -585,8 +593,8 @@ public class ConvertTopoORtoTapiAtInit {
                     case DEGREERXTTP:
                     case DEGREETXTTP:
                     case DEGREETXRXTTP:
-                        usedFreqMap = tapiFactory.getTTPUsedFreqMap(tp);
-                        availableFreqMap = tapiFactory.getTTPAvailableFreqMap(tp);
+                        usedFreqMap = tapiFactory.getTTPUsedFreqMap(tp).ranges();
+                        availableFreqMap = tapiFactory.getTTPAvailableFreqMap(tp).ranges();
                         break;
                     default:
                         break;
