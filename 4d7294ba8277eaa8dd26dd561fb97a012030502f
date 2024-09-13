@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48a12585_87652104",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-13T15:16:18Z",
+      "side": 1,
+      "message": "This change goes on top of Update PortMapping models for which Test1.2.1 \u0026 Tests tapi were failing on the gate. Test 121 and test tapi pass locally. All other tests passed on the gate. Thus all functionnal tests are supposed to pass now!",
+      "revId": "4d7294ba8277eaa8dd26dd561fb97a012030502f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
