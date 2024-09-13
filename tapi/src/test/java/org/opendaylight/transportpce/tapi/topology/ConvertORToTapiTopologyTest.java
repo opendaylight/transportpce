@@ -15,8 +15,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.frequency.grid.Math;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
@@ -54,7 +57,8 @@ class ConvertORToTapiTopologyTest {
                         191.325,
                         768,
                         math
-                )
+                ),
+                new FrequencyRangeFactory()
         );
 
         byte[] availableFrequencyMap = new byte[96];
@@ -81,26 +85,26 @@ class ConvertORToTapiTopologyTest {
 
     @Test
     void getTTPUsedFreqMap() {
-        Map<Double, Double> expected = Map.of(196.075, 196.125);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPUsedFreqMap(terminationPoint));
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(196.075), new TeraHertz(196.125));
+        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPUsedFreqMap(terminationPoint).ranges());
     }
 
     @Test
     void getTTPAvailableFreqMap() {
-        Map<Double, Double> expected = Map.of(191.325, 196.07);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPAvailableFreqMap(terminationPoint));
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(191.325), new TeraHertz(196.075));
+        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPAvailableFreqMap(terminationPoint).ranges());
     }
 
     @Test
     void getTTP11UsedFreqMap() {
-        Map<Double, Double> expected = Map.of(196.075, 196.125);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11UsedFreqMap(terminationPoint1));
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(196.075), new TeraHertz(196.125));
+        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11UsedFreqMap(terminationPoint1).ranges());
     }
 
     @Test
     void getTTP11AvailableFreqMap() {
-        Map<Double, Double> expected = Map.of(191.325, 196.075);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11AvailableFreqMap(terminationPoint1));
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(191.325), new TeraHertz(196.075));
+        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11AvailableFreqMap(terminationPoint1).ranges());
     }
 
     @Test
@@ -123,7 +127,7 @@ class ConvertORToTapiTopologyTest {
                 .setPpAttributes(ppAttributes)
                 .build();
 
-        Map<Double, Double> expected = Map.of(196.05, 196.1);
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(196.05), new TeraHertz(196.1));
         Assertions.assertEquals(expected, convertORToTapiTopology.getPP11UsedWavelength(tp));
         Assertions.assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedWavelength(tp)));
 
