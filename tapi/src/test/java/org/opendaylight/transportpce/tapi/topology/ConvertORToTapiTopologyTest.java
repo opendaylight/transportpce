@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.frequency.grid.Math;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
 import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
@@ -58,7 +59,8 @@ class ConvertORToTapiTopologyTest {
                         768,
                         math
                 ),
-                new FrequencyRangeFactory()
+                new FrequencyRangeFactory(),
+                new TeraHertzFactory()
         );
 
         byte[] availableFrequencyMap = new byte[96];
