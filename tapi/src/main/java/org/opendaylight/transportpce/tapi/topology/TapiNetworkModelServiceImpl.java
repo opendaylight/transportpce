@@ -32,6 +32,10 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Factory;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
@@ -1362,7 +1366,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             profileMap.put(contextProfile.key(), contextProfile);
         }
         mergeProfileInTapiContext(profileMap);
-        Map<Double, Double> freqWidthMap = new HashMap<>();
+        Map<Frequency, Frequency> freqWidthMap = new HashMap<>();
         if (getNetworkTerminationPointFromDatastore(nodeId, tpid) == null) {
             LOG.error("CREATENEP, No Tp found in topology for LCP {}, of NodeId {} ", tpid, nodeId);
         } else {
@@ -1976,6 +1980,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String nodeId, Map<String, TerminationPoint1> tpMap, boolean withSip, String nepPhotonicSublayer) {
         // create neps for MC and and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
+        Factory frequencyFactory = new TeraHertzFactory();
         for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
             // Admin and oper state common for all tps
             // PHOTONIC MEDIA nep
@@ -2002,8 +2007,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
             OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
-                Map<Double,Double> usedFreqMap = new HashMap<>();
-                Map<Double,Double> availableFreqMap = new HashMap<>();
+                Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
+                Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
                 switch (entry.getValue().getTpType()) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
@@ -2013,9 +2018,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         usedFreqMap = tapiFactory.getPP11UsedWavelength(
                             getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(GridConstant.START_EDGE_FREQUENCY * 1E12,
-                                GridConstant.START_EDGE_FREQUENCY * 1E12
-                                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09);
+                            availableFreqMap.put(
+                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
+                                    frequencyFactory.frequency(
+                                            GridConstant.START_EDGE_FREQUENCY,
+                                            GridConstant.GRANULARITY,
+                                            GridConstant.EFFECTIVE_BITS)
+                            );
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} for Node {}, tp {}",
                                 usedFreqMap, nodeId, tpMap);
@@ -2029,9 +2038,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     case DEGREETXTTP:
                     case DEGREETXRXTTP:
                         usedFreqMap = tapiFactory.getTTP11UsedFreqMap(
-                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
+                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey())).ranges();
                         availableFreqMap = tapiFactory.getTTP11AvailableFreqMap(
-                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
+                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey())).ranges();
                         break;
                     default:
                         break;
