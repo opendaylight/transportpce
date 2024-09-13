@@ -31,6 +31,10 @@ import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Factory;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.ServiceEndpointType;
@@ -185,6 +189,7 @@ public final class ConnectivityUtils {
             .connection.vs.service.Services> servicesMap;
     private String serviceName;
     private Uuid serviceUuid;
+    private final Factory frequencyFactory;
 
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
     public ConnectivityUtils(ServiceDataStoreOperations serviceDataStoreOperations,
@@ -202,6 +207,7 @@ public final class ConnectivityUtils {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.servicesMap = new HashMap<>();
+        this.frequencyFactory = new TeraHertzFactory();
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
@@ -1693,7 +1699,7 @@ public final class ConnectivityUtils {
         return minRate;
     }
 
-    private void updateXpdrNepSpectrum(Decimal64 lowFreq, Decimal64 highFreq,
+    private void updateXpdrNepSpectrum(Decimal64 lowFreqThz, Decimal64 highFreqThz,
             String id, String qualifier) {
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
         String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
@@ -1706,18 +1712,21 @@ public final class ConnectivityUtils {
         // Compute the new spectrum Pac (no AvailableSpectrum as the TP is provisonned with a wavelength)
         SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
         OccupiedSpectrum ospec = new OccupiedSpectrumBuilder()
-            .setLowerFrequency(Uint64.valueOf(Math.round(lowFreq.doubleValue() * 1E012)))
-            .setUpperFrequency(Uint64.valueOf(Math.round(highFreq.doubleValue() * 1E012)))
+            .setLowerFrequency(new TeraHertz(lowFreqThz).hertz())
+            .setUpperFrequency(new TeraHertz(highFreqThz).hertz())
             .build();
         spectrumPac.setOccupiedSpectrum(
             new HashMap<OccupiedSpectrumKey, OccupiedSpectrum>(Map.of(
                 new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec)));
-        double naz = 0.01;
-        Double gridLowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E012 ;
-        Double gridUpSupFreq = gridLowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz;
+        Frequency gridLowSupFreq = new TeraHertz(GridConstant.START_EDGE_FREQUENCY);
+        Frequency gridUpSupFreq =  frequencyFactory.frequency(
+                GridConstant.START_EDGE_FREQUENCY,
+                GridConstant.GRANULARITY,
+                GridConstant.EFFECTIVE_BITS
+        );
         SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-            .setLowerFrequency(Uint64.valueOf(Math.round(gridLowSupFreq)))
-            .setUpperFrequency(Uint64.valueOf(Math.round(gridUpSupFreq)))
+            .setLowerFrequency(gridLowSupFreq.hertz())
+            .setUpperFrequency(gridUpSupFreq.hertz())
             .build();
         spectrumPac.setSupportableSpectrum(
             new HashMap<SupportableSpectrumKey, SupportableSpectrum>(Map.of(
