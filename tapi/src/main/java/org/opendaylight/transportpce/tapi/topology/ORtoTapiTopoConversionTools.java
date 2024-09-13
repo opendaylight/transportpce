@@ -24,11 +24,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.frequency.grid.Available;
 import org.opendaylight.transportpce.tapi.frequency.grid.AvailableGrid;
 import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
 import org.opendaylight.transportpce.tapi.frequency.grid.Numeric;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
+import org.opendaylight.transportpce.tapi.frequency.range.Range;
+import org.opendaylight.transportpce.tapi.frequency.range.RangeFactory;
+import org.opendaylight.transportpce.tapi.frequency.range.SortedRange;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengths;
@@ -187,6 +193,7 @@ public class ORtoTapiTopoConversionTools {
     private Map<String, Uuid> uuidMap;
     private final Numeric numericFrequency;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
+    private final RangeFactory rangeFactory;
 
     static {
         OPMODE_LOOPRATE_MAP = new TreeMap<>(Comparator.reverseOrder());
@@ -273,7 +280,8 @@ public class ORtoTapiTopoConversionTools {
                         GridConstant.START_EDGE_FREQUENCY,
                         GridConstant.EFFECTIVE_BITS,
                         new FrequencyMath()
-                )
+                ),
+                new FrequencyRangeFactory()
         );
     }
 
@@ -281,8 +289,9 @@ public class ORtoTapiTopoConversionTools {
      * Instantiate an ORToTapiTopoConversionFactory Object.
      * @param tapiTopoUuid Uuid of the generated topology used in Builders.
      * @param numericFrequency NumericFrequency instance facilitating the management of the flex grid.
+     * @param rangeFactory Simplifies creation of frequency ranges.
      */
-    public ORtoTapiTopoConversionTools(Uuid tapiTopoUuid, Numeric numericFrequency) {
+    public ORtoTapiTopoConversionTools(Uuid tapiTopoUuid, Numeric numericFrequency, RangeFactory rangeFactory) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
@@ -291,6 +300,7 @@ public class ORtoTapiTopoConversionTools {
         this.oorOduSwitchingPool = new HashMap<>();
         this.irgMap = new HashMap<>();
         this.numericFrequency = numericFrequency;
+        this.rangeFactory = rangeFactory;
     }
 
     /**
@@ -1057,7 +1067,7 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to occupied-slot low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object).
      */
-    public Map<Double, Double> getXpdrUsedWavelength(TerminationPoint tp) {
+    public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
         if (tpAug == null) {
@@ -1079,9 +1089,9 @@ public class ORtoTapiTopoConversionTools {
         if (width == null) {
             return null;
         }
-        Double freqValue = freq.getValue().doubleValue();
-        Double widthValue = width.getValue().doubleValue();
-        return new HashMap<>(Map.of(freqValue - widthValue * 0.001 / 2, freqValue + widthValue * 0.001 / 2));
+        Double centerFrequencyTHz = freq.getValue().doubleValue();
+        Double widthGHz = width.getValue().doubleValue();
+        return rangeFactory.range(centerFrequencyTHz, widthGHz).ranges();
     }
 
     /**
@@ -1089,7 +1099,7 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
+    public Map<Frequency, Frequency> getPPUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
         if (tpAug == null) {
@@ -1106,7 +1116,8 @@ public class ORtoTapiTopoConversionTools {
         var usedWvlfirstValue = usedWvl.entrySet().iterator().next().getValue();
         Double centFreq = usedWvlfirstValue.getFrequency().getValue().doubleValue();
         Double width = usedWvlfirstValue.getWidth().getValue().doubleValue();
-        return  new HashMap<>(Map.of(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2));
+
+        return rangeFactory.range(centFreq, width).ranges();
     }
 
 
@@ -1115,23 +1126,23 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Double, Double> getTTPUsedFreqMap(TerminationPoint tp) {
+    public Range getTTPUsedFreqMap(TerminationPoint tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
             .TerminationPoint1.class);
         if (termPoint1 == null) {
-            return null;
+            return new SortedRange();
         }
         TxTtpAttributes txttpAtt = termPoint1.getTxTtpAttributes();
         if (txttpAtt  == null) {
-            return null;
+            return new SortedRange();
         }
         var txttpAttUsedWvl = txttpAtt.getUsedWavelengths();
         if (txttpAttUsedWvl == null || txttpAttUsedWvl.isEmpty()) {
             var txttpAttAvlFreqMaps = txttpAtt.getAvailFreqMaps();
             if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-                return null;
+                return new SortedRange();
             }
             byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
             LOG.debug("Creation of Bitset {}", freqByteSet);
@@ -1151,18 +1162,18 @@ public class ORtoTapiTopoConversionTools {
                     bitMap.assignedFrequencies()
             );
             Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
-
             LOG.info("TTP used frequency map {}", assignedFrequencyRanges);
-            return assignedFrequencyRanges;
+
+            return new SortedRange(assignedFrequencyRanges);
 
         }
-        Map<Double,Double> freqMap = new HashMap<>();
+        Range range = new SortedRange();
         for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
             Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
             Double width = usedLambdas.getValue().getWidth().getValue().doubleValue();
-            freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            range.add(rangeFactory.range(centFreq, width));
         }
-        return freqMap;
+        return range;
     }
 
     /**
@@ -1170,19 +1181,19 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Double, Double> getTTPAvailableFreqMap(TerminationPoint tp) {
+    public Range getTTPAvailableFreqMap(TerminationPoint tp) {
         var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
             .TerminationPoint1.class);
         if (termPoint1 == null) {
-            return null;
+            return new SortedRange();
         }
         TxTtpAttributes txttpAtt = termPoint1.getTxTtpAttributes();
         if (txttpAtt == null) {
-            return null;
+            return new SortedRange();
         }
         var avlFreqMaps = txttpAtt.getAvailFreqMaps();
         if (avlFreqMaps == null || !avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-            return null;
+            return new SortedRange();
         }
         byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
         LOG.debug("Creation of Bitset {}", freqByteSet);
@@ -1204,7 +1215,7 @@ public class ORtoTapiTopoConversionTools {
         Map<Double, Double> availableFrequencyRanges = numericFrequency.availableFrequency(bitMap);
 
         LOG.info("TTP available frequency map {}", availableFrequencyRanges);
-        return availableFrequencyRanges;
+        return new SortedRange(availableFrequencyRanges);
 
     }
 
@@ -1215,18 +1226,18 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object)
      */
-    public Map<Double, Double> getTTP11AvailableFreqMap(
+    public Range getTTP11AvailableFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         if (tp == null) {
-            return null;
+            return new SortedRange();
         }
         TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
         if (txttpAtt == null) {
-            return null;
+            return new SortedRange();
         }
         var avlFreqMaps = txttpAtt.getAvailFreqMaps();
         if (avlFreqMaps == null || !avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-            return null;
+            return new SortedRange();
         }
         byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
         LOG.debug("Creation of Bitset {}", freqByteSet);
@@ -1249,7 +1260,7 @@ public class ORtoTapiTopoConversionTools {
         Map<Double, Double> availableFrequencyRanges = numericFrequency.availableFrequency(bitMap);
 
         LOG.info("TTP11 available frequency map {}", availableFrequencyRanges);
-        return availableFrequencyRanges;
+        return new SortedRange(availableFrequencyRanges);
     }
 
     /**
@@ -1258,23 +1269,23 @@ public class ORtoTapiTopoConversionTools {
      * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Double, Double> getPP11UsedWavelength(
+    public Map<Frequency, Frequency> getPP11UsedWavelength(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         if (tp == null) {
-            return null;
+            return new HashMap<>();
         }
         PpAttributes ppAtt = tp.getPpAttributes();
         if (ppAtt == null) {
-            return null;
+            return new HashMap<>();
         }
         var usedWvl = ppAtt.getUsedWavelength();
         if (usedWvl == null || usedWvl.isEmpty()) {
-            return null;
+            return new HashMap<>();
         }
         var usedWvlFirstValue = usedWvl.entrySet().iterator().next().getValue();
         Double centFreq = usedWvlFirstValue.getFrequency().getValue().doubleValue();
         Double width = usedWvlFirstValue.getWidth().getValue().doubleValue();
-        return new HashMap<>(Map.of(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2));
+        return rangeFactory.range(centFreq, width).ranges();
     }
 
     /**
@@ -1283,22 +1294,22 @@ public class ORtoTapiTopoConversionTools {
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Double, Double> getTTP11UsedFreqMap(
+    public Range getTTP11UsedFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         if (tp == null) {
-            return null;
+            return new SortedRange();
         }
         TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
         if (txttpAtt == null) {
-            return null;
+            return new SortedRange();
         }
         var txttpAttUsedWvl = txttpAtt.getUsedWavelengths();
         if (txttpAttUsedWvl == null || txttpAttUsedWvl.isEmpty()) {
             var txttpAttAvlFreqMaps = txttpAtt.getAvailFreqMaps();
             if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-                return null;
+                return new SortedRange();
             }
             byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
             LOG.debug("Creation of Bitset {}", freqByteSet);
@@ -1320,16 +1331,21 @@ public class ORtoTapiTopoConversionTools {
             Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
 
             LOG.info("TTP11 used frequency map {}", assignedFrequencyRanges);
-            return assignedFrequencyRanges;
+            return new SortedRange(assignedFrequencyRanges);
         }
-        Map<Double,Double> freqMap = new HashMap<>();
+        return getRange(txttpAttUsedWvl);
+    }
+
+    private static Range getRange(Map<UsedWavelengthsKey, UsedWavelengths> txttpAttUsedWvl) {
+        Range range = new SortedRange();
+        org.opendaylight.transportpce.tapi.frequency.Factory frequencyFactory = new TeraHertzFactory();
         for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
             var usedLambdasValue = usedLambdas.getValue();
             Double centFreq = usedLambdasValue.getFrequency().getValue().doubleValue();
             Double width = usedLambdasValue.getWidth().getValue().doubleValue();
-            freqMap.put(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2);
+            range.add(centFreq, width, frequencyFactory);
         }
-        return freqMap;
+        return range;
     }
 
     /**
@@ -1343,7 +1359,7 @@ public class ORtoTapiTopoConversionTools {
      * @param keyword Concatenation of the nodeId and the layer protocol qualifier.
      */
     public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId, String rate,
-            Map<Double, Double> freqMap, List<OperationalModeKey> operModeList,
+            Map<Frequency, Frequency> freqMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
         if (!String.join("+", nodeId, TapiConstants.OTSI_MC).equals(keyword)
                 && !String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
@@ -1383,10 +1399,10 @@ public class ORtoTapiTopoConversionTools {
                 createAvailablePayloadStructureForPhtncMedia(rate, true, sicColl,operModeList));
             onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
                 createTotalSizeForCommonNeps(Double.valueOf(0.0))).build());
-            for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
+            for (Map.Entry<Frequency, Frequency> frequency : freqMap.entrySet()) {
                 ospecBd
-                    .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E12)))
-                    .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue() * 1E12)));
+                    .setLowerFrequency(frequency.getKey().hertz())
+                    .setUpperFrequency(frequency.getValue().hertz());
             }
             OccupiedSpectrum ospec = ospecBd.build();
             spectrumPac.setOccupiedSpectrum(
@@ -1422,7 +1438,7 @@ public class ORtoTapiTopoConversionTools {
      * @param keyword Concatenation of the nodeId and the layer protocol qualifier.
      */
     public OwnedNodeEdgePointBuilder addPhotSpecToRoadmOnep(String nodeId,
-            Map<Double, Double> usedFreqMap, Map<Double, Double> availableFreqMap,
+            Map<Frequency, Frequency> usedFreqMap, Map<Frequency, Frequency> availableFreqMap,
             OwnedNodeEdgePointBuilder onepBldr, String keyword) {
         LOG.debug("Entering Add PhotSpec to Roadm, ConvertToTopology LINE 1050 , availfreqmap is {} Used FreqMap {}",
             availableFreqMap, usedFreqMap);
@@ -1446,10 +1462,10 @@ public class ORtoTapiTopoConversionTools {
                 if (availableFreqMap != null && !availableFreqMap.isEmpty()) {
                     Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
                     AvailableSpectrumBuilder  aspecBd = new AvailableSpectrumBuilder();
-                    for (Map.Entry<Double, Double> frequency : availableFreqMap.entrySet()) {
+                    for (Map.Entry<Frequency, Frequency> frequency : availableFreqMap.entrySet()) {
                         aspecBd
-                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue())))
-                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue())));
+                            .setLowerFrequency(frequency.getKey().hertz())
+                            .setUpperFrequency(frequency.getValue().hertz());
                         AvailableSpectrum aspec = aspecBd.build();
                         aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
                             aspec.getUpperFrequency()), aspec);
@@ -1459,10 +1475,10 @@ public class ORtoTapiTopoConversionTools {
                 if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
                     Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
                     OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
-                    for (Map.Entry<Double, Double> frequency : usedFreqMap.entrySet()) {
+                    for (Map.Entry<Frequency, Frequency> frequency : usedFreqMap.entrySet()) {
                         ospecBd
-                            .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue())))
-                            .setUpperFrequency(Uint64.valueOf(Math.round(frequency.getValue().doubleValue())));
+                            .setLowerFrequency(frequency.getKey().hertz())
+                            .setUpperFrequency(frequency.getValue().hertz());
                         OccupiedSpectrum ospec = ospecBd.build();
                         ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
                             ospec.getUpperFrequency()), ospec);
