@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a3d67d_92ed70f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-18T13:39:52Z",
+      "side": 1,
+      "message": "Clarification to previous comment: locally test 71 fails because of a Netconf Issue.\nOn the gate : Failures are not the same. Tried to correct through last patch test71 test 3 using results of the console... Next step will be test4",
+      "revId": "e6fd2ed14cd9c7ac50c81797747b88e28a09e6af",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
