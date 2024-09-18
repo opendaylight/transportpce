@@ -598,14 +598,8 @@ public class ConvertORTopoToTapiFullTopo {
         }
     }
 
-    private String getIdBasedOnModelVersion(String linknodeid) {
-        if (linknodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*")) {
-            LOG.info("OpenROADM version > 1.2.1 {}", linknodeid);
-            return String.join("-", linknodeid.split("-")[0], linknodeid.split("-")[1]);
-        } else {
-            LOG.info("OpenROADM version <= 1.2.1 {}", linknodeid);
-            return linknodeid.split("-")[0];
-        }
+    public String getIdBasedOnModelVersion(String linknodeid) {
+        return linknodeid.substring(0, linknodeid.lastIndexOf("-"));
     }
 
     public void setTapiNodes(Map<NodeKey,

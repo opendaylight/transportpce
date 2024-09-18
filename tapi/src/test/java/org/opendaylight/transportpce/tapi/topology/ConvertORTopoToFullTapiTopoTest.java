@@ -1240,4 +1240,20 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         LOG.info("pattern '{}' not found in list of nodes", searchedChar);
         return null;
     }
+
+    @Test
+    void getIdBasedOnModelVersion() {
+        ConvertORTopoToTapiFullTopo convertORTopoToTapiFullTopo = new ConvertORTopoToTapiFullTopo(
+                topologyUuid,
+                tapiLink);
+
+        assertTrue(
+                "ROADM-A".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADM-A-SRG1"))
+        );
+
+        assertTrue(
+                "ROADMA".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADMA-SRG1"))
+        );
+    }
+
 }
