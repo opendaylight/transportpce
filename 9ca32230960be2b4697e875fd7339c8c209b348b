@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d94c44ff_a3987cbd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiFullTopo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-18T08:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e7be392_5fa730f9",
+      "range": {
+        "startLine": 602,
+        "startChar": 8,
+        "endLine": 604,
+        "endChar": 71
+      },
+      "revId": "9ca32230960be2b4697e875fd7339c8c209b348b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6ffa079_5e56e0ca",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-09-18T08:32:58Z",
       "side": 1,
       "message": "Useless. assertTrue is already imported in org.junit.jupiter.api.Assertions",
+      "revId": "9ca32230960be2b4697e875fd7339c8c209b348b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d3f3e47_200271f5",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-18T08:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6ffa079_5e56e0ca",
       "revId": "9ca32230960be2b4697e875fd7339c8c209b348b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -81,6 +123,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6036d12e_ad457f8c",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-18T08:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "21d88095_52733ac9",
+      "range": {
+        "startLine": 1251,
+        "startChar": 8,
+        "endLine": 1251,
+        "endChar": 15
+      },
+      "revId": "9ca32230960be2b4697e875fd7339c8c209b348b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdd7f1de_4f00e636",
@@ -94,6 +160,30 @@
       "writtenOn": "2024-09-18T08:32:58Z",
       "side": 1,
       "message": "useless",
+      "range": {
+        "startLine": 1255,
+        "startChar": 8,
+        "endLine": 1255,
+        "endChar": 15
+      },
+      "revId": "9ca32230960be2b4697e875fd7339c8c209b348b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d19e99a2_d1140c7f",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToFullTapiTopoTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-09-18T08:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdd7f1de_4f00e636",
       "range": {
         "startLine": 1255,
         "startChar": 8,
