@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d94e6af_ddfc60e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-18T08:09:05Z",
+      "side": 1,
+      "message": "Hi. \nNEED YOUR HELP THERE. \nCorrected bugs on my side, but still have an issue with :\ntest 121 (test2 : 2,5,6) which pass locally, but not on the gate. \ntest 71 that neither pass locally nor on the gate. I guess we have an issue with NETCONF. Test 3 \u0026 4 fails. In both tests this is following an unsuccessfull POST of an otsi interface XPDRn-NETWORKm-XXX-YYY on a XPDR node. Would appreciate your help to solve this! Thanks",
+      "revId": "a360bd3e2bd531556d0f5e20520e814cf52089a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
