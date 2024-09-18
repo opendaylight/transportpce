@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -1240,4 +1241,18 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         LOG.info("pattern '{}' not found in list of nodes", searchedChar);
         return null;
     }
+
+    @Test
+    void getIdBasedOnModelVersion() {
+        ConvertORTopoToTapiFullTopo convertORTopoToTapiFullTopo = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
+
+        Assert.assertTrue(
+                "ROADM-A".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADM-A-SRG1"))
+        );
+
+        Assert.assertTrue(
+                "ROADMA".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADMA-SRG1"))
+        );
+    }
+
 }
