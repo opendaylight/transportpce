@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f818f3b2_e8dbd5e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-09-19T08:49:45Z",
+      "side": 1,
+      "message": "Did a bit of cleanup. Last patchset did not pass the gate because of tapi func tests. However all tapi func tests pass locally. Associated recheck may be successful!",
+      "revId": "680fda925f689a5868275f6d2d449583dac195c3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
