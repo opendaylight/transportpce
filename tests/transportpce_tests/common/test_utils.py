@@ -325,20 +325,21 @@ def mount_device(node: str, sim: str):
            'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}'}
     body = {'node': [{
             "node-id": node,
-            "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": SIMS[sim]['port'],
-            "netconf-node-topology:login-password-unencrypted": {
-                "netconf-node-topology:username": NODES_LOGIN,
-                "netconf-node-topology:password": NODES_PWD
-            },
-            "netconf-node-topology:tcp-only": "false",
-            "netconf-node-topology:reconnect-on-changed-schema": "false",
-            "netconf-node-topology:connection-timeout-millis": 20000,
-            "netconf-node-topology:max-connection-attempts": 5,
-            "netconf-node-topology:min-backoff-millis": 2000,
-            "netconf-node-topology:max-backoff-millis": 1800000,
-            "netconf-node-topology:backoff-multiplier": 1.5,
-            "netconf-node-topology:keepalive-delay": 120}]}
+            "netconf-node-topology:netconf-node": {
+                "netconf-node-topology:host": "127.0.0.1",
+                "netconf-node-topology:port": SIMS[sim]['port'],
+                "netconf-node-topology:login-password-unencrypted": {
+                    "netconf-node-topology:username": NODES_LOGIN,
+                    "netconf-node-topology:password": NODES_PWD
+                },
+                "netconf-node-topology:tcp-only": "false",
+                "netconf-node-topology:reconnect-on-changed-schema": "false",
+                "netconf-node-topology:connection-timeout-millis": 20000,
+                "netconf-node-topology:max-connection-attempts": 5,
+                "netconf-node-topology:min-backoff-millis": 2000,
+                "netconf-node-topology:max-backoff-millis": 1800000,
+                "netconf-node-topology:backoff-multiplier": 1.5,
+                "netconf-node-topology:keepalive-delay": 120}}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
     if wait_until_log_contains(TPCE_LOG,
                                [f'Triggering notification stream NETCONF for node {node}',
@@ -372,7 +373,8 @@ def check_device_connection(node: str):
     return_key = {'rfc8040': 'network-topology:node',
                   'draft-bierman02': 'node'}
     if return_key[RESTCONF_VERSION] in res.keys():
-        connection_status = res[return_key[RESTCONF_VERSION]][0]['netconf-node-topology:connection-status']
+        connection_status = res[return_key[RESTCONF_VERSION]
+                                ][0]['netconf-node-topology:netconf-node']['connection-status']
     else:
         connection_status = res['errors']['error'][0]
     return {'status_code': response.status_code,

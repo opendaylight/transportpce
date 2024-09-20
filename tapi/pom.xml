@@ -40,7 +40,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>8.0.1</version>
+        <version>8.0.2</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

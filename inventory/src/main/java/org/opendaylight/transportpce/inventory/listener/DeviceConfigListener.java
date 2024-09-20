@@ -18,7 +18,8 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.inventory.DeviceInventory;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.ConnectionOper.ConnectionStatus;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240611.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.NetconfNodeAugment;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.netconf.node.augment.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
 
             LOG.debug("nodeId {}", nodeId);
 
-            NetconfNode netconfNode = rootNode.dataAfter().augmentation(NetconfNode.class);
+            NetconfNode netconfNode = rootNode.dataAfter().augmentation(NetconfNodeAugment.class).getNetconfNode();
             ConnectionStatus connectionStatus =
                     netconfNode.getConnectionStatus();
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
@@ -115,11 +116,13 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
                     (change.getRootNode().dataAfter() != null
                         && !StringConstants.DEFAULT_NETCONF_NODEID
                             .equalsIgnoreCase(change.getRootNode().dataAfter().key().getNodeId().getValue())
-                        && change.getRootNode().dataAfter().augmentation(NetconfNode.class) != null)
+                        && change.getRootNode().dataAfter().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode() != null)
                     || (change.getRootNode().dataBefore() != null
                         && !StringConstants.DEFAULT_NETCONF_NODEID
                             .equalsIgnoreCase(change.getRootNode().dataBefore().key().getNodeId().getValue())
-                        && change.getRootNode().dataBefore().augmentation(NetconfNode.class) != null))
+                        && change.getRootNode().dataBefore().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode() != null))
                 .collect(Collectors.toList());
     }
 
