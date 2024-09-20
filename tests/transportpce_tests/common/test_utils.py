@@ -187,16 +187,14 @@ def start_sims(sims_list):
     if SIMS_TO_USE == 'None':
         return None
     if SIMS_TO_USE == 'honeynode':
-        start_msg = HONEYNODE_OK_START_MSG
         start_method = start_honeynode
     else:
-        start_msg = LIGHTYNODE_OK_START_MSG
         start_method = start_lightynode
     for sim in sims_list:
         print('starting simulator ' + sim[0] + ' in OpenROADM device version ' + sim[1] + '...')
         log_file = os.path.join(SIM_LOG_DIRECTORY, SIMS[sim]['logfile'])
         process = start_method(log_file, sim)
-        if wait_until_log_contains(log_file, start_msg, 100):
+        if wait_until_log_contains(log_file, [HONEYNODE_OK_START_MSG, LIGHTYNODE_OK_START_MSG], 100):
             print('simulator for ' + sim[0] + ' started')
         else:
             print('simulator for ' + sim[0] + ' failed to start')
@@ -215,11 +213,9 @@ def start_tpce():
     print('starting OpenDaylight...')
     if 'USE_LIGHTY' in os.environ and os.environ['USE_LIGHTY'] == 'True':
         process = start_lighty()
-        start_msg = LIGHTY_OK_START_MSG
     else:
         process = start_karaf()
-        start_msg = KARAF_OK_START_MSG
-    if wait_until_log_contains(TPCE_LOG, start_msg, time_to_wait=100):
+    if wait_until_log_contains(TPCE_LOG, [LIGHTY_OK_START_MSG, KARAF_OK_START_MSG], time_to_wait=100):
         print('OpenDaylight started !')
     else:
         print('OpenDaylight failed to start !')
@@ -273,7 +269,7 @@ def shutdown_process(process):
         process.send_signal(signal.SIGINT)
 
 
-def wait_until_log_contains(log_file, regexp, time_to_wait=60):
+def wait_until_log_contains(log_file, regexps, time_to_wait=60):
     # pylint: disable=lost-exception
     # pylint: disable=consider-using-with
     stringfound = False
@@ -284,11 +280,11 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=60):
                 time.sleep(0.2)
             with open(log_file, 'r', encoding='utf-8') as filelogs:
                 filelogs.seek(0, 2)
-                print("Searching for pattern '" + regexp + "' in " + os.path.basename(log_file), end='... ', flush=True)
-                compiled_regexp = re.compile(regexp)
+                print("Searching for patterns in " + os.path.basename(log_file), end='... ', flush=True)
+                compiled_regexps = [re.compile(regexp) for regexp in regexps]
                 while True:
                     line = filelogs.readline()
-                    if compiled_regexp.search(line):
+                    if any(compiled_regexp.search(line) for compiled_regexp in compiled_regexps):
                         print('Pattern found!', end=' ')
                         stringfound = True
                         break
@@ -344,7 +340,10 @@ def mount_device(node: str, sim: str):
             "netconf-node-topology:backoff-multiplier": 1.5,
             "netconf-node-topology:keepalive-delay": 120}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
-    if wait_until_log_contains(TPCE_LOG, 'Triggering notification stream NETCONF for node ' + node, 180):
+    if wait_until_log_contains(TPCE_LOG,
+                               [f'Triggering notification stream NETCONF for node {node}',
+                                f'Triggering notification stream OPENROADM for node {node}'],
+                               180):
         print('Node ' + node + ' correctly added to tpce topology', end='... ', flush=True)
     else:
         print('Node ' + node + ' still not added to tpce topology', end='... ', flush=True)
@@ -358,7 +357,7 @@ def unmount_device(node: str):
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}',
            'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}'}
     response = delete_request(url[RESTCONF_VERSION].format('{}', node))
-    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: " + node), 180):
+    if wait_until_log_contains(TPCE_LOG, [re.escape("onDeviceDisConnected: " + node)], 180):
         print('Node ' + node + ' correctly deleted from tpce topology', end='... ', flush=True)
     else:
         print('Node ' + node + ' still not deleted from tpce topology', end='... ', flush=True)
