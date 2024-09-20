@@ -15,7 +15,8 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.connection.oper.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240611.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.NetconfNodeAugment;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.netconf.node.augment.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,8 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
                 continue;
             }
             String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNode.class);
+            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNodeAugment.class)
+                    .getNetconfNode();
             switch (rootNode.modificationType()) {
                 case DELETE:
                     this.tapiNetworkModelService.deleteTapinode(nodeId);
@@ -47,7 +49,8 @@ public class TapiNetconfTopologyListener implements DataTreeChangeListener<Node>
                     LOG.info("Device {} correctly disconnected from controller", nodeId);
                     break;
                 case WRITE:
-                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNode.class);
+                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode();
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
