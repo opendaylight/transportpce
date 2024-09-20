@@ -38,7 +38,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.r
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.streams.Stream;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.connection.oper.available.capabilities.AvailableCapability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240611.NetconfNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.NetconfNodeAugment;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.netconf.node.augment.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -75,7 +76,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 continue;
             }
             String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNode.class);
+            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNodeAugment.class)
+                    .getNetconfNode();
             switch (rootNode.modificationType()) {
                 case DELETE:
                     if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
@@ -83,8 +85,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                         LOG.info("Device {} correctly disconnected from controller", nodeId);
                     }
                     break;
-                case WRITE:
-                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNode.class);
+                case SUBTREE_MODIFIED:
+                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNodeAugment.class)
+                            .getNetconfNode();
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
