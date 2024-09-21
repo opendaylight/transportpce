@@ -337,10 +337,12 @@ def mount_device(node: str, sim: str):
             },
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:reconnect-on-changed-schema": "false",
-            "netconf-node-topology:connection-timeout-millis": "20000",
-            "netconf-node-topology:default-request-timeout-millis": "60000",
-            "netconf-node-topology:max-connection-attempts": "0",
-            "netconf-node-topology:keepalive-delay": "120"}]}
+            "netconf-node-topology:connection-timeout-millis": 20000,
+            "netconf-node-topology:max-connection-attempts": 5,
+            "netconf-node-topology:min-backoff-millis": 2000,
+            "netconf-node-topology:max-backoff-millis": 1800000,
+            "netconf-node-topology:backoff-multiplier": 1.5,
+            "netconf-node-topology:keepalive-delay": 120}]}
     response = put_request(url[RESTCONF_VERSION].format('{}', node), body)
     if wait_until_log_contains(TPCE_LOG, 'Triggering notification stream NETCONF for node ' + node, 180):
         print('Node ' + node + ' correctly added to tpce topology', end='... ', flush=True)
