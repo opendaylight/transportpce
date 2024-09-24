@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.JsonUtil;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.MappingBuilder;
@@ -246,7 +246,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             OtnLinkType.OTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1.class)
                 .getOtnLinkType(),
             "otn link type should be OTU4");
     }
@@ -316,7 +316,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             OtnLinkType.ODTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1.class)
                 .getOtnLinkType(),
             "otn link type should be ODTU4");
 
