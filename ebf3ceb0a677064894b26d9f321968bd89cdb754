@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e33d8e_d33229ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T10:59:20Z",
+      "side": 1,
+      "message": "If this is a fix, please make it appear in the commit title.\nwhat about \"Fix grid sprectrum compitation (reserved logic)\" ?",
+      "revId": "ebf3ceb0a677064894b26d9f321968bd89cdb754",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3452372_0b2046d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T10:59:20Z",
+      "side": 1,
+      "message": "Thank you a lot for this correction Joakim.\nHere are my comments. LGTM apart cosmetic issues.\nI am adding people officially in charge of tpce now since I moved to another department.\n\ncheers\nGuillaume",
+      "revId": "ebf3ceb0a677064894b26d9f321968bd89cdb754",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d102a60b_61f0e346",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T10:59:20Z",
+      "side": 1,
+      "message": "I am not sure this method should be moved to public.\nIf this is justified by Junit test, please explain it in the commit message.",
+      "revId": "ebf3ceb0a677064894b26d9f321968bd89cdb754",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e968bed_bc4b265f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T10:59:20Z",
+      "side": 1,
+      "message": ".build() should preferably on a a separate line IMO",
+      "revId": "ebf3ceb0a677064894b26d9f321968bd89cdb754",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25ea814f_f94da4e4",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T10:59:20Z",
+      "side": 1,
+      "message": ".build() should preferably on a a separate line IMO",
+      "revId": "ebf3ceb0a677064894b26d9f321968bd89cdb754",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
