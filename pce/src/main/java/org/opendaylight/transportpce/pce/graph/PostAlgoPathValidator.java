@@ -1079,7 +1079,7 @@ public class PostAlgoPathValidator {
         //in operational, the allocation is done through wavelength starting from the smallest
         //so we have to loop from the last element of the spectrum occupation
         for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber;
-                i -= isFlexGrid ? spectralWidthSlotNumber : 1) {
+                i -= isFlexGrid ? 1 : spectralWidthSlotNumber) {
             if (spectrumOccupation.get(i - spectralWidthSlotNumber, i).equals(referenceBitSet)) {
                 spectrumAssignmentBldr.setBeginIndex(Uint16.valueOf(i - spectralWidthSlotNumber));
                 spectrumAssignmentBldr.setStopIndex(Uint16.valueOf(i - 1));
