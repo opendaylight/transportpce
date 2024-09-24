@@ -16,6 +16,11 @@ module transportpce-networkutils {
     revision-date 2023-05-26;
   }
 
+  revision 2024-09-23 {
+    description
+      "Add T-API Ids to ROADM nodes to extend topology coverage and include
+       T-API abstracting node attributes. Add RPC init-interdomain-link";
+  }
   revision 2022-06-30 {
     description
       "Add transportpce augmentation to manage otn-link-type in otn-topology";
@@ -64,6 +69,22 @@ module transportpce-networkutils {
     }
   }
 
+
+  grouping rdm-tapi-uuid-information {
+    leaf rdm-topology-uuid {
+      type string;
+    }
+    leaf rdm-node-uuid {
+      type string;
+    }
+    leaf rdm-nep-uuid {
+      type string;
+    }
+    description
+      "Optional parameters to be provided if the ROADM node is part of a T-API topology
+       retrieved from the South Bound Interface";
+  }
+
   grouping links-input-grouping {
     container links-input {
       description
@@ -86,7 +107,22 @@ module transportpce-networkutils {
       leaf termination-point-num {
         type string;
       }
+      uses rdm-tapi-uuid-information;
     }
+  }
+
+  grouping generic-rdm-information {
+    leaf rdm-node {
+      type string;
+    }
+    leaf deg-num {
+      type uint8;
+    }
+    leaf termination-point {
+      type string;
+    }
+    description
+      "rdm parameters to be provided for inter-domain link creation";
   }
 
   rpc init-roadm-nodes {
@@ -151,6 +187,26 @@ module transportpce-networkutils {
     input {
       leaf link-id {
         type string;
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
+
+  rpc init-inter-domain-links {
+    description
+      "This rpc initiates rdm to rdm inter-domain link";
+    input {
+      container a-end {
+        uses generic-rdm-information;
+        uses rdm-tapi-uuid-information;
+      }
+      container z-end {
+        uses generic-rdm-information;
+        uses rdm-tapi-uuid-information;
       }
     }
     output {

@@ -17,10 +17,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.DeleteLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRdmXpdrLinks;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitXpdrRdmLinks;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRdmXpdrLinks;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitXpdrRdmLinks;
 
 
 @ExtendWith(MockitoExtension.class)

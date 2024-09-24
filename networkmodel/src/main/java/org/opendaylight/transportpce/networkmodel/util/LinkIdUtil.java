@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.InitRoadmNodesInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 
 
