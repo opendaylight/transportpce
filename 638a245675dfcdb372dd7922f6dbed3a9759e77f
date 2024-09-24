@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6575d7e_3c046246",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2024-09-24T12:46:19Z",
+      "side": 1,
+      "message": "reserved -\u003e reversed .\n\nSorry my mistake",
+      "revId": "638a245675dfcdb372dd7922f6dbed3a9759e77f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
