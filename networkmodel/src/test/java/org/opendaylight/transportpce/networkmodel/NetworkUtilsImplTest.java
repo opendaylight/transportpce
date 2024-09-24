@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRdmXpdrLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitXpdrRdmLinks;
@@ -36,6 +37,6 @@ class NetworkUtilsImplTest {
 
         verify(rpcProvider, times(1)).registerRpcImplementations(
                 any(DeleteLink.class), any(InitRoadmNodes.class), any(InitXpdrRdmLinks.class),
-                any(InitRdmXpdrLinks.class));
+                any(InitRdmXpdrLinks.class), any(InitInterDomainLinks.class));
     }
 }
