@@ -1,0 +1,260 @@
+module transportpce-or-network-augmentation {
+  yang-version 1.1;
+  namespace "http://org/opendaylight/transportpce/or-network-augmentation";
+  prefix org-opendaylight-transportpce-or-network-augmentation;
+
+  import ietf-network {
+    prefix nd;
+    revision-date 2018-02-26;
+  }
+  import ietf-network-topology {
+    prefix nwt;
+    revision-date 2018-02-26;
+  }
+  import org-openroadm-network-topology {
+    prefix topo;
+    revision-date 2023-05-26;
+  }
+  import org-openroadm-network {
+    prefix net;
+    revision-date 2023-05-26;
+  }
+  import org-openroadm-common-network {
+    prefix cnet;
+    revision-date 2023-05-26;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions augmenting OpenRoadm Topology in TransportPCE.
+     Copyright (c) 2024 Orange and others. All rights reserved.
+     authors: Olivier Renais";
+
+
+  revision 2024-09-23 {
+    description
+      "Create augmentation to handle OpenConfig and T-API element in OR topology";
+    reference
+      "YANG model for OpenROADM topologies augmentation";
+  }
+
+  typedef model-enum {
+    type enumeration {
+      enum openroadm {
+        value 1;
+        description
+          "OpenROADM model used for potentially any type of OpenROADM node :
+           Xponders, Pluggable, ROADMs (both SRG and Degrees).";
+      }
+      enum openconfig-alien {
+        value 2;
+        description
+          "openConfig model used for Alien Xponders or Pluggable.
+           OpenConfig Node modeled in transportPCE do not include ROADMs";
+      }
+      enum tapi-ext {
+        value 3;
+        description
+          "Used for Abstracted node that represents a T-API domain. The name of the node
+           corresponds to the name of a given topology in T-API topology context.
+           Only used to represent T-API topology domains that do not result from the
+           translation of the OpenROADM topology in T-API topology context";
+      }
+    }
+    description
+      "Models that the nodes may follow, extending the scope of OpenROADM topology to include
+       nodes that may follow other models, including Super-Nodes abstracting T-API domains";
+  }
+
+  typedef link-class-enum {
+    type enumeration {
+      enum openroadm {
+        value 1;
+        description
+          "OpenROADM link used in OpenROADM topology connecting OpenROADM nodes";
+      }
+      enum alien-to-openroadm {
+        value 2;
+        description
+          "Link connecting an alien Xponder or Pluggable that is not directly handled by
+           transportPCE, to OpenROADM topology (ROADM infrastructure).
+           As an example : Link between an IP Router pluggable and an OpenROADM SRG";
+      }
+      enum alien-oc-to-openroadm {
+        value 3;
+        description
+          "Link connecting an OpenConfig alien Xponder or Pluggable that is handled by
+           transportPCE to OpenROADM topology (ROADM infrastructure)";
+      }
+      enum alien-to-tapi {
+        value 4;
+        description
+          "Link connecting an OpenConfig or an OpenROADM Xponder or Pluggable that is
+           handled by transportPCE to an abstracted node that represents a T-API domain";
+      }
+      enum inter-domain {
+        value 5;
+        description
+          "Link which interconnects different domains, whether they are OpenROADM or T-API";
+      }
+    }
+    description
+      "Different classes of links, extending the scope of OpenROADM topology to topology where
+       either T-API or OpenROADM domains may be interconnected together";
+  }
+
+  grouping openconfig-specific-attributes {
+    leaf oc-rate {
+      type string;
+      mandatory false;
+      description
+        "Rate as defined in the corresponding OpenConfig enum. Set as a string to avoid dependency
+         on enums that might be created at a later step.
+         To be populated from the enum present in the portMapping/Metadata-file";
+    }
+    leaf oc-fec-type {
+      type string;
+      mandatory false;
+      description
+        "fec-type as defined in the corresponding OpenConfig enum Set as a string to avoid dependency
+         on enums that might be created at a later step.
+         To be populated from the enum present in the portMapping/Metadata-file";
+    }
+    leaf oc-trib-protocol {
+      type string;
+      mandatory false;
+      description
+        "trib-protocol as defined in the corresponding OpenConfig enum Set as a string to avoid dependency
+         on enums that might be created at a later step.
+         To be populated from the enum present in the portMapping/Metadata-file";
+    }
+    description
+        "Includes nodes related to specific OpenConfig attributes";
+  }
+
+  augment "/nd:networks/nd:network/nd:node" {
+    description
+      "Augment the generic network node with attributes to identify the Node model.";
+    leaf node-model {
+      type model-enum;
+      mandatory false;
+      description
+        "An optional parameter that does not need to be set in case the node follows an openroadm
+         model (backward compatibility) but shall be populated if this is an abstracted node
+         representing a T-API domain or an openConfig alien Xponder/pluggable";
+    }
+    leaf topology-uuid {
+      type string;
+      mandatory false;
+      description
+        "Optional uuid of the topology that the node is associated with, in the T-API domain.
+         Applies to openconfig-alien and tapi-ext nodes that are recorded in a T-API topology
+         that do not result from a transcription of the OpenROADM topology";
+    }
+    leaf node-uuid {
+      type string;
+      mandatory false;
+      description
+        "Optional uuid of the the node as it appears in the T-API domain.
+         Applies to openconfig-alien nodes that are recorded in a T-API topology
+         that do not result from a transcription of the OpenROADM topology.
+         Does not apply to tapi-ext nodes since this kind of node abstracts a
+         topology including several nodes";
+    }
+  }
+
+  augment "/nd:networks/nd:network/nd:node/nwt:termination-point/topo:xpdr-network-attributes" {
+    when "../../nd:node/org-opendaylight-transportpce-or-network-augmentation:node-model = 'openconfig-alien'";
+    description
+      "Augment the xpdr-network-attributes container with OpenConfig Xponders specific attributes";
+    uses openconfig-specific-attributes;
+  }
+
+  augment "/nd:networks/nd:network/nd:node" {
+    when '../nd:network-types/cnet:openroadm-common-network/net:openroadm-network';
+    description
+      "Augment the generic network node with attributes to identify the version of an
+       OpenConfig node";
+    leaf openconfig-version {
+      type string;
+      mandatory false;
+      description
+        "An optional parameter that specifies the version of openConfig model supported
+         by the node. Set as a string to avoid dependency on enums that might be created at
+         a later step.To be populated from the enum present in the portMapping";
+    }
+  }
+
+  augment "/nd:networks/nd:network/nwt:link" {
+    description
+      "Augment the generic network link with attributes to identify the link class.";
+    leaf link-class {
+      type link-class-enum;
+      mandatory false;
+      description
+        "An optional parameter that does not need to be set in case the link is a pure OpenROADM
+         link, but shall be populated if this the link is between 2 domains or between an
+         openConfig alien Xponder/pluggable and a T-API or an OpenROADM domain";
+    }
+  }
+
+  augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
+    when "../org-opendaylight-transportpce-or-network-augmentation:node-model = 'openconfig-alien'
+      or ../org-opendaylight-transportpce-or-network-augmentation:node-model = 'tapi-ext'";
+    description
+      "Augment the generic network termination-point with attributes to identify the node as
+       represented in T-API topology-context. Applies to OpenROADM and OpenConfig alien nodes
+       connected to a tapi-ext node which abstracts a T-API domain.
+       Also applies to the tapi-ext node itself";
+    leaf supporting-node-topology-uuid {
+      type string;
+      mandatory false;
+      description
+        "Optional uuid of the topology the tp and its supporting node are associated with,
+         in the T-API domain. Applies to openconfig-alien nodes recorded in a T-API topology.
+         Also applies to tapi-ext nodes wich abstract a topology that do not result from a
+         transcription of the OpenROADM topology.
+         For tp of tapi-ext-nodes, the attributes is equal to the tapi-ext node-uuid, since
+         tapi-ext node abstracts a topology domain";
+    }
+    leaf supporting-node-uuid {
+      type string;
+      mandatory false;
+      description
+        "Optional uuid of the supporting node a tp is associated with as it appears
+         in the T-API domain. Applies to openconfig-alien nodes recorded in a T-API topology.
+         Also applies to tapi-ext nodes wich abstract a topology that do not result from a
+         transcription of the OpenROADM topology.";
+    }
+    leaf tp-uuid {
+      type string;
+      mandatory false;
+      description
+        "Optional uuid of the tp, in the T-API domain.
+         Applies to openconfig-alien and tapi-ext nodes that are recorded in a T-API topology
+         that do not result from a transcription of the OpenROADM topology.
+         Also applies to tapi-ext node";
+    }
+  }
+
+  augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
+    when "../org-opendaylight-transportpce-or-network-augmentation:node-model = 'tapi-ext'";
+    description
+      "Augment the generic network termination-point with attributes to identify the node as
+       represented in T-API topology-context. Applies only to the tapi-ext nodes";
+    leaf supporting-node-name {
+      type string;
+      mandatory false;
+      description
+        "Optional Name of the the supporting node as it appears in the T-API domain.
+         Applies only to tapi-ext node recorded in a T-API topology, that do not
+         result from a transcription of the OpenROADM topology, and which abstracts
+         a full domain; to provide information on the supporting node that do not appear
+         in the OpenROADM topology and can not be referenced as node/supporting-nodes";
+    }
+  }
+
+}
