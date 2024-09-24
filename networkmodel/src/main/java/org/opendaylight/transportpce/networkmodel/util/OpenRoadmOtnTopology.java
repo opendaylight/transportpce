@@ -20,7 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -302,13 +302,13 @@ public final class OpenRoadmOtnTopology {
         for (Link link : suppOtuLinks) {
             if (link.augmentation(Link1.class) == null
                     || link.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630
+                            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
                                     .Link1.class) == null) {
                 LOG.error(OTN_PARAMS_ERROR, link.getLinkId().getValue());
                 return new TopologyShard(null, null, null);
             }
             OtnLinkType otnLinkType = link.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1.class)
                     .getOtnLinkType();
             if (!OTNLINKTYPE_OTU_BW_MAP.containsKey(otnLinkType)) {
             //TODO shouldn't other link type listed in OTNLINKTYPE_BW_MAP be handled too ?
@@ -333,8 +333,8 @@ public final class OpenRoadmOtnTopology {
         List<Link> links = new ArrayList<>();
         String nodeATopo = formatNodeName(nodeA, tpA);
         String nodeZTopo = formatNodeName(nodeZ, tpZ);
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1 tpceLink1
-            = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev220630.Link1Builder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1 tpceLink1
+            = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1Builder()
                 .setOtnLinkType(linkType).build();
         Link1Builder otnLink1Bldr = new Link1Builder()
             .setUsedBandwidth(Uint32.valueOf(0));
