@@ -20,6 +20,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLinkOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinks;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRdmXpdrLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRdmXpdrLinksInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRdmXpdrLinksOutput;
@@ -65,8 +69,8 @@ public class NetworkUtilsImpl {
                 (DeleteLink) this::deleteLink,
                 (InitRoadmNodes) this::initRoadmNodes,
                 (InitXpdrRdmLinks) this::initXpdrRdmLinks,
-                (InitRdmXpdrLinks) this::initRdmXpdrLinks
-                );
+                (InitRdmXpdrLinks) this::initRdmXpdrLinks,
+                (InitInterDomainLinks) this::initInterDomainLinks);
         LOG.info("NetworkUtilsImpl instanciated");
     }
 
@@ -128,6 +132,22 @@ public class NetworkUtilsImpl {
                 .buildFuture();
         } else {
             return RpcResultBuilder.<InitRoadmNodesOutput>failed().buildFuture();
+        }
+    }
+
+
+    private ListenableFuture<RpcResult<InitInterDomainLinksOutput>>
+            initInterDomainLinks(InitInterDomainLinksInput input) {
+        LOG.info("Roadm to Roadm inter-domain links rpc called");
+        boolean createRdmLinks = OrdLink.createInterDomainLinks(input, this.dataBroker);
+        if (createRdmLinks) {
+            return RpcResultBuilder
+                .success(new InitInterDomainLinksOutputBuilder()
+                    .setResult("Unidirectional Roadm-to-Roadm Inter-Domain Link created successfully")
+                    .build())
+                .buildFuture();
+        } else {
+            return RpcResultBuilder.<InitInterDomainLinksOutput>failed().buildFuture();
         }
     }
 

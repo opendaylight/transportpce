@@ -19,9 +19,12 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodesInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
@@ -39,6 +42,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -97,6 +101,171 @@ final class OrdLink {
             LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer ");
             return false;
         }
+    }
+
+    /**Method to create InterDomain links that can't be discovered by LLDP. This is used
+    to create topologies that span across several domains**/
+    public static boolean createInterDomainLinks(InitInterDomainLinksInput input, DataBroker dataBroker) {
+        // Determination of the node that belongs to the TAPI domain
+        String tapiDomainNode = "A";
+        if (input.getAEnd().getRdmTopologyUuid() == null) {
+            if (input.getZEnd().getRdmTopologyUuid() == null) {
+                LOG.error("Creation of Interdomain Link Error : Topology Uuid must be populated for at least 1 node");
+                return false;
+            } else {
+                tapiDomainNode = "Z";
+            }
+        }
+        LinkId linkId;
+        LinkId oppLinkId;
+        String srcNode;
+        String srcTp;
+        String destNode;
+        String destTp;
+        TerminationPoint rdmSrcTp;
+        TerminationPoint rdmDestTp;
+        State orTpState;
+        if (tapiDomainNode.equals("Z")) {
+            srcNode = new StringBuilder(input.getAEnd().getRdmNode()).append("-DEG")
+                .append(input.getAEnd().getDegNum()).toString();
+            srcTp = input.getAEnd().getTerminationPoint();
+            destNode = input.getZEnd().getRdmNode();
+            destTp = input.getZEnd().getTerminationPoint();
+            linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
+            oppLinkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
+            rdmSrcTp = getTpofNode(srcNode, srcTp, dataBroker);
+            orTpState = rdmSrcTp.augmentation(TerminationPoint1.class).getOperationalState();
+            addTpsToTapiExtNode(destTp, input.getZEnd().getRdmNepUuid(), destNode, input.getZEnd().getRdmNodeUuid(),
+                input.getZEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
+        } else {
+            destNode = new StringBuilder(input.getZEnd().getRdmNode()).append("-DEG")
+                .append(input.getZEnd().getDegNum()).toString();
+            destTp = input.getZEnd().getTerminationPoint();
+            srcNode = input.getAEnd().getRdmNode();
+            srcTp = input.getAEnd().getTerminationPoint();
+            oppLinkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
+            linkId = LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp);
+            rdmDestTp = getTpofNode(destNode, destTp, dataBroker);
+            orTpState = rdmDestTp.augmentation(TerminationPoint1.class).getOperationalState();
+            addTpsToTapiExtNode(srcTp, input.getAEnd().getRdmNepUuid(), srcNode, input.getAEnd().getRdmNodeUuid(),
+                input.getAEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
+        }
+        // For opposite link augment
+        Link1Builder oppositeLinkBuilder =
+            new Link1Builder()
+                .setOppositeLink(oppLinkId)
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        // Check status of TPs to provide R2R link state
+        if (State.InService.equals(orTpState)) {
+            oppositeLinkBuilder.setAdministrativeState(AdminStates.InService).setOperationalState(State.InService);
+        } else {
+            oppositeLinkBuilder.setAdministrativeState(AdminStates.OutOfService).setOperationalState(
+                State.OutOfService);
+        }
+
+        // IETF link builder
+        LinkBuilder linkBuilderFW = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null);
+        linkBuilderFW.addAugmentation(new Link1Builder().setOppositeLink(oppLinkId).setAdministrativeState(
+                State.InService.equals(orTpState) ? AdminStates.InService : AdminStates.OutOfService)
+            .setOperationalState(orTpState)
+            .build())
+            .addAugmentation(new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                    .Link1Builder().build());
+        linkBuilderFW.addAugmentation(oppositeLinkBuilder.build());
+
+        org.opendaylight.yang.gen.v1.http.org.opendaylight
+                .transportpce.or.network.augmentation.rev240923.Link1Builder tpceAugmLink11Bd =
+            new org.opendaylight.yang.gen.v1.http.org.opendaylight
+                    .transportpce.or.network.augmentation.rev240923.Link1Builder()
+                .setLinkClass(LinkClassEnum.InterDomain);
+        linkBuilderFW.addAugmentation(tpceAugmLink11Bd.build());
+
+        LinkBuilder linkBuilderBW = TopologyUtils.createLink(destNode, srcNode, destTp, srcTp, null);
+        linkBuilderBW.addAugmentation(new Link1Builder().setOppositeLink(oppLinkId).setAdministrativeState(
+                State.InService.equals(orTpState) ? AdminStates.InService : AdminStates.OutOfService)
+            .setOperationalState(orTpState)
+            .build())
+            .addAugmentation(new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                    .Link1Builder().build());
+        linkBuilderBW.addAugmentation(oppositeLinkBuilder.build());
+        linkBuilderBW.addAugmentation(tpceAugmLink11Bd.build());
+
+        // Building link instance identifier
+        InstanceIdentifier.Builder<Link> linkIIDFW = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+
+        WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDFW.build(), linkBuilderFW.build());
+        try {
+            writeTransaction.commit().get();
+            LOG.info("A new link with linkId: {} added into {} layer.",
+                linkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
+                srcNode, srcTp, destNode, destTp);
+            return false;
+        }
+
+        InstanceIdentifier.Builder<Link> linkIIDBW = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+        writeTransaction = dataBroker.newWriteOnlyTransaction();
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDBW.build(), linkBuilderBW.build());
+        try {
+            writeTransaction.commit().get();
+            LOG.info("A new link with linkId: {} added into {} layer.",
+                oppLinkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+            return true;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
+                destNode, destTp, srcNode, srcTp);
+            return false;
+        }
+    }
+
+    /**Generates terminating Tps on TAPI-SBI-ABS-NODE while creating inter-domain or alien-transpondersToRoadm links.
+       TAPI-SBI-ABS-NODE abstracts T-API Topology retrieved through SouthBound API. **/
+
+    public static TerminationPoint addTpsToTapiExtNode(String tpName, String tpUuid, String nodeName, String nodeUuid,
+            String topoUuid, String linkId, DataBroker dataBroker) {
+        //Ietf tpBuilder
+        org.opendaylight.yang.gen.v1.http.org.opendaylight
+                .transportpce.or.network.augmentation.rev240923.TerminationPoint1Builder tpceAugmTp111Bd =
+            new org.opendaylight.yang.gen.v1.http.org.opendaylight
+                    .transportpce.or.network.augmentation.rev240923.TerminationPoint1Builder()
+                .setSupportingNodeTopologyUuid(topoUuid)
+                .setSupportingNodeUuid(nodeUuid)
+                .setTpUuid(tpUuid);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1Builder orAugmTp11Bd =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1Builder();
+
+        TerminationPointBuilder tpBuilder = new TerminationPointBuilder()
+                .addAugmentation(orAugmTp11Bd.build()).addAugmentation(tpceAugmTp111Bd.build())
+            .setTpId(new TpId(tpName));
+        //Set by default Operational state of created tp to InService
+        tpBuilder.addAugmentation(new TerminationPoint1Builder().setOperationalState(State.InService).build());
+
+        InstanceIdentifier<TerminationPoint> tpIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+            .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                    .Node1.class)
+            .child(TerminationPoint.class, new TerminationPointKey(new TpId(tpName)))
+            .build();
+
+        WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, tpIID, tpBuilder.build());
+        try {
+            writeTransaction.commit().get();
+            LOG.info("A new tp {} terminating Link {} has been added  to TAPI-SBI-ABS-NODE into {} layer.",
+                tpName, linkId, NetworkUtils.OVERLAY_NETWORK_ID);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to create new tp {} terminating link {} on TAPI-SBI-ABS-NODE ", tpName, linkId);
+            return null;
+        }
+        return tpBuilder.build();
     }
 
     private static TerminationPoint getTpofNode(String srcNode, String srcTp, DataBroker dataBroker) {
