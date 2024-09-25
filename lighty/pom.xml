@@ -25,7 +25,7 @@
     <application.attach.zip>true</application.attach.zip>
     <maven.deploy.skip>true</maven.deploy.skip>
     <transportpce.version>9.2.0-SNAPSHOT</transportpce.version>
-    <transportpce.models.version>20.2.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>20.2.1</transportpce.models.version>
   </properties>
 
   <dependencyManagement>

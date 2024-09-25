@@ -25,7 +25,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>20.2.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>20.2.1</transportpce.models.version>
   </properties>
 
   <dependencyManagement>

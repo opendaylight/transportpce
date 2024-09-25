@@ -23,8 +23,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce</name>
 
   <properties>
-    <netconf.version>7.0.9</netconf.version>
-    <transportpce.models.version>20.2.0-SNAPSHOT</transportpce.models.version>
+    <netconf.version>7.0.10</netconf.version>
+    <transportpce.models.version>20.2.1</transportpce.models.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
     <skip.karaf.featureTest>false</skip.karaf.featureTest>
   </properties>
