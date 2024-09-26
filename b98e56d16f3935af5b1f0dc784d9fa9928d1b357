@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed66f870_65f7eaff",
+        "filename": "api/src/main/yang/transportpce-or-network-augmentation@2024-09-23.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-09-26T11:06:35Z",
+      "side": 1,
+      "message": "I think \"node-model\" may be a confusing name here considering that an openroadm-network node already has a \"model\" attribute that is meant as an \"Identifier of the supplier\u0027s equipment\".",
+      "revId": "b98e56d16f3935af5b1f0dc784d9fa9928d1b357",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
