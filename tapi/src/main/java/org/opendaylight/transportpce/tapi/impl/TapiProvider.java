@@ -50,6 +50,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
+import org.opendaylight.transportpce.tapi.utils.TapiTopoContextInit;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -120,6 +121,8 @@ public class TapiProvider {
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
                 tapiContext, this.networkTransactionService, TAPI_TOPO_UUID);
+        TapiTopoContextInit tapiTopoContextInit = new TapiTopoContextInit(tapiContext,this.networkTransactionService);
+        tapiTopoContextInit.initializeTopoContext();
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
                 tapiContext, this.serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
