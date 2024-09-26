@@ -21,6 +21,8 @@ public final class TapiStringConstants {
     public static final String T0_MULTILAYER = "T0 - Multi-layer topology";
     public static final String T0_TAPI_MULTILAYER = "T0 - Tapi-Multi-layer Abstracted topology";
     public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";
+    public static final String SBI_TAPI_TOPOLOGY = "SBI - Multi-layer - TAPI topology";
+    public static final String ALIEN_XPDR_TAPI_TOPOLOGY = "Alien-Xponders - TAPI topology";
     // TODO: these hardcoded UUID are here for debugging purpose.
     // They allow to have a reference somewhere of the UUID to be used when testing.
     public static final String T0_MULTILAYER_UUID = "747c670e-7a07-3dab-b379-5b1cd17402a3";
