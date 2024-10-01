@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bf9c08c_06fdce0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-01T08:48:09Z",
+      "side": 1,
+      "message": "Thanks for your review Joakim! This is a good point. Changed from node-model to yang-data-model to be more precise and avoisd potential confusion.",
+      "revId": "c02dd3adda6692c87c8c687fc94a0245078601c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
