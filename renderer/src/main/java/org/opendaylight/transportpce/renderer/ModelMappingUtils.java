@@ -163,22 +163,27 @@ public final class ModelMappingUtils {
                     Uint32.valueOf(GridUtils
                             .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
         }
+        BigDecimal nmcWidth = BigDecimal.valueOf(0.0);
+        String nmcWidthFromMode = "0";
         if (atoZDirection.getAToZMinFrequency() != null && atoZDirection.getAToZMaxFrequency() != null) {
             servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
-                    atoZDirection.getAToZMinFrequency().getValue().decimalValue(),
-                    atoZDirection.getAToZMaxFrequency().getValue().decimalValue(),
-                    scale));
+                atoZDirection.getAToZMinFrequency().getValue().decimalValue(),
+                atoZDirection.getAToZMaxFrequency().getValue().decimalValue(), scale));
+            nmcWidth = atoZDirection.getAToZMaxFrequency().getValue().decimalValue().subtract(
+                atoZDirection.getAToZMinFrequency().getValue().decimalValue())
+                .multiply(BigDecimal.valueOf(1000)).subtract(BigDecimal.valueOf(8.0));
         }
         if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(atoZDirection.getModulationFormat());
-            if (modulationFormat != null
-                    && GridConstant.FREQUENCY_WIDTH_TABLE
+            if (modulationFormat != null && GridConstant.FREQUENCY_WIDTH_TABLE
                     .contains(atoZDirection.getRate(), modulationFormat)) {
-                servicePathInputBuilder
-                    .setNmcWidth(FrequencyGHz
-                        .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),
-                        modulationFormat)));
+                nmcWidthFromMode = GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),modulationFormat);
             }
+        }
+        if (nmcWidth.compareTo(new BigDecimal(nmcWidthFromMode)) >= 0) {
+            servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(nmcWidth.toString()));
+        } else {
+            servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(nmcWidthFromMode));
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
@@ -220,21 +225,27 @@ public final class ModelMappingUtils {
                     Uint32.valueOf(GridUtils
                             .getHigherSpectralIndexFromFrequency(ztoADirection.getZToAMaxFrequency().getValue())));
         }
+        BigDecimal nmcWidth = BigDecimal.valueOf(0.0);
+        String nmcWidthFromMode = "0";
         if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
             servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
-                    ztoADirection.getZToAMinFrequency().getValue().decimalValue(),
-                    ztoADirection.getZToAMaxFrequency().getValue().decimalValue(),
-                    scale));
+                ztoADirection.getZToAMinFrequency().getValue().decimalValue(),
+                ztoADirection.getZToAMaxFrequency().getValue().decimalValue(), scale));
+            nmcWidth = ztoADirection.getZToAMaxFrequency().getValue().decimalValue().subtract(
+                ztoADirection.getZToAMinFrequency().getValue().decimalValue())
+                .multiply(BigDecimal.valueOf(1000)).subtract(BigDecimal.valueOf(12.5));
         }
         if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(ztoADirection.getModulationFormat());
-            if (modulationFormat != null
-                    && GridConstant.FREQUENCY_WIDTH_TABLE
+            if (modulationFormat != null && GridConstant.FREQUENCY_WIDTH_TABLE
                     .contains(ztoADirection.getRate(), modulationFormat)) {
-                servicePathInputBuilder.setNmcWidth(FrequencyGHz
-                        .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),
-                                modulationFormat)));
+                nmcWidthFromMode = GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),modulationFormat);
             }
+        }
+        if (nmcWidth.compareTo(new BigDecimal(nmcWidthFromMode)) >= 0) {
+            servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(nmcWidth.toString()));
+        } else {
+            servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(nmcWidthFromMode));
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))

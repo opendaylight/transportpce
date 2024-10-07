@@ -55,7 +55,7 @@ public class PceGraph {
     private Double margin = null;
     PceConstraints pceHardConstraints;
     private PceConstraintMode pceConstraintMode;
-    private BitSet spectrumConstraint;
+    private Map<Integer,BitSet> spectrumConstraint;
 
     // results
     private PceResult pceResult = null;
@@ -70,7 +70,8 @@ public class PceGraph {
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
-            NetworkTransactionService networkTransactionService, PceConstraintMode mode, BitSet spectrumConstraint) {
+            NetworkTransactionService networkTransactionService, PceConstraintMode mode,
+            Map<Integer,BitSet> spectrumConstraint) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;

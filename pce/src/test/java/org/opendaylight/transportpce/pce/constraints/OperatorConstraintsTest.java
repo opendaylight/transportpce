@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,10 +98,12 @@ public class OperatorConstraintsTest extends AbstractTest {
         BitSet referenceBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         referenceBitSet.set(0, GridConstant.EFFECTIVE_BITS, false);
         referenceBitSet.set(0, 8, true);
-        assertEquals(referenceBitSet, opConstraints.getBitMapConstraint("CustomerProfileLamda1"));
+        Map<Integer, BitSet> bitMapConstraint = new HashMap<>(Map.of(50,referenceBitSet));
+        assertEquals(bitMapConstraint, opConstraints.getBitMapConstraint("CustomerProfileLamda1"));
         referenceBitSet.set(8, GridConstant.EFFECTIVE_BITS, true);
         referenceBitSet.set(0, 8, false);
-        assertEquals(referenceBitSet, opConstraints.getBitMapConstraint("otherCustomer"));
+        bitMapConstraint = new HashMap<>(Map.of(0,referenceBitSet));
+        assertEquals(bitMapConstraint, opConstraints.getBitMapConstraint("otherCustomer"));
     }
 
 }
