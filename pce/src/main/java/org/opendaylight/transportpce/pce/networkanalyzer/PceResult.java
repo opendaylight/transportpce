@@ -29,6 +29,8 @@ public class PceResult {
     private String serviceType = "";
     private BigDecimal minFreq;
     private BigDecimal maxFreq;
+    private BigDecimal osnr;
+    private String operationalMode;
 
     // for now it is constant returned as received from A-end
     private long rate = -1;
@@ -175,6 +177,23 @@ public class PceResult {
      */
     public void setMaxFreq(BigDecimal maxFreq) {
         this.maxFreq = maxFreq;
+    }
+
+    public BigDecimal getOsnr() {
+        return this.osnr;
+    }
+
+    public void setosnr(BigDecimal givenosnr) {
+        this.osnr = givenosnr;
+    }
+
+
+    public String getOperationalMode() {
+        return operationalMode;
+    }
+
+    public void setOperationalMode(String om) {
+        this.operationalMode = om;
     }
 
 }
