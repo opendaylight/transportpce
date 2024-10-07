@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f368bd_56861067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-07T19:52:53Z",
+      "side": 1,
+      "message": "Can you describe the bug you are trying to fix here?",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "703f0316_5256e0c1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-07T19:52:53Z",
+      "side": 1,
+      "message": "The logic here is confusing. Why first check that rate and modulation format is not null and then use min and max frequency instead of those parameters?",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0f30f2b_5089eec9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-07T19:52:53Z",
+      "side": 1,
+      "message": "Why do you want to set NMC width to the same value as MC width? That does not seem correct.",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
