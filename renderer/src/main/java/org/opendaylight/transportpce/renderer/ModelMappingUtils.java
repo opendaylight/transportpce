@@ -171,13 +171,20 @@ public final class ModelMappingUtils {
         }
         if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(atoZDirection.getModulationFormat());
-            if (modulationFormat != null
-                    && GridConstant.FREQUENCY_WIDTH_TABLE
-                    .contains(atoZDirection.getRate(), modulationFormat)) {
-                servicePathInputBuilder
-                    .setNmcWidth(FrequencyGHz
-                        .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),
-                        modulationFormat)));
+            if (atoZDirection.getAToZMinFrequency() != null && atoZDirection.getAToZMaxFrequency() != null) {
+                servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(
+                    atoZDirection.getAToZMaxFrequency().getValue().decimalValue().subtract(
+                        atoZDirection.getAToZMinFrequency().getValue().decimalValue())
+                    .multiply(BigDecimal.valueOf(1000)).toString()));
+            } else {
+                if (modulationFormat != null
+                        && GridConstant.FREQUENCY_WIDTH_TABLE
+                        .contains(atoZDirection.getRate(), modulationFormat)) {
+                    servicePathInputBuilder
+                        .setNmcWidth(FrequencyGHz
+                            .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(atoZDirection.getRate(),
+                                    modulationFormat)));
+                }
             }
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
@@ -228,12 +235,20 @@ public final class ModelMappingUtils {
         }
         if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(ztoADirection.getModulationFormat());
-            if (modulationFormat != null
-                    && GridConstant.FREQUENCY_WIDTH_TABLE
-                    .contains(ztoADirection.getRate(), modulationFormat)) {
-                servicePathInputBuilder.setNmcWidth(FrequencyGHz
-                        .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),
-                                modulationFormat)));
+            if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
+                servicePathInputBuilder.setNmcWidth(FrequencyGHz.getDefaultInstance(
+                    ztoADirection.getZToAMaxFrequency().getValue().decimalValue().subtract(
+                        ztoADirection.getZToAMinFrequency().getValue().decimalValue())
+                    .multiply(BigDecimal.valueOf(1000)).toString()));
+            } else {
+                if (modulationFormat != null
+                        && GridConstant.FREQUENCY_WIDTH_TABLE
+                        .contains(ztoADirection.getRate(), modulationFormat)) {
+                    servicePathInputBuilder
+                        .setNmcWidth(FrequencyGHz
+                            .getDefaultInstance(GridConstant.FREQUENCY_WIDTH_TABLE.get(ztoADirection.getRate(),
+                                    modulationFormat)));
+                }
             }
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
