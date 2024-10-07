@@ -62,6 +62,9 @@ public class PostAlgoPathValidator {
     private Double tpceCalculatedMargin = 0.0;
     private final NetworkTransactionService networkTransactionService;
     private final BitSet spectrumConstraint;
+    private BigDecimal osnrAZ;
+    private BigDecimal osnrZA;
+    private String operationalMode;
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint) {
         this.networkTransactionService = networkTransactionService;
@@ -122,6 +125,11 @@ public class PostAlgoPathValidator {
                             StringConstants.SERVICE_DIRECTION_AZ, cu);
                     double margin2 = checkOSNR(path, allPceNodes, allPceLinks, serviceType,
                             StringConstants.SERVICE_DIRECTION_ZA, cu);
+                    pceResult.setOperationalMode(this.operationalMode);
+                    if (this.osnrAZ != null && this.osnrZA != null) {
+                        pceResult.setosnr(
+                            this.osnrAZ.doubleValue() > this.osnrZA.doubleValue() ? this.osnrZA : this.osnrAZ);
+                    }
                     if (margin1 < 0 || margin2 < 0 || margin1 == Double.NEGATIVE_INFINITY
                             || margin2 == Double.NEGATIVE_INFINITY) {
                         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
@@ -593,6 +601,7 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
+        this.osnrAZ = BigDecimal.valueOf(calcOnsrdB);
         if (!transponderPresent) {
             LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
                 + "that optical tunnel degradations are compatible with external transponder performances");
@@ -794,6 +803,7 @@ public class PostAlgoPathValidator {
             signal.get("calcCd"), Math.sqrt(signal.get("calcPmd2").doubleValue()),
             Math.sqrt(signal.get("calcPdl2").doubleValue()), calcOnsrdB,
             getOsnrDbfromOnsrLin(signal.get("calcOnsrLin").doubleValue()));
+        this.osnrZA = BigDecimal.valueOf(calcOnsrdB);
         if (!transponderPresent) {
             LOG.info("No transponder in the path, User shall check from CD, PMD, and OSNR values provided "
                 + "that optical tunnel degradations are compatible with external transponder performances");
@@ -878,6 +888,7 @@ public class PostAlgoPathValidator {
         // If the Xponder operational mode (setOpMode Arg1) is not consistent nor declared in the topology (Network TP)
         // Operational mode is retrieved from the service Type assuming it is supported by the Xponder (setOpMode Arg2)
         String opMode = getXpdrOpMode(nwTpId, vertice, pathElement, currentNode, serviceType, cu);
+        this.operationalMode = opMode;
         // If the operational mode of the ADD/DROP MUX is not consistent nor declared in the topology (Network TP)
         // Operational mode is set by default to standard opMode for ADD SRGs
         String adnMode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWWRCORE);
