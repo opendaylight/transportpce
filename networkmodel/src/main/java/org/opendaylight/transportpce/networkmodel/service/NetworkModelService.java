@@ -129,4 +129,11 @@ public interface NetworkModelService {
      *     True indicates if the low-order otn service must be deleted
      */
     void updateOtnLinks(List<String> supportedLinks, boolean isDeletion);
+
+
+    /**
+     * Create new OpenROADM TAPI-EXT node in all OpenROADM topologies.
+     */
+    void createTapiExtNodeAtInit();
+
 }
