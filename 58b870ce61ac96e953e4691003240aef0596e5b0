@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6449b6ff_0c401941",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-08T16:59:26Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused about how nmc bandwidth is related to dedicated-signal-bandwidth-multiple. I don\u0027t necessarily think it\u0027s wrong to take min and max frequencies into account when setting nmc bandwidth but I just don\u0027t see how it\u0027s related to customer profiles. Isn\u0027t the allocated spectrum already defined by min and max frequency?",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -14,6 +31,40 @@
       "writtenOn": "2024-10-08T12:24:28Z",
       "side": 1,
       "message": "recheck",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "161e23d2_a1080372",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-08T16:59:26Z",
+      "side": 1,
+      "message": "I don\u0027t understand how these changes are related to the description in the commit message.",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e38ce5_ebfe04cf",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-08T16:59:26Z",
+      "side": 1,
+      "message": "Why do you subtract exactly 12.5? I don\u0027t think there is anything that says nmc width has to be a multiple of slot width granularity?",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
