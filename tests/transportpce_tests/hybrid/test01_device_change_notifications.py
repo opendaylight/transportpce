@@ -233,9 +233,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'XPDRA01-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
+                if nodeId == 'XPDRA01-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -296,6 +300,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeMapId = node['node-id'].split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
                 self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'inService')
@@ -347,9 +354,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP1-TXRX':
+                if nodeId == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP1-TXRX':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -431,9 +442,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'ROADM-A1-DEG2' and tp['tp-id'] == 'DEG2-TTP-TXRX':
+                if nodeId == 'ROADM-A1-DEG2' and tp['tp-id'] == 'DEG2-TTP-TXRX':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -513,9 +528,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'XPDR-C1-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
+                if nodeId == 'XPDR-C1-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -595,9 +614,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         for node in node_list:
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP2-TXRX':
+                if nodeId == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP2-TXRX':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1

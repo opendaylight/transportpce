@@ -160,12 +160,15 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_05_getNodes_OpenRoadmTopology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 4)
+        self.assertEqual(len(response['network'][0]['node']), 5)
         listNode = ['ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
         for node in response['network'][0]['node']:
-            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, node['supporting-node'])
-            nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
+            nodeType = node['org-openroadm-common-network:node-type']
+            self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, node['supporting-node'])
             self.assertIn(nodeId, self.CHECK_DICT1)
             self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
             if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
@@ -192,11 +195,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 2)
+        self.assertEqual(len(response['network'][0]['node']), 3)
         for node in response['network'][0]['node']:
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             self.assertEqual(node['supporting-node'][0]['network-ref'], 'clli-network')
             self.assertEqual(node['supporting-node'][0]['node-ref'], 'NodeA')
-            nodeId = node['node-id']
             if nodeId == 'XPDRA01':
                 self.assertEqual(node['org-openroadm-common-network:node-type'], 'XPONDER')
                 self.assertEqual(node['org-openroadm-network:model'], '1')
@@ -210,11 +216,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
+        self.assertEqual(len(response['network'][0]['node']), 6)
         listNode = ['XPDRA01-XPDR1', 'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
         for node in response['network'][0]['node']:
-            nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
+            nodeType = node['org-openroadm-common-network:node-type']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, node['supporting-node'])
@@ -331,7 +340,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_16_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        listNode = ['NodeA', 'NodeC']
+        listNode = ['NodeA', 'NodeC', 'TAPI-SBI-ABS-NODE']
         for node in response['network'][0]['node']:
             nodeId = node['node-id']
             self.assertIn(nodeId, listNode)
@@ -342,7 +351,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_17_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 3)
+        self.assertEqual(len(response['network'][0]['node']), 4)
         listNode = ['XPDRA01', 'ROADMA01', 'ROADMC01']
         CHECK_LIST = {'XPDRA01': {'node-ref': 'NodeA', 'node-type': 'XPONDER', 'model': '1'},
                       'ROADMA01': {'node-ref': 'NodeA', 'node-type': 'ROADM', 'model': '2'},
@@ -351,6 +360,9 @@ class TransportPCETopologyTesting(unittest.TestCase):
         for node in response['network'][0]['node']:
             self.assertEqual(node['supporting-node'][0]['network-ref'], 'clli-network')
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             self.assertIn(nodeId, CHECK_LIST)
             self.assertEqual(node['supporting-node'][0]['node-ref'],
                              CHECK_LIST[nodeId]['node-ref'])
@@ -419,13 +431,16 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 8)
+        self.assertEqual(len(response['network'][0]['node']), 9)
         listNode = ['XPDRA01-XPDR1',
                     'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2',
                     'ROADMC01-SRG1', 'ROADMC01-DEG1', 'ROADMC01-DEG2']
         for node in response['network'][0]['node']:
-            nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
+            nodeType = node['org-openroadm-common-network:node-type']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, node['supporting-node'])
@@ -534,6 +549,9 @@ class TransportPCETopologyTesting(unittest.TestCase):
         listNode = ['NodeA', 'NodeB', 'NodeC']
         for node in response['network'][0]['node']:
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             self.assertIn(nodeId, listNode)
             self.assertEqual(node['org-openroadm-clli-network:clli'], nodeId)
             listNode.remove(nodeId)
@@ -620,11 +638,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
+        self.assertEqual(len(response['network'][0]['node']), 6)
         listNode = ['XPDRA01-XPDR1', 'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
         for node in response['network'][0]['node']:
-            nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
+            nodeType = node['org-openroadm-common-network:node-type']
             # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
                 for tp in node['ietf-network-topology:termination-point']:
@@ -660,7 +681,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_33_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 2)
+        self.assertEqual(len(response['network'][0]['node']), 3)
         for node in response['network'][0]['node']:
             self.assertNotEqual(node['node-id'], 'ROADMC01')
             self.assertNotEqual(node['node-id'], 'ROADMB01')
@@ -668,7 +689,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_34_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(len(response['network'][0]['node']), 2)
         self.assertNotEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeC')
 
     def test_35_disconnect_XPDRA(self):
@@ -678,24 +699,27 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_36_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(len(response['network'][0]['node']), 2)
         self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_37_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(len(response['network'][0]['node']), 2)
         self.assertNotEqual(response['network'][0]['node'][0]['node-id'], 'XPDRA01')
 
     def test_38_getNodes_OpenRoadmTopology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 4)
+        self.assertEqual(len(response['network'][0]['node']), 5)
         listNode = ['ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
         for node in response['network'][0]['node']:
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMA01'}, node['supporting-node'])
             nodeType = node['org-openroadm-common-network:node-type']
-            nodeId = node['node-id']
             self.assertIn(nodeId, self.CHECK_DICT1)
             self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
             if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
@@ -763,17 +787,20 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_42_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
 
     def test_43_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
 
     def test_44_check_roadm2roadm_link_persistence(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
         self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 6)
 
 

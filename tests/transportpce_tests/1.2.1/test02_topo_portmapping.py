@@ -56,6 +56,8 @@ class TransportPCEtesting(unittest.TestCase):
         for node in resTopo['network'][0]['node']:
             nodeId = node['node-id']
             nodeMapId = nodeId.split("-")[0]
+            if (nodeMapId == 'TAPI'):
+                continue
             response = test_utils.get_portmapping_node_attr(nodeMapId, "node-info", None)
             self.assertEqual(response['status_code'], requests.codes.ok)
             for tp in node['ietf-network-topology:termination-point']:
