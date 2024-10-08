@@ -228,3 +228,33 @@ class TransportPCEtesting(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+                listNode.remove(nodeId)
+        self.assertEqual(len(listNode), 0)
+
+    def test_08_disconnect_SPDR_SA1(self):
+        response = test_utils.unmount_device("SPDR-SA1")
+        self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
+
+    def test_09_getClliNetwork(self):
+        response = test_utils.get_ietf_network_request('clli-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(len(response['network'][0]['node']), 1)
+        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
+
+    def test_10_getOpenRoadmNetwork(self):
+        response = test_utils.get_ietf_network_request('openroadm-network', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
+
+    def test_11_getNodes_OpenRoadmTopology(self):
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertNotIn('node', response['network'][0])
+
+    def test_12_getNodes_OtnTopology(self):
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        self.assertNotIn('node', response['network'][0])
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

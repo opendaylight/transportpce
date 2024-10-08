@@ -192,7 +192,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 2)
+        self.assertEqual(len(response['network'][0]['node']), 3)
         for node in response['network'][0]['node']:
             self.assertEqual(node['supporting-node'][0]['network-ref'], 'clli-network')
             self.assertEqual(node['supporting-node'][0]['node-ref'], 'NodeA')
@@ -210,7 +210,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
+        self.assertEqual(len(response['network'][0]['node']), 6)
         listNode = ['XPDRA01-XPDR1', 'ROADMA01-SRG1', 'ROADMA01-SRG3', 'ROADMA01-DEG1', 'ROADMA01-DEG2']
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
@@ -426,7 +426,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
             nodeId = node['node-id']
-            # Tests related to XPDRA nodes
             if nodeId == 'XPDRA01-XPDR1':
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA01'}, node['supporting-node'])
                 self.assertEqual(nodeType, 'XPONDER')
@@ -464,8 +463,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADMC01'}, node['supporting-node'])
                 self.assertEqual(node['org-openroadm-common-network:node-type'], self.CHECK_DICT2[nodeId]['node_type'])
                 listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):

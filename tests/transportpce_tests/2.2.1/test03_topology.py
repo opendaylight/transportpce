@@ -195,7 +195,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         nbNode = len(response['network'][0]['node'])
-        self.assertEqual(nbNode, 2)
+        self.assertEqual(nbNode, 3)
         for node in response['network'][0]['node']:
             self.assertEqual(node['supporting-node'][0]['network-ref'], 'clli-network')
             self.assertEqual(node['supporting-node'][0]['node-ref'], 'NodeA')
@@ -634,7 +634,7 @@ class TransportPCEtesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 5)
+        self.assertEqual(len(response['network'][0]['node']), 6)
         listNode = ['XPDR-A1-XPDR1', 'ROADM-A1-SRG1', 'ROADM-A1-SRG3', 'ROADM-A1-DEG1', 'ROADM-A1-DEG2']
         for node in response['network'][0]['node']:
             nodeType = node['org-openroadm-common-network:node-type']
@@ -713,7 +713,6 @@ class TransportPCEtesting(unittest.TestCase):
         for node in response['network'][0]['node']:
             self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'}, node['supporting-node'])
             nodeType = node['org-openroadm-common-network:node-type']
-            nodeId = node['node-id']
             self.assertIn(nodeId, self.CHECK_DICT1)
             self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
             if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':

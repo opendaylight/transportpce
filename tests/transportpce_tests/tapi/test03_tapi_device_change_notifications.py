@@ -329,11 +329,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         node_list = response['network'][0]['node']
         nb_updated_tp = 0
         for node in node_list:
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'XPDR-C1-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
+                if nodeId == 'XPDR-C1-XPDR1' and tp['tp-id'] == 'XPDR1-NETWORK1':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -379,22 +383,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                 self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                                  "Administrative State should be 'UNLOCKED'")
         self.node_details["node-id"] = "XPDR-C1-XPDR1+DSR"
-#        response = test_utils.transportpce_api_rpc_request(
-#            'tapi-topology', 'get-node-details', self.node_details)
-#        self.assertEqual(response['status_code'], requests.codes.ok)
-#        nep_list = response['output']['node']['owned-node-edge-point']
-#        for nep in nep_list:
-#            if 'XPDR1-NETWORK1' in nep['name'][0]['value']:
-#                self.assertEqual(nep['operational-state'], 'DISABLED',
-#                                 "Operational State should be 'DISABLED'")
-#                self.assertEqual(nep['administrative-state'], 'LOCKED',
-#                                 "Administrative State should be 'LOCKED'")
-#                nb_updated_neps += 1
-#            else:
-#                self.assertEqual(nep['operational-state'], 'ENABLED',
-#                                 "Operational State should be 'ENABLED'")
-#                self.assertEqual(nep['administrative-state'], 'UNLOCKED',
-#                                 "Administrative State should be 'UNLOCKED'")
         self.assertEqual(nb_updated_neps, 3, "3 xponder neps (OTS, OTSI_MC, eODU) should have been modified")
         time.sleep(1)
 
@@ -459,6 +447,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         node_list = response['network'][0]['node']
         for node in node_list:
+            nodeMapId = node['node-id'].split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
@@ -485,17 +476,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                              "Operational State should be 'ENABLED'")
             self.assertEqual(nep['administrative-state'], 'UNLOCKED',
                              "Administrative State should be 'UNLOCKED'")
-
-#        self.node_details["node-id"] = "XPDR-C1-XPDR1+DSR"
-#        response = test_utils.transportpce_api_rpc_request(
-#            'tapi-topology', 'get-node-details', self.node_details)
-#        self.assertEqual(response['status_code'], requests.codes.ok)
-#        nep_list = response['output']['node']['owned-node-edge-point']
-#        for nep in nep_list:
-#            self.assertEqual(nep['operational-state'], 'ENABLED',
-#                             "Operational State should be 'ENABLED'")
-#            self.assertEqual(nep['administrative-state'], 'UNLOCKED',
-#                             "Administrative State should be 'UNLOCKED'")
         time.sleep(1)
 
     def test_25_check_update_tapi_links_ok(self):
@@ -550,11 +530,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         node_list = response['network'][0]['node']
         nb_updated_tp = 0
         for node in node_list:
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
             for tp in tp_list:
-                if node['node-id'] == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP1-TXRX':
+                if nodeId == 'ROADM-A1-SRG1' and tp['tp-id'] == 'SRG1-PP1-TXRX':
                     self.assertEqual(tp['org-openroadm-common-network:operational-state'], 'outOfService')
                     self.assertEqual(tp['org-openroadm-common-network:administrative-state'], 'outOfService')
                     nb_updated_tp += 1
@@ -713,6 +697,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         node_list = response['network'][0]['node']
         nb_updated_tp = 0
         for node in node_list:
+            nodeMapId = node['node-id'].split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
@@ -856,6 +843,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         node_list = response['network'][0]['node']
         nb_updated_tp = 0
         for node in node_list:
+            nodeMapId = node['node-id'].split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertEqual(node['org-openroadm-common-network:operational-state'], 'inService')
             self.assertEqual(node['org-openroadm-common-network:administrative-state'], 'inService')
             tp_list = node['ietf-network-topology:termination-point']
