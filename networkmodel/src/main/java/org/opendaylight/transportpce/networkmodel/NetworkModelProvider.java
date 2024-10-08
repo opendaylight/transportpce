@@ -45,6 +45,7 @@ public class NetworkModelProvider {
         .child(Mapping.class);
 
     private final DataBroker dataBroker;
+    private final NetworkModelService netModServ;
     private final NetConfTopologyListener topologyListener;
     private List<Registration> listeners;
     private TpceNetwork tpceNetwork;
@@ -62,6 +63,7 @@ public class NetworkModelProvider {
             @Reference NotificationService notificationService,
             @Reference FrequenciesService frequenciesService) {
         this.dataBroker = dataBroker;
+        this.netModServ = networkModelService;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
         this.listeners = new ArrayList<>();
@@ -89,6 +91,7 @@ public class NetworkModelProvider {
                 DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
         serviceHandlerListenerRegistration = notificationService.registerCompositeListener(
             new ServiceHandlerListener(frequenciesService).getCompositeListener());
+        netModServ.createTapiExtNodeAtInit();
     }
 
         /**
