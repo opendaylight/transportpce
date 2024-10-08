@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "140e6c75_3cbeb013",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-08T10:06:13Z",
+      "side": 1,
+      "message": "It seems that I was a bit tired yesterday evening...Forget it. Will push an updated patch to correct this. Thanks!",
+      "parentUuid": "703f0316_5256e0c1",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0f30f2b_5089eec9",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2024-10-07T19:52:53Z",
       "side": 1,
       "message": "Why do you want to set NMC width to the same value as MC width? That does not seem correct.",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563c2d25_4e27df5a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-08T10:06:13Z",
+      "side": 1,
+      "message": "Same. Did it in a hurry, but this will be corrected through next patch.",
+      "parentUuid": "c0f30f2b_5089eec9",
       "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

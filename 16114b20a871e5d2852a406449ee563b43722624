@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "16114b20a871e5d2852a406449ee563b43722624",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7554489c_d1fc1ad3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-08T10:06:13Z",
+      "side": 1,
+      "message": "Thanks Jonas. made all of this in a hurry, with a lot of approximations; Wanted to see whether it passes the functional tests. Just provided a corrected patch that should address your valid points",
+      "revId": "16114b20a871e5d2852a406449ee563b43722624",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
