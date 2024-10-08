@@ -45,6 +45,7 @@ public class NetworkModelProvider {
         .child(Mapping.class);
 
     private final DataBroker dataBroker;
+    private final NetworkModelService netModServ;
     private final NetConfTopologyListener topologyListener;
     private List<Registration> listeners;
     private TpceNetwork tpceNetwork;
@@ -62,6 +63,7 @@ public class NetworkModelProvider {
             @Reference NotificationService notificationService,
             @Reference FrequenciesService frequenciesService) {
         this.dataBroker = dataBroker;
+        this.netModServ = networkModelService;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
         this.listeners = new ArrayList<>();
@@ -81,6 +83,7 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
+        netModServ.createTapiExtNodeAtInit();
         listeners.add(dataBroker.registerTreeChangeListener(
                 DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL,
                     InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)),

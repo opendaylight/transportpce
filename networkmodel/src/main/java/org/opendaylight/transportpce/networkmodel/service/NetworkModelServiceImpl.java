@@ -9,11 +9,13 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -41,6 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
@@ -55,7 +58,10 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
@@ -65,6 +71,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev240611.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -670,6 +677,50 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         LOG.info("OTN links updated");
     }
 
+    @Override
+    public void createTapiExtNodeAtInit() {
+        Node tapiExt = new NodeBuilder().setNodeId(new NodeId("TAPI-EXT")).build();
+        InstanceIdentifier<Node> iiTapiExtClliNode = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId("TAPI-EXT")))
+            .build();
+        LOG.info("OR Topo initialization, creating new CLLI TAPI-EXT Node in DataStore");
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode, tapiExt);
+
+        String topoUuid = new Uuid(UUID.nameUUIDFromBytes("SBI - Multi-layer - TAPI topology"
+                .getBytes(Charset.forName("UTF-8"))).toString()).toString();
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.Node1
+            tapiExt1 = new org.opendaylight.yang.gen.v1.http.org
+                .opendaylight.transportpce.or.network.augmentation.rev240923.Node1Builder()
+                    .setYangDataModel(DataModelEnum.TapiExt)
+                    .setTopologyUuid(topoUuid)
+                    .build();
+
+        InstanceIdentifier<Node> iiTapiExtNetworkNode = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId("TAPI-EXT")))
+            .build();
+        LOG.info("OR Topo initialization, creating new NETWORK TAPI-EXT Node in DataStore with TopoUUID {}", topoUuid);
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode,
+            createTapiNodeBuilder(NetworkUtils.CLLI_NETWORK_ID, "TAPI-EXT").addAugmentation(tapiExt1).build());
+
+        InstanceIdentifier<Node> iiTapiExtTopologyNode = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId("TAPI-EXT")))
+            .build();
+        LOG.info("OR Topo initialization, creating new TOPOLOGY TAPI-EXT Node in DataStore with TopoUUID {}", topoUuid);
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode,
+            createTapiNodeBuilder(NetworkUtils.UNDERLAY_NETWORK_ID, "TAPI-EXT").addAugmentation(tapiExt1).build());
+
+        InstanceIdentifier<Node> iiTapiExtOtnNode = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId("TAPI-EXT")))
+            .build();
+        LOG.info("OR Topo initialization, creating new OTN TAPI-EXT Node in DataStore with TopoUUID {}", topoUuid);
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode,
+            createTapiNodeBuilder(NetworkUtils.OVERLAY_NETWORK_ID, "TAPI-EXT").addAugmentation(tapiExt1).build());
+    }
+
     private List<Link> getOtnLinks(List<LinkId> linkIds) {
         List<Link> links = new ArrayList<>();
         for (LinkId linkId : linkIds) {
@@ -878,6 +929,17 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         } else {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
         }
+    }
+
+    private NodeBuilder createTapiNodeBuilder(String supportingLayer, String nodeId) {
+        SupportingNodeBuilder supNBd = new SupportingNodeBuilder()
+            .setNetworkRef(new NetworkId(supportingLayer))
+            .setNodeRef(new NodeId(nodeId));
+        return new NodeBuilder()
+            .setNodeId(new NodeId("TAPI-EXT"))
+            .setSupportingNode(new HashMap<>(
+                Map.of(new SupportingNodeKey(supNBd.build().key()), supNBd.build())));
+
     }
 
     private String convertNetconfNodeIdToTopoNodeId(String nodeId, String tpId) {
