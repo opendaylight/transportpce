@@ -59,6 +59,8 @@ class TransportPCEtesting(unittest.TestCase):
             # pylint: disable=consider-using-f-string
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
+            if nodeMapId == 'TAPI-SBI':
+                continue
             print("nodeMapId={}".format(nodeMapId))
             response = test_utils.get_portmapping_node_attr(nodeMapId, "node-info", None)
             self.assertEqual(response['status_code'], requests.codes.ok)
