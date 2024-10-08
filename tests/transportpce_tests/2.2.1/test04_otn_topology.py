@@ -57,8 +57,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         logging.info(response)
-        self.assertEqual(response['network'][0]['node'][0]['node-id'], 'NodeSA')
-        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
+        self.assertEqual(response['network'][0]['node'][1]['node-id'], 'NodeSA')
+        self.assertEqual(response['network'][0]['node'][1]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_03_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
@@ -81,13 +81,16 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('node', response['network'][0])
-        self.assertEqual(len(response['network'][0]['node']), 3)
+        self.assertEqual(len(response['network'][0]['node']), 4)
         listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3']
         for node in response['network'][0]['node']:
+            nodeId = node['node-id']
+            nodeMapId = nodeId.split("-")[0]
+            if nodeMapId == 'TAPI':
+                continue
             self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'}, node['supporting-node'])
             self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'}, node['supporting-node'])
             nodeType = node['org-openroadm-common-network:node-type']
-            nodeId = node['node-id']
             if nodeId not in listNode:
                 self.assertFalse(True)
                 continue
@@ -118,8 +121,8 @@ class TransportPCEtesting(unittest.TestCase):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 3)
-        listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3']
+        self.assertEqual(len(response['network'][0]['node']), 4)
+        listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3', "TAPI-SBI-ABS-NODE"]
         CHECK_LIST = {
             'SPDR-SA1-XPDR1': {
                 'node-type': 'MUXPDR',
@@ -198,7 +201,6 @@ class TransportPCEtesting(unittest.TestCase):
                         for tp in CHECK_LIST[nodeId]['tp-unchecklist']:
                             self.assertNotIn(tp, nbl['tp-list'])
             else:
-                self.assertEqual('SPDR-SA1-XPDR3', nodeId)
                 listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
@@ -209,21 +211,24 @@ class TransportPCEtesting(unittest.TestCase):
     def test_09_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 1)
-        self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
+        self.assertEqual(len(response['network'][0]['node']), 2)
+        self.assertEqual(response['network'][0]['node'][1]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_10_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
 
     def test_11_getNodes_OpenRoadmTopology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
 
     def test_12_getNodes_OtnTopology(self):
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
-        self.assertNotIn('node', response['network'][0])
+        # Only TAPI-SBI-ABS-NODE created at initialization shall remain in the topology
+        self.assertEqual(len(response['network'][0]['node']), 1)
 
 
 if __name__ == "__main__":
