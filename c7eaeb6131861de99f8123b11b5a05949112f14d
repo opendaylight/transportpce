@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63601cb8_e91cf04b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-11T13:39:47Z",
+      "side": 1,
+      "message": "Still have a problem with test 13. Please look at the comment. help appreciated. Thanks",
+      "revId": "c7eaeb6131861de99f8123b11b5a05949112f14d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad28729_de6b7c22",
+        "filename": "tests/transportpce_tests/network/test01_topo_extension.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-11T13:39:47Z",
+      "side": 1,
+      "message": "Any idea of why this highlighted section doesn\u0027t work?\nLink is an ietf-network-topology link.\ntransportpce-or-network-augmentation augments this link\nBut this result in an error executing the program :\n  File \"transportpce_tests/network/test01_topo_extension.py\", line 306, in test_13_getLinks_OpenroadmTopology\n    if (link[\u0027transportpce-or-network-augmentation:link-class\u0027] \u003d\u003d null) :\nKeyError: \u0027transportpce-or-network-augmentation:link-class\u0027\nThe print shows that the augmentation is present as formulated here.\nResult in Postman getting this topo provides the same formulation.\nTrying org-opendaylight-transportpce-or-network-augmentation:link-class gives the same result.",
+      "range": {
+        "startLine": 306,
+        "startChar": 12,
+        "endLine": 308,
+        "endChar": 79
+      },
+      "revId": "c7eaeb6131861de99f8123b11b5a05949112f14d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
