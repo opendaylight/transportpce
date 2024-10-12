@@ -74,6 +74,7 @@ public class ServiceReconfigureImpl implements ServiceReconfigure {
         }
         this.pceListener.setInput(new ServiceInput(input));
         this.pceListener.setServiceReconfigure(true);
+        this.pceListener.setServiceFeasiblity(false);
         this.pceListener.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListener.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListener.setServiceInput(new ServiceInput(input));
