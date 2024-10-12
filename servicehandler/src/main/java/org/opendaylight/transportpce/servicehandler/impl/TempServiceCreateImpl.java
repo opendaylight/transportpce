@@ -76,6 +76,7 @@ public class TempServiceCreateImpl implements TempServiceCreate {
         this.pceListener.setInput(new ServiceInput(input));
         this.pceListener.setServiceReconfigure(false);
         this.pceListener.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.pceListener.setServiceFeasiblity(false);
         this.pceListener.setTempService(true);
         this.rendererListener.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListener.setServiceInput(new ServiceInput(input));
