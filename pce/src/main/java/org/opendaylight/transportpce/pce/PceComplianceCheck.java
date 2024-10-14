@@ -7,6 +7,10 @@
  */
 package org.opendaylight.transportpce.pce;
 
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
+import org.opendaylight.transportpce.pce.input.valid.Factory;
+import org.opendaylight.transportpce.pce.input.valid.Valid;
+import org.opendaylight.transportpce.pce.input.valid.ValidInputFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRerouteRequestInput;
 import org.slf4j.Logger;
@@ -53,6 +57,24 @@ public final class PceComplianceCheck {
             }
         } else {
             result = false;
+        }
+        if (result) {
+
+            Factory inputValidationFactory = new ValidInputFactory();
+            Valid validInput = inputValidationFactory.instantiate(
+                    GridConstant.START_EDGE_FREQUENCY,
+                    GridConstant.CENTRAL_FREQUENCY,
+                    GridConstant.GRANULARITY,
+                    12.5,
+                    GridConstant.EFFECTIVE_BITS
+            );
+
+            if (!validInput.isValid(input)) {
+                result = false;
+                message = validInput.lastErrorMessage();
+                LOG.debug("PCEInput validation failed: {}", message);
+            }
+
         }
         return new PceComplianceCheckResult(result, message);
     }
