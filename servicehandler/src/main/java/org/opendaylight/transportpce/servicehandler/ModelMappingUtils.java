@@ -12,6 +12,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.HashMap;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.com.smartoptics.openroadm.service.rev230907.ServiceAEnd1Builder;
+import org.opendaylight.yang.gen.v1.http.com.smartoptics.openroadm.service.rev230907.ServiceZEnd1Builder;
+import org.opendaylight.yang.gen.v1.http.com.smartoptics.openroadm.service.rev230907.SpectrumAllocation;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
@@ -269,15 +272,35 @@ public final class ModelMappingUtils {
             .build();
     }
 
-    public static ServiceAEnd createServiceAEnd(ServiceEndpoint serviceAEnd) {
-        return new ServiceAEndBuilder()
-            .setClli(serviceAEnd.getClli())
-            .setNodeId(serviceAEnd.getNodeId().getValue())
-            .setRxDirection(createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
-            .setServiceFormat(serviceAEnd.getServiceFormat())
-            .setServiceRate(serviceAEnd.getServiceRate())
-            .setTxDirection(createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
-            .build();
+    public static ServiceAEnd createServiceAEnd(
+            ServiceEndpoint serviceAEnd,
+            SpectrumAllocation spectrumAEndAllocation) {
+
+        ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
+                .setClli(serviceAEnd.getClli())
+                .setNodeId(serviceAEnd.getNodeId().getValue())
+                .setRxDirection(
+                        createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
+                .setServiceFormat(serviceAEnd.getServiceFormat())
+                .setServiceRate(serviceAEnd.getServiceRate())
+                .setTxDirection(
+                        createTxDirection(serviceAEnd.getTxDirection().values().stream().findFirst().orElseThrow()));
+
+
+        if (spectrumAEndAllocation != null) {
+
+            ServiceAEnd1Builder serviceAEnd1Builder = new ServiceAEnd1Builder();
+            if (spectrumAEndAllocation.getFrequencySlot() != null) {
+                serviceAEnd1Builder.setFrequencySlot(spectrumAEndAllocation.getFrequencySlot());
+            }
+            if (spectrumAEndAllocation.getFrequencyRange() != null) {
+                serviceAEnd1Builder.setFrequencyRange(spectrumAEndAllocation.getFrequencyRange());
+            }
+
+            serviceAEndBuilder.addAugmentation(serviceAEnd1Builder.build());
+        }
+
+        return serviceAEndBuilder.build();
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
@@ -295,15 +318,34 @@ public final class ModelMappingUtils {
                 .build();
     }
 
-    public static ServiceZEnd createServiceZEnd(ServiceEndpoint serviceZEnd) {
-        return new ServiceZEndBuilder()
-            .setClli(serviceZEnd.getClli())
-            .setNodeId(serviceZEnd.getNodeId().getValue())
-            .setRxDirection(createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
-            .setServiceFormat(serviceZEnd.getServiceFormat())
-            .setServiceRate(serviceZEnd.getServiceRate())
-            .setTxDirection(createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().orElseThrow()))
-            .build();
+    public static ServiceZEnd createServiceZEnd(
+            ServiceEndpoint serviceZEnd,
+            SpectrumAllocation spectrumZEndAllocation
+    ) {
+        ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
+                .setClli(serviceZEnd.getClli())
+                .setNodeId(serviceZEnd.getNodeId().getValue())
+                .setRxDirection(
+                        createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
+                .setServiceFormat(serviceZEnd.getServiceFormat())
+                .setServiceRate(serviceZEnd.getServiceRate())
+                .setTxDirection(
+                        createTxDirection(serviceZEnd.getTxDirection().values().stream().findFirst().orElseThrow()));
+
+        if (spectrumZEndAllocation != null) {
+
+            ServiceZEnd1Builder serviceZEnd1Builder = new ServiceZEnd1Builder();
+            if (spectrumZEndAllocation.getFrequencySlot() != null) {
+                serviceZEnd1Builder.setFrequencySlot(spectrumZEndAllocation.getFrequencySlot());
+            }
+            if (spectrumZEndAllocation.getFrequencyRange() != null) {
+                serviceZEnd1Builder.setFrequencyRange(spectrumZEndAllocation.getFrequencyRange());
+            }
+
+            serviceZEndBuilder.addAugmentation(serviceZEnd1Builder.build());
+        }
+
+        return serviceZEndBuilder.build();
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205
