@@ -9,16 +9,23 @@
 package org.opendaylight.transportpce.pce;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.OperatorConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
+import org.opendaylight.transportpce.pce.frequency.interval.FrequencyIntervalFactory;
+import org.opendaylight.transportpce.pce.frequency.service.ServiceFrequency;
+import org.opendaylight.transportpce.pce.frequency.spectrum.FrequencySpectrum;
+import org.opendaylight.transportpce.pce.frequency.spectrum.index.SpectrumIndex;
 import org.opendaylight.transportpce.pce.gnpy.GnpyException;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.GnpyUtilitiesImpl;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.graph.PceGraph;
+import org.opendaylight.transportpce.pce.input.ClientInput;
+import org.opendaylight.transportpce.pce.input.ServiceCreateClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
@@ -123,10 +130,29 @@ public class PceSendingPceRPCs {
             return;
         }
         OperatorConstraints opConstraints = new OperatorConstraints(networkTransaction);
+        ClientInput clientInput = new ServiceCreateClientInput(
+                this.input,
+                new FrequencyIntervalFactory(
+                        new ServiceFrequency(),
+                        GridConstant.EFFECTIVE_BITS,
+                        GridConstant.GRANULARITY
+                ),
+                new FrequencySpectrum(
+                        new SpectrumIndex(
+                                GridConstant.START_EDGE_FREQUENCY,
+                                GridConstant.GRANULARITY,
+                                GridConstant.EFFECTIVE_BITS
+                        ),
+                        GridConstant.EFFECTIVE_BITS
+                ),
+                new ServiceFrequency(),
+                GridConstant.GRANULARITY
+        );
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
-                rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()));
+                rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
+                clientInput);
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {
