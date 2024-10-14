@@ -35,6 +35,9 @@ import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
+import org.opendaylight.transportpce.pce.frequency.FrequencySelectionFactory;
+import org.opendaylight.transportpce.pce.frequency.Select;
+import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -62,10 +65,14 @@ public class PostAlgoPathValidator {
     private Double tpceCalculatedMargin = 0.0;
     private final NetworkTransactionService networkTransactionService;
     private final BitSet spectrumConstraint;
+    private final ClientInput clientInput;
 
-    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint) {
+    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService,
+                                 BitSet spectrumConstraint,
+                                 ClientInput clientInput) {
         this.networkTransactionService = networkTransactionService;
         this.spectrumConstraint = spectrumConstraint;
+        this.clientInput = clientInput;
     }
 
     @SuppressWarnings("fallthrough")
@@ -1050,12 +1057,22 @@ public class PostAlgoPathValidator {
                 pceNode.getNodeId(), pceNodeVersion, sltWdthGran, ctralFreqGran);
             isFlexGrid = false;
         }
-        if (spectrumConstraint != null) {
-            result.and(spectrumConstraint);
-        }
 
-        LOG.debug("Bitset result {}", result);
-        return computeBestSpectrumAssignment(result, spectralWidthSlotNumber, isFlexGrid);
+        LOG.debug("Available bitset on nodes: {}", result);
+
+        Select frequencySelectionFactory = new FrequencySelectionFactory();
+
+        BitSet assignableBitset = frequencySelectionFactory.availableFrequencies(
+                clientInput,
+                spectrumConstraint,
+                result);
+
+        LOG.debug("Assignable bitset: {}", assignableBitset);
+
+        return computeBestSpectrumAssignment(
+                assignableBitset,
+                clientInput.slotWidth(spectralWidthSlotNumber),
+                isFlexGrid);
     }
 
     /**
