@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -22,10 +23,13 @@ class PostAlgoPathValidatorTest {
     @Test
     void computeBestSpectrumAssignmentFixGrid() {
 
+        ClientInput clientInput = Mockito.mock(ClientInput.class);
+
         NetworkTransactionService networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
-                new BitSet()
+                new BitSet(),
+                clientInput
         );
 
         BitSet available = new BitSet(768);
@@ -47,11 +51,13 @@ class PostAlgoPathValidatorTest {
 
     @Test
     void computeBestSpectrumAssignmentFlexGrid() {
+        ClientInput clientInput = Mockito.mock(ClientInput.class);
 
         NetworkTransactionService networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
-                new BitSet()
+                new BitSet(),
+                clientInput
         );
 
         BitSet available = new BitSet(768);

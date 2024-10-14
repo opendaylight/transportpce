@@ -593,6 +593,12 @@
     <degree>
       <degree-number>1</degree-number>
       <max-wavelengths>96</max-wavelengths>
+      <mc-capabilities>
+        <slot-width-granularity>12.5</slot-width-granularity>
+        <center-freq-granularity>6.25</center-freq-granularity>
+        <min-slots>3</min-slots>
+        <max-slots>384</max-slots>
+      </mc-capabilities>
       <circuit-packs>
         <index>1</index>
         <circuit-pack-name>1/0</circuit-pack-name>
@@ -610,6 +616,12 @@
     <degree>
       <degree-number>2</degree-number>
       <max-wavelengths>96</max-wavelengths>
+      <mc-capabilities>
+        <slot-width-granularity>12.5</slot-width-granularity>
+        <center-freq-granularity>6.25</center-freq-granularity>
+        <min-slots>3</min-slots>
+        <max-slots>384</max-slots>
+      </mc-capabilities>
       <circuit-packs>
         <index>1</index>
         <circuit-pack-name>2/0</circuit-pack-name>
@@ -628,6 +640,12 @@
       <srg-number>1</srg-number>
       <max-add-drop-ports>4</max-add-drop-ports>
       <wavelength-duplication>one-per-srg</wavelength-duplication>
+      <mc-capabilities>
+        <slot-width-granularity>12.5</slot-width-granularity>
+        <center-freq-granularity>6.25</center-freq-granularity>
+        <min-slots>3</min-slots>
+        <max-slots>384</max-slots>
+      </mc-capabilities>
       <circuit-packs>
         <index>1</index>
         <circuit-pack-name>3/0</circuit-pack-name>
