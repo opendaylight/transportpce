@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
+import org.opendaylight.yang.gen.v1.http.com.smartoptics.openroadm.service.rev230907.ServiceAEnd2;
+import org.opendaylight.yang.gen.v1.http.com.smartoptics.openroadm.service.rev230907.ServiceZEnd2;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.ServicePathRpcResult;
@@ -165,8 +167,14 @@ public final class ServiceDataUtils {
             .setHardConstraints(input.getHardConstraints())
             .setSoftConstraints(input.getSoftConstraints())
             .setPceRoutingMetric(PceMetric.TEMetric)
-            .setServiceAEnd(ModelMappingUtils.createServiceAEnd(input.getServiceAEnd()))
-            .setServiceZEnd(ModelMappingUtils.createServiceZEnd(input.getServiceZEnd()))
+            .setServiceAEnd(ModelMappingUtils.createServiceAEnd(
+                    input.getServiceAEnd(),
+                    input.getServiceAEnd().augmentation(ServiceAEnd2.class)
+            ))
+            .setServiceZEnd(ModelMappingUtils.createServiceZEnd(
+                    input.getServiceZEnd(),
+                    input.getServiceZEnd().augmentation(ServiceZEnd2.class)
+            ))
             .build();
     }
 
