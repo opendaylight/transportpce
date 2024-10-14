@@ -25,6 +25,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceAEnd2;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.ServiceZEnd2;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
@@ -165,8 +167,14 @@ public final class ServiceDataUtils {
             .setHardConstraints(input.getHardConstraints())
             .setSoftConstraints(input.getSoftConstraints())
             .setPceRoutingMetric(PceMetric.TEMetric)
-            .setServiceAEnd(ModelMappingUtils.createServiceAEnd(input.getServiceAEnd()))
-            .setServiceZEnd(ModelMappingUtils.createServiceZEnd(input.getServiceZEnd()))
+            .setServiceAEnd(ModelMappingUtils.createServiceAEnd(
+                    input.getServiceAEnd(),
+                    input.getServiceAEnd().augmentation(ServiceAEnd2.class)
+            ))
+            .setServiceZEnd(ModelMappingUtils.createServiceZEnd(
+                    input.getServiceZEnd(),
+                    input.getServiceZEnd().augmentation(ServiceZEnd2.class)
+            ))
             .build();
     }
 
