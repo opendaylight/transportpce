@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -44,6 +45,8 @@ import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.frequency.input.ClientInput;
+import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -127,6 +130,7 @@ public class PceGraphTest extends AbstractTest {
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
     private NetworkTransactionService netTransServ;
+    private ClientInput clientInput;
 
     // Test of integration for PceGraph
 
@@ -142,6 +146,11 @@ public class PceGraphTest extends AbstractTest {
         this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
+        this.clientInput = Mockito.mock(ClientInput.class);
+        Mockito.when(this.clientInput.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
+        Mockito.when(this.clientInput.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
+        Mockito.when(this.clientInput.slots(Mockito.anyInt())).thenReturn(8);
+
         //  The catalog of operational mode needs to be loaded so that Ctalog primitives (CatlogUtils)
         // can retrieve physical parameters of the nodes of the path
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
@@ -249,7 +258,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
@@ -262,7 +272,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.1559963686478447));
     }
@@ -275,7 +286,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.3351048800367167));
     }
@@ -288,7 +300,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), false);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
@@ -301,7 +314,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
@@ -314,7 +328,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
     }
@@ -327,7 +342,8 @@ public class PceGraphTest extends AbstractTest {
         pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
     }
@@ -337,10 +353,11 @@ public class PceGraphTest extends AbstractTest {
         PceCalculation pceCalc = new PceCalculation(getPCE2Request(Uint32.valueOf(100), ServiceFormat.Ethernet,
             "XPONDER-1", "Node1", "Client-1", "XPONDER-3", "Node3", "Client-1"),
             netTransServ, pceHardConstraints, null, rc, portMapping);
-        pceCalc.retrievePceNetwork();
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
-            pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null);
+                pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
+                rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
+        pceCalc.retrievePceNetwork();
         assertEquals(pceGraph.calcPath(), true);
         assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
     }
@@ -354,7 +371,8 @@ public class PceGraphTest extends AbstractTest {
         pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
         pceGraph = new PceGraph(pceCalc.getaendPceNode(), pceCalc.getzendPceNode(),
             pceCalc.getAllPceNodes(), pceCalc.getAllPceLinks(), pceHardConstraints,
-            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null);
+            rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
+                clientInput);
         pceGraph.setConstrains(pceHardConstraints);
 
         assertEquals(pceGraph.calcPath(), true);
@@ -417,7 +435,8 @@ public class PceGraphTest extends AbstractTest {
             new NodeId("optical"), pceOtnNode,
             new NodeId("optical2"), pceOtnNode2);
         return new PceGraph(pceOtnNode, pceOtnNode2, allPceNodes, allPceLinks, pceHardConstraints,
-                new PceResult(), type, null, PceConstraintMode.Loose, null);
+                new PceResult(), type, null, PceConstraintMode.Loose, null,
+                clientInput);
     }
 
     private void saveOpenRoadmNetwork(Network network, String networkId)
