@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.frequency.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -56,6 +57,7 @@ public class PceGraph {
     PceConstraints pceHardConstraints;
     private PceConstraintMode pceConstraintMode;
     private BitSet spectrumConstraint;
+    private final ClientInput clientInput;
 
     // results
     private PceResult pceResult = null;
@@ -70,7 +72,8 @@ public class PceGraph {
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
-            NetworkTransactionService networkTransactionService, PceConstraintMode mode, BitSet spectrumConstraint) {
+            NetworkTransactionService networkTransactionService, PceConstraintMode mode, BitSet spectrumConstraint,
+            ClientInput clientInput) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -82,6 +85,7 @@ public class PceGraph {
         this.networkTransactionService = networkTransactionService;
         this.pceConstraintMode = mode;
         this.spectrumConstraint = spectrumConstraint;
+        this.clientInput = clientInput;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
@@ -105,7 +109,10 @@ public class PceGraph {
         for (Entry<Integer, GraphPath<String, PceGraphEdge>> entry : allWPaths.entrySet()) {
             GraphPath<String, PceGraphEdge> path = entry.getValue();
             LOG.info("validating path n° {} - {}", entry.getKey(), path.getVertexList());
-            PostAlgoPathValidator papv = new PostAlgoPathValidator(networkTransactionService, spectrumConstraint);
+            PostAlgoPathValidator papv = new PostAlgoPathValidator(
+                    networkTransactionService,
+                    spectrumConstraint,
+                    clientInput);
             pceResult = papv.checkPath(
                     path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
             this.margin = papv.getTpceCalculatedMargin();
