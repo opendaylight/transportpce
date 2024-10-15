@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "9c5b232d571f5c89fb3a0170de64591e9409940b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a20895_6d0b5617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-15T15:06:46Z",
+      "side": 1,
+      "message": "Tapi tests pass locally\n\nrecheck",
+      "revId": "9c5b232d571f5c89fb3a0170de64591e9409940b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
