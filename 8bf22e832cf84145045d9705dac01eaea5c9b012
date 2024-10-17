@@ -16,6 +16,23 @@
       "message": "Hi Jonas. Thanks for your review. Replied to your comments",
       "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917ba69a_0895a672",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-17T21:48:02Z",
+      "side": 1,
+      "message": "This doesn\u0027t really make sense to me. If NMC width is larger than MC width - guard bands, then the allocated MC width is not large enough and this service is not following the OpenROADM spec. Logically, you should set NMC width to nmcWidthFromMode if it\u0027s a standard mode and to MC width - guard bands if it\u0027s a non-standard mode (\"that does not follow OR specs\" as you say).",
+      "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

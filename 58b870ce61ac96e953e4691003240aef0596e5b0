@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ddbc4e2_040d38ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-17T21:48:02Z",
+      "side": 1,
+      "message": "No, it does not make sense to me. The commit message says \"the dedicated-signal-\nbandwidth multiple is not consider by the controller to set the width\nof the ROADM connections. This patch corrects the bug.\" But this patch does not consider the dedicated-signal-bandwidth-multiple attribute (which is an actual attribute in the service model, right?) either so I don\u0027t see how that attribute is relevant. And I think that attribute would only be relevant to the MC width anyway, not directly to the NMC width, even if it were considered.",
+      "parentUuid": "20e1af40_669eb4b6",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Normally, NMC width is deduced from FrequencyWidthTable (line180) which will provide a value in accordance with the physical characteristics of the the TX.\nHowever when we need to respect a constraint imposed by dedicated-signal-bandwith, it could be that we need to allocate a slot that is larger than the what is derived from the physical characteristics of the the TX (Line183-187).\nIn this case I prefer to stick to the constraint (which may reflect a condition that we may not fully master (characteristic of a transmitter that does not follow OR specs), rather than filtering potentially too much the signal. As we have no real no way to evaluate the exact guard Band, I consider 6.25 GHz on each side which correspond to a default value, even if, I agree, a guard band may be lower than the elementary slot (6.25/2 is lower than the minimum guardband I have seen specified until now and which was 3.75 GHz). Does it make sense to you?",
       "parentUuid": "e4e38ce5_ebfe04cf",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d8d7d2_bb890c0e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-17T21:48:02Z",
+      "side": 1,
+      "message": "The OpenROADM device white paper considers a 4 GHz guard band on each side so that could be an alternative.",
+      "parentUuid": "63cbd7dd_831e1486",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
