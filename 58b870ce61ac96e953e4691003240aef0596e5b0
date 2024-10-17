@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "20e1af40_669eb4b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "In service model white paper, dedicated-signal-bandwidth-multiple of customer profile defines \"the granularity of the width for the channels to be provisioned in the spectrum portion\". \nIt could be used for different use cases (a signal passes through a part of the network where the spectrum allocation may be specific, the characteristics of the Transmitters are not fully mastered,...)\nThis constraint may not be expressed, meaning that we rely on the PCE to evaluate the width needed, derived from Operational mode or modulation-format \u0026 rate. \nIf it is, it means someone expressed a specific constraints. In this case a prefer to try to stick to the expressed constraint rather than deriving nmc from physical parameters of the transmitter that we may not fully master and using predefined values that may not fully reflect the reality: \nIf nmc-standard-calculation \u003c nmc-deduced-from(mc - default-guardband), I use the second. As default-guardBand I use 6.25 GHz on each side. Does it make sense to you?",
+      "parentUuid": "6449b6ff_0c401941",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a2d5dc_4d9cf53a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "You are right, this was not documented in the commit message. Realized while trying to solve that bug that the API was completed with additional parameters that we were still not feeding. Corrected the commit message.",
+      "parentUuid": "161e23d2_a1080372",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4e38ce5_ebfe04cf",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-10-08T16:59:26Z",
       "side": 1,
       "message": "Why do you subtract exactly 12.5? I don\u0027t think there is anything that says nmc width has to be a multiple of slot width granularity?",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63cbd7dd_831e1486",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "Normally, NMC width is deduced from FrequencyWidthTable (line180) which will provide a value in accordance with the physical characteristics of the the TX.\nHowever when we need to respect a constraint imposed by dedicated-signal-bandwith, it could be that we need to allocate a slot that is larger than the what is derived from the physical characteristics of the the TX (Line183-187).\nIn this case I prefer to stick to the constraint (which may reflect a condition that we may not fully master (characteristic of a transmitter that does not follow OR specs), rather than filtering potentially too much the signal. As we have no real no way to evaluate the exact guard Band, I consider 6.25 GHz on each side which correspond to a default value, even if, I agree, a guard band may be lower than the elementary slot (6.25/2 is lower than the minimum guardband I have seen specified until now and which was 3.75 GHz). Does it make sense to you?",
+      "parentUuid": "e4e38ce5_ebfe04cf",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

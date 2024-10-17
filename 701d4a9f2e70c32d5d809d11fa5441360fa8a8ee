@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f342ea25_b8f6754f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "Completed the commit message",
+      "parentUuid": "70f368bd_56861067",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "703f0316_5256e0c1",
@@ -53,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2374a56d_e82c82d5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140e6c75_3cbeb013",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0f30f2b_5089eec9",
@@ -84,6 +120,24 @@
       "side": 1,
       "message": "Same. Did it in a hurry, but this will be corrected through next patch.",
       "parentUuid": "c0f30f2b_5089eec9",
+      "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "776445f2_983be795",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-17T16:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "563c2d25_4e27df5a",
       "revId": "701d4a9f2e70c32d5d809d11fa5441360fa8a8ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
