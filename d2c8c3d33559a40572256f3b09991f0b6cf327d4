@@ -16,6 +16,224 @@
       "message": "recheck",
       "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e627ecb7_f0e38b9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Thanks so much Joakim for this huge and valuable contribution. \nHope my comments will be understandable since I went back and forth between the different classes many times, as I understood some things only going through the latest tests. So it could be that some of them not fully make sense, reflecting part of y confusion. We can discuss it during next meeting.\nIt\u0027s great and brings a feature of interest for several companies that asked for modifying OR models (service API) to have it. I have only 1 or 2 concerns with the name you choose for some of the parameters :\nThe leaf slot-width, and the way you use width and slot in the name of your variables. In openRoadm when we use \"width\" aside a \"frequency\", it always mean total width, and shall not be multiplied by anything. If I remember well this was one reason for being sometime confused.\nThanks again, and do not spend too much time of comments that do not seem so clear to you : again, we can discuss it in a meeting.",
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53f16ec4_b83e182e",
+        "filename": "api/src/main/yang/com-smartoptics-openroadm-service@2023-09-07.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "The leaf name is really confusing to me. It took me a lot of time understanding how you use it, and I did not understand part of your code because of this.\nWould be interested in knowing what Jonas thinks about it.\nElementary slot with is 6.25. \nFrequency spacing granularity is 12.5. For slot width I would expect something in GHz.I would expect something like number-of-12-5-slots (not that nice) or number-of-freq-spacing-slots (probably too long and even worst...)",
+      "range": {
+        "startLine": 79,
+        "startChar": 11,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7640281_e5d4bcf7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Not so clear to me : in the interface you mention slot : number of slot in the interval. Can you elaborate? I\u0027m fine with the following calculation assuming that slots \u003d 1. But intuitively I would expect that slots corresponds to the number of elementary slots which is I guess not the case. I think I miss something here. Why would we need to define an interval centered on center frequency with x times the width/2 around. I don\u0027t see the use case...",
+      "range": {
+        "startLine": 61,
+        "startChar": 85,
+        "endLine": 61,
+        "endChar": 90
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "676f8fd4_9f241b47",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Seems that at the end  intervalCollection is a union of frequencyIntervals defined in A and Z end of the PathComputationRequestInput, which I guess is directly derived from A and Z end container of the service create. What if by mistake a user enters in A end and Z end different frequencyIntervals? Should it not be the intersection rather the union? Did I miss something?",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 111
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68f00c85_7a82297f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Same as first comment. I don\u0027t see the use case for slots*width. Probably need to refine the description of slot in the interface",
+      "range": {
+        "startLine": 101,
+        "startChar": 42,
+        "endLine": 101,
+        "endChar": 67
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d20ca9a_669c2fe2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequency.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "12.5 or frequencyGranularity?",
+      "range": {
+        "startLine": 79,
+        "startChar": 45,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29c864f_2734bc1f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/FrequencyIntervalFactoryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Is there any specific reason why you specify  a frequency slot that is out of the frequency range ? Want to show this is checked somewhere else ? \nThis brings another question. \nWould it make sense to check consistency while service-create request is exercised rather than later on in PostAlgoValidator when the path computation request has been launched?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 25
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c4425c_0db184bd",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Any reason why you set frequency that are not corresponding to the bits you set in the BitSet : is it to show independence of frequency with the grid/slot-index we usually use (6.25GHz, 768 bit) in your approach?",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 24
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6ff6e8b_0f31b4a3",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "Would it make sense to have exactly the same test (same one and available) for intersection to check that we have a different behavior. I would expect no more an empty bitset to be returned but expected.set(15,20) as the result; if I correctly understood but I am not so sure :-(",
+      "range": {
+        "startLine": 183,
+        "startChar": 3,
+        "endLine": 193,
+        "endChar": 30
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3aad736_f353c3bb",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequencyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-18T16:25:55Z",
+      "side": 1,
+      "message": "I think we really need to change the name of the leaf slot-width (see comment in yang file)",
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
