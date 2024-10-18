@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1735f6d8_ae8f3241",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-18T08:26:27Z",
+      "side": 1,
+      "message": "Unfortunately, I don\u0027t think `length()` will quite work as a direct replacement for `size()` in this method/scenario.\n\nConsider this example:\n\n    BitSet bitSet \u003d new BitSet(768);\n    bitSet.set(0, 15);\n\n    System.out.println(bitSet);\n    System.out.println(\"(A) length: \" + bitSet.length());\n    System.out.println(\"(B) size:   \" + bitSet.size());\n\nThe above code will output \n\n    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}\n    (A) length: 15\n    (B) size:   768\n    \nNote how `size` is dividable by 8 while `length` is not. In a flex grid scenario that is not a problem, but it will be in a fixgrid scenario. In the result above there is only one available fixgrid range: `{0, 1, 2, 3, 4, 5, 6, 7}`. Depending on whether you use `length` or `size` and the nr of steps in each iteration, you may end up with `{7, 8, 9, 10, 11, 12, 13, 14}` for fixgrid. \n\nNote\n----\n\nThere is an additional bug in this method. The method iterates one step for fixgrid instead of eight steps. By moving one step at a time for fixgrid you will end up with `{7, 8, 9, 10, 11, 12, 13, 14}`, regardless if you use `size` or `length`.\n\nHowever, by moving eight steps you will end up with the fixgrid `{0, 1, 2, 3, 4, 5, 6, 7}` when using `size()`, but `{7, 8, 9, 10, 11, 12, 13, 14}` if you\u0027re using `length()`.\n\nThe fix ensuring fixgrid iterates eight times is resolved in this review: https://git.opendaylight.org/gerrit/c/transportpce/+/113634",
+      "revId": "44dbc70faff6765c4aeb398c86a6c831bc67d00a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
