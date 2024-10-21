@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24610d0c_3a1e1ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Hi Olivier!\n\nThank you for the feedback. I\u0027ll go through this and make some changes. Also, some of your comments refer to code no longer present in this commit. Looks like the comment is attached to Patchset 1. The latest is Patchset 4. The new classes have been moved to a separate commit.",
+      "revId": "933639a534dfe8c1c6784285e7ec73e9eb277933",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

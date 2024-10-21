@@ -107,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "221dc9c1_ec45953c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Looking at this method now, I\u0027d say it\u0027s probably missing some clarification. The intention was to create a method with this calculation:\n\n`centerFrequencyTHz ± ((slots / 2) x widthGHz)`.\n\nConsider these examples where C is the center frequency. This method will return an interval consisting of frequencies F1 and F2:\n\n```\n(A)\n |-----1-----|.  12.5GHz  slots\n |--1--|--2--|.   6.25GHz slots\n |-----C-----|\nF1-----------F2\n\nThe interval can be found using: interval(C, 6.25, 2);\n\n\n(B)\n |-----1-----|-----2-----|.  12.5GHz. slots\n |--1--|--2--|--3--|--4--|.   6.25GHz slots\n |-----------C-----------|\nF1-----------------------F2\n\nThe interval can be found using: interval(C, 6.25, 4);\n```\n\nPerhaps `widthGHz` should be renamed to `frequencyGranularityGHz`, or `slotFrequencyGHz`.\n\nJonas suggested renaming `slots`. I\u0027m struggling with coming up with a suitable alternative though.\n* `totalSlots`?\n* `totalSlotWidthCount`?\n* `nrOfFrequencyGranularitySlots`?\n* `frequencyGranularityWidthQuotient`?\n\nOn a side note, this method should probably throw an exception if slots are not evenly dividable by 2.\n\nThe use case is we\u0027re using 12.5GHz slots in the API input, and 6.25GHz slots in TPCE. So this method is used when API input is being processed.",
+      "parentUuid": "b7640281_e5d4bcf7",
+      "range": {
+        "startLine": 61,
+        "startChar": 85,
+        "endLine": 61,
+        "endChar": 90
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "676f8fd4_9f241b47",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
         "patchSetId": 1
@@ -130,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7307cde4_3348ef55",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "frequency-slot\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nYes, it appears to be a union in this case and I agree with you, that\u0027s wrong. My original intention was to throw an exception if this case happened. It appears this is no longer the case. Perhaps a refactor gone wrong, I\u0027ll have to check. \n\nImho, a \"hard fail\" would be better, i.e. the client has specified something that doesn\u0027t make any sense.\n\nfrequency-range\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nIn this case my intention was to use the union. I\u0027ve discussed this with Jonas and he feels the intersection would be better. I don\u0027t have a strong preference either way.\n\nSuggestion\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nI suggest the two cases are changed as follows.\n\n1 - frequency-range\n--------------------------------------\nUse the intersection. e.g. 193.0 - 194.0 in this example:\n```\n{\n    \"input\": {\n        ...\n        \"service-a-end\": {\n            ...\n            \"frequency-range\": {\n                \"min-frequency\": 192.0,\n                \"max-frequency\": 194.0\n            },\n            ...\n        },\n        \"service-z-end\": {\n            ...\n            \"frequency-range\": {\n                \"min-frequency\": 193.0,\n                \"max-frequency\": 195.0\n            },\n            ...\n        }\n    }\n}\n```\n\n2 - frequency-slot\n------------------\nRequire AEnd \u003d ZEnd. e.g. this example would result in a hard fail regardless if some of the frequency ranges overlap or not:\n\n```\n{\n    \"input\": {\n        ...\n        \"service-a-end\": {\n            ...\n            \"frequency-slot\": {\n                \"center-frequency\": 193.1,\n                \"slot-width\": X\n            },\n            ...\n        },\n        \"service-z-end\": {\n            ...\n            \"frequency-slot\": {\n                \"center-frequency\": 193.5,\n                \"slot-width\": X\n            },\n            ...\n        }\n    }\n}\n```",
+      "parentUuid": "676f8fd4_9f241b47",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 111
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68f00c85_7a82297f",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
         "patchSetId": 1
@@ -141,6 +189,30 @@
       "writtenOn": "2024-10-18T16:25:55Z",
       "side": 1,
       "message": "Same as first comment. I don\u0027t see the use case for slots*width. Probably need to refine the description of slot in the interface",
+      "range": {
+        "startLine": 101,
+        "startChar": 42,
+        "endLine": 101,
+        "endChar": 67
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed9add5_355220ca",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "68f00c85_7a82297f",
       "range": {
         "startLine": 101,
         "startChar": 42,
@@ -176,6 +248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65a1b94b_f6a2810b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequency.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "This is actually intentional. A conversion between the input slot width and the width we use internally. Either we hardcode `12.5` or `2`. `12.5` is perhaps less wrong.",
+      "parentUuid": "9d20ca9a_669c2fe2",
+      "range": {
+        "startLine": 79,
+        "startChar": 45,
+        "endLine": 79,
+        "endChar": 49
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f29c864f_2734bc1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/FrequencyIntervalFactoryTest.java",
         "patchSetId": 1
@@ -187,6 +283,30 @@
       "writtenOn": "2024-10-18T16:25:55Z",
       "side": 1,
       "message": "Is there any specific reason why you specify  a frequency slot that is out of the frequency range ? Want to show this is checked somewhere else ? \nThis brings another question. \nWould it make sense to check consistency while service-create request is exercised rather than later on in PostAlgoValidator when the path computation request has been launched?",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 25
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "644891c4_518c1756",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/FrequencyIntervalFactoryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Mostly a way to verify they work independently. I guess this comes down to \"responsibility\". I didn\u0027t make this factory responsible for validating user input. Maybe it should be or maybe it should happen somewhere else. I\u0027m not sure.",
+      "parentUuid": "f29c864f_2734bc1f",
       "range": {
         "startLine": 46,
         "startChar": 0,
@@ -222,6 +342,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6551c208_cb626641",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Yes, I wanted this test to work independently. Also, it save me the work of figuring out the actual slot nr since they don\u0027t really matter that much. It\u0027s the intersection",
+      "parentUuid": "69c4425c_0db184bd",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 24
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6ff6e8b_0f31b4a3",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
         "patchSetId": 1
@@ -245,6 +389,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1936df57_c25aab7c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Yes, the intersection would return `expected.set(15,20)`.\nAlright, I\u0027ll add that test.",
+      "parentUuid": "a6ff6e8b_0f31b4a3",
+      "range": {
+        "startLine": 183,
+        "startChar": 3,
+        "endLine": 193,
+        "endChar": 30
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3aad736_f353c3bb",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequencyTest.java",
         "patchSetId": 1
@@ -256,6 +424,24 @@
       "writtenOn": "2024-10-18T16:25:55Z",
       "side": 1,
       "message": "I think we really need to change the name of the leaf slot-width (see comment in yang file)",
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6a3ffaf_5371f6b9",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequencyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T11:59:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3aad736_f353c3bb",
       "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
