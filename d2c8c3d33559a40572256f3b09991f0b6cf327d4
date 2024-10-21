@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a5ada04_16649e1e",
+        "filename": "api/src/main/yang/com-smartoptics-openroadm-service@2023-09-07.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-21T08:29:02Z",
+      "side": 1,
+      "message": "We did have some discussion about whether to specify slot-width in GHz or in number of 12.5 GHz slots. The flexgrid definition in ITU-T G.694.1 says:\n\n\"slot width defined by: 12.5 × m where m is a positive integer and 12.5 is the slot width granularity in GHz.\"\n\nIn the yang file, slot-width refers to the \"m\" value in ITU-T\u0027s definition. In principle, I would be fine with using GHz instead but the disadvantage is that then we need to decide how to handle the case when the requested slot-width divided by the granularity (12.5) is not an integer.",
+      "parentUuid": "53f16ec4_b83e182e",
+      "range": {
+        "startLine": 79,
+        "startChar": 11,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7640281_e5d4bcf7",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
         "patchSetId": 1
