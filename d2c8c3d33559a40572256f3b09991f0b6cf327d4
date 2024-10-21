@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd10fdd1_76642b18",
+        "filename": "api/src/main/yang/com-smartoptics-openroadm-service@2023-09-07.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-21T13:04:26Z",
+      "side": 1,
+      "message": "I found this in `org-openroadm-media-channel-interfaces.yang`. So the confusion stems from our model defining the same name as numeric nr of slots as opposed to frequency in GHZ.\n\n```\n    leaf slot-width {\n      type org-openroadm-common-optical-channel-types:frequency-GHz;\n      config false;\n      description\n        \"Width of the slot.  Granularity is hardware dependent, based on slot-width-granularity\";\n    }\n```\n\nWhat about... \n* `flex-grid-slots`\n* `number-of-flex-grid-slots`\n* `g-694-1-slots`\n* `number-of-g-694-1-slots`\n* `frequency-slots`\n* `number-of-frequency-slots`\n* `m`",
+      "parentUuid": "2a5ada04_16649e1e",
+      "range": {
+        "startLine": 79,
+        "startChar": 11,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7640281_e5d4bcf7",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
         "patchSetId": 1
