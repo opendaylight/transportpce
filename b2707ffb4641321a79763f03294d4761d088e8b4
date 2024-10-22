@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba0fc250_baceb249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Pushed some minor changes/clarifications to the interface `frequency/interval/IntervalFactory.java`.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "602b33db_1117a255",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Rename this from `frequencyWindow`. I didn\u0027t really like the word `frequencyWindow`, it felt like a crutch.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba603435_94ccac41",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Renamed this from `flexGrid`. I didn\u0027t really like the word `flexGrid` in this case.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c73bde09_fdef95fd",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Added this clarification.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc1d7b81_f2c68323",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Renamed `widthGHz` to `slotFrequencyGHz`. Maybe that makes it clearer? Didn\u0027t change `slots`. I know Jonas feels very strongly I should remove that word. Kind of struggling coming up with an suitable alternative though.\n\nAs I\u0027m writing this, the word \"segment\" comes to mind. Would that be something we could work with? Something like...\n\n```\n    /**\n     * Factory method creating a frequency interval.\n     * i.e. centerFrequencyTHz ± ((segmentWidthGHz / 1000) x (segments / 2)).\n     *\n     * \u003cp\u003e\n     * @param centerFrequencyTHz the center frequency of the interval in THz.\n     * @param segmentWidthGHz the width of the interval in GHz.\n     * @param segments \u003e\u003d2. The number of segments in the interval. Each segment is segmentWidthGHz frequencies wide.\n     * @return A frequency interval with a range of segments * segmentWidthGHz and centerFrequencyTHz in the middle.\n     */\n    Interval interval(BigDecimal centerFrequencyTHz, BigDecimal segmentWidthGHz, int segments);\n```",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3f0884c_027fcb74",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Added this clarification.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34156467_ceb9af9f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T08:28:54Z",
+      "side": 1,
+      "message": "Added this clarification.",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
