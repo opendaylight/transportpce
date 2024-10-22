@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21d12385_52e3d262",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-22T10:33:41Z",
+      "side": 1,
+      "message": "Another option would be to rename `slots` to `spectralWidthSlotNumber`. Doesn\u0027t mean anything to me, I find it rather ambiguous, but maybe it means something to you?\n\n`spectralWidthSlotNumber` is used in `PostAlgoPathValidator`:\n\n```\n/**\n * Get spectrum assignment for path.\n *\n * @param path                    the path for which we get spectrum assignment.\n * @param allPceNodes             all optical nodes.\n * @param spectralWidthSlotNumber number of slot for spectral width. Depends on\n *                                service type.\n * @return a spectrum assignment object which contains begin and end index. If\n *         no spectrum assignment found, beginIndex \u003d stopIndex \u003d 0\n */\nprivate SpectrumAssignment getSpectrumAssignment(GraphPath\u003cString, PceGraphEdge\u003e path,\n        Map\u003cNodeId, PceNode\u003e allPceNodes, int spectralWidthSlotNumber) {\n\n...\n}            \n```",
+      "parentUuid": "fc1d7b81_f2c68323",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3f0884c_027fcb74",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
         "patchSetId": 4
