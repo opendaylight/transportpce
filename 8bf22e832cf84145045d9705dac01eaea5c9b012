@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4c36d42_5699b4fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-23T17:43:02Z",
+      "side": 1,
+      "message": "Hi Jonas, tried to answer your points, clarifying a few things... Hope that helps.",
+      "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "917ba69a_0895a672",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-10-17T21:48:02Z",
       "side": 1,
       "message": "This doesn\u0027t really make sense to me. If NMC width is larger than MC width - guard bands, then the allocated MC width is not large enough and this service is not following the OpenROADM spec. Logically, you should set NMC width to nmcWidthFromMode if it\u0027s a standard mode and to MC width - guard bands if it\u0027s a non-standard mode (\"that does not follow OR specs\" as you say).",
+      "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86380c55_5b9ab466",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-23T17:43:02Z",
+      "side": 1,
+      "message": "Sorry but I don\u0027t get your point. The highest value that NMC width can take here is MaxFreq - MinFreq - 12.5 GHz . So if we consider that the values that are provided at this step are consistent (After path computation and through postAlgoValidator) how would we have a nmc that can exceed the mc (MaxFreq - MinFreq)? \n\nHere we just check if nmc-width calculated through path computation is greater than what would be defined without considering any constraint on the wavelength spacing, so the width defined by the operational mode; and if this is the case, derive the nmc from the mc rather than using what\u0027is defined by the mode.",
+      "parentUuid": "917ba69a_0895a672",
       "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

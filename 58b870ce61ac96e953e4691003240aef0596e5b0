@@ -54,6 +54,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ccf7586_8da9c563",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-23T17:43:02Z",
+      "side": 1,
+      "message": "OK, my shortcut needs a bit of clarification. In the change I made to handle customer profiles, I considered dedicated-signal-bandwidth-multiple attribute to make the relevant calculation in the PostAlgoValidator. But we saw later on, that it was not correctly handled. Debugging, I saw that Mapping.Utils.rendererCreateServiceInputAtoZ/ZtoA is calculating nmc from GridConstants.FREQUENCY_WIDTH_TABLE, crushing what is done in PostAlgoValidator. In other terms, what\u0027s done in PAPV has no effect because the nmc is not extrapolated in MappingUtils from the result of the path computation. Does it clarify the commit message content?",
+      "parentUuid": "6ddbc4e2_040d38ee",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -155,6 +173,24 @@
       "side": 1,
       "message": "The OpenROADM device white paper considers a 4 GHz guard band on each side so that could be an alternative.",
       "parentUuid": "63cbd7dd_831e1486",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a28cc312_667ad029",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-23T17:43:02Z",
+      "side": 1,
+      "message": "This could be, but I think we may ask for confirmation during OpenRoadm Plenary The 4 GHz guardBand was defined at the origin with 100G signals. It has not been updated. It can be because it does not need to. It could also be that nobody saw it was there, with a potential need to be updated for higher rates. Not trying to argue, but just because the default value I use appeared in different presentations that were provided during B100G discussions. In other terms, I\u0027m not pulling it out of my hat, but just saw it several times. Now, to make it clear, I am not an optical expert...",
+      "parentUuid": "78d8d7d2_bb890c0e",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
