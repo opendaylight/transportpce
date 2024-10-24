@@ -16,6 +16,23 @@
       "message": "Thanks for your review Joakim! This is a good point. Changed from node-model to yang-data-model to be more precise and avoisd potential confusion.",
       "revId": "c02dd3adda6692c87c8c687fc94a0245078601c7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "875765ec_657f48a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-24T12:26:47Z",
+      "side": 1,
+      "message": "Ready for review",
+      "revId": "c02dd3adda6692c87c8c687fc94a0245078601c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
