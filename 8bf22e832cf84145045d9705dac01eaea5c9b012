@@ -86,6 +86,24 @@
       "parentUuid": "86380c55_5b9ab466",
       "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a151648_f83cb6a4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T12:44:29Z",
+      "side": 1,
+      "message": "Ok, got it. Will need to investigate in PostAlgo to see what I did and if I check this case. Basically the constraint expressed through dedicated-signal-bandwidth is  supposed to be used to impose wider frequency slots than what is driven by specs (when needed), not the opposite that would not make sense. Of course this doesn\u0027t mean we should not check that correct values have been set. But this will not be in this class.",
+      "parentUuid": "e764eade_3b3f8498",
+      "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

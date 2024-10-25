@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "511c1f5a_8b9c2f98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T12:44:29Z",
+      "side": 1,
+      "message": "Hi Jonas, thanks for your answer. Modified from 2 x 6.25 to 2 times 4 GHz. Not clear to whether the patch was uploaded before, while, or after you made your latest answer... Please see my answer to yours.",
+      "revId": "e5ab8f82f8ee11f2eb48efbf543538edd591ae60",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

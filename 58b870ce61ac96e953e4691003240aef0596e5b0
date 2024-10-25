@@ -90,6 +90,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8465b503_d9c846c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T12:44:29Z",
+      "side": 1,
+      "message": "Can you elaborate? (Meaning what is not correct). Not clear to me whether your answer considers the modification made on the guard band to set it to 4 Ghz of the latest patchset. Don\u0027t know if the patch had been updated at the time you made the comment...",
+      "parentUuid": "6885f79f_4b14960b",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -227,6 +245,24 @@
       "side": 1,
       "message": "Ok, understood. I just think that if a number like that is hard-coded, it\u0027s nice to be able to point to some specification where that number is defined. Currently, the only defined number is 4 GHz per side so I think it makes sense to use that for now while also bringing it up in the OpenROADM plenary to see if it should be updated in the specs. But I think most people don\u0027t care that much about NMC width since it doesn\u0027t really impact ROADM configuration, except maybe for specific superchannel use cases, see also this old discussion:\nhttps://github.com/OpenROADM/OpenROADM_MSA_Public/issues/37\n\nBTW, is there some presentation you can point to that where the value you use appears?",
       "parentUuid": "a28cc312_667ad029",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f9b768_515efc84",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T12:44:29Z",
+      "side": 1,
+      "message": "For the presentation, it has been made a long time ago, and sorry, I can point out to a specific one. Anyway, the experts answered yesterday during OpenROADM plenary, and my understanding is that the 4GHz should fit. Modified it  in the last patchset according to your suggestion.",
+      "parentUuid": "2fef9d61_5aa6250c",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
