@@ -106,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37644126_22029a7c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T13:46:18Z",
+      "side": 1,
+      "message": "Segment introduces something new to describe the same things. \n\nTo me frequencySlotGhz would fit better than slotFrequencyGHz : this is a slot defined by frequencies which should spaced each-others from 12.5 Ghz min, in comparison to what I usually call unitarySlot or elementarySlot which corresponds to minimum granularity (6.25). But I am a poor English speaker, and grammar is not my cup of tea... \n\nIn the same way when you define slotFrequencyWidth, the width qualifify the slot defined according to frequency spacing. It is not the width of the frequency. So I would prefer on my side frequencySlotWidth.\n\nI agree on the fact that we need to rename slot. I am ok with spectralWidthSlotNumber.\nHowever I think the simplest would be to use slot-width and slot-number which is short and unambiguous in this context",
+      "parentUuid": "21d12385_52e3d262",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3f0884c_027fcb74",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
         "patchSetId": 4

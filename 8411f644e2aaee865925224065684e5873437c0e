@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25653a8c_f648fddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-10-25T13:46:18Z",
+      "side": 1,
+      "message": "Hi Joakim. Thanks for this refinements. Always difficult to find the best terms. Made a suggestion to try to keep it short and simple. Don\u0027t know if it will fit with your view...",
+      "revId": "8411f644e2aaee865925224065684e5873437c0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
