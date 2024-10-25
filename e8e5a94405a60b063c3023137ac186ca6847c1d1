@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1219a36c_5c045a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-25T06:29:15Z",
+      "side": 1,
+      "message": "Updated due to yang model being changed.",
+      "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b266d0a1_72b0030b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequency.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-10-25T06:29:15Z",
+      "side": 1,
+      "message": "This method was updated in Patchset 5 due to the yang model changing slot-width from int to frequencyGHz.",
+      "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
