@@ -68,6 +68,24 @@
       "parentUuid": "917ba69a_0895a672",
       "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e764eade_3b3f8498",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-25T11:50:03Z",
+      "side": 1,
+      "message": "I\u0027m probably not being very clear but my point is that if it is the case that NMC width from operational mode exceeds \"any constraint on the wavelength spacing\", then that mode will not work and maybe path computation should fail instead of just changing the NMC width to what fits.",
+      "parentUuid": "86380c55_5b9ab466",
+      "revId": "8bf22e832cf84145045d9705dac01eaea5c9b012",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

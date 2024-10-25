@@ -72,6 +72,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6885f79f_4b14960b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-25T11:50:03Z",
+      "side": 1,
+      "message": "Ok, thanks, that is good background information that would probably be useful to have in the commit message as well. But like I wrote in another comment, I don\u0027t really think your solution is correct.",
+      "parentUuid": "0ccf7586_8da9c563",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
@@ -191,6 +209,24 @@
       "side": 1,
       "message": "This could be, but I think we may ask for confirmation during OpenRoadm Plenary The 4 GHz guardBand was defined at the origin with 100G signals. It has not been updated. It can be because it does not need to. It could also be that nobody saw it was there, with a potential need to be updated for higher rates. Not trying to argue, but just because the default value I use appeared in different presentations that were provided during B100G discussions. In other terms, I\u0027m not pulling it out of my hat, but just saw it several times. Now, to make it clear, I am not an optical expert...",
       "parentUuid": "78d8d7d2_bb890c0e",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fef9d61_5aa6250c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-25T11:50:03Z",
+      "side": 1,
+      "message": "Ok, understood. I just think that if a number like that is hard-coded, it\u0027s nice to be able to point to some specification where that number is defined. Currently, the only defined number is 4 GHz per side so I think it makes sense to use that for now while also bringing it up in the OpenROADM plenary to see if it should be updated in the specs. But I think most people don\u0027t care that much about NMC width since it doesn\u0027t really impact ROADM configuration, except maybe for specific superchannel use cases, see also this old discussion:\nhttps://github.com/OpenROADM/OpenROADM_MSA_Public/issues/37\n\nBTW, is there some presentation you can point to that where the value you use appears?",
+      "parentUuid": "a28cc312_667ad029",
       "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
