@@ -108,6 +108,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0501a22a_8e3a137a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2024-10-26T08:04:17Z",
+      "side": 1,
+      "message": "I meant the other comment, which you also replied to.",
+      "parentUuid": "8465b503_d9c846c2",
+      "revId": "58b870ce61ac96e953e4691003240aef0596e5b0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "545abee6_aebabc0b",
