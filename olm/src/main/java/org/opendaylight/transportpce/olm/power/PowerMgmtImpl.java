@@ -431,16 +431,13 @@ public class PowerMgmtImpl implements PowerMgmt {
      * This methods turns down power a WL by performing
      * following steps:
      *
-     * <p>
-     * 1. Pull interfaces used in service and change
+     * <p>1. Pull interfaces used in service and change
      * status to outOfService
      *
-     * <p>
-     * 2. For each of the ROADM node set target-output-power
+     * <p>2. For each of the ROADM node set target-output-power
      * to -60dbm, wait for 20 seconds, turn power mode to off
      *
-     * <p>
-     * 3. Turn down power in Z to A direction and A to Z
+     * <p>3. Turn down power in Z to A direction and A to Z
      *
      * @param input
      *            Input parameter from the olm servicePowerTurndown rpc

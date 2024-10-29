@@ -47,11 +47,10 @@ final class OlmUtils121 {
 
     /**
      * This method retrieves list of current PMs for given nodeId,
-     * resourceType, resourceName and Granularity.Currently vendorExtentions
-     * are excluded but can be added back based on requirement
+     * resourceType, resourceName and Granularity. Currently vendorExtentions
+     * are excluded but can be added back based on requirement.
      *
-     * <p>
-     * 1. pmFetch This operation traverse through current PM list and gets PM for
+     * <p>This operation traverse through current PM list and gets PM for
      * given NodeId and Resource name
      *
      * @param input
