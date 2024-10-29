@@ -13,7 +13,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>bundle-parent</artifactId>
-    <version>14.0.3</version>
+    <version>14.0.4</version>
     <relativePath/>
   </parent>
 
@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>21.0.0</transportpce.models.version>
+    <transportpce.models.version>21.1.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -38,21 +38,21 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
         <groupId>org.opendaylight.yangtools</groupId>
         <artifactId>yangtools-artifacts</artifactId>
-        <version>14.0.4</version>
+        <version>14.0.5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.opendaylight.mdsal</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>14.0.2</version>
+        <version>14.0.4</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>8.0.2</version>
+        <version>8.0.3</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
