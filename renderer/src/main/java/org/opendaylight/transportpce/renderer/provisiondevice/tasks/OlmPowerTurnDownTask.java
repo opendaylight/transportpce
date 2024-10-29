@@ -36,8 +36,7 @@ public class OlmPowerTurnDownTask implements Callable<OLMRenderingResult> {
     /**
      * Task used to power down OLM.
      *
-     * <p>
-     * Intended to be used for parallel execution.
+     * <p>Intended to be used for parallel execution.
      */
     public OlmPowerTurnDownTask(String serviceName, String path, ServicePathInputData servicePathInputData,
             Notification notification, RpcService rpcService) {

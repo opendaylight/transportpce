@@ -13,8 +13,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer.port;
  * In essence, all ports on all nodes will therefore be treated as 'preferred'
  * when queried.
  *
- * <p>
- * Usage of this class is of sorts the 'backwards compatible' approach. Meaning,
+ * <p>Usage of this class is of sorts the 'backwards compatible' approach. Meaning,
  * intended to offer a path for the application to behave as it did
  * prior to implementing client port preference.
  */

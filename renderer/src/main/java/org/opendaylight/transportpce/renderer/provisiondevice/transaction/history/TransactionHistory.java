@@ -24,8 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A class keeping track of transaction history.
  *
- * <p>
- * A transaction can be something like an interface or a roadm connection, that may need to be
+ * <p>A transaction can be something like an interface or a roadm connection, that may need to be
  * rolled back in the future.
  */
 public class TransactionHistory implements History {

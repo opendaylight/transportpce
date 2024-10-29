@@ -15,12 +15,10 @@ public interface Factory {
     /**
      * Extracting preferred ports from pathComputationRequestInput.
      *
-     * <p>
-     * This is the recommended method of determining if a node/port combination
+     * <p>This is the recommended method of determining if a node/port combination
      * is preferred by the client.
      *
-     * <p>
-     * Pseudocode example:
+     * <p>Pseudocode example:
      * <pre>
      *     Factory.portPreference(PCRI).preferredPort("ROADM-B-SRG1", "SRG1-PP1-TXRX");
      * </pre>

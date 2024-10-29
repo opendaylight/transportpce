@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Connection transaction.
  *
- * <p>
- * i.e. a class tracking a connection.
+ * <p>i.e. a class tracking a connection.
  */
 public class Connection implements Transaction {
 
