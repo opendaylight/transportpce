@@ -15,16 +15,14 @@ public interface Numeric {
     /**
      * Return a map of ASSIGNED (i.e. used) frequency ranges.
      *
-     * <p>
-     * The key is the lower frequency bound and the value is the upper frequency bound.
+     * <p>The key is the lower frequency bound and the value is the upper frequency bound.
      */
     Map<Double, Double> assignedFrequency(Available frequency);
 
     /**
      * Return a map of AVAILABLE frequency ranges.
      *
-     * <p>
-     * The key is the lower frequency bound and the value is the upper frequency bound.
+     * <p>The key is the lower frequency bound and the value is the upper frequency bound.
      */
     Map<Double, Double> availableFrequency(Available frequency);
 

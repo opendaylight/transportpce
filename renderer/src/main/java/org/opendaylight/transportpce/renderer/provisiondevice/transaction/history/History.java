@@ -17,8 +17,7 @@ public interface History {
     /**
      * Add transaction.
      *
-     * <p>
-     * Only accepts the transaction if this History
+     * <p>Only accepts the transaction if this History
      * object doesn't already contain the object.
      *
      * @return true if the transaction was added.
@@ -28,8 +27,7 @@ public interface History {
     /**
      * A list of transactions.
      *
-     * <p>
-     * Will only accept unique transactions.
+     * <p>Will only accept unique transactions.
      * @return true if all transactions was added. false if one or more transactions was rejected.
      */
     boolean add(List<Transaction> transactions);
@@ -37,8 +35,7 @@ public interface History {
     /**
      * Add an array of interface transactions.
      *
-     * <p>
-     * Duplicate interface ids, null or empty strings
+     * <p>Duplicate interface ids, null or empty strings
      * are silently ignored.
      * @return may return false
      */
@@ -47,8 +44,7 @@ public interface History {
     /**
      * Add an array of interface transactions.
      *
-     * <p>
-     * Duplicate interface ids, null or empty strings
+     * <p>Duplicate interface ids, null or empty strings
      * are silently ignored.
      * @return may return false
      */
@@ -57,8 +53,7 @@ public interface History {
     /**
      * Add a list of interface transactions.
      *
-     * <p>
-     * Duplicate interface ids, null or empty strings
+     * <p>Duplicate interface ids, null or empty strings
      * are silently ignored.
      */
     boolean addInterfaces(String nodeId, List<String> interfaceIds);
@@ -66,8 +61,7 @@ public interface History {
     /**
      * Rollback all transactions.
      *
-     * <p>
-     * Typically, the transactions are rolled back in reverse
+     * <p>Typically, the transactions are rolled back in reverse
      * order, but the implementing class may choose a different
      * logic.
      */

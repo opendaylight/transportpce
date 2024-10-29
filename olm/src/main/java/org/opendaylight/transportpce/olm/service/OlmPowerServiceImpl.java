@@ -339,12 +339,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     /**
-     * This method retrieves OTS PM from current PM list by nodeId and TPId: Steps:
+     * This method retrieves OTS PM from current PM list by nodeId and TPId:
      *
-     * <p>
-     * 1. Get OTS interface name from port mapping by TPId 2. Call getPm RPC to get OTS PM
+     * <p>Steps:
      *
-     * <p>
+     * <p>1. Get OTS interface name from port mapping by TPId
+     *
+     * <p>2. Call getPm RPC to get OTS PM
      *
      * @param nodeId Node-id of the NE.
      * @param tpID Termination point Name.
@@ -384,13 +385,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     /**
-     * This method Sets Spanloss on A-End and Z-End OTS interface: Steps:
+     * This method Sets Spanloss on A-End and Z-End OTS interface:
      *
-     * <p>
-     * 1. Read existing interface details
+     * <p>Steps:
      *
-     * <p>
-     * 2. Set spanloss
+     * <p>1. Read existing interface details
+     *
+     * <p>2. Set spanloss
      *
      * @param nodeId nodeId of NE on which spanloss need to be updated
      * @param interfaceName OTS interface for NE on which spanloss is cacluated
@@ -516,11 +517,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     /**
      * This method calculates Spanloss by TranmistPower - Receive Power Steps:
      *
-     * <p>
-     * 1. Read PM measurement
+     * <p>1. Read PM measurement
      *
-     * <p>
-     * 2. Set Spanloss value for interface
+     * <p>2. Set Spanloss value for interface
      *
      * @param roadmLinks
      *            reference to list of RoadmLinks

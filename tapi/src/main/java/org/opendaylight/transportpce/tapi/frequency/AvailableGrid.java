@@ -18,13 +18,11 @@ public class AvailableGrid implements Available {
     /**
      * The available frequency slots are represented by a (signed) byte array.
      *
-     * <p>
-     * The size of the byte array multiplied by byte size is equal to the
+     * <p>The size of the byte array multiplied by byte size is equal to the
      * total number of frequency slots.
      * e.g. 96 bytes = 768 bits = 768 frequency slots.
      *
-     * <p>
-     * The available frequency slots...
+     * <p>The available frequency slots...
      *     byte[] frequencies = {-58, -1} => {0b11000110, 0b11111111}
      * ...can be reversed using the method assignedFrequencies():
      *     availableFrequencies() => {0b00111001, 0b00000000}
