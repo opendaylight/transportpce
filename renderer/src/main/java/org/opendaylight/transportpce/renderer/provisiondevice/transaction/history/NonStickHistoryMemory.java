@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Goldfish implementation of the History interface.
  *
- * <p>
- * This implementation simply doesn't track anything.
+ * <p>This implementation simply doesn't track anything.
  * Most useful for backwards compatibility reasons.
  */
 public class NonStickHistoryMemory implements History {

@@ -24,8 +24,7 @@ import org.slf4j.LoggerFactory;
  * This class is the implementation of the 'get-pm' RESTCONF service, which
  * is one of the external APIs into the olm application.
  *
- *<p>
- * This operation traverse through current PM list and gets PM for
+ *<p>This operation traverse through current PM list and gets PM for
  * given NodeId and Resource name
  */
 public final class GetPmImpl implements GetPm {

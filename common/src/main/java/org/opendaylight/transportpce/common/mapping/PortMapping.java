@@ -32,20 +32,15 @@ public interface PortMapping {
      * does a selective read operation on degree/srg subtree to get circuit
      * packs/ports that map to :
      *
-     * <p>
-     * 1. DEGn-TTP-TX, DEGn-TTP-RX, DEGn-TTP-TXRX
+     * <p>1. DEGn-TTP-TX, DEGn-TTP-RX, DEGn-TTP-TXRX
      *
-     * <p>
-     * 2. SRGn-PPp-TX, SRGn-PPp-RX, SRGn-PPp-TXRX
+     * <p>2. SRGn-PPp-TX, SRGn-PPp-RX, SRGn-PPp-TXRX
      *
-     * <p>
-     * 3. LINEn
+     * <p>3. LINEn
      *
-     * <p>
-     * 4. CLNTn.
+     * <p>4. CLNTn.
      *
-     * <p>
-     * If the port is Mw it also store the OMS, OTS interface provisioned on the
+     * <p>If the port is Mw it also store the OMS, OTS interface provisioned on the
      * port. It skips the logical ports that are internal. If operation is
      * successful the mapping gets stored in datastore corresponding to
      * portmapping.yang data model.
@@ -74,14 +69,11 @@ public interface PortMapping {
      * created when the node is connected for the first time. The mapping object
      * basically contains the following attributes of interest:
      *
-     * <p>
-     * 1. Supporting circuit pack
+     * <p>1. Supporting circuit pack
      *
-     * <p>
-     * 2. Supporting port
+     * <p>2. Supporting port
      *
-     * <p>
-     * 3. Supporting OTS/OMS interface (if port on ROADM)
+     * <p>3. Supporting OTS/OMS interface (if port on ROADM)
      *
      * @param nodeId
      *            Unique Identifier for the node of interest.
@@ -115,14 +107,11 @@ public interface PortMapping {
      * created when the node is connected for the first time. The mapping object
      * basically contains the following attributes of interest:
      *
-     * <p>
-     * 1. Supporting circuit pack
+     * <p>1. Supporting circuit pack
      *
-     * <p>
-     * 2. Supporting port
+     * <p>2. Supporting port
      *
-     * <p>
-     * 3. Supporting OTS/OMS interface (if port on ROADM)
+     * <p>3. Supporting OTS/OMS interface (if port on ROADM)
      *
      * @param nodeId
      *            Unique Identifier for the node of interest.
@@ -151,17 +140,13 @@ public interface PortMapping {
      * created when the node is connected for the first time. The mapping object
      * basically contains the following attributes of interest:
      *
-     * <p>
-     * 1. slot width granularity
+     * <p>1. slot width granularity
      *
-     * <p>
-     * 2. center frequency granularity
+     * <p>2. center frequency granularity
      *
-     * <p>
-     * 3. Supporting OMS interface (if port on ROADM)
+     * <p>3. Supporting OMS interface (if port on ROADM)
      *
-     * <p>
-     * 4. Supporting OTS interface (if port on ROADM)
+     * <p>4. Supporting OTS interface (if port on ROADM)
      *
      * @param nodeId
      *            Unique Identifier for the node of interest.
