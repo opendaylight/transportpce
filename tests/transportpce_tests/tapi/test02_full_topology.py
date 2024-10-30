@@ -164,6 +164,11 @@ class TransportPCEtesting(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        result = test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
+        if result.returncode != 0:
+            print("tapi desinstallation feature failed...")
+        else:
+            print("Tapi Feature uninstalled")
 
     def setUp(self):
         time.sleep(2)
@@ -263,13 +268,13 @@ class TransportPCEtesting(unittest.TestCase):
     def test_11_check_otn_topology(self):
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 6, 'There should be 6 otn nodes')
+        self.assertEqual(len(response['network'][0]['node']), 7, 'There should be 7 otn nodes')
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
     def test_12_check_openroadm_topology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertEqual(len(response['network'][0]['node']), 13, 'There should be 13 openroadm nodes')
+        self.assertEqual(len(response['network'][0]['node']), 14, 'There should be 14 openroadm nodes')
         self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 22,
                          'There should be 22 openroadm links')
 
