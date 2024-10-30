@@ -193,6 +193,7 @@ public class TapiProvider {
         tapinetworkmodellistenerRegistration.close();
         rpcRegistration.close();
         LOG.info("TapiProvider Session Closed");
+        netModServ.deleteTapiExtNode();
     }
 
     public Registration getRegisteredRpcs() {
