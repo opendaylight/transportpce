@@ -22,6 +22,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
@@ -91,6 +92,7 @@ public class TapiProvider {
         TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
     public static final String TOPOLOGICAL_MODE = "Full";
     private final DataBroker dataBroker;
+    private final NetworkModelService netModServ;
     private final NetworkTransactionService networkTransactionService;
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private List<Registration> listeners;
@@ -108,6 +110,7 @@ public class TapiProvider {
             @Reference NotificationPublishService notificationPublishService,
             @Reference NetworkTransactionService networkTransactionService,
             @Reference ServiceDataStoreOperations serviceDataStoreOperations,
+            @Reference NetworkModelService networkModelService,
             @Reference TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler,
             @Reference TapiNetworkModelService tapiNetworkModelServiceImpl,
             @Reference TapiLink tapiLink,
@@ -115,6 +118,8 @@ public class TapiProvider {
         this.dataBroker = dataBroker;
         this.networkTransactionService = networkTransactionService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
+        this.netModServ = networkModelService;
+        netModServ.createTapiExtNodeAtInit();
         LOG.info("TapiProvider Session Initiated");
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
@@ -177,6 +182,7 @@ public class TapiProvider {
      */
     @Deactivate
     public void close() {
+        netModServ.deleteTapiExtNode();
         listeners.forEach(lis -> lis.close());
         listeners.clear();
         pcelistenerRegistration.close();
