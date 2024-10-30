@@ -24,6 +24,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
@@ -61,6 +62,8 @@ public class TapiProviderTest {
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperations;
     @Mock
+    private NetworkModelService networkModelService;
+    @Mock
     private TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler;
     @Mock
     private TapiNetworkModelService tapiNetworkModelServiceImpl;
@@ -74,7 +77,7 @@ public class TapiProviderTest {
         when(networkTransactionService.read(any(), any())).thenReturn(Futures.immediateFuture(Optional.empty()));
 //        doReturn(emptyFluentFuture()).when(networkTransactionService).commit();
         new TapiProvider(dataBroker, rpcProviderService, rpcService, notificationService, notificationPublishService,
-                networkTransactionService, serviceDataStoreOperations,
+                networkTransactionService, serviceDataStoreOperations, networkModelService,
                 tapiNetworkModelNotificationHandler, tapiNetworkModelServiceImpl, tapilink, tapiContext);
 
         verify(rpcProviderService, times(1)).registerRpcImplementations(
