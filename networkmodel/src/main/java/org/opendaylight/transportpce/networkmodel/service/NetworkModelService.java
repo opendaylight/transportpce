@@ -136,4 +136,9 @@ public interface NetworkModelService {
      */
     void createTapiExtNodeAtInit();
 
+
+    /**
+     * delete the OpenROADM TAPI-EXT node in all OpenROADM topologies.
+     */
+    void deleteTapiExtNode();
 }

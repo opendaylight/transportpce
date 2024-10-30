@@ -164,6 +164,11 @@ class TransportPCEtesting(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        result = test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
+        if result.returncode != 0:
+            print("tapi desinstallation feature failed...")
+        else:
+            print("Tapi Feature uninstalled")
 
     def setUp(self):
         time.sleep(2)
