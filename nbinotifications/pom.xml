@@ -22,7 +22,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <transportpce.models.version>21.1.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>21.1.0</transportpce.models.version>
     <kafka.version>3.7.0</kafka.version>
   </properties>
 

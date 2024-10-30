@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>21.1.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>21.1.0</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
