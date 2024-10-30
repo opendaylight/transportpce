@@ -44,6 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
@@ -750,6 +751,76 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .addAugmentation(commonExt1)
                 .build());
         networkTransactionService.commit();
+    }
+
+    @Override
+    public void deleteTapiExtNode() {
+        String networkLayer = NetworkUtils.CLLI_NETWORK_ID;
+        try {
+            InstanceIdentifier<Node> iiTapiExtClliNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            LOG.info("Following tapi feature desinstallation, Deleting CLLI TAPI-SBI-ABS-NODE Node in DataStore");
+            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode);
+
+            networkLayer = NetworkUtils.UNDERLAY_NETWORK_ID;
+            InstanceIdentifier<Node> iiTapiExtNetworkNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode);
+
+            networkLayer = NetworkUtils.OVERLAY_NETWORK_ID;
+            InstanceIdentifier<Node> iiTapiExtTopologyNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode);
+
+            networkLayer = NetworkUtils.OTN_NETWORK_ID;
+            InstanceIdentifier<Node> iiTapiExtOtnNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode);
+
+            InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+
+            Optional<Network> nwOptional =
+                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
+            networkLayer = NetworkUtils.OVERLAY_NETWORK_ID + "Tapi-Links";
+            if (nwOptional.isPresent()) {
+                Network1 nw = nwOptional.orElseThrow().augmentation(Network1.class);
+                List<LinkId> tapiLinkIdList = nw.nonnullLink().values().stream()
+                    .filter(l -> l.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                        .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                        .equals(LinkClassEnum.AlienToTapi)
+                        || l.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                            .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                                .equals(LinkClassEnum.InterDomain))
+                    .map(Link::getLinkId)
+                    .collect(Collectors.toList());
+                if (tapiLinkIdList == null || tapiLinkIdList.isEmpty()) {
+                    LOG.warn("TAPI-SBI-ABS-NODE succesfully deleted, no associated Links found in Datastore");
+                    return;
+                }
+                for (LinkId linkId : tapiLinkIdList) {
+                    InstanceIdentifier<Link> iiORNetworkLink = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .augmentation(Network1.class)
+                        .child(Link.class, new LinkKey(linkId))
+                        .build();
+                    networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiORNetworkLink);
+                }
+                LOG.info("TAPI-SBI-ABS-NODE and associated Links succesfully deleted from Datastore");
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error trying to delete TAPI-SBI-ABS-NODE and associated Links at {} Level in Datastore",
+                networkLayer,e);
+        }
     }
 
     private List<Link> getOtnLinks(List<LinkId> linkIds) {
