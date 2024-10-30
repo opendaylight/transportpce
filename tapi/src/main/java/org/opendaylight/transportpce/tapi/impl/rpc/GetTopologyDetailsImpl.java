@@ -222,6 +222,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         // read otn-topology
         Network otnTopo = readTopology(InstanceIdentifiers.OTN_NETWORK_II);
         Map<NodeId, Node> otnNodeMap = otnTopo.nonnullNode().values().stream()
+                .filter(onode -> !onode.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE"))
                 .collect(Collectors.toMap(Node::getNodeId, node -> node));
 
         Map<String, List<String>> networkPortMap = new HashMap<>();
@@ -262,9 +263,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             tapiNodeList.putAll(tapiAbstractFactory.getTapiNodes());
             tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         }
-        if (openroadmTopo.nonnullNode().values().stream().filter(nt -> nt
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
-                .getNodeType().equals(OpenroadmNodeType.SRG)).count() > 0) {
+        if (openroadmTopo.nonnullNode().values().stream()
+                .filter(nt -> !nt.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE"))
+                .filter(nt -> nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+                    .Node1.class).getNodeType().equals(OpenroadmNodeType.SRG))
+                .count() > 0) {
             tapiAbstractFactory.convertRoadmInfrastructure();
             tapiNodeList.putAll(tapiAbstractFactory.getTapiNodes());
             tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
