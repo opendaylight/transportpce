@@ -14,7 +14,7 @@ import io.lighty.modules.southbound.netconf.impl.util.NetconfConfigUtils;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.opendaylight.yangtools.binding.YangModuleInfo;
+import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
 
 public final class TPCEUtils {
 
