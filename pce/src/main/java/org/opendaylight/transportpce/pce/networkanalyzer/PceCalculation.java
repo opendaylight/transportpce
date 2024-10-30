@@ -542,6 +542,9 @@ public class PceCalculation {
     private void validateOtnNode(Node node) {
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
+        if (node.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE")) {
+            return;
+        }
         if (node.augmentation(Node1.class) == null) {
             LOG.error("ValidateOtnNode: no node-type augmentation. Node {} is ignored", node.getNodeId().getValue());
             return;
