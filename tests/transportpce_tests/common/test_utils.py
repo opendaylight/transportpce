@@ -254,9 +254,22 @@ def install_karaf_feature(feature_name: str):
         os.path.dirname(os.path.realpath(__file__)),
         '..', '..', '..', KARAF_INSTALLDIR, 'target', 'assembly', 'bin', 'client')
 # FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-701
-# -b option needed below because of Karaf client bug reporte in the JIRA ticket mentioned above
+# -b option needed below because of Karaf client bug report in the JIRA ticket mentioned above
     return subprocess.run([executable, '-b'],
                           input='feature:install ' + feature_name + '\n feature:list | grep '
+                          + feature_name + ' \n',
+                          universal_newlines=True, check=False)
+
+
+def uninstall_karaf_feature(feature_name: str):
+    print('uninstalling feature ' + feature_name)
+    executable = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        '..', '..', '..', KARAF_INSTALLDIR, 'target', 'assembly', 'bin', 'client')
+# FIXME: https://jira.opendaylight.org/browse/TRNSPRTPCE-701
+# -b option needed below because of Karaf client bug report in the JIRA ticket mentioned above
+    return subprocess.run([executable, '-b'],
+                          input='feature:uninstall ' + feature_name + '\n feature:list | grep '
                           + feature_name + ' \n',
                           universal_newlines=True, check=False)
 

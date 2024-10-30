@@ -150,6 +150,9 @@ public class ConvertORTopoToTapiFullTopo {
     }
 
     public void convertRoadmNode(Node roadm, Network openroadmTopo, String topoMode) {
+        if (roadm != null && roadm.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE")) {
+            return;
+        }
         setTopologicalMode(topoMode);
         if (topoMode.equals("Full")) {
             convertRoadmNodeFull(roadm, openroadmTopo);

@@ -172,6 +172,7 @@ public final class TopologyUtils {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node>
                     otnNodeMap =
             otnTopo.nonnullNode().values().stream()
+                .filter(onode -> !onode.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE"))
                 .collect(Collectors.toMap(
                         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.network.Node::getNodeId, node -> node));
@@ -216,6 +217,7 @@ public final class TopologyUtils {
                 .networks.network.Node> rdmList =
             openroadmNet == null ? new ArrayList<>()
                 : openroadmNet.nonnullNode().values().stream()
+                    .filter(nt -> !nt.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE"))
                     .filter(nt -> nt
                         .augmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)

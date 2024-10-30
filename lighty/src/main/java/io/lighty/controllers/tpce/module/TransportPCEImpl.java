@@ -230,6 +230,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                     notificationPublishService,
                     networkTransaction,
                     serviceDataStoreOperations,
+                    networkModelService,
                     new TapiNetworkModelNotificationHandler(networkTransaction, notificationPublishService),
                     new TapiNetworkModelServiceImpl(
                             networkTransaction,
