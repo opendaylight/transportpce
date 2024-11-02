@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+import com.google.common.collect.ImmutableMap;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -101,6 +102,47 @@ public final class PortMappingUtils {
         "{} : Updating old mapping data {} for {} by new mapping data {}";
     public static final String XPDR_LIST_IN_CONF_LOGMSG =
         "{} : list of Xponders {} in configuration";
+    public static final ImmutableMap<String, String> INTERFACE_RATE_MAP =
+        ImmutableMap.<String, String>builder()
+        .put("If1GE", "1")
+        .put("If10GE", "10")
+        .put("If40GE", "40")
+        .put("If100GE", "100")
+        .put("If200GE", "200")
+        .put("If400GE", "400")
+        .put("If1GEODU0", "1")
+        .put("If10GEODU2", "10")
+        .put("If10GEODU2e", "10")
+        .put("If10GEoduflexgfp", "10")
+        .put("If25GEoduflexcbr", "25")
+        .put("If40GEODU3", "40")
+        .put("If100GEODU4", "100")
+        .put("If100GEoduflexgfp", "100")
+        .put("If200GEoduflexcbr", "200")
+        .put("If400GEodufleximp", "400")
+        .put("If400GEoduflexcbr", "400")
+        .put("IfOCHOTU1ODU1", "1")
+        .put("IfOCHOTU2ODU2", "10")
+        .put("IfOCHOTU2EODU2E", "10")
+        .put("IfOCHOTU3ODU3", "40")
+        .put("IfOCHOTU4ODU4", "100")
+        .put("IfOCHOTU4ODU4uniregen", "100")
+        .put("IfOCHOTU4ODU4regen", "100")
+        .put("IfOCHOTUCnODUCn", "400")
+        .put("IfOCHOTUCnODUCnregen", "400")
+        .put("IfOCHOTUCnODUCnuniregen", "400")
+        .put("Ifotsiotucnoducn", "400")
+        .put("IfnOTU4ODU4", "100")
+        .put("IfOTU1ODU1", "1")
+        .put("IfOTU2ODU2", "10")
+        .put("IfOTU2eODU2e", "10")
+        .put("IfOTU3ODU3", "40")
+        .put("IfOTU4ODU4", "100")
+        //Add default 100G to ifOCH that was created at the beginning of OR when no other line rate was available
+        .put("IfOCH", "100")
+        .build();
+
+        //new HashMap<>(Map.of(IfOTU4ODU4.VALUE, "1"));
 
     /**
      * Implements the FNV-1 64bit algorithm.

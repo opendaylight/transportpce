@@ -130,50 +130,52 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
-             'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
-             'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'AMkDwQ7xTmRI', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-NETWORK1',
+             'supporting-circuit-pack-name': '1/0/1-PLUG-NET', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': '1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT1',
+             'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
+             'port-qual': 'xpdr-network', 'lcp-hash-val': 'AMkDwQ7xTmRI'},
             response['mapping'])
 
     def test_12_xpdr_portmapping_XPDR2_NETWORK1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-NETWORK2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
-             'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
-             'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network',
-             'lcp-hash-val': 'AMkDwQ7xTmRL', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-NETWORK2',
+             'supporting-circuit-pack-name': '1/0/2-PLUG-NET', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': '1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-CLIENT2',
+             'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
+             'port-qual': 'xpdr-network', 'lcp-hash-val': 'AMkDwQ7xTmRL'},
             response['mapping'])
 
     def test_13_xpdr_portmapping_XPDR1_CLIENT1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
-             'supporting-port': 'C1',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALj', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-CLIENT1',
+             'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': 'C1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK1',
+             'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr',
+             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AJUUr6I5fALj'},
             response['mapping'])
 
     def test_14_xpdr_portmapping_XPDR1_CLIENT2(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A1", "mapping", "XPDR1-CLIENT2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
-             'supporting-port': 'C1',
-             'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'AJUUr6I5fALg', 'xpdr-type': 'tpdr',
-             'port-admin-state': 'InService', 'port-oper-state': 'InService'},
+            {'logical-connection-point': 'XPDR1-CLIENT2',
+             'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': 'C1',
+             'port-oper-state': 'InService', 'connection-map-lcp': 'XPDR1-NETWORK2',
+             'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'tpdr', 'port-qual': 'xpdr-client',
+             'lcp-hash-val': 'AJUUr6I5fALg'},
             response['mapping'])
 
     def test_15_spdr_device_connection(self):
@@ -272,16 +274,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {"logical-connection-point": "XPDR1-NETWORK1",
-             "supporting-circuit-pack-name": "CP1-CFP0",
-             "supported-interface-capability": ["org-openroadm-port-types:if-OCH-OTU4-ODU4"],
-             "supporting-port": "CP1-CFP0-P1",
-             "lcp-hash-val": "Swfw02qXGyI=",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xpdr-type": "mpdr",
-             "port-qual": "xpdr-network",
-             "port-oper-state": "InService"},
+            {'logical-connection-point': 'XPDR1-NETWORK1',
+             'supporting-circuit-pack-name': 'CP1-CFP0', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': 'CP1-CFP0-P1',
+             'port-oper-state': 'InService',
+             'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
+             'lcp-hash-val': 'Swfw02qXGyI='},
             response['mapping'])
 
     def test_24_spdr_portmapping_XPDR2_CLIENT2(self):
@@ -307,48 +306,39 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR2-NETWORK2")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {"logical-connection-point": "XPDR2-NETWORK2",
-             "supporting-circuit-pack-name": "CP6-CFP",
-             "supported-interface-capability": ["org-openroadm-port-types:if-OCH-OTU4-ODU4"],
-             "supporting-port": "CP6-CFP-P1",
-             "lcp-hash-val": "exT821pFtOQ=",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xpdr-type": "switch",
-             "port-qual": "switch-network",
-             "port-oper-state": "InService"},
+            {'logical-connection-point': 'XPDR2-NETWORK2',
+             'supporting-circuit-pack-name': 'CP6-CFP', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': 'CP6-CFP-P1',
+             'port-oper-state': 'InService',
+             'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'switch',
+             'port-qual': 'switch-network', 'lcp-hash-val': 'exT821pFtOQ='},
             response['mapping'])
 
     def test_26_spdr_portmapping_XPDR3_CLIENT3(self):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-CLIENT3")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {"logical-connection-point": "XPDR3-CLIENT3",
-             "supporting-circuit-pack-name": "CP3-SFP3",
-             "supported-interface-capability": ["org-openroadm-port-types:if-1GE-ODU0"],
-             "supporting-port": "CP3-SFP3-P1",
-             "lcp-hash-val": "AKsQ/HRQdtdN",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xpdr-type": "mpdr",
-             "port-qual": "xpdr-client",
-             "port-oper-state": "InService"},
+            {'logical-connection-point': 'XPDR3-CLIENT3',
+             'supporting-circuit-pack-name': 'CP3-SFP3', 'rate': '1',
+             'port-admin-state': 'InService', 'supporting-port': 'CP3-SFP3-P1',
+             'port-oper-state': 'InService',
+             'supported-interface-capability': ['org-openroadm-port-types:if-1GE-ODU0'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'mpdr',
+             'port-qual': 'xpdr-client', 'lcp-hash-val': 'AKsQ/HRQdtdN'},
             response['mapping'])
 
     def test_27_spdr_portmapping_XPDR3_NETWORK1(self):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", "mapping", "XPDR3-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
-            {"logical-connection-point": "XPDR3-NETWORK1",
-             "supporting-circuit-pack-name": "CP3-CFP0",
-             "supported-interface-capability": ["org-openroadm-port-types:if-OCH-OTU4-ODU4"],
-             "supporting-port": "CP3-CFP0-P1",
-             "lcp-hash-val": "ANnxoi7K8q30",
-             "port-direction": "bidirectional",
-             "port-admin-state": "InService",
-             "xpdr-type": "mpdr",
-             "port-qual": "xpdr-network",
-             "port-oper-state": "InService"},
+            {'logical-connection-point': 'XPDR3-NETWORK1',
+             'supporting-circuit-pack-name': 'CP3-CFP0', 'rate': '100',
+             'port-admin-state': 'InService', 'supporting-port': 'CP3-CFP0-P1',
+             'port-oper-state': 'InService',
+             'supported-interface-capability': ['org-openroadm-port-types:if-OCH-OTU4-ODU4'],
+             'port-direction': 'bidirectional', 'xpdr-type': 'mpdr', 'port-qual': 'xpdr-network',
+             'lcp-hash-val': 'ANnxoi7K8q30'},
             response['mapping'])
 
     def test_28_spdr_device_disconnection(self):

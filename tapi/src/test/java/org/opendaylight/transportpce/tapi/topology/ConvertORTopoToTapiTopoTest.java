@@ -884,7 +884,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 .map(lpqi -> lpqi.getLayerProtocolQualifier())
                 .collect(Collectors.toList());
         assertEquals(1, lpql.size(), "Network nep should support 1 kind of cep");
-        assertThat("network nep should support 1 kind of cep", lpql, hasItem(ODUTYPEODU4.VALUE));
+        assertThat("network nep should support ODU4 kind of cep", lpql, hasItem(ODUTYPEODU4.VALUE));
         assertEquals(LayerProtocolName.ODU, nep.getLayerProtocolName(), "network nep should be of ODU protocol type");
         checkCommonPartOfNep(nep, false);
         checkSIP(nep, portName, nodeId, extension);

@@ -653,10 +653,17 @@ public class PortMappingVersion121 {
             String logicalConnectionPoint, String partnerLcp) {
         Set<org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability> supportedIntf =
             new HashSet<>();
+        Integer maxrate = 0;
+        Integer rate = 0;
         for (String sup: getSupIfCapList(port)) {
             if (MappingUtilsImpl.convertSupIfCapa(sup) != null) {
                 supportedIntf.add(MappingUtilsImpl.convertSupIfCapa(sup));
+                var rateFromMap = PortMappingUtils.INTERFACE_RATE_MAP
+                    .get(MappingUtilsImpl.convertSupIfCapa(sup).implementedInterface().getSimpleName());
+                rate = rateFromMap == null ? Integer.valueOf(0) : Integer.valueOf(rateFromMap);
+
             }
+            maxrate = (rate > maxrate) ? rate : maxrate;
         }
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
@@ -666,7 +673,8 @@ public class PortMappingVersion121 {
                 .setPortDirection(port.getPortDirection().getName())
                 .setXpdrType(XpdrNodeTypes.Tpdr)
                 .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
-                .setSupportedInterfaceCapability(supportedIntf);
+                .setSupportedInterfaceCapability(supportedIntf)
+                .setRate(String.valueOf(maxrate));
         if (port.getPortQual() != null) {
             mpBldr.setPortQual(port.getPortQual().getName());
         }

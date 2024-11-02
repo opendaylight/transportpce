@@ -395,7 +395,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 #                                 "Operational State should be 'ENABLED'")
 #                self.assertEqual(nep['administrative-state'], 'UNLOCKED',
 #                                 "Administrative State should be 'UNLOCKED'")
-        self.assertEqual(nb_updated_neps, 3, "3 xponder neps (OTS, OTSI_MC, eODU) should have been modified")
+        self.assertEqual(nb_updated_neps, 4, "4 xponder neps (OTS, OTSI_MC, iOTU, eODU) should have been modified")
         time.sleep(1)
 
     def test_18_check_update_tapi_links(self):
