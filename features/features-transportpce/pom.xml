@@ -18,7 +18,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>features-transportpce</artifactId>
-  <version>10.1.0</version>
+  <version>10.2.0-SNAPSHOT</version>
   <packaging>feature</packaging>
   <name>OpenDaylight :: TransportPCE :: Features</name>
 
