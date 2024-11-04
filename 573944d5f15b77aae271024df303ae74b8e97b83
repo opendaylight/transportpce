@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42566086_6300aa31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-04T11:50:40Z",
+      "side": 1,
+      "message": "Added input validation",
+      "revId": "573944d5f15b77aae271024df303ae74b8e97b83",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52204eba_9f566007",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceComplianceCheck.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-04T11:50:40Z",
+      "side": 1,
+      "message": "Added with the intention to validate:\n\n```\n\"frequency-slot\": {\n    \"center-frequency\": X,\n    \"slot-width\": Y\n},\n```",
+      "range": {
+        "startLine": 61,
+        "startChar": 19,
+        "endLine": 78,
+        "endChar": 9
+      },
+      "revId": "573944d5f15b77aae271024df303ae74b8e97b83",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
