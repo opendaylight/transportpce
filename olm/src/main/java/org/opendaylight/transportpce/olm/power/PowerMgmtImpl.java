@@ -321,6 +321,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             .augmentation(Interface1.class)
                             .getOts().getSpanLossTransmit().getValue().decimalValue();
                 case 2:
+                    LOG.info("OpenROADM version for {} is", openroadmVersion);
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
                             .interfaces.grp.Interface> interfaceOpt1 =
                         this.openRoadmInterfaces.getInterface(nodeId, supportingOts);
@@ -339,6 +340,26 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 .openroadm.optical.transport.interfaces.rev181019.Interface1.class)
                             .getOts().getSpanLossTransmit().getValue().decimalValue();
                 // TODO no case 3 ?
+                case 3:
+                    LOG.info("OpenROADM version for {} is", openroadmVersion);
+                    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529
+                            .interfaces.grp.Interface> interfaceOpt2 =
+                            this.openRoadmInterfaces.getInterface(nodeId, supportingOts);
+                    if (interfaceOpt2.isEmpty()) {
+                        LOG.error(INTERFACE_NOT_PRESENT, supportingOts, nodeId);
+                        return null;
+                    }
+                    if (interfaceOpt2.orElseThrow().augmentation(org.opendaylight.yang.gen.v1.http.org
+                                    .openroadm.optical.transport.interfaces.rev200529.Interface1.class).getOts()
+                            .getSpanLossTransmit() == null) {
+                        LOG.error("interface {} has no spanloss value", interfaceOpt2.orElseThrow().getName());
+                        return null;
+                    }
+                    return interfaceOpt2.orElseThrow()
+                            .augmentation(org.opendaylight.yang.gen.v1.http.org
+                                    .openroadm.optical.transport.interfaces.rev200529.Interface1.class)
+                            .getOts().getSpanLossTransmit().getValue().decimalValue();
+
                 default:
                     return null;
             }
