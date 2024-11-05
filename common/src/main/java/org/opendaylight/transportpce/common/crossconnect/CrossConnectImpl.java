@@ -63,6 +63,8 @@ public class CrossConnectImpl implements CrossConnect {
                 return crossConnectImpl121.getCrossConnect(nodeId,connectionNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                return crossConnectImpl710.getCrossConnect(nodeId, connectionNumber);
             default:
                 return Optional.empty();
         }
@@ -80,6 +82,9 @@ public class CrossConnectImpl implements CrossConnect {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 LOG.info("Device Version is 2.2.1");
                 return crossConnectImpl221.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                LOG.info("Device Version is 7.1");
+                return crossConnectImpl710.postCrossConnect(nodeId, srcTp, destTp, spectrumInformation);
             default:
                 LOG.info("Device Version not found");
                 return Optional.empty();
@@ -94,7 +99,7 @@ public class CrossConnectImpl implements CrossConnect {
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
             case OPENROADM_DEVICE_VERSION_7_1:
-                return crossConnectImpl710.deleteOtnCrossConnect(nodeId, connectionNumber);
+                return crossConnectImpl710.deleteCrossConnect(nodeId, connectionNumber, isOtn);
             default:
                 return null;
         }
@@ -109,6 +114,9 @@ public class CrossConnectImpl implements CrossConnect {
                     .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
             case OPENROADM_DEVICE_VERSION_2_2_1:
                 return crossConnectImpl221
+                    .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                return crossConnectImpl710
                     .getConnectionPortTrail(nodeId, srcTp, destTp, lowerSpectralSlotNumber, higherSpectralSlotNumber);
             default:
                 return null;
@@ -132,6 +140,11 @@ public class CrossConnectImpl implements CrossConnect {
                 }
                 return crossConnectImpl221.setPowerLevel(nodeId,
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode
+                        .forName(mode),
+                    powerValue, connectionNumber);
+            case OPENROADM_DEVICE_VERSION_7_1:
+                return crossConnectImpl710.setPowerLevel(nodeId,
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.OpticalControlMode
                         .forName(mode),
                     powerValue, connectionNumber);
             default:
