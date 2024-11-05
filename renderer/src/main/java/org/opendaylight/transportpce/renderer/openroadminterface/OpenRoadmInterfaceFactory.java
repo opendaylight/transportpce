@@ -73,6 +73,8 @@ public class OpenRoadmInterfaceFactory {
                         spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return openRoadmInterface710.createFlexOCH(nodeId, logicalConnPoint, spectrumInformation);
             default:
                 return null;
         }
@@ -189,6 +191,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmOmsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOmsInterface(nodeId, mapping);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return openRoadmInterface710.createOpenRoadmOmsInterface(nodeId, mapping);
             default:
                 return null;
         }
@@ -200,6 +204,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmOtsInterface(nodeId, mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.createOpenRoadmOtsInterface(nodeId, mapping);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return openRoadmInterface710.createOpenRoadmOtsInterface(nodeId, mapping);
             default:
                 return null;
         }
@@ -212,6 +218,8 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return openRoadmInterface710.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
             default:
                 return false;
         }
