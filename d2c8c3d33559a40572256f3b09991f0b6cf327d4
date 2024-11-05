@@ -323,6 +323,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b70d9788_95c337a5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-05T08:55:43Z",
+      "side": 1,
+      "message": "`slotWidthGHz` could work. But I don\u0027t like `slotNumber`. I think it\u0027s too ambiguous. It could be misinterpreted as a single slot position on a 768 grid (e.g. 354). I think `nrOfSlots` or `slotCount` would be less ambiguous.",
+      "parentUuid": "7de44a0a_9c20e92f",
+      "range": {
+        "startLine": 61,
+        "startChar": 85,
+        "endLine": 61,
+        "endChar": 90
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "676f8fd4_9f241b47",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
         "patchSetId": 1
@@ -382,6 +406,30 @@
       "side": 1,
       "message": "I Agree with your approach for both frequency range \u0026 frequency slot,  : intersection, exception if not consistent.",
       "parentUuid": "7307cde4_3348ef55",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 111
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe2fe06_cc60fc1b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-05T08:55:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69a3a4d0_03bfa919",
       "range": {
         "startLine": 81,
         "startChar": 0,
@@ -583,6 +631,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4abefd05_1972ca01",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/FrequencyIntervalFactoryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-05T08:55:43Z",
+      "side": 1,
+      "message": "\u003e Understand that you don\u0027t want to make this factory responsible for validating user input. Do you think it would however make sense to add in the code checking the input (somewhere in the ServiceHandler...) a test on the consistence of both \n\nAdded input validation in this location:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/113983/comment/52204eba_9f566007/",
+      "parentUuid": "e23844ff_d94759aa",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 25
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69c4425c_0db184bd",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
         "patchSetId": 1
@@ -652,6 +724,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "872af762_85abdb6a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-05T08:55:43Z",
+      "side": 1,
+      "message": "Added a bit more comments to this test and renamed it to `twoEqualFrequencyRanges_returnIntersectionWithAvailableBitset`.",
+      "parentUuid": "c830cd5b_81e725e4",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 24
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6ff6e8b_0f31b4a3",
@@ -689,6 +785,30 @@
       "side": 1,
       "message": "Yes, the intersection would return `expected.set(15,20)`.\nAlright, I\u0027ll add that test.",
       "parentUuid": "a6ff6e8b_0f31b4a3",
+      "range": {
+        "startLine": 183,
+        "startChar": 3,
+        "endLine": 193,
+        "endChar": 30
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e3e9b5_e742c207",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalCollectionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-05T08:55:43Z",
+      "side": 1,
+      "message": "Added the test `rangesThatAreWithinTheIntersection_returnsIntersection`. A test with the same info but calls intersection.",
+      "parentUuid": "1936df57_c25aab7c",
       "range": {
         "startLine": 183,
         "startChar": 3,
