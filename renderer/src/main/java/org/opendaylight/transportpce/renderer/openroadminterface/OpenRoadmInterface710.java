@@ -13,9 +13,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -33,6 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.ty
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic28;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic36;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.Foic48;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.ProvisionModeType;
@@ -45,22 +50,34 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Of
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Off;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Rsfec;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev200529.Scfec;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev200529.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev200529.ethernet.container.EthernetBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.EthernetCsmacd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.InterfaceType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.MediaChannelTrailTerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.NetworkMediaChannelConnectionTerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OpticalChannel;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OpticalTransport;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOdu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.Otsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtsiGroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev200529.mc.ttp.container.McTtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev200529.nmc.ctp.container.NmcCtpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev200529.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.attributes.FlexoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev200529.OtsAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev200529.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCTP;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODUCn;
@@ -80,6 +97,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otsi.group.interfaces.rev
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtsigroup;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -130,6 +148,87 @@ public class OpenRoadmInterface710 {
         // Post the equipment-state change on the device circuit-pack
         openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
         return ethInterfaceBldr.getName();
+    }
+
+    public List<String> createFlexOCH(String nodeId, String logicalConnPoint, SpectrumInformation spectrumInformation)
+            throws OpenRoadmInterfaceException {
+        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (portMap == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
+        }
+        List<String> interfacesCreated = new ArrayList<>();
+        String mcInterfaceCreated = "";
+        if (logicalConnPoint.contains("DEG")) {
+            mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, spectrumInformation);
+            interfacesCreated.add(mcInterfaceCreated);
+        }
+        interfacesCreated.add(createNMCInterface(nodeId, logicalConnPoint, spectrumInformation, mcInterfaceCreated));
+        return interfacesCreated;
+    }
+
+    public String createMCInterface(String nodeId, String logicalConnPoint,
+                                    SpectrumInformation spectrumInformation)
+            throws OpenRoadmInterfaceException {
+        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (portMap == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
+        }
+        LOG.info("MC interface Freq Start {} and Freq End {} and center-Freq {}",
+                spectrumInformation.getMinFrequency(), spectrumInformation.getMaxFrequency(),
+                spectrumInformation.getCenterFrequency());
+        InterfaceBuilder mcInterfaceBldr =
+            createGenericInterfaceBuilder(
+                portMap,
+                MediaChannelTrailTerminationPoint.VALUE,
+                spectrumInformation.getIdentifierFromParams(logicalConnPoint, "mc"))
+                .setSupportingInterfaceList(new HashSet<>(Set.of(portMap.getSupportingOms())))
+                .addAugmentation(
+                    // Create Interface1 type object required for adding as augmentation
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev200529
+                            .Interface1Builder()
+                        .setMcTtp(
+                            new McTtpBuilder()
+                                .setMinFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMinFrequency())))
+                                .setMaxFreq(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getMaxFrequency())))
+                                .build())
+                            .build());
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(nodeId, mcInterfaceBldr);
+        return mcInterfaceBldr.getName();
+    }
+
+    public String createNMCInterface(String nodeId, String logicalConnPoint,
+                                     SpectrumInformation spectrumInformation, String mcName)
+            throws OpenRoadmInterfaceException {
+        LOG.info("The central frequency is {} and the nmc width is {}",
+                spectrumInformation.getCenterFrequency(), spectrumInformation.getWidth());
+        Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
+        if (portMap == null) {
+            throw new OpenRoadmInterfaceException(
+                    OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
+        }
+        InterfaceBuilder nmcInterfaceBldr =
+                createGenericInterfaceBuilder(
+                        portMap, NetworkMediaChannelConnectionTerminationPoint.VALUE,
+                        spectrumInformation.getIdentifierFromParams(logicalConnPoint, "nmc"));
+        if (logicalConnPoint.contains("DEG")) {
+            nmcInterfaceBldr.setSupportingInterfaceList(new HashSet<>(Set.of(mcName)));
+        }
+        // Create Interface1 type object required for adding as augmentation
+        nmcInterfaceBldr.addAugmentation(
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev200529
+                .Interface1Builder()
+                .setNmcCtp(
+                    new NmcCtpBuilder()
+                        .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
+                        .setWidth(new FrequencyGHz(Decimal64.valueOf(spectrumInformation.getWidth())))
+                        .build())
+                .build());
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(nodeId, nmcInterfaceBldr);
+        return nmcInterfaceBldr.getName();
     }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
@@ -990,6 +1089,72 @@ public class OpenRoadmInterface710 {
             .setName(key)
             .withKey(new InterfaceKey(key));
     }
+
+    public String createOpenRoadmOmsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
+        if (mapping.getSupportingOms() != null) {
+            return mapping.getSupportingOms();
+        }
+        // Create generic interface
+        if (mapping.getSupportingOts() == null) {
+            LOG.error("Unable to get ots interface from mapping {} - {}", nodeId, mapping.getLogicalConnectionPoint());
+            return null;
+        }
+        InterfaceBuilder omsInterfaceBldr =
+            createGenericInterfaceBuilder(
+                mapping, OpenROADMOpticalMultiplex.VALUE, "OMS-" + mapping.getLogicalConnectionPoint())
+                .setSupportingInterfaceList(new HashSet<>(Set.of(mapping.getSupportingOts())));
+        this.openRoadmInterfaces.postInterface(nodeId, omsInterfaceBldr);
+        this.portMapping.updateMapping(nodeId, mapping);
+        return omsInterfaceBldr.build().getName();
+    }
+
+    public String createOpenRoadmOtsInterface(String nodeId, Mapping mapping) throws OpenRoadmInterfaceException {
+        if (mapping.getSupportingOts() != null) {
+            return mapping.getSupportingOts();
+        }
+        // Create generic interface
+        InterfaceBuilder otsInterfaceBldr =
+            createGenericInterfaceBuilder(mapping, OpticalTransport.VALUE, "OTS-" + mapping.getLogicalConnectionPoint())
+                .addAugmentation(
+                    // Create Interface1 type object required for adding as augmentation
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev200529
+                            .Interface1Builder()
+                            // OTS interface augmentation specific data
+                            .setOts(new OtsBuilder().setFiberType(OtsAttributes.FiberType.Smf).build())
+                            .build());
+        this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);
+        this.portMapping.updateMapping(nodeId, mapping);
+        return otsInterfaceBldr.build().getName();
+    }
+
+    public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
+                              DeviceTransactionManager deviceTransactionManager) {
+        DataObjectIdentifier<RoadmConnections> xciid = DataObjectIdentifier
+                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
+                .build();
+        LOG.info("reading xc {} in node {}", xc, nodeId);
+        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (crossconnection.isEmpty()) {
+            LOG.info("xd {} not found !", xc);
+            return false;
+        }
+        RoadmConnections rc = crossconnection.orElseThrow();
+        LOG.info("xd {} found", xc);
+        String supportedinter =
+                interfaceName.contains("nmc")
+                        ? null
+                        : interfaceName.replace("mc", "nmc");
+        if (rc.getSource().getSrcIf().equals(interfaceName)
+                || rc.getDestination().getDstIf().equals(interfaceName)
+                || rc.getSource().getSrcIf().equals(supportedinter)
+                || rc.getDestination().getDstIf().equals(supportedinter)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private int getServiceRate(ModulationFormat modulationFormat, SpectrumInformation spectrumInformation) {
         switch (modulationFormat) {
