@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b16c676b_5b200424",
+        "filename": "api/src/main/yang/transportpce-or-network-augmentation@2024-09-23.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-06T14:39:03Z",
+      "side": 1,
+      "message": "From what I understood from the description, I thought it would rather be an openconfig-alien type node or an openroadm node.",
+      "range": {
+        "startLine": 206,
+        "startChar": 85,
+        "endLine": 206,
+        "endChar": 93
+      },
+      "revId": "6d32292b246f658a16103f123e7483cdbc04a216",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc274e8c_d82d62f9",
+        "filename": "api/src/main/yang/transportpce-or-network-augmentation@2024-09-23.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-06T14:39:03Z",
+      "side": 1,
+      "message": "attribute",
+      "range": {
+        "startLine": 220,
+        "startChar": 39,
+        "endLine": 220,
+        "endChar": 49
+      },
+      "revId": "6d32292b246f658a16103f123e7483cdbc04a216",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
