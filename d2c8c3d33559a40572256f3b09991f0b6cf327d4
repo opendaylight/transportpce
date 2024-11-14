@@ -250,6 +250,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87433a7b_cfb644ce",
+        "filename": "api/src/main/yang/com-smartoptics-openroadm-service@2023-09-07.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:07:04Z",
+      "side": 1,
+      "message": "\u003e I understand. This comment pinpoints the changed method after changing this datatype from uint to frequencyGHz.\n\u003e https://git.opendaylight.org/gerrit/c/transportpce/+/113982/comment/b266d0a1_72b0030b/\n\u003e \n\u003e Comparing Patchset 4 and Patchset 5 on the file ServiceFrequency shows the changes required. I tried to get those changes into the comment, but couldn\u0027t figure out how to do it in Gerrit.",
+      "parentUuid": "09512a9f_73eeab3c",
+      "range": {
+        "startLine": 79,
+        "startChar": 11,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7640281_e5d4bcf7",
@@ -335,6 +359,30 @@
       "side": 1,
       "message": "`slotWidthGHz` could work. But I don\u0027t like `slotNumber`. I think it\u0027s too ambiguous. It could be misinterpreted as a single slot position on a 768 grid (e.g. 354). I think `nrOfSlots` or `slotCount` would be less ambiguous.",
       "parentUuid": "7de44a0a_9c20e92f",
+      "range": {
+        "startLine": 61,
+        "startChar": 85,
+        "endLine": 61,
+        "endChar": 90
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "845a8d8d_46a646af",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/FrequencyIntervalFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:07:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b70d9788_95c337a5",
       "range": {
         "startLine": 61,
         "startChar": 85,
@@ -643,6 +691,30 @@
       "side": 1,
       "message": "\u003e Understand that you don\u0027t want to make this factory responsible for validating user input. Do you think it would however make sense to add in the code checking the input (somewhere in the ServiceHandler...) a test on the consistence of both \n\nAdded input validation in this location:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/113983/comment/52204eba_9f566007/",
       "parentUuid": "e23844ff_d94759aa",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 25
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a1592f_74766d18",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/frequency/FrequencyIntervalFactoryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:07:04Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "4abefd05_1972ca01",
       "range": {
         "startLine": 46,
         "startChar": 0,
