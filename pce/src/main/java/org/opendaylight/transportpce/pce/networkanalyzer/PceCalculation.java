@@ -216,6 +216,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC2:
             case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 LOG.debug("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
                 nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
                     .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
@@ -296,6 +297,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC2:
             case StringConstants.SERVICE_TYPE_OTUC3:
             case  StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 Factory portPreferenceFactory = new PreferenceFactory();
                 Preference portPreference = portPreferenceFactory.portPreference(input);
                 // 100GE service and OTU4 service are handled at the openroadm-topology layer
@@ -428,6 +430,7 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 return processPceLink(link, sourceId, destId, source, dest);
             case StringConstants.SERVICE_TYPE_ODU4:
             case StringConstants.SERVICE_TYPE_10GE:
@@ -521,6 +524,7 @@ public class PceCalculation {
                 }
             //fallthrough
             case "OTU":
+            case "other":
                 switch (azEndPoint) {
                     case "A":
                         return checkAendInputTxPortDeviceName()
