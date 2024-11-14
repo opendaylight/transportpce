@@ -48,6 +48,7 @@ public final class StringConstants {
     public static final String SERVICE_TYPE_ODUC3 = "ODUC3";
     public static final String SERVICE_TYPE_ODUC4 = "ODUC4";
 
+    public static final String SERVICE_TYPE_OTHER = "other";
 
     public static final String SERVICE_DIRECTION_AZ = "aToz";
     public static final String SERVICE_DIRECTION_ZA = "zToa";
