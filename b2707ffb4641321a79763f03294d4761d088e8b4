@@ -122,6 +122,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a0d0e7f_35bdb6e7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/interval/IntervalFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:29:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37644126_22029a7c",
+      "revId": "b2707ffb4641321a79763f03294d4761d088e8b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3f0884c_027fcb74",

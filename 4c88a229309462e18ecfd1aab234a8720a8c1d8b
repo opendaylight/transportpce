@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "4c88a229309462e18ecfd1aab234a8720a8c1d8b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "677ce5aa_ef1aa5cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:29:51Z",
+      "side": 1,
+      "message": "LGTM. Still one thing not so clear to me which is about slotWidth.",
+      "revId": "4c88a229309462e18ecfd1aab234a8720a8c1d8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

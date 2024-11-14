@@ -33,6 +33,24 @@
       "message": "This method was updated in Patchset 5 due to the yang model changing slot-width from int to frequencyGHz.",
       "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb74f1e_b69ef620",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequency.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:29:51Z",
+      "side": 1,
+      "message": "Can you elaborate? I am a bit lost, since original comment was made in a separate change. You changed the yang file so that the slot-width parameter is expressed as a width in GHZ. But at the end the java method slotWidth still returns an integer. Not sure that your approach really clarify things, if we consider that original comment (if I remember well made by you or Jonas) was made on the java code and was concerning this slotWidth.",
+      "parentUuid": "b266d0a1_72b0030b",
+      "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
