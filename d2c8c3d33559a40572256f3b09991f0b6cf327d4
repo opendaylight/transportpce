@@ -274,6 +274,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04879d1f_548354d1",
+        "filename": "api/src/main/yang/com-smartoptics-openroadm-service@2023-09-07.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T10:11:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "09512a9f_73eeab3c",
+      "range": {
+        "startLine": 79,
+        "startChar": 11,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "d2c8c3d33559a40572256f3b09991f0b6cf327d4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7640281_e5d4bcf7",
