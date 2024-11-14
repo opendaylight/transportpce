@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b112a64_fc5fb61f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T09:16:10Z",
+      "side": 1,
+      "message": "Thanks for the modifications, Joakim. LGTM. Now we need to understand why the change does pass the gate, and LOG is no more available.",
+      "revId": "4c88a229309462e18ecfd1aab234a8720a8c1d8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
