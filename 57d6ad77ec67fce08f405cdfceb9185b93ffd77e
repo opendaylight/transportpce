@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "35293c9e_1e30759e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-14T14:37:10Z",
+      "side": 1,
+      "message": "\u0027Signed-off-by\u0027 line is missing",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 52
+      },
+      "revId": "57d6ad77ec67fce08f405cdfceb9185b93ffd77e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b4d78f68_02eda92c",
