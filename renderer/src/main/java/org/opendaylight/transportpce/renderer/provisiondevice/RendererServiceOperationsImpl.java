@@ -168,6 +168,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_OTUC2:
                     case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
+                    case StringConstants.SERVICE_TYPE_OTHER:
                         LOG.debug("Check temp service {}", isTempService);
                         if (!manageServicePathCreation(input, serviceType, isTempService)) {
                             return ModelMappingUtils
@@ -248,6 +249,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_OTUC2:
                     case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
+                    case StringConstants.SERVICE_TYPE_OTHER:
                         if (!manageServicePathDeletion(serviceName, pathDescription, serviceType)) {
                             return ModelMappingUtils
                                 .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
