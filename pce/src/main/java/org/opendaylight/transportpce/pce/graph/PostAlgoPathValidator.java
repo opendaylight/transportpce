@@ -102,6 +102,7 @@ public class PostAlgoPathValidator {
             //fallthrough
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
