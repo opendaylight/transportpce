@@ -169,7 +169,11 @@ public final class ModelMappingUtils {
                     atoZDirection.getAToZMaxFrequency().getValue().decimalValue(),
                     scale));
         }
-        if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
+        if (atoZDirection.getWidth() != null) {
+            servicePathInputBuilder.setNmcWidth(
+                    FrequencyGHz.getDefaultInstance(atoZDirection.getWidth().getValue().toCanonicalString())
+            );
+        } else if (atoZDirection.getRate() != null && atoZDirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(atoZDirection.getModulationFormat());
             if (modulationFormat != null
                     && GridConstant.FREQUENCY_WIDTH_TABLE
@@ -226,7 +230,11 @@ public final class ModelMappingUtils {
                     ztoADirection.getZToAMaxFrequency().getValue().decimalValue(),
                     scale));
         }
-        if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
+        if (ztoADirection.getWidth() != null) {
+            servicePathInputBuilder.setNmcWidth(
+                    FrequencyGHz.getDefaultInstance(ztoADirection.getWidth().getValue().toCanonicalString())
+            );
+        } else if (ztoADirection.getRate() != null && ztoADirection.getModulationFormat() != null) {
             ModulationFormat modulationFormat = ModulationFormat.forName(ztoADirection.getModulationFormat());
             if (modulationFormat != null
                     && GridConstant.FREQUENCY_WIDTH_TABLE

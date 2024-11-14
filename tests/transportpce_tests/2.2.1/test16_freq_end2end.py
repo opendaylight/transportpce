@@ -43,7 +43,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-a-end": {
             "service-rate": "100",
             "node-id": "ROADM-A1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "frequency-slot": {
                 "center-frequency": 193.1,
@@ -87,7 +87,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-z-end": {
             "service-rate": "100",
             "node-id": "ROADM-C1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "tx-direction": [{
                 "port": {
@@ -303,7 +303,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'description': '  TBD   ',
                 'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
                     'frequency': '193.1',
-                    'width': '40.0'
+                    'width': '29.5'
                 }
             },
             response['interface'][0]
@@ -325,7 +325,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "description": "  TBD   ",
                 "org-openroadm-network-media-channel-interfaces:nmc-ctp": {
                     "frequency": "193.1",
-                    "width": "40.0"
+                    "width": "29.5"
                 }
             },
             response['interface'][0]
@@ -371,7 +371,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'description': '  TBD   ',
                 'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
                     'frequency': '193.1',
-                    'width': '40.0'
+                    'width': '29.5'
                 }
             },
             response['interface'][0]
@@ -393,7 +393,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'description': '  TBD   ',
                 'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
                     'frequency': '193.1',
-                    'width': '40.0'
+                    'width': '29.5'
                 }
             },
             response['interface'][0]
