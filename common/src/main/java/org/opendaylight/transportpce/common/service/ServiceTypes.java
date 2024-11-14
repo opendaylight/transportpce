@@ -56,6 +56,8 @@ public final class ServiceTypes {
                 }
                 return getOtnServiceType(serviceFormat, serviceRate);
 
+            case "other":
+                return StringConstants.SERVICE_TYPE_OTHER;
             //case "ODU":
             //case "OTU":
             default:
