@@ -50,6 +50,23 @@
       "message": "LGTM. Still one thing not so clear to me which is about slotWidth.",
       "revId": "4c88a229309462e18ecfd1aab234a8720a8c1d8b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6d8d24_0d07c717",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-14T11:43:30Z",
+      "side": 1,
+      "message": "Hi Olivier, added a bit of clarification regarding how GHz is translated into int.",
+      "revId": "4c88a229309462e18ecfd1aab234a8720a8c1d8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
