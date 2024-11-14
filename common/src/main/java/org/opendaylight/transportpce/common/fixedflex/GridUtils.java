@@ -221,8 +221,9 @@ public final class GridUtils {
                     spectrumInformation.getMaxFrequency()).getValue().decimalValue());
         }
         if (input.getNmcWidth() != null) {
-            spectrumInformation.setWidth(input.getNmcWidth().getValue().decimalValue()
-                    .setScale(0, RoundingMode.CEILING));
+            spectrumInformation.setWidth(new BigDecimal(
+                    input.getNmcWidth().getValue().decimalValue().stripTrailingZeros().toPlainString())
+            );
         }
         if (input.getModulationFormat() != null) {
             spectrumInformation.setModulationFormat(input.getModulationFormat());
