@@ -17,6 +17,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -111,6 +112,22 @@ public class PcePathDescription {
                         .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
                 break;
+            case StringConstants.SERVICE_TYPE_OTHER:
+                FrequencyGHz width;
+                if (rc.getWidthFreqGhz() != null) {
+                    width = FrequencyGHz.getDefaultInstance(rc.getWidthFreqGhz().toPlainString());
+                } else {
+                    width = GridUtils.getWidthFromRateAndModulationFormat(
+                            Uint32.valueOf(rc.getRate()), modulationFormat);
+                }
+                atoZDirectionBldr
+                        .setAToZMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())))
+                        .setAToZMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())))
+                        .setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
+                        .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
+                                rc.getMinFreq(), rc.getMaxFreq(), 4).getValue()))
+                        .setWidth(width);
+                break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
             case StringConstants.SERVICE_TYPE_10GE:
@@ -163,6 +180,22 @@ public class PcePathDescription {
                                 rc.getMinFreq(), rc.getMaxFreq(), 4).getValue()))
                         .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
                                 Uint32.valueOf(rc.getRate()), modulationFormat));
+                break;
+            case StringConstants.SERVICE_TYPE_OTHER:
+                FrequencyGHz width;
+                if (rc.getWidthFreqGhz() != null) {
+                    width = FrequencyGHz.getDefaultInstance(rc.getWidthFreqGhz().toPlainString());
+                } else {
+                    width = GridUtils.getWidthFromRateAndModulationFormat(
+                            Uint32.valueOf(rc.getRate()), modulationFormat);
+                }
+                ztoADirectionBldr
+                        .setZToAMaxFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMaxFreq())))
+                        .setZToAMinFrequency(new FrequencyTHz(Decimal64.valueOf(rc.getMinFreq())))
+                        .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
+                        .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
+                                rc.getMinFreq(), rc.getMaxFreq(), 4).getValue()))
+                        .setWidth(width);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:

@@ -29,6 +29,7 @@ public class PceResult {
     private String serviceType = "";
     private BigDecimal minFreq;
     private BigDecimal maxFreq;
+    private BigDecimal widthFreqGhz;
 
     // for now it is constant returned as received from A-end
     private long rate = -1;
@@ -177,4 +178,11 @@ public class PceResult {
         this.maxFreq = maxFreq;
     }
 
+    public BigDecimal getWidthFreqGhz() {
+        return widthFreqGhz;
+    }
+
+    public void setWidthFreqGhz(BigDecimal widthFreqGhz) {
+        this.widthFreqGhz = widthFreqGhz;
+    }
 }

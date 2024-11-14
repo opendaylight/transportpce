@@ -431,6 +431,7 @@ public class RendererNotificationHandler implements RendererListener {
             case StringConstants.SERVICE_TYPE_ODUC2:
             case StringConstants.SERVICE_TYPE_ODUC3:
             case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 Map<String, OtnLinkType> otnLinkTypeMap = Map.of(
                     StringConstants.SERVICE_TYPE_OTU4, OtnLinkType.OTU4,
                     // TODO: need to change it when OtnLinkType is updated with enum

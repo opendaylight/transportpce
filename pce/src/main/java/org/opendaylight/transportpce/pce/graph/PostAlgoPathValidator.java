@@ -102,6 +102,7 @@ public class PostAlgoPathValidator {
             //fallthrough
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_OTHER:
                 spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
@@ -118,8 +119,22 @@ public class PostAlgoPathValidator {
                     pceResult.setResultWavelength(
                         GridUtils.getWaveLengthIndexFromSpectrumAssigment(spectrumAssignment.getBeginIndex().toJava()));
                 }
-                pceResult.setMinFreq(GridUtils.getStartFrequencyFromIndex(spectrumAssignment.getBeginIndex().toJava()));
-                pceResult.setMaxFreq(GridUtils.getStopFrequencyFromIndex(spectrumAssignment.getStopIndex().toJava()));
+
+                BigDecimal startFrequencyFromIndex = GridUtils.getStartFrequencyFromIndex(
+                        spectrumAssignment.getBeginIndex().toJava());
+                pceResult.setMinFreq(startFrequencyFromIndex);
+
+                BigDecimal stopFrequencyFromIndex = GridUtils.getStopFrequencyFromIndex(
+                        spectrumAssignment.getStopIndex().toJava());
+                pceResult.setMaxFreq(stopFrequencyFromIndex);
+
+                if (serviceType.equals(StringConstants.SERVICE_TYPE_OTHER)) {
+                    pceResult.setWidthFreqGhz(
+                            stopFrequencyFromIndex
+                                    .subtract(startFrequencyFromIndex).subtract(BigDecimal.valueOf(0.008))
+                                    .multiply(BigDecimal.valueOf(1000))
+                    );
+                }
                 LOG.debug("In PostAlgoPathValidator: spectrum assignment found {} {}", spectrumAssignment, path);
 
                 // Check the OSNR
