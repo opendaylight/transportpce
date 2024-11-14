@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79a577e0_a9e7dc8a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetworkUtilsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T08:53:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4854d14b_7aeedf89",
+      "range": {
+        "startLine": 149,
+        "startChar": 10,
+        "endLine": 150,
+        "endChar": 87
+      },
+      "revId": "1ab74d385599dacd8e94038a118fdc93d400f62b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50d5dbd5_e0af1476",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-11-07T09:30:15Z",
       "side": 1,
       "message": "Just a suggestion to avoid nested if conditions and improve code readability :\n\nString aEndUuid \u003d input.getAEnd().getRdmTopologyUuid();\nString zEndUuid \u003d input.getZEnd().getRdmTopologyUuid();\n\nif (aEndUuid \u003d\u003d null \u0026\u0026 zEndUuid \u003d\u003d null) {\n    LOG.error(\"Creation of Interdomain Link Error: Topology Uuid must be populated for at least 1 node\");\n    return false;\n}\n\nif (zEndUuid !\u003d null) {\n    tapiDomainNode \u003d \"Z\";\n}",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 9
+      },
+      "revId": "1ab74d385599dacd8e94038a118fdc93d400f62b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12e56906_7725117f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-14T08:53:39Z",
+      "side": 1,
+      "message": "You are right!",
+      "parentUuid": "50d5dbd5_e0af1476",
       "range": {
         "startLine": 111,
         "startChar": 8,
