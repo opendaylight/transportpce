@@ -43,7 +43,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-a-end": {
             "service-rate": "100",
             "node-id": "ROADM-A1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "frequency-slot": {
                 "center-frequency": 193.1,
@@ -87,7 +87,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-z-end": {
             "service-rate": "100",
             "node-id": "ROADM-C1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "tx-direction": [{
                 "port": {
@@ -697,7 +697,6 @@ class TransportPCEtesting(unittest.TestCase):
     def test_43_disconnect_roadmC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

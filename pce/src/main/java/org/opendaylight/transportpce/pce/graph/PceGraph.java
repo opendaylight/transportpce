@@ -139,6 +139,7 @@ public class PceGraph {
                 case StringConstants.SERVICE_TYPE_OTUC4:
                 case StringConstants.SERVICE_TYPE_400GE:
                 case StringConstants.SERVICE_TYPE_OTU4:
+                case StringConstants.SERVICE_TYPE_OTHER:
                     LOG.debug(
                         "In calcPath Path FOUND path for wl [{}], min Freq assignment {}, max Freq assignment {},"
                         + " hops {}, distance per metrics {}, path AtoZ {}",
