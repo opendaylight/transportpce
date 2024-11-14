@@ -43,7 +43,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-a-end": {
             "service-rate": "100",
             "node-id": "ROADM-A1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "frequency-slot": {
                 "center-frequency": 193.1,
@@ -87,7 +87,7 @@ class TransportPCEtesting(unittest.TestCase):
         "service-z-end": {
             "service-rate": "100",
             "node-id": "ROADM-C1",
-            "service-format": "OTU",
+            "service-format": "other",
             "clli": "clli_1",
             "tx-direction": [{
                 "port": {
@@ -269,19 +269,19 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                "name": "DEG2-TTP-TXRX-mc-282:287",
-                "supporting-circuit-pack-name": "2/0",
-                "operational-state": "inService",
-                "administrative-state": "inService",
-                "type": "org-openroadm-interfaces:mediaChannelTrailTerminationPoint",
-                "circuit-id": "   TBD    ",
-                "org-openroadm-media-channel-interfaces:mc-ttp": {
-                    "max-freq": "193.11875",
-                    "min-freq": "193.08125"
+                "name":"DEG2-TTP-TXRX-mc-282:287",
+                "supporting-circuit-pack-name":"2/0",
+                "operational-state":"inService",
+                "administrative-state":"inService",
+                "type":"org-openroadm-interfaces:mediaChannelTrailTerminationPoint",
+                "circuit-id":"   TBD    ",
+                "org-openroadm-media-channel-interfaces:mc-ttp":{
+                    "max-freq":"193.11875",
+                    "min-freq":"193.08125"
                 },
-                "supporting-interface": "OMS-DEG2-TTP-TXRX",
-                "supporting-port": "L1",
-                "description": "  TBD   "
+                "supporting-interface":"OMS-DEG2-TTP-TXRX",
+                "supporting-port":"L1",
+                "description":"  TBD   "
             },
             response['interface'][0]
         )
@@ -292,18 +292,18 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                'name': 'DEG2-TTP-TXRX-nmc-282:287',
-                'supporting-circuit-pack-name': '2/0',
-                'operational-state': 'inService',
-                'administrative-state': 'inService',
-                'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
-                'circuit-id': '   TBD    ',
-                'supporting-interface': 'DEG2-TTP-TXRX-mc-282:287',
-                'supporting-port': 'L1',
-                'description': '  TBD   ',
-                'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
-                    'frequency': '193.1',
-                    'width': '40.0'
+                'name':'DEG2-TTP-TXRX-nmc-282:287',
+                'supporting-circuit-pack-name':'2/0',
+                'operational-state':'inService',
+                'administrative-state':'inService',
+                'type':'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
+                'circuit-id':'   TBD    ',
+                'supporting-interface':'DEG2-TTP-TXRX-mc-282:287',
+                'supporting-port':'L1',
+                'description':'  TBD   ',
+                'org-openroadm-network-media-channel-interfaces:nmc-ctp':{
+                    'frequency':'193.1',
+                    'width':'29.5'
                 }
             },
             response['interface'][0]
@@ -315,17 +315,17 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                "name": "SRG3-PP1-TXRX-nmc-282:287",
-                "supporting-circuit-pack-name": "5/0",
-                "operational-state": "inService",
-                "administrative-state": "inService",
-                "type": "org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint",
-                "circuit-id": "   TBD    ",
-                "supporting-port": "C1",
-                "description": "  TBD   ",
-                "org-openroadm-network-media-channel-interfaces:nmc-ctp": {
-                    "frequency": "193.1",
-                    "width": "40.0"
+                "name":"SRG3-PP1-TXRX-nmc-282:287",
+                "supporting-circuit-pack-name":"5/0",
+                "operational-state":"inService",
+                "administrative-state":"inService",
+                "type":"org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint",
+                "circuit-id":"   TBD    ",
+                "supporting-port":"C1",
+                "description":"  TBD   ",
+                "org-openroadm-network-media-channel-interfaces:nmc-ctp":{
+                    "frequency":"193.1",
+                    "width":"29.5"
                 }
             },
             response['interface'][0]
@@ -337,19 +337,19 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                'name': 'DEG1-TTP-TXRX-mc-282:287',
-                'supporting-circuit-pack-name': '1/0',
-                'operational-state': 'inService',
-                'administrative-state': 'inService',
-                'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
-                'circuit-id': '   TBD    ',
-                'org-openroadm-media-channel-interfaces:mc-ttp': {
-                    'max-freq': '193.11875',
-                    'min-freq': '193.08125'
+                'name':'DEG1-TTP-TXRX-mc-282:287',
+                'supporting-circuit-pack-name':'1/0',
+                'operational-state':'inService',
+                'administrative-state':'inService',
+                'type':'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
+                'circuit-id':'   TBD    ',
+                'org-openroadm-media-channel-interfaces:mc-ttp':{
+                    'max-freq':'193.11875',
+                    'min-freq':'193.08125'
                 },
-                'supporting-interface': 'OMS-DEG1-TTP-TXRX',
-                'supporting-port': 'L1',
-                'description': '  TBD   '
+                'supporting-interface':'OMS-DEG1-TTP-TXRX',
+                'supporting-port':'L1',
+                'description':'  TBD   '
             },
             response['interface'][0]
         )
@@ -360,18 +360,18 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                'name': 'DEG1-TTP-TXRX-nmc-282:287',
-                'supporting-circuit-pack-name': '1/0',
-                'operational-state': 'inService',
-                'administrative-state': 'inService',
-                'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
-                'circuit-id': '   TBD    ',
-                'supporting-interface': 'DEG1-TTP-TXRX-mc-282:287',
-                'supporting-port': 'L1',
-                'description': '  TBD   ',
-                'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
-                    'frequency': '193.1',
-                    'width': '40.0'
+                'name':'DEG1-TTP-TXRX-nmc-282:287',
+                'supporting-circuit-pack-name':'1/0',
+                'operational-state':'inService',
+                'administrative-state':'inService',
+                'type':'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
+                'circuit-id':'   TBD    ',
+                'supporting-interface':'DEG1-TTP-TXRX-mc-282:287',
+                'supporting-port':'L1',
+                'description':'  TBD   ',
+                'org-openroadm-network-media-channel-interfaces:nmc-ctp':{
+                    'frequency':'193.1',
+                    'width':'29.5'
                 }
             },
             response['interface'][0]
@@ -383,17 +383,17 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertDictEqual(
             {
-                'name': 'SRG1-PP1-TXRX-nmc-282:287',
-                'supporting-circuit-pack-name': '3/0',
-                'operational-state': 'inService',
-                'administrative-state': 'inService',
-                'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
-                'circuit-id': '   TBD    ',
-                'supporting-port': 'C1',
-                'description': '  TBD   ',
-                'org-openroadm-network-media-channel-interfaces:nmc-ctp': {
-                    'frequency': '193.1',
-                    'width': '40.0'
+                'name':'SRG1-PP1-TXRX-nmc-282:287',
+                'supporting-circuit-pack-name':'3/0',
+                'operational-state':'inService',
+                'administrative-state':'inService',
+                'type':'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
+                'circuit-id':'   TBD    ',
+                'supporting-port':'C1',
+                'description':'  TBD   ',
+                'org-openroadm-network-media-channel-interfaces:nmc-ctp':{
+                    'frequency':'193.1',
+                    'width':'29.5'
                 }
             },
             response['interface'][0]
@@ -697,7 +697,6 @@ class TransportPCEtesting(unittest.TestCase):
     def test_43_disconnect_roadmC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
