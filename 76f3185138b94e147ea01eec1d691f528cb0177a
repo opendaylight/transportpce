@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79934f09_dd635434",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-15T10:58:26Z",
+      "side": 1,
+      "message": "This change is due to a width such as 29.5 will be rounded off to 30. This line addresses that rounding error.",
+      "revId": "76f3185138b94e147ea01eec1d691f528cb0177a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
