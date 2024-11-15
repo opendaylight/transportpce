@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f4bc37_11dd3bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-15T13:21:48Z",
+      "side": 1,
+      "message": "Pushed a patch due to a unit test failing.",
+      "revId": "8d260615c922bc612c005171b6e65b35762b0622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b0c649f_8bc5f5a6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2024-11-15T13:21:48Z",
+      "side": 1,
+      "message": "`input.getNmcWidth().getValue().decimalValue()` produced an error in a unit test. `initSpectrumInformationFromServicePathInputNoCenterFreqTest` expected `40` but received `40.0`.\n\nAlso, calling `.stripTrailingZeros()` alone didn\u0027t work either since it produced `4E+1` instead of `40`.",
+      "revId": "8d260615c922bc612c005171b6e65b35762b0622",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
