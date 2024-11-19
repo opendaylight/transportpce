@@ -502,6 +502,9 @@ public class PceCalculation {
                     this.zendPceNode = pceNode;
                 }
             }
+        } else if (!pceNode.isValid()) {
+            LOG.debug(" validateNode: Node {} is ignored", node.getNodeId().getValue());
+            return;
         }
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
