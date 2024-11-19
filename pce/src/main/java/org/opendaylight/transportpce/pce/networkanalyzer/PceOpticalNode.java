@@ -325,6 +325,10 @@ public class PceOpticalNode implements PceNode {
     @Override
     public String getRdmSrgClient(String tp, String direction) {
         LOG.debug("getRdmSrgClient: Getting PP client for tp '{}' on node : {}", tp, this.nodeId);
+        if (this.availableSrgPp.isEmpty()) {
+            LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this);
+            return null;
+        }
         OpenroadmTpType srgType = null;
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
@@ -357,10 +361,6 @@ public class PceOpticalNode implements PceNode {
                 break;
         }
         LOG.debug("getRdmSrgClient:  Getting client PP for CP '{}'", tp);
-        if (this.availableSrgPp.isEmpty()) {
-            LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this);
-            return null;
-        }
         final OpenroadmTpType openType = srgType;
         Optional<String> client = this.availableSrgPp.entrySet()
                 .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
