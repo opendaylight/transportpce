@@ -1266,6 +1266,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         } else {
             freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
         }
+        if (keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+            ConnectionEndPoint otsCep = tapiFactory.createOTSCepXpdr(
+                String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS, tpid));
+            Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(Map.of(otsCep.key(), otsCep));
+            onepBldr.addAugmentation(
+                new OwnedNodeEdgePoint1Builder().setCepList(
+                        new CepListBuilder().setConnectionEndPoint(cepMap).build())
+                    .build());
+        }
         OwnedNodeEdgePoint onep = tapiFactory.addPayloadStructureAndPhotSpecToOnep(
                 nodeId, rate, freqWidthMap, keyedOpModeList, sicColl, onepBldr, keyword)
             .setProfile(profile)
