@@ -690,7 +690,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.debug("CREATENEP transformDegToOnep, ListOfMapping {}, of NodeId {} ", mapDeg, orNodeId);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> degOnepMap = new HashMap<>();
         Map<String, TerminationPoint1> tpMap = new HashMap<>();
-        //List<TerminationPoint> tpList = new ArrayList<>();
         for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
             // For each degree node. Loop through the LCPs and create neps and sips for TTP
             for (Mapping m:entry.getValue()) {
@@ -706,7 +705,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         tpId, overlayNodeId);
                     continue;
                 }
-                //tpList.add(getNetworkTerminationPointFromDatastore(overlayNodeId, tpId));
                 tpMap.put(tpId, netTP1fromDS);
                 LOG.info("LCP {} is not empty for augmentation TP1", tpId);
             }
@@ -1265,6 +1263,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.error("CREATENEP, No Tp found in topology for LCP {}, of NodeId {} ", tpid, nodeId);
         } else {
             freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
+        }
+        if (keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+            ConnectionEndPoint otsCep = tapiFactory.createOTSCepXpdr(
+                String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS, tpid));
+            Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(Map.of(otsCep.key(), otsCep));
+            onepBldr.addAugmentation(
+                new OwnedNodeEdgePoint1Builder().setCepList(
+                        new CepListBuilder().setConnectionEndPoint(cepMap).build())
+                    .build());
         }
         OwnedNodeEdgePoint onep = tapiFactory.addPayloadStructureAndPhotSpecToOnep(
                 nodeId, rate, freqWidthMap, keyedOpModeList, sicColl, onepBldr, keyword)

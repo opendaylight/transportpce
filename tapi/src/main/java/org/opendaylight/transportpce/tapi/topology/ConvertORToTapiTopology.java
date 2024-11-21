@@ -70,12 +70,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.payl
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ClientNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ClientNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ParentNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.end.point.ParentNodeEdgePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
@@ -713,6 +716,43 @@ public class ConvertORToTapiTopology {
         return TapiStringConstants.OTSI_MC.equals(qualifier)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+    }
+
+    public ConnectionEndPoint createOTSCepXpdr(String nepId) {
+        String nepNodeId = String.join("+",nepId.split("\\+")[0], TapiStringConstants.XPDR);
+        LOG.debug("ConvertORToTapiTopology 722 CreateOTSCepXpdr for Nep {}", nepId);
+        Name cepName = new NameBuilder()
+            .setValueName("ConnectionEndPoint name")
+            .setValue(nepId)
+            .build();
+        ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nepId.getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
+            .setTopologyUuid(this.tapiTopoUuid)
+            .build();
+        ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
+            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                String.join("+", nepId.split("\\+" + TapiStringConstants.PHTNC_MEDIA_OTS)[0],
+                    TapiStringConstants.OTSI_MC, nepId.split((TapiStringConstants.PHTNC_MEDIA_OTS + "\\+"))[1])
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
+            .setTopologyUuid(this.tapiTopoUuid)
+            .build();
+
+        ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", nepId))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setParentNodeEdgePoint(pnep)
+            .setName(Map.of(cepName.key(), cepName))
+            .setConnectionPortRole(PortRole.SYMMETRIC)
+            .setDirection(Direction.BIDIRECTIONAL)
+            .setOperationalState(OperationalState.ENABLED)
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA);
+        return cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = "SF_SWITCH_FALLTHROUGH",
@@ -1623,6 +1663,19 @@ public class ConvertORToTapiTopology {
         if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
             onepBldr = addPayloadStructureAndPhotSpecToOnep(
                 this.ietfNodeId, rate, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
+        }
+        if (keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+            String nepId = nepNames.entrySet().stream()
+                .filter(n -> n.getKey().equals(new NameKey("eNodeEdgePoint")))
+                .findAny().orElseThrow().getValue().getValue();
+            if (nepId != null) {
+                ConnectionEndPoint otsCep = createOTSCepXpdr(nepId);
+                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>(Map.of(otsCep.key(), otsCep));
+                onepBldr.addAugmentation(
+                    new OwnedNodeEdgePoint1Builder().setCepList(
+                            new CepListBuilder().setConnectionEndPoint(cepMap).build())
+                        .build());
+            }
         }
         OwnedNodeEdgePoint onep = onepBldr.build();
         LOG.debug("ConvertORToTapiTopology 1485, onep = {}", onep);
