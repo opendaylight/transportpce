@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27b0a2c4_a8ab6d3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-21T13:27:40Z",
+      "side": 1,
+      "message": "Thanks for having renamed the file to something that complies with our common usages!",
+      "revId": "c41fbd8a62e0ea1e424f4648265f0e3afc360acb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
