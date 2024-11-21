@@ -907,8 +907,6 @@ public final class ConnectivityUtils {
     private Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
             .cep.list.ConnectionEndPointKey, ConnectionEndPoint> createRoadmCepsAndClientNeps(String roadm,
                 int lowerFreqIndex, int higherFreqIndex, String rdmTp, boolean withOMS) {
-        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-            .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         String clientQualifier = "";
         // Create 3 CEPs (OTS, MC, OTSi_MC) for ADD and (OMS, MC, OTSi_MC) for DEG and add them to CepMap
 
@@ -920,10 +918,12 @@ public final class ConnectivityUtils {
             putRdmNepInTopologyContext(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1], TapiStringConstants.MC, onepMC);
         } else {
             // WithOMS is false for Add/drop ports for which no OTS was created during initial mapping
-            ConnectionEndPoint rdmCep0 = tapiFactory.createCepRoadm(0, 0, rdmTp,
-                TapiStringConstants.PHTNC_MEDIA_OTS, null);
-            putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.PHTNC_MEDIA_OTS, rdmCep0);
-            cepMap.put(rdmCep0.key(), rdmCep0);
+            // With new process of CEP creation, OTS CEP are created also on PPs at initialization.
+            // Don't need to recreate it
+//            ConnectionEndPoint rdmCep0 = tapiFactory.createCepRoadm(0, 0, rdmTp,
+//                TapiStringConstants.PHTNC_MEDIA_OTS, null, true);
+//            putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.PHTNC_MEDIA_OTS, rdmCep0);
+//            cepMap.put(rdmCep0.key(), rdmCep0);
         }
 
         clientQualifier = TapiStringConstants.OTSI_MC;
@@ -931,13 +931,17 @@ public final class ConnectivityUtils {
             false, OperationalState.ENABLED, AdministrativeState.UNLOCKED, clientQualifier);
         putRdmNepInTopologyContext(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1],
             TapiStringConstants.OTSI_MC, onepOTSiMC);
+        // For MC Cep creation process last parameter (boolean srg) is not checked so that we don't care whether we
+        //create this Cep for PP or for TTP that srg is set to false or true
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+            .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         ConnectionEndPoint rdmCep2 = tapiFactory.createCepRoadm(lowerFreqIndex, higherFreqIndex, rdmTp,
-            TapiStringConstants.MC, null);
+            TapiStringConstants.MC, null, false);
         putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.MC, rdmCep2);
         cepMap.put(rdmCep2.key(), rdmCep2);
 
         ConnectionEndPoint rdmCep3 = tapiFactory.createCepRoadm(lowerFreqIndex, higherFreqIndex, rdmTp,
-            TapiStringConstants.OTSI_MC, null);
+            TapiStringConstants.OTSI_MC, null, false);
         putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.OTSI_MC, rdmCep3);
         cepMap.put(rdmCep3.key(), rdmCep3);
         return cepMap;
