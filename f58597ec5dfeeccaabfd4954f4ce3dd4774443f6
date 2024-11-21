@@ -39,6 +39,30 @@
       },
       "revId": "f58597ec5dfeeccaabfd4954f4ce3dd4774443f6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81fbd3a6_e725641a",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 23
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-21T17:40:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd015139_1fdd6040",
+      "range": {
+        "startLine": 159,
+        "startChar": 7,
+        "endLine": 163,
+        "endChar": 47
+      },
+      "revId": "f58597ec5dfeeccaabfd4954f4ce3dd4774443f6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

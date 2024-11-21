@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76001d83_3f2148e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-21T17:40:02Z",
+      "side": 1,
+      "message": "Thanks for the review Christophe. Removed commented code",
+      "revId": "7da17ce375435d5fa6828f4b152cba7dead5a97f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
