@@ -16,6 +16,29 @@
       "message": "recheck",
       "revId": "f58597ec5dfeeccaabfd4954f4ce3dd4774443f6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd015139_1fdd6040",
+        "filename": "tests/transportpce_tests/tapi/test03_tapi_device_change_notifications.py",
+        "patchSetId": 23
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-21T14:20:59Z",
+      "side": 1,
+      "message": "Commented code to delete",
+      "range": {
+        "startLine": 159,
+        "startChar": 7,
+        "endLine": 163,
+        "endChar": 47
+      },
+      "revId": "f58597ec5dfeeccaabfd4954f4ce3dd4774443f6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
