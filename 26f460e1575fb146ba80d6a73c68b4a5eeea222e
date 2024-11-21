@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c268077d_95eee4b8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-21T14:16:26Z",
+      "side": 1,
+      "message": "code in comment to delete",
+      "range": {
+        "startLine": 134,
+        "startChar": 12,
+        "endLine": 134,
+        "endChar": 54
+      },
+      "revId": "26f460e1575fb146ba80d6a73c68b4a5eeea222e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c21ae23d_6277075d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-21T14:16:26Z",
+      "side": 1,
+      "message": "old code in comment to delete",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 53
+      },
+      "revId": "26f460e1575fb146ba80d6a73c68b4a5eeea222e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef81349_5baec711",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-21T14:16:26Z",
+      "side": 1,
+      "message": "commented code to delete",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 61
+      },
+      "revId": "26f460e1575fb146ba80d6a73c68b4a5eeea222e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9d48e6_efb6f83a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-11-21T14:16:26Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 141,
+        "startChar": 9,
+        "endLine": 141,
+        "endChar": 58
+      },
+      "revId": "26f460e1575fb146ba80d6a73c68b4a5eeea222e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
