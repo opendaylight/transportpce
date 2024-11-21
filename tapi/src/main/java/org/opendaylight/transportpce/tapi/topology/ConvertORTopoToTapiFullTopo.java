@@ -86,6 +86,7 @@ public class ConvertORTopoToTapiFullTopo {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
+    private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
 
 
     public ConvertORTopoToTapiFullTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
@@ -93,6 +94,7 @@ public class ConvertORTopoToTapiFullTopo {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
+        this.srgOtsCepMap = new HashMap<>();
         this.tapiLink = tapiLink;
     }
 
@@ -253,9 +255,9 @@ public class ConvertORTopoToTapiFullTopo {
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
-                    oneplist.putAll(populateNepsForRdmNode(
-                        nodeId, degPortList, false, TapiStringConstants.PHTNC_MEDIA_OTS));
-                    oneplist.putAll(populateNepsForRdmNode(
+                    oneplist.putAll(populateNepsForRdmNode(false,
+                        nodeId, degPortList, true, TapiStringConstants.PHTNC_MEDIA_OTS));
+                    oneplist.putAll(populateNepsForRdmNode(false,
                         nodeId, degPortList, false, TapiStringConstants.PHTNC_MEDIA_OMS));
                     numNeps += degPortList.size() * 2;
                     break;
@@ -272,7 +274,7 @@ public class ConvertORTopoToTapiFullTopo {
                         .collect(Collectors.toList());
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Srg port List: {}", srgPortList);
-                    oneplist.putAll(populateNepsForRdmNode(
+                    oneplist.putAll(populateNepsForRdmNode(true,
                         nodeId, srgPortList, true, TapiStringConstants.PHTNC_MEDIA_OTS));
 
                     numNeps += srgPortList.size();
@@ -354,7 +356,7 @@ public class ConvertORTopoToTapiFullTopo {
                 .collect(Collectors.toList());
             // Convert TP List in NEPs and put it in onepl
             LOG.debug("Srg port List: {}", srgPortList);
-            oneMap.putAll(populateNepsForRdmNode(node.getNodeId().getValue(), srgPortList, true,
+            oneMap.putAll(populateNepsForRdmNode(true, node.getNodeId().getValue(), srgPortList, true,
                 TapiStringConstants.PHTNC_MEDIA_OTS));
             numNeps += srgPortList.size();
             numSips += srgPortList.size();
@@ -444,10 +446,11 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
     }
 
-    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
             String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
         // create neps for MC and and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
+        LOG.info("TopoInitialMapping, enter populateNepsForRdmNode");
         for (TerminationPoint tp:tpList) {
             String tpId = tp.getTpId().getValue();
             // Admin and oper state common for all tps
@@ -504,9 +507,11 @@ public class ConvertORTopoToTapiFullTopo {
                 .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
                 .setLifecycleState(LifecycleState.INSTALLED);
 
+            ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+
             if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
                     && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
-                ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+                //ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
                 Map<Double,Double> usedFreqMap = new HashMap<>();
                 Map<Double,Double> availableFreqMap = new HashMap<>();
                 switch (tpType) {
@@ -523,9 +528,9 @@ public class ConvertORTopoToTapiFullTopo {
                         } else {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
                                 usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
-                            onepMap.putAll(populateNepsForRdmNode(
+                            onepMap.putAll(populateNepsForRdmNode(srg,
                                 nodeId, new ArrayList<>(List.of(tp)), true, TapiStringConstants.MC));
-                            onepMap.putAll(populateNepsForRdmNode(
+                            onepMap.putAll(populateNepsForRdmNode(srg,
                                 nodeId, new ArrayList<>(List.of(tp)), true, TapiStringConstants.OTSI_MC));
                         }
                         break;
@@ -542,11 +547,37 @@ public class ConvertORTopoToTapiFullTopo {
                 onepBdd = tapiFactory.addPhotSpecToRoadmOnep(
                     nodeId, usedFreqMap, availableFreqMap, onepBdd, String.join("+", nodeId, nepPhotonicSublayer));
             }
-
+            // Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
+            // Map<Map<String nepId, String NodeId>, ConnectionEndPoint>
+            // Identify that we have an SRG through withSip set to true only for SRG
+            if (withSip) {
+                //TODO: currently do not add extension corresponding to channel to OTSiMC/MC CEP on OTS CEP. Although
+                //not really required (One CEP per Tp) could complete with extension affecting High/lowFrequencyIndex
+                //This affection would be done in the switch case on nepPhotonicSublayer
+                int highFrequencyIndex = 0;
+                int lowFrequencyIndex = 0;
+                var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
+                    String.join("+", this.ietfNodeId, tpId), nepPhotonicSublayer, null, srg);
+                LOG.info("TopoInitialMapping, populateNepsForRdmNode, creating CEP for SRG");
+                var uuidMap = new HashMap<>(Map.of(
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
+                        tpId)).getBytes(Charset.forName("UTF-8"))).toString()).toString(),
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA))
+                        .getBytes(Charset.forName("UTF-8"))).toString()).toString()));
+                this.srgOtsCepMap.put(uuidMap, cep);
+                CepList cepList = new CepListBuilder()
+                    .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
+                OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+                LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                    this.ietfNodeId, tpId, cep);
+                onepBdd.addAugmentation(onep1Bldr)
+                        .build();
+            }
             OwnedNodeEdgePoint onep = onepBdd.build();
             LOG.debug("ConvertORToTapiTopology.populateNepsForRdmNode onep is {}", onep);
             onepMap.put(onep.key(), onep);
         }
+        LOG.info("TopoInitialMapping, SRG OTS CepMAp is {}", srgOtsCepMap);
         return onepMap;
     }
 

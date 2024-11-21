@@ -370,7 +370,7 @@ public class TapiLinkImpl implements TapiLink {
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCmCepSpecA);
+            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCmCepSpecA, false);
         LOG.debug("TAPILINKIMPLLINE378 CepSpec is {}", otsMCmCepSpecA);
         LOG.debug("TAPILINKIMPLLINE379 Cep Node A OTS is {}", cepNodeAots);
 
@@ -379,7 +379,7 @@ public class TapiLinkImpl implements TapiLink {
         LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null);
+            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiStringConstants.PHTNC_MEDIA_OMS, cepNodeAoms);
         LOG.info("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
@@ -387,13 +387,13 @@ public class TapiLinkImpl implements TapiLink {
         intermediateTp = link.getDestination().getDestTp().getValue();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ);
+            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiStringConstants.PHTNC_MEDIA_OTS, cepNodeZots);
         LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null);
+            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiStringConstants.PHTNC_MEDIA_OMS, cepNodeZoms);
         LOG.info("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
