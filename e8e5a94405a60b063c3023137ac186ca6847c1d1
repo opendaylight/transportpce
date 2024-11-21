@@ -69,6 +69,24 @@
       "parentUuid": "adb74f1e_b69ef620",
       "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a5cfd31_1873ac5a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/service/ServiceFrequency.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-11-21T13:30:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "efff71da_ebcd3534",
+      "revId": "e8e5a94405a60b063c3023137ac186ca6847c1d1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
