@@ -414,13 +414,16 @@ public class ConvertORTopoToTapiFullTopo {
                     ? "Full"
                     : "Abstracted",
                 nodeUuid, this.ietfNodeId, onepMap.values());
+        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
+        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
+            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
+        }
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap
             = tapiFactory.createInterRuleGroupForRdmNode(
                 topoMode.equals("Full")
                     ? "Full"
                     : "Abstracted",
-                nodeUuid, this.ietfNodeId,
-                nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList()));
+                nodeUuid, this.ietfNodeId, nrgMap);
         return new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(nameMap)
