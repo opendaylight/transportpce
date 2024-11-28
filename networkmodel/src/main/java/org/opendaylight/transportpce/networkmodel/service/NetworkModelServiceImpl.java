@@ -27,6 +27,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.OCPortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
@@ -45,9 +46,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenconfigNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -56,6 +58,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTpBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -93,6 +96,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private NetworkTransactionService networkTransactionService;
     private final R2RLinkDiscovery linkDiscovery;
     private final PortMapping portMapping;
+    private final OCPortMapping ocPortMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
     // Variables for creating and sending topology update notification
@@ -105,11 +109,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference final NetworkTransactionService networkTransactionService,
             @Reference PortMapping portMapping,
+            @Reference OCPortMapping ocPortMapping,
             @Reference final NotificationPublishService notificationPublishService) {
 
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
         this.portMapping = portMapping;
+        this.ocPortMapping = ocPortMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.notificationPublishService = notificationPublishService;
@@ -195,6 +201,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             LOG.info("all nodes and links created");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
+        }
+    }
+
+    @Override
+    public void createOpenConfigNode(String nodeId, String openConfigVersion, IpAddress ipAddress) {
+        LOG.info("create openconfig node {}", nodeId);
+        if (!ocPortMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
+            LOG.error("could not generate portmapping {}", nodeId);
         }
     }
 
@@ -291,6 +305,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             LOG.error("Error when trying to delete node : {}", nodeId, e);
             return false;
         }
+        return true;
+    }
+
+    /**
+     * This Method is used to delete openconfig node in portmapping.
+     * @param nodeId
+     *     unique node ID of OpenConfig node.
+     *
+     * @return result of node deletion from portmapping
+     */
+    @Override
+    public boolean deleteOpenConfignode(String nodeId) {
+        if (!this.portMapping.isNodeExist(nodeId)) {
+            return false;
+        }
+        OpenconfigNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenconfigVersion();
+        LOG.info("deleteOpenConfignode: {} version {}", nodeId, deviceVersion.getName());
+        this.portMapping.deletePortMappingNode(nodeId);
         return true;
     }
 
