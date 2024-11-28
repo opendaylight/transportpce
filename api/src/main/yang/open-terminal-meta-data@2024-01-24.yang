@@ -1,0 +1,199 @@
+module open-terminal-meta-data {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/open-terminal-meta-data";
+  prefix "otmd";
+
+  import openconfig-transport-types { prefix oc-opt-types; }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG module for defining meta data about Open Terminals. All rights reserved.
+    The purpose of this module is to work around some gaps in the Open Config
+    data models as published now, by adding information that the Transport PCE
+    controller needs about the NE and its capabilities.
+    authors: Roshan Joyce ( roshan.joyce@fujitsu.com )
+    Olivier Renais ( olivier.renais@orange.com )";
+
+  revision 2024-01-24 {
+    description
+      "Initial version";
+  }
+
+  container open-terminal-meta-data {
+    description
+      "This meta data is described in terms of a list of known transciever types and a list
+      of known line-card types.";
+
+    container transceiver-info {
+      list transceiver {
+        description
+          "List of transceiver types known to Transport PCE. Each type of transceiver is
+          identified by its part-no.";
+        key "part-no";
+
+        leaf part-no {
+          type string;
+          description
+            "The part-no of the transceiver type that this entry is describing.";
+        }
+
+        container operational-modes {
+          list operational-mode {
+            description
+              "List of operational modes supported by this type of transceiver.";
+            key "mode-id";
+
+            leaf mode-id {
+              type uint16;
+              description
+                "Unique id reported by th NE identifying this operational mode supported.";
+            }
+
+            leaf catalog-id {
+              type string;
+              description
+                "Corresponding operational-mode-id in the catalog.";
+              }
+          }
+        }
+        leaf-list supported-operational-mode {
+          type string;
+          description
+            "List of operational modes supported by this type of transceiver.";
+        }
+
+        list supported-interface-capability {
+          description
+            "List of capabilities indicating what kind of interfaces are supported on this transceiver.
+            Each capability is expressed as an ordered sequence of interface-types supported.";
+          list interface-sequence {
+            description
+              "Sequence of interfaces (logical-channels) that can be provisioned on this transceiver,
+              starting at the bottom-most interface, closest to the physical port.";
+            key "position";
+
+            leaf position {
+              type uint8;
+              description
+                "Position of this interface in the sequence.";
+            }
+
+            leaf interface-type {
+              type identityref {
+                base oc-opt-types:TRIBUTARY_PROTOCOL_TYPE;
+              }
+              description
+                "The type of the interface in this position.";
+            }
+
+            leaf max-interfaces {
+              type uint16;
+              description
+                "Max number of interfaces of this type that can be created in this position in this sequence.";
+            }
+          }
+        }
+      }
+    }
+
+    container line-card-info {
+      list line-card {
+        description
+          "List of line-card types known to Transport PCE. Each type of line-card is
+          identified by its part-no.";
+        key "part-no";
+
+        leaf part-no {
+          type string;
+          description
+            "The part-no of the line-card type that this entry is describing.";
+        }
+
+        leaf xpdr-type {
+          description
+            "The type of XPDR equipment that this line-card type is.";
+          type enumeration {
+            enum TPDR { description "Transponder"; }
+            enum MPDR { description "Muxponder"; }
+            enum SPDR { description "Switchponder"; }
+          }
+        }
+
+        list supported-port {
+          description
+            "The list of ports supported by this line card, each identified by a unique id.";
+          key "id";
+          leaf id {
+            type uint8;
+            description
+              "Id of this port, unique within this line-card type.";
+          }
+
+          leaf component-name {
+            type string;
+            description
+              "The name expected on the Open Config platform component of type PORT read from the NE,
+              corresponding to this entry. This field will be used to correlate the PORT component to
+              this entry.";
+          }
+
+          leaf type {
+            type identityref {
+              base oc-opt-types:OPTICAL_PORT_TYPE;
+            }
+            description
+              "The type of this port.";
+          }
+        }
+
+        list switch-fabric {
+          description
+            "Information on the types of switch fabrics supported on this line-card type.";
+          key "switch-fabric-id";
+          leaf switch-fabric-id {
+            type uint8;
+          }
+
+          leaf switch-fabric-type {
+            type enumeration {
+              enum Blocking {
+                description
+                  "A blocking switch-fabric has fixed mapping between a set of ports.
+                  It will have 1 entry in the non-blocking-list for each group of ports
+                  that can connect to each other.";
+              }
+              enum NonBlocking {
+                description
+                  "A non-blocking switch-fabric has flexible mapping between a set of ports.
+                  It will have only 1 entry in the non-blocking-list with all the connectable ports.";
+              }
+            }
+            description
+              "The type of switch-fabric that this entry represents.";
+          }
+
+          list non-blocking-list {
+            description
+              "The list of non-blocking-list entries for this switch-fabric.";
+            key "nbl-id";
+            leaf nbl-id {
+              type uint8;
+            }
+
+            leaf-list connectable-port {
+              type leafref {
+                path "../../../supported-port/id";
+              }
+              description
+                "List of ids of ports on this linecard whose connectability is described
+                by this non-blocking-list entry.";
+            }
+          }
+        }
+      }
+    }
+  }
+}
