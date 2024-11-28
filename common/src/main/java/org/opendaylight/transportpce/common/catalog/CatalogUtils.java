@@ -17,6 +17,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant.CatalogNodeType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.ImpairmentType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.amplifier.parameters.Amplifier;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
@@ -852,4 +853,35 @@ public class CatalogUtils {
         }
     }
 
+    /**
+     * This method is to get central frequency granularity.
+     * @param operationalModeId
+     *            operational-mode-id of a specific-operational-mode
+     * @return String central frequency
+     */
+    public String getCFGranularity(String operationalModeId) {
+        FrequencyGHz centralFrequencyGranularity;
+        InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
+                .builder(OperationalModeCatalog.class)
+                .child(SpecificOperationalModes.class)
+                .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
+                .build();
+        try {
+            var somOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+            if (somOptional.isEmpty()) {
+                LOG.error("readMdSal: Error reading Specific Operational Mode Catalog {} , empty list", omCatalogIid);
+                return null;
+            }
+            SpecificOperationalMode speTspOM = somOptional.orElseThrow();
+            centralFrequencyGranularity = FrequencyGHz.getDefaultInstance(speTspOM.getCentralFrequencyGranularity()
+                    .getValue().toString());
+
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("readMdSal: Error reading Specific Operational Mode Catalog {} , Mode does not exist",
+                    omCatalogIid);
+            throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
+        }
+        return centralFrequencyGranularity.getValue().toString();
+    }
 }
