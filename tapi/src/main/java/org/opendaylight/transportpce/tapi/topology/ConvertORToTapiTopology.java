@@ -419,15 +419,21 @@ public class ConvertORToTapiTopology {
     }
 
     public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForRdmNode(
-            String topoType, Uuid nodeUuid,String orNodeId, List<NodeRuleGroupKey> nrgList) {
-        Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>();
-        for (NodeRuleGroupKey nrgKey : nrgList) {
+            String topoType, Uuid nodeUuid,String orNodeId, Map<NodeRuleGroupKey, String> nrgMap) {
+
+        Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgSrgMap = new HashMap<>();
+        Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgDegMap = new HashMap<>();
+        for (Map.Entry<NodeRuleGroupKey, String> nrgEntry : nrgMap.entrySet()) {
             AssociatedNodeRuleGroup associatedNrg = new AssociatedNodeRuleGroupBuilder()
                 .setTopologyUuid(tapiTopoUuid)
                 .setNodeUuid(nodeUuid)
-                .setNodeRuleGroupUuid(nrgKey.getUuid())
+                .setNodeRuleGroupUuid(nrgEntry.getKey().getUuid())
                 .build();
-            associatedNrgMap.put(associatedNrg.key(), associatedNrg);
+            if (nrgEntry.getValue().contains("SRG")) {
+                associatedNrgSrgMap.put(associatedNrg.key(), associatedNrg);
+            } else {
+                associatedNrgDegMap.put(associatedNrg.key(), associatedNrg);
+            }
         }
         var rule = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                 .inter.rule.group.RuleBuilder()
@@ -435,15 +441,33 @@ public class ConvertORToTapiTopology {
             .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
             .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
             .build();
-        String irgNameValue = topoType.equals("Full") ? orNodeId + " inter rule group-" : "rdm infra inter rule group-";
-        Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
-        InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
-            .setName(Map.of(irgName.key(), irgName))
-            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
-            .setAssociatedNodeRuleGroup(associatedNrgMap)
-            .build();
-        return new HashMap<>(Map.of(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup));
+
+        if (associatedNrgSrgMap == null || associatedNrgSrgMap.isEmpty()
+                || associatedNrgDegMap == null || associatedNrgDegMap.isEmpty()) {
+            return null;
+        }
+        Map<InterRuleGroupKey, InterRuleGroup> irgMap = new HashMap<>();
+        int srgCounter = 0;
+        for (Map.Entry<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> anrg : associatedNrgSrgMap.entrySet()) {
+            String irgNameValue = topoType.equals("Full")
+                ? orNodeId + " inter rule group-" + srgCounter
+                : "rdm infra inter rule group-" + srgCounter;
+            Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>(Map.of(
+                anrg.getKey(), anrg.getValue(),
+                associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getKey(),
+                associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getValue()));
+
+            Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
+            InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+                .setName(Map.of(irgName.key(), irgName))
+                .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+                .setAssociatedNodeRuleGroup(associatedNrgMap)
+                .build();
+            irgMap.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
+            srgCounter++;
+        }
+        return irgMap;
     }
 
     public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(

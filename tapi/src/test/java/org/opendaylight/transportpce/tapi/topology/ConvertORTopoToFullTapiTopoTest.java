@@ -864,9 +864,11 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     }
 
     private void checkInterRuleGroupForRdm(List<InterRuleGroup> irgList) {
-        assertEquals(1, irgList.size(), "RDM infra node - OTS should contain 1 inter rule group");
-        List<AssociatedNodeRuleGroup> anrgList = new ArrayList<>(irgList.get(0).getAssociatedNodeRuleGroup().values());
-        assertEquals(3, anrgList.size(), "RDM infra node inter-rule-group should contain 3 associated nrg");
+        assertEquals(2, irgList.size(), "RDM infra node - OTS should contain 2 inter rule group");
+        List<AssociatedNodeRuleGroup> anrgList = new ArrayList<>();
+        anrgList.addAll(irgList.get(0).getAssociatedNodeRuleGroup().values());
+        anrgList.addAll(irgList.get(1).getAssociatedNodeRuleGroup().values());
+        assertEquals(4, anrgList.size(), "RDM infra node inter-rule-group should contain 4 associated nrg");
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule>
             ruleList = new ArrayList<>(irgList.get(0).nonnullRule().values());
         assertEquals(1, ruleList.size(), "inter-rule-group should contain a single rule");
@@ -874,6 +876,14 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().stream().findFirst().orElseThrow(),
             "the rule type should be 'FORWARDING'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
+                    "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule>
+            ruleList2 = new ArrayList<>(irgList.get(1).nonnullRule().values());
+        assertEquals(1, ruleList2.size(), "inter-rule-group should contain a single rule");
+        assertEquals("forward", ruleList2.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+        assertEquals(RuleType.FORWARDING, ruleList2.get(0).getRuleType().stream().findFirst().orElseThrow(),
+            "the rule type should be 'FORWARDING'");
+        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList2.get(0).getForwardingRule(),
                     "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
     }
 
