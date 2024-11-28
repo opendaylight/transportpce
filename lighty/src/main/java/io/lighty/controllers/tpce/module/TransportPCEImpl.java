@@ -115,7 +115,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMapping portMapping = initPortMapping(dataBroker);
         NotificationPublishService notificationPublishService = lightyServices.getBindingNotificationPublishService();
         NetworkModelService networkModelService = new NetworkModelServiceImpl(dataBroker, deviceTransactionManager,
-                networkTransaction, portMapping, notificationPublishService);
+                networkTransaction, portMapping, null, notificationPublishService);
         new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager, portMapping);
         new PortMappingListener(networkModelService);
 

@@ -68,6 +68,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-240119</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>tapi-2.4.0</artifactId>
     </dependency>
     <dependency>
