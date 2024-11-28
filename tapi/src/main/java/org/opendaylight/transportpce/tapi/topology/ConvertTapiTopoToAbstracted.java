@@ -73,6 +73,10 @@ public class ConvertTapiTopoToAbstracted {
         var tapiFactory = new ConvertORToTapiTopology(this.refTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
             tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
+        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
+        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
+            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
+        }
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -102,8 +106,7 @@ public class ConvertTapiTopoToAbstracted {
             .setNodeRuleGroup(nodeRuleGroupMap)
             .setInterRuleGroup(
                 tapiFactory.createInterRuleGroupForRdmNode(
-                    "Abstracted", nodeUuid, null,
-                    nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList())))
+                    "Abstracted", nodeUuid, null, nrgMap))
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setRiskParameterPac(new RiskParameterPacBuilder()
