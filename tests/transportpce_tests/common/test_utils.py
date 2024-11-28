@@ -35,7 +35,7 @@ import simulators
 SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
-LIGHTYNODE_OK_START_MSG = 'Data tree change listeners registered'
+LIGHTYNODE_OK_START_MSG = 'Netconf monitoring enabled successfully'
 KARAF_OK_START_MSG = "Transportpce controller started"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
@@ -367,6 +367,218 @@ def mount_device(node: str, sim: str):
     return response
 
 
+def metadata_input():
+    url = {'rfc8040': '{}/data/open-terminal-meta-data:open-terminal-meta-data',
+           'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
+    body = {
+        "open-terminal-meta-data:open-terminal-meta-data": {
+            "transceiver-info": {
+                "transceiver": [
+                    {
+                        "part-no": "Transceiver-part-1",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "openconfig-transport-types:PROT_OTUCN",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "openconfig-transport-types:PROT_ODUCN",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "line-card-info": {
+                "line-card": [
+                    {
+                        "part-no": "Linecard component (4 x 400G CFP2-DC + 4 x 100GbE QSFP28 Ports)",
+                        "xpdr-type": "MPDR",
+                        "supported-port": [
+                            {
+                                "id": 1,
+                                "component-name": "client-qsfp-1",
+                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 2,
+                                "component-name": "client-qsfp-2",
+                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 3,
+                                "component-name": "clinet-qsfp-3",
+                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 4,
+                                "component-name": "client-qsfp-4",
+                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 5,
+                                "component-name": "line-cfp2-1",
+                                "type": "openconfig-transport-types:TERMINAL_LINE"
+                            }
+                        ],
+                        "switch-fabric": [
+                            {
+                                "switch-fabric-id": 1,
+                                "switch-fabric-type": "Blocking",
+                                "non-blocking-list": [
+                                    {
+                                        "nbl-id": 1,
+                                        "connectable-port": [
+                                            5,
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+    response = put_request(url[RESTCONF_VERSION], body)
+    return response
+
+
+def catlog_input():
+    url = {'rfc8040': '{}/operations/org-openroadm-service:add-specific-operational-modes-to-catalog',
+           'draft-bierman02': '{}/config/operations/org-openroadm-service:add-specific-operational-modes-to-catalog'}
+    body = {
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "load-specific-OM-Catalog",
+                "rpc-action": "fill-catalog-with-specific-operational-modes",
+                "request-system-id": "test"
+            },
+            "operational-mode-info": {
+                "specific-operational-modes": {
+                    "specific-operational-mode": [
+                        {
+                            "operational-mode-id": "4308",
+                            "baud-rate": "65.7",
+                            "modulation-format": "dp-qam16",
+                            "min-RX-osnr-tolerance": "23.000",
+                            "min-central-frequency": "191.32500000",
+                            "max-central-frequency": "196.12500000",
+                            "central-frequency-granularity": "12.50000",
+                            "min-spacing": "37.50000",
+                            "line-rate": "505.1",
+                            "min-TX-osnr": "36.000",
+                            "TX-OOB-osnr": {
+                                "WR-openroadm-operational-mode-id": "MW-WR-core",
+                                "min-OOB-osnr-multi-channel-value": "31.000",
+                                "min-OOB-osnr-single-channel-value": "43.000"
+                            },
+                            "output-power-range": {
+                                "WR-openroadm-operational-mode-id": "MW-WR-core",
+                                "min-output-power": "-5.000",
+                                "max-output-power": "0.000"
+                            },
+                            "min-input-power-at-RX-osnr": "-14.000",
+                            "max-input-power": "1.000",
+                            "channel-width": "75.72000",
+                            "fec-type": "org-openroadm-common-types:ofec",
+                            "min-roll-off": "0.05",
+                            "max-roll-off": "0.20",
+                            "penalties": [
+                                {
+                                    "parameter-and-unit": "CD-ps/nm",
+                                    "up-to-boundary": "4000.00",
+                                    "penalty-value": "0.000"
+                                },
+                                {
+                                    "parameter-and-unit": "CD-ps/nm",
+                                    "up-to-boundary": "12000.00",
+                                    "penalty-value": "0.500"
+                                },
+                                {
+                                    "parameter-and-unit": "PDL-dB",
+                                    "up-to-boundary": "1.00",
+                                    "penalty-value": "0.500"
+                                },
+                                {
+                                    "parameter-and-unit": "PDL-dB",
+                                    "up-to-boundary": "2.00",
+                                    "penalty-value": "1.000"
+                                },
+                                {
+                                    "parameter-and-unit": "PDL-dB",
+                                    "up-to-boundary": "4.00",
+                                    "penalty-value": "2.500"
+                                },
+                                {
+                                    "parameter-and-unit": "PMD-ps",
+                                    "up-to-boundary": "10.00",
+                                    "penalty-value": "0.000"
+                                },
+                                {
+                                    "parameter-and-unit": "PMD-ps",
+                                    "up-to-boundary": "20.00",
+                                    "penalty-value": "0.500"
+                                },
+                                {
+                                    "parameter-and-unit": "power-dBm",
+                                    "up-to-boundary": "-14.00",
+                                    "penalty-value": "0.000"
+                                },
+                                {
+                                    "parameter-and-unit": "power-dBm",
+                                    "up-to-boundary": "-16.00",
+                                    "penalty-value": "1.000"
+                                },
+                                {
+                                    "parameter-and-unit": "power-dBm",
+                                    "up-to-boundary": "-18.00",
+                                    "penalty-value": "2.000"
+                                },
+                                {
+                                    "parameter-and-unit": "cross-talk-total-power-dB",
+                                    "up-to-boundary": "13.00",
+                                    "penalty-value": "0.300"
+                                },
+                                {
+                                    "parameter-and-unit": "cross-talk-total-power-dB",
+                                    "up-to-boundary": "15.00",
+                                    "penalty-value": "0.500"
+                                },
+                                {
+                                    "parameter-and-unit": "colorless-drop-adjacent-channel-crosstalk-GHz",
+                                    "up-to-boundary": "4.10",
+                                    "penalty-value": "0.500"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    response = post_request(url[RESTCONF_VERSION], body)
+    return response
+
+
 def unmount_device(node: str):
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}',
            'draft-bierman02': '{}/config/network-topology:network-topology/topology/topology-netconf/node/{}'}
@@ -467,6 +679,13 @@ def post_portmapping(payload: str):
 def del_portmapping():
     url = {'rfc8040': '{}/data/transportpce-portmapping:network',
            'draft-bierman02': '{}/config/transportpce-portmapping:network'}
+    response = delete_request(url[RESTCONF_VERSION].format('{}'))
+    return {'status_code': response.status_code}
+
+
+def del_metadata():
+    url = {'rfc8040': '{}/data/open-terminal-meta-data:open-terminal-meta-data',
+           'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
     response = delete_request(url[RESTCONF_VERSION].format('{}'))
     return {'status_code': response.status_code}
 

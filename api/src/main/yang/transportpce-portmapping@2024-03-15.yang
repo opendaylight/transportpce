@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2024-03-15 {
+    description
+      "Add support to open config in mapping";
+  }
   revision 2023-12-21 {
     description
        "Add leaflist supported-operational-mode to lcp";
@@ -138,6 +142,40 @@ module transportpce-portmapping {
          defined in org-openroadm-common-types";
   }
 
+  typedef openconfig-node-version {
+    type enumeration {
+      enum PROTOTYPE {
+        value 1;
+        description
+          "Version that indicates a prototype implementation";
+      }
+      enum 1.9.0 {
+        value 2;
+        description
+          "Version 1.9.0 of Open Config";
+      }
+    }
+    description
+      "YANG enumerations for indicating the version of Open Config model supported ";
+  }
+
+  typedef node-datamodel-type {
+    type enumeration {
+      enum OPENROADM {
+        value 1;
+        description
+          "OpenRoadm datamodel type";
+      }
+      enum OPENCONFIG {
+        value 2;
+        description
+          "OpenConfig datamodel type";
+      }
+    }
+    description
+          "YANG enumerations for indicating the type of datamodel supported by a node";
+  }
+
   grouping node-info {
     leaf node-type {
       type org-openroadm-device-types:node-types;
@@ -146,6 +184,14 @@ module transportpce-portmapping {
     }
     leaf openroadm-version {
       type openroadm-node-version;
+    }
+    leaf openconfig-version {
+      type openconfig-node-version;
+    }
+    leaf sw-version {
+      type string;
+      description
+        "Software Version of the Node";
     }
     leaf node-clli {
       type string;
@@ -423,6 +469,11 @@ module transportpce-portmapping {
         type string;
         description
           "Unique identifier for node in the network";
+      }
+      leaf datamodel-type {
+        type node-datamodel-type;
+        description
+          "Identifies the type of data model using which this node is controlled";
       }
       container node-info {
         uses node-info;
