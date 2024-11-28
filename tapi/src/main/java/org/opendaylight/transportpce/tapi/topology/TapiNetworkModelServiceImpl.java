@@ -1327,6 +1327,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .build();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, onepMap.values());
+        Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
+        for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
+            nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
+        }
         return new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType))
@@ -1337,8 +1341,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .setOwnedNodeEdgePoint(onepMap)
             .setNodeRuleGroup(nodeRuleGroupMap)
             .setInterRuleGroup(
-                tapiFactory.createInterRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId,
-                    nodeRuleGroupMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList())))
+                tapiFactory.createInterRuleGroupForRdmNode(TOPOLOGICAL_MODE, nodeUuid, orNodeId, nrgMap))
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setErrorCharacteristic("error")
