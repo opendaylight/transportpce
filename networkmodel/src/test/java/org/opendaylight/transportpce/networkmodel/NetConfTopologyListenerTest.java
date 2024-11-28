@@ -14,6 +14,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Host;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
@@ -64,6 +67,10 @@ public class NetConfTopologyListenerTest {
     private PortMapping portMapping;
     @Mock
     private Map<String, NodeRegistration> registrations;
+    @Mock
+    private Nodes nodes;
+    @Mock
+    private NodeDatamodelType nodeDatamodelType;
 
     @Test
     void testOnDataTreeChangedWhenDeleteNode() {
@@ -78,7 +85,10 @@ public class NetConfTopologyListenerTest {
             OPENROADM_DEVICE_VERSION_2_2_1);
         when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
-
+        when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
+        when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
+        when(portMapping.getNode("netconfNode1").getDatamodelType()).thenReturn(NodeDatamodelType
+                .valueOf("OPENROADM"));
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping, registrations);
         listener.onDataTreeChanged(changes);
@@ -86,6 +96,33 @@ public class NetConfTopologyListenerTest {
         verify(node, times(1)).modificationType();
         verify(node, times(3)).dataBefore();
         verify(networkModelService, times(1)).deleteOpenRoadmnode(anyString());
+        verify(nodeRegistration, times(0)).unregisterListeners();
+    }
+
+    @Test
+    void testOnDataTreeChangedWhenDeleteOpenConfigNode() {
+        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        final List<DataTreeModification<Node>> changes = new ArrayList<>();
+        @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
+        final NodeRegistration nodeRegistration = mock(NodeRegistration.class);
+        changes.add(ch);
+        when(ch.getRootNode()).thenReturn(node);
+
+        final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
+                OPENCONFIG_DEVICE_VERSION_1_9_0);
+        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(node.dataBefore()).thenReturn(netconfNode);
+        when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
+        when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
+        when(portMapping.getNode("netconfNode1").getDatamodelType()).thenReturn(NodeDatamodelType
+                .valueOf("OPENCONFIG"));
+        NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
+                deviceTransactionManager, portMapping, registrations);
+        listener.onDataTreeChanged(changes);
+        verify(ch, times(1)).getRootNode();
+        verify(node, times(1)).modificationType();
+        verify(node, times(3)).dataBefore();
+        verify(networkModelService, times(1)).deleteOpenConfignode(anyString());
         verify(nodeRegistration, times(0)).unregisterListeners();
     }
 
