@@ -18,11 +18,11 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GEODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GEOduflexgfp;
@@ -223,6 +223,22 @@ public final class MappingUtilsImpl implements MappingUtils {
                 + "if-otsi-otucn-oducn}", IfOtsiOtucnOducn.VALUE)
             .build();
 
+   //This map will expanded for other interface capabilities
+    private static final ImmutableMap<String, SupportedIfCapability> OC_CAP_TYPE_MAP =
+            ImmutableMap.<String, SupportedIfCapability>builder()
+                    .put("if-100GE-ODU4", If100GEODU4.VALUE)
+                    .put("if-OTUCN-ODUCN", IfOTUCnODUCn.VALUE).build();
+
+    private static final ImmutableMap<String, String> OC_CAP_MAP =
+            ImmutableMap.<String, String>builder()
+                    .put("PROT100GE{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_100GE}",
+                            "100GE")
+                    .put("PROTODU4{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_ODU4}",
+                            "ODU4")
+                    .put("PROTOTUCN{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_OTUCN}",
+                            "OTUCN")
+                    .put("PROTODUCN{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_ODUCN}",
+                            "ODUCN").build();
     private final DataBroker dataBroker;
 
     @Activate
@@ -294,5 +310,31 @@ public final class MappingUtilsImpl implements MappingUtils {
             return null;
         }
         return CAP_TYPE_MAP.get(ifCapType);
+    }
+
+    /**
+     * This Method is used to get SupportedIfCapability for openconfig port.
+     * @param ifCapType interface name
+     * @return supportedIf-capability
+     */
+    public static SupportedIfCapability ocConvertSupIfCapa(String ifCapType) {
+        if (!OC_CAP_TYPE_MAP.containsKey(ifCapType)) {
+            LOG.error("supported-if-capability {} not supported", ifCapType);
+            return null;
+        }
+        return OC_CAP_TYPE_MAP.get(ifCapType);
+    }
+
+    /**
+     * This Method is used to get interface type from metadata.
+     * @param interfaceType interface type
+     * @return interface name
+     */
+    public static String getInterfaceType(String interfaceType) {
+        if (!OC_CAP_MAP.containsKey(interfaceType)) {
+            LOG.error("Interface type {} not found", interfaceType);
+            return null;
+        }
+        return OC_CAP_MAP.get(interfaceType);
     }
 }

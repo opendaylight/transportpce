@@ -35,7 +35,7 @@ import simulators
 SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
-LIGHTYNODE_OK_START_MSG = 'Data tree change listeners registered'
+LIGHTYNODE_OK_START_MSG = 'Netconf monitoring enabled successfully'
 KARAF_OK_START_MSG = "Transportpce controller started"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
@@ -176,8 +176,9 @@ def start_lightynode(log_file: str, sim):
                                     '..', '..', 'sample_configs', 'openroadm', sim[1])
     if os.path.isfile(executable):
         with open(log_file, 'w', encoding='utf-8') as outfile:
+            version = 'OC' if sim[1] == 'oc' else sim[1]
             return subprocess.Popen(
-                [executable, "-v" + sim[1], "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory,
+                [executable, "-v" + version, "-p" + SIMS[sim]['port'], "-f" + os.path.join(sample_directory,
                                                                                           SIMS[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
     return None
