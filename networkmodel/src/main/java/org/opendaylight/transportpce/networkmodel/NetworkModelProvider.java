@@ -23,8 +23,8 @@ import org.opendaylight.transportpce.networkmodel.listeners.ServiceHandlerListen
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -40,7 +40,7 @@ public class NetworkModelProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelProvider.class);
     private static final InstanceIdentifier<Mapping> MAPPING_II = InstanceIdentifier.create(Network.class)
-        .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev231221.network
+        .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
                 .Nodes.class)
         .child(Mapping.class);
 
