@@ -88,6 +88,8 @@
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>tapi-2.4.0</artifactId>
     </dependency>
+    <!-- TPCE Models - END -->
+    <!-- TPCE bundles - BEGIN -->
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-api</artifactId>
@@ -95,11 +97,14 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-common</artifactId>
+      <version>${transportpce.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-networkmodel</artifactId>
       <version>${transportpce.version}</version>
     </dependency>
-    <!-- TPCE Models - END -->
-    <!-- TPCE bundles - BEGIN -->
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-pce</artifactId>

@@ -24,11 +24,16 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
+import org.opendaylight.transportpce.common.mapping.OCPortMapping;
+import org.opendaylight.transportpce.common.mapping.OCPortMappingImpl;
+import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion190;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
+import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
+import org.opendaylight.transportpce.common.metadata.OCMetaDataTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -92,6 +97,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     // because implementation has additional public methods ...
     private final DeviceTransactionManagerImpl deviceTransactionManager;
     private final NetworkTransactionService networkTransaction;
+    private final OCMetaDataTransaction ocMetaDataTransaction;
     // network model beans
     private final NetworkModelProvider networkModelProvider;
     // service-handler beans
@@ -110,12 +116,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(), MAX_TIME_FOR_TRANSACTION);
         DataBroker dataBroker = lightyServices.getBindingDataBroker();
         networkTransaction = new NetworkTransactionImpl(dataBroker);
+        ocMetaDataTransaction = new OCMetaDataTransactionImpl(dataBroker);
 
         LOG.info("Creating network-model beans ...");
         PortMapping portMapping = initPortMapping(dataBroker);
+        OCPortMapping ocPortMapping = initOCPortMapping(dataBroker);
         NotificationPublishService notificationPublishService = lightyServices.getBindingNotificationPublishService();
         NetworkModelService networkModelService = new NetworkModelServiceImpl(dataBroker, deviceTransactionManager,
-                networkTransaction, portMapping, notificationPublishService);
+                networkTransaction, portMapping, ocPortMapping, notificationPublishService);
         new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager, portMapping);
         new PortMappingListener(networkModelService);
 
@@ -291,6 +299,12 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
         PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
         return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, portMappingVersion121);
+    }
+
+    private OCPortMapping initOCPortMapping(DataBroker dataBroker) {
+        OCPortMappingVersion190 ocPortMappingVersion190 = new OCPortMappingVersion190(dataBroker,
+            deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
+        return new OCPortMappingImpl(dataBroker, ocPortMappingVersion190);
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {
