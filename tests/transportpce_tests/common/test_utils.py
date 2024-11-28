@@ -35,7 +35,7 @@ import simulators
 SIMS = simulators.SIMS
 
 HONEYNODE_OK_START_MSG = 'Netconf SSH endpoint started successfully at 0.0.0.0'
-LIGHTYNODE_OK_START_MSG = 'Data tree change listeners registered'
+LIGHTYNODE_OK_START_MSG = 'Netconf monitoring enabled successfully'
 KARAF_OK_START_MSG = "Transportpce controller started"
 LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
