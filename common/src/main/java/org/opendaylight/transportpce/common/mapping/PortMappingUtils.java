@@ -36,6 +36,8 @@ public final class PortMappingUtils {
     public static final String CREATE = "create";
     public static final String CREATE_MAPPING_DATA_LOGMSG =
         "{} : OpenROADM version {} node - Creating Mapping Data";
+    public static final String CREATE_OC_MAPPING_DATA_LOGMSG =
+            "{} : OpenConfig version {} node - Creating Mapping Data";
     public static final String DEVICE_HAS_LOGMSG =
         "{} : device has {} {}";
     public static final String FETCH_CONNECTIONPORT_LOGMSG =
