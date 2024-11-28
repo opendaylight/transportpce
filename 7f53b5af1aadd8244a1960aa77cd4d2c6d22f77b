@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63ee84df_e27e434a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-11-28T12:55:02Z",
+      "side": 1,
+      "message": "Bringing the enhancements related to OC XPDR discovery into the public repo.",
+      "revId": "7f53b5af1aadd8244a1960aa77cd4d2c6d22f77b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
