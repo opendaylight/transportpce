@@ -29,6 +29,7 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.NodeDatamodelType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscription;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionOutput;
@@ -36,6 +37,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.streams.Stream;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev241009.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev241009.connection.oper.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.NetconfNodeAugment;
@@ -80,9 +82,17 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                     .getNetconfNode();
             switch (rootNode.modificationType()) {
                 case DELETE:
-                    if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
-                        onDeviceDisConnected(nodeId);
-                        LOG.info("Device {} correctly disconnected from controller", nodeId);
+                    NodeDatamodelType type = portMapping.getNode(nodeId).getDatamodelType();
+                    if (type != null && type.getName().equalsIgnoreCase("OPENCONFIG")) {
+                        if (this.networkModelService.deleteOpenConfignode(nodeId)) {
+                            onDeviceDisConnected(nodeId);
+                            LOG.info("Device {} correctly disconnected from controller", nodeId);
+                        }
+                    } else {
+                        if (this.networkModelService.deleteOpenRoadmnode(nodeId)) {
+                            onDeviceDisConnected(nodeId);
+                            LOG.info("Device {} correctly disconnected from controller", nodeId);
+                        }
                     }
                     break;
                 case SUBTREE_MODIFIED:
@@ -91,19 +101,36 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                     if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
-                        Optional<AvailableCapability> deviceCapabilityOpt =
-                            netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
-                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
+                        Optional<AvailableCapability> deviceCapability = null;
+                        deviceCapability =
+                              netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)
+                                && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
                                 .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
                                 .findFirst();
-                        if (deviceCapabilityOpt.isEmpty()) {
-                            LOG.error("Unable to get openroadm-device-capability");
-                            return;
+                        if (!deviceCapability.isEmpty()) {
+                            this.networkModelService
+                                    .createOpenRoadmNode(nodeId, deviceCapability.orElseThrow().getCapability());
+                            onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
+                            LOG.info("OpenRoadm device {} correctly connected to controller", nodeId);
+                        } else {
+                            deviceCapability =
+                                    netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                                            .filter(cp -> cp.getCapability()
+                                                    .matches("(.*)" + StringConstants.OPENCONFIG_XPDR_DEVICE_MODEL))
+                                            .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
+                                            .findFirst();
+                            if (deviceCapability.isEmpty()) {
+                                LOG.error("Unable to get openroadm-device-capability or openconfig-device-capability");
+                                return;
+                            }
+                            IpAddress ipAddress = netconfNodeAfter.getHost().getIpAddress();
+                            this.networkModelService
+                                    .createOpenConfigNode(nodeId, deviceCapability.orElseThrow().getCapability(),
+                                            ipAddress);
+                            onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
+                            LOG.info("OpenConfig device {} correctly connected to controller", nodeId);
                         }
-                        this.networkModelService
-                            .createOpenRoadmNode(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
-                        onDeviceConnected(nodeId, deviceCapabilityOpt.orElseThrow().getCapability());
-                        LOG.info("Device {} correctly connected to controller", nodeId);
                     }
                     if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
                             && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
@@ -115,6 +142,16 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                     break;
             }
         }
+    }
+
+    /**
+     * This method is to get open roadm device capabilities supported by TPCE.
+     */
+    private List<String> getOpenRoadmDeviceCapabilities() {
+        return new ArrayList<>(List.of(
+                "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device",
+                "(http://org/openroadm/device?revision=2018-10-19)org-openroadm-device",
+                "(http://org/openroadm/device?revision=2020-05-29)org-openroadm-device"));
     }
 
     private void onDeviceConnected(final String nodeId, String openRoadmVersion) {
