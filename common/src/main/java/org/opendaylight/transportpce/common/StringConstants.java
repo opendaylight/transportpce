@@ -15,10 +15,14 @@ public final class StringConstants {
 
     public static final String OPENROADM_DEVICE_MODEL_NAME = "org-openroadm-device";
 
+    public static final String OPENCONFIG_XPDR_DEVICE_MODEL = "openconfig-terminal-device";
+
     public static final String DEFAULT_NETCONF_NODEID = "controller-config";
     public static final String OPENROADM_DEVICE_VERSION_1_2_1 = "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device";
     public static final String OPENROADM_DEVICE_VERSION_2_2_1 = "(http://org/openroadm/device?revision=2018-10-19)org-openroadm-device";
     public static final String OPENROADM_DEVICE_VERSION_7_1 = "(http://org/openroadm/device?revision=2020-05-29)org-openroadm-device";
+
+    public static final String OPENCONFIG_DEVICE_VERSION_1_9_0 = "(http://openconfig.net/yang/terminal-device?revision=2021-07-29)openconfig-terminal-device";
 
     public static final String NETWORK_TOKEN = "NETWORK";
 
@@ -52,6 +56,20 @@ public final class StringConstants {
     public static final String SERVICE_DIRECTION_AZ = "aToz";
     public static final String SERVICE_DIRECTION_ZA = "zToa";
     public static final String UNKNOWN_MODE = "Unknown Mode";
+
+    /**
+     * Defining string constants required for supporting Openconfig XPDRS.
+     */
+    public static final String CHASSIS = "CHASSIS";
+    public static final String OPERATINGSYSTEM = "OPERATING_SYSTEM";
+    public static final String LINECARD = "LINECARD";
+    public static final String PORT = "PORT";
+    public static final String TERMINALCLIENT = "TERMINAL_CLIENT";
+    public static final String TERMINALLINE = "TERMINAL_LINE";
+    public static final String TRANSCEIVER = "TRANSCEIVER";
+    public static final String BIDIRECTIONAL = "bidirectional";
+    public static final String XPDR_MCPROFILE = "XPDR-mcprofile";
+    public static final String SWITCH = "switch";
 
     public static final Map<String, Uint32> SERVICE_TYPE_RATE = Map.of(
         SERVICE_TYPE_100GE_T, ServiceRateConstant.RATE_100,
