@@ -40,6 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev23052
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
@@ -48,6 +49,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -61,7 +63,11 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Life
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.TotalSize;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.TotalSizeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacity;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacityBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.TotalPotentialCapacity;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.TotalPotentialCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
@@ -149,6 +155,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,7 +173,7 @@ public class ConvertORToTapiTopology {
     private State ietfNodeOperState;
     private List<TerminationPoint> oorClientPortList;
     private List<TerminationPoint> oorNetworkPortList;
-    private OduSwitchingPools oorOduSwitchingPool;
+    private Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool;
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
@@ -174,6 +181,7 @@ public class ConvertORToTapiTopology {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private Map<String, Uuid> uuidMap;
     private final Numeric numericFrequency;
+    private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
 
     static {
         OPMODE_LOOPRATE_MAP = new TreeMap<>(Comparator.reverseOrder());
@@ -262,6 +270,8 @@ public class ConvertORToTapiTopology {
         this.tapiLinks = new HashMap<>();
         this.uuidMap = new HashMap<>();
         this.tapiSips = new HashMap<>();
+        this.oorOduSwitchingPool = new HashMap<>();
+        this.irgMap = new HashMap<>();
         this.numericFrequency = numericFrequency;
     }
 
@@ -284,11 +294,15 @@ public class ConvertORToTapiTopology {
                 && networkPorts.contains(tp.getTpId().getValue()))
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
+        OduSwitchingPools oorsp;
         if (this.ietfNodeType.equals(OpenroadmNodeType.TPDR)) {
-            this.oorOduSwitchingPool = createOduSwitchingPoolForTp100G();
-            List<TpId> tpList = this.oorOduSwitchingPool.getNonBlockingList().values().stream()
-                .flatMap(nbl -> nbl.getTpList().stream())
-                .collect(Collectors.toList());
+           // this.oorOduSwitchingPool = createOduSwitchingPoolForTp100G();
+            oorsp = createOduSwitchingPoolForTp100G();
+            this.oorOduSwitchingPool.put(oorsp.key(), oorsp);
+            List<TpId> tpList = new ArrayList<>();
+            for (Map.Entry<NonBlockingListKey, NonBlockingList> nbl : oorsp.getNonBlockingList().entrySet()) {
+                tpList.addAll(nbl.getValue().getTpList().stream().collect(Collectors.toList()));
+            }
             this.oorClientPortList = ietfAugTopo.getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
                         == OpenroadmTpType.XPONDERCLIENT.getIntValue()
@@ -297,8 +311,10 @@ public class ConvertORToTapiTopology {
                 .collect(Collectors.toList());
             this.oorClientPortList.forEach(tp -> LOG.info("tp = {}", tp.getTpId()));
         } else {
-            this.oorOduSwitchingPool = ietfNode.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
-                .values().stream().findFirst().orElseThrow();
+            for (OduSwitchingPools osp : ietfNode.augmentation(Node1.class).getSwitchingPools()
+                    .getOduSwitchingPools().values()) {
+                this.oorOduSwitchingPool.put(osp.key(), osp);
+            }
             this.oorClientPortList = ietfAugTopo.getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
                     == OpenroadmTpType.XPONDERCLIENT.getIntValue())
@@ -418,8 +434,37 @@ public class ConvertORToTapiTopology {
         return globalNrgMap;
     }
 
+    public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForXpdrNode(
+        int index, Uuid nodeUuid, List<NodeRuleGroupKey> nrgKeyList,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule) {
+
+        Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>();
+        for (NodeRuleGroupKey nrgKey : nrgKeyList) {
+            AssociatedNodeRuleGroup associatedNrg = new AssociatedNodeRuleGroupBuilder()
+                .setTopologyUuid(tapiTopoUuid)
+                .setNodeUuid(nodeUuid)
+                .setNodeRuleGroupUuid(nrgKey.getUuid())
+                .build();
+            associatedNrgMap.put(associatedNrg.key(), associatedNrg);
+        }
+
+        Map<InterRuleGroupKey, InterRuleGroup> irgMapp = new HashMap<>();
+        String irgNameValue = " irg-" + index;
+
+        Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
+        InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setName(Map.of(irgName.key(), irgName))
+            .setRule(new HashMap<>(Map.of(rule.key(), rule)))
+            .setAssociatedNodeRuleGroup(associatedNrgMap)
+            .build();
+        irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
+
+        return irgMapp;
+    }
+
     public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForRdmNode(
-            String topoType, Uuid nodeUuid,String orNodeId, Map<NodeRuleGroupKey, String> nrgMap) {
+            String topoType, Uuid nodeUuid, String orNodeId, Map<NodeRuleGroupKey, String> nrgMap) {
 
         Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgSrgMap = new HashMap<>();
         Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgDegMap = new HashMap<>();
@@ -446,7 +491,7 @@ public class ConvertORToTapiTopology {
                 || associatedNrgDegMap == null || associatedNrgDegMap.isEmpty()) {
             return null;
         }
-        Map<InterRuleGroupKey, InterRuleGroup> irgMap = new HashMap<>();
+        Map<InterRuleGroupKey, InterRuleGroup> irgMapp = new HashMap<>();
         int srgCounter = 0;
         for (Map.Entry<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> anrg : associatedNrgSrgMap.entrySet()) {
             String irgNameValue = topoType.equals("Full")
@@ -464,10 +509,10 @@ public class ConvertORToTapiTopology {
                 .setRule(new HashMap<>(Map.of(rule.key(), rule)))
                 .setAssociatedNodeRuleGroup(associatedNrgMap)
                 .build();
-            irgMap.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
+            irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
             srgCounter++;
         }
-        return irgMap;
+        return irgMapp;
     }
 
     public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(
@@ -1213,13 +1258,13 @@ public class ConvertORToTapiTopology {
         Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
         int count = 1;
         for (TerminationPoint tp : this.oorNetworkPortList) {
+            Set<TpId> nblTpId = new HashSet<>();
+            nblTpId.addAll(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+                .TerminationPoint1.class).getAssociatedConnectionMapTp());
+            nblTpId.add(tp.getTpId());
             NonBlockingList nbl = new NonBlockingListBuilder()
                 .setNblNumber(Uint16.valueOf(count))
-                .setTpList(new HashSet<>(Set.of(
-                    tp.getTpId(),
-                    tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
-                            .TerminationPoint1.class)
-                        .getAssociatedConnectionMapTp().iterator().next())))
+                .setTpList(new HashSet<>(nblTpId))
                 .build();
             nblMap.put(nbl.key(), nbl);
             count++;
@@ -1227,6 +1272,7 @@ public class ConvertORToTapiTopology {
         return new OduSwitchingPoolsBuilder()
             .setNonBlockingList(nblMap)
             .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolType(SwitchingPoolTypes.Blocking)
             .build();
     }
 
@@ -1234,15 +1280,15 @@ public class ConvertORToTapiTopology {
             Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols) {
         Uuid nodeUuid = null;
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl = new HashMap<>();
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList = new HashMap<>();
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         if (layerProtocols.contains(LayerProtocolName.DSR)
                 || layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA)) {
-            Rule rule = new RuleBuilder()
-                .setLocalId("forward")
-                .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-                .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
-                .build();
-            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupList, new HashMap<>(Map.of(rule.key(), rule)));
+//            Rule rule = new RuleBuilder()
+//                .setLocalId("forward")
+//                .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+//                .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
+//                .build();
+            nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupMap);
         } else {
             var nodeName = nodeNames.get(nodeNames.keySet().iterator().next());
             LOG.error("Undefined LayerProtocolName for {} node {}", nodeName.getValueName(), nodeName.getValue());
@@ -1272,7 +1318,8 @@ public class ConvertORToTapiTopology {
             .setOperationalState(transformOsToTapiOperationalState(this.ietfNodeOperState.getName()))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setOwnedNodeEdgePoint(onepl)
-            .setNodeRuleGroup(nodeRuleGroupList)
+            .setInterRuleGroup(irgMap)
+            .setNodeRuleGroup(nodeRuleGroupMap)
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .setRiskParameterPac(
@@ -1290,8 +1337,7 @@ public class ConvertORToTapiTopology {
 
     private Uuid getNodeUuid4Dsr(
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
-            Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList,
-            Map<RuleKey, Rule> ruleList) {
+            Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList) {
         // client NEP DSR creation on DSR/ODU node
         List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
         for (int i = 0; i < oorClientPortList.size(); i++) {
@@ -1398,105 +1444,205 @@ public class ConvertORToTapiTopology {
         }
 
         // create NodeRuleGroup
-        int count = 1;
-        LOG.debug("ODU switching pool = {}", this.oorOduSwitchingPool.nonnullNonBlockingList().values());
         String ietfXpdr = String.join("+", this.ietfNodeId, TapiStringConstants.XPDR);
-        for (NonBlockingList nbl : this.oorOduSwitchingPool.nonnullNonBlockingList().values()) {
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
+        nodeRuleGroupList.putAll(createNodeRuleGroupForXpdrNode(this.ietfNodeId, this.oorOduSwitchingPool));
+
+        return this.uuidMap.get(ietfXpdr);
+    }
+
+    private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForXpdrNode(String nodeId,
+        Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwPool) {
+
+        if (oorOduSwPool == null) {
+            LOG.info("No switching pool created for node = {}", nodeId);
+            return new HashMap<>();
+        }
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
+        Uuid nodeUuid = new Uuid(
+            UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.XPDR))
+                .getBytes(StandardCharsets.UTF_8)).toString());
+        int count = 0;
+        RuleBuilder nblRuleBd = new RuleBuilder()
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)));
+
+        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule;
+
+        for (Map.Entry<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPool : oorOduSwPool.entrySet()) {
+            List<NodeRuleGroupKey> nrgKeyList = new ArrayList<>();
+            if (oduSwPool.getValue().getSwitchingPoolType().equals(SwitchingPoolTypes.NonBlocking)) {
+                rule = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .inter.rule.group.RuleBuilder()
+                    .setLocalId("forward" + count)
+                    .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+                    .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
+                    .build();
+            } else {
+                rule = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .inter.rule.group.RuleBuilder()
+                    .setLocalId("non-forward" + count)
+                    .setForwardingRule(FORWARDINGRULECANNOTFORWARDACROSSGROUP.VALUE)
+                    .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)))
+                    .build();
+            }
+            int nblCount = 0;
+
+            String ietfXpdr = String.join("+", nodeId, TapiStringConstants.XPDR);
+            for (Map.Entry<NonBlockingListKey, NonBlockingList> nblEntry :
+                oduSwPool.getValue().getNonBlockingList().entrySet()) {
+                nblCount++;
+                LOG.debug("CORTTTline1574 CreateNodeRuleGroupForXpdrNode, Non blocking list = {}", nblEntry.getValue());
+
+                Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .node.rule.group.NodeEdgePointKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .node.rule.group.NodeEdgePoint>
                     nepList = new HashMap<>();
-            Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
-                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint>
+                Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .node.rule.group.NodeEdgePointKey,
+                    org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .node.rule.group.NodeEdgePoint>
                     oduNepList = new HashMap<>();
-            LOG.debug("UUidMap={}", this.uuidMap.keySet());
-            LOG.debug("TP list = {}", nbl.getTpList());
-            for (TpId tp : nbl.getTpList()) {
-                String tpValue = tp.getValue();
-                LOG.debug("TP={}", tpValue);
-                String ietfEoduTp = String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU, tpValue);
-                LOG.debug("UuidKey={}", ietfEoduTp);
-                String ietfIoduTp = String.join("+", this.ietfNodeId, TapiStringConstants.I_ODU, tpValue);
-                if (this.uuidMap.containsKey(String.join("+", this.ietfNodeId, TapiStringConstants.DSR, tpValue))
-                        || this.uuidMap.containsKey(ietfIoduTp)) {
-                    var nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                                .node.rule.group.NodeEdgePointBuilder()
-                            .setTopologyUuid(tapiTopoUuid)
-                            .setNodeUuid(this.uuidMap.get(ietfXpdr))
-                            .setNodeEdgePointUuid(this.uuidMap.get(
-                                String.join("+",
-                                    this.ietfNodeId,
-                                    tpValue.contains("CLIENT") ? TapiStringConstants.DSR : TapiStringConstants.I_ODU,
-                                    tpValue)))
-                            .build();
-                    nepList.put(nep.key(), nep);
+
+                for (TpId tp : nblEntry.getValue().getTpList()) {
+                    String tpValue = tp.getValue();
+                    String ietfEoduTp = String.join("+", nodeId, TapiStringConstants.E_ODU, tpValue);
+                    LOG.debug("UuidKey={}", ietfEoduTp);
+                    String ietfIoduTp = String.join("+", nodeId, TapiStringConstants.I_ODU, tpValue);
+                    //Following Nep MAp is currently not used
+                    // TODO: consolidate or remove after PCE for TAPI is consolidated
+                    if (this.uuidMap.containsKey(String.join("+", nodeId, TapiStringConstants.DSR, tpValue))
+                            || this.uuidMap.containsKey(ietfIoduTp)) {
+                        var nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                    .node.rule.group.NodeEdgePointBuilder()
+                                .setTopologyUuid(tapiTopoUuid)
+                                .setNodeUuid(this.uuidMap.get(ietfXpdr))
+                                .setNodeEdgePointUuid(this.uuidMap.get(
+                                    String.join("+", nodeId, tpValue.contains("CLIENT") ? TapiStringConstants.DSR
+                                            : TapiStringConstants.I_ODU,
+                                        tpValue)))
+                                .build();
+                        nepList.put(nep.key(), nep);
+                    }
+                    if (this.uuidMap.containsKey(ietfEoduTp)) {
+                        var nep1 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                    .node.rule.group.NodeEdgePointBuilder()
+                                .setTopologyUuid(tapiTopoUuid)
+                                .setNodeUuid(this.uuidMap.get(ietfXpdr))
+                                .setNodeEdgePointUuid(this.uuidMap.get(ietfEoduTp))
+                                .build();
+                        oduNepList.put(nep1.key(), nep1);
+                    }
+                    if (this.uuidMap.containsKey(ietfIoduTp)) {
+                    // TODO already checked with DSR above -> potential factorization ?
+                        var nep2 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                    .node.rule.group.NodeEdgePointBuilder()
+                                .setTopologyUuid(tapiTopoUuid)
+                                .setNodeUuid(this.uuidMap.get(ietfXpdr))
+                                .setNodeEdgePointUuid(this.uuidMap.get(ietfIoduTp))
+                                .build();
+                        oduNepList.put(nep2.key(), nep2);
+                    }
                 }
-                if (this.uuidMap.containsKey(ietfEoduTp)) {
-                    var nep1 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                                .node.rule.group.NodeEdgePointBuilder()
-                            .setTopologyUuid(tapiTopoUuid)
-                            .setNodeUuid(this.uuidMap.get(ietfXpdr))
-                            .setNodeEdgePointUuid(this.uuidMap.get(ietfEoduTp))
-                            .build();
-                    oduNepList.put(nep1.key(), nep1);
+                //EndLoop on TP
+                LOG.info("COORTTLine1647 NEPLIST (DSR/I_ODU) of [dsr node rule group] is {}", nepList);
+                LOG.info("COORTTLine1648 ODUNEPLIST (E_ODU/I_ODU) of [odu node rule group] is {}", oduNepList);
+                AvailableCapacity avc;
+                TotalPotentialCapacity tpc;
+                if (nblEntry.getValue().getCapableInterconnectBandwidth() != null
+                        && nblEntry.getValue().getInterconnectBandwidthUnit() != null) {
+                    TotalSize potentialTs = new TotalSizeBuilder()
+                        .setValue(Decimal64.valueOf((nblEntry.getValue().getCapableInterconnectBandwidth().doubleValue()
+                            * nblEntry.getValue().getInterconnectBandwidthUnit().doubleValue() / 1000000000),
+                            RoundingMode.DOWN))
+                        .setUnit(CAPACITYUNITGBPS.VALUE)
+                        .build();
+                    tpc = new TotalPotentialCapacityBuilder()
+                        .setTotalSize(potentialTs).build();
+                    Uint32 availBW = nblEntry.getValue().getAvailableInterconnectBandwidth();
+                    // TODO: Right now available BW is not in Device OR model. Correct next line when it will be
+                    availBW = availBW == null ? nblEntry.getValue().getCapableInterconnectBandwidth() : availBW;
+                    TotalSize availableTs = new TotalSizeBuilder()
+                        .setValue(Decimal64.valueOf((availBW.doubleValue()
+                            * nblEntry.getValue().getInterconnectBandwidthUnit().doubleValue() / 1000000000),
+                            RoundingMode.DOWN))
+                        .setUnit(CAPACITYUNITGBPS.VALUE)
+                        .build();
+                    avc = new AvailableCapacityBuilder()
+                        .setTotalSize(availableTs).build();
+                } else {
+                    avc = new AvailableCapacityBuilder().build();
+                    tpc = new TotalPotentialCapacityBuilder().build();
                 }
-                if (this.uuidMap.containsKey(ietfIoduTp)) {
-                // TODO already checked with DSR above -> potential factorization ?
-                    var nep2 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                                .node.rule.group.NodeEdgePointBuilder()
-                            .setTopologyUuid(tapiTopoUuid)
-                            .setNodeUuid(this.uuidMap.get(ietfXpdr))
-                            .setNodeEdgePointUuid(this.uuidMap.get(ietfIoduTp))
-                            .build();
-                    oduNepList.put(nep2.key(), nep2);
+
+                CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                    .setCostAlgorithm("Restricted Shortest Path - RSP")
+                    .setCostName("HOP_COUNT")
+                    .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+                    .build();
+                LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+                    .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
+                    .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
+                    .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
+                    .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+                    .setTrafficPropertyName("FIXED_LATENCY")
+                    .build();
+                RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+                    .setRiskCharacteristicName("risk characteristic")
+                    .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+                    .build();
+
+                if (nepList != null && !nepList.isEmpty()) {
+                    Name nrgName1 = new NameBuilder().setValueName("nrg name")
+                        .setValue("dsr node rule group-" + count + "." + nblCount).build();
+                    NodeRuleGroup nodeRuleGroup1 = new NodeRuleGroupBuilder()
+                        .setName(Map.of(nrgName1.key(), nrgName1))
+                        .setUuid(new Uuid(
+                            UUID.nameUUIDFromBytes(("dsr node rule group-" + count + "." + nblCount)
+                                .getBytes(StandardCharsets.UTF_8)).toString()))
+                        .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
+                            nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
+                        .setNodeEdgePoint(nepList)
+                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                        .setAvailableCapacity(avc)
+                        .setTotalPotentialCapacity(tpc)
+                        .build();
+                    nodeRuleGroupMap.put(nodeRuleGroup1.key(), nodeRuleGroup1);
+                    nrgKeyList.add(nodeRuleGroup1.key());
+                }
+
+                if (oduNepList != null && !oduNepList.isEmpty()) {
+                    Name nrgName2 = new NameBuilder().setValueName("nrg name")
+                        .setValue("odu node rule group-" + count + "." + nblCount).build();
+                    NodeRuleGroup nodeRuleGroup2 = new NodeRuleGroupBuilder()
+                        .setName(Map.of(nrgName2.key(), nrgName2))
+                        .setUuid(new Uuid(
+                            UUID.nameUUIDFromBytes(("odu node rule group-" + count + "." + nblCount)
+                                .getBytes(StandardCharsets.UTF_8)).toString()))
+                        .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
+                            nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
+                        .setNodeEdgePoint(oduNepList)
+                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+                        .setAvailableCapacity(avc)
+                        .setTotalPotentialCapacity(tpc)
+                        .build();
+                    nodeRuleGroupMap.put(nodeRuleGroup2.key(), nodeRuleGroup2);
+                    nrgKeyList.add(nodeRuleGroup2.key());
                 }
             }
-            LOG.debug("NEPLIST (DSR/I_ODU) of [dsr node rule group] is {}", nepList);
-            LOG.debug("NEPLIST (E_ODU/I_ODU) of [odu node rule group] is {}", nepList);
-            // Empty random creation of mandatory fields for avoiding errors....
-            CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                .setCostAlgorithm("Restricted Shortest Path - RSP")
-                .setCostName("HOP_COUNT")
-                .setCostValue(TapiStringConstants.COST_HOP_VALUE)
-                .build();
-            LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-                .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-                .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-                .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
-                .setTrafficPropertyName("FIXED_LATENCY")
-                .build();
-            RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-                .setRiskCharacteristicName("risk characteristic")
-                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-                .build();
-            Name nrgName = new NameBuilder()
-                .setValueName("nrg name")
-                .setValue("odu node rule group " + count)
-                .build();
-            NodeRuleGroup nodeRuleGroup1 = new NodeRuleGroupBuilder()
-                .setName(Map.of(nrgName.key(), nrgName))
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(("dsr node rule group " + count)
-                    .getBytes(Charset.forName("UTF-8"))).toString()))
-                .setRule(ruleList)
-                .setNodeEdgePoint(nepList)
-                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-                .build();
-            nodeRuleGroupList.put(nodeRuleGroup1.key(), nodeRuleGroup1);
-            NodeRuleGroup nodeRuleGroup2 = new NodeRuleGroupBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(("odu node rule group " + count)
-                    .getBytes(Charset.forName("UTF-8"))).toString()))
-                .setRule(ruleList)
-                .setNodeEdgePoint(oduNepList)
-                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-                .build();
-            nodeRuleGroupList.put(nodeRuleGroup2.key(), nodeRuleGroup2);
+            // End LOOP on NBL
             count++;
+            if (nrgKeyList.size() > 1) {
+                this.irgMap = createInterRuleGroupForXpdrNode(count, nodeUuid, nrgKeyList, rule);
+            }
         }
-        return this.uuidMap.get(ietfXpdr);
+        //endLoop MAP<ospkey, osp>
+
+        return nodeRuleGroupMap;
     }
 
     private List<OwnedNodeEdgePoint> createNep(TerminationPoint oorTp, Map<NameKey, Name> nepNames,
