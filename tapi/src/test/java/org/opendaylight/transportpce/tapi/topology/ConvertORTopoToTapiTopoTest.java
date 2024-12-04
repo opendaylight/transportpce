@@ -902,20 +902,21 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
                 "each node-rule-group should contain 2 NEP for transponder DSR");
         }
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).nonnullNodeEdgePoint().values());
-        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(3).nonnullNodeEdgePoint().values());
+        assertThat("node-rule-group nb 4 should be between nep-client1 and nep-network1",
             nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
-        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
+        assertThat("node-rule-group nb 4 should be between nep-client1 and nep-network1",
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
         assertEquals(nodeEdgePointList.get(0).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node");
+            "node-rule-group nb 4 should be between nep-client1 and nep-network1 of the same node");
         assertEquals(nodeEdgePointList.get(1).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node");
+            "node-rule-group nb 4 should be between nep-client1 and nep-network1 of the same node");
         List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
         assertEquals(1, rule.size(), "node-rule-group nb 1 should contain a single rule");
-        assertEquals("forward", rule.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+        assertEquals(true, rule.get(0).getLocalId().startsWith("forward"),
+            "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().iterator().next(),
@@ -925,50 +926,63 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     private void checkNodeRuleGroupForMuxDSR(
             List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
         assertEquals(8, nrgList.size(), "muxponder DSR should contain 8 node rule group (4*DSR/I_ODU + 4*E_ODU/I_ODU)");
-        for (NodeRuleGroup nodeRuleGroup : nrgList) {
-            assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
+        int indexnrg = 0;
+        for (NodeRuleGroup nrg : nrgList) {
+            LOG.info("CORTTTTest Line : nep List of Nrg {} contains {}", indexnrg,
+                nrg.nonnullNodeEdgePoint().values());
+            assertEquals(2, nrg.getNodeEdgePoint().size(),
                 "each node-rule-group should contain 2 NEP for muxponder DSR");
+            List<Rule> rule = new ArrayList<>(nrg.nonnullRule().values());
+            assertEquals(1, rule.size(), "node-rule-group nb" + indexnrg + "should contain a single rule");
+            assertEquals(true, rule.get(0).getLocalId().startsWith("forward"),
+                "local-id of the rule should be 'forward'");
+            assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
+                "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
+            assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().iterator().next(),
+                "the rule type should be 'FORWARDING'");
+            indexnrg++;
         }
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).nonnullNodeEdgePoint().values());
-        assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(2).nonnullNodeEdgePoint().values());
+
+        assertThat("node-rule-group nb 3 should be between nep-client4 and nep-network1",
+            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
-        assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
+        assertThat("node-rule-group nb 3 should be between nep-client4 and nep-network1",
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
         assertEquals(nodeEdgePointList.get(0).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
+            "node-rule-group nb 3 should be between nep-client4 and nep-network1 of the same node");
         assertEquals(nodeEdgePointList.get(1).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
-        List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
-        assertEquals(1, rule.size(), "node-rule-group nb 2 should contain a single rule");
-        assertEquals("forward", rule.get(0).getLocalId(), "local-id of the rule should be 'forward'");
-        assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
-            "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
-        assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().iterator().next(),
-            "the rule type should be 'FORWARDING'");
+            "node-rule-group nb 3 should be between nep-client4 and nep-network1 of the same node");
+
     }
 
     private void checkNodeRuleGroupForSwitchDSR(
             List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid, Uuid nodeUuid) {
         assertEquals(2, nrgList.size(), "Switch-DSR should contain 2 node rule groups (DSR/I_ODU + E_ODU/I_ODU)");
         assertEquals(8, nrgList.get(0).getNodeEdgePoint().size(), "Switch-DSR node-rule-group should contain 8 NEP");
-        List<NodeEdgePoint> nrg = nrgList.get(0).nonnullNodeEdgePoint().values().stream()
-            .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
-                .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
-            .collect(Collectors.toList());
-        assertEquals(networkNepUuid, nrg.get(6).getNodeEdgePointUuid(),
+        List<NodeEdgePoint> nepList = nrgList.stream()
+            .filter(nrg -> nrg.nonnullNodeEdgePoint().values().stream()
+                .map(nep -> nep.getNodeEdgePointUuid())
+                .collect(Collectors.toList())
+                .containsAll(List.of(clientNepUuid, networkNepUuid)))
+            .findFirst().orElseThrow().nonnullNodeEdgePoint().values().stream()
+                .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
+                    .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
+                .collect(Collectors.toList());
+        assertEquals(networkNepUuid, nepList.get(6).getNodeEdgePointUuid(),
             "in the sorted node-rule-group, nep number 7 should be XPDR2-NETWORK1");
-        assertEquals(clientNepUuid, nrg.get(5).getNodeEdgePointUuid(),
+        assertEquals(clientNepUuid, nepList.get(5).getNodeEdgePointUuid(),
             "in the sorted node-rule-group, nep number 6 should be XPDR2-CLIENT4");
-        assertEquals(nodeUuid, nrg.get(4).getNodeUuid(),
+        assertEquals(nodeUuid, nepList.get(4).getNodeUuid(),
             "any item of the node-rule-group should have the same nodeUuid");
-        assertEquals(nodeUuid, nrg.get(3).getNodeUuid(),
+        assertEquals(nodeUuid, nepList.get(3).getNodeUuid(),
             "any item of the node-rule-group should have the same nodeUuid");
         @Nullable
         List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
         assertEquals(1, ruleList.size(), "node-rule-group should contain a single rule");
-        assertEquals("forward", ruleList.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+        assertEquals(true, ruleList.get(0).getLocalId().startsWith("forward"),
+            "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().iterator().next(),

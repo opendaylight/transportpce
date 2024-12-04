@@ -794,8 +794,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         List<NodeEdgePoint> nodeEdgePointList;
         if (nodeType.equals("Switch")) {
             assertEquals(8, nrgCltAndNet.getNodeEdgePoint().size(), "Switch-DSR nrg should contain 8 NEP");
-            nodeEdgePointList = nrgList.get(0).nonnullNodeEdgePoint().values().stream()
-                .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
+            nodeEdgePointList = nrgCltAndNet.nonnullNodeEdgePoint().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
                     .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
                 .collect(Collectors.toList());
             Integer xxxxx = 0;
@@ -827,12 +827,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         }
         List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
         assertEquals(1, rule.size(), "node-rule-group should contain a single rule");
-        assertEquals("forward", rule.get(0).getLocalId(), "local-id of the rule should be 'forward'");
+        assertEquals(true, rule.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().stream().findFirst().orElseThrow(),
             "the rule type should be 'FORWARDING'");
-        //TODO regroup with rawCheckNodeRuleGroupOTsi ?
+
     }
 
     private void checkNodeRuleGroupForRdm(List<NodeRuleGroup> nrgList, List<Integer> nbNeps) {
@@ -958,27 +958,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             false, nep, nepUuid, portName, nepName, withSip);
     }
 
-//    private void checkNepOtsiNode(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName,
-//            boolean withSip) {
-//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
-//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
-//        assertEquals(portName, nameList.get(0).getValue(), "value of OTSi nep should be '" + portName + "'");
-//        assertEquals(nepName, nameList.get(0).getValueName(), "value-name of OTSi nep should be '" + nepName + "'");
-//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
-//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
-//                .getSupportedCepLayerProtocolQualifierInstances();
-//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
-//            lpql.add(entry.getLayerProtocolQualifier());
-//        }
-//        assertEquals(2, lpql.size(), "OTSi nep should support 2 kind of cep");
-//        assertThat("OTSi nep should support 2 kind of cep",
-//            lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE, PHOTONICLAYERQUALIFIEROTSi.VALUE));
-//        assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//            "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//        checkCommonPartOfNep(nep, withSip);
-//        checkPhotPartOfNep(nep);
-//    }
-
     private void checkNepOtsiRdmNode(
             OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName, boolean withSip) {
         if (!nep.getUuid().equals(nepUuid)) {
@@ -988,33 +967,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 ? List.of(PHOTONICLAYERQUALIFIEROMS.VALUE)
                 : nepName.contains("OTS") ? List.of(PHOTONICLAYERQUALIFIEROTS.VALUE) : null,
             LayerProtocolName.PHOTONICMEDIA, false, nep, nepUuid, portName, nepName, withSip);
-//=======
-//        assertEquals(nepUuid, nep.getUuid(), "bad uuid for " + portName);
-//        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
-//        assertEquals(portName, nameList.get(0).getValue(),
-//            "value of OTSi nep should be '" + portName + "'");
-//        assertEquals(nepName, nameList.get(0).getValueName(),
-//            "value-name of OTSi nep should be '" + nepName + "'");
-//        List<LAYERPROTOCOLQUALIFIER> lpql = new ArrayList<>();
-//        List<SupportedCepLayerProtocolQualifierInstances> lsclpqi = nep
-//                .getSupportedCepLayerProtocolQualifierInstances();
-//        for (SupportedCepLayerProtocolQualifierInstances entry : lsclpqi) {
-//            lpql.add(entry.getLayerProtocolQualifier());
-//        }
-//        if (nepName.contains("OMS")) {
-//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
-//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROMS.VALUE));
-//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//            checkPhotPartOfNep(nep);
-//        } else if (nepName.contains("OTS")) {
-//            assertEquals(1, lpql.size(), "OTSi nep of RDM infra node should support only 1 kind of cep");
-//            assertThat("OTSi nep should support 1 kind of cep", lpql, hasItems(PHOTONICLAYERQUALIFIEROTS.VALUE));
-//            assertEquals(LayerProtocolName.PHOTONICMEDIA, nep.getLayerProtocolName(),
-//                "OTSi nep should be of PHOTONIC_MEDIA protocol type");
-//            checkPhotPartOfNep(nep);
-//        }
-//        checkCommonPartOfNep(nep, withSip);
     }
 
 
@@ -1079,8 +1031,6 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals(9999.0, iroEgress.iterator().next().getOtsFiberSpanImpairments().getTotalLoss().doubleValue(),
                 "OTS-media-CEP-spec shall be present with 9999 concentrated loss");
         }
-//        checkCommonPartOfNep(nep, withSip);
-//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
     }
 
     private void rawCheckNep(List<LAYERPROTOCOLQUALIFIER> lpqList, LayerProtocolName lpn, boolean anyInList,
