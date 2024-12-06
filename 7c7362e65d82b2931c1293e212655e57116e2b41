@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3c6db19_6a485c53",
+        "filename": "api/src/main/yang/transportpce-portmapping@2024-03-15.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-06T06:37:37Z",
+      "side": 1,
+      "message": "It is not strictly speaking necessary. However, this is useful information for a controller to know about the Node. Also, if the controller wants to lookup meta-data for a Node based on the version of the OS on the node, it will be available. That is why we had added it in the design. Can we agree to keep this?",
+      "parentUuid": "c4a6c6ae_73f8eb4e",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 21
+      },
+      "revId": "7c7362e65d82b2931c1293e212655e57116e2b41",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24914bec_45281896",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
         "patchSetId": 6
@@ -54,6 +78,30 @@
       "writtenOn": "2024-12-05T14:52:08Z",
       "side": 1,
       "message": "\u0027componentOptional\u0027 would be more explicit than \u0027deviceInfoOptional\u0027 which corresponded to device info container for the openROADM model.",
+      "range": {
+        "startLine": 151,
+        "startChar": 12,
+        "endLine": 151,
+        "endChar": 30
+      },
+      "revId": "7c7362e65d82b2931c1293e212655e57116e2b41",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b6029c_f2a584fd",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-06T06:37:37Z",
+      "side": 1,
+      "message": "Thank you Christophe for your review. We will make this change.",
+      "parentUuid": "24914bec_45281896",
       "range": {
         "startLine": 151,
         "startChar": 12,
