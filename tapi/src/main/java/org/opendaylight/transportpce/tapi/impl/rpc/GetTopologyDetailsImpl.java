@@ -281,7 +281,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         Name name = new NameBuilder().setValue(
                 TapiStringConstants.T0_MULTILAYER).setValueName("TAPI Topology Name")
             .build();
-        LOG.info("TOPOABSTRACTED : the list of node is as follows {}", tapiNodeList);
+        LOG.debug("TOPOABSTRACTED : the list of node is as follows {}", tapiNodeList);
         this.tapiSips.putAll(tapiAbstractFactory.getTapiSips());
         return new TopologyBuilder()
             .setName(Map.of(name.key(), name))

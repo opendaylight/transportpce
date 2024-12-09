@@ -673,14 +673,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     counter--;
                 } while (counter > 0);
                 if (counter == 0) {
-                    LOG.error("CREATENEP transformSrgToOnep, No Tp1 found in topology for LCP {}, of NodeId {} ",
+                    LOG.debug("CREATENEP transformSrgToOnep, No Tp1 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
                 }
                 if (getNetworkTerminationPoint11FromDatastore(overlayNodeId, tpId) == null) {
-                    LOG.error("CREATENEP transformSrgToOnep, No Tp11 found in topology for LCP {}, of NodeId {} ",
+                    LOG.debug("CREATENEP transformSrgToOnep, No Tp11 found in topology for LCP {}, of NodeId {} ",
                         tpId, overlayNodeId);
                 } else {
-                    LOG.info("LCP {} is not empty for augmentation TP11", tpId);
+                    LOG.debug("LCP {} is not empty for augmentation TP11", tpId);
                 }
             }
         }
