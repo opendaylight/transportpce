@@ -51,7 +51,7 @@ public final class NetworkUtils {
             link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1.class);
 
         if (link1 == null) {
-            LOG.error(NETWORK_UTILS_NO_LINK_AUGMENTATION_AVAILABLE_MSG, link.getLinkId().getValue());
+            LOG.warn(NETWORK_UTILS_NO_LINK_AUGMENTATION_AVAILABLE_MSG, link.getLinkId().getValue());
             return null;
         }
         if (link1.getOMSAttributes() == null) {

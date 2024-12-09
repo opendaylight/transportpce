@@ -178,13 +178,17 @@ public class TapiProvider {
                 tapiListener));
         // Notification Listener
         pcelistenerRegistration = notificationService.registerCompositeListener(pceListenerImpl.getCompositeListener());
+        LOG.debug("Pce Listener Registration in TapiProvider : {}", pcelistenerRegistration);
         rendererlistenerRegistration = notificationService
             .registerCompositeListener(rendererListenerImpl.getCompositeListener());
+        LOG.debug("Renderer Listener Registration in TapiProvider : {}", rendererlistenerRegistration);
         TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(dataBroker);
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
+        LOG.debug("SH Listener Registration in TapiProvider : {}", servicehandlerlistenerRegistration);
         tapinetworkmodellistenerRegistration = notificationService
             .registerCompositeListener(tapiNetworkModelNotificationHandler.getCompositeListener());
+        LOG.debug("Network Model Listener Registration in TapiProvider : {}", tapinetworkmodellistenerRegistration);
     }
 
     /**

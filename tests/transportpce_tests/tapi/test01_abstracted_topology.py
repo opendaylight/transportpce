@@ -683,18 +683,19 @@ class TransportTapitesting(unittest.TestCase):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_51_uninstall_Tapi_Feature(self):
+    def test_51_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
         time.sleep(2)
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
+        print("Tapi Feature uninstalled")
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        print("Tapi Feature uninstalled")
+        print("Confirm Tapi Feature correctly uninstalled")
 
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
