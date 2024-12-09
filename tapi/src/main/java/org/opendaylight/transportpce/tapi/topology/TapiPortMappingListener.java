@@ -49,7 +49,7 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                     continue;
                 }
                 if (mappingBef == null) {
-                    LOG.info("New mapping for node {} = {}", nodeId, mappingAft);
+                    LOG.debug("New mapping for node {} = {}", nodeId, mappingAft);
                     LOG.info("As the mapping is now created for the first time, "
                         + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
                     this.tapiNetworkModelService.createTapiNode(nodeId,

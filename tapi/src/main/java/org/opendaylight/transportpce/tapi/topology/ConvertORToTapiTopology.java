@@ -383,7 +383,7 @@ public class ConvertORToTapiTopology {
                 : onepl.stream()
                     .filter(onep -> onep.getName().keySet().contains(new NameKey("PHOTONIC_MEDIA_OTSNodeEdgePoint")))
                     .collect(Collectors.toList());
-        LOG.info("Creating NRG for {} {}", topoType, otsNepList);
+        LOG.debug("Creating NRG for {} {}", topoType, otsNepList);
         List<OwnedNodeEdgePointKey> degOnepKeyList = new ArrayList<>();
         List<String> srgNames = new ArrayList<>();
         Map<OwnedNodeEdgePointKey,String> srgMap = new HashMap<>();
