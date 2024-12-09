@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.networkmodel.service;
 
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.charset.Charset;
@@ -20,9 +21,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -694,63 +697,76 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             .addAugmentation(clliExt1)
             .addAugmentation(commonExt1)
             .build();
-        InstanceIdentifier<Node> iiTapiExtClliNode = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
-            .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
-            .build();
-        LOG.info("OR Topo initialization, creating new CLLI TAPI-SBI-ABS-NODE Node in DataStore");
-        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode, tapiExt);
-        networkTransactionService.commit();
-
-        String topoUuid = new Uuid(UUID.nameUUIDFromBytes("SBI - Multi-layer - TAPI topology"
-                .getBytes(Charset.forName("UTF-8"))).toString()).toString();
-        var tapiExt1 = new org.opendaylight.yang.gen.v1.http.org
-            .opendaylight.transportpce.or.network.augmentation.rev240923.Node1Builder()
-                .setYangDataModel(DataModelEnum.TapiExt)
-                .setTopologyUuid(topoUuid)
+        try {
+            InstanceIdentifier<Node> iiTapiExtClliNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
+            LOG.info("OR Topo initialization, creating new CLLI TAPI-SBI-ABS-NODE Node in DataStore");
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode, tapiExt);
+            //networkTransactionService.commit();
+            FluentFuture<? extends @NonNull CommitInfo> commit = networkTransactionService.commit();
+            commit.get();
 
-        InstanceIdentifier<Node> iiTapiExtNetworkNode = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
-            .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
-            .build();
-        LOG.info("OR Topo initialization, creating new NETWORK TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
-            topoUuid);
-        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode,
-            createTapiNodeBuilder(NetworkUtils.CLLI_NETWORK_ID, "TAPI-SBI-ABS-NODE")
-                .addAugmentation(tapiExt1)
-                .addAugmentation(clliExt1)
-                .addAugmentation(commonExt1)
-                .build());
-        networkTransactionService.commit();
+            String topoUuid = new Uuid(UUID.nameUUIDFromBytes("SBI - Multi-layer - TAPI topology"
+                    .getBytes(Charset.forName("UTF-8"))).toString()).toString();
+            var tapiExt1 = new org.opendaylight.yang.gen.v1.http.org
+                .opendaylight.transportpce.or.network.augmentation.rev240923.Node1Builder()
+                    .setYangDataModel(DataModelEnum.TapiExt)
+                    .setTopologyUuid(topoUuid)
+                    .build();
 
-        InstanceIdentifier<Node> iiTapiExtTopologyNode = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
-            .build();
-        LOG.info("OR Topo initialization, creating new TOPOLOGY TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
-            topoUuid);
-        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode,
-            createTapiNodeBuilder(NetworkUtils.UNDERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
-                .addAugmentation(tapiExt1)
-                .addAugmentation(clliExt1)
-                .addAugmentation(commonExt1)
-                .build());
-        networkTransactionService.commit();
+            InstanceIdentifier<Node> iiTapiExtNetworkNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            LOG.info("OR Topo initialization, creating new NETWORK TAPI-SBI-ABS-NODE Node in DataStore"
+                + "with TopoUUID {}", topoUuid);
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode,
+                createTapiNodeBuilder(NetworkUtils.CLLI_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+                    .addAugmentation(tapiExt1)
+                    .addAugmentation(clliExt1)
+                    .addAugmentation(commonExt1)
+                    .build());
+            commit = networkTransactionService.commit();
+            commit.get();
+            //networkTransactionService.commit();
 
-        InstanceIdentifier<Node> iiTapiExtOtnNode = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-            .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
-            .build();
-        LOG.info("OR Topo initialization, creating new OTN TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
-            topoUuid);
-        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode,
-            createTapiNodeBuilder(NetworkUtils.OVERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
-                .addAugmentation(tapiExt1)
-                .addAugmentation(clliExt1)
-                .addAugmentation(commonExt1)
-                .build());
-        networkTransactionService.commit();
+            InstanceIdentifier<Node> iiTapiExtTopologyNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            LOG.info("OR Topo initialization, creating new TOPOLOGY TAPI-SBI-ABS-NODE Node in DataStore"
+                + "with TopoUUID {}", topoUuid);
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode,
+                createTapiNodeBuilder(NetworkUtils.UNDERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+                    .addAugmentation(tapiExt1)
+                    .addAugmentation(clliExt1)
+                    .addAugmentation(commonExt1)
+                    .build());
+            commit = networkTransactionService.commit();
+            commit.get();
+            //networkTransactionService.commit();
+
+            InstanceIdentifier<Node> iiTapiExtOtnNode = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
+                .build();
+            LOG.info("OR Topo initialization, creating new OTN TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
+                topoUuid);
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode,
+                createTapiNodeBuilder(NetworkUtils.OVERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+                    .addAugmentation(tapiExt1)
+                    .addAugmentation(clliExt1)
+                    .addAugmentation(commonExt1)
+                    .build());
+            commit = networkTransactionService.commit();
+            commit.get();
+            //networkTransactionService.commit();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Unable to create TAPI-ABS-NODE in DataStore Topology", e);
+        }
+
     }
 
     @Override
@@ -763,6 +779,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .build();
             LOG.info("Following tapi feature desinstallation, Deleting CLLI TAPI-SBI-ABS-NODE Node in DataStore");
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode);
+            networkTransactionService.commit().get(1, TimeUnit.SECONDS);
 
             networkLayer = NetworkUtils.UNDERLAY_NETWORK_ID;
             InstanceIdentifier<Node> iiTapiExtNetworkNode = InstanceIdentifier.builder(Networks.class)
@@ -770,6 +787,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode);
+            networkTransactionService.commit().get(1, TimeUnit.SECONDS);
 
             networkLayer = NetworkUtils.OVERLAY_NETWORK_ID;
             InstanceIdentifier<Node> iiTapiExtTopologyNode = InstanceIdentifier.builder(Networks.class)
@@ -777,6 +795,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode);
+            networkTransactionService.commit().get(1, TimeUnit.SECONDS);
 
             networkLayer = NetworkUtils.OTN_NETWORK_ID;
             InstanceIdentifier<Node> iiTapiExtOtnNode = InstanceIdentifier.builder(Networks.class)
@@ -798,15 +817,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     LOG.warn("TAPI-SBI-ABS-NODE succesfully deleted, no associated Links found in Datastore");
                     return;
                 }
-                List<LinkId> tapiLinkIdList = nw.nonnullLink().values().stream()
-                    .filter(l -> l.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
-                        .equals(LinkClassEnum.AlienToTapi)
-                        || l.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                            .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
-                                .equals(LinkClassEnum.InterDomain))
-                    .map(Link::getLinkId)
-                    .collect(Collectors.toList());
+
+                List<LinkId> tapiLinkIdList = new ArrayList<>();
+                for (Link link : nw.nonnullLink().values()) {
+                    if ((link.augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                            .transportpce.or.network.augmentation.rev240923.Link1.class) != null
+                            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                                .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass() != null)
+                            && (link.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                                    .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                                    .equals(LinkClassEnum.AlienToTapi)
+                                || link.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                                    .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                                    .equals(LinkClassEnum.InterDomain))) {
+
+                        tapiLinkIdList.add(link.getLinkId());
+                    }
+                }
+
                 if (tapiLinkIdList == null || tapiLinkIdList.isEmpty()) {
                     LOG.warn("TAPI-SBI-ABS-NODE succesfully deleted, no associated Links found in Datastore");
                     return;
@@ -818,8 +846,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .child(Link.class, new LinkKey(linkId))
                         .build();
                     networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiORNetworkLink);
+                    networkTransactionService.commit().get(1, TimeUnit.SECONDS);
                 }
-                networkTransactionService.commit().get(1, TimeUnit.SECONDS);
+                //networkTransactionService.commit().get(1, TimeUnit.SECONDS);
                 LOG.info("TAPI-SBI-ABS-NODE and associated Links succesfully deleted from Datastore");
             }
 

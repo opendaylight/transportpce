@@ -326,6 +326,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['network'][0]['node'][3]['node-id'], 'TAPI-SBI-ABS-NODE')
         self.assertIn(self.CHECK_DICT_TAPINODES, response['network'][0]['node'])
 
+
     def test_15_disconnect_spdrA(self):
         time.sleep(2)
         response = test_utils.unmount_device('SPDR-SA1')
@@ -343,10 +344,12 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.unmount_device('ROADM-C1')
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_19_uninstall_Tapi_Feature(self):
+    def test_19_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
         time.sleep(2)
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        print("Tapi Feature uninstalled")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
@@ -354,7 +357,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        print("Tapi Feature uninstalled")
+        print("Confirm Tapi Feature correctly uninstalled")
 
 
 if __name__ == '__main__':
