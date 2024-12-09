@@ -924,7 +924,14 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.no_content))
         time.sleep(self.WAITING)
 
-    def test_64_disconnect_xponders_from_roadm(self):
+    def test_64_No_exception_At_Tapi_Feature_uninstall(self):
+        test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
+        time.sleep(2)
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        print("Tapi Feature uninstalled")
+
+    def test_65_disconnect_xponders_from_roadm(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         links = response['network'][0]['ietf-network-topology:link']
@@ -934,23 +941,23 @@ class TransportPCEFulltesting(unittest.TestCase):
                     'openroadm-topology', link['link-id'], 'config')
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_65_disconnect_XPDRA(self):
+    def test_66_disconnect_XPDRA(self):
         response = test_utils.unmount_device("XPDR-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_66_disconnect_XPDRC(self):
+    def test_67_disconnect_XPDRC(self):
         response = test_utils.unmount_device("XPDR-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_67_disconnect_ROADMA(self):
+    def test_68_disconnect_ROADMA(self):
         response = test_utils.unmount_device("ROADM-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_68_disconnect_ROADMC(self):
+    def test_69_disconnect_ROADMC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_69_restore_status_port_roadma_srg(self):
+    def test_70_restore_status_port_roadma_srg(self):
         self.assertTrue(test_utils.sims_update_cp_port(('roadma', self.NODE_VERSION_221), '3/0', 'C2',
                                                        {
             "port-name": "C2",
@@ -962,7 +969,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         }))
         time.sleep(2)
 
-    def test_70_clean_openroadm_topology(self):
+    def test_71_clean_openroadm_topology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         links = response['network'][0]['ietf-network-topology:link']
@@ -971,9 +978,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 response = test_utils.del_ietf_network_link_request('openroadm-topology', link['link-id'], 'config')
                 self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_71_uninstall_Tapi_Feature(self):
-        test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
-        time.sleep(2)
+    def test_72_check_uninstall_Tapi_Feature(self):
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
@@ -982,7 +987,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        print("Tapi Feature uninstalled")
+        print("Tapi Feature correctly uninstalled")
 
 
 if __name__ == "__main__":

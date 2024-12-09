@@ -667,25 +667,30 @@ class TransportTapitesting(unittest.TestCase):
         self.test_01_get_tapi_topology_T100G()
         self.test_02_get_tapi_topology_T0()
 
-    def test_47_disconnect_xpdra(self):
+    def test_47_No_exception_At_Tapi_Feature_uninstall(self):
+        test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
+        time.sleep(2)
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        print("Tapi Feature uninstalled")
+
+    def test_48_disconnect_xpdra(self):
         response = test_utils.unmount_device("XPDR-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_48_disconnect_xpdrc(self):
+    def test_49_disconnect_xpdrc(self):
         response = test_utils.unmount_device("XPDR-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_49_disconnect_spdr_sa1(self):
+    def test_50_disconnect_spdr_sa1(self):
         response = test_utils.unmount_device("SPDR-SA1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_50_disconnect_spdr_sc1(self):
+    def test_51_disconnect_spdr_sc1(self):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_51_uninstall_Tapi_Feature(self):
-        test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
-        time.sleep(2)
+    def test_52_check_uninstall_Tapi_Feature(self):
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
@@ -694,7 +699,7 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        print("Tapi Feature uninstalled")
+        print("Tapi Feature correctly uninstalled")
 
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
