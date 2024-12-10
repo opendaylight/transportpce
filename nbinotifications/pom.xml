@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.6</version>
+    <version>13.0.7</version>
     <relativePath/>
   </parent>
 
@@ -22,7 +22,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <transportpce.models.version>20.2.1</transportpce.models.version>
+    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
     <kafka.version>3.7.0</kafka.version>
   </properties>
 

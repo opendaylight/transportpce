@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.6</version>
+    <version>13.0.7</version>
     <relativePath/>
   </parent>
 
@@ -20,7 +20,7 @@
   <description>client to send message to Dmaap message router</description>
 
   <properties>
-    <transportpce.models.version>20.2.1</transportpce.models.version>
+    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 

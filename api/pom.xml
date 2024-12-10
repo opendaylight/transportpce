@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.6</version>
+    <version>13.0.7</version>
     <relativePath/>
   </parent>
 
@@ -22,7 +22,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>20.2.1</transportpce.models.version>
+    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>

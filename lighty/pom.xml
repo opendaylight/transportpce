@@ -11,7 +11,7 @@
   <parent>
     <groupId>io.lighty.core</groupId>
     <artifactId>lighty-app-parent</artifactId>
-    <version>20.0.0</version>
+    <version>20.2.0</version>
     <relativePath/>
   </parent>
 
@@ -25,7 +25,7 @@
     <application.attach.zip>true</application.attach.zip>
     <maven.deploy.skip>true</maven.deploy.skip>
     <transportpce.version>9.3.0-SNAPSHOT</transportpce.version>
-    <transportpce.models.version>20.2.1</transportpce.models.version>
+    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>

@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>13.0.6</version>
+    <version>13.0.7</version>
     <relativePath/>
   </parent>
 
@@ -20,7 +20,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>20.2.1</transportpce.models.version>
+    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -35,7 +35,7 @@
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>7.0.10</version>
+        <version>7.0.11</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
