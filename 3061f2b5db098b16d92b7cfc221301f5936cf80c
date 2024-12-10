@@ -16,6 +16,24 @@
       "message": "Hello,\nI\u0027m not able to explain the reason why our CI is broken, but with this change, our tox job is failing due to the fact that java-21 is not available on the minion used. We can no longer compile the controller to run our python functional test.\n\nTox log show that (I can\u0027t understand where that comes from - it seems being an old thing that does not corresponds to the current version of buildcontroller.sh script...):\n\nbuildcontroller: freeze\u003e python -m pip freeze --all\nbuildcontroller: bcrypt\u003d\u003d4.2.1,certifi\u003d\u003d2024.8.30,cffi\u003d\u003d1.17.1,charset-normalizer\u003d\u003d3.4.0,cryptography\u003d\u003d44.0.0,dict2xml\u003d\u003d1.7.6,idna\u003d\u003d3.10,iniconfig\u003d\u003d2.0.0,lxml\u003d\u003d5.3.0,netconf-client\u003d\u003d3.1.3,packaging\u003d\u003d24.2,paramiko\u003d\u003d3.5.0,pip\u003d\u003d24.3.1,pluggy\u003d\u003d1.5.0,psutil\u003d\u003d6.1.0,pycparser\u003d\u003d2.22,PyNaCl\u003d\u003d1.5.0,pytest\u003d\u003d8.3.4,requests\u003d\u003d2.32.3,setuptools\u003d\u003d75.6.0,urllib3\u003d\u003d2.2.3,wheel\u003d\u003d0.45.1\nbuildcontroller: commands[0] /w/workspace/transportpce-tox-verify-transportpce-master/tests\u003e ./build_controller.sh\n+ JAVA_CMD\u003djava\n+ [ -n  ]\n[INFO] Initializing environment for https://github.com/perltidy/perltidy.\n+ java -version\n+ sed -n ;s/.* version \"\\(.*\\)\\.\\(.*\\)\\..*\".*$/\\1/p;\n11\n+ JAVA_VER\u003d11\n+ echo 11\n+ JAVAC_CMD\u003djavac\n+ [ -n  ]\n+ javac -version\n+ sed -n ;s/javac \\(.*\\)\\.\\(.*\\)\\..*.*$/\\1/p;\n+ JAVAC_VER\u003d11\n+ echo 11\n11\ninstall java 17\n+ [ 11 -ge 17 -a 11 -ge 17 ]\n+ echo install java 17\n+ sudo yum install -y java-17-openjdk java-17-openjdk-devel\nsudo: yum: command not found\n+ + tail -1\n+ grep java-17-openjdk-17\nls -tr1 /usr/lib/jvm/\n+ last_installed_jdk17\u003d\n+ [ -n  ]\n+ echo No java17 available\n+ exit 1\nNo java17 available\nbuildcontroller: exit 1 (0.48 seconds) /w/workspace/transportpce-tox-verify-transportpce-master/tests\u003e ./build_controller.sh pid\u003d30578\nbuildcontroller: FAIL âœ– in 10.97 seconds\n\nSee also this change and exchange we have already had on this topic:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/112222",
       "revId": "3061f2b5db098b16d92b7cfc221301f5936cf80c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f932cac_b027e8e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1927
+      },
+      "writtenOn": "2024-12-10T18:57:43Z",
+      "side": 1,
+      "message": "This should be rebased to run the tox job.\n\nThe parent this change is this:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/112090\n\nand before `build_controller.sh` was updated for Ubuntu.",
+      "parentUuid": "517f134e_cf6685f5",
+      "revId": "3061f2b5db098b16d92b7cfc221301f5936cf80c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
