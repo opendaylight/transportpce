@@ -20,7 +20,7 @@
   <description>client to send message to Dmaap message router</description>
 
   <properties>
-    <transportpce.models.version>20.3.0-SNAPSHOT</transportpce.models.version>
+    <transportpce.models.version>20.3.0</transportpce.models.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
