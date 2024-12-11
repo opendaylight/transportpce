@@ -16,6 +16,207 @@
       "message": "Have incorporated this change. Thanks again.",
       "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b425434_dce4a4a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "Hi Roshan, Thanks a lot again for your great contribution for openconfig port-mapping.",
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15581c57_c4bd4ad4",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "for better consistency, it would be better to put this openconfig initialization file in the folder : tests/sample_configs/openconfig/240119/sample-openconfig-mpdr.xml",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7740be0_6487bcf0",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 6210,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "change \u0027clinet\u0027 to \u0027client\u0027 here and below",
+      "range": {
+        "startLine": 6210,
+        "startChar": 12,
+        "endLine": 6210,
+        "endChar": 26
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fdee7a0_93eb49bd",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9377,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "Since there are errors in karaf with the 2 aaa models not being announced in lightynode, I will patch lightynode to announce them.",
+      "range": {
+        "startLine": 9376,
+        "startChar": 6,
+        "endLine": 9377,
+        "endChar": 119
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4287d1e_eaf9ffc5",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9414,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "I suggest removing the schema to avoid error in karaf when connecting the node.",
+      "range": {
+        "startLine": 9408,
+        "startChar": 6,
+        "endLine": 9414,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f563b997_12aa453c",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9428,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "I suggest removing the schema to avoid error in karaf when connecting the node.",
+      "range": {
+        "startLine": 9422,
+        "startChar": 6,
+        "endLine": 9428,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c19c99_26a70b0c",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9435,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "I suggest removing the schema to avoid error in karaf when connecting the node.",
+      "range": {
+        "startLine": 9429,
+        "startChar": 6,
+        "endLine": 9435,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf81b4a_79eb6318",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "I will fix this point also in lightynode to allow to have \u0027oc\u0027 in lower and upper case.",
+      "range": {
+        "startLine": 179,
+        "startChar": 12,
+        "endLine": 179,
+        "endChar": 56
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e989049a_ea7065db",
+        "filename": "tests/transportpce_tests/oc/test01_portmapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "for better readability it would be better to put NETWORK5 instead of NETWORK1",
+      "range": {
+        "startLine": 82,
+        "startChar": 33,
+        "endLine": 82,
+        "endChar": 41
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

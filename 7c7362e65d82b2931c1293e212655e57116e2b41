@@ -65,6 +65,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d410cae_3946f91d",
+        "filename": "api/src/main/yang/transportpce-portmapping@2024-03-15.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-11T15:27:55Z",
+      "side": 1,
+      "message": "I understand your point. I agree to keep this leaf.",
+      "parentUuid": "f3c6db19_6a485c53",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 21
+      },
+      "revId": "7c7362e65d82b2931c1293e212655e57116e2b41",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24914bec_45281896",
