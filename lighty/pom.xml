@@ -17,14 +17,14 @@
 
   <groupId>io.lighty.controllers</groupId>
   <artifactId>tpce</artifactId>
-  <version>9.3.0-SNAPSHOT</version>
+  <version>9.3.0</version>
   <packaging>jar</packaging>
 
   <properties>
     <application.main.class>io.lighty.controllers.tpce.Main</application.main.class>
     <application.attach.zip>true</application.attach.zip>
     <maven.deploy.skip>true</maven.deploy.skip>
-    <transportpce.version>9.3.0-SNAPSHOT</transportpce.version>
+    <transportpce.version>9.3.0</transportpce.version>
     <transportpce.models.version>20.3.0</transportpce.models.version>
   </properties>
 
