@@ -16,6 +16,23 @@
       "message": "Break the CI, our functional tests running on tox-verify job",
       "revId": "1bc468de121dba91531ede403865e052f224d44f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4bf5e95_3e716689",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6258
+      },
+      "writtenOn": "2024-12-11T00:28:14Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "1bc468de121dba91531ede403865e052f224d44f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
