@@ -21,6 +21,7 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -42,6 +43,7 @@ public class GnpyConsumerImpl implements GnpyConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerImpl.class);
 
     private final GnpyResource api;
+    private Client client;
 
     @Activate
     public GnpyConsumerImpl(final Configuration configuration,
@@ -62,6 +64,15 @@ public class GnpyConsumerImpl implements GnpyConsumer {
                 .register(new ResultMessageBodyReader(resultConverter))
                 .register(new RequestMessageBodyWriter(gnpyRequestConverter));
         api = WebResourceFactory.newResource(GnpyResource.class, client.target(baseUrl));
+    }
+
+    @Deactivate
+    public void close() {
+        if (this.client != null) {
+            LOG.info("Closing client {}", this.client);
+            this.client.close();
+        }
+        this.client = null;
     }
 
     @Override
