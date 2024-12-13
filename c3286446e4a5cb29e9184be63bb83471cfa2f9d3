@@ -58,6 +58,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e693f4a_aff0513b",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15581c57_c4bd4ad4",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7740be0_6487bcf0",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-12-11T15:27:55Z",
       "side": 1,
       "message": "change \u0027clinet\u0027 to \u0027client\u0027 here and below",
+      "range": {
+        "startLine": 6210,
+        "startChar": 12,
+        "endLine": 6210,
+        "endChar": 26
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98193f57_89918d10",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 6210,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7740be0_6487bcf0",
       "range": {
         "startLine": 6210,
         "startChar": 12,
@@ -104,6 +152,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5455b09f_0e341f89",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9377,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fdee7a0_93eb49bd",
+      "range": {
+        "startLine": 9376,
+        "startChar": 6,
+        "endLine": 9377,
+        "endChar": 119
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4287d1e_eaf9ffc5",
@@ -117,6 +189,30 @@
       "writtenOn": "2024-12-11T15:27:55Z",
       "side": 1,
       "message": "I suggest removing the schema to avoid error in karaf when connecting the node.",
+      "range": {
+        "startLine": 9408,
+        "startChar": 6,
+        "endLine": 9414,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723c061f_25635700",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9414,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4287d1e_eaf9ffc5",
       "range": {
         "startLine": 9408,
         "startChar": 6,
@@ -150,6 +246,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2a11753_3b1a5ebd",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9428,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f563b997_12aa453c",
+      "range": {
+        "startLine": 9422,
+        "startChar": 6,
+        "endLine": 9428,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56c19c99_26a70b0c",
@@ -163,6 +283,30 @@
       "writtenOn": "2024-12-11T15:27:55Z",
       "side": 1,
       "message": "I suggest removing the schema to avoid error in karaf when connecting the node.",
+      "range": {
+        "startLine": 9429,
+        "startChar": 6,
+        "endLine": 9435,
+        "endChar": 15
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3feb3581_9b54a6b3",
+        "filename": "tests/sample_configs/openroadm/oc/sample-openconfig-mpdr.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 9435,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56c19c99_26a70b0c",
       "range": {
         "startLine": 9429,
         "startChar": 6,
@@ -196,6 +340,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d242b0d0_f67e48eb",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eaf81b4a_79eb6318",
+      "range": {
+        "startLine": 179,
+        "startChar": 12,
+        "endLine": 179,
+        "endChar": 56
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e989049a_ea7065db",
@@ -209,6 +377,30 @@
       "writtenOn": "2024-12-11T15:27:55Z",
       "side": 1,
       "message": "for better readability it would be better to put NETWORK5 instead of NETWORK1",
+      "range": {
+        "startLine": 82,
+        "startChar": 33,
+        "endLine": 82,
+        "endChar": 41
+      },
+      "revId": "c3286446e4a5cb29e9184be63bb83471cfa2f9d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e6834b_e8c61e7e",
+        "filename": "tests/transportpce_tests/oc/test01_portmapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e989049a_ea7065db",
       "range": {
         "startLine": 82,
         "startChar": 33,

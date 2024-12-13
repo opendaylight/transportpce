@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e23f2d_a29a1f54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2024-12-13T02:44:19Z",
+      "side": 1,
+      "message": "Thank you Christophe for your thorough review. We have incorporated the changes.",
+      "revId": "d4a7f3be93273680527a7c278f62cd10db6d4335",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
