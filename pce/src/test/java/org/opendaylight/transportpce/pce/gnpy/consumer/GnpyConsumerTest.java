@@ -7,16 +7,22 @@
  */
 package org.opendaylight.transportpce.pce.gnpy.consumer;
 
-
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import javax.ws.rs.core.Application;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -28,28 +34,55 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GnpyConsumerTest extends JerseyTest {
+class GnpyConsumerTest {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyConsumerTest.class);
-    private JsonStringConverter<Request> gnpyApiConverter;
+    private final JsonStringConverter<Request> gnpyApiConverter = new JsonStringConverter<>(
+            AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
+    private final WireMockServer wireMockServer = new WireMockServer(9998);
 
-    @Override
-    protected Application configure() {
-        gnpyApiConverter = new JsonStringConverter<>(
-                AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
-        return new ResourceConfig(GnpyStub.class);
+    @BeforeEach
+    void setUp() {
+        wireMockServer.start();
+        wireMockServer.resetAll();
+        configureFor("localhost", 9998);
+    }
+
+    @AfterEach
+    void tearDown() {
+        wireMockServer.stop();
     }
 
     @Test
-    void isAvailableTest() {
+    void isAvailableTest() throws IOException {
+        // GIVEN
+        stubFor(get(urlEqualTo("/api/v1/status"))
+                .willReturn(okJson(Files
+                        .readString(Paths
+                                .get("src", "test", "resources", "gnpy", "gnpy_status.json")))));
+
+        // WHEN
         GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin",
                 "mypassword",
                 AbstractTest.getDataStoreContextUtil().getBindingDOMCodecServices());
-        assertTrue(gnpyConsumer.isAvailable(), "Gnpy should be available");
+        boolean gnpyConsumerAvailable = gnpyConsumer.isAvailable();
+
+        // THEN
+        assertTrue(gnpyConsumerAvailable, "Gnpy should be available");
     }
 
     @Test
     void computePathsTest() throws IOException {
+        // GIVEN
+        stubFor(post(urlEqualTo("/api/v1/path-computation"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Files
+                        .readString(Paths
+                                .get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
+
+        // WHEN
         GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://localhost:9998",
                 "mylogin",
                 "mypassword",
@@ -61,6 +94,8 @@ public class GnpyConsumerTest extends JerseyTest {
                         Files.readString(Paths.get("src/test/resources/gnpy/gnpy_request.json")),
                         JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02);
         Result result = gnpyConsumer.computePaths(request);
+
+        // THEN
         LOG.info("Response received {}", result);
         assertNotNull(result, "Result should not be null");
     }
