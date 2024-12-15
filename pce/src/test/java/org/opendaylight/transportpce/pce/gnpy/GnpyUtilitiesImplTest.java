@@ -7,26 +7,30 @@
  */
 package org.opendaylight.transportpce.pce.gnpy;
 
-
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.google.gson.stream.JsonReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -36,7 +40,6 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
-import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyStub;
 import org.opendaylight.transportpce.pce.utils.JsonUtil;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -61,15 +64,31 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GnpyUtilitiesImplTest extends AbstractTest {
+class GnpyUtilitiesImplTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(GnpyUtilitiesImplTest.class);
     private GnpyUtilitiesImpl gnpyUtilitiesImpl;
     private NetworkTransactionImpl networkTransaction;
-    private static HttpServer httpServer;
     private GnpyConsumer gnpyConsumer;
+    private final WireMockServer wireMockServer = new WireMockServer(9998);
 
-    public GnpyUtilitiesImplTest() throws IOException {
+    @BeforeEach
+    void setUp() throws IOException {
+        wireMockServer.start();
+        wireMockServer.resetAll();
+        configureFor("localhost", 9998);
+        stubFor(get(urlEqualTo("/api/v1/status"))
+                .willReturn(okJson(Files
+                        .readString(Paths
+                                .get("src", "test", "resources", "gnpy", "gnpy_status.json")))));
+    }
+
+    @AfterEach
+    void tearDown() {
+        wireMockServer.stop();
+    }
+
+    GnpyUtilitiesImplTest() throws IOException {
         networkTransaction = new NetworkTransactionImpl(getDataBroker());
         JsonReader networkReader = null;
         JsonReader topoReader = null;
@@ -113,17 +132,6 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
                 getDataStoreContextUtil().getBindingDOMCodecServices());
     }
 
-    @BeforeAll
-    static void init() {
-        // here we cannot use JerseyTest as we already extends AbstractTest
-        final ResourceConfig rc = new ResourceConfig(GnpyStub.class);
-        httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create("http://localhost:9998"), rc);
-    }
-
-    @AfterAll
-    static void tearDown() {
-        httpServer.shutdownNow();
-    }
 
     private void saveOpenRoadmNetwork(Network network, String networkId)
             throws InterruptedException, ExecutionException {
@@ -135,14 +143,31 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     @Test
     void askNewPathFromGnpyNullResultTest() throws Exception {
+        // GIVEN
+        stubFor(post(urlEqualTo("/api/v1/path-computation"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Files
+                                .readString(Paths
+                                        .get("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
+       // WHEN
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
                 gnpyConsumer);
+        // THEN
         assertNull(gnpyUtilitiesImpl.askNewPathFromGnpy(null), "No hard constraints should be available");
     }
 
     @Test
     void askNewPathFromGnpyTest() throws Exception {
+        stubFor(post(urlEqualTo("/api/v1/path-computation"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Files
+                                .readString(Paths
+                                        .get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
                 gnpyConsumer);
@@ -154,6 +179,13 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     @Test
     void verifyComputationByGnpyTest() throws Exception {
+        stubFor(post(urlEqualTo("/api/v1/path-computation"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Files
+                                .readString(Paths
+                                        .get("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
         // build AtoZ
         AToZDirectionBuilder atoZDirectionBldr = buildAtZ();
         // build ZtoA
