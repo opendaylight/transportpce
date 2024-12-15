@@ -7,12 +7,20 @@
  */
 package org.opendaylight.transportpce.pce;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +30,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
-import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
@@ -37,16 +44,14 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 
-
 @ExtendWith(MockitoExtension.class)
-public class PceSendingPceRPCsTest extends AbstractTest {
+class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
     private Mapping mapping;
     @Mock
     private BindingDOMCodecServices bindingDOMCodecServices;
-    private JerseyServer jerseyServer = new JerseyServer();
     private DataBroker dataBroker;
     private GnpyConsumer gnpyConsumer;
     @Mock
@@ -79,13 +84,28 @@ public class PceSendingPceRPCsTest extends AbstractTest {
 
     @Test
     void pathComputationTest() throws Exception {
-        jerseyServer.setUp();
+        // GIVEN
+        WireMockServer wireMockServer = new WireMockServer(9998);
+        wireMockServer.start();
+        wireMockServer.stubFor(get(urlEqualTo("/api/v1/status"))
+                .willReturn(okJson(Files
+                        .readString(Paths
+                                .get("src", "test", "resources", "gnpy", "gnpy_status.json")))));
+        wireMockServer.stubFor(post(urlEqualTo("/api/v1/path-computation"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Files
+                                .readString(Paths
+                                        .get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
                 networkTransaction, gnpyConsumer, portMapping);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
+        // WHEN
         pceSendingPceRPCs.pathComputation();
+        // THEN
         assertTrue(gnpyConsumer.isAvailable());
-        jerseyServer.tearDown();
+        wireMockServer.stop();
     }
 
     @Test
