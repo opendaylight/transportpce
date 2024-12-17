@@ -72,7 +72,6 @@ public class JsonStringConverter<T extends DataObject> {
                 .of(bindingDOMCodecServices.getRuntimeContext().modelContext())
                 .toInference();
             rootNode.modelContext();
-            rootNode.modelContext();
             NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter
                 .createExclusiveWriter(codecFactory, rootNode, EffectiveModelContext.NAME.getNamespace(), jsonWriter);
             try (NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(jsonStreamWriter)) {
