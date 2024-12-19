@@ -82,6 +82,7 @@ public class ServiceCreateImpl implements ServiceCreate {
         // TODO: If there is one, delete it from the temp-service-list??
         this.pceListener.setInput(new ServiceInput(input));
         this.pceListener.setServiceReconfigure(false);
+        this.pceListener.setServiceFeasiblity(false);
         this.pceListener.setTempService(false);
         this.pceListener.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListener.setserviceDataStoreOperations(serviceDataStoreOperations);
