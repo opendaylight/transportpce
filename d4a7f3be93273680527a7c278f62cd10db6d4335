@@ -16,6 +16,23 @@
       "message": "Thank you Christophe for your thorough review. We have incorporated the changes.",
       "revId": "d4a7f3be93273680527a7c278f62cd10db6d4335",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c5b9d4f_5dea9021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2024-12-19T10:06:14Z",
+      "side": 1,
+      "message": "Thanks so much for this huge contribution that really adds a lot of value and paves the way toward OpenConfig support for transponders. Everything looks good to me. Appreciate the efforts you made to respect the existing structure of the code.\nNo comments to add to the ones Christophe made. Thanks again for the very good job!!!",
+      "revId": "d4a7f3be93273680527a7c278f62cd10db6d4335",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
