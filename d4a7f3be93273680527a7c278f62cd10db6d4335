@@ -33,6 +33,29 @@
       "message": "Thanks so much for this huge contribution that really adds a lot of value and paves the way toward OpenConfig support for transponders. Everything looks good to me. Appreciate the efforts you made to respect the existing structure of the code.\nNo comments to add to the ones Christophe made. Thanks again for the very good job!!!",
       "revId": "d4a7f3be93273680527a7c278f62cd10db6d4335",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6690d14_0741942c",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2024-12-19T14:30:00Z",
+      "side": 1,
+      "message": "redundant ocPortMapping instanciation",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 83
+      },
+      "revId": "d4a7f3be93273680527a7c278f62cd10db6d4335",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
