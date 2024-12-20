@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30239671_0761254f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-12-20T10:42:02Z",
+      "side": 1,
+      "message": "New methods in servicehandler/PCEServiceWrapper need to be integrated in the already existing one, ohterwise we have two methods with the same signature.",
+      "revId": "5ee7b0ec66ffccc4c481fa10b00ce46f5ac38e4d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1987c05b_9bcc4f3a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/PCEServiceWrapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-12-20T10:42:02Z",
+      "side": 1,
+      "message": "I don\u0027t see how java can make the difference between these two \"performPCE\" methods. They have the same signature.\nYou must find another way to implement the temp service use case.",
+      "range": {
+        "startLine": 154,
+        "startChar": 41,
+        "endLine": 154,
+        "endChar": 51
+      },
+      "revId": "5ee7b0ec66ffccc4c481fa10b00ce46f5ac38e4d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "536858e3_f666c0fc",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/PCEServiceWrapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-12-20T10:42:02Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 240,
+        "startChar": 40,
+        "endLine": 240,
+        "endChar": 61
+      },
+      "revId": "5ee7b0ec66ffccc4c481fa10b00ce46f5ac38e4d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
