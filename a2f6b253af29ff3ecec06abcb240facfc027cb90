@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a41ab5c_175806a4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-12-20T10:27:06Z",
+      "side": 1,
+      "message": "shouldn\u0027t be better to use a short-circuit (\u0026\u0026) logic instead?",
+      "range": {
+        "startLine": 596,
+        "startChar": 34,
+        "endLine": 596,
+        "endChar": 35
+      },
+      "revId": "a2f6b253af29ff3ecec06abcb240facfc027cb90",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c796a83_01a70fb1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2024-12-20T10:27:06Z",
+      "side": 1,
+      "message": "shouldn\u0027t be better to use a short-circuit (\u0026\u0026) logic instead?",
+      "range": {
+        "startLine": 795,
+        "startChar": 34,
+        "endLine": 795,
+        "endChar": 35
+      },
+      "revId": "a2f6b253af29ff3ecec06abcb240facfc027cb90",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
