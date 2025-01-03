@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
@@ -66,8 +65,8 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -86,17 +85,21 @@ public class TapiProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiProvider.class);
 
-    private static final InstanceIdentifier<Node> NETCONF_NODE_II = InstanceIdentifier
-            .create(NetworkTopology.class)
+    private static final DataObjectReference<Node> NETCONF_NODE_II = DataObjectReference.builder(NetworkTopology.class)
             .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
-            .child(Node.class);
-    private static final InstanceIdentifier<Nodes> MAPPING_II = InstanceIdentifier.create(Network.class)
-        .child(org.opendaylight.yang.gen.v1.http
-            .org.opendaylight.transportpce.portmapping.rev240315.network.Nodes.class);
-    private static final InstanceIdentifier<Link> LINK_II = InstanceIdentifier.create(Networks.class).child(
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network.class,
-            new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class)
-        .child(Link.class);
+            .child(Node.class)
+            .build();
+    private static final DataObjectReference<Nodes> MAPPING_II = DataObjectReference.builder(Network.class)
+            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
+                    .Nodes.class)
+            .build();
+    private static final DataObjectReference<Link> LINK_II = DataObjectReference.builder(Networks.class)
+            .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
+                    .Network.class,
+                    new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .augmentation(Network1.class)
+            .child(Link.class)
+            .build();
     public static final Uuid TAPI_TOPO_UUID = new Uuid(UUID.nameUUIDFromBytes(
         TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
     public static final String TOPOLOGICAL_MODE = "Full";
@@ -163,18 +166,15 @@ public class TapiProvider {
         TapiNetconfTopologyListener topologyListener = new TapiNetconfTopologyListener(tapiNetworkModelServiceImpl);
         TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransactionService);
         TapiPortMappingListener tapiPortMappingListener = new TapiPortMappingListener(tapiNetworkModelServiceImpl);
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, LINK_II), orLinkListener));
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II),
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, LINK_II,
+                orLinkListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,
                 topologyListener));
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, MAPPING_II), tapiPortMappingListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, MAPPING_II,
+                tapiPortMappingListener));
         TapiListener tapiListener = new TapiListener();
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(
-                        LogicalDatastoreType.CONFIGURATION,
-                        InstanceIdentifier.create(ServiceInterfacePoints.class)),
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
+                DataObjectReference.builder(ServiceInterfacePoints.class).build(),
                 tapiListener));
         // Notification Listener
         pcelistenerRegistration = notificationService.registerCompositeListener(pceListenerImpl.getCompositeListener());

@@ -93,6 +93,6 @@ public class TapiProviderTest {
                 any(GetTopologyListImpl.class),
                 any(GetServiceInterfacePointDetailsImpl.class),
                 any(GetServiceInterfacePointListImpl.class));
-        verify(dataBroker, times(4)).registerTreeChangeListener(any(), any());
+        verify(dataBroker, times(4)).registerTreeChangeListener(any(), any(), any());
     }
 }

@@ -99,7 +99,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
@@ -168,7 +168,7 @@ public class PceGraphTest extends AbstractTest {
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
-                    InstanceIdentifier.create(OperationalModeCatalog.class),
+                    DataObjectIdentifier.builder(OperationalModeCatalog.class).build(),
                     omCatalog);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {
@@ -189,8 +189,8 @@ public class PceGraphTest extends AbstractTest {
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
-                    InstanceIdentifier.create(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev240315.Network.class),
+                    DataObjectIdentifier.builder(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                        .transportpce.portmapping.rev240315.Network.class).build(),
                     networkNode);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {
@@ -441,8 +441,9 @@ public class PceGraphTest extends AbstractTest {
 
     private void saveOpenRoadmNetwork(Network network, String networkId)
             throws InterruptedException, ExecutionException {
-        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(networkId))).build();
+        DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(networkId)))
+            .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
         dataWriteTransaction.commit().get();

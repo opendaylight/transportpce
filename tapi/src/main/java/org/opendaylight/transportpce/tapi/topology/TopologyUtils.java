@@ -63,7 +63,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -273,10 +272,11 @@ public final class TopologyUtils {
         @NonNull
         FluentFuture<Optional<Mapping>> mappingOpt = this.dataBroker.newReadOnlyTransaction().read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(
+                DataObjectIdentifier.builder(
                     org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network.class)
                 .child(Nodes.class, new NodesKey(nodeIdPortMap))
-                .child(Mapping.class, new MappingKey(networkLcp)));
+                .child(Mapping.class, new MappingKey(networkLcp))
+                .build());
         if (!mappingOpt.isDone()) {
             LOG.error("Impossible to get mapping of associated network port {} of tp {}",
                 networkLcp, tp.getTpId().getValue());

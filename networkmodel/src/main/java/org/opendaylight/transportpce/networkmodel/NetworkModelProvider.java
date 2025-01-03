@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.networkmodel;
 import java.util.ArrayList;
 import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -30,8 +29,8 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -43,14 +42,17 @@ import org.slf4j.LoggerFactory;
 public class NetworkModelProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelProvider.class);
-    private static final InstanceIdentifier<Node> NETCONF_NODE_II = InstanceIdentifier
-            .create(NetworkTopology.class)
+    private static final DataObjectReference<Node> NETCONF_NODE_II = DataObjectReference
+            .builder(NetworkTopology.class)
             .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
-            .child(Node.class);
-    private static final InstanceIdentifier<Mapping> MAPPING_II = InstanceIdentifier.create(Network.class)
-        .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
-                .Nodes.class)
-        .child(Mapping.class);
+            .child(Node.class)
+            .build();
+    private static final DataObjectReference<Mapping> MAPPING_II = DataObjectReference
+            .builder(Network.class)
+            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
+                    .Nodes.class)
+            .child(Mapping.class)
+            .build();
 
 
     private final DataBroker dataBroker;
@@ -90,10 +92,10 @@ public class NetworkModelProvider {
         tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
         tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II), topologyListener));
-        listeners.add(dataBroker.registerTreeChangeListener(
-                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, MAPPING_II), portMappingListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,
+                topologyListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, MAPPING_II,
+                portMappingListener));
         serviceHandlerListenerRegistration = notificationService.registerCompositeListener(
             new ServiceHandlerListener(frequenciesService).getCompositeListener());
     }

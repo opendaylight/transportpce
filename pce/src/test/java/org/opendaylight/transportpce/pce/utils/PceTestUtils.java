@@ -37,7 +37,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
 import org.opendaylight.yangtools.yang.data.api.schema.MapEntryNode;
@@ -65,7 +65,7 @@ public final class PceTestUtils {
                 = ((ContainerNode) normalizedNode.orElseThrow()).body().iterator().next();
         MapEntryNode mapNode = ((MapNode) next).body().iterator().next();
         Optional<DataObject> dataObject = dataObjectConverter.getDataObject(mapNode, Network.QNAME);
-        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
@@ -100,8 +100,9 @@ public final class PceTestUtils {
 
     private static void saveOpenRoadmNetwork(Network network, String networkId, DataBroker dataBroker)
             throws InterruptedException, ExecutionException {
-        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(networkId))).build();
+        DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(networkId)))
+                .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
         dataWriteTransaction.commit().get();
@@ -111,7 +112,7 @@ public final class PceTestUtils {
                                                  DataStoreContext dataStoreContext, Network network)
             throws ExecutionException, InterruptedException {
 
-        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();

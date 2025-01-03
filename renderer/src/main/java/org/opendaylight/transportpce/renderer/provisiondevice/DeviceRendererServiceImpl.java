@@ -88,7 +88,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -644,11 +644,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 nodeList.put(nodes.key(),nodes);
             }
         }
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-            .service.nodelist.Nodelist> nodeListIID =
-                 InstanceIdentifier.create(ServiceNodelist.class)
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+            .service.nodelist.Nodelist> nodeListIID = DataObjectIdentifier.builder(ServiceNodelist.class)
                      .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-                         .service.nodelist.Nodelist.class, new NodelistKey(input.getServiceName()));
+                         .service.nodelist.Nodelist.class, new NodelistKey(input.getServiceName()))
+                     .build();
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION,
                 nodeListIID,
@@ -669,11 +669,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     }
 
     private boolean alarmSuppressionNodeRemoval(String serviceName) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-            .service.nodelist.Nodelist> nodeListIID =
-                InstanceIdentifier.create(ServiceNodelist.class)
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+            .service.nodelist.Nodelist> nodeListIID = DataObjectIdentifier.builder(ServiceNodelist.class)
                     .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-                        .service.nodelist.Nodelist.class, new NodelistKey(serviceName));
+                        .service.nodelist.Nodelist.class, new NodelistKey(serviceName))
+                    .build();
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
@@ -692,8 +692,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ServicesBuilder servicesBuilder;
         // Get the service from the service list inventory
         ServicesKey serviceKey = new ServicesKey(name);
-        InstanceIdentifier<Services> iid =
-                InstanceIdentifier.create(ServiceList.class).child(Services.class, serviceKey);
+        DataObjectIdentifier<Services> iid = DataObjectIdentifier.builder(ServiceList.class)
+                .child(Services.class, serviceKey)
+                .build();
         Optional<Services> services;
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Future<java.util.Optional<Services>> future =

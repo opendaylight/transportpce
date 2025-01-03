@@ -78,7 +78,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -328,12 +328,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             justification = "call in call() method")
     private Optional<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
             .service.path.PathDescription> getPathDescriptionFromDatastore(String serviceName) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-                .service.path.PathDescription> pathDescriptionIID =
-            InstanceIdentifier.create(ServicePathList.class)
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                    .service.path.PathDescription> pathDescriptionIID = DataObjectIdentifier
+                .builder(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName))
                 .child(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-                    .service.path.PathDescription.class);
+                    .service.path.PathDescription.class)
+                .build();
         try {
             LOG.debug("Getting path description for service {}", serviceName);
             return this.dataBroker.newReadOnlyTransaction()
