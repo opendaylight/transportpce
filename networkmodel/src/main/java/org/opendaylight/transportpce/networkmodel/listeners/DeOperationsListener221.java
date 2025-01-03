@@ -14,10 +14,24 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev181019.R
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org-openroadm-de-operations notification.
+ * This implementation is dedicated to yang model 2.2.1 revision.
+ */
 public class DeOperationsListener221 {
+
+    /**
+     * Default constructor.
+     */
+    public DeOperationsListener221() {
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(DeOperationsListener221.class);
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(RestartNotification.class, this::onRestartNotification)));

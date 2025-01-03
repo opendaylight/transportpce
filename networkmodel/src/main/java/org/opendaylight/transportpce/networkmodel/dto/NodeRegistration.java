@@ -29,6 +29,9 @@ import org.opendaylight.yangtools.concepts.Registration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class manages the registration of listener for the different netconf device node versions.
+ */
 public class NodeRegistration {
     private static final Logger LOG = LoggerFactory.getLogger(NodeRegistration.class);
     private final String nodeId;
@@ -38,6 +41,14 @@ public class NodeRegistration {
     private final PortMapping portMapping;
     private final List<Registration> listeners;
 
+    /**
+     * Instantiate the NodeRegistration object.
+     * @param nodeId Node name
+     * @param nodeVersion OpenROADM org-openroadm-device model version
+     * @param notificationService Notification broker which allows to subscribe for notifications
+     * @param dataBroker Provides access to the conceptual data tree store. Used here to instantiate listeners
+     * @param portMapping Store the abstraction view of the netconf OpenROADM-device
+     */
     public NodeRegistration(String nodeId, String nodeVersion, NotificationService notificationService,
             DataBroker dataBroker, PortMapping portMapping) {
         this.nodeId = nodeId;
@@ -48,6 +59,10 @@ public class NodeRegistration {
         listeners = new ArrayList<Registration>();
     }
 
+    /**
+     * Depending on the org-openroadm-device version, select the correct implementations that register the different
+     * device listeners.
+     */
     public void registerListeners() {
         switch (this.nodeVersion) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -65,6 +80,9 @@ public class NodeRegistration {
         }
     }
 
+    /**
+     * Unregister the different device listeners when the network service module stop.
+     */
     public void unregisterListeners() {
         LOG.info("Unregistering notification listeners for node: {}", this.nodeId);
         for (Registration listenerRegistration : listeners) {

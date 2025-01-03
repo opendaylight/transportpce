@@ -38,6 +38,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class is the starting point of the networkmodel module. It starts the different objects and initialize the
+ * different topology layer instances.
+ */
 @Component
 public class NetworkModelProvider {
 
@@ -64,6 +68,16 @@ public class NetworkModelProvider {
     private FrequenciesService frequenciesService;
     private PortMappingListener portMappingListener;
 
+    /**
+     * Instantiate the NetworkModelProvider.
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
+     * @param networkModelService Service that eases data handling in topology datastores
+     * @param deviceTransactionManager Manages data transactions with the netconf devices
+     * @param portMapping Store the abstraction view of the netconf device
+     * @param notificationService Notification broker which allows to subscribe for notifications
+     * @param frequenciesService Object that ease WDM spectrum handling
+     */
     @Activate
     public NetworkModelProvider(@Reference NetworkTransactionService networkTransactionService,
             @Reference final DataBroker dataBroker,

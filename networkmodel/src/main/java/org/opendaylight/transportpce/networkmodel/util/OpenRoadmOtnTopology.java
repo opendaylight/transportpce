@@ -81,6 +81,9 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class to implement the org-openroadm-otn-network-topology layer.
+ */
 public final class OpenRoadmOtnTopology {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmOtnTopology.class);
@@ -117,6 +120,11 @@ public final class OpenRoadmOtnTopology {
     private OpenRoadmOtnTopology() {
     }
 
+    /**
+     * Create Nodes and Links in the OTN topology depending on the type of OTN device.
+     * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
+     * @return Subset of the topology
+     */
     public static TopologyShard createTopologyShard(Nodes mappingNode) {
         List<Node> nodes = new ArrayList<>();
         List<Link> links = new ArrayList<>();
@@ -145,6 +153,15 @@ public final class OpenRoadmOtnTopology {
         return new TopologyShard(nodes, links);
     }
 
+    /**
+     * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     * @param nodeA Node name at one link end
+     * @param tpA Terminatin point id on nodeA
+     * @param nodeZ Node name at the other link end
+     * @param tpZ Termination point id on nodeZ
+     * @param linkType To distinguish the ODU link creation from the OTU link creation
+     * @return topology with otn links updated
+     */
     public static TopologyShard createOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ,
             OtnLinkType linkType) {
 
@@ -155,6 +172,12 @@ public final class OpenRoadmOtnTopology {
                 : null);
     }
 
+    /**
+     * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     * @param notifLink List of links to create
+     * @param linkType To distinguish the ODU link creation from the OTU link creation
+     * @return topology with otn links updated
+     */
     public static TopologyShard createOtnLinks(
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp
                 .Link notifLink,
@@ -169,6 +192,14 @@ public final class OpenRoadmOtnTopology {
             linkType));
     }
 
+    /**
+     * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     * @param notifLink List of links to create
+     * @param supportedOtu4links List of OTU links to update when they exist
+     * @param supportedTPs List of termination points to update
+     * @param linkType To distinguish the ODU link creation from the OTU link creation
+     * @return topology with otn links updated
+     */
     public static TopologyShard createOtnLinks(
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp
                 .Link notifLink,
@@ -195,6 +226,13 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
+    /**
+     * Update the available and used bandwidth parameters of OTN links during creation of a service.
+     * @param suppOtuLinks List of OTU links to create
+     * @param oldTps List of termination points to update
+     * @param linkType To distinguish the ODU link creation from the OTU link creation
+     * @return topology with otn links updated
+     */
     public static TopologyShard createOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
             OtnLinkType linkType) {
 
@@ -230,6 +268,17 @@ public final class OpenRoadmOtnTopology {
             :  new TopologyShard(null, null, null);
     }
 
+    /**
+     * Update the available and used bandwidth parameters of an OTN link during creation and deletion of a service.
+     * @param suppOduLinks List of ODU links to update
+     * @param oldTps List of ODU termination points to update
+     * @param serviceRate Rate of the service
+     * @param tribPortNb Trib port number
+     * @param minTribSlotNb Min tributary slot number
+     * @param maxTribSlotNb Max tributary slot number
+     * @param isDeletion Set when this is a deletion action
+     * @return topology with otn links and TPs updated
+     */
     public static TopologyShard updateOtnLinks(List<Link> suppOduLinks, List<TerminationPoint> oldTps,
             Uint32 serviceRate, Short tribPortNb, Short minTribSlotNb, Short maxTribSlotNb, boolean isDeletion) {
 
@@ -271,6 +320,12 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
+    /**
+     * Update the available and used bandwidth parameters of an OTN link during creation and deletion of a service.
+     * @param suppOtuLinks List of OTU links to update
+     * @param isDeletion Set when this is a deletion action
+     * @return topology with otn links updated
+     */
     public static TopologyShard updateOtnLinks(List<Link> suppOtuLinks, boolean isDeletion) {
 
         List<Link> links = new ArrayList<>();
@@ -295,6 +350,13 @@ public final class OpenRoadmOtnTopology {
         }
     }
 
+    /**
+     * Update the available and used bandwidth parameters of OTN links during deletion of a service.
+     * @param suppOtuLinks List of OTU links to update
+     * @param oldTps List of termination points to update
+     * @param linkType To distinguish the ODU link deletion from the OTU link deletion
+     * @return topology with otn links updated
+     */
     public static TopologyShard deleteOtnLinks(List<Link> suppOtuLinks, List<TerminationPoint> oldTps,
             OtnLinkType linkType) {
 

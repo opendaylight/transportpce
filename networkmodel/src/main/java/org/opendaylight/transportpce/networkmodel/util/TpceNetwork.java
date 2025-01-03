@@ -29,12 +29,19 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class that initializes the different topology layers.
+ */
 public class TpceNetwork {
 
     private static final Logger LOG = LoggerFactory.getLogger(TpceNetwork.class);
 
     private NetworkTransactionService networkTransactionService;
 
+    /**
+     * Instantiate the TpceNetwork object.
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     */
     public TpceNetwork(NetworkTransactionService networkTransactionService) {
         this.networkTransactionService = networkTransactionService;
     }
