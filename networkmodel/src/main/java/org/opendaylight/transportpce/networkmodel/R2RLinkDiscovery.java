@@ -43,6 +43,9 @@ import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class that manages the WDM ROADM-to-ROADM links in the openroadm-topology.
+ */
 public class R2RLinkDiscovery {
 
     private static final Logger LOG = LoggerFactory.getLogger(R2RLinkDiscovery.class);
@@ -51,6 +54,12 @@ public class R2RLinkDiscovery {
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
 
+    /**
+     * Instantiate the R2RLinkDiscovery object.
+     * @param dataBroker Provides access to the conceptual data tree store
+     * @param deviceTransactionManager Manages data transactions with the netconf devices
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     */
     public R2RLinkDiscovery(final DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         NetworkTransactionService networkTransactionService) {
         this.dataBroker = dataBroker;
@@ -58,6 +67,13 @@ public class R2RLinkDiscovery {
         this.networkTransactionService = networkTransactionService;
     }
 
+    /**
+     * Depending on the org-openroadm-device version, get from the device relevant information concerning the node
+     * neighbors.
+     * @param nodeId Node name
+     * @param nodeVersion org-openroadm-device version
+     * @return True if the node has at least one neighbor. False otherwise.
+     */
     public boolean readLLDP(NodeId nodeId, String nodeVersion) {
         switch (nodeVersion) {
             case OPENROADM_DEVICE_VERSION_1_2_1:
@@ -187,6 +203,12 @@ public class R2RLinkDiscovery {
         return success;
     }
 
+    /**
+     * Get the kind of WDM line interface of the node (Bidirectional or Unidirectional).
+     * @param degreeCounter Number of the degree
+     * @param nodeId Node name
+     * @return Direction
+     */
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
         DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue()))
@@ -211,6 +233,14 @@ public class R2RLinkDiscovery {
         return Direction.NotApplicable;
     }
 
+    /**
+     * Create a ROADM-to-ROADM link when a ROADM node has a neighbor declared in its configuration.
+     * @param nodeId Node name
+     * @param interfaceName Name of the WDM line interface
+     * @param remoteSystemName Name of the neighbor node
+     * @param remoteInterfaceName Name of the WDM line interface on the neighbor node
+     * @return True if the links are correctly created, False otherwise
+     */
     public boolean createR2RLink(NodeId nodeId, String interfaceName, String remoteSystemName,
                                  String remoteInterfaceName) {
         // Find which degree is associated with ethernet interface
@@ -292,6 +322,14 @@ public class R2RLinkDiscovery {
         return true;
     }
 
+    /**
+     * Delete a ROADM-to-ROADM link when a ROADM node is removed from the openroadm topology.
+     * @param nodeId Node name
+     * @param interfaceName Name of the WDM line interface
+     * @param remoteSystemName Name of the neighbor node
+     * @param remoteInterfaceName Name of the WDM line interface on the neighbor node
+     * @return True if the links are correctly created, False otherwise
+     */
     public boolean deleteR2RLink(NodeId nodeId, String interfaceName, String remoteSystemName,
                                  String remoteInterfaceName) {
         // Find which degree is associated with ethernet interface

@@ -15,11 +15,21 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.LldpNbrInfoChange
+ * notification.
+ * This implementation is dedicated to yang model 1.2.1 revision.
+ */
 public class LldpListener implements Listener<LldpNbrInfoChange> {
 
     private static final Logger LOG = LoggerFactory.getLogger(LldpListener.class);
     private final NodeId nodeId;
 
+    /**
+     * Create instance of the device listener.
+     *
+     * @param nodeId Node name
+     */
     public LldpListener(final String nodeId) {
         this.nodeId = new NodeId(nodeId);
     }

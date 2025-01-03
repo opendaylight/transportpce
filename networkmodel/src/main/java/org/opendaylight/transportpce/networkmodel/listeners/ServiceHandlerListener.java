@@ -17,21 +17,37 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation that listens to any data change on
+ * org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh object.
+ */
 public class ServiceHandlerListener {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerListener.class);
     private final FrequenciesService service;
 
 
+    /**
+     * Instantiate the ServiceHandlerListener.
+     * @param service FrequenciesService that eases WDM spectrum handling.
+     */
     public ServiceHandlerListener(FrequenciesService service) {
         LOG.info("Init service handler listener for network");
         this.service = service;
     }
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)));
     }
 
+    /**
+     * Callback on a notification reception.
+     * @param notification ServiceRpcResultSh object
+     */
     public void onServiceRpcResultSh(ServiceRpcResultSh notification) {
         if (notification.getStatus() != RpcStatusEx.Successful) {
             LOG.info("RpcStatusEx of notification not equals successful. Nothing to do for notification {}",

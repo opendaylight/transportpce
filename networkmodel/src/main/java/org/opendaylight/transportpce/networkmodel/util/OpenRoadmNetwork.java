@@ -24,7 +24,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Utility class to implement the org-openroadm-network topology layer.
+ */
 public final class OpenRoadmNetwork {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmNetwork.class);

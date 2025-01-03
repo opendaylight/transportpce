@@ -19,10 +19,18 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yangtools.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
+/**
+ * Implementation that listens to any data change on
+ * org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping object.
+ */
 public class PortMappingListener implements DataTreeChangeListener<Mapping> {
 
     private final NetworkModelService networkModelService;
 
+    /**
+     * Instantiate the PortMappingListener.
+     * @param networkModelService Service that eases data handling in topology data-stores.
+     */
     public PortMappingListener(NetworkModelService networkModelService) {
         this.networkModelService = networkModelService;
     }
@@ -48,6 +56,11 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
         }
     }
 
+    /**
+     * Retrieve from the data change the node id that emits the device notification.
+     * @param dataTreeIdentifier Instance Identifiers of the mapping change.
+     * @return the node ID, parent of the data tree change.
+     */
     protected String getNodeIdFromMappingDataTreeIdentifier(DataTreeIdentifier<Mapping> dataTreeIdentifier) {
         LinkedList<DataObjectStep<?>> path = new LinkedList<>();
         dataTreeIdentifier.path().getPathArguments().forEach(p -> path.add(p));
