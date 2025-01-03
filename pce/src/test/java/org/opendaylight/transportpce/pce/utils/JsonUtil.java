@@ -15,11 +15,10 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.DataObjectReference;
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingCodecContext;
+import org.opendaylight.yangtools.binding.data.codec.impl.di.DefaultBindingDOMCodecFactory;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
 import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
-import org.opendaylight.yangtools.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.yangtools.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -48,8 +47,8 @@ public final class JsonUtil {
         }
         /* Create the schema context for loaded models */
         this.schemaCtx = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-        BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();
-        bindingDOMCodecServices = new BindingCodecContext(bindingContext);
+        bindingDOMCodecServices = new DefaultBindingDOMCodecFactory()
+                .createBindingDOMCodec(BindingRuntimeHelpers.createRuntimeContext());
     }
 
     public static JsonUtil getInstance() {

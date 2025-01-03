@@ -32,7 +32,7 @@ import org.opendaylight.mdsal.dom.broker.SerializedDOMDataBroker;
 import org.opendaylight.mdsal.dom.spi.FixedDOMSchemaService;
 import org.opendaylight.mdsal.dom.spi.store.DOMStore;
 import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStoreFactory;
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingCodecContext;
+import org.opendaylight.yangtools.binding.data.codec.impl.di.DefaultBindingDOMCodecFactory;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
 import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
@@ -61,7 +61,8 @@ public class DataStoreContextImpl implements DataStoreContext {
             moduleInfos.add(yangModelBindingProvider.getModuleInfo());
         }
         schemaCtx = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-        bindingDOMCodecServices = new BindingCodecContext(BindingRuntimeHelpers.createRuntimeContext());
+        bindingDOMCodecServices = new DefaultBindingDOMCodecFactory()
+                .createBindingDOMCodec(BindingRuntimeHelpers.createRuntimeContext());
         adapterFactory = new BindingAdapterFactory(new ConstantAdapterContext(bindingDOMCodecServices));
         domNotificationRouter = new DOMNotificationRouter(16);
         domNotificationService = new RouterDOMNotificationService(domNotificationRouter);
