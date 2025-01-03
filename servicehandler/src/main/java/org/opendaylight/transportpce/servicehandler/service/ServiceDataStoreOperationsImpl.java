@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -92,7 +92,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
             transaction.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServiceList.class),
+                DataObjectIdentifier.builder(ServiceList.class).build(),
                 new ServiceListBuilder().build());
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -107,7 +107,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction transaction = this.dataBroker.newWriteOnlyTransaction();
             transaction.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(TempServiceList.class),
+                DataObjectIdentifier.builder(TempServiceList.class).build(),
                 new TempServiceListBuilder().build());
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -122,8 +122,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return this.dataBroker.newReadOnlyTransaction()
                     .read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.create(ServiceList.class)
+                        DataObjectIdentifier.builder(ServiceList.class)
                             .child(Services.class, new ServicesKey(serviceName))
+                            .build()
                         )
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -138,7 +139,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return this.dataBroker.newReadOnlyTransaction()
                     .read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.create(ServiceList.class))
+                        DataObjectIdentifier.builder(ServiceList.class).build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading services failed:", e);
@@ -153,12 +154,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return this.dataBroker.newReadOnlyTransaction()
                     .read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.create(TempServiceList.class)
+                        DataObjectIdentifier.builder(TempServiceList.class)
                             .child(
                                 org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                                     .temp.service.list.Services.class,
                                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
-                                    .temp.service.list.ServicesKey(serviceName)))
+                                    .temp.service.list.ServicesKey(serviceName))
+                            .build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading service {} failed:", serviceName, e);
@@ -173,8 +175,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.delete(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServiceList.class)
-                    .child(Services.class, new ServicesKey(serviceName)));
+                DataObjectIdentifier.builder(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceName))
+                    .build());
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
@@ -190,12 +193,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.delete(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(TempServiceList.class)
+                DataObjectIdentifier.builder(TempServiceList.class)
                     .child(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                             .temp.service.list.Services.class,
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
-                            .temp.service.list.ServicesKey(commonId)));
+                            .temp.service.list.ServicesKey(commonId))
+                    .build());
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
@@ -216,8 +220,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServiceList.class)
-                    .child(Services.class, new ServicesKey(serviceName)),
+                DataObjectIdentifier.builder(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceName))
+                    .build(),
                 new ServicesBuilder(readService.orElseThrow())
                     .setOperationalState(operationalState)
                     .setAdministrativeState(administrativeState)
@@ -244,12 +249,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(TempServiceList.class)
+                DataObjectIdentifier.builder(TempServiceList.class)
                     .child(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                             .temp.service.list.Services.class,
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
-                            .temp.service.list.ServicesKey(serviceName)),
+                            .temp.service.list.ServicesKey(serviceName))
+                    .build(),
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                         .temp.service.list.ServicesBuilder(readService.orElseThrow())
                     .setOperationalState(operationalState)
@@ -270,8 +276,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServiceList.class)
-                    .child(Services.class, new ServicesKey(serviceCreateInput.getServiceName())),
+                DataObjectIdentifier.builder(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceCreateInput.getServiceName()))
+                    .build(),
                 ModelMappingUtils.mappingServices(serviceCreateInput, null));
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -291,11 +298,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(TempServiceList.class)
+                DataObjectIdentifier.builder(TempServiceList.class)
                     .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                             .temp.service.list.Services.class,
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
-                            .temp.service.list.ServicesKey(tempServiceCreateInput.getCommonId())),
+                            .temp.service.list.ServicesKey(tempServiceCreateInput.getCommonId()))
+                    .build(),
                 ModelMappingUtils.mappingServices(tempServiceCreateInput, pathDescription));
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -313,7 +321,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return this.dataBroker.newReadOnlyTransaction()
                     .read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.create(ServicePathList.class))
+                        DataObjectIdentifier.builder(ServicePathList.class).build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Reading service path list failed. Error={}", e.getMessage());
@@ -328,8 +336,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return this.dataBroker.newReadOnlyTransaction()
                     .read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.create(ServicePathList.class)
-                            .child(ServicePaths.class, new ServicePathsKey(serviceName)))
+                        DataObjectIdentifier.builder(ServicePathList.class)
+                            .child(ServicePaths.class, new ServicePathsKey(serviceName))
+                            .build())
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Reading service path failed. Error={}", e.getMessage());
@@ -344,8 +353,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServicePathList.class)
-                    .child(ServicePaths.class, new ServicePathsKey(serviceInput.getServiceName())),
+                DataObjectIdentifier.builder(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey(serviceInput.getServiceName()))
+                    .build(),
                 ModelMappingUtils.mappingServicePaths(serviceInput, outputFromPce));
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
@@ -368,8 +378,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServicePathList.class)
-                    .child(ServicePaths.class, new ServicePathsKey(serviceName)),
+                DataObjectIdentifier.builder(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey(serviceName))
+                    .build(),
                 new ServicePathsBuilder()
                     .setServiceAEnd(readServicePath.orElseThrow().getServiceAEnd())
                     .setServiceHandlerHeader(readServicePath.orElseThrow().getServiceHandlerHeader())
@@ -394,9 +405,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
     @Override
     public OperationResult deleteServicePath(String serviceName) {
-        InstanceIdentifier<ServicePaths> servicePathsIID =
-            InstanceIdentifier.create(ServicePathList.class)
-                .child(ServicePaths.class, new ServicePathsKey(serviceName));
+        DataObjectIdentifier<ServicePaths> servicePathsIID = DataObjectIdentifier.builder(ServicePathList.class)
+                .child(ServicePaths.class, new ServicePathsKey(serviceName))
+                .build();
         LOG.debug("Deleting service from {}", servicePathsIID);
         WriteTransaction servicePathsWriteTx = this.dataBroker.newWriteOnlyTransaction();
         servicePathsWriteTx.delete(LogicalDatastoreType.OPERATIONAL, servicePathsIID);
@@ -440,8 +451,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             LOG.debug("Writing '{}' Service", serviceName);
             writeTx.put(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServiceList.class)
-                    .child(Services.class, new ServicesKey(serviceName)),
+                DataObjectIdentifier.builder(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceName))
+                    .build(),
                 ModelMappingUtils.mappingServices(input, null));
             try {
                 writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -455,8 +467,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         /*
          * Modify / Delete Service.
          */
-        InstanceIdentifier<Services> iid =
-            InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
+        DataObjectIdentifier<Services> iid = DataObjectIdentifier.builder(ServiceList.class)
+                .child(Services.class, new ServicesKey(serviceName))
+                .build();
         String action = null;
         switch (choice) {
             case 0 : /* Modify. */

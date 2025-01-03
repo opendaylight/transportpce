@@ -62,6 +62,6 @@ public class NetworkModelProviderTest {
         new NetworkModelProvider(networkTransactionService, dataBroker, networkModelService, deviceTransactionManager,
                 portMapping, notificationService, frequenciesService);
 
-        verify(dataBroker, times(2)).registerTreeChangeListener(any(), any());
+        verify(dataBroker, times(2)).registerTreeChangeListener(any(), any(), any());
     }
 }

@@ -92,7 +92,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
@@ -130,51 +130,56 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             .read(
                 LogicalDatastoreType.CONFIGURATION,
                 //muxAIID
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1"))))
+                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1")))
+                    .build())
             .get().orElseThrow();
         otnMuxC = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
                 //muxCIID
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1"))))
+                    .child(Node.class, new NodeKey(new NodeId("SPDR-SC1-XPDR1")))
+                    .build())
             .get().orElseThrow();
         otnSwitch = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
                 //switchIID
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2"))))
+                    .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")))
+                    .build())
             .get().orElseThrow();
         tpdr100G = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
                 //tpdrIID
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1"))))
+                    .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")))
+                    .build())
             .get().orElseThrow();
         otnLinks = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
                 //linksIID
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .augmentation(Network1.class))
+                    .augmentation(Network1.class)
+                    .build())
             .get().orElseThrow().getLink();
         topologyUuid = new Uuid(
             UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8"))).toString());

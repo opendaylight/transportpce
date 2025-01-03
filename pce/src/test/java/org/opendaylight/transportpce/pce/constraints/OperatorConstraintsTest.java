@@ -37,8 +37,8 @@ import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 //import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev230526.controller.parameters
 //.spectrum.filling.SpectrumFillingRules;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ControllerBehaviourSettings;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
@@ -74,8 +74,7 @@ public class OperatorConstraintsTest extends AbstractTest {
                 .fromNormalizedNode(
                     YangInstanceIdentifier.of(ControllerBehaviourSettings.QNAME), normalizedNode)
                 .getValue();
-            InstanceIdentifier<ControllerBehaviourSettings> sfIID =
-                InstanceIdentifier
+            DataObjectIdentifier<ControllerBehaviourSettings> sfIID = DataObjectIdentifier
                     .builder(ControllerBehaviourSettings.class)
 //                    .child(SpectrumFilling.class)
 //                    .child(SpectrumFillingRules.class)

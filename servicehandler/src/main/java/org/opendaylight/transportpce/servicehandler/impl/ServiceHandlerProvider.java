@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.servicehandler.impl;
 
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
-import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelNotificationHandler;
@@ -19,8 +18,8 @@ import org.opendaylight.transportpce.servicehandler.listeners.RendererNotificati
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -38,8 +37,9 @@ import org.slf4j.LoggerFactory;
 public class ServiceHandlerProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerProvider.class);
-    private static final InstanceIdentifier<Services> SERVICE = InstanceIdentifier.create(ServiceList.class)
-            .child(Services.class);
+    private static final DataObjectReference<Services> SERVICE = DataObjectReference.builder(ServiceList.class)
+            .child(Services.class)
+            .build();
 
     private final Registration pcelistenerRegistration;
     private Registration serviceListListenerRegistration;
@@ -63,8 +63,8 @@ public class ServiceHandlerProvider {
             .registerCompositeListener(rendererNotificationHandler.getCompositeListener());
         networkmodellistenerRegistration = notificationService
             .registerCompositeListener(networkModelNotificationHandler.getCompositeListener());
-        final var serviceListId = DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL, SERVICE);
-        serviceListListenerRegistration = dataBroker.registerTreeChangeListener(serviceListId, serviceListener);
+        serviceListListenerRegistration = dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL,
+                SERVICE, serviceListener);
         LOG.info("ServicehandlerProvider Session Initiated");
         LOG.info("Transportpce controller started");
     }

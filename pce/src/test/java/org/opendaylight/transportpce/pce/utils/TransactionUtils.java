@@ -76,7 +76,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.binding.Augmentation;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -90,7 +90,7 @@ public final class TransactionUtils {
     // FIXME check if the InstanceIdentifier raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
-    public static void writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
+    public static void writeTransaction(DataBroker dataBroker, DataObjectIdentifier instanceIdentifier,
                                         DataObject object) {
         @NonNull
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
@@ -253,7 +253,7 @@ public final class TransactionUtils {
                         .OpticalPowerOutput)
                 .setMeasurement(Map.of(measurementA.key(),measurementA))
                 .build();
-        InstanceIdentifier<Interface> interfaceIIDA = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfaceIIDA = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
             .build();
@@ -283,7 +283,7 @@ public final class TransactionUtils {
                         .OpticalPowerInput)
                 .setMeasurement(measurementListC)
                 .build();
-        InstanceIdentifier<Interface> interfaceIIDC = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfaceIIDC = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
             .build();

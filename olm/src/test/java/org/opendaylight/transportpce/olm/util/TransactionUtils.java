@@ -65,7 +65,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLinkKey;
 import org.opendaylight.yangtools.binding.Augmentation;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -80,7 +80,7 @@ public final class TransactionUtils {
     // FIXME check if the InstanceIdentifier raw type can be avoided
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
-    public static boolean writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
+    public static boolean writeTransaction(DataBroker dataBroker, DataObjectIdentifier instanceIdentifier,
         DataObject object) {
         ReadWriteTransaction transaction = dataBroker.newReadWriteTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
@@ -414,22 +414,25 @@ public final class TransactionUtils {
     }
 
     public static void writeNodeTransaction(String nodeId, DataBroker dataBroker, String mappingKey) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         Nodes nodes = getNodes(nodeId, mappingKey);
         writeTransaction(dataBroker, nodesIID, nodes);
     }
 
     public static void writeNodeTransaction2(String nodeId, DataBroker dataBroker, String mappingKey) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         Nodes nodes = getNodes2(nodeId, mappingKey);
         writeTransaction(dataBroker, nodesIID, nodes);
     }
 
     public static void writeNodeTransaction3(String nodeId, DataBroker dataBroker, String mappingKey) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         Nodes nodes = getNodes3(nodeId, mappingKey);
         writeTransaction(dataBroker, nodesIID, nodes);
     }
