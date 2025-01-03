@@ -49,7 +49,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,10 +90,11 @@ final class Rdm2XpdrLink {
             return false;
         }
         Network network = networkBldr.build();
-        InstanceIdentifier.Builder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .build();
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID, network);
 
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
 
@@ -138,11 +139,11 @@ final class Rdm2XpdrLink {
             return false;
         }
         Network network = networkBldr.build();
-        InstanceIdentifier.Builder<Network> nwIID =
-            InstanceIdentifier.builder(Networks.class).child(Network.class,
-                new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .build();
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
-        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
+        wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID, network);
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
         try {
             commit.get();
@@ -238,7 +239,7 @@ final class Rdm2XpdrLink {
     }
 
     private static TerminationPoint getTpofNode(String srcNode, String srcTp, DataBroker dataBroker) {
-        InstanceIdentifier<TerminationPoint> iiTp = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<TerminationPoint> iiTp = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(Node.class, new NodeKey(new NodeId(srcNode)))
             .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -265,9 +266,9 @@ final class Rdm2XpdrLink {
     }
 
     private static DataModelEnum getNodeModel(String srcNode, String srcTp, DataBroker dataBroker) {
-        InstanceIdentifier<
+        DataObjectIdentifier<
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.Node1>
-            nodeIID = InstanceIdentifier.builder(Networks.class)
+            nodeIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(Node.class, new NodeKey(new NodeId(srcNode)))
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight

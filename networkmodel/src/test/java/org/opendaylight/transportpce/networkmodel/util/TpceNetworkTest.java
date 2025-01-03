@@ -27,7 +27,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NetworkTypes;
 import org.opendaylight.yangtools.binding.Augmentation;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public class TpceNetworkTest extends AbstractTest {
     TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(getDataBroker()));
@@ -35,8 +35,9 @@ public class TpceNetworkTest extends AbstractTest {
     @Test
     void createLayerClliTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("clli-network");
-        InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId("clli-network")));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("clli-network")))
+            .build();
         Network createdClli = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdClli, "Clli layer should be created and not null");
@@ -53,8 +54,9 @@ public class TpceNetworkTest extends AbstractTest {
     @Test
     void createLayerNetworkTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("openroadm-network");
-        InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId("openroadm-network")));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("openroadm-network")))
+            .build();
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "openroadm-network layer should be created and not null");
@@ -64,8 +66,9 @@ public class TpceNetworkTest extends AbstractTest {
     @Test
     void createLayerTopologyTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("openroadm-topology");
-        InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId("openroadm-topology")));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("openroadm-topology")))
+            .build();
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "openroadm-logpology layer should be created and not null");
@@ -75,8 +78,9 @@ public class TpceNetworkTest extends AbstractTest {
     @Test
     void createLayerOtnTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("otn-topology");
-        InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId("otn-topology")));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("otn-topology")))
+            .build();
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "otn-logpology layer should be created and not null");
@@ -86,8 +90,9 @@ public class TpceNetworkTest extends AbstractTest {
     @Test
     void createBadLayerTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("toto");
-        InstanceIdentifier<Network> nwIID = InstanceIdentifier.create(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId("toto")));
+        DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("toto")))
+            .build();
         Network createdOrdNetwork = getDataBroker().newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, nwIID).get().orElseThrow();
         assertNotNull(createdOrdNetwork, "toto layer should be created and not null");
