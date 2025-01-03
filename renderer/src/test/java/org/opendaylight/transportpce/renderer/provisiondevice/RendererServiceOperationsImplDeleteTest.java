@@ -66,7 +66,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
@@ -247,8 +247,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 this.deviceTransactionManager,
                 "node1" + StringConstants.PP_TOKEN,
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.create(ServicePathList.class)
-                    .child(ServicePaths.class, new ServicePathsKey("service 1")),
+                DataObjectIdentifier.builder(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey("service 1"))
+                    .build(),
                 new ServicePathsBuilder()
                     .setPathDescription(ServiceDeleteDataUtils
                         .createTransactionPathDescription(StringConstants.PP_TOKEN))

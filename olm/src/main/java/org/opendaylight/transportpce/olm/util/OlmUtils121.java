@@ -37,7 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Srg;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +64,7 @@ final class OlmUtils121 {
         LOG.info("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
                 input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
-        InstanceIdentifier<CurrentPmlist> currentPmsIID = InstanceIdentifier.create(CurrentPmlist.class);
+        DataObjectIdentifier<CurrentPmlist> currentPmsIID = DataObjectIdentifier.builder(CurrentPmlist.class).build();
         Optional<CurrentPmlist> currentPmList;
         currentPmList = deviceTransactionManager
                 .getDataFromDevice(input.getNodeId(), LogicalDatastoreType.OPERATIONAL, currentPmsIID,

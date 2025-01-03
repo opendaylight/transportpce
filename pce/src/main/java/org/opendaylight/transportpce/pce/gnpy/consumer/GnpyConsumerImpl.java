@@ -18,8 +18,8 @@ import java.nio.charset.StandardCharsets;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.Result;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.osgi.service.component.annotations.Activate;
@@ -107,7 +107,7 @@ public class GnpyConsumerImpl implements GnpyConsumer {
     public Result computePaths(final Request request) {
         try {
             String requestBody = requestConverter.createJsonStringFromDataObject(
-                            InstanceIdentifier.create(Request.class),
+                            DataObjectIdentifier.builder(Request.class).build(),
                             request,
                             JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02)
                     .replace("gnpy-network-topology:", "");

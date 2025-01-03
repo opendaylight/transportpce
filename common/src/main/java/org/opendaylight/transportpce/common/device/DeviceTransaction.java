@@ -22,8 +22,8 @@ import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,20 +54,20 @@ public class DeviceTransaction {
     }
 
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
-            InstanceIdentifier<T> path) {
+            DataObjectIdentifier<T> path) {
         return rwTx.read(store, path);
     }
 
-    public <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void put(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         rwTx.put(store, path, data);
     }
 
-    public <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void merge(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         rwTx.merge(store, path, data);
     }
 
 
-    public void delete(LogicalDatastoreType store, InstanceIdentifier<?> path) {
+    public void delete(LogicalDatastoreType store, DataObjectIdentifier<?> path) {
         rwTx.delete(store, path);
     }
 

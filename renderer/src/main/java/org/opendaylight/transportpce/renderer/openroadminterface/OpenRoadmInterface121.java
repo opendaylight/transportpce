@@ -52,7 +52,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -319,7 +319,7 @@ public class OpenRoadmInterface121 {
         Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(
             nodeId,
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
+            DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
                 .build(),

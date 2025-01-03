@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev220221.Request;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
@@ -35,7 +35,7 @@ public class JsonStringConverterTest extends AbstractTest {
                 Files.readString(Paths.get("src/test/resources/expected_string.json")),
                 new JsonStringConverter<Request>(getDataStoreContextUtil().getBindingDOMCodecServices())
                     .createJsonStringFromDataObject(
-                        InstanceIdentifier.builder(Request.class).build(),
+                        DataObjectIdentifier.builder(Request.class).build(),
                         //gnpyRequest
                         (Request) getDataStoreContextUtil()
                             .getBindingDOMCodecServices()

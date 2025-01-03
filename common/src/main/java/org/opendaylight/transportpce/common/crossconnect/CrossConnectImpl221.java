@@ -43,7 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -105,8 +105,7 @@ public class CrossConnectImpl221 {
         // post the cross connect on the device
         deviceTx.merge(
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
-                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
                 .build(),
             rdmConn);
@@ -251,8 +250,7 @@ public class CrossConnectImpl221 {
         // post the cross connect on the device
         deviceTx.merge(
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
-                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(ctName))
                 .build(),
             newRdmConn);
@@ -268,16 +266,14 @@ public class CrossConnectImpl221 {
         return false;
     }
 
-    private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
-        return InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+    private DataObjectIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
+        return DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
             .build();
     }
 
-    private InstanceIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
-        return InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+    private DataObjectIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
+        return DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(OduConnection.class, new OduConnectionKey(connectionNumber))
             .build();
     }
@@ -320,8 +316,7 @@ public class CrossConnectImpl221 {
         // post the cross connect on the device
         deviceTx.merge(
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
-                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(OduConnection.class, new OduConnectionKey(oduXConnectionName))
                 .build(),
             oduConnection);

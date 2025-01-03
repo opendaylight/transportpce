@@ -25,17 +25,18 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public final class InstanceIdentifiers {
 
-    public static final InstanceIdentifier<Topology> NETCONF_TOPOLOGY_II =
-            InstanceIdentifier.create(NetworkTopology.class).child(Topology.class, new TopologyKey(
-                    new TopologyId(TopologyNetconf.QNAME.getLocalName())));
+    public static final DataObjectIdentifier<Topology> NETCONF_TOPOLOGY_II =
+            DataObjectIdentifier.builder(NetworkTopology.class)
+                .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
+                .build();
 
-    public static final InstanceIdentifier<Network> UNDERLAY_NETWORK_II = InstanceIdentifier
+    public static final DataObjectIdentifier<Network> UNDERLAY_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .build();
 
     public static final DataObjectIdentifier<Network> OVERLAY_NETWORK_II = DataObjectIdentifier
         .builder(Networks.class)
@@ -47,9 +48,10 @@ public final class InstanceIdentifiers {
         .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
         .build();
 
-    public static final InstanceIdentifier<Network> CLLI_NETWORK_II = InstanceIdentifier
+    public static final DataObjectIdentifier<Network> CLLI_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))).build();
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+            .build();
 
     private InstanceIdentifiers() {
         // Instance should be not created
@@ -77,9 +79,9 @@ public final class InstanceIdentifiers {
                 .build();
     }
 
-    public static InstanceIdentifier<TerminationPoint> createNetworkTerminationPointIIDBuilder(
+    public static DataObjectIdentifier<TerminationPoint> createNetworkTerminationPointIIDBuilder(
             String nodeId, String tpId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
@@ -98,8 +100,8 @@ public final class InstanceIdentifiers {
      * @param nodeId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<Node1> createNodeIIDBuilder(String nodeId) {
-        return InstanceIdentifier.builder(Networks.class)
+    public static DataObjectIdentifier<Node1> createNodeIIDBuilder(String nodeId) {
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,

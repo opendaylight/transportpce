@@ -70,7 +70,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -468,8 +468,8 @@ public class OpenRoadmInterface221 {
     }
 
     public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
-        DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier
+            DeviceTransactionManager deviceTransactionManager) {
+        DataObjectIdentifier<RoadmConnections> xciid = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey(xc))
             .build();
@@ -497,7 +497,7 @@ public class OpenRoadmInterface221 {
 
     public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
             DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<OduConnection> xciid = InstanceIdentifier
+        DataObjectIdentifier<OduConnection> xciid = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(OduConnection.class, new OduConnectionKey(xc))
             .build();

@@ -35,7 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.States;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public class OpenRoadmInterfacesImpl221 {
                 nodeId), e);
         }
 
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(ifBuilder.getName()))
             .build();
@@ -114,7 +114,7 @@ public class OpenRoadmInterfacesImpl221 {
 
 
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
@@ -147,7 +147,7 @@ public class OpenRoadmInterfacesImpl221 {
                     + " deleting it!", interfaceName, AdminStates.OutOfService), ex);
             }
 
-            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+            DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(interfaceName))
                 .build();
@@ -195,7 +195,7 @@ public class OpenRoadmInterfacesImpl221 {
 
     public void postEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException {
-        InstanceIdentifier<CircuitPacks> circuitPackIID = InstanceIdentifier
+        DataObjectIdentifier<CircuitPacks> circuitPackIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .build();
@@ -267,7 +267,7 @@ public class OpenRoadmInterfacesImpl221 {
     }
 
     private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+        DataObjectIdentifier<Ports> portIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(ifBuilder.getSupportingCircuitPackName()))
             .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()))

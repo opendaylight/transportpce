@@ -27,7 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.otn.renderer.nodes.Nodes;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +46,8 @@ public class CrossConnectImpl710 {
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
-    private InstanceIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
-        return InstanceIdentifier
-            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+    private DataObjectIdentifier<OduConnection> generateOduConnectionIID(String connectionNumber) {
+        return DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(OduConnection.class, new OduConnectionKey(connectionNumber))
             .build();
     }
@@ -77,7 +76,7 @@ public class CrossConnectImpl710 {
                 .SourceBuilder().setSrcIf(srcTp).build())
             .setDirection(Direction.Bidirectional);
 
-        InstanceIdentifier<OduConnection> oduConnectionIID = InstanceIdentifier
+        DataObjectIdentifier<OduConnection> oduConnectionIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(OduConnection.class, new OduConnectionKey(oduConnectionBuilder.getConnectionName()))
             .build();

@@ -53,7 +53,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,14 +83,16 @@ final class OlmUtils221 {
 
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
 
-        InstanceIdentifier<?> resourceKeyIID =
+        DataObjectIdentifier<?> resourceKeyIID =
                 findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
         if (resourceKeyIID == null) {
             return pmOutputBuilder;
         }
         CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID.toIdentifier(),
                 convertResourceTypeEnum(input.getResourceType()),"");
-        InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
+        DataObjectIdentifier<CurrentPmList> iidCurrentPmList = DataObjectIdentifier
+                .builder(CurrentPmList.class)
+                .build();
 
         Optional<CurrentPmList> currentPmListOpt = deviceTransactionManager.getDataFromDevice(input.getNodeId(),
                 LogicalDatastoreType.OPERATIONAL, iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT,
@@ -184,7 +186,7 @@ final class OlmUtils221 {
         return olmMeasurements;
     }
 
-    private static InstanceIdentifier<?> findClassKeyIdentifiers(ResourceTypeEnum wantedResourceType,
+    private static DataObjectIdentifier<?> findClassKeyIdentifiers(ResourceTypeEnum wantedResourceType,
             ResourceIdentifier wantedResourceIdentifier) {
         if (wantedResourceIdentifier.getResourceName() == null) {
             LOG.debug("resource {} is null", wantedResourceType);
@@ -192,54 +194,54 @@ final class OlmUtils221 {
         }
         switch (wantedResourceType) {
             case Device:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .build();
             case Degree:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(Degree.class, new DegreeKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())))
                     .build();
             case SharedRiskGroup:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(
                         SharedRiskGroup.class,
                         new SharedRiskGroupKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())))
                     .build();
             case Connection:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(RoadmConnections.class, new RoadmConnectionsKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case CircuitPack:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case Port:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(CircuitPacks.class, new CircuitPacksKey(wantedResourceIdentifier.getCircuitPackName()))
                     .child(Ports.class, new PortsKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case Interface:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(Interface.class, new InterfaceKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case InternalLink:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(InternalLink.class, new InternalLinkKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case PhysicalLink:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(PhysicalLink.class, new PhysicalLinkKey(wantedResourceIdentifier.getResourceName()))
                     .build();
             case Shelf:
-                return InstanceIdentifier
+                return DataObjectIdentifier
                     .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                     .child(Shelves.class, new ShelvesKey(wantedResourceIdentifier.getResourceName()))
                     .build();

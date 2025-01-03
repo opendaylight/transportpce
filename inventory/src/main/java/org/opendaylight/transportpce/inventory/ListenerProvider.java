@@ -21,8 +21,14 @@ import org.opendaylight.transportpce.inventory.listener.DeviceConfigListener;
 import org.opendaylight.transportpce.inventory.listener.DeviceListener;
 import org.opendaylight.transportpce.inventory.listener.OverlayNetworkChangeListener;
 import org.opendaylight.transportpce.inventory.listener.UnderlayNetworkChangeListener;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.network.topology.topology.topology.types.TopologyNetconf;
+import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
+import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
+import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
+import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.Registration;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -37,6 +43,10 @@ import org.slf4j.LoggerFactory;
 public class ListenerProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListenerProvider.class);
+    private static final InstanceIdentifier<Node> NETCONF_NODE_II = InstanceIdentifier
+            .create(NetworkTopology.class)
+            .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
+            .child(Node.class);
     private List<Registration> listeners = new ArrayList<>();
 
     /**
@@ -60,12 +70,12 @@ public class ListenerProvider {
         LOG.info("Overlay network change listener was successfully registered");
         UnderlayNetworkChangeListener underlayNetworkListener = new UnderlayNetworkChangeListener();
         listeners.add(dataBroker.registerDataTreeChangeListener(
-                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.UNDERLAY_NETWORK_II),
+                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.UNDERLAY_NETWORK_II),
                 underlayNetworkListener));
         LOG.info("Underlay network change listener was successfully registered");
         ClliNetworkChangeListener clliNetworkChangeListener = new ClliNetworkChangeListener();
         listeners.add(dataBroker.registerDataTreeChangeListener(
-                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.CLLI_NETWORK_II),
+                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.CLLI_NETWORK_II),
                 clliNetworkChangeListener));
         LOG.info("CLLI network change listener was successfully registered");
         INode121 inode121 = new INode121(dataSource, deviceTransactionManager);
@@ -73,13 +83,13 @@ public class ListenerProvider {
         DeviceInventory deviceInventory = new DeviceInventory(dataSource, inode);
         DeviceListener deviceListener = new DeviceListener(deviceInventory);
         listeners.add(dataBroker.registerDataTreeChangeListener(
-                DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), deviceListener));
+                DataTreeIdentifier.of(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II),
+                deviceListener));
         LOG.info("Device change listener was successfully registered");
         DeviceConfigListener deviceConfigListener = new DeviceConfigListener(deviceInventory);
         listeners.add(dataBroker.registerDataTreeChangeListener(
-                DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), deviceConfigListener));
+                DataTreeIdentifier.of(LogicalDatastoreType.CONFIGURATION, NETCONF_NODE_II),
+                deviceConfigListener));
         LOG.info("Device config change listener was successfully registered");
     }
 
