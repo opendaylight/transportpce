@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
@@ -25,10 +26,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
-import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.binding.DataObjectStep;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.ExactDataObjectStep;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,19 +65,19 @@ public class DeviceListener710 {
             return;
         }
         Map<Uint16, List<DataObjectIdentifier<PortList>>> nbliidMap = new HashMap<>();
-        InstanceIdentifier<OduSwitchingPools> ospIID = null;
+        DataObjectIdentifier<OduSwitchingPools> ospIID = null;
         for (Edit edit : notification.getEdit()) {
             if (edit.getTarget() == null) {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
-            InstanceIdentifier<DataObject> path = InstanceIdentifier.unsafeOf(
-                    (List<? extends DataObjectStep<?>>) edit.getTarget().steps());
+            DataObjectIdentifier<?> path = DataObjectIdentifier.ofUnsafeSteps(
+                    (Iterable<? extends @NonNull ExactDataObjectStep<?>>) edit.getTarget().steps());
             LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
             switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":
-                    String portName = path.firstKeyOf(Ports.class).getPortName();
-                    String cpName = path.firstKeyOf(CircuitPacks.class).getCircuitPackName();
+                    String portName = path.toLegacy().firstKeyOf(Ports.class).getPortName();
+                    String cpName = path.toLegacy().firstKeyOf(CircuitPacks.class).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
                     if (oldMapping == null) {
@@ -97,14 +96,13 @@ public class DeviceListener710 {
                     break;
                 case "OduSwitchingPools":
                     LOG.info("odu-switching-pools modified on device {}", nodeId);
-                    ospIID = path.firstIdentifierOf(OduSwitchingPools.class);
+                    ospIID = path.toLegacy().firstIdentifierOf(OduSwitchingPools.class).toIdentifier();
                     break;
                 case "PortList":
-                    InstanceIdentifier<PortList> plIID = path.firstIdentifierOf(PortList.class);
-                    Uint16 nblNb = path.firstKeyOf(NonBlockingList.class).getNblNumber();
+                    Uint16 nblNb = path.toLegacy().firstKeyOf(NonBlockingList.class).getNblNumber();
                     List<DataObjectIdentifier<PortList>> iidList = nbliidMap.containsKey(nblNb)
                         ? nbliidMap.get(nblNb) : new ArrayList<>();
-                    iidList.add(plIID.toIdentifier());
+                    iidList.add(path.toLegacy().firstIdentifierOf(PortList.class).toIdentifier());
                     nbliidMap.put(nblNb, iidList);
                     break;
                 default:

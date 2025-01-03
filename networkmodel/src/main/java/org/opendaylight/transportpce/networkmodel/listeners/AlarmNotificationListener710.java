@@ -34,7 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Service;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Shelf;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev200529.resource.resource.resource.Srg;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,8 @@ public class AlarmNotificationListener710 {
      */
     private void onAlarmNotification(AlarmNotification notification) {
         List<Nodes> allNodeList = new ArrayList<>();
-        InstanceIdentifier<ServiceNodelist> serviceNodeListIID = InstanceIdentifier.create(ServiceNodelist.class);
+        DataObjectIdentifier<ServiceNodelist> serviceNodeListIID = DataObjectIdentifier.builder(ServiceNodelist.class)
+                .build();
         try {
             ReadTransaction rtx = dataBroker.newReadOnlyTransaction();
             Optional<ServiceNodelist> serviceListObject =

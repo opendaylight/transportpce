@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import java.util.List;
 import java.util.Set;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
@@ -18,9 +18,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScan
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.change.notification.Edit;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
-import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.binding.DataObjectStep;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.ExactDataObjectStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,13 +58,13 @@ public class DeviceListener121 {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
-            InstanceIdentifier<DataObject> path = InstanceIdentifier.unsafeOf(
-                    (List<? extends DataObjectStep<?>>) edit.getTarget().steps());
+            DataObjectIdentifier<?> path = DataObjectIdentifier.ofUnsafeSteps(
+                    (Iterable<? extends @NonNull ExactDataObjectStep<?>>) edit.getTarget().steps());
             LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
             switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":
-                    String portName = path.firstKeyOf(Ports.class).getPortName();
-                    String cpName = path.firstKeyOf(CircuitPacks.class).getCircuitPackName();
+                    String portName = path.toLegacy().firstKeyOf(Ports.class).getPortName();
+                    String cpName = path.toLegacy().firstKeyOf(CircuitPacks.class).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
                     if (oldMapping == null) {

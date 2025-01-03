@@ -44,8 +44,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.osgi.service.component.annotations.Activate;
@@ -85,16 +85,16 @@ public class NetworkUtilsImpl {
 
         LinkId linkId = new LinkId(input.getLinkId());
         // Building link instance identifier
-        InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
+            .build();
 
 
         //Check if link exists
         try {
             ReadTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction();
-            Optional<Link> linkOptional = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, linkIID.build())
-                .get();
+            Optional<Link> linkOptional = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, linkIID).get();
             if (!linkOptional.isPresent()) {
                 LOG.info("Link not present");
                 return RpcResultBuilder
@@ -109,7 +109,7 @@ public class NetworkUtilsImpl {
         }
 
         WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-        writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, linkIID.build());
+        writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, linkIID);
         try {
             writeTransaction.commit().get();
             LOG.info("Link with linkId: {} deleted from {} layer.",

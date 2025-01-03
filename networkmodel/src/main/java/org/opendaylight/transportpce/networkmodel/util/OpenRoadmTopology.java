@@ -71,7 +71,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
@@ -590,9 +589,10 @@ public final class OpenRoadmTopology {
      * @param tpId String
      * @return InstanceIdentifierBuilder
      */
-    public static InstanceIdentifier.Builder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+    public static DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier
+                .builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
@@ -603,7 +603,8 @@ public final class OpenRoadmTopology {
                         .networks.network.node.TerminationPoint.class,
                     new TerminationPointKey(new TpId(tpId)))
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
-                        .TerminationPoint1.class);
+                        .TerminationPoint1.class)
+                .build();
     }
 
     /**
@@ -626,9 +627,9 @@ public final class OpenRoadmTopology {
      * @param nodeId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+    public static DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .Node1> createCommonNetworkNodeIID(String nodeId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,

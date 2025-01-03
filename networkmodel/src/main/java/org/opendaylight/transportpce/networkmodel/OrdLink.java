@@ -44,7 +44,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,12 +86,14 @@ final class OrdLink {
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
 
         // Building link instance identifier
-        InstanceIdentifier.Builder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+            .augmentation(Network1.class)
+            .child(Link.class, new LinkKey(linkId))
+            .build();
 
         WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(), linkBuilder.build());
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIID, linkBuilder.build());
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
@@ -182,12 +184,13 @@ final class OrdLink {
         linkBuilderBW.addAugmentation(tpceAugmLink11Bd.build());
 
         // Building link instance identifier
-        InstanceIdentifier.Builder<Link> linkIIDFW = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIIDFW = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
+            .build();
 
         WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDFW.build(), linkBuilderFW.build());
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDFW, linkBuilderFW.build());
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
@@ -198,11 +201,12 @@ final class OrdLink {
             return false;
         }
 
-        InstanceIdentifier.Builder<Link> linkIIDBW = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<Link> linkIIDBW = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .augmentation(Network1.class).child(Link.class, new LinkKey(oppLinkId));
+            .augmentation(Network1.class).child(Link.class, new LinkKey(oppLinkId))
+            .build();
         writeTransaction = dataBroker.newWriteOnlyTransaction();
-        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDBW.build(), linkBuilderBW.build());
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIIDBW, linkBuilderBW.build());
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
@@ -240,7 +244,7 @@ final class OrdLink {
             .setAdministrativeState(AdminStates.InService)
             .setOperationalState(State.InService).build());
 
-        InstanceIdentifier<TerminationPoint> tpIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<TerminationPoint> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -262,7 +266,7 @@ final class OrdLink {
     }
 
     private static TerminationPoint getTpofNode(String srcNode, String srcTp, DataBroker dataBroker) {
-        InstanceIdentifier<TerminationPoint> iiTp = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<TerminationPoint> iiTp = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(Node.class, new NodeKey(new NodeId(srcNode)))
                 .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
