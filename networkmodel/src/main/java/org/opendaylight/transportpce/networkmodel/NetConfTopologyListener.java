@@ -48,6 +48,11 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This is the entry-point of TransportPCE. This class listen to the NETCONF Topology to detect new Netconf Node
+ * connection to the controller. It triggers the creation of an abstracted node in the portmapping and its
+ * representation in openroadm topologies.
+ */
 public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetConfTopologyListener.class);
@@ -57,6 +62,13 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final Map<String, NodeRegistration> registrations;
     private final PortMapping portMapping;
 
+    /**
+     * Instantiate the NetConfTopologyListener.
+     * @param networkModelService Service that eases data handling in topology datastores
+     * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
+     * @param deviceTransactionManager Manages data transactions with the netconf devices
+     * @param portMapping Store the abstraction view of the netconf device
+     */
     public NetConfTopologyListener(
             final NetworkModelService networkModelService,
             final DataBroker dataBroker,
@@ -205,6 +217,14 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         return false;
     }
 
+    /**
+     * Specific constructor dedicated to JUnit tests.
+     * @param networkModelService Service that eases data handling in topology datastores
+     * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
+     * @param deviceTransactionManager Manages data transactions with the netconf devices
+     * @param portMapping Store the abstraction view of the netconf device
+     * @param registrations Map with all listeners registered for a netconf device
+     */
     @VisibleForTesting
     public NetConfTopologyListener(
             final NetworkModelService networkModelService,

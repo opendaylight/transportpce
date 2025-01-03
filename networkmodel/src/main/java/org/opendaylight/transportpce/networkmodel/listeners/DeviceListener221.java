@@ -24,18 +24,33 @@ import org.opendaylight.yangtools.binding.ExactDataObjectStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification
+ * notification.
+ * This implementation is dedicated to yang model 2.2.1 revision. 
+ */
 public class DeviceListener221 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceListener221.class);
     private final String nodeId;
     private final PortMapping portMapping;
 
+    /**
+     * Create instance of the device listener.
+     *
+     * @param nodeId Node name
+     * @param portMapping Node abstractions stored
+     */
     public DeviceListener221(String nodeId, PortMapping portMapping) {
         super();
         this.nodeId = nodeId;
         this.portMapping = portMapping;
     }
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(ChangeNotification.class, this::onChangeNotification),

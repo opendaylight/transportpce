@@ -23,18 +23,33 @@ import org.opendaylight.yangtools.binding.ExactDataObjectStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification
+ * notification.
+ * This implementation is dedicated to yang model 1.2.1 revision. 
+ */
 public class DeviceListener121 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceListener121.class);
     private final String nodeId;
     private final PortMapping portMapping;
 
+    /**
+     * Create instance of the device listener.
+     *
+     * @param nodeId Node name
+     * @param portMapping Node abstractions stored
+     */
     public DeviceListener121(String nodeId, PortMapping portMapping) {
         super();
         this.nodeId = nodeId;
         this.portMapping = portMapping;
     }
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(ChangeNotification.class, this::onChangeNotification),
@@ -44,10 +59,8 @@ public class DeviceListener121 {
 
     /**
      * Callback for change-notification.
-     *
      * @param notification ChangeNotification object
      */
-
     void onChangeNotification(ChangeNotification notification) {
         if (notification.getEdit() == null) {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
