@@ -166,7 +166,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -404,7 +404,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<Topology> optTopology =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(TopologyContext.class)
                             .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -428,7 +428,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 this.networkTransactionService.merge(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -457,7 +457,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Optional<Node> optionalNode =
                     this.networkTransactionService.read(
                             LogicalDatastoreType.OPERATIONAL,
-                            InstanceIdentifier.builder(Context.class)
+                            DataObjectIdentifier.builder(Context.class)
                                 .augmentation(Context1.class)
                                 .child(TopologyContext.class)
                                 .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -475,7 +475,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     updateSips(mapping, onep);
                     this.networkTransactionService.merge(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(TopologyContext.class)
                             .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -557,8 +557,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         for (MappedServiceInterfacePoint msip : onep.getMappedServiceInterfacePoint().values()) {
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier
-                    .builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .child(ServiceInterfacePoint.class,
                             new ServiceInterfacePointKey(msip.getServiceInterfacePointUuid()))
                     .build(),
@@ -736,7 +735,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // This will delete NEPs. Then check for links that have this node and delete them.
         // Then check SIPs and delete them. Then services and connections with SIPs and put them to another state.
         LOG.info("Deleting node {} from TAPI topology", nodeId);
-        InstanceIdentifier<Topology> topologyIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<Topology> topologyIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
                 .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -793,11 +792,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         // Delete sips of sip map
-        InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
         Context context = null;
         try {
-            Optional<Context> optContext =
-                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, contextIID).get();
+            Optional<Context> optContext = this.networkTransactionService.read(
+                    LogicalDatastoreType.OPERATIONAL,
+                    DataObjectIdentifier.builder(Context.class).build())
+                .get();
             if (optContext.isEmpty()) {
                 LOG.error("No context object present in datastore.");
                 return;
@@ -1528,7 +1528,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // merge in datastore
         this.networkTransactionService.merge(
             LogicalDatastoreType.OPERATIONAL,
-            InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
                 .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
@@ -1552,7 +1552,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         try {
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class).build(),
+                DataObjectIdentifier.builder(Context.class).build(),
                 new ContextBuilder().setProfile(profileMap).build());
             this.networkTransactionService.commit().get();
 
@@ -1569,7 +1569,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         // merge in datastore
         this.networkTransactionService.merge(
             LogicalDatastoreType.OPERATIONAL,
-            InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
                 .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
@@ -1590,7 +1590,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // merge in datastore
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class).build(),
+                DataObjectIdentifier.builder(Context.class).build(),
                 new ContextBuilder().setServiceInterfacePoint(sips).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIPs merged successfully.");
@@ -1604,7 +1604,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.delete(
                 LogicalDatastoreType.OPERATIONAL,
                 // TODO: check if this IID is correct
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(TopologyContext.class)
                     .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
@@ -1621,7 +1621,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             this.networkTransactionService.delete(
                 LogicalDatastoreType.OPERATIONAL,
                 // TODO: check if this IID is correct
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(TopologyContext.class)
                     .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
@@ -1638,7 +1638,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         try {
             this.networkTransactionService.delete(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .child(ServiceInterfacePoint.class, new ServiceInterfacePointKey(sipUuid))
                     .build());
             this.networkTransactionService.commit().get();
@@ -1655,7 +1655,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Optional<ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                                 .Context1.class)
                             .child(ConnectivityContext.class)
@@ -1712,7 +1712,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.networkTransactionService.merge(
             LogicalDatastoreType.OPERATIONAL,
             // TODO: check if this IID is correct
-            InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier.builder(Context.class)
                 .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                 .child(ConnectivityContext.class)
                 .child(Connection.class, new ConnectionKey(updConn.getUuid()))
@@ -1729,7 +1729,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
                 // TODO: check if this IID is correct
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .Context1.class)
                     .child(ConnectivityContext.class)
@@ -1844,7 +1844,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint> tpIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<TerminationPoint> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
@@ -1883,7 +1883,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint1 getNetworkTerminationPoint1FromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
@@ -1919,8 +1919,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
             .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
-                .TerminationPoint1> tpIID = InstanceIdentifier.builder(Networks.class)
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                .TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226

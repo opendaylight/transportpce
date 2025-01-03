@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -41,8 +41,10 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
     public void addOpenroadmOperationalModesToCatalog(OpenroadmOperationalModes objToSave) {
         LOG.info("Inside addOpenroadmOperationalModesToCatalog method of CatalogDataStoreOperationsImpl");
         try {
-            InstanceIdentifier<OpenroadmOperationalModes> instanceIdentifier =
-                InstanceIdentifier.create(OperationalModeCatalog.class).child(OpenroadmOperationalModes.class);
+            DataObjectIdentifier<OpenroadmOperationalModes> instanceIdentifier = DataObjectIdentifier
+                    .builder(OperationalModeCatalog.class)
+                    .child(OpenroadmOperationalModes.class)
+                    .build();
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
@@ -57,8 +59,9 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
     public void addSpecificOperationalModesToCatalog(SpecificOperationalModes objToSave) {
         LOG.info("Inside addSpecificOperationalModesToCatalog method of CatalogDataStoreOperationsImpl");
         try {
-            InstanceIdentifier<SpecificOperationalModes> instanceIdentifier = InstanceIdentifier
-                    .create(OperationalModeCatalog.class).child(SpecificOperationalModes.class);
+            DataObjectIdentifier<SpecificOperationalModes> instanceIdentifier = DataObjectIdentifier
+                    .builder(OperationalModeCatalog.class).child(SpecificOperationalModes.class)
+                    .build();
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {

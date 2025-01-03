@@ -16,7 +16,6 @@ import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMMountPointServiceAda
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class MountPointServiceStub implements MountPointService {
 
@@ -27,17 +26,11 @@ public class MountPointServiceStub implements MountPointService {
     }
 
     @Override
-    public Optional<MountPoint> getMountPoint(InstanceIdentifier<?> mountPoint) {
+    public Optional<MountPoint> findMountPoint(@NonNull DataObjectIdentifier<?> path) {
         if (returnedMountPoint == null) {
             return Optional.empty();
         }
         return Optional.of(returnedMountPoint);
-    }
-
-    @Override
-    public Optional<MountPoint> findMountPoint(@NonNull DataObjectIdentifier<?> path) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
     }
 
     @Override

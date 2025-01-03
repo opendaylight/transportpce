@@ -23,7 +23,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -48,7 +48,7 @@ public class DeleteTapiLinkImpl implements DeleteTapiLink {
         // TODO: check if this IID is correct
         // TODO --> need to check if the link exists in the topology
         try {
-            InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
                 .child(Topology.class, new TopologyKey(tapiNetworkUtilsImpl.getTapiTopoUuid()))

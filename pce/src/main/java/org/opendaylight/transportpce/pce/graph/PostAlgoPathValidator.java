@@ -50,7 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -831,8 +831,8 @@ public class PostAlgoPathValidator {
 
     private String getXpdrOpMode(String nwTpId, String vertice, int pathElement, PceNode currentNode,
             String serviceType, CatalogUtils cu) {
-        InstanceIdentifier<TerminationPoint1> nwTpIid =
-            InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(vertice, nwTpId);
+        DataObjectIdentifier<TerminationPoint1> nwTpIid =
+                InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(vertice, nwTpId);
         String opMode = cu.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP, serviceType);
         try {
             if (networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwTpIid).get().isPresent()) {

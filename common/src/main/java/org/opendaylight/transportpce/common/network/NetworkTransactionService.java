@@ -16,20 +16,19 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 
 
 public interface NetworkTransactionService {
 
-    <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
-                                                                                InstanceIdentifier<T> path);
+    <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store, DataObjectIdentifier<T> path);
 
-    void delete(LogicalDatastoreType store, InstanceIdentifier<?> path);
+    void delete(LogicalDatastoreType store, DataObjectIdentifier<?> path);
 
-    <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path,T data);
+    <T extends DataObject> void put(LogicalDatastoreType store, DataObjectIdentifier<T> path,T data);
 
-    <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data);
+    <T extends DataObject> void merge(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data);
 
     FluentFuture<? extends @NonNull CommitInfo> commit();
 

@@ -23,7 +23,7 @@ import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public final class TopologyDataUtils {
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
     public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
-        InstanceIdentifier ii) throws InterruptedException, ExecutionException {
+        DataObjectIdentifier ii) throws InterruptedException, ExecutionException {
         Networks networks = null;
         File topoFile = new File(file);
         if (topoFile.exists()) {
@@ -76,7 +76,7 @@ public final class TopologyDataUtils {
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
     private static FluentFuture<? extends CommitInfo> writeTransaction(DataBroker dataBroker,
-        InstanceIdentifier instanceIdentifier, DataObject object) {
+        DataObjectIdentifier instanceIdentifier, DataObject object) {
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
         return transaction.commit();
@@ -109,7 +109,7 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", portmappingFile.getName(), portmappingFile.getAbsolutePath());
         }
-        InstanceIdentifier<Network> portmappingIID = InstanceIdentifier.builder(Network.class).build();
+        DataObjectIdentifier<Network> portmappingIID = DataObjectIdentifier.builder(Network.class).build();
         FluentFuture<? extends CommitInfo> writeTransaction = writeTransaction(dataStoreContextUtil.getDataBroker(),
             portmappingIID, result);
         writeTransaction.get();

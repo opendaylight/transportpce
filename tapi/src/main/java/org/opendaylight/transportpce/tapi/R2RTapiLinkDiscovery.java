@@ -38,6 +38,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Laye
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -261,12 +262,13 @@ public class R2RTapiLinkDiscovery {
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId.getValue()))
+            .build();
         try {
 
             Optional<Nodes> nodesObject = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                nodesIID).get();
+                    nodesIID).get();
             if (nodesObject.isEmpty() || (nodesObject.orElseThrow().getCpToDegree() == null)) {
                 LOG.warn("Could not find mapping for Interface {} for nodeId {}", interfaceName,
                     nodeId.getValue());
@@ -294,8 +296,9 @@ public class R2RTapiLinkDiscovery {
     }
 
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId.getValue()))
+            .build();
         try {
             Optional<Nodes> nodesObject = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
                 nodesIID).get();

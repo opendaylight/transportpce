@@ -105,7 +105,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II);
+            TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.UNDERLAY_NETWORK_II.toIdentifier());
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
@@ -140,67 +140,74 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         otnMuxA  = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1"))))
+                .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR1")))
+                .build())
             .get().orElseThrow();
 
         otnSwitch = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2"))))
+                .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")))
+                .build())
             .get().orElseThrow();
         roadmA = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("openroadm-network")))
-                    .child(Node.class, new NodeKey(new NodeId("ROADM-A1"))))
+                    .child(Node.class, new NodeKey(new NodeId("ROADM-A1")))
+                    .build())
             .get().orElseThrow();
         roadmC = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("openroadm-network")))
-                    .child(Node.class, new NodeKey(new NodeId("ROADM-C1"))))
+                    .child(Node.class, new NodeKey(new NodeId("ROADM-C1")))
+                    .build())
             .get().orElseThrow();
 
         tpdr100G = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("otn-topology")))
-                    .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1"))))
+                    .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")))
+                    .build())
             .get().orElseThrow();
 
         ortopoLinks = dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
                         new NetworkKey(new NetworkId("openroadm-topology")))
-                .augmentation(Network1.class))
+                .augmentation(Network1.class)
+                .build())
             .get().orElseThrow().getLink();
         openroadmNet =  dataBroker.newReadOnlyTransaction()
             .read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(Networks.class)
+                DataObjectIdentifier.builder(Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
-                        new NetworkKey(new NetworkId("openroadm-topology"))))
+                        new NetworkKey(new NetworkId("openroadm-topology")))
+                    .build())
             .get().orElseThrow();
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(

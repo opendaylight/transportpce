@@ -40,7 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stub.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
@@ -125,7 +125,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     private TerminationPoint1 getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        InstanceIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
+        DataObjectIdentifier<TerminationPoint1> tpIID = InstanceIdentifiers
                 .createNetworkTerminationPoint1IIDBuilder(nodeId, tpId);
         try (ReadTransaction readTx = getDataBroker().newReadOnlyTransaction()) {
             Optional<TerminationPoint1> optionalTerminationPoint = readTx
@@ -149,7 +149,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     private Node1 getNetworkNodeFromDatastore(String nodeId) {
-        InstanceIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
+        DataObjectIdentifier<Node1> nodeIID = OpenRoadmTopology.createNetworkNodeIID(nodeId);
         try (ReadTransaction nodeReadTx = getDataBroker().newReadOnlyTransaction()) {
             Optional<Node1> optionalNode = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);

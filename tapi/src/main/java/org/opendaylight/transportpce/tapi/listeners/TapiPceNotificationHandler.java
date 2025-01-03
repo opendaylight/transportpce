@@ -46,7 +46,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -199,7 +199,7 @@ public class TapiPceNotificationHandler {
 
     public void updateTopologyWithCep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, ConnectionEndPoint cep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
@@ -245,7 +245,7 @@ public class TapiPceNotificationHandler {
 
     public void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
@@ -290,12 +290,13 @@ public class TapiPceNotificationHandler {
                     .setConnectivityService(Map.of(updtConnServ.key(), updtConnServ))
                     .setConnection(connFullMap)
                     .build();
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
+            DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> connectivitycontextIID =
-                InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
-                    .child(org.opendaylight.yang.gen.v1.urn
+                DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
-                    .build();
+                .build();
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID,
                 connectivityContext);
@@ -309,8 +310,8 @@ public class TapiPceNotificationHandler {
     private ConnectivityService getConnectivityService(Uuid suuid) {
         try {
             // First read connectivity service with service uuid and update info
-            InstanceIdentifier<ConnectivityService> connectivityServIID =
-                InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+            DataObjectIdentifier<ConnectivityService> connectivityServIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(suuid))
@@ -331,8 +332,8 @@ public class TapiPceNotificationHandler {
 
     private void deleteConnectivityService(Uuid suuid) {
         // First read connectivity service with service uuid and update info
-        InstanceIdentifier<ConnectivityService> connectivityServIID =
-            InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+        DataObjectIdentifier<ConnectivityService> connectivityServIID = DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                 .child(ConnectivityService.class, new ConnectivityServiceKey(suuid))
@@ -347,9 +348,10 @@ public class TapiPceNotificationHandler {
 
     private void deleteConnection(Uuid connectionUuid) {
         // First read connectivity service with service uuid and update info
-        InstanceIdentifier<org.opendaylight.yang.gen.v1
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1
                 .urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection> connectionIID =
-            InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+            DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                 .child(org.opendaylight.yang.gen.v1.urn

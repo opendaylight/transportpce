@@ -16,7 +16,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -31,21 +31,20 @@ public final class NetworkTransactionImpl implements NetworkTransactionService {
     }
 
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
-            InstanceIdentifier<T> path) {
+            DataObjectIdentifier<T> path) {
         return requestProcessor.read(store, path);
     }
 
 
 
-    public void delete(LogicalDatastoreType store, InstanceIdentifier<?> path) {
+    public void delete(LogicalDatastoreType store, DataObjectIdentifier<?> path) {
         requestProcessor.delete(store, path);
     }
 
 
 
     @Override
-    public <T extends DataObject> void put(LogicalDatastoreType store,
-        InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void put(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         requestProcessor.put(store, path, data);
     }
 
@@ -53,8 +52,7 @@ public final class NetworkTransactionImpl implements NetworkTransactionService {
         return requestProcessor.commit();
     }
 
-    public <T extends DataObject> void merge(LogicalDatastoreType store,
-        InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void merge(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         requestProcessor.merge(store, path, data);
     }
 

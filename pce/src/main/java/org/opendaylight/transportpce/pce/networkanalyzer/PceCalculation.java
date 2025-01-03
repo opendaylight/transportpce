@@ -50,7 +50,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,7 +208,7 @@ public class PceCalculation {
     }
 
     private boolean readMdSal() {
-        InstanceIdentifier<Network> nwInstanceIdentifier = null;
+        DataObjectIdentifier<Network> nwInstanceIdentifier = null;
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_400GE:
@@ -218,8 +218,9 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_OTHER:
                 LOG.debug("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
-                nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+                nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .build();
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -230,8 +231,9 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
                 LOG.debug("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
-                nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
+                nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .build();
                 break;
             default:
                 LOG.warn("readMdSal: unknown service-type for service-rate {} and service-format {}", serviceRate,
@@ -271,7 +273,7 @@ public class PceCalculation {
         return true;
     }
 
-    private Network readTopology(InstanceIdentifier<Network> nwInstanceIdentifier) {
+    private Network readTopology(DataObjectIdentifier<Network> nwInstanceIdentifier) {
         Network nw = null;
         try {
             Optional<Network> nwOptional =

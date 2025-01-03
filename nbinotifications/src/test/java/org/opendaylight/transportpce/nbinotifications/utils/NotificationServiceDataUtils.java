@@ -69,7 +69,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.NwTopologyServiceBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
@@ -274,19 +274,20 @@ public final class NotificationServiceDataUtils {
                     .build())
                 .build();
 
-        ContextBuilder contextBuilder = new ContextBuilder()
-            .setName(Map.of(contextName.key(), contextName))
-            .setUuid(
-                new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(Charset.forName("UTF-8"))).toString()))
-            .setServiceInterfacePoint(new HashMap<>())
-            .addAugmentation(connectivityContext)
-            .addAugmentation(topologyContext)
-            .addAugmentation(notificationContext);
-
         // todo: add notification context
-        InstanceIdentifier<Context> contextIID = InstanceIdentifier.builder(Context.class).build();
         // put in datastore
-        networkTransactionService.put(LogicalDatastoreType.OPERATIONAL, contextIID, contextBuilder.build());
+        networkTransactionService.put(
+                LogicalDatastoreType.OPERATIONAL,
+                DataObjectIdentifier.builder(Context.class).build(),
+                new ContextBuilder()
+                    .setName(Map.of(contextName.key(), contextName))
+                    .setUuid(
+                        new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(Charset.forName("UTF-8"))).toString()))
+                    .setServiceInterfacePoint(new HashMap<>())
+                    .addAugmentation(connectivityContext)
+                    .addAugmentation(topologyContext)
+                    .addAugmentation(notificationContext)
+                    .build());
         networkTransactionService.commit().get();
     }
 

@@ -117,7 +117,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -509,7 +509,7 @@ public final class ConnectivityUtils {
     }
 
     private void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
@@ -1877,9 +1877,10 @@ public final class ConnectivityUtils {
                 networkPort.split("\\+")[0].split("-")[0],
                 networkPort.split("\\+")[0].split("-")[1]);
             String tpId = networkPort.split("\\+")[1];
-            InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.builder(Network.class)
+            DataObjectIdentifier<Mapping> mapIID = DataObjectIdentifier.builder(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
-                .child(Mapping.class, new MappingKey(tpId)).build();
+                .child(Mapping.class, new MappingKey(tpId))
+                .build();
             try {
                 Optional<Mapping> optMapping =
                     this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, mapIID).get();
@@ -1907,9 +1908,8 @@ public final class ConnectivityUtils {
     private OpenroadmNodeType getOpenRoadmNodeType(List<String> xpdrNodelist) {
         List<OpenroadmNodeType> openroadmNodeTypeList = new ArrayList<>();
         for (String xpdrNode:xpdrNodelist) {
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
-                    .topology.Node> nodeIID =
-                InstanceIdentifier.builder(Context.class)
+            DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                    .topology.Node> nodeIID = DataObjectIdentifier.builder(Context.class)
                     .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                     .child(TopologyContext.class)
                     .child(Topology.class, new TopologyKey(this.tapiTopoUuid))

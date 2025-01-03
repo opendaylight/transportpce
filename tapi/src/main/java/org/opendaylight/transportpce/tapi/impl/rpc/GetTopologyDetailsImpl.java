@@ -83,7 +83,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -328,7 +328,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             .build();
     }
 
-    private Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
+    private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
         Network topology = null;
         ListenableFuture<Optional<Network>> topologyFuture = networkTransactionService
                 .read(LogicalDatastoreType.CONFIGURATION, networkIID);
@@ -337,10 +337,10 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                    + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId().getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                    + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId().getValue(), e);
         }
         return topology;
     }
@@ -376,10 +376,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         ListenableFuture<Optional<Mapping>> mappingOpt =
             networkTransactionService.read(
                 LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifier.create(
+                DataObjectIdentifier.builder(
                     org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network.class)
                         .child(Nodes.class, new NodesKey(nodeIdPortMap))
-                        .child(Mapping.class, new MappingKey(networkLcp)));
+                        .child(Mapping.class, new MappingKey(networkLcp))
+                        .build());
         if (!mappingOpt.isDone()) {
             LOG.error("Impossible to get mapping of associated network port {} of tp {}",
                     networkLcp, tp.getTpId().getValue());
