@@ -88,6 +88,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the NetworkModelService to ease the data manipulation on OpenROADM topology models.
+ */
 @Component(immediate = true)
 public class NetworkModelServiceImpl implements NetworkModelService {
 
@@ -104,6 +107,15 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private Map<TopologyChangesKey, TopologyChanges> topologyChanges;
     private TopologyUpdateResult notification = null;
 
+    /**
+     * Instantiate the NetworkModelServiceImpl.
+     * @param dataBroker Provides access to the conceptual data tree store. Used here to instantiate R2RLinkDiscovery
+     * @param deviceTransactionManager Manages data transactions with the netconf devices
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     * @param portMapping Store the abstraction view of the netconf OpenROADM-device
+     * @param ocPortMapping Store the abstraction view of the netconf OpenConfig device
+     * @param notificationPublishService Notification broker which allows to submit a notifications
+     */
     @Activate
     public NetworkModelServiceImpl(@Reference DataBroker dataBroker,
             @Reference DeviceTransactionManager deviceTransactionManager,

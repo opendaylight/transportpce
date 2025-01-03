@@ -55,6 +55,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class that allows to register TransportPCE internal RPC to complement the different topologies.
+ */
 @Component
 public class NetworkUtilsImpl {
 
@@ -62,6 +65,11 @@ public class NetworkUtilsImpl {
     private final DataBroker dataBroker;
     private final Registration rpcReg;
 
+    /**
+     * Instantiate the NetworkUtilsImpl object.
+     * @param dataBroker Provides access to the conceptual data tree store.
+     * @param rpcProvider Service that allows to registered Remote Procedure Call (RPC) implementations.
+     */
     @Activate
     public NetworkUtilsImpl(@Reference DataBroker dataBroker, @Reference RpcProviderService rpcProvider) {
         this.dataBroker = dataBroker;
@@ -74,7 +82,9 @@ public class NetworkUtilsImpl {
         LOG.info("NetworkUtilsImpl instanciated");
     }
 
-
+    /**
+     * Unregister RPC used in this network module when closing the network model service.
+     */
     @Deactivate
     public void close() {
         rpcReg.close();

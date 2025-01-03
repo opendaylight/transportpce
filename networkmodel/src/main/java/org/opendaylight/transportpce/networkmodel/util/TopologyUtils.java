@@ -48,6 +48,9 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class to ease update of items in topology data-stores.
+ */
 public final class TopologyUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
@@ -55,7 +58,15 @@ public final class TopologyUtils {
     private TopologyUtils() {
     }
 
-    // This method returns the linkBuilder object for given source and destination
+    /**
+     * Create a {@link LinkBuilder} object for a given source and destination.
+     * @param srcNode source node id string
+     * @param dstNode destination node id
+     * @param srcTp source termination point
+     * @param destTp destination termination point
+     * @param otnPrefix OTN link type prefix
+     * @return {@link LinkBuilder}
+     */
     public static LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp,
         String otnPrefix) {
 
@@ -91,7 +102,15 @@ public final class TopologyUtils {
         return lnkBldr;
     }
 
-    // This method returns the linkBuilder object for given source and destination
+    /**
+     * Delete a link specified by a given source and destination.
+     * @param srcNode source node id string
+     * @param dstNode destination node id
+     * @param srcTp source termination point
+     * @param destTp destination termination point
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     * @return True if OK, False otherwise.
+     */
     public static boolean deleteLink(String srcNode, String dstNode, String srcTp, String destTp,
                                      NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for {}-{}", srcNode, dstNode);
@@ -105,7 +124,12 @@ public final class TopologyUtils {
         }
     }
 
-    // This method returns the linkBuilder object for given source and destination
+    /**
+     * Delete a link specified by its linkId.
+     * @param linkId The link identifier
+     * @param networkTransactionService Service that eases the transaction operations with data-stores
+     * @return True if OK, False otherwise.
+     */
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
@@ -135,6 +159,11 @@ public final class TopologyUtils {
         }
     }
 
+    /**
+     * Set the {@link AdminStates} according to string representation.
+     * @param adminState value of the AdminStates
+     * @return {@link AdminStates}
+     */
     public static AdminStates setNetworkAdminState(String adminState) {
         if (adminState == null) {
             return null;
@@ -151,6 +180,11 @@ public final class TopologyUtils {
         }
     }
 
+    /**
+     * Set the {@link State} according to string representation.
+     * @param operState Value of the operational state
+     * @return {@link State}
+     */
     public static State setNetworkOperState(String operState) {
         if (operState == null) {
             return null;
@@ -167,6 +201,14 @@ public final class TopologyUtils {
         }
     }
 
+    /**
+     * Update topology components.
+     * @param abstractNodeid Node name
+     * @param mapping mapping
+     * @param nodes Map of topology nodes
+     * @param links Map of topology links
+     * @return Subset of the topology
+     */
     public static TopologyShard updateTopologyShard(String abstractNodeid, Mapping mapping, Map<NodeKey, Node> nodes,
             Map<LinkKey, Link> links) {
         // update termination-point corresponding to the mapping

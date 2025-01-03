@@ -68,6 +68,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class that implements the WDM frequency spectrum handling.
+ */
 @Component
 public class FrequenciesServiceImpl implements FrequenciesService {
 
@@ -75,6 +78,11 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private final DataBroker dataBroker;
     private final AvailFreqMapsKey availFreqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
 
+    /**
+     * Create instance of the FrequenciesService.
+     *
+     * @param dataBroker Provides access to the conceptual data tree store used by the implementation.
+     */
     @Activate
     public FrequenciesServiceImpl(@Reference DataBroker dataBroker) {
         this.dataBroker = dataBroker;

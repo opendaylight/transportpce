@@ -14,10 +14,18 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.TcaNotifica
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.tca.rev161014.TcaNotification
+ * notification.
+ */
 public class TcaListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TcaListener.class);
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(TcaNotification.class, this::onTcaNotification)));

@@ -38,16 +38,27 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev200529.AlarmNotification notification.
+ */
 public class AlarmNotificationListener710 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AlarmNotificationListener710.class);
     private static final String PIPE = "|";
     private final DataBroker dataBroker;
 
+    /**
+     * Create instance of the listener.
+     * @param dataBroker Provides access to the conceptual data tree store used by the listener implementation.
+     */
     public AlarmNotificationListener710(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 
+    /**
+     * Get instances of a CompositeListener that could be used to unregister listeners.
+     * @return a Composite listener containing listener implementations that will receive notifications
+     */
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
             new CompositeListener.Component<>(AlarmNotification.class, this::onAlarmNotification)));
