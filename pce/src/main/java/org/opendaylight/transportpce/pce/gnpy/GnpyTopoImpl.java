@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -61,7 +62,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,19 +109,19 @@ public class GnpyTopoImpl {
      */
     private void extractTopo() throws GnpyException {
         // Define the instance identifier of the OpenRoadm topology
-        InstanceIdentifier<Network> insIdOpenRoadmTopo = InstanceIdentifier
-                .builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+        DataObjectIdentifier<Network> insIdOpenRoadmTopo = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .build();
         // Define the instance identifier of the OpenRoadm network
-        InstanceIdentifier<Network> insIdrOpenRoadmNet = InstanceIdentifier
-                .builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
+        DataObjectIdentifier<Network> insIdrOpenRoadmNet = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .build();
         try {
             // Initialize the reading of the networkTransactionService
             // read the configuration part of the data broker that concerns the openRoadm topology and get all the nodes
-            java.util.Optional<Network> openRoadmTopo = this.networkTransactionService
+            Optional<Network> openRoadmTopo = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdOpenRoadmTopo).get();
-            java.util.Optional<Network> openRoadmNet = this.networkTransactionService
+            Optional<Network> openRoadmNet = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get();
             if (openRoadmNet.isPresent() && openRoadmTopo.isPresent()) {
                 extractElements(openRoadmTopo,openRoadmNet);

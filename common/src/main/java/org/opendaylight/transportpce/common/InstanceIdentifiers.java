@@ -24,6 +24,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public final class InstanceIdentifiers {
@@ -36,13 +37,15 @@ public final class InstanceIdentifiers {
             .builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
 
-    public static final InstanceIdentifier<Network> OVERLAY_NETWORK_II = InstanceIdentifier
+    public static final DataObjectIdentifier<Network> OVERLAY_NETWORK_II = DataObjectIdentifier
         .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+        .build();
 
-    public static final InstanceIdentifier<Network> OTN_NETWORK_II = InstanceIdentifier
+    public static final DataObjectIdentifier<Network> OTN_NETWORK_II = DataObjectIdentifier
         .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
+        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+        .build();
 
     public static final InstanceIdentifier<Network> CLLI_NETWORK_II = InstanceIdentifier
             .builder(Networks.class)
@@ -58,9 +61,9 @@ public final class InstanceIdentifiers {
      * @param tpId String
      * @return InstanceIdentifier
      */
-    public static InstanceIdentifier<TerminationPoint1> createNetworkTerminationPoint1IIDBuilder(
+    public static DataObjectIdentifier<TerminationPoint1> createNetworkTerminationPoint1IIDBuilder(
             String nodeId, String tpId) {
-        return InstanceIdentifier.builder(Networks.class)
+        return DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,

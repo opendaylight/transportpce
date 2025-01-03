@@ -25,7 +25,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NetworkTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NetworkTypesBuilder;
 import org.opendaylight.yangtools.binding.Augmentation;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +47,10 @@ public class TpceNetwork {
     public void createLayer(String networkId) {
         try {
             Network network = createNetwork(networkId);
-            InstanceIdentifier.Builder<Network> nwIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
-                new NetworkKey(new NetworkId(networkId)));
-            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), network);
+            DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(networkId)))
+                    .build();
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, nwIID, network);
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("{} network layer created successfully.", networkId);
         } catch (ExecutionException | TimeoutException | InterruptedException e) {

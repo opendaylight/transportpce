@@ -12,9 +12,9 @@ import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.binding.DataContainer;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.binding.Notification;
 import org.opendaylight.yangtools.binding.data.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
@@ -112,7 +112,9 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     @SuppressWarnings({"rawtypes","unchecked"})
     public <T extends DataObject> Optional<NormalizedNode> toNormalizedNodes(@NonNull T object,
             Class dataObjectClass) {
-        return Optional.of(codecRegistry.toNormalizedDataObject(InstanceIdentifier.create(dataObjectClass), object)
+        return Optional.of(codecRegistry.toNormalizedDataObject(
+                DataObjectReference.builder(dataObjectClass).build(),
+                object)
             .node());
     }
 

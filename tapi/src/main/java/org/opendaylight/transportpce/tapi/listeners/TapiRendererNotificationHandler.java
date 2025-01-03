@@ -50,7 +50,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.TargetObjectNameKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -187,8 +187,8 @@ public class TapiRendererNotificationHandler {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             // First read connectivity service with service uuid and update info
-            InstanceIdentifier<ConnectivityService> connectivityServIID =
-                InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+            DataObjectIdentifier<ConnectivityService> connectivityServIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(suuid))
@@ -211,9 +211,9 @@ public class TapiRendererNotificationHandler {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             // First read connection with connection uuid and update info
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
+            DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn
                 .onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection> connectionIID =
-                InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                DataObjectIdentifier.builder(Context.class).augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(org.opendaylight.yang.gen.v1.urn
@@ -245,8 +245,8 @@ public class TapiRendererNotificationHandler {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             // First read connectivity service with connectivity service uuid and update info
-            InstanceIdentifier<ConnectivityService> connServIID =
-                InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+            DataObjectIdentifier<ConnectivityService> connServIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn
                         .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(updtConnServ.getUuid()))
@@ -271,8 +271,8 @@ public class TapiRendererNotificationHandler {
 
     private void deleteConnectivityService(Uuid suuid) {
         // First read connectivity service with service uuid and update info
-        InstanceIdentifier<ConnectivityService> connectivityServIID =
-            InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+        DataObjectIdentifier<ConnectivityService> connectivityServIID = DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                 .child(ConnectivityService.class, new ConnectivityServiceKey(suuid))
@@ -287,9 +287,10 @@ public class TapiRendererNotificationHandler {
 
     private void deleteConnection(Uuid connectionUuid) {
         // First read connectivity service with service uuid and update info
-        InstanceIdentifier<org.opendaylight.yang.gen.v1
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1
             .urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection> connectionIID =
-            InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+            DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                 .child(org.opendaylight.yang.gen.v1.urn

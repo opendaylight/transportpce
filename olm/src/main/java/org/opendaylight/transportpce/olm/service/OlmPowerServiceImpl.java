@@ -575,7 +575,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
     private String getRealNodeId(String mappedNodeId) {
         KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII =
-            InstanceIdentifiers.OVERLAY_NETWORK_II.child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
+            InstanceIdentifiers.OVERLAY_NETWORK_II.toLegacy().child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
         Optional<Node> realNode;
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();

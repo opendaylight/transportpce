@@ -68,8 +68,8 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.EnumTypeObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -186,8 +186,9 @@ public class TapiNetworkModelNotificationHandler {
     private void updateConnectivityServices() {
         try {
             this.connectivityServiceChanges.clear();
-            InstanceIdentifier<ConnectivityContext> connectivityContextIID =
-                InstanceIdentifier.builder(Context.class).augmentation(
+            DataObjectIdentifier<ConnectivityContext> connectivityContextIID = DataObjectIdentifier
+                    .builder(Context.class)
+                    .augmentation(
                         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .build();
@@ -209,9 +210,9 @@ public class TapiNetworkModelNotificationHandler {
                 AdministrativeState adminState = (AdministrativeState) states.get(connService.getUuid())[0];
                 OperationalState operState = (OperationalState) states.get(connService.getUuid())[1];
 
-                InstanceIdentifier<ConnectivityService> connServIID = InstanceIdentifier
-                    .builder(Context.class).augmentation(org.opendaylight.yang.gen.v1
-                                .urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+                DataObjectIdentifier<ConnectivityService> connServIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(connService.getUuid()))
                     .build();
@@ -253,9 +254,9 @@ public class TapiNetworkModelNotificationHandler {
         }
         for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.service.Connection connection : connService.getConnection().values()) {
-            InstanceIdentifier<Connection> connIID =
-                InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+            DataObjectIdentifier<Connection> connIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(ConnectivityContext.class)
                     .child(Connection.class, new ConnectionKey(connection.getConnectionUuid()))
                     .build();
@@ -280,13 +281,14 @@ public class TapiNetworkModelNotificationHandler {
         LOG.info("Change in oneps = {}, new states = {}", changedOneps, onepStates);
         try {
             //should it return a list of connections?
-            InstanceIdentifier<org.opendaylight.yang.gen.v1.urn
+            DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> connectivityContextIID =
-                InstanceIdentifier.builder(Context.class).augmentation(
+                DataObjectIdentifier.builder(Context.class)
+                    .augmentation(
                             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                        .child(org.opendaylight.yang.gen.v1.urn
-                                .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
-                        .build();
+                    .child(org.opendaylight.yang.gen.v1.urn
+                            .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
+                    .build();
             Optional<org.opendaylight.yang.gen.v1.urn
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivityContextIID).get();
@@ -313,13 +315,13 @@ public class TapiNetworkModelNotificationHandler {
                 }
                 for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.service.Connection connection : connService.getConnection().values()) {
-                    InstanceIdentifier<Connection> connIID =
-                        InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                                .child(org.opendaylight.yang.gen.v1.urn
-                                        .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
-                                .child(Connection.class, new ConnectionKey(connection.getConnectionUuid()))
-                                .build();
+                    DataObjectIdentifier<Connection> connIID = DataObjectIdentifier.builder(Context.class)
+                        .augmentation(org.opendaylight.yang.gen.v1
+                                .urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+                        .child(org.opendaylight.yang.gen.v1
+                                .urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
+                        .child(Connection.class, new ConnectionKey(connection.getConnectionUuid()))
+                        .build();
                     Optional<Connection> optConn =
                         this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                     if (optConn.isEmpty()) {
@@ -379,13 +381,13 @@ public class TapiNetworkModelNotificationHandler {
         Boolean allLowerConnEna = true;
         try {
             for (LowerConnection lowerConn:lowerConnections) {
-                InstanceIdentifier<Connection> connIID =
-                    InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                        .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                            .child(org.opendaylight.yang.gen.v1.urn
-                                    .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
-                            .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
-                            .build();
+                DataObjectIdentifier<Connection> connIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+                    .child(org.opendaylight.yang.gen.v1.urn
+                            .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
+                    .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
+                    .build();
                 Optional<Connection> optConn =
                         this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                 if (optConn.isEmpty()) {
@@ -449,7 +451,7 @@ public class TapiNetworkModelNotificationHandler {
                 if (ocep.isEmpty()) {
                     continue;
                 }
-                InstanceIdentifier<OwnedNodeEdgePoint> onepIID = InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class).child(TopologyContext.class)
                     .child(Topology.class, new TopologyKey(tapiTopoUuid))
                     .child(Node.class, new NodeKey(ocep.orElseThrow().getNodeUuid()))
@@ -479,14 +481,13 @@ public class TapiNetworkModelNotificationHandler {
     private boolean allLowerConEnabled(Collection<LowerConnection> lowerConnections) {
         try {
             for (LowerConnection lowerConn:lowerConnections) {
-                InstanceIdentifier<Connection> connIID =
-                    InstanceIdentifier.builder(Context.class).augmentation(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
-                        .child(org.opendaylight.yang.gen.v1.urn
-                            .onf.otcc.yang.tapi.connectivity.rev221121.context
-                            .ConnectivityContext.class)
-                        .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
-                        .build();
+                DataObjectIdentifier<Connection> connIID = DataObjectIdentifier.builder(Context.class)
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+                    .child(org.opendaylight.yang.gen.v1
+                            .urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
+                    .child(Connection.class, new ConnectionKey(lowerConn.getConnectionUuid()))
+                    .build();
                 Optional<Connection> optConn =
                     this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                 if (optConn.isEmpty()) {
@@ -524,11 +525,12 @@ public class TapiNetworkModelNotificationHandler {
                 if (supportedConnService.getLayerProtocolName() != layer) {
                     continue;
                 }
-                InstanceIdentifier<ConnectivityService> supportedConnServIID = InstanceIdentifier
-                    .builder(Context.class).augmentation(org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
+                DataObjectIdentifier<ConnectivityService> supportedConnServIID = DataObjectIdentifier
+                    .builder(Context.class)
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.Context1.class)
                     .child(org.opendaylight.yang.gen.v1
-                        .urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
+                            .urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext.class)
                     .child(ConnectivityService.class, new ConnectivityServiceKey(supportedConnService.getUuid()))
                     .build();
                 Optional<ConnectivityService> optNewConnService = this.networkTransactionService.read(

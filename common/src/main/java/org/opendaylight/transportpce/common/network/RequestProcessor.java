@@ -24,8 +24,8 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class RequestProcessor {
     }
 
     public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
-            InstanceIdentifier<T> path) {
+            DataObjectIdentifier<T> path) {
         ReadTransaction readTx = dataBroker.newReadOnlyTransaction();
         String thread = Thread.currentThread().getName();
         readL.lock();
@@ -63,7 +63,7 @@ public class RequestProcessor {
         }
     }
 
-    public <T extends DataObject> void delete(LogicalDatastoreType store, InstanceIdentifier<?> path) {
+    public <T extends DataObject> void delete(LogicalDatastoreType store, DataObjectIdentifier<?> path) {
         String thread = Thread.currentThread().getName();
         LOG.debug("delete - store, thread = {} - {}", store, thread);
         writeL.lock();
@@ -82,7 +82,7 @@ public class RequestProcessor {
         }
     }
 
-    public <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void put(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         String thread = Thread.currentThread().getName();
         writeL.lock();
         LOG.debug("put locked {} by {}", store, thread);
@@ -98,7 +98,7 @@ public class RequestProcessor {
         }
     }
 
-    public <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
+    public <T extends DataObject> void merge(LogicalDatastoreType store, DataObjectIdentifier<T> path, T data) {
         String thread = Thread.currentThread().getName();
         writeL.lock();
         LOG.debug("merge locked {} by {}", store, thread);

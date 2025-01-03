@@ -62,6 +62,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +86,7 @@ public final class TopologyUtils {
         // TODO: Initially set topological mode to Full. Shall be set through the setter at controller initialization
     }
 
-    public Network readTopology(InstanceIdentifier<Network> networkIID) throws TapiTopologyException {
+    public Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
         ListenableFuture<Optional<Network>> topologyFuture =
                 this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
         try {
@@ -93,12 +94,12 @@ public final class TopologyUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(),
-                e);
+                "Unable to get from mdsal topology: " + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId()
+                .getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(),
-                e);
+                "Unable to get from mdsal topology: " + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId()
+                .getValue(), e);
         } catch (NoSuchElementException e) {
             return null;
         }
@@ -106,7 +107,7 @@ public final class TopologyUtils {
 
     public List<String> readTopologyName(Uuid topoUuid) throws TapiTopologyException {
         Topology topology = null;
-        InstanceIdentifier<Topology> topoIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<Topology> topoIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
             .child(TopologyContext.class)
             .child(Topology.class, new TopologyKey(topoUuid))
@@ -118,10 +119,12 @@ public final class TopologyUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + topoIID.firstKeyOf(Topology.class).getUuid().getValue(), e);
+                "Unable to get from mdsal topology: " + topoIID.toLegacy().firstKeyOf(Topology.class).getUuid()
+                .getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + topoIID.firstKeyOf(Topology.class).getUuid().getValue(), e);
+                "Unable to get from mdsal topology: " + topoIID.toLegacy().firstKeyOf(Topology.class).getUuid()
+                .getValue(), e);
         } catch (NoSuchElementException e) {
             return null;
         }
@@ -212,7 +215,7 @@ public final class TopologyUtils {
         }
         // roadm infrastructure not abstracted
         // read openroadm-network
-        Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II);
+        Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II.toIdentifier());
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                 .networks.network.Node> rdmList =
             openroadmNet == null ? new ArrayList<>()

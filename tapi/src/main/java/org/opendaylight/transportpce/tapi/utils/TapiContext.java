@@ -52,7 +52,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.NwTopologyServiceBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -82,7 +82,7 @@ public class TapiContext {
                 new NameBuilder().setValue("Network Topo Service").setValueName("Network Topo Service Name").build();
             this.networkTransactionService.put(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class).build(),
+                DataObjectIdentifier.builder(Context.class).build(),
                 new ContextBuilder()
                     .setName(Map.of(contextName.key(), contextName))
                     .setUuid(
@@ -135,7 +135,7 @@ public class TapiContext {
         try {
             Optional<Context> optionalContext = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class).build())
+                    DataObjectIdentifier.builder(Context.class).build())
                 .get();
             if (optionalContext.isEmpty()) {
                 LOG.error("Tapi context is not present in datastore");
@@ -159,7 +159,7 @@ public class TapiContext {
             // merge in datastore
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                     .child(TopologyContext.class)
                     .build(),
@@ -180,7 +180,7 @@ public class TapiContext {
             // merge in datastore
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class).build(),
+                DataObjectIdentifier.builder(Context.class).build(),
                 new ContextBuilder().setServiceInterfacePoint(sipMap).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI SIPs merged successfully.");
@@ -196,7 +196,7 @@ public class TapiContext {
             // merge in datastore
             this.networkTransactionService.merge(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                             .context.ConnectivityContext.class)
@@ -216,8 +216,7 @@ public class TapiContext {
 
     public void updateTopologyWithCep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, ConnectionEndPoint cep) {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        InstanceIdentifier<OwnedNodeEdgePoint> onepIID =
-            InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                 .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                         .context.TopologyContext.class)
@@ -270,7 +269,7 @@ public class TapiContext {
             Optional<Node> optNode =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(
                                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
@@ -328,7 +327,7 @@ public class TapiContext {
             Optional<OwnedNodeEdgePoint> optNode =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(
                                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
@@ -355,7 +354,7 @@ public class TapiContext {
         try {
             Optional<Link> optLink = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(
                             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
@@ -379,7 +378,7 @@ public class TapiContext {
         try {
             Optional<TopologyContext> optTopoContext = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(
                             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                         .child(TopologyContext.class)
@@ -402,7 +401,7 @@ public class TapiContext {
             Optional<ConnectivityService> optConnServ =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                                     .context.ConnectivityContext.class)
@@ -433,7 +432,7 @@ public class TapiContext {
         try {
             this.networkTransactionService.delete(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                             .context.ConnectivityContext.class)
@@ -499,7 +498,7 @@ public class TapiContext {
         try {
             this.networkTransactionService.delete(
                 LogicalDatastoreType.OPERATIONAL,
-                InstanceIdentifier.builder(Context.class)
+                DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                             .context.ConnectivityContext.class)
@@ -565,7 +564,7 @@ public class TapiContext {
             Optional<Connection> optConn =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                                     .context.ConnectivityContext.class)
@@ -590,7 +589,7 @@ public class TapiContext {
                     .context.ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(
                         LogicalDatastoreType.OPERATIONAL,
-                        InstanceIdentifier.builder(Context.class)
+                        DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                                     .context.ConnectivityContext.class)
@@ -611,7 +610,7 @@ public class TapiContext {
         try {
             Optional<OwnedNodeEdgePoint> optNode = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(
                             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                         .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121

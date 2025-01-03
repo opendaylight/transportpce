@@ -36,7 +36,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.context.NotifSubscriptionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilter;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.notification.subscription.service.SubscriptionFilterKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -75,7 +75,7 @@ public class GetNotificationListImpl implements GetNotificationList {
             Optional<NotifSubscription> optionalNotifSub = this.networkTransactionService
                 .read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class).augmentation(Context1.class)
+                    DataObjectIdentifier.builder(Context.class).augmentation(Context1.class)
                         .child(NotificationContext.class)
                         .child(NotifSubscription.class, new NotifSubscriptionKey(notifSubsUuid))
                         .build())

@@ -19,7 +19,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev230526.controller.parameters.spectrum.filling.SpectrumFillingRules;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev230526.controller.parameters.spectrum.filling.SpectrumFillingRulesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ControllerBehaviourSettings;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +47,7 @@ public class OperatorConstraints {
     public BitSet getBitMapConstraint(String customerName) {
         BitSet referenceBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         referenceBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        InstanceIdentifier<SpectrumFilling> sfIID =
-            InstanceIdentifier
-                .builder(ControllerBehaviourSettings.class)
+        DataObjectIdentifier<SpectrumFilling> sfIID = DataObjectIdentifier.builder(ControllerBehaviourSettings.class)
                 .child(SpectrumFilling.class)
                 .build();
 

@@ -75,7 +75,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanism;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.validation.pac.ValidationMechanismBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.osgi.service.component.annotations.Activate;
@@ -234,8 +234,8 @@ public class TapiLinkImpl implements TapiLink {
     private org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
             .topology.rev180226.networks.network.Link getORLinkFromLinkId(LinkId linkId) {
 
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-            .networks.network.Link> linkIID = InstanceIdentifier.builder(
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+            .networks.network.Link> linkIID = DataObjectIdentifier.builder(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
@@ -401,8 +401,8 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     private String getSupportingNodeFromNodeId(String overlayNodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-                .rev180226.networks.network.Node> nodeIID = InstanceIdentifier.builder(
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                .rev180226.networks.network.Node> nodeIID = DataObjectIdentifier.builder(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
                     .rev180226.Networks.class)
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
@@ -487,7 +487,7 @@ public class TapiLinkImpl implements TapiLink {
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -509,7 +509,7 @@ public class TapiLinkImpl implements TapiLink {
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -546,7 +546,7 @@ public class TapiLinkImpl implements TapiLink {
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
@@ -569,7 +569,7 @@ public class TapiLinkImpl implements TapiLink {
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))

@@ -41,7 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.power.mask.MaskPowerVsPin;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.power.mask.MaskPowerVsPinKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +124,7 @@ public class CatalogUtils {
         double baudRate;
         double maxRollOff;
         if (operationalModeId.startsWith("OR")) {
-            InstanceIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = InstanceIdentifier
+            DataObjectIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
                 .child(XpondersPluggables.class)
@@ -147,7 +147,7 @@ public class CatalogUtils {
             }
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
-            InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
+            DataObjectIdentifier<SpecificOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(SpecificOperationalModes.class)
                 .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
@@ -202,7 +202,7 @@ public class CatalogUtils {
         RatioDB minOOBOsnrSingleChannelValue;
         RatioDB minOOBOsnrMultiChannelValue;
         if (operationalModeId.startsWith("OR")) {
-            InstanceIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = InstanceIdentifier
+            DataObjectIdentifier<XponderPluggableOpenroadmOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
                 .child(XpondersPluggables.class)
@@ -235,7 +235,7 @@ public class CatalogUtils {
             }
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
-            InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
+            DataObjectIdentifier<SpecificOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(SpecificOperationalModes.class)
                 .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
@@ -303,7 +303,7 @@ public class CatalogUtils {
         SpecificOperationalMode speTspOM = null;
         Map<PenaltiesKey, Penalties> penaltiesMap = null;
         if (operationalModeId.startsWith("OR")) {
-            var omCatalogIid = InstanceIdentifier
+            var omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(OpenroadmOperationalModes.class)
                 .child(XpondersPluggables.class)
@@ -330,8 +330,7 @@ public class CatalogUtils {
         } else {
             // In other cases, means the mode is a non OpenROADM specific Operational Mode
             // InstanceIdentifier<SpecificOperationalMode> omCatalogIid = InstanceIdentifier
-            var omCatalogIid = InstanceIdentifier
-                .builder(OperationalModeCatalog.class)
+            var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                 .child(SpecificOperationalModes.class)
                 .child(SpecificOperationalMode.class, new SpecificOperationalModeKey(operationalModeId))
                 .build();
@@ -474,8 +473,7 @@ public class CatalogUtils {
         List<Double> osnrPolynomialFits;
         switch (catalogNodeType) {
             case ADD:
-                var omCatalogIid = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Add.class)
@@ -508,8 +506,7 @@ public class CatalogUtils {
                 break;
 
             case DROP:
-                var omCatalogIid1 = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid1 = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Drop.class)
@@ -545,8 +542,7 @@ public class CatalogUtils {
                 break;
 
             case EXPRESS:
-                var omCatalogIid2 = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid2 = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Express.class)
@@ -561,8 +557,7 @@ public class CatalogUtils {
                     .build();
                 try {
                     var omOptional = networkTransactionService
-                        .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid2)
-                        .get();
+                        .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid2).get();
                     if (omOptional.isEmpty()) {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return new HashMap<>();
@@ -590,8 +585,7 @@ public class CatalogUtils {
                 break;
 
             case AMP:
-                var omCatalogIid3 = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid3 = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Amplifiers.class)
                     .child(Amplifier.class)
@@ -705,8 +699,7 @@ public class CatalogUtils {
         double pout = 99999.0;
         switch (catalogNodeType) {
             case ADD:
-                var omCatalogIid = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Add.class)
@@ -743,8 +736,7 @@ public class CatalogUtils {
                 break;
 
             case EXPRESS:
-                var omCatalogIid2 = InstanceIdentifier
-                    .builder(OperationalModeCatalog.class)
+                var omCatalogIid2 = DataObjectIdentifier.builder(OperationalModeCatalog.class)
                     .child(OpenroadmOperationalModes.class)
                     .child(Roadms.class)
                     .child(Express.class)
@@ -759,8 +751,7 @@ public class CatalogUtils {
                     .build();
                 try {
                     var omOptional = networkTransactionService
-                        .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid2)
-                        .get();
+                            .read(LogicalDatastoreType.CONFIGURATION, omCatalogIid2).get();
                     if (omOptional.isEmpty()) {
                         LOG.error(OPMODE_MISMATCH_MSG, operationalModeId);
                         return pout;
@@ -832,8 +823,7 @@ public class CatalogUtils {
     }
 
     public boolean isCatalogFilled() {
-        var omCatalogIid = InstanceIdentifier
-            .builder(OperationalModeCatalog.class)
+        var omCatalogIid = DataObjectIdentifier.builder(OperationalModeCatalog.class)
             .child(OpenroadmOperationalModes.class)
             .child(Roadms.class)
             .child(Add.class)
@@ -851,5 +841,4 @@ public class CatalogUtils {
                 "readMdSal: Error reading from operational store, Operational Mode Catalog not filled" + e);
         }
     }
-
 }

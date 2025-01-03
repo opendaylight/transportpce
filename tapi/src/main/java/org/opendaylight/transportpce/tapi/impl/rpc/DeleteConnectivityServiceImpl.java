@@ -37,7 +37,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.ConnectivityServiceKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -115,7 +115,7 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
         if (!typeOfNode.equals("Service")) {
             return new ArrayList<>();
         }
-        InstanceIdentifier<ConnectivityService> nodeIID = InstanceIdentifier.builder(Context.class)
+        DataObjectIdentifier<ConnectivityService> nodeIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(ConnectivityContext.class)
                 .child(ConnectivityService.class, new ConnectivityServiceKey(uuid))
@@ -136,10 +136,10 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
             // violation error)
         } catch (ExecutionException e) {
             throw new ExecutionException("Unable to get from mdsal service: "
-                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+                    + nodeIID.toLegacy().firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Unable to get from mdsal service: "
-                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+                    + nodeIID.toLegacy().firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
         }
         LOG.debug("The service name of service {}, is {}", uuid, nameList);
         return nameList;

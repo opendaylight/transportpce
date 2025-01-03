@@ -33,9 +33,9 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapi
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev221121.context.NotificationContext;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.concepts.Registration;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -143,7 +143,7 @@ public class NbiNotificationsProvider {
         try {
             Optional<NotificationContext> notificationContextOptional = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class).child(NotificationContext.class)
                         .build())
                 .get();
@@ -162,7 +162,7 @@ public class NbiNotificationsProvider {
         try {
             this.networkTransactionService.merge(
                     LogicalDatastoreType.OPERATIONAL,
-                    InstanceIdentifier.builder(Context.class)
+                    DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class).child(NotificationContext.class)
                         .build(),
                     notificationContext1);
