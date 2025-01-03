@@ -17,10 +17,9 @@ import org.opendaylight.mdsal.binding.dom.adapter.CurrentAdapterSerializer;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.binding.data.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingCodecContext;
+import org.opendaylight.yangtools.binding.data.codec.impl.di.DefaultBindingDOMCodecFactory;
 import org.opendaylight.yangtools.binding.meta.YangModelBindingProvider;
 import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
-import org.opendaylight.yangtools.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.yangtools.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -52,8 +51,9 @@ public final class JsonUtil {
             throw new IllegalStateException("Failed to load schema context");
         }
         // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();
-        codecRegistry = new CurrentAdapterSerializer(new BindingCodecContext(bindingContext));
+        codecRegistry = new CurrentAdapterSerializer(
+            new DefaultBindingDOMCodecFactory()
+                .createBindingDOMCodec(BindingRuntimeHelpers.createRuntimeContext()));
     }
 
     public static JsonUtil getInstance() {
