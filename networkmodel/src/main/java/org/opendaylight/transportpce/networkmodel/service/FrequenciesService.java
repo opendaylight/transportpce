@@ -10,6 +10,9 @@ package org.opendaylight.transportpce.networkmodel.service;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
 
+/**
+ * Allows WDM frequency spectrum handling.
+ */
 public interface FrequenciesService {
 
     /**

@@ -12,6 +12,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkut
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 
 
+/**
+ * Utility class that eases the generation of different ID and their handling.
+ */
 public final class LinkIdUtil {
 
     private static final String NETWORK = "-NETWORK";
@@ -22,7 +25,6 @@ public final class LinkIdUtil {
     private static final String OTN_LINK_ID_FORMAT = "%5$s-%1$s-%2$sto%3$s-%4$s";
 
     private LinkIdUtil() {
-        // utility class
     }
 
     /**

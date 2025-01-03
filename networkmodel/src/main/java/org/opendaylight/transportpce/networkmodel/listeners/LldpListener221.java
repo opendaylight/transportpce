@@ -17,12 +17,22 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.LldpNbrInfoChange
+ * notification.
+ */
 public class LldpListener221 implements Listener<LldpNbrInfoChange> {
 
     private static final Logger LOG = LoggerFactory.getLogger(LldpListener221.class);
     private final R2RLinkDiscovery linkDiscovery;
     private final NodeId nodeId;
 
+    /**
+     * Create instance of the device listener.
+     *
+     * @param linkDiscovery Object representing the ROADM-to-ROADM WDM link
+     * @param nodeId Node name
+     */
     public LldpListener221(final R2RLinkDiscovery linkDiscovery, final String nodeId) {
         this.linkDiscovery = linkDiscovery;
         this.nodeId = new NodeId(nodeId);
