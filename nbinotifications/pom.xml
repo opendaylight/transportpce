@@ -41,6 +41,10 @@
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-7.1.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-13.1.0</artifactId>
     </dependency>
     <dependency>
@@ -105,6 +109,10 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.metatype.annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
     </dependency>
 
     <!-- Testing Dependencies -->

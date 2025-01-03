@@ -45,7 +45,7 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
+    <!--dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-1.2.1</artifactId>
       <scope>test</scope>
@@ -79,7 +79,7 @@
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-service-13.1.0</artifactId>
       <scope>test</scope>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
@@ -96,6 +96,10 @@
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>binding-spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-runtime-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
@@ -181,6 +185,10 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
     </dependency>
   </dependencies>
 </project>

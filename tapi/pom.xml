@@ -50,10 +50,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-2.2.1</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-7.1.0</artifactId>
     </dependency>
     <dependency>
@@ -97,16 +93,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-networkmodel</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-renderer</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -171,11 +157,27 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-renderer</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
