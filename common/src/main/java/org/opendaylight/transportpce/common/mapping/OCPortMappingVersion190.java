@@ -97,7 +97,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.Xp
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
@@ -146,8 +146,8 @@ public class OCPortMappingVersion190 {
         NodeInfo nodeInfo = null;
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
-        InstanceIdentifier<Components> componentIId =
-                InstanceIdentifier.builderOfInherited(OpenconfigPlatformData.class, Components.class).build();
+        DataObjectIdentifier<Components> componentIId =
+                DataObjectIdentifier.builderOfInherited(OpenconfigPlatformData.class, Components.class).build();
         var componentOptional =
                 this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
                         componentIId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -949,7 +949,7 @@ public class OCPortMappingVersion190 {
         nodesList.put(nodes.key(),nodes);
         Network network = new NetworkBuilder().setNodes(nodesList).build();
         final WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-        InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
+        DataObjectIdentifier<Network> nodesIID = DataObjectIdentifier.builder(Network.class).build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {

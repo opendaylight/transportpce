@@ -13,7 +13,7 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.NotificationTapiService;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +43,8 @@ public class TapiNotificationSerializer implements Serializer<NotificationTapiSe
             return new byte[0];
         }
         try {
-            InstanceIdentifier<NotificationTapiService> iid = InstanceIdentifier.builder(NotificationTapiService.class)
-                .build();
+            DataObjectIdentifier<NotificationTapiService> iid = DataObjectIdentifier
+                    .builder(NotificationTapiService.class).build();
             String serialized = converter.createJsonStringFromDataObject(iid, data, JSONCodecFactorySupplier.RFC7951);
             LOG.info("Serialized event {}", serialized);
             return serialized.getBytes(StandardCharsets.UTF_8);

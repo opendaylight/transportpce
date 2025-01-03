@@ -71,7 +71,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -86,7 +86,7 @@ public final class OlmTransactionUtils {
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
     public static void writeTransaction(
-            DataBroker dataBroker, InstanceIdentifier instanceIdentifier, DataObject object) {
+            DataBroker dataBroker, DataObjectIdentifier instanceIdentifier, DataObject object) {
         @NonNull
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
@@ -286,8 +286,7 @@ public final class OlmTransactionUtils {
         CurrentPmEntry currentPmEntryA =
             new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpA.key(),cpA))
-                .setPmResourceInstance(
-                    InstanceIdentifier
+                .setPmResourceInstance(DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
                         .build()
@@ -322,8 +321,7 @@ public final class OlmTransactionUtils {
         CurrentPmEntry currentPmEntryC =
             new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpC.key(),cpC))
-                .setPmResourceInstance(
-                    InstanceIdentifier
+                .setPmResourceInstance(DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
                         .build()

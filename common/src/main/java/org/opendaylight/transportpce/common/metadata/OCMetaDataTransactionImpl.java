@@ -14,7 +14,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaData;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -45,8 +45,8 @@ public class OCMetaDataTransactionImpl implements OCMetaDataTransaction {
     @Override
     public OpenTerminalMetaData getXPDROpenTerminalMetaData() {
         OpenTerminalMetaData terminalMetaData = null;
-        InstanceIdentifier<OpenTerminalMetaData> iidOTMD = InstanceIdentifier
-                .builder(OpenTerminalMetaData.class).build();
+        DataObjectIdentifier<OpenTerminalMetaData> iidOTMD = DataObjectIdentifier.builder(OpenTerminalMetaData.class)
+                .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<OpenTerminalMetaData> openTerminalMetaData =
                     readTx.read(LogicalDatastoreType.CONFIGURATION, iidOTMD).get();

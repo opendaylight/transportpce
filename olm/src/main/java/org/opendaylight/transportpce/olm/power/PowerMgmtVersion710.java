@@ -44,7 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtsigroup;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ public final class PowerMgmtVersion710 {
      */
     public static Map<String, Double> getXponderPowerRange(String circuitPackName, String portName, String deviceId,
             DeviceTransactionManager deviceTransactionManager) {
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+        DataObjectIdentifier<Ports> portIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .child(Ports.class, new PortsKey(portName))
@@ -115,7 +115,7 @@ public final class PowerMgmtVersion710 {
             String circuitPackName, String portName) {
         LOG.debug("Coming inside SRG power range");
         LOG.debug("Mapping object exists.");
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier
+        DataObjectIdentifier<Ports> portIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .child(Ports.class, new PortsKey(portName))
@@ -204,7 +204,7 @@ public final class PowerMgmtVersion710 {
             LOG.error("Unable to get transaction for device {} during transponder power setup!", nodeId, e);
             return false;
         }
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
@@ -270,7 +270,7 @@ public final class PowerMgmtVersion710 {
             return false;
         }
         // post the cross connect on the device
-        InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier
+        DataObjectIdentifier<RoadmConnections> roadmConnIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
             .build();

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 /**
  * <p>
@@ -152,7 +152,7 @@ public interface DeviceTransactionManager {
      *         empty Optional will be returned.
      */
     <T extends DataObject> Optional<T> getDataFromDevice(String deviceId, LogicalDatastoreType logicalDatastoreType,
-            InstanceIdentifier<T> path, long timeout, TimeUnit timeUnit);
+            DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit);
 
     /**
      * Checks if device with specified ID is mounted.

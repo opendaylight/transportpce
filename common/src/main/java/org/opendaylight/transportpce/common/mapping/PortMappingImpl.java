@@ -32,8 +32,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -100,8 +100,10 @@ public class PortMappingImpl implements PortMapping {
         /*
          * Getting physical mapping corresponding to logical connection point
          */
-        InstanceIdentifier<Mapping> portMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-            new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnPoint)).build();
+        DataObjectIdentifier<Mapping> portMappingIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId))
+                .child(Mapping.class, new MappingKey(logicalConnPoint))
+                .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
             if (mapObject.isPresent()) {
@@ -119,8 +121,9 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public Mapping getMapping(String nodeId, String circuitPackName, String portName) {
-        KeyedInstanceIdentifier<Nodes, NodesKey> portMappingIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        WithKey<Nodes, NodesKey> portMappingIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> portMapppingOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
             if (portMapppingOpt.isEmpty()) {
@@ -145,8 +148,10 @@ public class PortMappingImpl implements PortMapping {
     public void deleteMapping(String nodeId, String logicalConnectionPoint) {
         LOG.info("Deleting Mapping {} of node '{}'", logicalConnectionPoint, nodeId);
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
-        InstanceIdentifier<Mapping> mappingIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnectionPoint));
+        DataObjectIdentifier<Mapping> mappingIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .child(Mapping.class, new MappingKey(logicalConnectionPoint))
+            .build();
         rw.delete(LogicalDatastoreType.CONFIGURATION, mappingIID);
         try {
             rw.commit().get(1, TimeUnit.SECONDS);
@@ -161,8 +166,10 @@ public class PortMappingImpl implements PortMapping {
         /*
          * Getting physical mapping corresponding to logical connection point
          */
-        InstanceIdentifier<McCapabilities> mcCapabilitiesIID = InstanceIdentifier.builder(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId)).child(McCapabilities.class, new McCapabilitiesKey(mcLcp)).build();
+        DataObjectIdentifier<McCapabilities> mcCapabilitiesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .child(McCapabilities.class, new McCapabilitiesKey(mcLcp))
+            .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<McCapabilities> mcCapObject = readTx.read(LogicalDatastoreType.CONFIGURATION,
                 mcCapabilitiesIID).get();
@@ -184,8 +191,9 @@ public class PortMappingImpl implements PortMapping {
     public void deletePortMappingNode(String nodeId) {
         LOG.info("Deleting Mapping Data corresponding at node '{}'", nodeId);
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        DataObjectIdentifier<Nodes> nodesIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
         try {
             rw.commit().get(1, TimeUnit.SECONDS);
@@ -212,8 +220,9 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public Nodes getNode(String nodeId) {
-        InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-            new NodesKey(nodeId)).build();
+        DataObjectIdentifier<Nodes> nodePortMappingIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId))
+                .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodePortMapObject =
                 readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
@@ -230,8 +239,8 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
-    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, InstanceIdentifier<OduSwitchingPools> ospIID,
-            Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap) {
+    public boolean updatePortMappingWithOduSwitchingPools(String nodeId, DataObjectIdentifier<OduSwitchingPools> ospIID,
+            Map<Uint16, List<DataObjectIdentifier<PortList>>> nbliidMap) {
         OpenroadmNodeVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
         switch (openROADMversion.getIntValue()) {
             case 3:
@@ -250,8 +259,9 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public Mapping getMappingFromOtsInterface(String nodeId, String interfName) {
-        KeyedInstanceIdentifier<Nodes, NodesKey> nodePortmappingIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        WithKey<Nodes, NodesKey> nodePortmappingIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodePortmapppingOpt
                 = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortmappingIID).get();

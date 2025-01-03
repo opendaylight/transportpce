@@ -59,7 +59,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOT
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtsigroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtucnOducn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -250,8 +250,9 @@ public final class MappingUtilsImpl implements MappingUtils {
         /*
          * Getting physical mapping corresponding to logical connection point
          */
-        InstanceIdentifier<NodeInfo> nodeInfoIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-                new NodesKey(nodeId)).child(NodeInfo.class).build();
+        DataObjectIdentifier<NodeInfo> nodeInfoIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId)).child(NodeInfo.class)
+                .build();
         try (ReadTransaction readTx = dataBroker.newReadOnlyTransaction()) {
             Optional<NodeInfo> nodeInfoObj =
                     readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
@@ -284,8 +285,9 @@ public final class MappingUtilsImpl implements MappingUtils {
     @Override
     public List<McCapabilities> getMcCapabilitiesForNode(String nodeId) {
         List<McCapabilities> mcCapabilities = new ArrayList<>();
-        InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class)
-                .child(Nodes.class, new NodesKey(nodeId)).build();
+        DataObjectIdentifier<Nodes> nodePortMappingIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId))
+                .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodePortMapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
                     .get();

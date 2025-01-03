@@ -34,7 +34,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -173,14 +173,16 @@ public final class DeviceTransactionManagerImpl implements DeviceTransactionMana
 
     @Override
     public Optional<MountPoint> getDeviceMountPoint(String deviceId) {
-        InstanceIdentifier<Node> netconfNodeIID = InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class,
-                new NodeKey(new NodeId(deviceId)));
-        return mountPointService.getMountPoint(netconfNodeIID);
+        DataObjectIdentifier<Node> netconfNodeIID = InstanceIdentifiers.NETCONF_TOPOLOGY_II
+                .toBuilder()
+                .child(Node.class, new NodeKey(new NodeId(deviceId)))
+                .build();
+        return mountPointService.findMountPoint(netconfNodeIID);
     }
 
     @Override
     public <T extends DataObject> Optional<T> getDataFromDevice(String deviceId,
-            LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<T> path, long timeout, TimeUnit timeUnit) {
+            LogicalDatastoreType logicalDatastoreType, DataObjectIdentifier<T> path, long timeout, TimeUnit timeUnit) {
         Optional<DeviceTransaction> deviceTxOpt;
         try {
             deviceTxOpt = getDeviceTransaction(deviceId, timeout, timeUnit).get();

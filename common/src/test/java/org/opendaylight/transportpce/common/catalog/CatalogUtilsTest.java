@@ -31,7 +31,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ public class CatalogUtilsTest extends AbstractTest {
             WriteTransaction newWriteOnlyTransaction = getDataBroker().newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
-                    InstanceIdentifier.create(OperationalModeCatalog.class),
+                    DataObjectIdentifier.builder(OperationalModeCatalog.class).build(),
                     omCatalog);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {

@@ -58,7 +58,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +96,9 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         when(this.portMapping.getMapping("ROADM-A1", "DEG2-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping1());
         when(this.portMapping.getMapping("ROADM-C1", "DEG1-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping2());
 
-        InstanceIdentifier<CurrentPmList> iidCurrentPmList = InstanceIdentifier.create(CurrentPmList.class);
+        DataObjectIdentifier<CurrentPmList> iidCurrentPmList = DataObjectIdentifier
+                .builder(CurrentPmList.class)
+                .build();
         when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.OPERATIONAL,
                 iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
             .thenReturn(OlmTransactionUtils.getCurrentPmListA());
@@ -104,11 +106,11 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
                 iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
             .thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
-        InstanceIdentifier<Interface> interfacesIIDA = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIIDA = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
             .build();
-        InstanceIdentifier<Interface> interfacesIIDC = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIIDC = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
             .build();
@@ -145,8 +147,9 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     void testCalculateSpanlossBaseLink() {
         // initialise and store openroadm-topology in datastore
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network> ietfNetworkIID = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, overlayTopologyKey).build();
+        DataObjectIdentifier<Network> ietfNetworkIID = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, overlayTopologyKey)
+                .build();
         Network openroadmTopology = OlmTransactionUtils.getNetworkForSpanLoss();
         OlmTransactionUtils.writeTransaction(this.dataBroker, ietfNetworkIID, openroadmTopology);
         try {
@@ -168,8 +171,9 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
 
         // initialise and store openroadm-topology in datastore
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network> ietfNetworkIID = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, overlayTopologyKey).build();
+        DataObjectIdentifier<Network> ietfNetworkIID = DataObjectIdentifier.builder(Networks.class)
+                .child(Network.class, overlayTopologyKey)
+                .build();
         Network openroadmTopology = OlmTransactionUtils.getNetworkForSpanLoss();
         OlmTransactionUtils.writeTransaction(this.dataBroker, ietfNetworkIID, openroadmTopology);
         try {

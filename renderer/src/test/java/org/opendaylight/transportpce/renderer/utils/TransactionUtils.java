@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yangtools.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public final class TransactionUtils {
 
@@ -32,7 +32,7 @@ public final class TransactionUtils {
     public static boolean writeTransaction(DeviceTransactionManager deviceTransactionManager,
                                     String nodeId,
                                     LogicalDatastoreType logicalDatastoreType,
-                                    InstanceIdentifier instanceIdentifier,
+                                    DataObjectIdentifier instanceIdentifier,
                                     DataObject object)
             throws ExecutionException, InterruptedException {
         Future<Optional<DeviceTransaction>> deviceTxFuture =
@@ -49,7 +49,7 @@ public final class TransactionUtils {
     public static DataObject readTransaction(DeviceTransactionManager deviceTransactionManager,
                                   String nodeId,
                                   LogicalDatastoreType logicalDatastoreType,
-                                  InstanceIdentifier<? extends DataObject> instanceIdentifier)
+                                  DataObjectIdentifier<? extends DataObject> instanceIdentifier)
             throws ExecutionException, InterruptedException {
         Future<Optional<DeviceTransaction>> deviceTxFuture =
                 deviceTransactionManager.getDeviceTransaction(nodeId);

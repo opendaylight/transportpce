@@ -94,7 +94,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.conta
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev181019.Ports1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -125,7 +125,7 @@ public class PortMappingVersion221 {
 
     public boolean createMappingData(String nodeId) {
         LOG.info(PortMappingUtils.CREATE_MAPPING_DATA_LOGMSG, nodeId, "2.2.1");
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier
+        DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Info.class)
             .build();
@@ -201,7 +201,7 @@ public class PortMappingVersion221 {
                         nodeId,
                         LogicalDatastoreType.OPERATIONAL,
                         // port Identifier
-                        InstanceIdentifier
+                        DataObjectIdentifier
                             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
                             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
@@ -217,7 +217,7 @@ public class PortMappingVersion221 {
                             nodeId,
                             LogicalDatastoreType.OPERATIONAL,
                             //interface Identifier
-                            InstanceIdentifier
+                            DataObjectIdentifier
                                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                                 .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))
                                 .build(),
@@ -228,9 +228,10 @@ public class PortMappingVersion221 {
             LOG.debug(PortMappingUtils.UPDATE_MAPPING_LOGMSG,
                 nodeId, oldMapping, oldMapping.getLogicalConnectionPoint(), newMapping);
             final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-            InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
+            DataObjectIdentifier<Mapping> mapIID = DataObjectIdentifier.builder(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
-                .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
+                .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()))
+                .build();
             writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
             FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
             commit.get();
@@ -279,7 +280,7 @@ public class PortMappingVersion221 {
     }
 
     private OrgOpenroadmDevice getXpdrDevice(String nodeId) {
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier
+        DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
@@ -440,7 +441,7 @@ public class PortMappingVersion221 {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks> srgCps
                 = new ArrayList<>();
             LOG.debug(PortMappingUtils.GETTING_CP_LOGMSG, deviceId, srgCounter);
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier
+            DataObjectIdentifier<SharedRiskGroup> srgIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)))
                 .build();
@@ -521,7 +522,7 @@ public class PortMappingVersion221 {
                 nodeId, port.getPortName(), circuitPackName);
             return null;
         }
-        InstanceIdentifier<Ports> port2ID = InstanceIdentifier
+        DataObjectIdentifier<Ports> port2ID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(port.getPartnerPort().getCircuitPackName()))
             .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName()))
@@ -549,7 +550,7 @@ public class PortMappingVersion221 {
     }
 
     private List<Ports> getPortList(String circuitPackName, String nodeId) {
-        InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier
+        DataObjectIdentifier<CircuitPacks> cpIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .build();
@@ -589,7 +590,7 @@ public class PortMappingVersion221 {
 
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.debug(PortMappingUtils.GETTING_CONPORT_LOGMSG, deviceId, degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier
+            DataObjectIdentifier<Degree> deviceIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)))
                 .build();
@@ -619,7 +620,7 @@ public class PortMappingVersion221 {
         // if not present assume to be 20 (temporary)
         Integer maxSrg = ordmInfo.getMaxSrgs() == null ? 20 : ordmInfo.getMaxSrgs().toJava();
         for (int srgCounter = 1; srgCounter <= maxSrg; srgCounter++) {
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier
+            DataObjectIdentifier<SharedRiskGroup> srgIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)))
                 .build();
@@ -636,7 +637,7 @@ public class PortMappingVersion221 {
 
     private Map<String, String> getEthInterfaceList(String nodeId) {
         LOG.info(PortMappingUtils.GETTING_ETH_LIST_LOGMSG, nodeId);
-        InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier
+        DataObjectIdentifier<Protocols> protocoliid = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Protocols.class)
             .build();
@@ -653,7 +654,7 @@ public class PortMappingVersion221 {
             if (!portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                 continue;
             }
-            InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier
+            DataObjectIdentifier<Interface> interfaceIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(portConfig.getIfName()))
                 .build();
@@ -665,7 +666,7 @@ public class PortMappingVersion221 {
             }
             String supportingCircuitPackName = interfaceObject.orElseThrow().getSupportingCircuitPackName();
             cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
-            InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
+            DataObjectIdentifier<CircuitPacks> circuitPacksIID = DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName))
                 .build();
@@ -747,7 +748,7 @@ public class PortMappingVersion221 {
 
         Network network = new NetworkBuilder().setNodes(nodesList).build();
         final WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
-        InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
+        DataObjectIdentifier<Network> nodesIID = DataObjectIdentifier.builder(Network.class).build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {
@@ -1171,7 +1172,7 @@ public class PortMappingVersion221 {
     }
 
     private Ports getTtpPort(ConnectionPorts cp, String cpName, String nodeId) {
-        InstanceIdentifier<Ports> portID = InstanceIdentifier
+        DataObjectIdentifier<Ports> portID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(cpName))
             .child(Ports.class, new PortsKey(cp.getPortName()))
@@ -1260,7 +1261,7 @@ public class PortMappingVersion221 {
     }
 
     private Optional<Interface> getInterfaceFromDevice(String nodeId, String interfaceName) {
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
+        DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();

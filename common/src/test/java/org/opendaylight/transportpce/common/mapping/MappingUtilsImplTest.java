@@ -29,7 +29,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
@@ -50,8 +50,10 @@ public class MappingUtilsImplTest extends AbstractTest {
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier
                             .of(Network.QNAME), normalizedNode).getValue();
             WriteTransaction writeNetworkTransaction = getDataBroker().newWriteOnlyTransaction();
-            writeNetworkTransaction.put(LogicalDatastoreType.CONFIGURATION,
-                    InstanceIdentifier.builder(Network.class).build(), network);
+            writeNetworkTransaction.put(
+                    LogicalDatastoreType.CONFIGURATION,
+                    DataObjectIdentifier.builder(Network.class).build(),
+                    network);
             writeNetworkTransaction.commit().get();
         } catch (IOException e) {
             LOG.error("Cannot load network ", e);

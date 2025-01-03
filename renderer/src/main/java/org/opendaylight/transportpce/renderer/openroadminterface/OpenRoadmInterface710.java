@@ -821,9 +821,6 @@ public class OpenRoadmInterface710 {
             throw new OpenRoadmInterfaceException(
                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnPoint));
         }
-        // Depending on OTU4 or OTUCn, supporting interface should
-        // reflect that
-        String interfaceOdu4OducnOduflex = null;
         // Depending on OTU4 or OTUCn, supporting interface should reflect that
         if (portMap.getSupportedInterfaceCapability().contains(IfOCHOTU4ODU4.VALUE)) {
             // create OTU4 interface

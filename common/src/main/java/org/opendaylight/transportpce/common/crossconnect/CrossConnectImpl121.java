@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -87,7 +87,7 @@ public class CrossConnectImpl121 {
         // post the cross connect on the device
         deviceTx.merge(
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
+            DataObjectIdentifier
                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
                 .build(),
@@ -184,8 +184,8 @@ public class CrossConnectImpl121 {
         return ports != null ? ports : Collections.emptyList();
     }
 
-    private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
-        return InstanceIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+    private DataObjectIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
+        return DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber))
             .build();
     }
@@ -225,8 +225,7 @@ public class CrossConnectImpl121 {
         // post the cross connect on the device
         deviceTx.merge(
             LogicalDatastoreType.CONFIGURATION,
-            InstanceIdentifier
-                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+            DataObjectIdentifier.builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(ctNumber))
                 .build(),
             newRdmConn);

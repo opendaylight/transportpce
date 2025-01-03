@@ -26,6 +26,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.DataObjectStep;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -64,7 +65,7 @@ public class DeviceListener710 {
             LOG.warn("unable to handle {} notificatin received - list of edit is null", ChangeNotification.QNAME);
             return;
         }
-        Map<Uint16, List<InstanceIdentifier<PortList>>> nbliidMap = new HashMap<>();
+        Map<Uint16, List<DataObjectIdentifier<PortList>>> nbliidMap = new HashMap<>();
         InstanceIdentifier<OduSwitchingPools> ospIID = null;
         for (Edit edit : notification.getEdit()) {
             if (edit.getTarget() == null) {
@@ -101,9 +102,9 @@ public class DeviceListener710 {
                 case "PortList":
                     InstanceIdentifier<PortList> plIID = path.firstIdentifierOf(PortList.class);
                     Uint16 nblNb = path.firstKeyOf(NonBlockingList.class).getNblNumber();
-                    List<InstanceIdentifier<PortList>> iidList = nbliidMap.containsKey(nblNb)
+                    List<DataObjectIdentifier<PortList>> iidList = nbliidMap.containsKey(nblNb)
                         ? nbliidMap.get(nblNb) : new ArrayList<>();
-                    iidList.add(plIID);
+                    iidList.add(plIID.toIdentifier());
                     nbliidMap.put(nblNb, iidList);
                     break;
                 default:
@@ -112,7 +113,7 @@ public class DeviceListener710 {
             }
         }
         if (!nbliidMap.isEmpty() && ospIID != null) {
-            InstanceIdentifier<OduSwitchingPools> id = ospIID;
+            DataObjectIdentifier<OduSwitchingPools> id = ospIID.toIdentifier();
             Runnable handleNetconfEvent = new Runnable() {
                 @Override
                 public void run() {

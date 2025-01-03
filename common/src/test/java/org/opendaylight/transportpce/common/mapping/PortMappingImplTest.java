@@ -36,7 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public class PortMappingImplTest {
 
@@ -77,17 +77,19 @@ public class PortMappingImplTest {
                 .setPortDirection("1").setConnectionMapLcp("1").setPartnerLcp("1")
                 .setPortQual("1").setSupportingCircuitPackName("1").setSupportingOms("1")
                 .setSupportingOts("1").setSupportingPort("1").build();
-        InstanceIdentifier<Mapping> portMappingIID = InstanceIdentifier.builder(Network.class)
+        DataObjectIdentifier<Mapping> portMappingIID = DataObjectIdentifier.builder(Network.class)
                 .child(Nodes.class, new NodesKey("node"))
                 .child(Mapping.class, new MappingKey("logicalConnectionPoint"))
                 .build();
-        InstanceIdentifier<NodeInfo> nodeInfoIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-                new NodesKey("node")).child(NodeInfo.class).build();
+        DataObjectIdentifier<NodeInfo> nodeInfoIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey("node")).child(NodeInfo.class)
+                .build();
         final NodeInfo nodeInfo = new NodeInfoBuilder().setOpenroadmVersion(OpenroadmNodeVersion._221).build();
         final NodeInfo nodeInfo2 = new NodeInfoBuilder().setOpenroadmVersion(OpenroadmNodeVersion._121).build();
         Nodes nodes = new NodesBuilder().setNodeId("node").setNodeInfo(nodeInfo).build();
-        InstanceIdentifier<Nodes> nodeIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-                new NodesKey("node")).build();
+        DataObjectIdentifier<Nodes> nodeIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey("node"))
+                .build();
         //create node with portmapping and nodeifno version 2
         WriteTransaction wr = dataBroker.newWriteOnlyTransaction();
         wr.merge(LogicalDatastoreType.CONFIGURATION, nodeIID, nodes);

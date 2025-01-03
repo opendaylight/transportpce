@@ -21,8 +21,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeWriter;
@@ -56,7 +56,7 @@ public class JsonStringConverter<T extends DataObject> {
      * @return Json string representation of the object
      * @throws IOException if something went wrong.
      */
-    public String createJsonStringFromDataObject(final InstanceIdentifier<T> id, T dataObject,
+    public String createJsonStringFromDataObject(final DataObjectIdentifier<T> id, T dataObject,
             JSONCodecFactorySupplier supplier) throws IOException {
         /*
          * This function needs : - context - scPath.getParent() -

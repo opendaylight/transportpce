@@ -38,9 +38,10 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.binding.DataObject;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.util.concurrent.FluentFutures;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 @ExtendWith(MockitoExtension.class)
 public class DeviceTransactionManagerTest {
@@ -58,15 +59,16 @@ public class DeviceTransactionManagerTest {
     private DeviceTransactionManagerImpl transactionManager;
     private String defaultDeviceId = "device-id";
     private LogicalDatastoreType defaultDatastore = LogicalDatastoreType.OPERATIONAL;
-    private InstanceIdentifier<Network> defaultIid = InstanceIdentifier
-        .builder(Networks.class).child(Network.class).build();
+    private DataObjectIdentifier<Network> defaultIid = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId("default-network")))
+            .build();
     private Network defaultData;
     private long defaultTimeout = 1000;
     private TimeUnit defaultTimeUnit = TimeUnit.MILLISECONDS;
 
     @BeforeEach
     void before() {
-        when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
+        when(mountPointServiceMock.findMountPoint(any())).thenReturn(Optional.of(mountPointMock));
         when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
         when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
         lenient().when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
@@ -304,7 +306,7 @@ public class DeviceTransactionManagerTest {
     }
 
     private <T extends DataObject> void putAndSubmit(DeviceTransactionManagerImpl deviceTxManager, String deviceId,
-            LogicalDatastoreType store, InstanceIdentifier<T> path, T data)
+            LogicalDatastoreType store, DataObjectIdentifier<T> path, T data)
             throws ExecutionException, InterruptedException {
         Future<java.util.Optional<DeviceTransaction>> deviceTxFuture = deviceTxManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow();
