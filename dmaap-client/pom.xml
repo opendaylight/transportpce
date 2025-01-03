@@ -38,12 +38,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.opendaylight.odlparent</groupId>
-      <artifactId>odl-jersey-2</artifactId>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
       <artifactId>openroadm-common-13.1.0</artifactId>
     </dependency>
@@ -65,9 +59,21 @@
       <artifactId>yang-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-spec</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.mdsal</groupId>
       <artifactId>mdsal-binding-api</artifactId>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.ext</groupId>

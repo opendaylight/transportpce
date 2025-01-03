@@ -80,6 +80,10 @@
       <artifactId>openroadm-service-13.1.0</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openconfig-240119</artifactId>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
       <version>${project.version}</version>
@@ -122,6 +126,10 @@
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-data-codec-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>binding-runtime-api</artifactId>
     </dependency>
     <dependency>
@@ -131,6 +139,10 @@
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc8345-ietf-network-topology</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
@@ -168,6 +180,10 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.metatype.annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
     </dependency>
 
     <!-- Testing dependencies -->
