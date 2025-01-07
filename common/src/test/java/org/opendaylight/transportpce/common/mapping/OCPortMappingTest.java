@@ -191,8 +191,9 @@ public class OCPortMappingTest {
         ocPortMappingVersion190Test = Mockito.spy(ocPortMappingVersion190Test);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
                 .getTransceiver()).values().stream().toList();
+        doReturn(null).when(ocPortMappingVersion190Test).getTransceiversListMetaData();
         doReturn(transceiver.get(0)).when(ocPortMappingVersion190Test).getTransceiverMetaData(componentList,
-                componentPort);
+                componentPort, null);
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
@@ -226,8 +227,9 @@ public class OCPortMappingTest {
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(componentPort, TRANSCEIVER);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
                 .getTransceiver()).values().stream().toList();
+        doReturn(null).when(ocPortMappingVersion190Test).getTransceiversListMetaData();
         doReturn(transceiver.get(0)).when(ocPortMappingVersion190Test).getTransceiverMetaData(componentList,
-                componentPort);
+                componentPort, null);
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
