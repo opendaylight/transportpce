@@ -176,7 +176,7 @@ public class OCPortMappingVersion190 {
             if (chassisComponent.isPresent()) {
                 nodeInfo = createNodeInfo(ipAddress , chassisComponent.orElseThrow().getState(), softwareVersion);
             }
-            postPortMapping(nodeId,nodeInfo,null,null,null);
+            postPortMapping(nodeId, nodeInfo, null, null, null);
             if (!createXpdrPortMapping(nodeId, componentList, portMapList, mcCapabilities)) {
                 LOG.warn(PortMappingUtils.UNABLE_MAPPING_LOGMSG, nodeId, PortMappingUtils.CREATE, "Xponder");
                 return false;
@@ -185,7 +185,7 @@ public class OCPortMappingVersion190 {
             LOG.error(PortMappingUtils.DEVICE_HAS_LOGMSG, nodeId, "no info", "components");
             return false;
         }
-        postPortMapping(nodeId, nodeInfo, portMapList,null, mcCapabilities);
+        postPortMapping(nodeId, nodeInfo, portMapList, null, mcCapabilities);
         LOG.info("Finished open config port mapping for XPDR {}", nodeId);
         return true;
     }
@@ -237,19 +237,28 @@ public class OCPortMappingVersion190 {
      */
     protected boolean createXpdrPortMapping(String nodeId, List<Component> componentList, List<Mapping> portMapList,
                                           Map<McCapabilitiesKey, McCapabilities> mcCapabilities) {
+        List<Component> lineCardComponentList = componentList.stream()
+                .filter(component -> checkComponentType(component, LINECARD))
+                .toList();
+        if (lineCardComponentList.isEmpty()) {
+            LOG.error("No LINECARD component found for node {}", nodeId);
+            return false;
+        }
+        OpenTerminalMetaData terminalMetaData = ocMetaDataTransaction.getXPDROpenTerminalMetaData();
+        if (terminalMetaData == null) {
+            LOG.error("No meta data found for node {}", nodeId);
+            return false;
+        }
+        if (terminalMetaData.getLineCardInfo() == null || terminalMetaData.getLineCardInfo().getLineCard() == null) {
+            LOG.error("No line card meta data found for node {}", nodeId);
+            return false;
+        }
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
         Map<String, Set<String>> lcpNamingMap = null;
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
         int xpdrIndex = 1;
-        List<Component> lineCardComponentList =
-                componentList.stream().filter(component -> checkComponentType(component,
-                        LINECARD)).toList();
-        OpenTerminalMetaData terminalMetaData = ocMetaDataTransaction.getXPDROpenTerminalMetaData();
         Map<LineCardKey, LineCard> lineCardMap = terminalMetaData.getLineCardInfo().getLineCard();
-        if (lineCardComponentList.isEmpty() || lineCardMap == null) {
-            return false;
-        }
         for (Component lineCardComponent : lineCardComponentList) {
             String lineCardName = lineCardComponent.getName();
             String partNo;
@@ -365,6 +374,7 @@ public class OCPortMappingVersion190 {
                         entry.getValue());
             }
         }
+        Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
         for (Component portComponent : portComponentList) {
             Port portData = portComponent.getPort();
             Port1 augmentationPort = portData.augmentation(Port1.class);
@@ -372,13 +382,13 @@ public class OCPortMappingVersion190 {
             if (augmentationPort != null
                     && augmentationPort.getOpticalPort().getState()
                     .getOpticalPortType().toString().contains(TERMINALLINE)) {
-                Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent);
+                Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 Set<SupportedIfCapability> supportedIfCapabilities = null;
                 if (transceiver != null) {
                     supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                     createCentralFrequency(transceiver, frequencyGHzSet);
                 } else {
-                    LOG.error("Transceiver meta data doesn't exist for port component {}", portName);
+                    LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
                 }
                 Set<String> clientSet = new HashSet<>();
                 String network;
@@ -607,6 +617,7 @@ public class OCPortMappingVersion190 {
                                         Map<String, Mapping> mappingMap, LineCard lineCardMetaData,int xpdrIndex,
                                         Map<String, Set<String>> lcpNamingMap, List<Component> componentsList,
                                         Set<Float> frequencyGHzSet) {
+        Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
         for (Component portComponent : portComponentList) {
             Port portData = portComponent.getPort();
             Port1 augmentationPort = portData.augmentation(Port1.class);
@@ -614,7 +625,7 @@ public class OCPortMappingVersion190 {
             if (augmentationPort != null
                     && augmentationPort.getOpticalPort().getState().getOpticalPortType()
                     .toString().contains(TERMINALCLIENT)) {
-                Transceiver transceiver = getTransceiverMetaData(componentsList,portComponent);
+                Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 LineCard.XpdrType xpdrType = lineCardMetaData.getXpdrType();
                 Map<SupportedPortKey, SupportedPort>  supportedPortMap = lineCardMetaData.getSupportedPort();
                 List<SupportedPort> supportedPortList = supportedPortMap.values().stream().toList();
@@ -632,7 +643,7 @@ public class OCPortMappingVersion190 {
                         supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                         createCentralFrequency(transceiver, frequencyGHzSet);
                     } else {
-                        LOG.error("Transceiver meta data doesn't exist for port component {}", portName);
+                        LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
                     }
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.CLIENT_TOKEN,
                             supportedId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
@@ -719,17 +730,25 @@ public class OCPortMappingVersion190 {
     }
 
     /**
+     * This method retrieves the list of transceivers declared in the metadata stored in the MD-SAL.
+     */
+    protected Map<TransceiverKey, Transceiver> getTransceiversListMetaData() {
+        return ocMetaDataTransaction.getXPDROpenTerminalMetaData().getTransceiverInfo().getTransceiver();
+    }
+
+    /**
      * This method is to get  transceiver metadata from MD-SAL.
      * @param componentsList - input
      *            components list from device
      * @param portComponent - input
      *            port component from device of type PORT
+     * @param transceiverMap - input
+     *            list of Transceivers declared in the meta-data file
      * @return Transceiver object from metadata
      */
-    protected Transceiver getTransceiverMetaData(List<Component> componentsList, Component portComponent) {
+    protected Transceiver getTransceiverMetaData(List<Component> componentsList, Component portComponent,
+            Map<TransceiverKey, Transceiver> transceiverMap) {
         Optional<Transceiver> transceiverMetadata;
-        Map<TransceiverKey, Transceiver> transceiverMap =
-                ocMetaDataTransaction.getXPDROpenTerminalMetaData().getTransceiverInfo().getTransceiver();
         List<Component> transceiverComponentList =
                 componentsList.stream().filter(component -> (checkComponentType(component,
                         TRANSCEIVER) && component.getState().getParent().contains(portComponent.getName()))).toList();

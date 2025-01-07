@@ -52,10 +52,10 @@ public class OCMetaDataTransactionImpl implements OCMetaDataTransaction {
                     readTx.read(LogicalDatastoreType.CONFIGURATION, iidOTMD).get();
             if (openTerminalMetaData.isPresent()) {
                 terminalMetaData = openTerminalMetaData.orElseThrow();
-                LOG.info("Found OpenTerminalMetaData {} in Md-Sal.", terminalMetaData);
+                LOG.debug("Found OpenTerminalMetaData {} in Md-Sal.", terminalMetaData);
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Unable to get TerminalMetaData {} in Md-Sal", iidOTMD, e);
+            LOG.error("Unable to get open-terminal-meta-data from Md-Sal", e);
         }
         return  terminalMetaData;
     }
