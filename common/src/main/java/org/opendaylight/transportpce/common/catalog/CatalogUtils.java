@@ -860,7 +860,8 @@ public class CatalogUtils {
             var somOptional =
                     networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
             if (somOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading Specific Operational Mode Catalog {} , empty list", omCatalogIid);
+                LOG.error("readMdSal: Error reading Specific Operational Mode Catalog for operational-mode-id {}",
+                        operationalModeId);
                 return null;
             }
             SpecificOperationalMode speTspOM = somOptional.orElseThrow();
