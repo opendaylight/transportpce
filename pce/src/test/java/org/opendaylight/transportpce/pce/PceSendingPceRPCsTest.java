@@ -42,7 +42,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 
 @ExtendWith(MockitoExtension.class)
 class PceSendingPceRPCsTest extends AbstractTest {
@@ -50,8 +49,6 @@ class PceSendingPceRPCsTest extends AbstractTest {
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
     private Mapping mapping;
-    @Mock
-    private BindingDOMCodecServices bindingDOMCodecServices;
     private DataBroker dataBroker;
     private GnpyConsumer gnpyConsumer;
     @Mock
