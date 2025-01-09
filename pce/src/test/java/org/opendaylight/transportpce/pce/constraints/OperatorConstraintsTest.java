@@ -20,7 +20,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -38,7 +37,6 @@ import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 //.spectrum.filling.SpectrumFillingRules;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ControllerBehaviourSettings;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.binding.data.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
@@ -54,8 +52,6 @@ public class OperatorConstraintsTest extends AbstractTest {
 //    private static SpectrumFillingRules sfRule;
     private static ControllerBehaviourSettings cbSettings;
     private OperatorConstraints opConstraints;
-    @Mock
-    private BindingDOMCodecServices bindingDOMCodecServices;
     private DataBroker dataBroker;
 
     @BeforeEach
