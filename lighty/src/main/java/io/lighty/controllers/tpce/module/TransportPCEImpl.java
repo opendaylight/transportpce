@@ -211,7 +211,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 pceListenerImpl,
                 rendererListener,
                 networkListener,
-                new CatalogDataStoreOperationsImpl(networkTransaction),
+                new CatalogDataStoreOperationsImpl(
+                        networkTransaction,
+                        lightyServices.getAdapterContext().currentSerializer()),
                 pathComputationService,
                 rendererServiceOperations,
                 notificationPublishService);
