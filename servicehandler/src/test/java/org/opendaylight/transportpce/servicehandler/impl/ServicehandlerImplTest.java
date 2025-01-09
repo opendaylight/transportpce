@@ -132,8 +132,9 @@ public class ServicehandlerImplTest extends AbstractTest {
         executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         endSignal = new CountDownLatch(1);
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(getNewDataBroker());
-        this.catalogDataStoreOperations =
-            new CatalogDataStoreOperationsImpl(new NetworkTransactionImpl(getDataBroker()));
+        this.catalogDataStoreOperations = new CatalogDataStoreOperationsImpl(
+                new NetworkTransactionImpl(getDataBroker()),
+                getDataStoreContextUtil().getBindingDOMCodecServices());
         serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         serviceReconfigureInput = ServiceDataUtils.buildServiceReconfigureInput();
