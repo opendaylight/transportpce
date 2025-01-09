@@ -182,7 +182,7 @@ class TransportGNPYtesting(unittest.TestCase):
         time.sleep(2)
 
     # #PCE cannot find a path while GNPy finds a feasible one
-    def test_06_path_computation_NotFoundByPCE_FoundByGNPy(self):
+    def test_06_path_computation_FoundByPCE_FoundByGNPy(self):
         self.path_computation_input_data["service-name"] = "service-3"
         self.path_computation_input_data["service-handler-header"]["request-id"] = "request-3"
         self.path_computation_input_data["service-z-end"]["node-id"] = "XPONDER-4"
@@ -196,7 +196,7 @@ class TransportGNPYtesting(unittest.TestCase):
             'response-code'], '200')
         self.assertEqual(response['output']['configuration-response-common'][
             'response-message'],
-            'Path is calculated by GNPy')
+            'Path is calculated by PCE')
         self.assertIn('A-to-Z',
                       [response['output']['gnpy-response'][0]['path-dir'],
                        response['output']['gnpy-response'][1]['path-dir']])
