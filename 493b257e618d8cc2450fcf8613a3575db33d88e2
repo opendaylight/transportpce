@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "493b257e618d8cc2450fcf8613a3575db33d88e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cef4d62_d5f9c0d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-10T09:07:30Z",
+      "side": 1,
+      "message": "@Robert,\nFYI, I\u0027ve migrated InstanceIdentifier which is marked as deprecated to DataObjectIdentifier, but in DeviceListenerXXX classes, I\u0027ve been forced to use the toLegacy() method to keep the very useful firstKeyOf() method available in InstanceIdentifier.\nI don\u0027t know how to retrieve, for example from the Step, the value of the key...\nIs there a better way to retrieve the key value from the InstanceIdentifier/DataObjectIdentifier?",
+      "revId": "493b257e618d8cc2450fcf8613a3575db33d88e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
