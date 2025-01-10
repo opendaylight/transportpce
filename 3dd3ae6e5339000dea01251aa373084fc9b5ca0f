@@ -1,0 +1,302 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "039a2796_579bc2a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Thanks Gilles! Made a few comments. Most of them being little typos. \nGeneric comment :\n1) for implemention associated with specific release, you do not put any information about the release in the java doc. this makes the same doc for generic and specific declinations.\n2) Data tree Store is used several time. Is it in fact Data-store tree?",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84d3678f_481e66d8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Maybe a bit to generic. ...of TransportPCE network model/topology?",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 52,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f75a96_69fa8018",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetworkUtilsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "to register, ou mieux, après allows : registering",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9525fd7_40b8c0c3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/OtnTopoNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "missing closing )",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77462a6d_aada4aa1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "shall we add to the java doc the fact that it is dedicated to 221 to avoid having same description as for AlarmNotification?",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d44bf4ca_8b8a6647",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Same as previous : add 7.1 to the description?",
+      "range": {
+        "startLine": 42,
+        "startChar": 1,
+        "endLine": 42,
+        "endChar": 120
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecd63bf_741393df",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeOperationsListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Same : add 221 to the desc?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "487b460a_1178ba10",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeOperationsListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Add 7.1 to the description ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aac4098d_03889ec2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "stored node abstractions?",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ac4eef3_15f60f7b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "add 221 to desc?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f32a549_ba8b0aae",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "710?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ec3192_6efe2a43",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "Nodes or a Node",
+      "range": {
+        "startLine": 101,
+        "startChar": 14,
+        "endLine": 101,
+        "endChar": 21
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aea5bb1_94aebc26",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "to be deleted",
+      "range": {
+        "startLine": 63,
+        "startChar": 37,
+        "endLine": 63,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6fac096_5659826b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-10T15:58:27Z",
+      "side": 1,
+      "message": "to be deleted",
+      "range": {
+        "startLine": 107,
+        "startChar": 37,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
