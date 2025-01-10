@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.networkmodel.util.test;
+package org.opendaylight.transportpce.test.converter;
 
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public final class JsonUtil {
                 .createBindingDOMCodec(BindingRuntimeHelpers.createRuntimeContext()));
     }
 
-    public static JsonUtil getInstance() {
+    public static synchronized JsonUtil getInstance() {
         if (instance == null) {
             instance = new JsonUtil();
         }
