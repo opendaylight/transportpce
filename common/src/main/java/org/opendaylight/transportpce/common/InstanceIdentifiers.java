@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -58,7 +58,7 @@ public final class InstanceIdentifiers {
 
     public static final DataObjectReference<Nodes> PORTMAPPING_NODE_II = DataObjectReference
             .builder(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.Network.class)
             .child(Nodes.class)
             .build();
 
