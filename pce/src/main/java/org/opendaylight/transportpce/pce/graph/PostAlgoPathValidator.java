@@ -40,6 +40,14 @@ import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.transportpce.pce.spectrum.assignment.Assign;
+import org.opendaylight.transportpce.pce.spectrum.assignment.AssignSpectrum;
+import org.opendaylight.transportpce.pce.spectrum.assignment.Range;
+import org.opendaylight.transportpce.pce.spectrum.centerfrequency.CenterFrequencyGranularityCollection;
+import org.opendaylight.transportpce.pce.spectrum.centerfrequency.Collection;
+import org.opendaylight.transportpce.pce.spectrum.index.Base;
+import org.opendaylight.transportpce.pce.spectrum.index.BaseFrequency;
+import org.opendaylight.transportpce.pce.spectrum.index.SpectrumIndex;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
@@ -1028,6 +1036,8 @@ public class PostAlgoPathValidator {
             }
         }
 
+        Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
+
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
             pceNodeFreqMap = pceNode.getBitSetData();
@@ -1036,6 +1046,7 @@ public class PostAlgoPathValidator {
                 result.and(pceNodeFreqMap);
                 LOG.debug("intermediate bitset {}", result);
             }
+            centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
             String pceNodeVersion = pceNode.getVersion();
             BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
             if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
@@ -1069,40 +1080,47 @@ public class PostAlgoPathValidator {
         LOG.debug("Assignable bitset: {}", assignableBitset);
 
         return computeBestSpectrumAssignment(
-                assignableBitset,
-                clientInput.slotWidth(spectralWidthSlotNumber),
-                isFlexGrid);
+            assignableBitset,
+            clientInput.slotWidth(spectralWidthSlotNumber),
+            centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
+            isFlexGrid);
     }
 
     /**
      * Compute spectrum assignment from spectrum occupation for spectral width.
      *
-     * @param spectrumOccupation      the spectrum occupation BitSet.
-     * @param spectralWidthSlotNumber the nb slots for spectral width.
-     * @param isFlexGrid              true if flexible grid, false otherwise.
+     * @param spectrumOccupation                   the spectrum occupation BitSet.
+     * @param spectralWidthSlotNumber              the nb slots for spectral width.
+     * @param centralFrequencyGranularitySlotWidth The nr of slots separating each central frequency.
+     * @param isFlexGrid                           true if flexible grid, false otherwise.
      * @return a spectrum assignment object which contains begin and stop index. If
      *         no spectrum assignment found, beginIndex = stopIndex = 0
      */
     public SpectrumAssignment computeBestSpectrumAssignment(
-            BitSet spectrumOccupation, int spectralWidthSlotNumber, boolean isFlexGrid) {
-        SpectrumAssignmentBuilder spectrumAssignmentBldr = new SpectrumAssignmentBuilder()
-            .setBeginIndex(Uint16.valueOf(0))
-            .setStopIndex(Uint16.valueOf(0))
-            .setFlexGrid(isFlexGrid);
-        BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
-        referenceBitSet.set(0, spectralWidthSlotNumber);
-        //higher is the frequency, smallest is the wavelength number
-        //in operational, the allocation is done through wavelength starting from the smallest
-        //so we have to loop from the last element of the spectrum occupation
-        for (int i = spectrumOccupation.size(); i >= spectralWidthSlotNumber;
-                i -= isFlexGrid ? 1 : spectralWidthSlotNumber) {
-            if (spectrumOccupation.get(i - spectralWidthSlotNumber, i).equals(referenceBitSet)) {
-                spectrumAssignmentBldr.setBeginIndex(Uint16.valueOf(i - spectralWidthSlotNumber));
-                spectrumAssignmentBldr.setStopIndex(Uint16.valueOf(i - 1));
-                break;
-            }
-        }
-        return spectrumAssignmentBldr.build();
+        BitSet spectrumOccupation,
+        int spectralWidthSlotNumber,
+        int centralFrequencyGranularitySlotWidth,
+        boolean isFlexGrid) {
+
+        Base baseFrequency = new BaseFrequency();
+        Assign assignSpectrum = new AssignSpectrum(new SpectrumIndex());
+        Range range = assignSpectrum.range(
+            GridConstant.EFFECTIVE_BITS,
+            baseFrequency.referenceFrequencySpectrumIndex(
+                GridConstant.CENTRAL_FREQUENCY,
+                GridConstant.START_EDGE_FREQUENCY,
+                GridConstant.GRANULARITY
+            ),
+            spectrumOccupation,
+            centralFrequencyGranularitySlotWidth,
+            spectralWidthSlotNumber
+        );
+
+        return new SpectrumAssignmentBuilder()
+            .setBeginIndex(Uint16.valueOf(range.lower()))
+            .setStopIndex(Uint16.valueOf(range.upper()))
+            .setFlexGrid(isFlexGrid)
+            .build();
     }
 
     public Double getTpceCalculatedMargin() {
