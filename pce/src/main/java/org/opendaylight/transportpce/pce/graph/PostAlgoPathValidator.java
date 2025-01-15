@@ -29,6 +29,9 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant;
 import org.opendaylight.transportpce.common.catalog.CatalogConstant.CatalogNodeType;
 import org.opendaylight.transportpce.common.catalog.CatalogUtils;
+import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
+import org.opendaylight.transportpce.common.device.observer.Ignore;
+import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -48,6 +51,9 @@ import org.opendaylight.transportpce.pce.spectrum.centerfrequency.Collection;
 import org.opendaylight.transportpce.pce.spectrum.index.Base;
 import org.opendaylight.transportpce.pce.spectrum.index.BaseFrequency;
 import org.opendaylight.transportpce.pce.spectrum.index.SpectrumIndex;
+import org.opendaylight.transportpce.pce.spectrum.slot.CapabilityCollection;
+import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
+import org.opendaylight.transportpce.pce.spectrum.slot.McCapabilityCollection;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
@@ -61,6 +67,7 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class PostAlgoPathValidator {
     /* Logging. */
@@ -109,11 +116,12 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTHER:
-                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
+                Subscriber subscriber = new EventSubscriber();
+                spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber, subscriber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
                         && spectrumAssignment.getStopIndex().equals(Uint16.valueOf(0))) {
-                    pceResult.error("No frequencies available.");
+                    pceResult.error(subscriber.last(Level.ERROR, "No frequencies available."));
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
                 }
@@ -1011,11 +1019,12 @@ public class PostAlgoPathValidator {
      * @param allPceNodes             all optical nodes.
      * @param spectralWidthSlotNumber number of slot for spectral width. Depends on
      *                                service type.
+     * @param subscriber              will be notified about errors.
      * @return a spectrum assignment object which contains begin and end index. If
      *         no spectrum assignment found, beginIndex = stopIndex = 0
      */
-    private SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
-            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber) {
+    public SpectrumAssignment getSpectrumAssignment(GraphPath<String, PceGraphEdge> path,
+            Map<NodeId, PceNode> allPceNodes, int spectralWidthSlotNumber, Subscriber subscriber) {
         byte[] freqMap = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(freqMap, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         BitSet result = BitSet.valueOf(freqMap);
@@ -1037,6 +1046,8 @@ public class PostAlgoPathValidator {
         }
 
         Collection centerFrequencyGranularityCollection = new CenterFrequencyGranularityCollection(50);
+        CapabilityCollection mcCapabilityCollection = new McCapabilityCollection(
+            message -> subscriber.event(Level.ERROR, message));
 
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
@@ -1047,6 +1058,14 @@ public class PostAlgoPathValidator {
                 LOG.debug("intermediate bitset {}", result);
             }
             centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
+            mcCapabilityCollection.add(
+                new InterfaceMcCapability(
+                    pceNode.getNodeId().getValue(),
+                    pceNode.getSlotWidthGranularity(),
+                    pceNode.getMinSlots(),
+                    pceNode.getMaxSlots()
+                )
+            );
             String pceNodeVersion = pceNode.getVersion();
             BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
             if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
@@ -1070,6 +1089,28 @@ public class PostAlgoPathValidator {
 
         LOG.debug("Available bitset on nodes: {}", result);
 
+        if (result.isEmpty()) {
+            subscriber.error("No frequencies available");
+            return createEmptySpectrumAssignment();
+        }
+
+        int slotCount = clientInput.slotWidth(spectralWidthSlotNumber);
+
+        if (!mcCapabilityCollection.isCompatibleService(
+            GridConstant.GRANULARITY, slotCount)) {
+            double slotWidth = slotCount * GridConstant.GRANULARITY;
+            LOG.debug("All mc interfaces in the requested service path will not support a slot width of {}GHz",
+                slotWidth);
+
+            subscriber.error(
+                String.format(
+                    "All mc interfaces in the requested service path will not support a slot width of %sGHz",
+                    slotWidth)
+            );
+
+            return createEmptySpectrumAssignment();
+        }
+
         Select frequencySelectionFactory = new FrequencySelectionFactory();
 
         BitSet assignableBitset = frequencySelectionFactory.availableFrequencies(
@@ -1079,11 +1120,25 @@ public class PostAlgoPathValidator {
 
         LOG.debug("Assignable bitset: {}", assignableBitset);
 
+        if (assignableBitset.isEmpty()) {
+            subscriber.error("No frequencies are assignable to the service.");
+            return createEmptySpectrumAssignment();
+        }
+
         return computeBestSpectrumAssignment(
             assignableBitset,
             clientInput.slotWidth(spectralWidthSlotNumber),
             centerFrequencyGranularityCollection.slots(GridConstant.GRANULARITY),
-            isFlexGrid);
+            isFlexGrid,
+            subscriber);
+    }
+
+    private SpectrumAssignment createEmptySpectrumAssignment() {
+        return new SpectrumAssignmentBuilder()
+            .setBeginIndex(Uint16.valueOf(0))
+            .setStopIndex(Uint16.valueOf(0))
+            .setFlexGrid(true)
+            .build();
     }
 
     /**
@@ -1102,6 +1157,32 @@ public class PostAlgoPathValidator {
         int nrOfSlotsSeparatingCenterFrequencies,
         boolean isFlexGrid) {
 
+        return computeBestSpectrumAssignment(
+            spectrumOccupation,
+            spectralWidthSlotNumber,
+            nrOfSlotsSeparatingCenterFrequencies,
+            isFlexGrid,
+            new Ignore());
+    }
+
+    /**
+     * Compute spectrum assignment from spectrum occupation for spectral width.
+     *
+     * @param spectrumOccupation                   the spectrum occupation BitSet.
+     * @param spectralWidthSlotNumber              the nb slots for spectral width.
+     * @param nrOfSlotsSeparatingCenterFrequencies The nr of slots separating each central frequency.
+     * @param isFlexGrid                           true if flexible grid, false otherwise.
+     * @param subscriber                           will be notified about errors.
+     * @return a spectrum assignment object which contains begin and stop index. If
+     *         no spectrum assignment found, beginIndex = stopIndex = 0
+     */
+    public SpectrumAssignment computeBestSpectrumAssignment(
+        BitSet spectrumOccupation,
+        int spectralWidthSlotNumber,
+        int nrOfSlotsSeparatingCenterFrequencies,
+        boolean isFlexGrid,
+        Subscriber subscriber) {
+
         Base baseFrequency = new BaseFrequency();
         Assign assignSpectrum = new AssignSpectrum(new SpectrumIndex());
         Range range = assignSpectrum.range(
@@ -1115,6 +1196,10 @@ public class PostAlgoPathValidator {
             nrOfSlotsSeparatingCenterFrequencies,
             spectralWidthSlotNumber
         );
+
+        if (range.lower() == 0 && range.upper() == 0) {
+            subscriber.event(Level.ERROR, "No frequencies available.");
+        }
 
         return new SpectrumAssignmentBuilder()
             .setBeginIndex(Uint16.valueOf(range.lower()))
