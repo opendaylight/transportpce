@@ -197,32 +197,32 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_13_check_xc1_ROADMA(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
+            "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1:8")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768',
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1:8',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss'
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-761:768'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-761:768'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-1:8'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-1:8'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_14_check_xc1_ROADMC(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
+            "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:8")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768',
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:8',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss'
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-761:768'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG2-TTP-TXRX-761:768'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-1:8'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'DEG2-TTP-TXRX-1:8'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_15_check_topo_XPDRA(self):
@@ -232,7 +232,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual(
-                    196.1,
+                    191.35,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     40.0,
@@ -249,14 +249,14 @@ class TransportPCEFulltesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
             elif ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
         time.sleep(1)
@@ -267,19 +267,19 @@ class TransportPCEFulltesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
             elif ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         time.sleep(1)
 
     def test_18_connect_xpdrA_N2_to_roadmA_PP2(self):
@@ -339,17 +339,17 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_24_check_xc2_ROADMA(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMA01", "roadm-connections", "DEG1-TTP-TXRX-SRG1-PP2-TXRX-753:760")
+            "ROADMA01", "roadm-connections", "DEG1-TTP-TXRX-SRG1-PP2-TXRX-9:16")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-753:760',
+                'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-9:16',
                 'wavelength-number': 2,
                 'opticalControlMode': 'power'
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'DEG1-TTP-TXRX-753:760'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'SRG1-PP2-TXRX-753:760'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'DEG1-TTP-TXRX-9:16'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'SRG1-PP2-TXRX-9:16'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_25_check_topo_XPDRA(self):
@@ -359,14 +359,14 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual(
-                    196.1,
+                    191.35,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     40.0,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['width']))
             elif ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertEqual(
-                    196.05,
+                    191.4,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     40.0,
@@ -381,22 +381,22 @@ class TransportPCEFulltesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-        self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-                self.assertEqual(freq_map_array[94], 255, "Lambda 2 should be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[1], 255, "Lambda 2 should be available")
             elif ele['tp-id'] == 'SRG1-PP2-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
-                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
             elif ele['tp-id'] == 'SRG1-PP3-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(1)
@@ -407,22 +407,22 @@ class TransportPCEFulltesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-        self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
             elif ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
         time.sleep(1)
 
     #     creation service test on a non-available resource
@@ -575,34 +575,34 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_38_check_xc1_ROADMA(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768")
+            "ROADMA01", "roadm-connections", "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1:8")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-761:768',
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1:8',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-761:768'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-761:768'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-1:8'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-1:8'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_39_check_xc1_ROADMC(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768")
+            "ROADMC01", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:8")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768',
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:8',
                 'wavelength-number': 1,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': 2.0
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-761:768'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG2-TTP-TXRX-761:768'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-1:8'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'DEG2-TTP-TXRX-1:8'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_40_create_oc_service2(self):
@@ -631,18 +631,18 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_42_check_xc2_ROADMA(self):
         response = test_utils.check_node_attribute_request(
-            "ROADMA01", "roadm-connections", "SRG1-PP2-TXRX-DEG1-TTP-TXRX-753:760")
+            "ROADMA01", "roadm-connections", "SRG1-PP2-TXRX-DEG1-TTP-TXRX-9:16")
         self.assertEqual(response['status_code'], requests.codes.ok)
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-753:760',
+                'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-9:16',
                 'wavelength-number': 2,
                 'opticalControlMode': 'gainLoss',
                 'target-output-power': -3.0
             }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP2-TXRX-753:760'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-753:760'}, response['roadm-connections'][0]['destination'])
+        self.assertDictEqual({'src-if': 'SRG1-PP2-TXRX-9:16'}, response['roadm-connections'][0]['source'])
+        self.assertDictEqual({'dst-if': 'DEG1-TTP-TXRX-9:16'}, response['roadm-connections'][0]['destination'])
         time.sleep(1)
 
     def test_43_check_topo_ROADMA(self):

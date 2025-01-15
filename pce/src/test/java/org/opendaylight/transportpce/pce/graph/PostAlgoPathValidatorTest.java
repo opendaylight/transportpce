@@ -33,7 +33,7 @@ class PostAlgoPathValidatorTest {
         );
 
         BitSet available = new BitSet(768);
-        available.set(16, 28);
+        available.set(12, 28);
 
         boolean isFlexGrid = false;
         SpectrumAssignment expectedFixGrid = new SpectrumAssignmentBuilder()
@@ -42,7 +42,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(isFlexGrid)
                 .build();
 
-        SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
+        SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, 8, isFlexGrid);
 
         Assertions.assertEquals(expectedFixGrid, fixGrid);
 
@@ -61,16 +61,16 @@ class PostAlgoPathValidatorTest {
         );
 
         BitSet available = new BitSet(768);
-        available.set(16, 28);
+        available.set(12, 28);
 
         boolean isFlexGrid = true;
         SpectrumAssignment expectedFlexGrid = new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(20))
-                .setStopIndex(Uint16.valueOf(27))
+                .setBeginIndex(Uint16.valueOf(16))
+                .setStopIndex(Uint16.valueOf(23))
                 .setFlexGrid(isFlexGrid)
                 .build();
 
-        SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
+        SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, 8, isFlexGrid);
 
         Assertions.assertEquals(expectedFlexGrid, flexGrid);
 
