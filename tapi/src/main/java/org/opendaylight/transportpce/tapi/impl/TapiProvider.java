@@ -50,8 +50,8 @@ import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.transportpce.tapi.utils.TapiTopoContextInit;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
@@ -90,7 +90,7 @@ public class TapiProvider {
             .child(Node.class)
             .build();
     private static final DataObjectReference<Nodes> MAPPING_II = DataObjectReference.builder(Network.class)
-            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
+            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
                     .Nodes.class)
             .build();
     private static final DataObjectReference<Link> LINK_II = DataObjectReference.builder(Networks.class)
