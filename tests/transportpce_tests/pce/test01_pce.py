@@ -298,9 +298,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
-        self.assertEqual(9, response['output']['response-parameters']['path-description']
+        self.assertEqual(10, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
-        self.assertEqual(9, response['output']['response-parameters']['path-description']
+        self.assertEqual(10, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
         time.sleep(4)
 

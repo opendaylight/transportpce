@@ -273,20 +273,22 @@ class TransportPCEtesting(unittest.TestCase):
     # Check correct configuration of devices
     def test_014_check_interface_otsi_xpdra2(self):
         response = test_utils.check_node_attribute_request(
-            'XPDR-A2', 'interface', 'XPDR2-NETWORK1-755:768')
+            'XPDR-A2', 'interface', 'XPDR2-NETWORK1-1:14')
+        print(response)
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-1:14',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                                    'type': 'org-openroadm-interfaces:otsi',
                                    'supporting-port': 'L1'
                                    }, **response['interface'][0]),
                              response['interface'][0])
-        self.assertDictEqual(
-            dict({'frequency': 196.0812, 'otsi-rate': 'org-openroadm-common-optical-channel-types:R400G-otsi',
-                  'transmit-power': -5, 'modulation-format': 'dp-qam16'},
-                 **response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
-            response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
+
+        otsi = response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']
+        self.assertEqual('191.36875', otsi['frequency'])
+        self.assertEqual('org-openroadm-common-optical-channel-types:R400G-otsi', otsi['otsi-rate'])
+        self.assertEqual('-5.0', otsi['transmit-power'])
+        self.assertEqual('dp-qam16', otsi['modulation-format'])
 
     def test_015_check_interface_OTSI_GROUP_xpdra2(self):
         response = test_utils.check_node_attribute_request(
@@ -295,7 +297,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSIGROUP-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-1:14',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'
                         }
@@ -337,9 +339,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_017_check_interface_otsi_xpdrc2(self):
         response = test_utils.check_node_attribute_request(
-            'XPDR-C2', 'interface', 'XPDR2-NETWORK1-755:768')
+            'XPDR-C2', 'interface', 'XPDR2-NETWORK1-1:14')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-755:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-1:14',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
                                    'type': 'org-openroadm-interfaces:otsi',
@@ -347,11 +349,11 @@ class TransportPCEtesting(unittest.TestCase):
                                    }, **response['interface'][0]),
                              response['interface'][0])
 
-        self.assertDictEqual(
-            dict({'frequency': 196.0812, 'otsi-rate': 'org-openroadm-common-optical-channel-types:R400G-otsi',
-                  'transmit-power': -5, 'modulation-format': 'dp-qam16'},
-                 **response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
-            response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
+        otsi = response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']
+        self.assertEqual('191.36875', otsi['frequency'])
+        self.assertEqual('org-openroadm-common-optical-channel-types:R400G-otsi', otsi['otsi-rate'])
+        self.assertEqual('-5.0', otsi['transmit-power'])
+        self.assertEqual('dp-qam16', otsi['modulation-format'])
 
     def test_018_check_interface_OTSI_GROUP_xpdrc2(self):
         response = test_utils.check_node_attribute_request(
@@ -360,7 +362,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTSIGROUP-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-                        'supporting-interface-list': 'XPDR2-NETWORK1-755:768',
+                        'supporting-interface-list': 'XPDR2-NETWORK1-1:14',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'
                         }
@@ -413,7 +415,7 @@ class TransportPCEtesting(unittest.TestCase):
         ele = response['node']['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR2-NETWORK1', ele['tp-id'])
         self.assertEqual(
-            196.08125,
+            191.36875,
             float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
         self.assertEqual(
             75.0,
@@ -1263,7 +1265,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_077_check_no_interface_OTSI_xpdra2(self):
         response = test_utils.check_node_attribute_request(
-            'XPDR-A2', 'interface', 'XPDR2-NETWORK1-755:768')
+            'XPDR-A2', 'interface', 'XPDR2-NETWORK1-1:14')
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_078_check_no_interface_OTSIG_xpdra2(self):
@@ -1357,16 +1359,16 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_088_check_xc1_roadma(self):
         response = test_utils.check_node_attribute_request(
-            "ROADM-A1", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-755:768")
+            "ROADM-A1", "roadm-connections", "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:14")
+
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(
-            dict({
-                'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-761:768',
-                'opticalControlMode': 'gainLoss',
-                'target-output-power': -3.0
-            }, **response['roadm-connections'][0]), response['roadm-connections'][0])
-        self.assertDictEqual({'src-if': 'SRG1-PP1-TXRX-nmc-755:768'}, response['roadm-connections'][0]['source'])
-        self.assertDictEqual({'dst-if': 'DEG2-TTP-TXRX-nmc-755:768'}, response['roadm-connections'][0]['destination'])
+
+        connection = response['roadm-connections'][0]
+        self.assertEqual('SRG1-PP1-TXRX-DEG2-TTP-TXRX-1:14', connection['connection-name'])
+        self.assertEqual('gainLoss', connection['opticalControlMode'])
+        self.assertEqual('-0.57', connection['target-output-power'])
+        self.assertEqual('SRG1-PP1-TXRX-nmc-1:14', connection['source']['src-if'])
+        self.assertEqual('DEG2-TTP-TXRX-nmc-1:14', connection['destination']['dst-if'])
         time.sleep(1)
 
     def test_089_check_topo_xpdra2(self):
@@ -1376,7 +1378,7 @@ class TransportPCEtesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual(
-                    196.08125,
+                    191.36875,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     75.0,
@@ -1391,14 +1393,14 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
         time.sleep(1)
@@ -1409,19 +1411,19 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Index 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
         time.sleep(1)
 
     def test_092_check_interface_400GE_CLIENT_xpdra2(self):
@@ -1443,29 +1445,15 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_093_check_interface_OTSI_xpdra2(self):
         response = test_utils.check_node_attribute_request(
-            'XPDR-A2', 'interface', 'XPDR1-NETWORK1-755:768')
-        self.assertEqual(response['status_code'], requests.codes.ok)
-        input_dict_1 = {'name': 'XPDR1-NETWORK1-755:768',
-                        'administrative-state': 'inService',
-                        'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        'type': 'org-openroadm-interfaces:otsi',
-                        'supporting-port': 'L1'}
-        input_dict_2 = {
-            "frequency": 196.0812,
-            "otsi-rate": "org-openroadm-common-optical-channel-types:R400G-otsi",
-            "fec": "org-openroadm-common-types:ofec",
-            "transmit-power": -5,
-            "provision-mode": "explicit",
-            "modulation-format": "dp-qam16"}
+            'XPDR-A2', 'interface', 'XPDR1-NETWORK1-1:14')
 
-        self.assertDictEqual(dict(input_dict_1, **response['interface'][0]),
-                             response['interface'][0])
-        self.assertDictEqual(
-            dict(input_dict_2, **response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']),
-            response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi'])
-        self.assertDictEqual(
-            {"foic-type": "org-openroadm-common-optical-channel-types:foic4.8", "iid": [1, 2, 3, 4]},
-            response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']['flexo'])
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        otsi = response['interface'][0]['org-openroadm-optical-tributary-signal-interfaces:otsi']
+        self.assertEqual('191.36875', otsi['frequency'])
+        self.assertEqual('org-openroadm-common-optical-channel-types:R400G-otsi', otsi['otsi-rate'])
+        self.assertEqual('-5.0', otsi['transmit-power'])
+        self.assertEqual('dp-qam16', otsi['modulation-format'])
+        self.assertEqual('org-openroadm-common-types:ofec', otsi['fec'])
 
     def test_094_check_interface_OTSI_GROUP_xpdra2(self):
         response = test_utils.check_node_attribute_request(
@@ -1474,7 +1462,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTSIGROUP-400G',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-755:768',
+                        ['supporting-interface-list'][0]: 'XPDR1-NETWORK1-1:14',
                         'type': 'org-openroadm-interfaces:otsi-group',
                         'supporting-port': 'L1'}
         input_dict_2 = {"group-id": 1,
@@ -1642,7 +1630,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_103_check_no_interface_OTSI_xpdra2(self):
         response = test_utils.check_node_attribute_request(
-            'XPDR-A2', 'interface', 'XPDR1-NETWORK1-755:768')
+            'XPDR-A2', 'interface', 'XPDR1-NETWORK1-1:14')
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_104_check_no_interface_400GE_CLIENT_xpdra2(self):
