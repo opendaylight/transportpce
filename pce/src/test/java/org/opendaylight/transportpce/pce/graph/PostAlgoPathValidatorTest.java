@@ -13,7 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.config.PCEConfig;
 import org.opendaylight.transportpce.pce.input.ClientInput;
+import org.opendaylight.transportpce.pce.spectrum.assignment.state.SpectrumAssignmentState;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -29,11 +31,12 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 new BitSet(),
-                clientInput
+                clientInput,
+                new PCEConfig(SpectrumAssignmentState.LOW_TO_HIGH_FREQUENCY)
         );
 
         BitSet available = new BitSet(768);
-        available.set(16, 28);
+        available.set(12, 28);
 
         boolean isFlexGrid = false;
         SpectrumAssignment expectedFixGrid = new SpectrumAssignmentBuilder()
@@ -42,7 +45,7 @@ class PostAlgoPathValidatorTest {
                 .setFlexGrid(isFlexGrid)
                 .build();
 
-        SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
+        SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, 8, isFlexGrid);
 
         Assertions.assertEquals(expectedFixGrid, fixGrid);
 
@@ -57,20 +60,21 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 new BitSet(),
-                clientInput
+                clientInput,
+                new PCEConfig(SpectrumAssignmentState.LOW_TO_HIGH_FREQUENCY)
         );
 
         BitSet available = new BitSet(768);
-        available.set(16, 28);
+        available.set(12, 28);
 
         boolean isFlexGrid = true;
         SpectrumAssignment expectedFlexGrid = new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(20))
-                .setStopIndex(Uint16.valueOf(27))
+                .setBeginIndex(Uint16.valueOf(16))
+                .setStopIndex(Uint16.valueOf(23))
                 .setFlexGrid(isFlexGrid)
                 .build();
 
-        SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
+        SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, 8, isFlexGrid);
 
         Assertions.assertEquals(expectedFlexGrid, flexGrid);
 
