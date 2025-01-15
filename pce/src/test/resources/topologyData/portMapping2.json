@@ -48,7 +48,16 @@
                     "node-type": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.4"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPONDER-1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "XPONDER-2",
@@ -97,9 +106,18 @@
                     "node-type": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.5"
-                }
-           },
-           {
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPONDER-2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
+            },
+            {
                 "node-id": "XPONDER-3",
                 "mapping": [
                     {
@@ -146,7 +164,16 @@
                     "node-type": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.6"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPONDER-3",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "XPONDER-4",
@@ -195,9 +222,18 @@
                     "node-type": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.7"
-                }
-           },
-           {
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPONDER-4",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
+            },
+            {
                 "node-id": "XPONDER-5",
                 "mapping": [
                     {
@@ -244,9 +280,18 @@
                     "node-type": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.8"
-                }
-           },
-           {
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "XPONDER-5",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
+            },
+            {
                 "node-id": "OpenROADM-1",
                 "mapping": [
                     {
@@ -401,7 +446,30 @@
                     "node-type": "rdm",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.9"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "OpenROADM-1-DEG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-1-DEG2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-1-SRG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "OpenROADM-2",
@@ -606,7 +674,37 @@
                     "node-type": "rdm",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.10"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "OpenROADM-2-DEG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-2-DEG2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-2-DEG3",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-2-SRG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "OpenROADM-3",
@@ -859,7 +957,45 @@
                     "node-type": "rdm",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.11"
-                }
+                },
+                "mc-capabilities": [
+
+                    {
+                        "mc-node-name": "OpenROADM-3-DEG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-3-DEG2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-3-DEG3",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-3-DEG4",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-3-SRG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "OpenROADM-4",
@@ -1016,7 +1152,30 @@
                     "node-type": "rdm",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.12"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "OpenROADM-4-DEG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-4-DEG2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-4-SRG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             },
             {
                 "node-id": "OpenROADM-5",
@@ -1221,7 +1380,37 @@
                     "node-type": "rdm",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.13"
-                }
+                },
+                "mc-capabilities": [
+                    {
+                        "mc-node-name": "OpenROADM-5-DEG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-5-DEG2",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-5-DEG3",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    },
+                    {
+                        "mc-node-name": "OpenROADM-5-SRG1",
+                        "slot-width-granularity": 12.5,
+                        "center-freq-granularity": 6.25,
+                        "min-slots": 1,
+                        "max-slots": 20
+                    }
+                ]
             }
         ]
     }
