@@ -153,7 +153,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(2, response['output']['response-parameters']['path-description']
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
@@ -166,7 +166,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(2, response['output']['response-parameters']['path-description']
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
@@ -202,7 +202,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(2, response['output']['response-parameters']['path-description']
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
@@ -215,7 +215,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(2, response['output']['response-parameters']['path-description']
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
