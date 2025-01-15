@@ -432,9 +432,9 @@ class TransportPCEtesting(unittest.TestCase):
 # Check correct configuration of devices
     def test_027_check_interface_och_spdra(self):
         response = test_utils.check_node_attribute_request(
-            'SPDR-SA1', 'interface', 'XPDR2-NETWORK1-761:768')
+            'SPDR-SA1', 'interface', 'XPDR2-NETWORK1-1:8')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-761:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-1:8',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP5-CFP',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -446,7 +446,7 @@ class TransportPCEtesting(unittest.TestCase):
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['rate'])
         self.assertEqual('dp-qpsk',
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['modulation-format'])
-        self.assertEqual(196.1,
+        self.assertEqual(191.35,
                          float(response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['frequency']))
         self.assertEqual(
             -5,
@@ -459,7 +459,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-761:768',
+                        'supporting-interface': 'XPDR2-NETWORK1-1:8',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
@@ -485,9 +485,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_029_check_interface_och_spdrB(self):
         response = test_utils.check_node_attribute_request(
-            'SPDR-SB1', 'interface', 'XPDR2-NETWORK1-761:768')
+            'SPDR-SB1', 'interface', 'XPDR2-NETWORK1-1:8')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-761:768',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-1:8',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP5-CFP',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -499,7 +499,7 @@ class TransportPCEtesting(unittest.TestCase):
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['rate'])
         self.assertEqual('dp-qpsk',
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['modulation-format'])
-        self.assertEqual(196.1,
+        self.assertEqual(191.35,
                          float(response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['frequency']))
         self.assertEqual(
             -5,
@@ -512,7 +512,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-761:768',
+                        'supporting-interface': 'XPDR2-NETWORK1-1:8',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
@@ -561,7 +561,7 @@ class TransportPCEtesting(unittest.TestCase):
         ele = response['node']['ietf-network-topology:termination-point'][0]
         self.assertEqual('XPDR2-NETWORK1', ele['tp-id'])
         self.assertEqual(
-            196.1,
+            191.35,
             float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
         self.assertEqual(
             40,
@@ -576,14 +576,14 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP3-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
         time.sleep(1)
@@ -594,19 +594,19 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
             if ele['tp-id'] == 'DEG1-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
         time.sleep(1)
 
     def test_035_check_otn_topo_otu4_links(self):
@@ -665,9 +665,9 @@ class TransportPCEtesting(unittest.TestCase):
 # Check correct configuration of devices
     def test_038_check_interface_och_spdrB(self):
         response = test_utils.check_node_attribute_request(
-            'SPDR-SB1', 'interface', 'XPDR2-NETWORK2-753:760')
+            'SPDR-SB1', 'interface', 'XPDR2-NETWORK2-9:16')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-753:760',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-9:16',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP6-CFP',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -679,7 +679,7 @@ class TransportPCEtesting(unittest.TestCase):
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['rate'])
         self.assertEqual('dp-qpsk',
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['modulation-format'])
-        self.assertEqual(196.05,
+        self.assertEqual(191.4,
                          float(response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['frequency']))
         self.assertEqual(
             -5,
@@ -692,7 +692,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK2-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP6-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-753:760',
+                        'supporting-interface': 'XPDR2-NETWORK1-9:16',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP6-CFP-P1'
                         }
@@ -718,9 +718,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_040_check_interface_och_spdrC(self):
         response = test_utils.check_node_attribute_request(
-            'SPDR-SC1', 'interface', 'XPDR2-NETWORK1-753:760')
+            'SPDR-SC1', 'interface', 'XPDR2-NETWORK1-9:16')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-753:760',
+        self.assertDictEqual(dict({'name': 'XPDR2-NETWORK1-9:16',
                                    'administrative-state': 'inService',
                                    'supporting-circuit-pack-name': 'CP5-CFP',
                                    'type': 'org-openroadm-interfaces:opticalChannel',
@@ -732,7 +732,7 @@ class TransportPCEtesting(unittest.TestCase):
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['rate'])
         self.assertEqual('dp-qpsk',
                          response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['modulation-format'])
-        self.assertEqual(196.05,
+        self.assertEqual(191.4,
                          float(response['interface'][0]['org-openroadm-optical-channel-interfaces:och']['frequency']))
         self.assertEqual(
             -5,
@@ -745,7 +745,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-753:760',
+                        'supporting-interface': 'XPDR2-NETWORK1-9:16',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
@@ -796,7 +796,7 @@ class TransportPCEtesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR2-NETWORK1':
                 self.assertEqual(
-                    196.1,
+                    191.35,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     40,
@@ -805,7 +805,7 @@ class TransportPCEtesting(unittest.TestCase):
                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['tail-equipment-id'])
             elif ele['tp-id'] == 'XPDR2-NETWORK2':
                 self.assertEqual(
-                    196.05,
+                    191.4,
                     float(ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength']['frequency']))
                 self.assertEqual(
                     40,
@@ -822,21 +822,21 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
-        self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
-        self.assertEqual(freq_map_array[93], 255, "Lambda 3 should be available")
+        self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
+        self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
+        self.assertEqual(freq_map_array[2], 255, "Lambda 3 should be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[0], 0, "Lambda 1 should not be available")
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
             if ele['tp-id'] == 'SRG1-PP3-TXRX':
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
         time.sleep(1)
@@ -847,19 +847,19 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+        self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[94], 0, "Lambda 2 should not be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 2 should not be available")
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[94], 0, "Lambda 1 should not be available")
+                self.assertEqual(freq_map_array[1], 0, "Lambda 1 should not be available")
         time.sleep(1)
 
     def test_046_check_otn_topo_otu4_links(self):
@@ -1281,7 +1281,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_072_check_no_interface_OCH_spdra(self):
         response = test_utils.check_node_attribute_request(
-            'SPDR-SA1', 'interface', 'XPDR2-NETWORK1-761:768')
+            'SPDR-SA1', 'interface', 'XPDR2-NETWORK1-1:8')
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
     def test_073_getLinks_OtnTopology(self):
@@ -1304,20 +1304,20 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
-        self.assertEqual(freq_map_array[94], 255, "Lambda 1 should be available")
+        self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
+        self.assertEqual(freq_map_array[1], 255, "Lambda 1 should be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:pp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[94], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[1], 255, "Lambda 1 should be available")
         time.sleep(1)
 
     def test_076_check_openroadm_topo_ROADMB_DEG1(self):
@@ -1326,19 +1326,19 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+        self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
             if ele['tp-id'] == 'DEG1-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
         time.sleep(1)
 
     def test_077_check_openroadm_topo_ROADMB_DEG2(self):
@@ -1347,19 +1347,19 @@ class TransportPCEtesting(unittest.TestCase):
         freq_map = base64.b64decode(
             response['node']['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
         freq_map_array = [int(x) for x in freq_map]
-        self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+        self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
         liste_tp = response['node']['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 freq_map = base64.b64decode(
                     ele['org-openroadm-network-topology:tx-ttp-attributes']['avail-freq-maps'][0]['freq-map'])
                 freq_map_array = [int(x) for x in freq_map]
-                self.assertEqual(freq_map_array[95], 255, "Lambda 1 should be available")
+                self.assertEqual(freq_map_array[0], 255, "Lambda 1 should be available")
         time.sleep(1)
 
     def test_078_disconnect_xponders_from_roadm(self):
@@ -1503,7 +1503,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-761:768',
+                        'supporting-interface': 'XPDR2-NETWORK1-1:8',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
@@ -1534,7 +1534,7 @@ class TransportPCEtesting(unittest.TestCase):
         input_dict_1 = {'name': 'XPDR2-NETWORK1-OTU',
                         'administrative-state': 'inService',
                         'supporting-circuit-pack-name': 'CP5-CFP',
-                        'supporting-interface': 'XPDR2-NETWORK1-753:760',
+                        'supporting-interface': 'XPDR2-NETWORK1-9:16',
                         'type': 'org-openroadm-interfaces:otnOtu',
                         'supporting-port': 'CP5-CFP-P1'
                         }
