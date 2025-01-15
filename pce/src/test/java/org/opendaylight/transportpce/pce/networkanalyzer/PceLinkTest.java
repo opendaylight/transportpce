@@ -23,8 +23,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
@@ -86,10 +86,10 @@ public class PceLinkTest extends AbstractTest {
             createRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
     }
 
     @Test
@@ -100,10 +100,10 @@ public class PceLinkTest extends AbstractTest {
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
         assertNotNull(MapUtils.getOmsAttributesSpan(link));
         assertEquals(1, pceLink.getsrlgList().size());
         assertEquals(20.0, pceLink.getspanLoss(), 0.005, "Checking length loss");
@@ -118,10 +118,10 @@ public class PceLinkTest extends AbstractTest {
             createRoadmToRoadmWithoutLinkLatency("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
     }
 
     @Test
@@ -132,10 +132,10 @@ public class PceLinkTest extends AbstractTest {
             createOTNLink("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SWITCH, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.SWITCH, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
     }
 
     @Test
@@ -145,10 +145,10 @@ public class PceLinkTest extends AbstractTest {
             createXponderLink("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId2, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
     }
 
     @Test
@@ -159,10 +159,10 @@ public class PceLinkTest extends AbstractTest {
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
         assertNotNull(MapUtils.getOmsAttributesSpan(link));
         // assertNotNull(pceLink.getosnr());
         assertEquals(1, pceLink.getsrlgList().size());
@@ -199,10 +199,10 @@ public class PceLinkTest extends AbstractTest {
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
         assertNull(MapUtils.getOmsAttributesSpan(link));
         assertNull(pceLink.getpmd2());
         assertNull(pceLink.getpowerCorrection());
@@ -217,10 +217,10 @@ public class PceLinkTest extends AbstractTest {
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50),
+                new NodeMcCapability()),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
-                GridConstant.SLOT_WIDTH_50, GridConstant.SLOT_WIDTH_50));
+                new NodeMcCapability()));
         assertNotNull(MapUtils.getOmsAttributesSpan(link));
         assertEquals(1, pceLink.getsrlgList().size());
         assertEquals(4.0, pceLink.getpmd2(), 0.005, "Checking PMDvalue of link");
