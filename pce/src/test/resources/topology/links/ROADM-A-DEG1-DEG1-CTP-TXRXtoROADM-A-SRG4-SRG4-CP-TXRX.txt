@@ -1,0 +1,49 @@
+<edge>
+  <graphLink>
+    <source class="string">ROADM-A-DEG1</source>
+    <target class="string">ROADM-A-SRG4</target>
+    <weight>1.0</weight>
+    <link>
+      <weight>0.0</weight>
+      <isValid>true</isValid>
+      <clientA></clientA>
+      <clientZ>SRG4-PP2-TXRX</clientZ>
+      <linkId>
+        <__value>ROADM-A-DEG1-DEG1-CTP-TXRXtoROADM-A-SRG4-SRG4-CP-TXRX</__value>
+      </linkId>
+      <linkType>DROPLINK</linkType>
+      <sourceId>
+        <__value>ROADM-A-DEG1</__value>
+      </sourceId>
+      <destId>
+        <__value>ROADM-A-SRG4</__value>
+      </destId>
+      <sourceTP>
+        <__value>DEG1-CTP-TXRX</__value>
+      </sourceTP>
+      <destTP>
+        <__value>SRG4-CP-TXRX</__value>
+      </destTP>
+      <sourceNetworkSupNodeId>ROADM-A</sourceNetworkSupNodeId>
+      <destNetworkSupNodeId>ROADM-A</destNetworkSupNodeId>
+      <sourceCLLI>NodeA</sourceCLLI>
+      <destCLLI>NodeA</destCLLI>
+      <oppositeLink>
+        <__value>ROADM-A-SRG4-SRG4-CP-TXRXtoROADM-A-DEG1-DEG1-CTP-TXRX</__value>
+      </oppositeLink>
+      <adminStates>InService</adminStates>
+      <state>InService</state>
+      <latency>0</latency>
+      <availableBandwidth>0</availableBandwidth>
+      <usedBandwidth>0</usedBandwidth>
+      <length>0.0</length>
+      <cd>0.0</cd>
+      <pmd2>0.0</pmd2>
+      <spanLoss>0.0</spanLoss>
+      <powerCorrection>0.0</powerCorrection>
+    </link>
+  </graphLink>
+  <source>ROADM-A-DEG1</source>
+  <destination>ROADM-A-SRG4</destination>
+  <weight>1.0</weight>
+</edge>

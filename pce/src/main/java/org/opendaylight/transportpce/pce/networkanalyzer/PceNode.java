@@ -71,6 +71,22 @@ public interface PceNode {
     BigDecimal getSlotWidthGranularity();
 
     /**
+     * For optical node the min-slots from mc capabilities.
+     * Minimum number of slots permitted to be joined together to form a media channel.
+     * Must be less than or equal to the max-slots.
+     * @return int.
+     */
+    int getMinSlots();
+
+    /**
+     * For optical node the max-slots from mc capabilities.
+     * Maximum number of slots permitted to be joined together to form a media channel.
+     * Must be greater than or equal to the min-slots.
+     * @return int.
+     */
+    int getMaxSlots();
+
+    /**
      * For optical node the central-frequency granularity from mc capabilities.
      * @return Decimal64.
      */
