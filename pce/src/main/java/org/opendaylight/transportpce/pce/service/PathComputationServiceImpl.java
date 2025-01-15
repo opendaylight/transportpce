@@ -21,6 +21,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
+import org.opendaylight.transportpce.pce.config.Config;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev220615.result.Response;
@@ -71,17 +72,20 @@ public class PathComputationServiceImpl implements PathComputationService {
     private ServicePathRpcResult notification = null;
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
+    private final Config pceconfig;
 
     @Activate
     public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
             @Reference NotificationPublishService notificationPublishService,
             @Reference GnpyConsumer gnpyConsumer,
-            @Reference PortMapping portMapping) {
+            @Reference PortMapping portMapping,
+            @Reference Config pceconfig) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
         this.gnpyConsumer = gnpyConsumer;
         this.portMapping = portMapping;
+        this.pceconfig = pceconfig;
         LOG.info("PathComputationServiceImpl instantiated");
     }
 
@@ -124,7 +128,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending,
                         "Service compliant, submitting cancelResourceReserve Request ...",
                         null);
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer, pceconfig);
                 sendingPCE.cancelResourceReserve();
                 LOG.info("in PathComputationServiceImpl : {}",
                         Boolean.TRUE.equals(sendingPCE.getSuccess())
@@ -189,7 +193,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     "Service compliant, submitting pathComputation Request ...",
                     null);
                 PceSendingPceRPCs sendingPCE =
-                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping);
+                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping, pceconfig);
                 sendingPCE.pathComputation();
                 String message = sendingPCE.getMessage();
                 String responseCode = sendingPCE.getResponseCode();
@@ -312,7 +316,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setRoutingMetric(input.getRoutingMetric())
                     .build();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
-                    gnpyConsumer, portMapping, input.getEndpoints());
+                    gnpyConsumer, portMapping, input.getEndpoints(), pceconfig);
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
