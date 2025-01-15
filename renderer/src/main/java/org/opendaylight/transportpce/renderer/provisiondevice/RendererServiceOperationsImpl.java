@@ -146,7 +146,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
                 LOG.info("Using {}G rate", serviceRate);
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115
                         .network.Nodes mappingNode =
                     portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                         ? portMapping.getNode(input.getServiceAEnd().getNodeId())
