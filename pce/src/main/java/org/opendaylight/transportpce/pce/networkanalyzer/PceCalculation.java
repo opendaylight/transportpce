@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,6 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
-import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -33,6 +31,8 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Factory;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.PreferenceFactory;
+import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
+import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mc.capabilities.McCapabilities;
@@ -485,8 +485,7 @@ public class PceCalculation {
 
         LOG.debug("Device node id {} for {}", deviceNodeId, node);
         PceOpticalNode pceNode = new PceOpticalNode(deviceNodeId, this.serviceType, portMapping, node, nodeType,
-            mappingUtils.getOpenRoadmVersion(deviceNodeId), getSlotWidthGranularity(deviceNodeId, node.getNodeId()),
-            getCentralFreqGranularity(deviceNodeId, node.getNodeId()));
+            mappingUtils.getOpenRoadmVersion(deviceNodeId), mcCapabilities(deviceNodeId, node.getNodeId()));
         if (endpoints != null) {
             pceNode.setEndpoints(endpoints);
         }
@@ -815,12 +814,12 @@ public class PceCalculation {
     }
 
     /**
-     * Get mc capability slot width granularity for device.
+     * Get mc capability for device.
      * @param deviceNodeId String
      * @param nodeId NodeId
-     * @return slot width granularity
+     * @return mc capability
      */
-    private BigDecimal getSlotWidthGranularity(String deviceNodeId, NodeId nodeId) {
+    private McCapability mcCapabilities(String deviceNodeId, NodeId nodeId) {
         // nodeId: openroadm-topology level node
         // deviceNodeId: openroadm-network level node
         List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
@@ -829,40 +828,11 @@ public class PceCalculation {
         String moduleName = params[params.length - 1];
         for (McCapabilities mcCapabitility : mcCapabilities) {
             if (mcCapabitility.getMcNodeName().contains("XPDR")
-                    && mcCapabitility.getSlotWidthGranularity() != null) {
-                return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
+                || mcCapabitility.getMcNodeName().contains(moduleName)) {
+                return new NodeMcCapability(mcCapabitility);
             }
-            if (mcCapabitility.getMcNodeName().contains(moduleName)
-                    && mcCapabitility.getSlotWidthGranularity() != null) {
-                return mcCapabitility.getSlotWidthGranularity().getValue().decimalValue();
-            }
-        }
-        return GridConstant.SLOT_WIDTH_50;
-    }
 
-    /**
-     * Get mc capability central-width granularity for device.
-     * @param deviceNodeId String
-     * @param nodeId NodeId
-     * @return center-freq granularity
-     */
-    private BigDecimal getCentralFreqGranularity(String deviceNodeId, NodeId nodeId) {
-        // nodeId: openroadm-topology level node
-        // deviceNodeId: openroadm-network level node
-        List<McCapabilities> mcCapabilities = mappingUtils.getMcCapabilitiesForNode(deviceNodeId);
-        String[] params = nodeId.getValue().split("-");
-        // DEGx or SRGx or XPDRx
-        String moduleName = params[params.length - 1];
-        for (McCapabilities mcCapabitility : mcCapabilities) {
-            if (mcCapabitility.getMcNodeName().contains("XPDR")
-                    && mcCapabitility.getCenterFreqGranularity() != null) {
-                return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
-            }
-            if (mcCapabitility.getMcNodeName().contains(moduleName)
-                    && mcCapabitility.getCenterFreqGranularity() != null) {
-                return mcCapabitility.getCenterFreqGranularity().getValue().decimalValue();
-            }
         }
-        return GridConstant.SLOT_WIDTH_50;
+        return new NodeMcCapability();
     }
 }
