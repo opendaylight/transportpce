@@ -14,6 +14,8 @@ import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.config.Config;
+import org.opendaylight.transportpce.pce.config.PCEConfig;
 import org.opendaylight.transportpce.pce.constraints.OperatorConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
@@ -77,16 +79,25 @@ public class PceSendingPceRPCs {
     private PortMapping portMapping;
     // Define the termination points whose reservation status is not taken into account during the pruning process
     private Endpoints endpoints;
+    private final Config pceconfig;
 
-    public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {
+    public PceSendingPceRPCs(GnpyConsumer gnpyConsumer, Config pceconfig) {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
         this.gnpyConsumer = gnpyConsumer;
+        this.pceconfig = pceconfig;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
                              GnpyConsumer gnpyConsumer, PortMapping portMapping) {
+
+        this(input, networkTransaction, gnpyConsumer, portMapping, new PCEConfig());
+    }
+
+    public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
+                             GnpyConsumer gnpyConsumer, PortMapping portMapping, Config pceconfig) {
+
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         // TODO compliance check to check that input is not empty
@@ -94,17 +105,20 @@ public class PceSendingPceRPCs {
         this.networkTransaction = networkTransaction;
         this.portMapping = portMapping;
         this.endpoints = null;
+        this.pceconfig = pceconfig;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
                              GnpyConsumer gnpyConsumer, PortMapping portMapping,
-                             Endpoints endpoints) {
+                             Endpoints endpoints, Config pceconfig) {
+
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         this.input = input;
         this.networkTransaction = networkTransaction;
         this.portMapping = portMapping;
         this.endpoints = endpoints;
+        this.pceconfig = pceconfig;
     }
 
     public void cancelResourceReserve() {
@@ -156,7 +170,7 @@ public class PceSendingPceRPCs {
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
                 rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-                clientInput);
+                clientInput, pceconfig);
         Subscriber errorSubscriber = new EventSubscriber();
         graph.calcPath(errorSubscriber);
         rc = graph.getReturnStructure();
