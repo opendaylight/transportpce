@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
+import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
@@ -67,13 +68,11 @@ public class PceOpticalNode implements PceNode {
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
     private BitSet frequenciesBitSet;
     private String version;
-    private BigDecimal slotWidthGranularity;
-    private BigDecimal centralFreqGranularity;
+    private McCapability mcCapability;
     private Endpoints endpoints;
 
     public PceOpticalNode(String deviceNodeId, String serviceType, PortMapping portMapping, Node node,
-        OpenroadmNodeType nodeType, String version, BigDecimal slotWidthGranularity,
-                          BigDecimal centralFreqGranularity) {
+        OpenroadmNodeType nodeType, String version, McCapability mcCapability) {
 
         if (deviceNodeId != null
                 && serviceType != null
@@ -82,7 +81,7 @@ public class PceOpticalNode implements PceNode {
                 && node.getNodeId() != null
                 && nodeType != null
                 && version != null
-                && slotWidthGranularity != null) {
+                && mcCapability != null) {
             this.deviceNodeId = deviceNodeId;
             this.serviceType = serviceType;
             this.portMapping = portMapping;
@@ -90,8 +89,7 @@ public class PceOpticalNode implements PceNode {
             this.nodeId = node.getNodeId();
             this.nodeType = nodeType;
             this.version = version;
-            this.slotWidthGranularity = slotWidthGranularity;
-            this.centralFreqGranularity = centralFreqGranularity;
+            this.mcCapability = mcCapability;
             this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http
                     .org.openroadm.common.network.rev230526.Node1.class).getAdministrativeState();
             this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
@@ -550,7 +548,17 @@ public class PceOpticalNode implements PceNode {
     */
     @Override
     public BigDecimal getSlotWidthGranularity() {
-        return slotWidthGranularity;
+        return mcCapability.slotWidthGranularity();
+    }
+
+    @Override
+    public int getMinSlots() {
+        return mcCapability.minSlots();
+    }
+
+    @Override
+    public int getMaxSlots() {
+        return mcCapability.maxSlots();
     }
 
     /*
@@ -560,7 +568,7 @@ public class PceOpticalNode implements PceNode {
      */
     @Override
     public BigDecimal getCentralFreqGranularity() {
-        return centralFreqGranularity;
+        return mcCapability.centerFrequencyGranularity();
     }
 
     public void setEndpoints(Endpoints endpoints) {

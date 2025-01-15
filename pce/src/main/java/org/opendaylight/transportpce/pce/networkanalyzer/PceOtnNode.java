@@ -601,4 +601,14 @@ public class PceOtnNode implements PceNode {
     public BigDecimal getCentralFreqGranularity() {
         return null;
     }
+
+    @Override
+    public int getMinSlots() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxSlots() {
+        return 1;
+    }
 }
