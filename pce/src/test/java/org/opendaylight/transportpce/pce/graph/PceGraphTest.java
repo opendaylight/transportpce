@@ -118,7 +118,7 @@ public class PceGraphTest extends AbstractTest {
     private static final String MAPPING_FILE = "src/test/resources/topologyData/portMapping2.json";
     private static OperationalModeCatalog omCatalog;
     private static org.opendaylight.yang.gen.v1.http.org.opendaylight
-            .transportpce.portmapping.rev240315.Network networkNode;
+            .transportpce.portmapping.rev250115.Network networkNode;
     private DataBroker dataBroker;
     private MountPoint mountPoint;
     private MountPointService mountPointService;
@@ -177,18 +177,18 @@ public class PceGraphTest extends AbstractTest {
         try (Reader reader = new FileReader(MAPPING_FILE, StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.portmapping.rev240315.Network) getDataStoreContextUtil()
+                    .transportpce.portmapping.rev250115.Network) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()
                 .fromNormalizedNode(
                     YangInstanceIdentifier.of(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev240315.Network.QNAME), normalizedNode)
+                        .transportpce.portmapping.rev250115.Network.QNAME), normalizedNode)
                 .getValue();
             @NonNull
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
             newWriteOnlyTransaction
                 .put(LogicalDatastoreType.CONFIGURATION,
                     DataObjectIdentifier.builder(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                        .transportpce.portmapping.rev240315.Network.class).build(),
+                        .transportpce.portmapping.rev250115.Network.class).build(),
                     networkNode);
             newWriteOnlyTransaction.commit().get();
         } catch (IOException e) {
