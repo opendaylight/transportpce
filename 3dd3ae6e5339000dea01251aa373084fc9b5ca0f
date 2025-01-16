@@ -232,6 +232,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d93e751_aa1625a8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-01-16T10:46:10Z",
+      "side": 1,
+      "message": "Create Nodes and Links...",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 31
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94ec3192_6efe2a43",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
         "patchSetId": 1
