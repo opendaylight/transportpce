@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "869c5f41_d832f9f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-16T13:16:42Z",
+      "side": 1,
+      "message": "Thanks for your review. See my comments.",
+      "revId": "4e77128723c91d4bc5add464cde9be9b1466e22e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380aa2c2_81fb7d37",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-01-16T09:50:28Z",
       "side": 1,
       "message": "why don\u0027t you put .toLegacy() to keep consistency with line 58 ?",
+      "range": {
+        "startLine": 63,
+        "startChar": 98,
+        "endLine": 63,
+        "endChar": 118
+      },
+      "revId": "4e77128723c91d4bc5add464cde9be9b1466e22e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a8ed02_addba4b3",
+        "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/ListenerProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-16T13:16:42Z",
+      "side": 1,
+      "message": "because since the migration is done step by step, at this stage, OVERLAY_NETWORK_II is already a DataObjectIdentifier whereas UNDERLAY_NETWORK_II and CLLI_NETWORK_II are still an InstanceIdentifier object.",
+      "parentUuid": "380aa2c2_81fb7d37",
       "range": {
         "startLine": 63,
         "startChar": 98,
@@ -66,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "426b5ae7_0bae6b59",
+        "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/ListenerProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-16T13:16:42Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "e043d8fc_2891aa4f",
+      "range": {
+        "startLine": 68,
+        "startChar": 98,
+        "endLine": 68,
+        "endChar": 113
+      },
+      "revId": "4e77128723c91d4bc5add464cde9be9b1466e22e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "076a4e04_ec402db5",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
         "patchSetId": 1
@@ -77,6 +142,30 @@
       "writtenOn": "2025-01-16T09:50:28Z",
       "side": 1,
       "message": "why do you put .toIdentifier for this instance id and not for the others ?",
+      "range": {
+        "startLine": 132,
+        "startChar": 98,
+        "endLine": 132,
+        "endChar": 113
+      },
+      "revId": "4e77128723c91d4bc5add464cde9be9b1466e22e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "496cb644_dbf1b2b7",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/TapiConnectivityImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-16T13:16:42Z",
+      "side": 1,
+      "message": "Because at this stage UNDERLAY_NETWORK_II is still an InstanceIdentifier, so it is to convert it to a DataObjectIdentifier",
+      "parentUuid": "076a4e04_ec402db5",
       "range": {
         "startLine": 132,
         "startChar": 98,
