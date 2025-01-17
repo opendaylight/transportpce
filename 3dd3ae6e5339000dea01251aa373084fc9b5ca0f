@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b575f567_792d776b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Thank you for your review.",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84d3678f_481e66d8",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "Maybe a bit to generic. ...of TransportPCE network model/topology?",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 52,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed13117_c8d8e052",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "I don\u0027t think so...\nEverything starts here, when we connect a Netconf node to TransportPCE.",
+      "parentUuid": "84d3678f_481e66d8",
       "range": {
         "startLine": 52,
         "startChar": 3,
@@ -58,6 +99,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "293fdfc8_a260b5b4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetworkUtilsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8f75a96_69fa8018",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9525fd7_40b8c0c3",
@@ -71,6 +130,24 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "missing closing )",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe0ccae_1620eaff",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/OtnTopoNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9525fd7_40b8c0c3",
       "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -92,6 +169,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1283e23e_b88573dd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77462a6d_aada4aa1",
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d44bf4ca_8b8a6647",
@@ -105,6 +200,30 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "Same as previous : add 7.1 to the description?",
+      "range": {
+        "startLine": 42,
+        "startChar": 1,
+        "endLine": 42,
+        "endChar": 120
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d335fdbd_4d421ad5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/AlarmNotificationListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d44bf4ca_8b8a6647",
       "range": {
         "startLine": 42,
         "startChar": 1,
@@ -138,6 +257,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9d0437b_26547f9a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeOperationsListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aecd63bf_741393df",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "487b460a_1178ba10",
@@ -151,6 +294,30 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "Add 7.1 to the description ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56407db6_baca60c1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeOperationsListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "487b460a_1178ba10",
       "range": {
         "startLine": 17,
         "startChar": 1,
@@ -184,6 +351,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "013bc60c_56c1a03b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aac4098d_03889ec2",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ac4eef3_15f60f7b",
@@ -197,6 +388,30 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "add 221 to desc?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deda4986_81409bd1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ac4eef3_15f60f7b",
       "range": {
         "startLine": 28,
         "startChar": 0,
@@ -230,6 +445,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47b3122_7f469a84",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f32a549_ba8b0aae",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d93e751_aa1625a8",
@@ -243,6 +482,30 @@
       "writtenOn": "2025-01-16T10:46:10Z",
       "side": 1,
       "message": "Create Nodes and Links...",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 31
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "278f4c4b_5bbe0326",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d93e751_aa1625a8",
       "range": {
         "startLine": 124,
         "startChar": 7,
@@ -276,6 +539,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3357cd25_3050805a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ec3192_6efe2a43",
+      "range": {
+        "startLine": 101,
+        "startChar": 14,
+        "endLine": 101,
+        "endChar": 21
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aea5bb1_94aebc26",
@@ -299,6 +586,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cb2434_3d94f88e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aea5bb1_94aebc26",
+      "range": {
+        "startLine": 63,
+        "startChar": 37,
+        "endLine": 63,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6fac096_5659826b",
@@ -312,6 +623,30 @@
       "writtenOn": "2025-01-10T15:58:27Z",
       "side": 1,
       "message": "to be deleted",
+      "range": {
+        "startLine": 107,
+        "startChar": 37,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c056acf_1d2b1784",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/TopologyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-17T07:41:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6fac096_5659826b",
       "range": {
         "startLine": 107,
         "startChar": 37,
