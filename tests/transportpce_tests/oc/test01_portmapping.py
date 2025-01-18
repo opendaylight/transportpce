@@ -10,13 +10,13 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+# pylint: disable=wrong-import-order
 
-import unittest
+import test_utils_oc
 import time
 import requests
-# pylint: disable=wrong-import-order
 import sys
-from . import test_utils_oc
+import unittest
 sys.path.append('transportpce_tests/common')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
@@ -30,7 +30,7 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('sample-openconfig-mpdr', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
