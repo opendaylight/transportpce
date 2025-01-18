@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -46,9 +45,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenconfigNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -152,58 +151,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
                 return;
             }
-            NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
+            Nodes mappingNode = portMapping.getNode(nodeId);
+            NodeInfo nodeInfo = mappingNode.getNodeInfo();
             // node creation in clli-network
-            Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);
-            DataObjectIdentifier<Node> iiClliNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
-                .child(Node.class, clliNode.key())
-                .build();
-            LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
-            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode);
-
+            addNodeInClliNetwork(nodeId, nodeInfo);
             // node creation in openroadm-network
-            Node openroadmNetworkNode = OpenRoadmNetwork.createNode(nodeId, nodeInfo);
-            DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
-                .child(Node.class, openroadmNetworkNode.key())
-                .build();
-            LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
-            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode,
-                openroadmNetworkNode);
-
+            addNodeInOpenroadmNetwork(nodeId, nodeInfo);
             // nodes/links creation in openroadm-topology
-            TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId),
-                                                                                firstMount);
-            if (topologyShard != null) {
-                this.topologyShardMountedDevice.put(nodeId, topologyShard);
-                for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
-                    LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .child(Node.class, openRoadmTopologyNode.key())
-                        .build();
-                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
-                        openRoadmTopologyNode);
-                }
-                for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
-                    LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .augmentation(Network1.class)
-                        .child(Link.class, openRoadmTopologyLink.key())
-                        .build();
-                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
-                        openRoadmTopologyLink);
-                }
-            } else {
-                LOG.error("Unable to create openroadm-topology shard for node {}!", nodeId);
-            }
+            addNodeInOpenroadmTopology(mappingNode, firstMount);
             // nodes/links creation in otn-topology
-            if (nodeInfo.getNodeType().getIntValue() == 2 && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
-                createOpenRoadmOtnNode(nodeId);
+            if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())
+                    && !OpenroadmNodeVersion._121.equals(nodeInfo.getOpenroadmVersion())) {
+                addNodeInOtnTopology(nodeId);
             }
             networkTransactionService.commit().get();
             // neighbour links through LLDP
@@ -222,6 +181,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         if (!ocPortMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
             LOG.error("could not generate portmapping {}", nodeId);
         }
+        Nodes mappingNode = portMapping.getNode(nodeId);
+        NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
+        // node creation in clli-network
+        addNodeInClliNetwork(nodeId, nodeInfo);
+        // node creation in openroadm-network
+        addNodeInOpenroadmNetwork(nodeId, nodeInfo);
+        // nodes/links creation in openroadm-topology
+        addNodeInOpenroadmTopology(mappingNode, true);
+        // nodes/links creation in otn-topology
+        if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())) {
+            addNodeInOtnTopology(nodeId);
+        }
+
+        try {
+            networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error adding openconfig node in openroadm network layers");
+        }
     }
 
     @Override
@@ -235,105 +212,65 @@ public class NetworkModelServiceImpl implements NetworkModelService {
          */
     }
 
-    /*
-     @see org.opendaylight.transportpce.networkmodel.service.NetworkModelService# deleteOpenROADMnode(java.lang.String)
+    /**
+     * This Method is used to delete OpenROADM node from openroadm network layers and portmapping datastores.
+     * @param nodeId
+     *     unique node ID of OpenConfig node.
+     *
+     * @return result of node deletion from network and portmapping datastore
      */
-
     @Override
     public boolean deleteOpenRoadmnode(String nodeId) {
+        if (!this.portMapping.isNodeExist(nodeId)) {
+            return false;
+        }
+        OpenroadmNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+        LOG.info("deleteOpenROADMnode: {} version {}", nodeId, deviceVersion.getName());
+        removeNodeFromOpenroadmNetwork(nodeId);
+        removeNodeFromOpenroadmTopology(nodeId);
+        NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeType();
+        if (NodeTypes.Xpdr.equals(nodeType) && !OpenroadmNodeVersion._121.equals(deviceVersion)) {
+            removeNodeFromOtnTopology(nodeId);
+        }
         try {
-            if (!this.portMapping.isNodeExist(nodeId)) {
-                return false;
-            }
-            NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
-
-            LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
-            DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
-                .child(Node.class, nodeIdKey)
-                .build();
-            this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode);
-
-            TopologyShard topologyShard = this.topologyShardMountedDevice.get(nodeId);
-            if (topologyShard != null) {
-                for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
-                    LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .child(Node.class, openRoadmTopologyNode.key())
-                        .build();
-                    this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
-                }
-                for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
-                    LOG.info("deleting link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                    DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .augmentation(Network1.class)
-                        .child(Link.class, openRoadmTopologyLink.key())
-                        .build();
-                    this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
-                }
-            } else {
-                LOG.warn("TopologyShard for node '{}' is not present", nodeId);
-            }
-            @Nullable
-            OpenroadmNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-            @Nullable
-            NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeType();
-            if (nodeType.getIntValue() == 2 && deviceVersion.getIntValue() != 1) {
-                TopologyShard otnTopologyShard = this.otnTopologyShardMountedDevice.get(nodeId);
-                if (otnTopologyShard != null) {
-                    LOG.info("suppression de otnTopologyShard = {}", otnTopologyShard.toString());
-                    for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
-                        LOG.info("deleting node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                            NetworkUtils.OTN_NETWORK_ID);
-                        DataObjectIdentifier<Node> iiotnTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                            .child(Node.class, otnTopologyNode.key())
-                            .build();
-                        this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiotnTopologyNode);
-                    }
-                    for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
-                        LOG.info("deleting link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                            NetworkUtils.OTN_NETWORK_ID);
-                        DataObjectIdentifier<Link> iiotnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                            .augmentation(Network1.class)
-                            .child(Link.class, otnTopologyLink.key())
-                            .build();
-                        this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiotnTopologyLink);
-                    }
-                }
-            }
-
-            LOG.info("deleteOpenROADMnode: {} version {}", nodeId, deviceVersion.getName());
-            this.portMapping.deletePortMappingNode(nodeId);
-
             this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
-            LOG.info("all nodes and links deleted ! ");
+            LOG.info("all nodes and links deleted in topologies! ");
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error when trying to delete node : {}", nodeId, e);
             return false;
         }
+        this.portMapping.deletePortMappingNode(nodeId);
         return true;
     }
 
     /**
-     * This Method is used to delete openconfig node in portmapping.
+     * This Method is used to delete openconfig node from openroadm network layers and portmapping datastores.
      * @param nodeId
      *     unique node ID of OpenConfig node.
      *
-     * @return result of node deletion from portmapping
+     * @return result of node deletion from network and portmapping datastore
      */
     @Override
     public boolean deleteOpenConfignode(String nodeId) {
         if (!this.portMapping.isNodeExist(nodeId)) {
             return false;
         }
-        OpenconfigNodeVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenconfigVersion();
-        LOG.info("deleteOpenConfignode: {} version {}", nodeId, deviceVersion.getName());
+        NodeInfo nodeInfo = this.portMapping.getNode(nodeId).getNodeInfo();
+        LOG.info("deleteOpenConfignode: {} version {}", nodeId, nodeInfo.getOpenconfigVersion().getName());
+
+        removeNodeFromOpenroadmNetwork(nodeId);
+        removeNodeFromOpenroadmTopology(nodeId);
+        if (NodeTypes.Xpdr.equals(nodeInfo.getNodeType())) {
+            removeNodeFromOtnTopology(nodeId);
+        }
+        try {
+            this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
+            LOG.info("all nodes and links deleted in topologies! ");
+
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Error when trying to delete node : {}", nodeId, e);
+            return false;
+        }
         this.portMapping.deletePortMappingNode(nodeId);
         return true;
     }
@@ -873,6 +810,149 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
+    private void addNodeInClliNetwork(String nodeId, NodeInfo nodeInfo) {
+        Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);
+        DataObjectIdentifier<Node> iiClliNode = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+            .child(Node.class, clliNode.key())
+            .build();
+        LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode);
+
+    }
+
+    private void addNodeInOpenroadmNetwork(String nodeId, NodeInfo nodeInfo) {
+        Node openroadmNetworkNode = OpenRoadmNetwork.createNode(nodeId, nodeInfo);
+        DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .child(Node.class, openroadmNetworkNode.key())
+            .build();
+        LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode,
+            openroadmNetworkNode);
+    }
+
+    private void addNodeInOpenroadmTopology(Nodes mappingNode, boolean firstMount) {
+        // nodes/links creation in openroadm-topology
+        TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(mappingNode, firstMount);
+        if (topologyShard != null) {
+            this.topologyShardMountedDevice.put(mappingNode.getNodeId(), topologyShard);
+            for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
+                LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .child(Node.class, openRoadmTopologyNode.key())
+                    .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
+                    openRoadmTopologyNode);
+            }
+            for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
+                LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, openRoadmTopologyLink.key())
+                    .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
+                    openRoadmTopologyLink);
+            }
+        } else {
+            LOG.error("Unable to create openroadm-topology shard for node {}!", mappingNode.getNodeId());
+        }
+    }
+
+    private void addNodeInOtnTopology(String nodeId) {
+        TopologyShard otnTopologyShard = OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
+        if (otnTopologyShard != null) {
+            this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
+            for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
+                LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
+                    NetworkUtils.OTN_NETWORK_ID);
+                DataObjectIdentifier<Node> iiOtnTopologyNode = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Node.class, otnTopologyNode.key())
+                    .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode, otnTopologyNode);
+            }
+            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
+                LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, otnTopologyLink.key())
+                    .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink, otnTopologyLink);
+            }
+        } else {
+            LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
+        }
+    }
+
+    private void removeNodeFromOpenroadmNetwork(String nodeId) {
+        LOG.info("deleting node {} in {}", nodeId, NetworkUtils.UNDERLAY_NETWORK_ID);
+        DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .child(Node.class, new NodeKey(new NodeId(nodeId)))
+            .build();
+        this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode);
+    }
+
+    private void removeNodeFromOpenroadmTopology(String nodeId) {
+        TopologyShard topologyShard = this.topologyShardMountedDevice.get(nodeId);
+        if (topologyShard != null) {
+            for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
+                LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .child(Node.class, openRoadmTopologyNode.key())
+                    .build();
+                this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
+            }
+            for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
+                LOG.info("deleting link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
+                    NetworkUtils.OVERLAY_NETWORK_ID);
+                DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, openRoadmTopologyLink.key())
+                    .build();
+                this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
+            }
+        } else {
+            LOG.warn("TopologyShard for node '{}' is not present", nodeId);
+        }
+    }
+
+    private void removeNodeFromOtnTopology(String nodeId) {
+        TopologyShard otnTopologyShard = this.otnTopologyShardMountedDevice.get(nodeId);
+        if (otnTopologyShard != null) {
+            LOG.info("suppression de otnTopologyShard = {}", otnTopologyShard.toString());
+            for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
+                LOG.info("deleting node {} in {}", otnTopologyNode.getNodeId().getValue(),
+                    NetworkUtils.OTN_NETWORK_ID);
+                DataObjectIdentifier<Node> iiotnTopologyNode = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Node.class, otnTopologyNode.key())
+                    .build();
+                this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiotnTopologyNode);
+            }
+            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
+                LOG.info("deleting link {} in {}", otnTopologyLink.getLinkId().getValue(),
+                    NetworkUtils.OTN_NETWORK_ID);
+                DataObjectIdentifier<Link> iiotnTopologyLink = DataObjectIdentifier.builder(Networks.class)
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .augmentation(Network1.class)
+                    .child(Link.class, otnTopologyLink.key())
+                    .build();
+                this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiotnTopologyLink);
+            }
+        }
+    }
+
     private List<Link> getOtnLinks(List<LinkId> linkIds) {
         List<Link> links = new ArrayList<>();
         for (LinkId linkId : linkIds) {
@@ -1053,34 +1133,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
         LOG.debug("odu4oduC4links = {}", links);
         return links;
-    }
-
-    private void createOpenRoadmOtnNode(String nodeId) {
-        TopologyShard otnTopologyShard = OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
-        if (otnTopologyShard != null) {
-            this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
-            for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
-                LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                    NetworkUtils.OTN_NETWORK_ID);
-                DataObjectIdentifier<Node> iiOtnTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                    .child(Node.class, otnTopologyNode.key())
-                    .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode, otnTopologyNode);
-            }
-            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
-                LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
-                DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                    .augmentation(Network1.class)
-                    .child(Link.class, otnTopologyLink.key())
-                    .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink, otnTopologyLink);
-            }
-        } else {
-            LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-        }
     }
 
     private NodeBuilder createTapiNodeBuilder(String supportingLayer, String nodeId) {
