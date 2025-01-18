@@ -168,16 +168,12 @@ public final class TopologyUtils {
         if (adminState == null) {
             return null;
         }
-        switch (adminState) {
-            case "InService":
-                return AdminStates.InService;
-            case "OutOfService":
-                return AdminStates.OutOfService;
-            case "Maintenance":
-                return AdminStates.Maintenance;
-            default:
-                return null;
-        }
+        return switch (adminState) {
+            case "InService", "ENABLED" -> AdminStates.InService;
+            case "OutOfService", "DISABLED" -> AdminStates.OutOfService;
+            case "Maintenance" -> AdminStates.Maintenance;
+            default -> null;
+        };
     }
 
     /**
@@ -189,16 +185,12 @@ public final class TopologyUtils {
         if (operState == null) {
             return null;
         }
-        switch (operState) {
-            case "InService":
-                return State.InService;
-            case "OutOfService":
-                return State.OutOfService;
-            case "Degraded":
-                return State.Degraded;
-            default:
-                return null;
-        }
+        return switch (operState) {
+            case "InService", "ACTIVE" -> State.InService;
+            case "OutOfService", "INACTIVE" -> State.OutOfService;
+            case "Degraded" -> State.Degraded;
+            default -> null;
+        };
     }
 
     /**
