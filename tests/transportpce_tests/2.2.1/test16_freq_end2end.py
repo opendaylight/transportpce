@@ -510,7 +510,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
 
     def test_26_check_openroadm_topology_links(self):
-        #response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        # response = test_utils.get_ietf_network_request('otn-topology', 'config')
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['network'][0]['ietf-network-topology:link']), 22)
@@ -676,7 +676,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertNotIn('avail-freq-maps', dict.keys(ele))
 
     def test_39_getLinks_OtnTopology(self):
-        #response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        # response = test_utils.get_ietf_network_request('otn-topology', 'config')
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['network'][0]['node']), 13)
