@@ -8,19 +8,16 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-# pylint: disable=no-member
-# pylint: disable=too-many-public-methods
-
 import unittest
 import time
 import requests
 # pylint: disable=wrong-import-order
 import sys
-from . import test_utils_oc
-sys.path.append('transportpce_tests/common')
+sys.path.append('transportpce_tests/common/')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
+import test_utils_oc  # nopep8
 
 
 class TransportpceOCPortMappingTesting(unittest.TestCase):
@@ -30,7 +27,7 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('sample-openconfig-mpdr', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -57,7 +54,7 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
 
     def test_03_xpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-OC",
-                                           ('sample-openconfig-mpdr', self.NODE_VERSION))
+                                           ('oc-mpdr', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
