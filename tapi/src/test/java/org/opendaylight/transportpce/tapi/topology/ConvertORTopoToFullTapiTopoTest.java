@@ -238,7 +238,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private void rawConvertNodeWhenBadStates(
             String nodeId, String networkId, String clientId, AdminStates admState, State rawState) {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(
             changeTerminationPointState(tpdr100G, networkId, clientId , admState, rawState),
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -362,7 +362,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeForRoadmWhenOtnMuxAttached() {
         ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(
             otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -419,7 +419,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     }
 
     private void rawConvertNode(Node node0, String dsrNodeType, String nodeId) {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(
             node0,
             node0.augmentation(Node1.class).getTerminationPoint().values().stream()

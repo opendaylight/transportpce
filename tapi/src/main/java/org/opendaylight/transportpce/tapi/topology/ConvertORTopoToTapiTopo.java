@@ -161,7 +161,7 @@ public class ConvertORTopoToTapiTopo {
         // nep creation for rdm infra abstraction node
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = createNepForRdmNode(photonicNepUuisMap.size());
         // node rule group creation
-        var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+        var tapiFactory = new ConvertORToTapiTopology();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode("T0ML", nodeUuid, null, onepMap.values());
         Map<InterRuleGroupKey, InterRuleGroup> interRuleGroupMap

@@ -129,7 +129,6 @@ import org.slf4j.LoggerFactory;
 public final class ConnectivityUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectivityUtils.class);
-    private final Uuid tapiTopoUuid;
 
     private final ServiceDataStoreOperations serviceDataStoreOperations;
     private final TapiContext tapiContext;
@@ -148,7 +147,7 @@ public final class ConnectivityUtils {
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
     public ConnectivityUtils(ServiceDataStoreOperations serviceDataStoreOperations,
                              Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap, TapiContext tapiContext,
-                             NetworkTransactionService networkTransactionService, Uuid tapiTopoUuid) {
+                             NetworkTransactionService networkTransactionService) {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.tapiContext = tapiContext;
         this.sipMap = sipMap;
@@ -157,8 +156,7 @@ public final class ConnectivityUtils {
         this.topConnRdmRdm = null;
         this.topConnXpdrXpdrPhtn = null;
         this.topConnXpdrXpdrOdu = null;
-        this.tapiTopoUuid = tapiTopoUuid;
-        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
+        this.tapiFactory = new ConvertORToTapiTopology();
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
@@ -684,7 +682,7 @@ public final class ConnectivityUtils {
         LOG.info("Node name = {}", nodeName);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node tapiNode =
             this.tapiContext.getTapiNode(
-                this.tapiTopoUuid,
+                TapiStringConstants.T0_FULL_MULTILAYER_UUID,
                 new Uuid(UUID.nameUUIDFromBytes(
                         (String.join("+",nodeName, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
                     .toString()));
@@ -1232,7 +1230,7 @@ public final class ConnectivityUtils {
                     nepId.getBytes(StandardCharsets.UTF_8)).toString()))
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
                     nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setTopologyUuid(this.tapiTopoUuid)
+            .setTopologyUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)
             .build();
         String clientQualifier = "";
         switch (qualifier) {
@@ -1255,7 +1253,7 @@ public final class ConnectivityUtils {
                     .getBytes(StandardCharsets.UTF_8)).toString()))
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
                     nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setTopologyUuid(this.tapiTopoUuid)
+            .setTopologyUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)
             .build();
         // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
         ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
@@ -1536,7 +1534,7 @@ public final class ConnectivityUtils {
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
         this.tapiContext.updateTopologyWithCep(
             //topoUuid,
-            this.tapiTopoUuid,
+            TapiStringConstants.T0_FULL_MULTILAYER_UUID,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(nodeNepId.getBytes(StandardCharsets.UTF_8)).toString()),
             //nepUuid,
@@ -1549,7 +1547,7 @@ public final class ConnectivityUtils {
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
         this.tapiContext.updateTopologyWithCep(
             //topoUuid,
-            this.tapiTopoUuid,
+            TapiStringConstants.T0_FULL_MULTILAYER_UUID,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", node, nodeLayer).getBytes(StandardCharsets.UTF_8))
@@ -1569,7 +1567,7 @@ public final class ConnectivityUtils {
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
         updateTopologyWithNep(
             //topoUuid,
-            this.tapiTopoUuid,
+            TapiStringConstants.T0_FULL_MULTILAYER_UUID,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(
                     nepNodeId.getBytes(Charset.forName("UTF-8")))
@@ -1598,7 +1596,7 @@ public final class ConnectivityUtils {
         // Todo -> need to find the NEP associated to that SIP
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeZid.getBytes(StandardCharsets.UTF_8)).toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
-            this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
+            this.tapiContext.getTapiNode(TapiStringConstants.T0_FULL_MULTILAYER_UUID, nodeUuid);
         if (node == null) {
             LOG.error("Node not found in datastore");
             return null;
@@ -1712,7 +1710,7 @@ public final class ConnectivityUtils {
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeAid.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("NodeA {} Uuid is {}", nodeAid, nodeUuid);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
-            this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
+            this.tapiContext.getTapiNode(TapiStringConstants.T0_FULL_MULTILAYER_UUID, nodeUuid);
         if (node == null) {
             LOG.error("Node not found in datastore");
             return null;
@@ -1837,7 +1835,7 @@ public final class ConnectivityUtils {
 
     private ConnectionEndPoint getAssociatediODUCep(String spcXpdrNetwork) {
         return this.tapiContext.getTapiCEP(
-            this.tapiTopoUuid,
+            TapiStringConstants.T0_FULL_MULTILAYER_UUID,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+",
@@ -1912,7 +1910,7 @@ public final class ConnectivityUtils {
                     .topology.Node> nodeIID = DataObjectIdentifier.builder(Context.class)
                     .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
                     .child(TopologyContext.class)
-                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                     .child(
                         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
                         new NodeKey(
