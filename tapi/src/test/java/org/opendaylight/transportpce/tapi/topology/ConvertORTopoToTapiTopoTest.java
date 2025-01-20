@@ -191,7 +191,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeWhenNoStates() {
         Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", null, null);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(tpdr,
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -215,7 +215,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     void convertNodeWhenBadStates1() {
         Node tpdr =
             changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", AdminStates.OutOfService, State.OutOfService);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(tpdr,
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -238,7 +238,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     @Test
     void convertNodeWhenBadStates2() {
         Node tpdr = changeTerminationPointState(tpdr100G, "XPDR1-NETWORK1", AdminStates.Maintenance, State.Degraded);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(tpdr,
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -268,7 +268,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             changeOtnLinkState(otnLinks.get(new LinkKey(
                 new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -307,7 +307,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
             changeOtnLinkState(otnLinks.get(new LinkKey(
                 new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))), null, null);
         otnLinksAlt.replace(link.key(), link);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -347,7 +347,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -389,7 +389,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 new LinkId("ODTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.Maintenance, State.Degraded);
         otnLinksAlt.replace(link.key(), link);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -430,7 +430,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
                 new LinkId("ODTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1"))),
                 AdminStates.OutOfService, State.OutOfService);
         otnLinksAlt.replace(link.key(), link);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -463,7 +463,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForTransponder100G() {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(tpdr100G,
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -485,7 +485,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForOtnMuxponder() {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -506,7 +506,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForOtnSwitch() {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(otnSwitch,
             otnSwitch.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()
@@ -526,7 +526,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
 
     @Test
     void convertOtnLink() {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -600,7 +600,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
     @Test
     void convertRoadmInfrastructureWhenOtnMuxAttached() {
         ConvertORTopoToTapiTopo tapiAbsFactory = new ConvertORTopoToTapiTopo(topologyUuid, tapiLink);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
         tapiFactory.convertNode(otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
                 .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType()

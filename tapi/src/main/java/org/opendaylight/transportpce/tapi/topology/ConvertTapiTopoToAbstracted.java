@@ -52,13 +52,11 @@ public class ConvertTapiTopoToAbstracted {
     private Map<NodeKey, Node> tapiNodes;
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
-    private Uuid refTopoUuid;
 
-    public ConvertTapiTopoToAbstracted(Uuid reftopoUuid) {
+    public ConvertTapiTopoToAbstracted() {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
-        this.refTopoUuid = reftopoUuid;
     }
 
     public void convertRoadmInfrastructure() {
@@ -70,7 +68,7 @@ public class ConvertTapiTopoToAbstracted {
         Name nameNodeType =
             new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = pruneTapiRoadmNeps();
-        var tapiFactory = new ConvertORToTapiTopology(this.refTopoUuid);
+        var tapiFactory = new ConvertORToTapiTopology();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
             tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
         // Empty random creation of mandatory fields for avoiding errors....

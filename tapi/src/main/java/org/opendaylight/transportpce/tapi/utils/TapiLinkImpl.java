@@ -362,8 +362,7 @@ public class TapiLinkImpl implements TapiLink {
         LOG.debug("LINKIMPL366 OtsMediaConnectionEndSpec for link {} on Z end is {}}",link.getLinkId(), otsMCCepSpecZ);
 
 
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(new Uuid(UUID.nameUUIDFromBytes(
-            TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()));
+        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
 
         String intermediateSupNodeId = getSupportingNodeFromNodeId(link.getSource().getSourceNode().getValue());
         String intermediateTp = link.getSource().getSourceTp().getValue();
