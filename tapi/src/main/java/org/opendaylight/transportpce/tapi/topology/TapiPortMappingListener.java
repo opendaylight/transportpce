@@ -52,8 +52,7 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                     LOG.info("New mapping for node {} = {}", nodeId, mappingAft);
                     LOG.info("As the mapping is now created for the first time, "
                         + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
-                    this.tapiNetworkModelService.createTapiNode(nodeId,
-                        nodesAft.getNodeInfo().getOpenroadmVersion().getIntValue(), nodesAft);
+                    this.tapiNetworkModelService.createTapiNode(nodeId, nodesAft);
                 } else {
                     for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
                         Mapping oldMapping = mappingBef.get(entry.getKey());
