@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "083f8d2b_49cfb386",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-01-20T09:34:09Z",
+      "side": 1,
+      "message": "I have some questions about the temp-service feature in general:\n\nThe way it\u0027s implemented now, for a temp-service-create RPC, spectrum is allocated and ROADM connections configured on all nodes, but the last step of power setup is skipped, is that correct?\n\nAccording to the openroadm service whitepaper, a temp-service can be converted to a normal service using the service-create RPC. The way that is implemented in TPCE now, everything including path computation is performed again, is that correct? That means 1) ROADM connections are configured again, which seems unnecessary, and 2) it\u0027s not even guaranteed that the new path computation will result in the same path as used by the temp-service, is that correct?\n\nIs the intention with adding common-id to the path-computation-request to make sure that the new service use the same path and resources as the allocated temp-service? But isn\u0027t it unnecessary to even perform a new path computation when the resources for the temp-service are already reserved? Why not go directly to power setup in this case?\n\nI\u0027m also wondering about the optical-tunnel-create RPC in the openroadm service yang, which seems closely related to the IPoDWDM use case. Do you plan to implement this RPC as well?",
+      "revId": "a6123101d75673190ec21c6213d4395be05ad1df",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
