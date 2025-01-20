@@ -184,7 +184,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkModelServiceImpl.class);
 
-    private final Uuid tapiTopoUuid = TapiProvider.TAPI_TOPO_UUID;
     private static final String TOPOLOGICAL_MODE = TapiProvider.TOPOLOGICAL_MODE;
     private final NetworkTransactionService networkTransactionService;
     private final R2RTapiLinkDiscovery linkDiscovery;
@@ -201,13 +200,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink);
         this.notificationPublishService = notificationPublishService;
-        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
+        this.tapiFactory = new ConvertORToTapiTopology();
         this.tapiLink = tapiLink;
 
     }
 
     @Override
-    public void createTapiNode(String orNodeId, int orNodeVersion, Nodes node) {
+    public void createTapiNode(String orNodeId, Nodes node) {
         // TODO -> Implementation with PortMappingListener
         // check if port mapping exists or not...
         if (node.getMapping() == null) {
@@ -282,8 +281,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
                 // rdm to rdm link creation if neighbour roadm is mounted
                 LOG.info("checking if neighbor roadm exists");
-                Map<LinkKey, Link> rdm2rdmLinks =
-                    this.linkDiscovery.readLLDP(new NodeId(orNodeId), orNodeVersion, this.tapiTopoUuid);
+                Map<LinkKey, Link> rdm2rdmLinks = this.linkDiscovery.readLLDP(
+                        new NodeId(orNodeId),
+                        node.getNodeInfo().getOpenroadmVersion().getIntValue(),
+                        TapiStringConstants.T0_FULL_MULTILAYER_UUID);
                 if (!rdm2rdmLinks.isEmpty()) {
                     Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
                     addCepToOnep(onepMap, cepMap);
@@ -349,7 +350,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     //TODO: Change this : modification in Models 2.4 does not provide for Object type Node EdgePoint
                     .setTargetObjectType(TOPOLOGYOBJECTTYPENODEEDGEPOINT.VALUE)
                     .setChangedAttributes(getChangedAttributes(changedOneps, mapping))
-                    .setUuid(tapiTopoUuid)
+                    .setUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)
                     .build());
         } catch (InterruptedException e) {
             LOG.error("Could not send notification");
@@ -407,7 +408,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(TopologyContext.class)
-                            .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                            .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                             .build())
                     .get();
             if (optTopology.isEmpty()) {
@@ -431,7 +432,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     DataObjectIdentifier.builder(Context.class)
                         .augmentation(Context1.class)
                         .child(TopologyContext.class)
-                        .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                        .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                         .child(Link.class, new LinkKey(link.getUuid()))
                         .build(),
                     new LinkBuilder()
@@ -460,7 +461,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             DataObjectIdentifier.builder(Context.class)
                                 .augmentation(Context1.class)
                                 .child(TopologyContext.class)
-                                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                                .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                                 .child(Node.class, new NodeKey(nodeUuid))
                                 .build())
                         .get();
@@ -478,7 +479,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         DataObjectIdentifier.builder(Context.class)
                             .augmentation(Context1.class)
                             .child(TopologyContext.class)
-                            .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                            .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                             .child(Node.class, new NodeKey(nodeUuid))
                             .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(onep.getUuid()))
                             .build(),
@@ -738,7 +739,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         DataObjectIdentifier<Topology> topologyIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                 .build();
         Topology topology = null;
         try {
@@ -1419,7 +1420,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 .toString());
                             if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuid))) {
                                 NodeEdgePoint nep = new NodeEdgePointBuilder()
-                                    .setTopologyUuid(this.tapiTopoUuid)
+                                    .setTopologyUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)
                                     .setNodeUuid(nodeUuid)
                                     .setNodeEdgePointUuid(tpUuid)
                                     .build();
@@ -1435,7 +1436,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 .toString());
                             if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuid))) {
                                 NodeEdgePoint nep = new NodeEdgePointBuilder()
-                                    .setTopologyUuid(this.tapiTopoUuid)
+                                    .setTopologyUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)
                                     .setNodeUuid(nodeUuid)
                                     .setNodeEdgePointUuid(tpUuid)
                                     .build();
@@ -1531,9 +1532,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                 .build(),
-            new TopologyBuilder().setUuid(this.tapiTopoUuid).setNode(nodeMap).build());
+            new TopologyBuilder().setUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID).setNode(nodeMap).build());
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -1572,9 +1573,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                 .build(),
-            new TopologyBuilder().setUuid(this.tapiTopoUuid).setLink(linkMap).build());
+            new TopologyBuilder().setUuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID).setLink(linkMap).build());
         try {
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -1607,7 +1608,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(TopologyContext.class)
-                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                     .child(Link.class, new LinkKey(linkUuid)).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI link deleted successfully.");
@@ -1624,7 +1625,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class)
                     .child(TopologyContext.class)
-                    .child(Topology.class, new TopologyKey(this.tapiTopoUuid))
+                    .child(Topology.class, new TopologyKey(TapiStringConstants.T0_FULL_MULTILAYER_UUID))
                     .child(Node.class, new NodeKey(nodeUuid)).build());
             this.networkTransactionService.commit().get();
             LOG.info("TAPI Node deleted successfully.");

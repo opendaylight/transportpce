@@ -405,7 +405,7 @@ public class ConvertORTopoToTapiFullTopo {
             .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
             .build();
 
-        var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+        var tapiFactory = new ConvertORToTapiTopology();
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode(
                 topoMode.equals("Full")
@@ -506,7 +506,7 @@ public class ConvertORTopoToTapiFullTopo {
 
             if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
                     && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
-                ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+                ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology();
                 Map<Double,Double> usedFreqMap = new HashMap<>();
                 Map<Double,Double> availableFreqMap = new HashMap<>();
                 switch (tpType) {

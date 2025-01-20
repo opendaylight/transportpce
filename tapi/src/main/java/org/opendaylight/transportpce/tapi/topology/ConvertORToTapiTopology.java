@@ -242,9 +242,9 @@ public class ConvertORToTapiTopology {
     }
 
 
-    public ConvertORToTapiTopology(Uuid tapiTopoUuid) {
+    public ConvertORToTapiTopology() {
         this(
-                tapiTopoUuid,
+                TapiStringConstants.T0_FULL_MULTILAYER_UUID,
                 new NumericFrequency(
                         GridConstant.START_EDGE_FREQUENCY,
                         GridConstant.EFFECTIVE_BITS,
