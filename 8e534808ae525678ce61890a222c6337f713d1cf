@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd3f150_9aeb5c18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-01-21T18:06:30Z",
+      "side": 1,
+      "message": "Hi Gilles. Thanks for this improvement proposal, but PLEASE DO NOT MERGE this change. Current status does not reflect the status at the target. I should have finished my modifications earlier, but I focused on oter priorities.\nTOPOLOGICAL_MODE \u0026 TOPOLOGICAL_UUID are supposed at the end (the target) to be set at tapi feature installation to a value that corresponds to Abstracted/full. Then from what is set (and currently centralized in  TAPI Provider), these parameters are used in both ConnectivityUtils, and TapiNetworkModelServiceImpl.\nSO form current status, someone can understand that we always set the UUID to the one of the Full Multi Layer topology, but this won\u0027t be the case at the end.\nThe different ConvertXXXXXX classes need the TopoUuid parameters : \n_ConvertORToTapiTopo is used in the RPC process (getTopologyDetailsImpl) to convert the OR topo into a TapiTopo (either T0ML or 100G)\n_ConvertTapiTopoToAbstracted is used in the RPC process (getTopologyDetailsImpl) to convert the DS Tapi topo into an abstracted view of the topology (the UUID is the one requested by the RPC)\n_ConvertORToTapiTopology provides primitives used a lot of classes and requires Uuid to be provided to set correctly the different associated builders\n_ConvertORTopoToTapiFull shall be renamed to something like ConvertORTopoToTapiDSTopo. It uses original name from which the class is derived but which I should have already modified. Contrarily to what its name suggests, it converts OR Topo to a TAPI topo that will be put in the DS. It can be used to create either Full or Abstracted topology in the DataStore. At that time it is hardcoded and set to Full,n because in the process of debugging, as well as to provide full topology files to 3rd party (as an example of how we expect the topology to be formated and to show the parameters that we want to be populated for path computation. At the end the user will set which kind of topology he wants to have in DataStore. In operational conditions, it will be set to abstracted to save resources. For the purpose of developments/debug or to provide example to the community, it might be set to Full.\nI understand your logic and what you have in mind, but if you are ok with that, I propose to put this change in standby. Then I will try on my side to make a bit of cleanup, renaming some of the classes so that we better understand what they do, add java docs, and provide a change with these modifications, applying on top of it the modifications you pushed in this change that do not impact the expected behavior at the target. Thanks",
+      "revId": "8e534808ae525678ce61890a222c6337f713d1cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
