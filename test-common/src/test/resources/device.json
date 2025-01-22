@@ -1,0 +1,62 @@
+{
+    "org-openroadm-device:org-openroadm-device": {
+        "circuit-packs": [
+            {
+                "circuit-pack-name": "circuit-pack-name",
+                "slot": "slot",
+                "faceplate-label": "faceplate-label",
+                "vendor": "vendor",
+                "administrative-state": "inService",
+                "is-passive": false,
+                "circuit-pack-category": {
+                    "type": "circuitPack"
+                },
+                "shelf": "1",
+                "circuit-pack-type": "circuit-pack-type",
+                "serial-id": "serial-id",
+                "is-physical": true,
+                "model": "model",
+                "circuit-pack-mode": "NORMAL",
+                "is-pluggable-optics": false,
+                "ports": [
+                    {
+                        "port-name": "port-name",
+                        "faceplate-label": "faceplate-label",
+                        "administrative-state": "outOfService",
+                        "port-direction": "bidirectional",
+                        "is-physical": true,
+                        "operational-state": "inService",
+                        "supporting-port-list": [
+                            {
+                                "index": 1,
+                                "circuit-pack-name": "circuit-pack-name",
+                                "port-list": [
+                                    "port-name"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "shelves": [
+            {
+                "shelf-name": "1",
+                "faceplate-label": "faceplate-label",
+                "vendor": "vendor",
+                "is-physical": true,
+                "is-passive": false,
+                "model": "model",
+                "shelf-type": "shelf-type",
+                "serial-id": "serial-id"
+            }
+        ],
+        "interface": [
+            {
+                "name": "interface 1GE",
+                "type": "org-openroadm-interfaces:ethernetCsmacd",
+                "operational-state": "inService"
+            }
+        ]
+    }
+}

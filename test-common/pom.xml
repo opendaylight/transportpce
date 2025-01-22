@@ -45,45 +45,18 @@
   </dependencyManagement>
 
   <dependencies>
-    <!--dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-1.2.1</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-2.2.1</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-7.1.0</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-13.1.0</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-device-7.1.0</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-network-13.1.0</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-service-13.1.0</artifactId>
-      <scope>test</scope>
-    </dependency-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc6022</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf.model</groupId>
+      <artifactId>rfc5277</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
@@ -100,6 +73,10 @@
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>binding-runtime-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>binding-generator</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
