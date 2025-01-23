@@ -82,6 +82,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bab0bfe_445d0840",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-23T09:03:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8ed13117_c8d8e052",
+      "range": {
+        "startLine": 52,
+        "startChar": 3,
+        "endLine": 52,
+        "endChar": 43
+      },
+      "revId": "3dd3ae6e5339000dea01251aa373084fc9b5ca0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8f75a96_69fa8018",
