@@ -65,10 +65,16 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Class manages  the conversion of OpenROADM topology in Data store to a T-API abstracted Topology.
+ * The topology shall be provided as the output of GetTopologyDetails RPC.
+ * Allows abstracting the OpenROADM topology, masking the complexity ROADM infrastructure represented as a single node;
+ * to higher layer controller/orchestrator.
+ * (Instantiated by GetTopologyDetailsImpl.createbAbstractedOtnTopology)
+ */
+public class AbstractORTopoToNbi {
 
-public class ConvertORTopoToTapiTopo {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToTapiTopo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractORTopoToNbi.class);
     private Uuid tapiTopoUuid;
     private Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
         tapiNodes;
@@ -76,8 +82,13 @@ public class ConvertORTopoToTapiTopo {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private final TapiLink tapiLink;
 
-
-    public ConvertORTopoToTapiTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
+    /**
+     * Instantiate an AbstractORTopoToNbi Object.
+     * @param tapiTopoUuid Uuid of the generated topology provided in the input of GetTopologyDetails used in Builders.
+     *        Considered Nodes and links are the ones present in OpenROADM topology.
+     * @param tapiLink Instance of TapiLink leveraging its methods.
+     */
+    public AbstractORTopoToNbi(Uuid tapiTopoUuid, TapiLink tapiLink) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
@@ -85,6 +96,10 @@ public class ConvertORTopoToTapiTopo {
         this.tapiLink = tapiLink;
     }
 
+    /**
+     * Populate tapiLinks from a list of ietf/OpenROADM links provided as the input of the method.
+     * @param otnLinkMap Map of ietf/openroadm links provided as an input.
+     */
     public void convertLinks(Map<
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.LinkKey,
@@ -144,6 +159,9 @@ public class ConvertORTopoToTapiTopo {
         }
     }
 
+    /**
+     * Abstracts OpenROADM infrastructure to a single Photonic Node "ROADM_INFRA".
+     */
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
@@ -161,7 +179,7 @@ public class ConvertORTopoToTapiTopo {
         // nep creation for rdm infra abstraction node
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = createNepForRdmNode(photonicNepUuisMap.size());
         // node rule group creation
-        var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+        var tapiFactory = new ORToTapiTopoConversionFactory(this.tapiTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode("T0ML", nodeUuid, null, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
@@ -225,6 +243,9 @@ public class ConvertORTopoToTapiTopo {
         }
     }
 
+    /**
+     * Provides a list of Photonic TapiNodes that include eODU NEPs.
+     */
     private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
             pruneTapiPhotonicNodes() {
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node>
@@ -245,6 +266,9 @@ public class ConvertORTopoToTapiTopo {
         return prunedTapiPhotonicNodes;
     }
 
+    /**
+     * Build generic map(String =NodeUid-NepUuid, String = NodeName-NepName) from a list of Nodes.
+     */
     private Map<String, String> convertListNodeWithListNepToMapForUuidAndName(
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> nodes) {
         Map<String, String> uuidNameMap = new HashMap<>();
@@ -262,6 +286,9 @@ public class ConvertORTopoToTapiTopo {
         return uuidNameMap;
     }
 
+    /**
+     * Build generic ROADM NEP "NodeEdgePoint_i" with basic parameters set.
+     */
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> createNepForRdmNode(int nbNep) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         for (int i = 1; i <= nbNep; i++) {
@@ -290,6 +317,11 @@ public class ConvertORTopoToTapiTopo {
         return onepMap;
     }
 
+    /**
+     * Populate tapiLinks with generic links.
+     * Computed from a map(String =NodeUid-NepUuid, String = NodeName-NepName) corresponding to the list
+     * of photonic nodes.
+     */
     private void createTapiOtsLinks(Map<String, String> photonicNepUuisMap, Map<String, String> rdmInfraNepUuisMap) {
         Iterator<Entry<String, String>> it2 = rdmInfraNepUuisMap.entrySet().iterator();
         for (Map.Entry<String, String> photonicEntry : photonicNepUuisMap.entrySet()) {
