@@ -30,7 +30,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid
 
 class ConvertORToTapiTopologyTest {
 
-    private ConvertORToTapiTopology convertORToTapiTopology;
+    private ORToTapiTopoConversionFactory convertORToTapiTopology;
 
     private TerminationPoint1 terminationPoint1;
 
@@ -42,7 +42,7 @@ class ConvertORToTapiTopologyTest {
         Mockito.when(math.getStartFrequencyFromIndex(760)).thenReturn(196.075);
         Mockito.when(math.getStopFrequencyFromIndex(767)).thenReturn(196.125);
 
-        convertORToTapiTopology = new ConvertORToTapiTopology(
+        convertORToTapiTopology = new ORToTapiTopoConversionFactory(
                 Uuid.getDefaultInstance("123"),
                 new NumericFrequency(
                         191.325,

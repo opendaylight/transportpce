@@ -189,7 +189,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final NetworkTransactionService networkTransactionService;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
-    private final ConvertORToTapiTopology tapiFactory;
+    private final ORToTapiTopoConversionFactory tapiFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
 
@@ -201,7 +201,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink);
         this.notificationPublishService = notificationPublishService;
-        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
+        this.tapiFactory = new ORToTapiTopoConversionFactory(tapiTopoUuid);
         this.tapiLink = tapiLink;
 
     }
@@ -1077,7 +1077,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
                         .findFirst().orElseThrow().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ETH").get(sicColl.stream()
+                    supInt.putAll(ORToTapiTopoConversionFactory.LPN_MAP.get("ETH").get(sicColl.stream()
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
                         .findFirst().orElseThrow().getIfCapType().implementedInterface().getSimpleName()));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
@@ -1095,7 +1095,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
                         .contains("OTU4")).findFirst().orElseThrow().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ETH").get("IfOCH"));
+                    supInt.putAll(ORToTapiTopoConversionFactory.LPN_MAP.get("ETH").get("IfOCH"));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
                     if (mapping.getSupportingOtu4() != null  && (operState == null

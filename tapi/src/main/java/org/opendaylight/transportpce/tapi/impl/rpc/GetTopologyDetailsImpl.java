@@ -28,9 +28,9 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
-import org.opendaylight.transportpce.tapi.topology.ConvertORToTapiTopology;
-import org.opendaylight.transportpce.tapi.topology.ConvertORTopoToTapiTopo;
-import org.opendaylight.transportpce.tapi.topology.ConvertTapiTopoToAbstracted;
+import org.opendaylight.transportpce.tapi.topology.ORToTapiTopoConversionFactory;
+import org.opendaylight.transportpce.tapi.topology.AbstractORTopoToNbi;
+import org.opendaylight.transportpce.tapi.topology.AbstractTapiTopoToNbi;
 import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
 import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
@@ -252,8 +252,8 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
                 TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8")))
             .toString());
-        ConvertORTopoToTapiTopo tapiAbstractFactory = new ConvertORTopoToTapiTopo(topoUuid, this.tapiLink);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topoUuid);
+        AbstractORTopoToNbi tapiAbstractFactory = new AbstractORTopoToNbi(topoUuid, this.tapiLink);
+        ORToTapiTopoConversionFactory tapiFactory = new ORToTapiTopoConversionFactory(topoUuid);
         Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
         while (it.hasNext()) {
             String nodeId = it.next().getKey();
@@ -300,7 +300,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             this.tapiContext
                 .getTopologyContext().entrySet().stream().filter(topo -> topo.getKey().getUuid().equals(refTopoUuid))
                 .findAny().orElseThrow().getValue();
-        ConvertTapiTopoToAbstracted absTapiTopo = new ConvertTapiTopoToAbstracted(refTopoUuid);
+        AbstractTapiTopoToNbi absTapiTopo = new AbstractTapiTopoToNbi(refTopoUuid);
         absTapiTopo.setTapiLinks(tapiFullTopo.getLink());
         absTapiTopo.setTapiNodes(tapiFullTopo.getNode());
         absTapiTopo.convertRoadmInfrastructure();

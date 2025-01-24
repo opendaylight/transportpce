@@ -23,7 +23,7 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
-import org.opendaylight.transportpce.tapi.topology.ConvertORToTapiTopology;
+import org.opendaylight.transportpce.tapi.topology.ORToTapiTopoConversionFactory;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -362,7 +362,7 @@ public class TapiLinkImpl implements TapiLink {
         LOG.debug("LINKIMPL366 OtsMediaConnectionEndSpec for link {} on Z end is {}}",link.getLinkId(), otsMCCepSpecZ);
 
 
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(new Uuid(UUID.nameUUIDFromBytes(
+        ORToTapiTopoConversionFactory tapiFactory = new ORToTapiTopoConversionFactory(new Uuid(UUID.nameUUIDFromBytes(
             TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()));
 
         String intermediateSupNodeId = getSupportingNodeFromNodeId(link.getSource().getSourceNode().getValue());
