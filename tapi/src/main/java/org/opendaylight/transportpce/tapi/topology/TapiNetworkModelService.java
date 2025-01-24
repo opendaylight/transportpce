@@ -17,12 +17,10 @@ public interface TapiNetworkModelService {
      *
      * @param orNodeId
      *     unique node ID of new OpenROADM node
-     * @param orNodeVersion
-     *     OpenROADM node version
      * @param node
      *     OpenRoadm node
      */
-    void createTapiNode(String orNodeId, int orNodeVersion, Nodes node);
+    void createTapiNode(String orNodeId, Nodes node);
 
     /**
      * Delete TAPI node in topologies and update corresponding TAPI context objects.
