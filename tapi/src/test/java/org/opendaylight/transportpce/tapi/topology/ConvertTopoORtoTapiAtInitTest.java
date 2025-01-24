@@ -110,8 +110,8 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToFullTapiTopoTest.class);
+public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertTopoORtoTapiAtInitTest.class);
 
     private static Node otnMuxA;
     private static Node otnSwitch;
@@ -238,7 +238,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     private void rawConvertNodeWhenBadStates(
             String nodeId, String networkId, String clientId, AdminStates admState, State rawState) {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topologyUuid);
         tapiFactory.convertNode(
             changeTerminationPointState(tpdr100G, networkId, clientId , admState, rawState),
             tpdr100G.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -296,7 +296,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenNoOtnMuxAttached() {
-        ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         assertEquals(1, tapiFullFactory.getTapiNodes().size(), "Node list size should be 1");
         assertEquals(0, tapiFullFactory.getTapiLinks().size(), "Link list size should be empty");
@@ -313,7 +313,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenRoadmNeighborAttached() {
-        ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
         tapiFullFactory.convertRoadmNode(roadmA, openroadmNet, "Full");
         tapiFullFactory.convertRoadmNode(roadmC, openroadmNet, "Full");
         tapiFullFactory.convertRdmToRdmLinks(
@@ -361,8 +361,8 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     void convertNodeForRoadmWhenOtnMuxAttached() {
-        ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topologyUuid, tapiLink);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ConvertTopoORtoTapiAtInit tapiFullFactory = new ConvertTopoORtoTapiAtInit(topologyUuid, tapiLink);
+        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topologyUuid);
         tapiFactory.convertNode(
             otnMuxA,
             otnMuxA.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -419,7 +419,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
     }
 
     private void rawConvertNode(Node node0, String dsrNodeType, String nodeId) {
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topologyUuid);
+        ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topologyUuid);
         tapiFactory.convertNode(
             node0,
             node0.augmentation(Node1.class).getTerminationPoint().values().stream()
@@ -1210,7 +1210,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
 
     @Test
     void getIdBasedOnModelVersion() {
-        ConvertORTopoToTapiFullTopo convertORTopoToTapiFullTopo = new ConvertORTopoToTapiFullTopo(
+        ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
                 topologyUuid,
                 tapiLink);
 
