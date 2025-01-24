@@ -160,10 +160,16 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Class centralizes common methods to handle the conversion of OpenROADM topology to a T-API Topology.
+ * Provided methods are shared between Classes :
+ *    - dedicated to the generation of Topology on RPC requests,
+ *    - dedicated to the generation of Tapi Topology at initialization from existing Datastore,
+ *    - dedicated to Tapi Topology update on Data-Tree-Changes.
+ */
+public class ORToTapiTopoConversionFactory {
 
-public class ConvertORToTapiTopology {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertORToTapiTopology.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ORToTapiTopoConversionFactory.class);
     private static final TreeMap<Integer, String> OPMODE_LOOPRATE_MAP;
     private static final int OPMODE_LOOPRATE_MAX;
     static final Map<String, Map<String, Map<LAYERPROTOCOLQUALIFIER, Uint64>>> LPN_MAP;
@@ -252,8 +258,11 @@ public class ConvertORToTapiTopology {
         LPN_MAP.get("PHOTONIC_MEDIA").put("IfOCHOTU4ODU4Uniregen", LPN_MAP.get("PHOTONIC_MEDIA").get("IfOCHOTU4ODU4"));
     }
 
-
-    public ConvertORToTapiTopology(Uuid tapiTopoUuid) {
+    /**
+     * Instantiate an ORToTapiTopoConversionFactory Object.
+     * @param tapiTopoUuid Uuid of the generated topology used in Builders.
+     */
+    public ORToTapiTopoConversionFactory(Uuid tapiTopoUuid) {
         this(
                 tapiTopoUuid,
                 new NumericFrequency(
@@ -264,7 +273,12 @@ public class ConvertORToTapiTopology {
         );
     }
 
-    public ConvertORToTapiTopology(Uuid tapiTopoUuid, Numeric numericFrequency) {
+    /**
+     * Instantiate an ORToTapiTopoConversionFactory Object.
+     * @param tapiTopoUuid Uuid of the generated topology used in Builders.
+     * @param numericFrequency NumericFrequency instance facilitating the management of the flex grid.
+     */
+    public ORToTapiTopoConversionFactory(Uuid tapiTopoUuid, Numeric numericFrequency) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
@@ -275,6 +289,11 @@ public class ConvertORToTapiTopology {
         this.numericFrequency = numericFrequency;
     }
 
+    /**
+     * Convert Xponder Node from OpenROADM to Tapi.
+     * @param ietfNode the OpenROADM node to be converted.
+     * @param networkPorts The list of Node's network/line port.
+     */
     public void convertNode(Node ietfNode, List<String> networkPorts) {
         this.ietfNodeId = ietfNode.getNodeId().getValue();
         var ietfAug =
@@ -347,6 +366,17 @@ public class ConvertORToTapiTopology {
         tapiNodes.put(dsrNode.key(), dsrNode);
     }
 
+    /**
+     * Creates one elementary Node Rule Group including NEPs that can/can't forward among each others in a ROADM node.
+     * @param topoType The level of abstraction of the topology.
+     * @param nodeUuid The Uuid of the node.
+     * @param subNodeName The extension in OpenROADM NodeId that identifies the  considered SRG/DEG. this subnode Name
+     *                    is used to form the name of the NRG, as the information of the extension is removed from TAPI
+     *                    nodeID (no disaggregation of ROADM in Tapi topology representation).
+     * @param onepl List of owned node edge points to be considered in the NRGs.
+     * @param forwardingRule Forwarding Rule set in the NRG (May or Cannot Forward).
+     * @param index Index used to form the SRG name.
+     */
     public Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForRdmNode(String topoType, Uuid nodeUuid,
             String subNodeName, List<OwnedNodeEdgePointKey> onepl, FORWARDINGRULE forwardingRule, int index) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePointKey,
@@ -377,6 +407,15 @@ public class ConvertORToTapiTopology {
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
 
+    /**
+     * Creates Node Rule Group(s) that describe(s) the connectivity of the ROADM node.
+     * @param topoType The level of abstraction of the topology which determines the way the NRG is computed :
+     *                 (For abstracted topology, a single ROADM node summarizes the ROADM infrastructure with an
+     *                 Any to Any connectivity),
+     * @param nodeUuid Uuid of the node,
+     * @param orNodeId id of the openROADM node,
+     * @param onepl Collection of owned node edge points to be considered in the creation of the different NRGs.
+     */
     public Map<NodeRuleGroupKey, NodeRuleGroup> createAllNodeRuleGroupForRdmNode(
             String topoType, Uuid nodeUuid, String orNodeId, Collection<OwnedNodeEdgePoint> onepl) {
         List<OwnedNodeEdgePoint> otsNepList = topoType.equals("T0ML") ? onepl.stream().collect(Collectors.toList())
@@ -435,9 +474,8 @@ public class ConvertORToTapiTopology {
     }
 
     public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForXpdrNode(
-        int index, Uuid nodeUuid, List<NodeRuleGroupKey> nrgKeyList,
+            int index, Uuid nodeUuid, List<NodeRuleGroupKey> nrgKeyList,
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule) {
-
         Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> associatedNrgMap = new HashMap<>();
         for (NodeRuleGroupKey nrgKey : nrgKeyList) {
             AssociatedNodeRuleGroup associatedNrg = new AssociatedNodeRuleGroupBuilder()
@@ -463,6 +501,13 @@ public class ConvertORToTapiTopology {
         return irgMapp;
     }
 
+/**
+ * Creates Inter Rule Group(s) that describe(s) forwarding rules between the different NRGs.
+ * @param topoType The level of abstraction of the topology which conditions IRG name,
+ * @param nodeUuid Uuid of the node,
+ * @param orNodeId id of the openROADM node,
+ * @param nrgMap Map of the different NRGs for which the IRG provides forwarding rules.
+ */
     public Map<InterRuleGroupKey, InterRuleGroup> createInterRuleGroupForRdmNode(
             String topoType, Uuid nodeUuid, String orNodeId, Map<NodeRuleGroupKey, String> nrgMap) {
 
@@ -515,6 +560,18 @@ public class ConvertORToTapiTopology {
         return irgMapp;
     }
 
+    /**
+     * Provides a list of Mapped Service Interface Points associated with a tp/NEP and add SIPs to tapiSip List.
+     * so that they can be added later on to the SIP context.
+     * Returns a List of Mapped Service Interface Points.
+     * @param nb The number of SIPs to be created for the NEP,
+     * @param layerProtocol Layer protocol the SIP is associated to,
+     * @param tpId id of the tp converted to a string,
+     * @param nodeid id of the node converted to a string,
+     * @param supportedInterfaceCapability A collection of interfaces the tp supports.
+     * @param operState the operational State of the SIP to be created.
+     * @param adminState the administrative State of the SIP to be created.
+     */
     public Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> createMSIP(
             int nb, LayerProtocolName layerProtocol, String tpId, String nodeid,
             Collection<SupportedInterfaceCapability> supportedInterfaceCapability,
@@ -538,6 +595,14 @@ public class ConvertORToTapiTopology {
         return msipl;
     }
 
+    /**
+     * Provides a list of Available Payload Structure supported by a Photonic Media Node Edge Point.
+     * Returns an Available Payload Structure List.
+     * @param rate remaining capacity supported by the Photonic NEP,
+     * @param otsiProvisioned Boolean providing information on whether 1 OTSi service has been provisioned on the port,
+     * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
+     * @param supportedOpModes List of operational Modes (as they appear in catalog) that the tp/NEP supports.
+     */
     public List<AvailablePayloadStructure> createAvailablePayloadStructureForPhtncMedia(
             String rate, Boolean otsiProvisioned,
             Collection<SupportedInterfaceCapability> sicList,
@@ -603,6 +668,14 @@ public class ConvertORToTapiTopology {
         return aps.stream().distinct().toList();
     }
 
+    /**
+     * Provides a list of Available Payload Structure supported by a generic Node Edge Point.
+     * Returns an Available Payload Structure List.
+     * @param rate remaining capacity supported by the Photonic NEP,
+     * @param isProvisioned Boolean providing information on whether a service has been provisioned on the port,
+     * @param lpnList A list of layer protocol qualifiers that the tp/NEP supports.
+     * @param nberOfInstances Number of instances the tp/NEP supports for the layer protocol qualifiers.
+     */
     public List<AvailablePayloadStructure> createAvailablePayloadStructureForCommonNeps(
             Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
         List<AvailablePayloadStructure> aps = new ArrayList<>();
@@ -619,7 +692,13 @@ public class ConvertORToTapiTopology {
         return aps;
     }
 
-
+    /**
+     * Provides a list of Supported Payload Structure supported by a Photonic Media Node Edge Point.
+     * Returns a Supported Payload Structure List.
+     * @param rate Rounded maximum rate supported by the Photonic NEP,
+     * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
+     * @param supportedOpModes List of operational Modes (as they appear in catalog) that the tp/NEP supports.
+     */
     public List<SupportedPayloadStructure> createSupportedPayloadStructureForPhtncMedia(String rate,
             Collection<SupportedInterfaceCapability> sicList, List<OperationalModeKey> supportedOpModes) {
         Integer nepRate = 0;
@@ -683,7 +762,14 @@ public class ConvertORToTapiTopology {
         return sps.stream().distinct().toList();
     }
 
-
+    /**
+     * Provides a list of Supported Payload Structure supported by a Generic Node Edge Point.
+     * Returns a Supported Payload Structure List.
+     * @param isProvisioned Boolean providing information on whether a service has been provisioned on the port,
+     * @param rate Rounded maximum rate supported by the Photonic NEP,
+     * @param nberOfInstances Number of instances the tp/NEP supports for the layer protocol qualifiers,
+     * @param lpnList A list of layer protocol qualifiers that the tp/NEP supports.
+     */
     public List<SupportedPayloadStructure> createSupportedPayloadStructureForCommonNeps(
             Boolean isProvisioned, Double rate, int nberOfInstances, Set<LAYERPROTOCOLQUALIFIER> lpnList) {
         List<SupportedPayloadStructure> sps = new ArrayList<>();
@@ -700,7 +786,18 @@ public class ConvertORToTapiTopology {
         return sps.stream().distinct().toList();
     }
 
-
+    /**
+     * Creates Connection End Point for ROADMs.
+     * Returns a Connection End Point.
+     * @param lowerFreqIndex Index of the slot corresponding to lower boundary of the spectrum occupied by the channel
+     *                       in the flex-grid,
+     * @param higherFreqIndex Index of the slot corresponding to higher boundary of the spectrum occupied by the channel
+     *                       in the flex-grid,
+     * @param id OpenROADM tpId,
+     * @param qualifier Layer protocol qualifier used to process Nep and Cep Name,
+     * @param omCepSpec Pre-processed Ots Media Connection End Point Spec to be included to the Cep (includes some
+     *                  parameters required for impairment aware path computation),
+     */
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec, boolean srg) {
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
@@ -832,6 +929,13 @@ public class ConvertORToTapiTopology {
         return cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
 
+    /**
+     * Provides a list of the Cep Layer Protocol Qualifier Instances that are Supported by Node Edge Point.
+     * Returns a List of Supported Cep Layer Protocol Qualifier Instances.
+     * @param sicList A collection of supported interface capabilities that the tp/NEP supports.
+     * @param lpn Layer protocol qualifier that the tp/NEP supports.
+     * @param key String key used to refine the case of Digital-OTN that does not separate OTU from ODU case.
+     */
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = "SF_SWITCH_FALLTHROUGH",
         justification = "Voluntarily No break in switchcase where comment is inserted in following method")
     public List<SupportedCepLayerProtocolQualifierInstances> createSupportedCepLayerProtocolQualifier(
@@ -873,6 +977,11 @@ public class ConvertORToTapiTopology {
         return sclpqiList.stream().distinct().toList();
     }
 
+    /**
+     * Retrieves from OpenROADM tp the information on the wavelength used (when a service is provisioned).
+     * Returns a Map of Min and Max Frequency corresponding to occupied-slot low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object).
+     */
     public Map<Double, Double> getXpdrUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
@@ -900,6 +1009,11 @@ public class ConvertORToTapiTopology {
         return new HashMap<>(Map.of(freqValue - widthValue * 0.001 / 2, freqValue + widthValue * 0.001 / 2));
     }
 
+    /**
+     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
+     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
     public Map<Double, Double> getPPUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
@@ -920,6 +1034,12 @@ public class ConvertORToTapiTopology {
         return  new HashMap<>(Map.of(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2));
     }
 
+
+    /**
+     * Retrieves from OpenROADM tp (ROADM DEG-TTP)the information on the wavelength provisioned in the MW interface.
+     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
     public Map<Double, Double> getTTPUsedFreqMap(TerminationPoint tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
@@ -970,6 +1090,11 @@ public class ConvertORToTapiTopology {
         return freqMap;
     }
 
+    /**
+     * Retrieves the BitMap containing the information on spectrum used on the ROADM-TTP MW interface from tp.
+     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
     public Map<Double, Double> getTTPAvailableFreqMap(TerminationPoint tp) {
         var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
             .TerminationPoint1.class);
@@ -991,7 +1116,6 @@ public class ConvertORToTapiTopology {
                 .filter(afm -> afm.getKey().equals(availFreqMapsKey))
                 .findFirst().orElseThrow().getValue().getFreqMap();
 
-
         LOG.debug("TTP available frequency byte set ({} bytes, 0 represents 8 available frequencies): {} ",
                 freqByteSet.length,
                 freqByteSet
@@ -1009,6 +1133,13 @@ public class ConvertORToTapiTopology {
 
     }
 
+
+    /**
+     * Retrieves the BitMap containing the information on spectrum used on the ROADM-TTP MW interface.
+     * Done from TerminationPoint1 Augmentation.
+     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object)
+     */
     public Map<Double, Double> getTTP11AvailableFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         if (tp == null) {
@@ -1046,6 +1177,12 @@ public class ConvertORToTapiTopology {
         return availableFrequencyRanges;
     }
 
+    /**
+     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
+     * Done directly from TerminationPoint1 Augmentation.
+     * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
     public Map<Double, Double> getPP11UsedWavelength(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         if (tp == null) {
@@ -1065,6 +1202,12 @@ public class ConvertORToTapiTopology {
         return new HashMap<>(Map.of(centFreq - width * 0.001 / 2, centFreq + width * 0.001 / 2));
     }
 
+    /**
+     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the available spectrum (BitMap) on the tp.
+     * Done directly from TerminationPoint1 Augmentation.
+     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
     public Map<Double, Double> getTTP11UsedFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
@@ -1114,6 +1257,16 @@ public class ConvertORToTapiTopology {
         return freqMap;
     }
 
+    /**
+     * Adds the Payload Structure and the Photonic Node Edge Point Spec to an OwnedNodeEdgePointBuilder.
+     * Returns  Augmented OnepBuilder provided as an input.
+     * @param nodeId OpenROADM node Id.
+     * @param freqMap Map of Min/Max Frequency corresponding to the different occupied-slots low/high boundaries.
+     * @param operModeList List of Keys of the operational modes supported by the NEP.
+     * @param sicColl A collection of supported interface capabilities that the tp/NEP supports.
+     * @param onepBldr The onepBuilder of the NEP to augment.
+     * @param keyword Concatenation of the nodeId and the layer protocol qualifier.
+     */
     public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId, String rate,
             Map<Double, Double> freqMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
@@ -1179,6 +1332,14 @@ public class ConvertORToTapiTopology {
         return onepBldr;
     }
 
+    /**
+     * Adds the Photonic Node Edge Point Spec to a ROADM OwnedNodeEdgePointBuilder.
+     * Returns Augmented OnepBuilder provided as an input.
+     * @param nodeId OpenROADM node Id,
+     * @param usedFreqMap Map of Min/Max Frequency corresponding to the different occupied-slots low/high boundaries.
+     * @param onepBldr The onepBuilder of the NEP to augment.
+     * @param keyword Concatenation of the nodeId and the layer protocol qualifier.
+     */
     public OwnedNodeEdgePointBuilder addPhotSpecToRoadmOnep(String nodeId,
             Map<Double, Double> usedFreqMap, Map<Double, Double> availableFreqMap,
             OwnedNodeEdgePointBuilder onepBldr, String keyword) {
@@ -1254,6 +1415,10 @@ public class ConvertORToTapiTopology {
         return onepBldr;
     }
 
+    /**
+     * Create an OpenROADM Odu Switching pool for 100G transponder that rely on a connection map.
+     * @param OduSwitchingPools OduSwitchingPool returned by the method.
+     */
     private OduSwitchingPools createOduSwitchingPoolForTp100G() {
         Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
         int count = 1;
@@ -1276,6 +1441,11 @@ public class ConvertORToTapiTopology {
             .build();
     }
 
+    /**
+     * Create Tapi Node from class parameters setting automatically some mandatory default parameters.
+     * @param nodeName Map of NameKey and Name provided as an input of the method.
+     * @param layerProtocols Set of layer protocol names supported by the Node.
+     */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node createTapiNode(
             Map<NameKey, Name> nodeNames, Set<LayerProtocolName> layerProtocols) {
         Uuid nodeUuid = null;
@@ -1335,6 +1505,14 @@ public class ConvertORToTapiTopology {
             .build();
     }
 
+    /**
+     * Main method used to populate and create the Node Neps, node rule groups of a Xponder.
+     * Done scanning all OpenROADM termination points and switching pool.
+     * Returns the Uuid of the Node returned by the method in case of successfull Nep and NRG creation.
+     * @param onepList A map of owned node edge point filled scanning the Node OpenROADM tps.
+     * @param nodeRuleGroupList A map of Node Rule Group filled scanning the Node Odu Switching Pool.
+     * @param ruleList Map of Rules to be used for the creation of the NRGs.
+     */
     private Uuid getNodeUuid4Dsr(
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
             Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList) {
@@ -1450,6 +1628,12 @@ public class ConvertORToTapiTopology {
         return this.uuidMap.get(ietfXpdr);
     }
 
+    /**
+     * Creates Node Rule Group for Xponders.
+     * Returns a Map of Node Rule Groups returned by the method in case of successful creation.
+     * @param nodeId of OpenROADM Node.
+     * @param oorOduSwPool OpenROADM Node Odu Switching Pool.
+     */
     private Map<NodeRuleGroupKey, NodeRuleGroup> createNodeRuleGroupForXpdrNode(String nodeId,
         Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwPool) {
 
@@ -1645,6 +1829,16 @@ public class ConvertORToTapiTopology {
         return nodeRuleGroupMap;
     }
 
+    /**
+     * Creates a Node Edge Point from an OpenROADM termination point.
+     * Returns a List of owned node edge points returned by the method in case of successful Nep creation.
+     * @param oorTp OpenROADM tp the NEP is mapped to.
+     * @param nepNames A map of Names associated to the created NEP.
+     * @param nepProtocol Layer protocol the NEP is associated to,
+     * @param nodeProtocol Layer protocol the Node is associated to,
+     * @param withSip Boolean used to trigger the creation of SIP associated to the Nep,
+     * @param keyword String key used to refine the case of Digital-OTN that does not separate OTU from ODU case.
+     */
     private List<OwnedNodeEdgePoint> createNep(TerminationPoint oorTp, Map<NameKey, Name> nepNames,
             LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword) {
         var tp1 = oorTp.augmentation(
@@ -1861,6 +2055,16 @@ public class ConvertORToTapiTopology {
         return onepList;
     }
 
+    /**
+     * Creates a ROADM Node Edge Point.
+     * Returns an owned node edge point in case of successful Nep creation.
+     * @param orNodeId Id of the OpenROADM Node the NEP is mapped to.
+     * @param tpId Id of the OpenROADM tp the NEP is mapped to.
+     * @param withSip Boolean used to trigger the creation of SIP associated to the Nep,
+     * @param operState Operational state of the Nep.
+     * @param adminState Administrative state of the Nep
+     * @param nepPhotonicSublayer The layer protocol qualifier of the Nep.
+     */
     public OwnedNodeEdgePoint createRoadmNep(String orNodeId, String tpId, boolean withSip,
             OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
         //TODO : complete implementation with SIP
@@ -1891,6 +2095,16 @@ public class ConvertORToTapiTopology {
             .build();
     }
 
+    /**
+     * Creates a Service Interface Point.
+     * @param sipUuid The SIP Uuid,
+     * @param layerProtocol Layer protocol the SIP is associated to,
+     * @param tpId OpenROADM termination Point Id,
+     * @param nodeId OpenROADM Node Id,
+     * @param supportedInterfaceCapability Collection of supported interface capabilities,
+     * @param operState Operational state of the SIP,
+     * @param adminState Administrative state of the SIP,
+     */
     private ServiceInterfacePoint createSIP(Uuid sipUuid, LayerProtocolName layerProtocol, String tpId,
         String nodeid, Collection<SupportedInterfaceCapability> supportedInterfaceCapability,
         OperationalState operState, AdministrativeState adminState) {
@@ -1914,6 +2128,13 @@ public class ConvertORToTapiTopology {
             .build();
     }
 
+    /**
+     * Generates a list of Supported Cep Layer Protocol Qualifier Instances supported by a Service Interface Point.
+     * @param supportedInterfaceCapability Collection of supported interface capabilities,
+     * @param layerProtocolName Layer protocol the SIP is associated to,
+     * @param operState Operational state of the SIP,
+     * @param adminState Administrative state of the SIP,
+     */
     private List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
                 .service._interface.point.SupportedCepLayerProtocolQualifierInstances>
              createSipSupportedLayerProtocolQualifier(
@@ -1960,6 +2181,10 @@ public class ConvertORToTapiTopology {
         return tapiLinks;
     }
 
+    /**
+     * Converts an OpenROADM compliant administrative state (provided as a string) to a Tapi administrative state.
+     * @param adminState Administrative state in OpenROADM format converted to a string,
+     */
     public AdministrativeState transformAsToTapiAdminState(String adminState) {
         return adminState == null ? null
             : adminState.equals(AdminStates.InService.getName())
@@ -1967,6 +2192,10 @@ public class ConvertORToTapiTopology {
                 ? AdministrativeState.UNLOCKED : AdministrativeState.LOCKED;
     }
 
+    /**
+     * Converts an OpenROADM compliant operational state (provided as a string) to a Tapi operational state.
+     * @param operState Operational state in OpenROADM format converted to a string,
+     */
     public OperationalState transformOsToTapiOperationalState(String operState) {
         return operState == null ? null
             : operState.equals("inService") || operState.equals(OperationalState.ENABLED.getName())

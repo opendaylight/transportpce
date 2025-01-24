@@ -202,8 +202,8 @@ public final class TopologyUtils {
             tapiNodeList = new HashMap<>();
         Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
             tapiLinkList = new HashMap<>();
-        ConvertORTopoToTapiFullTopo tapiFullFactory = new ConvertORTopoToTapiFullTopo(topoUuid, this.tapiLink);
-        ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(topoUuid);
+        ConvertORToDSTapiTopo tapiFullFactory = new ConvertORToDSTapiTopo(topoUuid, this.tapiLink);
+        ORToTapiTopoConversionFactory tapiFactory = new ORToTapiTopoConversionFactory(topoUuid);
         for (var entry : networkPortMap.entrySet()) {
             tapiFactory.convertNode(otnNodeMap.get(new NodeId(entry.getKey())), entry.getValue());
             this.tapiSips.putAll(tapiFactory.getTapiSips());

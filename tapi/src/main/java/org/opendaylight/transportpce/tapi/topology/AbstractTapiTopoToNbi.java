@@ -46,22 +46,38 @@ import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Class manages the conversion of a TAPI topology in Data store to a T-API abstracted Topology.
+ * The topology shall be be provided as the output of GetTopologyDetails RPC.
+ * (Instantiated by GetTopologyDetailsImpl.createbAbsTopologyFromTapiTopo).
+ */
+public class AbstractTapiTopoToNbi {
 
-public class ConvertTapiTopoToAbstracted {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertTapiTopoToAbstracted.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractTapiTopoToNbi.class);
     private Map<NodeKey, Node> tapiNodes;
     private Map<LinkKey, Link> tapiLinks;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSips;
     private Uuid refTopoUuid;
 
-    public ConvertTapiTopoToAbstracted(Uuid reftopoUuid) {
+    /**
+     * Instantiate an AbstractTapiTopoToNbi Object.
+     * As soon as it is instantiated, Nodes, links and SIPs shall be provided using setters.
+     * All methods will used Nodes/Link/SIPs that have been populated externally through setters.
+     * Thus the constituting elements of the topology do not depend on refTopoUuid which is used as
+     * the target topoUuid.
+     * @param reftopoUuid Reference Topology Uuid provided in the input of GetTopologyDetails used in Builders.
+     */
+    public AbstractTapiTopoToNbi(Uuid reftopoUuid) {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
         this.refTopoUuid = reftopoUuid;
     }
 
+    /**
+     * Abstracts the ROADM infrastructure of the topology into a single Node.
+     * The node will have TapiStringConstants.RDM_INFRA Name.
+     */
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(
@@ -71,7 +87,7 @@ public class ConvertTapiTopoToAbstracted {
         Name nameNodeType =
             new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = pruneTapiRoadmNeps();
-        var tapiFactory = new ConvertORToTapiTopology(this.refTopoUuid);
+        var tapiFactory = new ORToTapiTopoConversionFactory(this.refTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap =
             tapiFactory.createAllNodeRuleGroupForRdmNode("Abstracted", nodeUuid, null, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
@@ -119,6 +135,9 @@ public class ConvertTapiTopoToAbstracted {
         purgeTapiLinks();
     }
 
+    /**
+     * Provides a map(onepKey, onep) that includes only NEPs which correspond to pure photonic Nodes.
+     */
     private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> pruneTapiRoadmNeps() {
         List<Node> tapiPhotonicNodes = this.tapiNodes.values().stream()
                 .filter(n -> n.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA)
@@ -141,6 +160,10 @@ public class ConvertTapiTopoToAbstracted {
         return onepMap;
     }
 
+    /**
+     * Removes from TapiLinks List all links that do not correspond to XPONDER-to-ROADM links.
+     * This is done filtering links on NameKeys
+     */
     private void purgeTapiLinks() {
         this.tapiLinks = this.tapiLinks.values().stream()
             .filter(l -> l.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_OTS_XPDR_RDM_LINK))
@@ -148,13 +171,18 @@ public class ConvertTapiTopoToAbstracted {
             .collect(BindingMap.toMap());
     }
 
+    /**
+     * Removes from TapiNodes List all nodes that corresponds ROADM Nodes, filtering nodes on NameKeys.
+     */
     private void purgeTapiNodes() {
         this.tapiNodes = this.tapiNodes.values().stream()
             .filter(n -> !n.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_ROADM_NODE)))
             .collect(BindingMap.toMap());
     }
 
-
+    /**
+     * TapiNodes List must be populated externally using the following setter.
+     */
     public void setTapiNodes(Map<NodeKey, Node> nodeMap) {
         this.tapiNodes.putAll(nodeMap);
     }
@@ -163,6 +191,9 @@ public class ConvertTapiTopoToAbstracted {
         return tapiNodes;
     }
 
+    /**
+     * TapiLinks List must be populated externally using the following setter.
+     */
     public void setTapiLinks(Map<LinkKey, Link> linkMap) {
         this.tapiLinks.putAll(linkMap);
     }
@@ -175,6 +206,9 @@ public class ConvertTapiTopoToAbstracted {
         return tapiSips;
     }
 
+    /**
+     * TapiSips List must be populated externally using the following setter.
+     */
     public void setTapiSips(Map<ServiceInterfacePointKey, ServiceInterfacePoint> tapiSip) {
         this.tapiSips.putAll(tapiSip);
     }
