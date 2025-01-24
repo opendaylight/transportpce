@@ -7,11 +7,9 @@
  */
 package org.opendaylight.transportpce.tapi.impl;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
@@ -100,8 +98,9 @@ public class TapiProvider {
             .augmentation(Network1.class)
             .child(Link.class)
             .build();
-    public static final Uuid TAPI_TOPO_UUID = new Uuid(UUID.nameUUIDFromBytes(
-        TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+    //TODO: When setting of TAPI Topology externalized, change setting to the value set at tapi feature install for the
+    // 2 following constants
+    public static final Uuid TAPI_TOPO_UUID = TapiStringConstants.T0_FULL_MULTILAYER_UUID;
     public static final String TOPOLOGICAL_MODE = "Full";
     private final DataBroker dataBroker;
     private final NetworkModelService netModServ;

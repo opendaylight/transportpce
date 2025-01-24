@@ -177,8 +177,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Profile1;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ProfileRef;
 
 @Component
 public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
@@ -190,7 +188,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private final NetworkTransactionService networkTransactionService;
     private final R2RTapiLinkDiscovery linkDiscovery;
     private final TapiLink tapiLink;
-    private final ConvertORToTapiTopology tapiFactory;
+    private final ORToTapiTopoConversionFactory tapiFactory;
     private final NotificationPublishService notificationPublishService;
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
@@ -204,14 +202,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink);
         this.notificationPublishService = notificationPublishService;
-        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
+        this.tapiFactory = new ORToTapiTopoConversionFactory(tapiTopoUuid);
         this.tapiLink = tapiLink;
         this.srgOtsCepMap = new HashMap<>();
 
     }
 
     @Override
-    public void createTapiNode(String orNodeId, int orNodeVersion, Nodes node) {
+    public void createTapiNode(String orNodeId, Nodes node) {
         // TODO -> Implementation with PortMappingListener
         // check if port mapping exists or not...
         if (node.getMapping() == null) {
@@ -287,7 +285,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 // rdm to rdm link creation if neighbour roadm is mounted
                 LOG.info("checking if neighbor roadm exists");
                 Map<LinkKey, Link> rdm2rdmLinks =
-                    this.linkDiscovery.readLLDP(new NodeId(orNodeId), orNodeVersion, this.tapiTopoUuid);
+                    this.linkDiscovery.readLLDP(
+                        new NodeId(orNodeId),
+                        node.getNodeInfo().getOpenroadmVersion().getIntValue(),
+                        this.tapiTopoUuid);
                 if (!rdm2rdmLinks.isEmpty()) {
                     Map<Map<String, String>, ConnectionEndPoint> cepMap = this.tapiLink.getCepMap();
                     addCepToOnep(onepMap, cepMap);
@@ -1082,7 +1083,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
                         .findFirst().orElseThrow().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ETH").get(sicColl.stream()
+                    supInt.putAll(ORToTapiTopoConversionFactory.LPN_MAP.get("ETH").get(sicColl.stream()
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
                         .findFirst().orElseThrow().getIfCapType().implementedInterface().getSimpleName()));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
@@ -1100,7 +1101,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
                         .contains("OTU4")).findFirst().orElseThrow().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(ConvertORToTapiTopology.LPN_MAP.get("ETH").get("IfOCH"));
+                    supInt.putAll(ORToTapiTopoConversionFactory.LPN_MAP.get("ETH").get("IfOCH"));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
                     if (mapping.getSupportingOtu4() != null  && (operState == null
