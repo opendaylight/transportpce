@@ -16,9 +16,7 @@ import static org.mockito.Mockito.when;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -142,9 +140,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapilink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService,
-            new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
-                .toString()));
+            networkTransactionService, new Uuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID));
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();

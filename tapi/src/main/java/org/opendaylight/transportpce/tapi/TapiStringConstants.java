@@ -7,6 +7,11 @@
  */
 package org.opendaylight.transportpce.tapi;
 
+import java.nio.charset.Charset;
+import java.util.UUID;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+
+
 public final class TapiStringConstants {
 
     public static final String TRANSITIONAL_LINK = "tapi-transitional-link";
@@ -23,13 +28,22 @@ public final class TapiStringConstants {
     public static final String T0_FULL_MULTILAYER = "T0 - Full Multi-layer topology";
     public static final String SBI_TAPI_TOPOLOGY = "SBI - Multi-layer - TAPI topology";
     public static final String ALIEN_XPDR_TAPI_TOPOLOGY = "Alien-Xponders - TAPI topology";
-    // TODO: these hardcoded UUID are here for debugging purpose.
-    // They allow to have a reference somewhere of the UUID to be used when testing.
-    public static final String T0_MULTILAYER_UUID = "747c670e-7a07-3dab-b379-5b1cd17402a3";
-    public static final String T0_TAPI_MULTILAYER_UUID = "a6c5aed1-dc75-333a-b3a3-b6b70534eae8";
-    public static final String T0_FULL_MULTILAYER_UUID = "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7";
-    public static final String SBI_TAPI_TOPOLOGY_UUID = "a21e4756-4d70-3d40-95b6-f7f630b4a13b";
-    public static final String ALIEN_XPDR_TAPI_TOPOLOGY_UUID = "4aedacb6-f830-3b3d-983a-a2de06bc373b";
+    // T0_MULTILAYER_UUID = "747c670e-7a07-3dab-b379-5b1cd17402a3"
+    public static final Uuid T0_MULTILAYER_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8"))).toString());
+    // T0_TAPI_MULTILAYER_UUID = "a6c5aed1-dc75-333a-b3a3-b6b70534eae8"
+    public static final Uuid T0_TAPI_MULTILAYER_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.T0_TAPI_MULTILAYER.getBytes(Charset.forName("UTF-8"))).toString());
+    // T0_FULL_MULTILAYER_UUID = "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7"
+    public static final Uuid T0_FULL_MULTILAYER_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8"))).toString());
+    // SBI_TAPI_TOPOLOGY_UUID = "a21e4756-4d70-3d40-95b6-f7f630b4a13b"
+    public static final Uuid SBI_TAPI_TOPOLOGY_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.SBI_TAPI_TOPOLOGY.getBytes(Charset.forName("UTF-8"))).toString());
+    // ALIEN_XPDR_TAPI_TOPOLOGY_UUID = "4aedacb6-f830-3b3d-983a-a2de06bc373b"
+    public static final Uuid ALIEN_XPDR_TAPI_TOPOLOGY_UUID = new Uuid(UUID.nameUUIDFromBytes(
+        TapiStringConstants.ALIEN_XPDR_TAPI_TOPOLOGY.getBytes(Charset.forName("UTF-8"))).toString());
+
     public static final String TPDR_100G = "Transponder 100GE";
     public static final String DSR = "DSR";
     public static final String ODU = "ODU";

@@ -73,10 +73,14 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Class manages  the conversion of the OpenROADM topology in the Data Store to a T-API Topology also stored
+ * in the Data Store. From the level of abstraction will depend DS used resources.
+ * The level of abstraction depends on the topologicalMode
+ */
+public class ConvertORToDSTapiTopo {
 
-public class ConvertORTopoToTapiFullTopo {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoToTapiFullTopo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertORToDSTapiTopo.class);
     private String ietfNodeId;
     private OpenroadmNodeType ietfNodeType;
     private Uuid tapiTopoUuid;
@@ -88,8 +92,13 @@ public class ConvertORTopoToTapiFullTopo {
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
 
-
-    public ConvertORTopoToTapiFullTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
+    /**
+     * Instantiate an ConvertORToDSTapiTopo Object.
+     * @param tapiTopoUuid Uuid of the generated topology which corresponds to either an Abstracted or a Full view
+     *                     of the OpenROAM converted topology.
+     * @param tapiLink Instance of TapiLink leveraging its methods.
+     */
+    public ConvertORToDSTapiTopo(Uuid tapiTopoUuid, TapiLink tapiLink) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
@@ -98,6 +107,10 @@ public class ConvertORTopoToTapiFullTopo {
         this.tapiLink = tapiLink;
     }
 
+    /**
+     * Populate tapiLinks from a list of ietf/OpenROADM links provided as the input of the method.
+     * @param rdmTordmLinkList List of ietf/openroadm links provided as an input.
+     */
     public void convertRdmToRdmLinks(
             List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> rdmTordmLinkList) {
@@ -151,25 +164,36 @@ public class ConvertORTopoToTapiFullTopo {
         }
     }
 
+    /**
+     * Selects the right method to convert OpenROADM topology according to the topological mode (Abstracted/Full).
+     * @param roadm A list of ietf/openroadm Nodes provided as an input.
+     * @param openroadmTopo A list of ietf/openroadm network provided as an input.
+     * @param topoMode Topological mode which corresponds to the desired level of abstraction.
+     */
     public void convertRoadmNode(Node roadm, Network openroadmTopo, String topoMode) {
         if (roadm != null && roadm.getNodeId().getValue().equals("TAPI-SBI-ABS-NODE")) {
             return;
         }
-        setTopologicalMode(topoMode);
-        if (topoMode.equals("Full")) {
+        if (topoMode != null) {
+            setTopologicalMode(topoMode);
+        }
+        if (ConvertORToDSTapiTopo.topologicalMode.equals("Full")) {
             convertRoadmNodeFull(roadm, openroadmTopo);
         } else {
             convertRoadmNodeAbstracted(openroadmTopo);
         }
     }
 
+    /**
+     * Enriches Nep description of tapiNodes populating their associated cep-list with Cep.
+     * @param cepMap Map of Connection-End-Points with their Keys.
+     */
     private void addCepToOnepAndNode(Map<Map<String, String>, ConnectionEndPoint> cepMap) {
 
         for (Map.Entry<Map<String, String>, ConnectionEndPoint> cepEntry : cepMap.entrySet()) {
             String nepNodeId = cepEntry.getKey().entrySet().stream().findFirst().orElseThrow().getValue();
             LOG.debug("CONVERTTOFULL165, Node UUID is {}", nepNodeId);
             List<NodeKey> listKey = tapiNodes.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList());
-            //.forEach(Function.identity().toString());
             LOG.debug("CONVERTTOFULL168, TapiNode Keys are {}", tapiNodes
                 .entrySet().stream()
                 .map(Map.Entry::getKey)
@@ -208,6 +232,12 @@ public class ConvertORTopoToTapiFullTopo {
         }
     }
 
+    /**
+     * Converts OpenROADM infrastructure of the OpenROADM topology to its equivalent Tapi Topology stored in Data Store.
+     * Associated topology name T0_FULL_MULTILAYER.
+     * @param roadm A list of OpenROADM nodes,
+     * @param openroadmTopo A list of networks topologies.
+     */
     private void convertRoadmNodeFull(Node roadm, Network openroadmTopo) {
         this.ietfNodeId = roadm.getNodeId().getValue();
         this.ietfNodeType = roadm.augmentation(
@@ -317,6 +347,11 @@ public class ConvertORTopoToTapiFullTopo {
         tapiNodes.put(roadmNode.key(), roadmNode);
     }
 
+    /**
+     * Abstracts OpenROADM infrastructure to a single Photonic Tapi Node "ROADM_INFRA" in Tapi Topology stored in DS.
+     * Associated topology name T0_MULTILAYER.
+     * @param openroadmTopo A list of networks topologies.
+     */
     private void convertRoadmNodeAbstracted(Network openroadmTopo) {
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneMap = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
@@ -386,6 +421,16 @@ public class ConvertORTopoToTapiFullTopo {
         tapiNodes.put(roadmNode.key(), roadmNode);
     }
 
+    /**
+     * Converts OpenROADM infrastructure of the OpenROADM topology to its equivalent Tapi Topology stored in Data Store.
+     * Associated topology name T0_FULL_MULTILAYER.
+     * @param nodeUuid Uuid of the node to be created,
+     * @param nameMap Name Map of the node to be created,
+     * @param layerProtocols Set of layer protocols supported by the node,
+     * @param onepMap Map of Owned-Node-Edge-Point of the node,
+     * @param topoMode Mode of creation for the topo,
+     * @param tapiNodeBuilder Node Builder returned by the method.
+     */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
              createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
              Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode) {
@@ -407,7 +452,7 @@ public class ConvertORTopoToTapiFullTopo {
             .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
             .build();
 
-        var tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+        var tapiFactory = new ORToTapiTopoConversionFactory(this.tapiTopoUuid);
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap
             = tapiFactory.createAllNodeRuleGroupForRdmNode(
                 topoMode.equals("Full")
@@ -449,6 +494,13 @@ public class ConvertORTopoToTapiFullTopo {
             .build();
     }
 
+    /**
+     * Provides a Map of Owned Node Edge Point supported by a ROADM node of the Tapi Topology.
+     * @param nodeId OpenROADM nodeId converted to a string,
+     * @param tpList List of tps in OpenROADM topology,
+     * @param withSip Boolean conditioning the creation of Service Interface Point and Connection End Points,
+     * @param nepPhotonicSublayer The CEP layer protocol qualifier associated with the NEP's client CEP,
+     */
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
             String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
         // create neps for MC and and Photonic Media OTS/OMS
@@ -479,10 +531,6 @@ public class ConvertORTopoToTapiFullTopo {
                 default:
                     break;
             }
-            //List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
-
-//          OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
-
 
             AdminStates admin = tp.augmentation(TerminationPoint1.class).getAdministrativeState();
             State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
@@ -510,11 +558,10 @@ public class ConvertORTopoToTapiFullTopo {
                 .setOperationalState(this.tapiLink.setTapiOperationalState(oper.getName()))
                 .setLifecycleState(LifecycleState.INSTALLED);
 
-            ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
+            ORToTapiTopoConversionFactory tapiFactory = new ORToTapiTopoConversionFactory(this.tapiTopoUuid);
 
             if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
                     && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
-                //ConvertORToTapiTopology tapiFactory = new ConvertORToTapiTopology(this.tapiTopoUuid);
                 Map<Double,Double> usedFreqMap = new HashMap<>();
                 Map<Double,Double> availableFreqMap = new HashMap<>();
                 switch (tpType) {
@@ -584,6 +631,10 @@ public class ConvertORTopoToTapiFullTopo {
         return onepMap;
     }
 
+    /**
+     * Adds to tapiLinkMap the links connecting Xponders to ROADM.
+     * @param xpdrRdmLinkList A list of OpenROADM link connecting ROADMs to Xponders.
+     */
     public void convertXpdrToRdmLinks(
             List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> xpdrRdmLinkList) {
@@ -662,7 +713,7 @@ public class ConvertORTopoToTapiFullTopo {
     }
 
     public static void setTopologicalMode(String topoMode) {
-        ConvertORTopoToTapiFullTopo.topologicalMode = topoMode;
+        ConvertORToDSTapiTopo.topologicalMode = topoMode;
     }
 
     public String getTopologicalMode() {

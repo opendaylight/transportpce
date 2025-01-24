@@ -25,7 +25,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
-import org.opendaylight.transportpce.tapi.topology.ConvertORToTapiTopology;
+import org.opendaylight.transportpce.tapi.topology.ORToTapiTopoConversionFactory;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.ServiceEndpointType;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
@@ -143,7 +143,7 @@ public final class ConnectivityUtils {
     private Connection topConnRdmRdm;
     private Connection topConnXpdrXpdrPhtn;
     private Connection topConnXpdrXpdrOdu;
-    private ConvertORToTapiTopology tapiFactory;
+    private ORToTapiTopoConversionFactory tapiFactory;
 
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
     public ConnectivityUtils(ServiceDataStoreOperations serviceDataStoreOperations,
@@ -158,7 +158,7 @@ public final class ConnectivityUtils {
         this.topConnXpdrXpdrPhtn = null;
         this.topConnXpdrXpdrOdu = null;
         this.tapiTopoUuid = tapiTopoUuid;
-        this.tapiFactory = new ConvertORToTapiTopology(tapiTopoUuid);
+        this.tapiFactory = new ORToTapiTopoConversionFactory(tapiTopoUuid);
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
