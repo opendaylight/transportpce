@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.stream.JsonReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -56,7 +55,7 @@ import org.opendaylight.transportpce.pce.utils.NodeUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
-import org.opendaylight.transportpce.test.converter.JsonUtil;
+import org.opendaylight.transportpce.test.converter.JsonDataConverter;
 import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
@@ -200,34 +199,19 @@ public class PceGraphTest extends AbstractTest {
 
         MockitoAnnotations.openMocks(this);
         // The topology (openROADM-Network and openROADM-topology layers) is loaded from a file
-        JsonReader networkReader = null;
-        JsonReader topoReader = null;
         try {
             // load openroadm-network
             Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
-            networkReader = new JsonReader(gnpyNetwork);
-            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
+            Networks networks = (Networks) new JsonDataConverter(null).deserialize(gnpyNetwork, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
             // load openroadm-topology
             Reader gnpyTopo = new FileReader("src/test/resources/topologyData/or-base-topology.json",
                     StandardCharsets.UTF_8);
-            topoReader = new JsonReader(gnpyTopo);
-            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader, Networks.QNAME);
+            networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
         } catch (IOException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
-        } finally {
-            try {
-                if (networkReader != null) {
-                    networkReader.close();
-                }
-                if (topoReader != null) {
-                    topoReader.close();
-                }
-            } catch (IOException e) {
-                LOG.warn("Cannot close reader ", e);
-            }
         }
         // init PceHardContraints
         pceHardConstraints = new PceConstraints();

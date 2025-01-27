@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.google.gson.stream.JsonReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
-import org.opendaylight.transportpce.test.converter.JsonUtil;
+import org.opendaylight.transportpce.test.converter.JsonDataConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
@@ -83,10 +82,8 @@ public class OpenRoadmOtnTopologyTest {
     private Nodes portMappingBad;
 
     public OpenRoadmOtnTopologyTest() {
-        try (Reader reader = new FileReader("src/test/resources/portMapping.json", StandardCharsets.UTF_8);
-                JsonReader portMappingReader = new JsonReader(reader)) {
-            Network portMapping = (Network) JsonUtil.getInstance()
-                .getDataObjectFromJson(portMappingReader, Network.QNAME);
+        try (Reader reader = new FileReader("src/test/resources/portMapping.json", StandardCharsets.UTF_8)) {
+            Network portMapping = (Network) new JsonDataConverter(null).deserialize(reader, Network.QNAME);
             for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {
                     this.portMappingTpdr = nodes;
