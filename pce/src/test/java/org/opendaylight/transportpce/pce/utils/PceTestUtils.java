@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.pce.utils;
 
-import com.google.gson.stream.JsonReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +26,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
-import org.opendaylight.transportpce.test.converter.JsonUtil;
+import org.opendaylight.transportpce.test.converter.JsonDataConverter;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
@@ -84,14 +83,12 @@ public final class PceTestUtils {
                 // load openroadm-topology
                 Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
                         StandardCharsets.UTF_8);
-                JsonReader networkReader = new JsonReader(gnpyNetwork);
-                JsonReader topoReader = new JsonReader(gnpyTopo);
         ) {
 
-            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
+            Networks networks = (Networks) new JsonDataConverter(null).deserialize(gnpyNetwork, Networks.QNAME);
             List<Network> networkMap = new ArrayList<>(networks.nonnullNetwork().values());
             saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
-            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,  Networks.QNAME);
+            networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo,  Networks.QNAME);
             saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
         } catch (IOException | ExecutionException | InterruptedException e) {
             LOG.error("Cannot init test ", e);
