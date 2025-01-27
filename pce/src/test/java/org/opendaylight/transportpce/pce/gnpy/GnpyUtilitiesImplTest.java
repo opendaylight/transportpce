@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.google.gson.stream.JsonReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -42,7 +41,7 @@ import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumerImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.transportpce.test.converter.JsonUtil;
+import org.opendaylight.transportpce.test.converter.JsonDataConverter;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
@@ -90,40 +89,21 @@ class GnpyUtilitiesImplTest extends AbstractTest {
 
     GnpyUtilitiesImplTest() throws IOException {
         networkTransaction = new NetworkTransactionImpl(getDataBroker());
-        JsonReader networkReader = null;
-        JsonReader topoReader = null;
-
         try {
             // load openroadm-network
-            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json",
-                    StandardCharsets.UTF_8);
-
-            networkReader = new JsonReader(gnpyNetwork);
-            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
+            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
+            Networks networks = (Networks) new JsonDataConverter(null).deserialize(gnpyNetwork, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_NETWORK);
             // load openroadm-topology
-            Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
-                    StandardCharsets.UTF_8);
-            topoReader = new JsonReader(gnpyTopo);
-            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader, Networks.QNAME);
+            Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json", StandardCharsets.UTF_8);
+            networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (FileNotFoundException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
-
-        } finally {
-            try {
-                if (networkReader != null) {
-                    networkReader.close();
-                }
-                if (topoReader != null) {
-                    topoReader.close();
-                }
-            } catch (IOException e) {
-                LOG.warn("Cannot close reader ", e);
-            }
+        } catch (IOException e) {
+            LOG.warn("Cannot close reader ", e);
         }
-
     }
 
     @BeforeEach
