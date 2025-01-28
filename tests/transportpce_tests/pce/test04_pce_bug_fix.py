@@ -113,7 +113,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual('Path is calculated by PCE',
                          response['output']['configuration-response-common']['response-message'])
         self.assertEqual(
-            96,
+            0,
             response['output']['response-parameters']['path-description']['aToZ-direction']['aToZ-wavelength-number'])
         self.assertEqual(191.325,
                          float(response['output']['response-parameters']['path-description']['aToZ-direction']
@@ -122,7 +122,7 @@ class TransportPCEtesting(unittest.TestCase):
                          float(response['output']['response-parameters']['path-description']['aToZ-direction']
                                ['aToZ-max-frequency']))
         self.assertEqual(
-            96,
+            0,
             response['output']['response-parameters']['path-description']['zToA-direction']['zToA-wavelength-number'])
         self.assertEqual(191.325,
                          float(response['output']['response-parameters']['path-description']['zToA-direction']
