@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -316,11 +315,11 @@ public class PceLinkTest extends AbstractTest {
     private Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
         SupportingNode supportingNode1 = new SupportingNodeBuilder()
             .setNodeRef(new NodeId("node 1"))
-            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
             .build();
         SupportingNode supportingNode2 = new SupportingNodeBuilder()
             .setNodeRef(new NodeId("node 2"))
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .build();
         return new HashMap<>(Map.of(
                 supportingNode1.key(), supportingNode1,

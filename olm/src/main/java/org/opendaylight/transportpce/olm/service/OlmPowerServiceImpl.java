@@ -28,7 +28,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -203,7 +202,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 LOG.info("Do something for all");
                 List<Link> networkLinks = getNetworkLinks();
                 if (networkLinks.isEmpty()) {
-                    LOG.warn("Failed to get links form {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
+                    LOG.warn("Failed to get links form {} topology.", StringConstants.OPENROADM_TOPOLOGY);
                     return new CalculateSpanlossBaseOutputBuilder().setResult(ResponseCodes.FAILED_RESULT).build();
                 }
                 //else for all other links
@@ -211,7 +210,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     Link1 roadmLinkAugmentation = link.augmentation(Link1.class);
                     if (roadmLinkAugmentation == null) {
                         LOG.debug("Missing OpenRoadm link augmentation in link {} from {} topology.",
-                            link.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                            link.getLinkId().getValue(), StringConstants.OPENROADM_TOPOLOGY);
                         continue;
                     }
                     if (OpenroadmLinkType.ROADMTOROADM.equals(roadmLinkAugmentation.getLinkType())) {
@@ -226,7 +225,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     }
                 }
                 if (roadmLinks.isEmpty()) {
-                    LOG.warn("Topology {} does not have any Roadm-to-Roadm links.", NetworkUtils.OVERLAY_NETWORK_ID);
+                    LOG.warn("Topology {} does not have any Roadm-to-Roadm links.", StringConstants.OPENROADM_TOPOLOGY);
                     return new CalculateSpanlossBaseOutputBuilder().setResult(ResponseCodes.FAILED_RESULT).build();
                 }
                 spanLossResult = getLinkSpanloss(roadmLinks);
@@ -260,7 +259,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         LOG.info("calculateSpanlossCurrent Request received for all links in network model.");
         List<Link> networkLinks = getNetworkLinks();
         if (networkLinks.isEmpty()) {
-            LOG.warn("Failed to get links form {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
+            LOG.warn("Failed to get links form {} topology.", StringConstants.OPENROADM_TOPOLOGY);
             return null;
         }
         List<RoadmLinks> roadmLinks = new ArrayList<>();
@@ -268,7 +267,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             Link1 roadmLinkAugmentation = link.augmentation(Link1.class);
             if (roadmLinkAugmentation == null) {
                 LOG.debug("Missing OpenRoadm link augmentation in link {} from {} topology.",
-                    link.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                    link.getLinkId().getValue(), StringConstants.OPENROADM_TOPOLOGY);
                 continue;
             }
             if (OpenroadmLinkType.ROADMTOROADM.equals(roadmLinkAugmentation.getLinkType())) {
@@ -283,7 +282,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
 
         if (roadmLinks.isEmpty()) {
-            LOG.warn("Topology {} does not have any Roadm-to-Roadm links.", NetworkUtils.OVERLAY_NETWORK_ID);
+            LOG.warn("Topology {} does not have any Roadm-to-Roadm links.", StringConstants.OPENROADM_TOPOLOGY);
             return null;
         }
 
@@ -306,7 +305,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     private List<Link> getNetworkLinks() {
-        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
 
         DataObjectIdentifier<Network1> networkIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, overlayTopologyKey)
@@ -319,20 +318,20 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Read of {} topology failed", NetworkUtils.OVERLAY_NETWORK_ID);
+            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY);
             return Collections.emptyList();
         }
 
         if (! networkOptional.isPresent()) {
             LOG.warn("Network augmentation with links data is not present in {} topology.",
-                NetworkUtils.OVERLAY_NETWORK_ID);
+                    StringConstants.OPENROADM_TOPOLOGY);
 
             return Collections.emptyList();
         }
 
         @Nullable Map<LinkKey, Link> networkLinks = networkOptional.orElseThrow().getLink();
         if ((networkLinks == null) || networkLinks.isEmpty()) {
-            LOG.warn("Links are not present in {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
+            LOG.warn("Links are not present in {} topology.", StringConstants.OPENROADM_TOPOLOGY);
             return Collections.emptyList();
         }
         return new ArrayList<>(networkLinks.values());
@@ -574,8 +573,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     private String getRealNodeId(String mappedNodeId) {
-        KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII =
-            InstanceIdentifiers.OVERLAY_NETWORK_II.toLegacy().child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
+        KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII = InstanceIdentifiers.OPENROADM_TOPOLOGY_II
+                .toLegacy()
+                .child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
         Optional<Node> realNode;
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();
@@ -590,7 +590,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
         List<SupportingNode> collect = realNode.orElseThrow().nonnullSupportingNode().values().stream()
             .filter(node -> (node.getNetworkRef() != null)
-                && NetworkUtils.UNDERLAY_NETWORK_ID.equals(node.getNetworkRef().getValue())
+                && StringConstants.OPENROADM_NETWORK.equals(node.getNetworkRef().getValue())
                 && (node.getNodeRef() != null) && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))
             .collect(Collectors.toList());
         if (collect.isEmpty() || (collect.size() > 1)) {
@@ -603,7 +603,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     private Link getNetworkLinkById(LinkId linkId) {
-        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
         DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
@@ -615,7 +615,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
             return linkOptional.orElseThrow();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Read of {} topology failed", NetworkUtils.OVERLAY_NETWORK_ID);
+            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY);
             return null;
         }
     }

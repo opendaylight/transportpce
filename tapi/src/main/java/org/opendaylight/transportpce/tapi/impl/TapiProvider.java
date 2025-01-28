@@ -18,7 +18,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -96,7 +96,7 @@ public class TapiProvider {
     private static final DataObjectReference<Link> LINK_II = DataObjectReference.builder(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
                     .Network.class,
-                    new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class)
             .child(Link.class)
             .build();

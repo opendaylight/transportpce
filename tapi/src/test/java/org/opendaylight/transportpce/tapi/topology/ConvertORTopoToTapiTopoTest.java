@@ -118,7 +118,7 @@ public class ConvertORTopoToTapiTopoTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(
             getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE,
-            InstanceIdentifiers.OVERLAY_NETWORK_II);
+            InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(
             getDataStoreContextUtil(),
             TapiTopologyDataUtils.OTN_TOPOLOGY_FILE,

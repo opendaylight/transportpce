@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -233,14 +232,14 @@ public class PceOpticalNodeTest extends AbstractTest {
         Map<SupportingNodeKey,SupportingNode> supportingNodes1 = new HashMap<>();
         SupportingNode supportingNode1 = new SupportingNodeBuilder()
                 .setNodeRef(new NodeId("node 1"))
-                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
                 .build();
         supportingNodes1
                 .put(supportingNode1.key(),supportingNode1);
 
         SupportingNode supportingNode2 = new SupportingNodeBuilder()
                 .setNodeRef(new NodeId("node 2"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
                 .build();
         supportingNodes1
                 .put(supportingNode2.key(),supportingNode2);

@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Coordinate;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev220615.Km;
@@ -110,11 +110,11 @@ public class GnpyTopoImpl {
     private void extractTopo() throws GnpyException {
         // Define the instance identifier of the OpenRoadm topology
         DataObjectIdentifier<Network> insIdOpenRoadmTopo = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .build();
         // Define the instance identifier of the OpenRoadm network
         DataObjectIdentifier<Network> insIdrOpenRoadmNet = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
                 .build();
         try {
             // Initialize the reading of the networkTransactionService

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.link.oms.attributes.Span;
@@ -122,7 +122,7 @@ public final class MapUtils {
 
     public static String getSupNetworkNode(Node node) {
         for (SupportingNode snode : node.nonnullSupportingNode().values()) {
-            if (NetworkUtils.UNDERLAY_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
+            if (StringConstants.OPENROADM_NETWORK.equals(snode.getNetworkRef().getValue())) {
                 return snode.getNodeRef().getValue();
             }
         }
@@ -131,7 +131,7 @@ public final class MapUtils {
 
     public static String getSupClliNode(Node node) {
         for (SupportingNode snode : node.nonnullSupportingNode().values()) {
-            if (NetworkUtils.CLLI_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
+            if (StringConstants.CLLI_NETWORK.equals(snode.getNetworkRef().getValue())) {
                 return snode.getNodeRef().getValue();
             }
         }

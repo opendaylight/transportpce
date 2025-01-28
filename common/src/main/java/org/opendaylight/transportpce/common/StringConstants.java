@@ -25,12 +25,14 @@ public final class StringConstants {
     public static final String OPENCONFIG_DEVICE_VERSION_1_9_0 = "(http://openconfig.net/yang/terminal-device?revision=2021-07-29)openconfig-terminal-device";
 
     public static final String NETWORK_TOKEN = "NETWORK";
-
     public static final String TTP_TOKEN = "TTP";
-
     public static final String CLIENT_TOKEN = "CLIENT";
-
     public static final String PP_TOKEN = "PP";
+
+    public static final String CLLI_NETWORK = "clli-network";
+    public static final String OPENROADM_NETWORK = "openroadm-network";
+    public static final String OPENROADM_TOPOLOGY = "openroadm-topology";
+    public static final String OTN_NETWORK = "otn-topology";
 
     public static final String SERVICE_TYPE_100GE_T = "100GEt";
     public static final String SERVICE_TYPE_100GE_M = "100GEm";

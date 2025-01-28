@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.MappingBuilder;
@@ -180,12 +180,12 @@ public final class NetworkmodelTestUtil {
             .setXpdrTpPortConnectionAttributes(xtpcaBldr.build())
             .build();
         SupportingTerminationPoint supTermPointA = new SupportingTerminationPointBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_TOPOLOGY))
             .setNodeRef(new NodeId("SPDRA-XPDR1"))
             .setTpRef(new TpId("XPDR1-NETWORK1"))
             .build();
         SupportingTerminationPoint supTermPointZ = new SupportingTerminationPointBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_TOPOLOGY))
             .setNodeRef(new NodeId("SPDRZ-XPDR1"))
             .setTpRef(new TpId("XPDR1-NETWORK1"))
             .build();

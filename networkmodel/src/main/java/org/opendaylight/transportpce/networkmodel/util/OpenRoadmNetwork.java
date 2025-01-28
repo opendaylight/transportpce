@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableMap;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev230526.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
@@ -78,9 +78,9 @@ public final class OpenRoadmNetwork {
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
         SupportingNode supportingNode = new SupportingNodeBuilder()
-                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
                 .setNodeRef(new NodeId(nodeInfo.getNodeClli()))
-                .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
+                .withKey(new SupportingNodeKey(new NetworkId(StringConstants.CLLI_NETWORK),
                         new NodeId(nodeInfo.getNodeClli())))
                 .build();
 

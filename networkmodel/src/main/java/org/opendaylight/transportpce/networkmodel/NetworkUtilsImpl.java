@@ -15,7 +15,7 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.DeleteLinkOutput;
@@ -96,7 +96,7 @@ public class NetworkUtilsImpl {
         LinkId linkId = new LinkId(input.getLinkId());
         // Building link instance identifier
         DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
             .build();
 
@@ -123,7 +123,7 @@ public class NetworkUtilsImpl {
         try {
             writeTransaction.commit().get();
             LOG.info("Link with linkId: {} deleted from {} layer.",
-                input.getLinkId(), NetworkUtils.OVERLAY_NETWORK_ID);
+                input.getLinkId(), StringConstants.OPENROADM_TOPOLOGY);
             return RpcResultBuilder
                 .success(new DeleteLinkOutputBuilder().setResult("Link {} deleted successfully").build())
                 .buildFuture();

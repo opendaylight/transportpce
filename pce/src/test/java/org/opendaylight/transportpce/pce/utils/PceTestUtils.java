@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JsonUtil;
@@ -67,7 +67,7 @@ public final class PceTestUtils {
         MapEntryNode mapNode = ((MapNode) next).body().iterator().next();
         Optional<DataObject> dataObject = dataObjectConverter.getDataObject(mapNode, Network.QNAME);
         DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier,
@@ -90,9 +90,9 @@ public final class PceTestUtils {
 
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
             List<Network> networkMap = new ArrayList<>(networks.nonnullNetwork().values());
-            saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
+            saveOpenRoadmNetwork(networkMap.get(0), StringConstants.OPENROADM_NETWORK, dataBroker);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,  Networks.QNAME);
-            saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
+            saveOpenRoadmNetwork(networkMap.get(0), StringConstants.OPENROADM_NETWORK, dataBroker);
         } catch (IOException | ExecutionException | InterruptedException e) {
             LOG.error("Cannot init test ", e);
             Assert.fail("Cannot init test ");
@@ -114,7 +114,7 @@ public final class PceTestUtils {
             throws ExecutionException, InterruptedException {
 
         DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
