@@ -20,6 +20,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
@@ -239,7 +240,7 @@ public class TapiLinkImpl implements TapiLink {
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                             .networks.Network.class,
-                        new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                     .augmentation(Network1.class)
                     .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                         .networks.network.Link.class, new org.opendaylight.yang.gen.v1.urn.ietf.params
@@ -407,7 +408,7 @@ public class TapiLinkImpl implements TapiLink {
                     .rev180226.Networks.class)
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.Network.class,
-                    new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
                         new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
@@ -423,7 +424,7 @@ public class TapiLinkImpl implements TapiLink {
             }
             //return node
             return node.orElseThrow().getSupportingNode().entrySet().stream()
-                .filter(supn -> supn.getKey().getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .filter(supn -> supn.getKey().getNetworkRef().getValue().equals(StringConstants.OPENROADM_NETWORK))
                 .findFirst().orElseThrow().getKey().getNodeRef().getValue();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("TAPILINKIMPL Failed getting Mapping data from portMapping",e);

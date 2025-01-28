@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
@@ -60,7 +60,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
         availableBits.set(0, 8, true);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(), OPENROADM_TOPOLOGY_FILE,
-                InstanceIdentifiers.OVERLAY_NETWORK_II);
+                InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = new FileReader(PATH_DESCRIPTION_FILE, StandardCharsets.UTF_8)) {
@@ -138,11 +138,11 @@ public class FrequenciesServiceTest extends AbstractTest {
             }
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology", tpId, nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted", tpId, nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -157,16 +157,16 @@ public class FrequenciesServiceTest extends AbstractTest {
                 return optionalNode.orElseThrow();
             } else {
                 LOG.error("Unable to get network node for node id {}from topology {}", nodeId,
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OPENROADM_TOPOLOGY);
                 return null;
             }
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting network node for node id {} from {} topology", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting network node for node id {} from {} topology was interrupted", nodeId,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }

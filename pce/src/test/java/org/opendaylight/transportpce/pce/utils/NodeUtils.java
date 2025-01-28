@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1Builder;
@@ -166,11 +166,11 @@ public final class NodeUtils {
     public static Map<SupportingNodeKey, SupportingNode> geSupportingNodes() {
         SupportingNode supportingNode1 = new SupportingNodeBuilder()
                 .setNodeRef(new NodeId("node 1"))
-                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
                 .build();
         SupportingNode supportingNode2 = new SupportingNodeBuilder()
                 .setNodeRef(new NodeId("node 2"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
                 .build();
         return new HashMap<>(
             Map.of(
@@ -303,11 +303,11 @@ public final class NodeUtils {
             List.of(
                 new SupportingNodeBuilder()
                     .setNodeRef(new NodeId("node 1"))
-                    .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                    .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
                     .build(),
                 new SupportingNodeBuilder()
                         .setNodeRef(new NodeId("node 2"))
-                        .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+                        .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
                         .build()));
     }
 

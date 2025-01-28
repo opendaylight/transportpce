@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.listeners;
 
+import java.util.Iterator;
 import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
@@ -73,6 +74,11 @@ public class DeviceListener121 {
             // 1. Detect the org-openroadm-device object modified
             DataObjectIdentifier<?> path = DataObjectIdentifier.ofUnsafeSteps(
                     (Iterable<? extends @NonNull ExactDataObjectStep<?>>) edit.getTarget().steps());
+            Iterator<? extends @NonNull ExactDataObjectStep<?>> ite = path.steps().iterator();
+            while (ite.hasNext()) {
+                ExactDataObjectStep<?> step = ite.next();
+                LOG.info("step type = {}", step.type());
+            }
             LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
             switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":

@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -1944,7 +1944,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      */
     private TerminationPoint getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
         DataObjectIdentifier<TerminationPoint> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
@@ -1970,7 +1970,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return tpOptional.orElseThrow();
         } catch (ExecutionException | InterruptedException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         }
     }
@@ -1983,7 +1983,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      */
     private TerminationPoint1 getNetworkTerminationPoint1FromDatastore(String nodeId, String tpId) {
         DataObjectIdentifier<TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
@@ -2011,7 +2011,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return tpOptional.orElseThrow();
         } catch (ExecutionException | InterruptedException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         }
     }
@@ -2020,7 +2020,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(String nodeId, String tpId) {
         DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
                 .TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
@@ -2047,7 +2047,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return tpOptional.orElseThrow();
         } catch (ExecutionException | InterruptedException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         }
     }

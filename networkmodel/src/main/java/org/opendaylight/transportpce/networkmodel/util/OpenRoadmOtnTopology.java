@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
@@ -854,7 +854,7 @@ public final class OpenRoadmOtnTopology {
                             new TpId(node.getXpdrNetConnectionMap().get(tpId.getValue()))));
                 }
                 SupportingTerminationPoint stp = new SupportingTerminationPointBuilder()
-                    .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+                    .setNetworkRef(new NetworkId(StringConstants.OPENROADM_TOPOLOGY))
                     .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
                     .setTpRef(tpId)
                     .build();
@@ -891,27 +891,27 @@ public final class OpenRoadmOtnTopology {
     private static Map<SupportingNodeKey,SupportingNode> createSupportingNodes(OtnTopoNode node) {
 
         SupportingNode suppNode1 = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .setNodeRef(new NodeId(node.getNodeId()))
             .withKey(
                 new SupportingNodeKey(
-                    new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID),
+                    new NetworkId(StringConstants.OPENROADM_NETWORK),
                     new NodeId(node.getNodeId())))
             .build();
         SupportingNode suppNode2 = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_TOPOLOGY))
             .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
             .withKey(
                 new SupportingNodeKey(
-                    new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID),
+                    new NetworkId(StringConstants.OPENROADM_TOPOLOGY),
                     new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
             .build();
         SupportingNode suppNode3 = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
             .setNodeRef(new NodeId(node.getClli()))
             .withKey(
                 new SupportingNodeKey(
-                    new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
+                    new NetworkId(StringConstants.CLLI_NETWORK),
                     new NodeId(node.getClli())))
             .build();
         Map<SupportingNodeKey,SupportingNode> suppNodeMap = new HashMap<>();

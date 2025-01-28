@@ -23,8 +23,8 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.NodeIdPair;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -161,17 +161,17 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                 .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
             if (optionalNode.isEmpty()) {
                 LOG.warn("Unable to get network node for node id {} from topology {}",
-                     nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+                     nodeId, StringConstants.OPENROADM_TOPOLOGY);
                 return null;
             }
             return optionalNode.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting network node for node id {} from {} topology",
-                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting network node for node id {} from {} topology was interrupted",
-                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -193,17 +193,17 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
             if (optionalNode.isEmpty()) {
                 LOG.error("Unable to get common network node for node id {} from topology {}",
-                        nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+                        nodeId, StringConstants.OPENROADM_TOPOLOGY);
                 return null;
             }
             return optionalNode.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting common network node for node id {} from {} topology",
-                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting common network node for node id {} from {} topology was interrupted",
-                    nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -238,11 +238,11 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             return optionalTerminationPoint.isEmpty() ? null : optionalTerminationPoint.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting termination {} for node id {} point from {} topology was interrupted",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -265,17 +265,17 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
             if (optionalTerminationPoint.isEmpty()) {
                 LOG.error("Unable to get common-network termination point {} for node id {}from topology {}",
-                        tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+                        tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY);
                 return null;
             }
             return optionalTerminationPoint.orElseThrow();
         } catch (ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting common-network termination {} for node id {} point from {} topology",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         } catch (InterruptedException e) {
             LOG.warn("Getting common-network termination {} for node id {} point from {} topology was interrupted",
-                    tpId, nodeId, NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
             Thread.currentThread().interrupt();
             return null;
         }
@@ -396,7 +396,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                 LOG.warn(
                         "From topology {} for node id {} -> Get common-network : {} "
                                 + "Get network-topology : {}. Skipping frequencies update for this node.",
-                        NetworkUtils.OVERLAY_NETWORK_ID, nodeId, commonNetworkNode, networkNode);
+                                StringConstants.OPENROADM_TOPOLOGY, nodeId, commonNetworkNode, networkNode);
                 continue;
             }
             Node1Builder networkNodeBuilder = new Node1Builder(networkNode);

@@ -24,7 +24,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
@@ -137,7 +137,7 @@ public final class TopologyUtils {
 
     public Topology createOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         String topoType = TOPOLOGICAL_MODE.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
             : TapiStringConstants.T0_TAPI_MULTILAYER;
         LOG.info("TOPOUTILS, createOtnTopology, the TOPOLOGICAL_MODE is {} ",topoType);
@@ -182,7 +182,7 @@ public final class TopologyUtils {
         for (var entry : otnNodeMap.entrySet()) {
             var entVal = entry.getValue();
             String portMappingNodeId = entVal.getSupportingNode().values().stream()
-                .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .filter(sn -> sn.getNetworkRef().getValue().equals(StringConstants.OPENROADM_NETWORK))
                 .findFirst()
                 .orElseThrow().getNodeRef().getValue();
             List<String> networkPortList = new ArrayList<>();
@@ -214,7 +214,7 @@ public final class TopologyUtils {
         }
         // roadm infrastructure not abstracted
         // read openroadm-network
-        Network openroadmNet = readTopology(InstanceIdentifiers.UNDERLAY_NETWORK_II.toIdentifier());
+        Network openroadmNet = readTopology(InstanceIdentifiers.OPENROADM_NETWORK_II.toIdentifier());
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                 .networks.network.Node> rdmList =
             openroadmNet == null ? new ArrayList<>()

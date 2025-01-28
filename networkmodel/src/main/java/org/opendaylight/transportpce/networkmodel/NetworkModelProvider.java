@@ -12,7 +12,7 @@ import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -102,10 +102,10 @@ public class NetworkModelProvider {
      */
     private void init() {
         LOG.info("NetworkModelProvider Session Initiated");
-        tpceNetwork.createLayer(NetworkUtils.CLLI_NETWORK_ID);
-        tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
-        tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
-        tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
+        tpceNetwork.createLayer(StringConstants.CLLI_NETWORK);
+        tpceNetwork.createLayer(StringConstants.OPENROADM_NETWORK);
+        tpceNetwork.createLayer(StringConstants.OPENROADM_TOPOLOGY);
+        tpceNetwork.createLayer(StringConstants.OTN_NETWORK);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,
                 topologyListener));
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, MAPPING_II,

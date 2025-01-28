@@ -64,11 +64,11 @@ public class ListenerProvider {
         LOG.debug("Registering listeners...");
         OverlayNetworkChangeListener overlayNetworkListener = new OverlayNetworkChangeListener();
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifiers.OVERLAY_NETWORK_II, overlayNetworkListener));
+                InstanceIdentifiers.OPENROADM_TOPOLOGY_II, overlayNetworkListener));
         LOG.info("Overlay network change listener was successfully registered");
         UnderlayNetworkChangeListener underlayNetworkListener = new UnderlayNetworkChangeListener();
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
-                InstanceIdentifiers.UNDERLAY_NETWORK_II, underlayNetworkListener));
+                InstanceIdentifiers.OPENROADM_NETWORK_II, underlayNetworkListener));
         LOG.info("Underlay network change listener was successfully registered");
         ClliNetworkChangeListener clliNetworkChangeListener = new ClliNetworkChangeListener();
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,

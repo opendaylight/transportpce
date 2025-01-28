@@ -25,7 +25,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -149,19 +149,19 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             // node creation in clli-network
             Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);
             DataObjectIdentifier<Node> iiClliNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.CLLI_NETWORK)))
                 .child(Node.class, clliNode.key())
                 .build();
-            LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
+            LOG.info("creating node in {}", StringConstants.CLLI_NETWORK);
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode);
 
             // node creation in openroadm-network
             Node openroadmNetworkNode = OpenRoadmNetwork.createNode(nodeId, nodeInfo);
             DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
                 .child(Node.class, openroadmNetworkNode.key())
                 .build();
-            LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
+            LOG.info("creating node in {}", StringConstants.OPENROADM_NETWORK);
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode,
                 openroadmNetworkNode);
 
@@ -172,9 +172,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 this.topologyShardMountedDevice.put(nodeId, topologyShard);
                 for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
                     LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .child(Node.class, openRoadmTopologyNode.key())
                         .build();
                     networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
@@ -182,9 +182,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 }
                 for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
                     LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .augmentation(Network1.class)
                         .child(Link.class, openRoadmTopologyLink.key())
                         .build();
@@ -232,9 +232,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
             NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
 
-            LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
+            LOG.info("deleting node in {}", StringConstants.OPENROADM_NETWORK);
             DataObjectIdentifier<Node> iiopenroadmNetworkNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
                 .child(Node.class, nodeIdKey)
                 .build();
             this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode);
@@ -243,18 +243,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (topologyShard != null) {
                 for (Node openRoadmTopologyNode : topologyShard.getNodes()) {
                     LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Node> iiOpenRoadmTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .child(Node.class, openRoadmTopologyNode.key())
                         .build();
                     this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
                 }
                 for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
                     LOG.info("deleting link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Link> iiOpenRoadmTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .augmentation(Network1.class)
                         .child(Link.class, openRoadmTopologyLink.key())
                         .build();
@@ -273,18 +273,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     LOG.info("suppression de otnTopologyShard = {}", otnTopologyShard.toString());
                     for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
                         LOG.info("deleting node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                            NetworkUtils.OTN_NETWORK_ID);
+                                StringConstants.OTN_NETWORK);
                         DataObjectIdentifier<Node> iiotnTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                             .child(Node.class, otnTopologyNode.key())
                             .build();
                         this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiotnTopologyNode);
                     }
                     for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                         LOG.info("deleting link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                            NetworkUtils.OTN_NETWORK_ID);
+                                StringConstants.OTN_NETWORK);
                         DataObjectIdentifier<Link> iiotnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                             .augmentation(Network1.class)
                             .child(Link.class, otnTopologyLink.key())
                             .build();
@@ -315,7 +315,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         Map<LinkKey, Link> otnTopologyLinks = null;
         try {
             openroadmTopology = this.networkTransactionService
-                .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OVERLAY_NETWORK_II)
+                .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OPENROADM_TOPOLOGY_II)
                 .get().orElseThrow();
             if (openroadmTopology.augmentation(Network1.class) != null) {
                 openroadmTopologyLinks = openroadmTopology.augmentation(Network1.class).getLink();
@@ -341,9 +341,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (topologyShard.getLinks() != null) {
                 for (Link link : topologyShard.getLinks()) {
                     LOG.info("updating links {} in {}", link.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Link> iiTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .augmentation(Network1.class)
                         .child(Link.class, link.key())
                         .build();
@@ -354,7 +354,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 for (TerminationPoint tp : topologyShard.getTps()) {
                     LOG.info("updating TP {} in openroadm-topology", tp.getTpId().getValue());
                     DataObjectIdentifier<TerminationPoint> iiTopologyTp = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .child(Node.class, new NodeKey(new NodeId(abstractNodeid)))
                         .augmentation(Node1.class)
                         .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
@@ -382,9 +382,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (otnShard.getLinks() != null) {
                 for (Link link : otnShard.getLinks()) {
                     LOG.info("updating links {} in {}", link.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
+                            StringConstants.OPENROADM_TOPOLOGY);
                     DataObjectIdentifier<Link> iiTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                         .augmentation(Network1.class)
                         .child(Link.class, link.key())
                         .build();
@@ -395,7 +395,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 for (TerminationPoint tp : otnShard.getTps()) {
                     LOG.info("updating TP {} in otn-topology", tp.getTpId().getValue());
                     DataObjectIdentifier<TerminationPoint> iiTopologyTp = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                         .child(Node.class, new NodeKey(new NodeId(abstractNodeid)))
                         .augmentation(Node1.class)
                         .child(TerminationPoint.class, new TerminationPointKey(tp.getTpId()))
@@ -461,9 +461,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("creating and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OPENROADM_TOPOLOGY);
                 DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();
@@ -476,7 +476,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 List<SupportingTerminationPoint> supportingTerminationPoint =
                     new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 DataObjectIdentifier<TerminationPoint> iiOtnTopologyTp = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(otnTopologyTp.getTpId()))
@@ -551,9 +551,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("deleting and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OPENROADM_TOPOLOGY);
                 DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();
@@ -566,7 +566,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 List<SupportingTerminationPoint> supportingTerminationPoint =
                     new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 DataObjectIdentifier<TerminationPoint> iiOtnTopologyTp = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(otnTopologyTp.getTpId()))
@@ -628,9 +628,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("creating and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OPENROADM_TOPOLOGY);
                 DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .augmentation(Network1.class)
                     .child(Link.class, new LinkKey(new LinkId(otnTopologyLink.getLinkId().getValue())))
                     .build();
@@ -643,7 +643,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 List<SupportingTerminationPoint> supportingTerminationPoint =
                     new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 DataObjectIdentifier<TerminationPoint> iiOtnTopologyTp = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(new TpId(otnTopologyTp.getTpId()
@@ -675,9 +675,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         if (otnTopologyShard.getLinks() != null) {
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("creating and updating otn links {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OPENROADM_TOPOLOGY);
                 DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();
@@ -706,7 +706,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             .addAugmentation(commonExt1)
             .build();
         DataObjectIdentifier<Node> iiTapiExtClliNode = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.CLLI_NETWORK)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .build();
         LOG.info("OR Topo initialization, creating new CLLI TAPI-SBI-ABS-NODE Node in DataStore");
@@ -722,13 +722,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .build();
 
         DataObjectIdentifier<Node> iiTapiExtNetworkNode = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .build();
         LOG.info("OR Topo initialization, creating new NETWORK TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
             topoUuid);
         networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode,
-            createTapiNodeBuilder(NetworkUtils.CLLI_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+            createTapiNodeBuilder(StringConstants.CLLI_NETWORK, "TAPI-SBI-ABS-NODE")
                 .addAugmentation(tapiExt1)
                 .addAugmentation(clliExt1)
                 .addAugmentation(commonExt1)
@@ -736,13 +736,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         networkTransactionService.commit();
 
         DataObjectIdentifier<Node> iiTapiExtTopologyNode = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .build();
         LOG.info("OR Topo initialization, creating new TOPOLOGY TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
             topoUuid);
         networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode,
-            createTapiNodeBuilder(NetworkUtils.UNDERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+            createTapiNodeBuilder(StringConstants.OPENROADM_NETWORK, "TAPI-SBI-ABS-NODE")
                 .addAugmentation(tapiExt1)
                 .addAugmentation(clliExt1)
                 .addAugmentation(commonExt1)
@@ -750,13 +750,13 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         networkTransactionService.commit();
 
         DataObjectIdentifier<Node> iiTapiExtOtnNode = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .build();
         LOG.info("OR Topo initialization, creating new OTN TAPI-SBI-ABS-NODE Node in DataStore with TopoUUID {}",
             topoUuid);
         networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode,
-            createTapiNodeBuilder(NetworkUtils.OVERLAY_NETWORK_ID, "TAPI-SBI-ABS-NODE")
+            createTapiNodeBuilder(StringConstants.OPENROADM_TOPOLOGY, "TAPI-SBI-ABS-NODE")
                 .addAugmentation(tapiExt1)
                 .addAugmentation(clliExt1)
                 .addAugmentation(commonExt1)
@@ -766,43 +766,43 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     @Override
     public void deleteTapiExtNode() {
-        String networkLayer = NetworkUtils.CLLI_NETWORK_ID;
+        String networkLayer = StringConstants.CLLI_NETWORK;
         try {
             DataObjectIdentifier<Node> iiTapiExtClliNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.CLLI_NETWORK)))
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             LOG.info("Following tapi feature desinstallation, Deleting CLLI TAPI-SBI-ABS-NODE Node in DataStore");
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode);
 
-            networkLayer = NetworkUtils.UNDERLAY_NETWORK_ID;
+            networkLayer = StringConstants.OPENROADM_NETWORK;
             DataObjectIdentifier<Node> iiTapiExtNetworkNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtNetworkNode);
 
-            networkLayer = NetworkUtils.OVERLAY_NETWORK_ID;
+            networkLayer = StringConstants.OPENROADM_TOPOLOGY;
             DataObjectIdentifier<Node> iiTapiExtTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtTopologyNode);
 
-            networkLayer = NetworkUtils.OTN_NETWORK_ID;
+            networkLayer = StringConstants.OTN_NETWORK;
             DataObjectIdentifier<Node> iiTapiExtOtnNode = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                 .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
                 .build();
             networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiTapiExtOtnNode);
             networkTransactionService.commit().get(1, TimeUnit.SECONDS);
 
             DataObjectIdentifier<Network> nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY))).build();
 
             Optional<Network> nwOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
-            networkLayer = NetworkUtils.OVERLAY_NETWORK_ID + "Tapi-Links";
+            networkLayer = StringConstants.OPENROADM_TOPOLOGY + "Tapi-Links";
             if (nwOptional.isPresent()) {
                 Network1 nw = nwOptional.orElseThrow().augmentation(Network1.class);
                 if (nw == null) {
@@ -824,7 +824,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 }
                 for (LinkId linkId : tapiLinkIdList) {
                     DataObjectIdentifier<Link> iiORNetworkLink = DataObjectIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                         .augmentation(Network1.class)
                         .child(Link.class, new LinkKey(linkId))
                         .build();
@@ -844,7 +844,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         List<Link> links = new ArrayList<>();
         for (LinkId linkId : linkIds) {
             DataObjectIdentifier<Link> iiLink = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                 .augmentation(Network1.class)
                 .child(Link.class, new LinkKey(linkId))
                 .build();
@@ -895,14 +895,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private List<TerminationPoint> getOtnNodeTps(String nodeTopoA, String tpA, String nodeTopoZ, String tpZ) {
         List<TerminationPoint> tps = new ArrayList<>();
         DataObjectIdentifier<TerminationPoint> iiTpA = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
             .child(Node.class, new NodeKey(new NodeId(nodeTopoA)))
             .augmentation(Node1.class)
             .child(TerminationPoint.class, new TerminationPointKey(new TpId(tpA)))
             .build();
         Optional<TerminationPoint> tpAOpt = Optional.empty();
         DataObjectIdentifier<TerminationPoint> iiTpZ = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
             .child(Node.class, new NodeKey(new NodeId(nodeTopoZ)))
             .augmentation(Node1.class)
             .child(TerminationPoint.class, new TerminationPointKey(new TpId(tpZ)))
@@ -935,7 +935,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String tp = linkTp.getTpId();
             String nodeId = formatNodeName(linkTp.getNodeId(), tp);
             DataObjectIdentifier<TerminationPoint> iiTp = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                 .child(Node.class, new NodeKey(new NodeId(nodeId)))
                 .augmentation(Node1.class)
                 .child(TerminationPoint.class, new TerminationPointKey(new TpId(tp)))
@@ -960,9 +960,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private void deleteLinks(List<Link> links) {
         for (Link otnTopologyLink : links) {
             LOG.info("deleting link {} from {}", otnTopologyLink.getLinkId().getValue(),
-                NetworkUtils.OTN_NETWORK_ID);
+                    StringConstants.OTN_NETWORK);
             DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                 .augmentation(Network1.class)
                 .child(Link.class, otnTopologyLink.key())
                 .build();
@@ -977,7 +977,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     private List<Link> getSupportingOdu4Links(List<LinkTp> nodesTopoTps, Uint32 serviceRate) {
         DataObjectIdentifier<Network1> iiOtnTopologyLinks = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
             .augmentation(Network1.class)
             .build();
         ListenableFuture<Optional<Network1>> netw1Fl = networkTransactionService
@@ -1028,18 +1028,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
             for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
                 LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                    NetworkUtils.OTN_NETWORK_ID);
+                        StringConstants.OTN_NETWORK);
                 DataObjectIdentifier<Node> iiOtnTopologyNode = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .child(Node.class, otnTopologyNode.key())
                     .build();
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode, otnTopologyNode);
             }
             for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
                 LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                    NetworkUtils.OVERLAY_NETWORK_ID);
+                        StringConstants.OTN_NETWORK);
                 DataObjectIdentifier<Link> iiOtnTopologyLink = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();

@@ -16,7 +16,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksInput;
@@ -87,7 +87,7 @@ final class OrdLink {
 
         // Building link instance identifier
         DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class)
             .child(Link.class, new LinkKey(linkId))
             .build();
@@ -97,7 +97,7 @@ final class OrdLink {
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
-                linkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer ");
@@ -185,7 +185,7 @@ final class OrdLink {
 
         // Building link instance identifier
         DataObjectIdentifier<Link> linkIIDFW = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
             .build();
 
@@ -194,7 +194,7 @@ final class OrdLink {
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
-                linkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
                 srcNode, srcTp, destNode, destTp);
@@ -202,7 +202,7 @@ final class OrdLink {
         }
 
         DataObjectIdentifier<Link> linkIIDBW = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class).child(Link.class, new LinkKey(oppLinkId))
             .build();
         writeTransaction = dataBroker.newWriteOnlyTransaction();
@@ -210,7 +210,7 @@ final class OrdLink {
         try {
             writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
-                oppLinkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
+                oppLinkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
@@ -245,7 +245,7 @@ final class OrdLink {
             .setOperationalState(State.InService).build());
 
         DataObjectIdentifier<TerminationPoint> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(Node.class, new NodeKey(new NodeId("TAPI-SBI-ABS-NODE")))
             .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                     .Node1.class)
@@ -257,7 +257,7 @@ final class OrdLink {
         try {
             writeTransaction.commit().get();
             LOG.info("A new tp {} terminating Link {} has been added  to TAPI-SBI-ABS-NODE into {} layer.",
-                tpName, linkId, NetworkUtils.OVERLAY_NETWORK_ID);
+                tpName, linkId, StringConstants.OPENROADM_TOPOLOGY);
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create new tp {} terminating link {} on TAPI-SBI-ABS-NODE ", tpName, linkId);
             return null;
@@ -267,7 +267,7 @@ final class OrdLink {
 
     private static TerminationPoint getTpofNode(String srcNode, String srcTp, DataBroker dataBroker) {
         DataObjectIdentifier<TerminationPoint> iiTp = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(Node.class, new NodeKey(new NodeId(srcNode)))
                 .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                         .Node1.class)
@@ -286,7 +286,7 @@ final class OrdLink {
                 }
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                        NetworkUtils.OVERLAY_NETWORK_ID, e);
+                        StringConstants.OPENROADM_TOPOLOGY, e);
             }
         }
         return null;

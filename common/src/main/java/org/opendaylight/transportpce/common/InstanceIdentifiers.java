@@ -33,24 +33,24 @@ public final class InstanceIdentifiers {
                 .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
                 .build();
 
-    public static final DataObjectIdentifier<Network> UNDERLAY_NETWORK_II = DataObjectIdentifier
+    public static final DataObjectIdentifier<Network> OPENROADM_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
             .build();
 
-    public static final DataObjectIdentifier<Network> OVERLAY_NETWORK_II = DataObjectIdentifier
+    public static final DataObjectIdentifier<Network> OPENROADM_TOPOLOGY_II = DataObjectIdentifier
         .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
         .build();
 
     public static final DataObjectIdentifier<Network> OTN_NETWORK_II = DataObjectIdentifier
         .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
         .build();
 
     public static final DataObjectIdentifier<Network> CLLI_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.CLLI_NETWORK)))
             .build();
 
     private InstanceIdentifiers() {
@@ -66,7 +66,7 @@ public final class InstanceIdentifiers {
     public static DataObjectIdentifier<TerminationPoint1> createNetworkTerminationPoint1IIDBuilder(
             String nodeId, String tpId) {
         return DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))
@@ -82,7 +82,7 @@ public final class InstanceIdentifiers {
     public static DataObjectIdentifier<TerminationPoint> createNetworkTerminationPointIIDBuilder(
             String nodeId, String tpId) {
         return DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))
@@ -102,7 +102,7 @@ public final class InstanceIdentifiers {
      */
     public static DataObjectIdentifier<Node1> createNodeIIDBuilder(String nodeId) {
         return DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))

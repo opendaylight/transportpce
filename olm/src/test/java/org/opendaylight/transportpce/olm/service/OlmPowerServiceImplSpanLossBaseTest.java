@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -146,7 +145,7 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     @Test
     void testCalculateSpanlossBaseLink() {
         // initialise and store openroadm-topology in datastore
-        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
         DataObjectIdentifier<Network> ietfNetworkIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, overlayTopologyKey)
                 .build();
@@ -170,7 +169,7 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     void testCalculateSpanlossBaseAll() {
 
         // initialise and store openroadm-topology in datastore
-        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
         DataObjectIdentifier<Network> ietfNetworkIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, overlayTopologyKey)
                 .build();

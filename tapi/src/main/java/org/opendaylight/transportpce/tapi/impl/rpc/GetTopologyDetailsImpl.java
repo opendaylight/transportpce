@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.topology.ConvertORToTapiTopology;
@@ -208,7 +208,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
 
     public Topology createAbstractedOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         List<Link> linkList = new ArrayList<>();
         if (openroadmTopo.augmentation(Network1.class) != null) {
             linkList.addAll(openroadmTopo.augmentation(Network1.class).getLink().values());
@@ -230,7 +230,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         while (itOtnNodeMap.hasNext()) {
             Entry<NodeId, Node> entry = itOtnNodeMap.next();
             String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
-                    .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                    .filter(sn -> sn.getNetworkRef().getValue().equals(StringConstants.OPENROADM_NETWORK))
                     .findFirst()
                     .orElseThrow().getNodeRef().getValue();
             List<String> networkPortList = new ArrayList<>();
