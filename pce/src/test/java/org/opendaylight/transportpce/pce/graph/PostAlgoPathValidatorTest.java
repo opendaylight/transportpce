@@ -417,7 +417,7 @@ class PostAlgoPathValidatorTest {
         SpectrumAssignment expected = new SpectrumAssignmentBuilder()
                 .setBeginIndex(Uint16.valueOf(760))
                 .setStopIndex(Uint16.valueOf(767))
-                .setFlexGrid(false)
+                .setFlexGrid(true)
                 .build();
 
         assertEquals(
