@@ -237,13 +237,18 @@ public class ORToTapiTopoConversionFactory {
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1),
-                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1),
+                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
                 "IfOCH",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4),
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0))))
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0),
+                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1))
+             ))
             ));
         LPN_MAP.put("DSR", LPN_MAP.get("ETH"));
         LPN_MAP.get("ODU").put("If10GE", LPN_MAP.get("ODU").get("If10GEODU2"));
@@ -895,7 +900,7 @@ public class ORToTapiTopoConversionFactory {
         LOG.debug("ConvertORToTapiTopology 722 CreateOTSCepXpdr for Nep {}", nepId);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(String.join("+", "CEP", nepNodeId))
+            .setValue(String.join("+", "CEP", nepId))
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -1276,8 +1281,8 @@ public class ORToTapiTopoConversionFactory {
         }
         LOG.debug("Entering LOOP Step1");
         double naz = 0.01;
-        Double lowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E09 ;
-        Double upSupFreq = lowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz;
+        Double lowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E012 ;
+        Double upSupFreq = lowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz;
         lowSupFreq += naz;
         // Creating OTS & OTSI_MC NEP specific attributes
         onepBldr.setSupportedPayloadStructure(
