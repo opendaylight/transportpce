@@ -196,54 +196,59 @@ public class ORtoTapiTopoConversionTools {
         LPN_MAP = new HashMap<>(Map.of(
             "ETH", new HashMap<>(Map.of(
                 "If1GEODU0", Map.of(
-                    ODUTYPEODU0.VALUE, Uint64.valueOf(0), DIGITALSIGNALTYPEGigE.VALUE, Uint64.valueOf(0)),
+                    ODUTYPEODU0.VALUE, Uint64.ZERO, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ZERO),
                 "If10GEODU2e", Map.of(
-                    ODUTYPEODU2E.VALUE, Uint64.valueOf(0), DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(0)),
+                    ODUTYPEODU2E.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
                 "If10GEODU2", Map.of(
-                    ODUTYPEODU2.VALUE, Uint64.valueOf(0), DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(0)),
-                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.valueOf(0)),
+                    ODUTYPEODU2.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
                 "If100GEODU4", Map.of(
-                    ODUTYPEODU4.VALUE, Uint64.valueOf(0), DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(0)),
-                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.valueOf(0)),
-                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)))),
-                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0)))),
+                    ODUTYPEODU4.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
+                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
+                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
+                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
             "OTU", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
-                    Map.of(OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                    Map.of(OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
-                    Map.of(OTUTYPEOTU4.VALUE, Uint64.valueOf(1)),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(OTUTYPEOTU4.VALUE, Uint64.valueOf(0)))),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ZERO))),
             "ODU", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.valueOf(0)),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.valueOf(0)),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.valueOf(0)),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)),
-                "IfOCHOTUCnODUCn", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1)),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "IfOCHOTUCnODUCn", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE),
                 "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
-                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)))),
+                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
             "DIGITAL_OTN", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.valueOf(0)),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.valueOf(0)),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.valueOf(0)),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
                 "IfOCHOTUCnODUCn",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1),
-                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
+                        OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0)))),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.valueOf(1),
-                        OTUTYPEOTUCN.VALUE, Uint64.valueOf(1)),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
+                        OTUTYPEOTUCN.VALUE, Uint64.ONE,
+                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4),
-                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.valueOf(1),
-                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.valueOf(1)),
+                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0), OTUTYPEOTU4.VALUE, Uint64.valueOf(0))))
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO,
+                        PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
+                        PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE)
+             ))
             ));
         LPN_MAP.put("DSR", LPN_MAP.get("ETH"));
         LPN_MAP.get("ODU").put("If10GE", LPN_MAP.get("ODU").get("If10GEODU2"));
@@ -731,7 +736,7 @@ public class ORtoTapiTopoConversionTools {
                 case "IfOCHOTU4ODU4Uniregen":
                     sps.add(new SupportedPayloadStructureBuilder()
                         .setMultiplexingSequence(Set.of(PHOTONICLAYERQUALIFIEROTSi.VALUE, ODUTYPEODU4.VALUE))
-                        .setNumberOfCepInstances(Uint64.valueOf(1))
+                        .setNumberOfCepInstances(Uint64.ONE)
                         .setCapacity(
                             new CapacityBuilder()
                                 .setUnit(CAPACITYUNITGBPS.VALUE)
@@ -895,7 +900,7 @@ public class ORtoTapiTopoConversionTools {
         LOG.debug("ConvertORToTapiTopology 722 CreateOTSCepXpdr for Nep {}", nepId);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(String.join("+", "CEP", nepNodeId))
+            .setValue(String.join("+", "CEP", nepId))
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -944,7 +949,7 @@ public class ORtoTapiTopoConversionTools {
             return new ArrayList<>(List.of(
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
                     .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .setNumberOfCepInstances(Uint64.ONE)
                     .build()));
         }
         LOG.debug("SIC list = {}", sicList);
@@ -970,7 +975,7 @@ public class ORtoTapiTopoConversionTools {
             for (LAYERPROTOCOLQUALIFIER qualifier: ifCapTypeMap.get(ifCapType).keySet()) {
                 sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()
                     .setLayerProtocolQualifier(qualifier)
-                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                    .setNumberOfCepInstances(Uint64.ONE)
                     .build());
             }
         }
@@ -1276,8 +1281,8 @@ public class ORtoTapiTopoConversionTools {
         }
         LOG.debug("Entering LOOP Step1");
         double naz = 0.01;
-        Double lowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E09 ;
-        Double upSupFreq = lowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E06 + naz;
+        Double lowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E012 ;
+        Double upSupFreq = lowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz;
         lowSupFreq += naz;
         // Creating OTS & OTSI_MC NEP specific attributes
         onepBldr.setSupportedPayloadStructure(
@@ -1287,8 +1292,8 @@ public class ORtoTapiTopoConversionTools {
         if (freqMap == null || freqMap.isEmpty()) {
 //                TODO: verify if we need to fill OcupiedSpectrum as follows when no lambda provisioned
 //                ospecBd
-//                    .setUpperFrequency(Uint64.valueOf(0))
-//                    .setLowerFrequency(Uint64.valueOf(0));
+//                    .setUpperFrequency(Uint64.ZERO)
+//                    .setLowerFrequency(Uint64.ZERO);
             onepBldr.setAvailablePayloadStructure(
                 createAvailablePayloadStructureForPhtncMedia(rate, false, sicColl,operModeList));
             AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
@@ -1977,7 +1982,7 @@ public class ORtoTapiTopoConversionTools {
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("ODU4"))
                         .findFirst().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)));
+                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO));
                     onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
                     if (tp1.getXpdrTpPortConnectionAttributes() == null
@@ -2086,7 +2091,7 @@ public class ORtoTapiTopoConversionTools {
                             TapiStringConstants.MC.equals(nepPhotonicSublayer)
                                 ? PHOTONICLAYERQUALIFIERMC.VALUE
                                 : PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
-                        .setNumberOfCepInstances(Uint64.valueOf(1))
+                        .setNumberOfCepInstances(Uint64.ONE)
                         .build())))
             .setDirection(Direction.BIDIRECTIONAL)
             .setLinkPortRole(PortRole.SYMMETRIC)
@@ -2143,7 +2148,7 @@ public class ORtoTapiTopoConversionTools {
             return new ArrayList<>(List.of(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
                     .service._interface.point.SupportedCepLayerProtocolQualifierInstancesBuilder()
                 .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                .setNumberOfCepInstances(Uint64.valueOf(1))
+                .setNumberOfCepInstances(Uint64.ONE)
                 .build()));
         }
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
