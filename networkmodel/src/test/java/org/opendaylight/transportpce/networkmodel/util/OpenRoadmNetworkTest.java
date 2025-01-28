@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfoBuilder;
@@ -85,7 +85,7 @@ public class OpenRoadmNetworkTest {
 
     private SupportingNode computeSupportingNode(String clli) {
         return new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
             .setNodeRef(new NodeId(clli))
             .build();
     }

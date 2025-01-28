@@ -34,7 +34,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
@@ -100,13 +100,13 @@ class GnpyUtilitiesImplTest extends AbstractTest {
 
             networkReader = new JsonReader(gnpyNetwork);
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
-            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_NETWORK);
             // load openroadm-topology
             Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
                     StandardCharsets.UTF_8);
             topoReader = new JsonReader(gnpyTopo);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader, Networks.QNAME);
-            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (FileNotFoundException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");

@@ -33,7 +33,6 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
@@ -207,13 +206,13 @@ public class PceGraphTest extends AbstractTest {
             Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
             networkReader = new JsonReader(gnpyNetwork);
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader, Networks.QNAME);
-            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_NETWORK);
             // load openroadm-topology
             Reader gnpyTopo = new FileReader("src/test/resources/topologyData/or-base-topology.json",
                     StandardCharsets.UTF_8);
             topoReader = new JsonReader(gnpyTopo);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader, Networks.QNAME);
-            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (IOException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
@@ -451,9 +450,9 @@ public class PceGraphTest extends AbstractTest {
 
     public static Node createNetworkNode(String nodeId, OpenroadmNodeType nodeType) {
         SupportingNode supportingNode = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
             .setNodeRef(new NodeId("node1"))
-            .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
+            .withKey(new SupportingNodeKey(new NetworkId(StringConstants.CLLI_NETWORK),
                 new NodeId("node1")))
             .build();
         return new NodeBuilder()
@@ -481,9 +480,9 @@ public class PceGraphTest extends AbstractTest {
 
     public static Node createTopologyNode(String nodeId, OpenroadmNodeType nodeType) {
         SupportingNode supportingNode = new SupportingNodeBuilder()
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .setNodeRef(new NodeId("node1"))
-            .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID),
+            .withKey(new SupportingNodeKey(new NetworkId(StringConstants.OPENROADM_NETWORK),
                 new NodeId("node1")))
             .build();
         return new NodeBuilder()

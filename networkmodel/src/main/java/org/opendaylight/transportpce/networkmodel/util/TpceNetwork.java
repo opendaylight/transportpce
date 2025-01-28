@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.networks.network.network.types.ClliNetworkBuilder;
@@ -72,15 +72,15 @@ public class TpceNetwork {
     private static Network createNetwork(String networkId) {
         NetworkTypesBuilder networkTypesBldr = new NetworkTypesBuilder();
         switch (networkId) {
-            case NetworkUtils.CLLI_NETWORK_ID:
+            case StringConstants.CLLI_NETWORK:
                 Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
                     .setClliNetwork(new ClliNetworkBuilder().build())
                     .build();
                 networkTypesBldr.addAugmentation(ordClli);
                 break;
-            case NetworkUtils.UNDERLAY_NETWORK_ID:
-            case NetworkUtils.OVERLAY_NETWORK_ID:
-            case NetworkUtils.OTN_NETWORK_ID:
+            case StringConstants.OPENROADM_NETWORK:
+            case StringConstants.OPENROADM_TOPOLOGY:
+            case StringConstants.OTN_NETWORK:
                 Augmentation<NetworkTypes> ordTopology = new org.opendaylight.yang.gen.v1.http
                     .org.openroadm.common.network.rev230526.NetworkTypes1Builder()
                     .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())

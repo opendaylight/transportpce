@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
@@ -184,7 +184,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                     .read(
                         LogicalDatastoreType.CONFIGURATION,
                         DataObjectIdentifier.builder(Networks.class)
-                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                             .augmentation(Network1.class)
                             .child(Link.class, new LinkKey(oppositeLink))
                             .build())

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
@@ -430,13 +430,13 @@ public final class OpenRoadmTopology {
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
         SupportingNode support1 = new SupportingNodeBuilder()
-                .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID), new NodeId(nodeId)))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .withKey(new SupportingNodeKey(new NetworkId(StringConstants.OPENROADM_NETWORK), new NodeId(nodeId)))
+                .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
                 .setNodeRef(new NodeId(nodeId))
                 .build();
         SupportingNode support2 = new SupportingNodeBuilder()
-                .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)))
-                .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
+                .withKey(new SupportingNodeKey(new NetworkId(StringConstants.CLLI_NETWORK), new NodeId(clli)))
+                .setNetworkRef(new NetworkId(StringConstants.CLLI_NETWORK))
                 .setNodeRef(new NodeId(clli))
                 .build();
         Map<SupportingNodeKey, SupportingNode> supportlist = new HashMap<>();
@@ -589,7 +589,7 @@ public final class OpenRoadmTopology {
         LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
             DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .augmentation(Network1.class)
                 .child(Link.class, new LinkKey(linkId))
                 .build();
@@ -631,7 +631,7 @@ public final class OpenRoadmTopology {
             .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
         return DataObjectIdentifier
                 .builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))
@@ -652,7 +652,7 @@ public final class OpenRoadmTopology {
      */
     public static DataObjectIdentifier<Node1> createNetworkNodeIID(String nodeId) {
         return DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                      new NodeKey(new NodeId(nodeId)))
@@ -668,7 +668,7 @@ public final class OpenRoadmTopology {
     public static DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
             .Node1> createCommonNetworkNodeIID(String nodeId) {
         return DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                         .networks.network.Node.class,
                     new NodeKey(new NodeId(nodeId)))

@@ -16,7 +16,7 @@ import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.cp.to.degree.CpToDegree;
@@ -105,7 +105,7 @@ public final class TransactionUtils {
             .rev180226.networks.Network getOverLayNetwork() {
         SupportingNode supportingNode = new SupportingNodeBuilder()
                 .setNodeRef(new NodeId("node 1"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .build();
         NodeBuilder node1Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
@@ -116,7 +116,7 @@ public final class TransactionUtils {
         nodes.put(node1.key(),node1);
         SupportingNode supportingNode2 = new SupportingNodeBuilder()
             .setNodeRef(new NodeId("node 2"))
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .build();
         NodeBuilder node2Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 2"))
@@ -126,7 +126,7 @@ public final class TransactionUtils {
         nodes.put(node2.key(),node2);
         SupportingNode supportingNode3 = new SupportingNodeBuilder()
             .setNodeRef(new NodeId("node 3"))
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .build();
         NodeBuilder node3Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 3"))
@@ -136,7 +136,7 @@ public final class TransactionUtils {
         nodes.put(node3.key(),node3);
         SupportingNode supportingNode4 = new SupportingNodeBuilder()
             .setNodeRef(new NodeId("node 4"))
-            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .setNetworkRef(new NetworkId(StringConstants.OPENROADM_NETWORK))
             .build();
         NodeBuilder node4Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 4"))
@@ -149,7 +149,7 @@ public final class TransactionUtils {
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
                     .NetworkBuilder()
                 .setNode(nodes)
-                .setNetworkId(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+                .setNetworkId(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network =
             networkBuilder.build();
         Optional.of(network);

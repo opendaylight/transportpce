@@ -18,7 +18,7 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.links.input.grouping.LinksInput;
@@ -91,7 +91,7 @@ final class Rdm2XpdrLink {
         }
         Network network = networkBldr.build();
         DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .build();
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID, network);
@@ -140,7 +140,7 @@ final class Rdm2XpdrLink {
         }
         Network network = networkBldr.build();
         DataObjectIdentifier<Network> nwIID = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .build();
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID, network);
@@ -229,7 +229,7 @@ final class Rdm2XpdrLink {
         Link link = linkBuilder.build();
         Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableMap.of(link.key(),link));
 
-        NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
+        NetworkId nwId = new NetworkId(StringConstants.OPENROADM_TOPOLOGY);
         Node node = nodeBldr.build();
         return new NetworkBuilder()
             .setNetworkId(nwId)
@@ -240,7 +240,7 @@ final class Rdm2XpdrLink {
 
     private static TerminationPoint getTpofNode(String srcNode, String srcTp, DataBroker dataBroker) {
         DataObjectIdentifier<TerminationPoint> iiTp = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(Node.class, new NodeKey(new NodeId(srcNode)))
             .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .Node1.class)
@@ -259,7 +259,7 @@ final class Rdm2XpdrLink {
                 }
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                    NetworkUtils.OVERLAY_NETWORK_ID, e);
+                    StringConstants.OPENROADM_TOPOLOGY, e);
             }
         }
         return null;
@@ -269,7 +269,7 @@ final class Rdm2XpdrLink {
         DataObjectIdentifier<
                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.Node1>
             nodeIID = DataObjectIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(Node.class, new NodeKey(new NodeId(srcNode)))
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
                     .transportpce.or.network.augmentation.rev240923.Node1.class)

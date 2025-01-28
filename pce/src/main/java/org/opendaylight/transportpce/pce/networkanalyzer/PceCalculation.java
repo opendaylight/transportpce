@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
@@ -221,9 +220,9 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_OTUC3:
             case StringConstants.SERVICE_TYPE_OTUC4:
             case StringConstants.SERVICE_TYPE_OTHER:
-                LOG.debug("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
+                LOG.debug("readMdSal: network {}", StringConstants.OPENROADM_TOPOLOGY);
                 nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                     .build();
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
@@ -234,9 +233,9 @@ public class PceCalculation {
             case StringConstants.SERVICE_TYPE_ODUC4:
             case StringConstants.SERVICE_TYPE_10GE:
             case StringConstants.SERVICE_TYPE_1GE:
-                LOG.debug("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
+                LOG.debug("readMdSal: network {}", StringConstants.OTN_NETWORK);
                 nwInstanceIdentifier = DataObjectIdentifier.builder(Networks.class)
-                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                    .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
                     .build();
                 break;
             default:
