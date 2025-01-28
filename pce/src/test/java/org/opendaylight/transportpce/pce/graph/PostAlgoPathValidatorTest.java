@@ -423,10 +423,10 @@ class PostAlgoPathValidatorTest {
         //Slot 36 - 51 is occupied on ROADM-B-DEG1, so first possible center frequency is 92 (well, between 91
         //and 92 really). A 50GHz service need 8 x 6.25GHz slots.
         SpectrumAssignment expected = new SpectrumAssignmentBuilder()
-                .setBeginIndex(Uint16.valueOf(88))
-                .setStopIndex(Uint16.valueOf(95))
-                .setFlexGrid(false)
-                .build();
+            .setBeginIndex(Uint16.valueOf(88))
+            .setStopIndex(Uint16.valueOf(95))
+            .setFlexGrid(true)
+            .build();
 
         Assertions.assertEquals(
                 expected,
