@@ -1069,22 +1069,12 @@ public class PostAlgoPathValidator {
             String pceNodeVersion = pceNode.getVersion();
             BigDecimal sltWdthGran = pceNode.getSlotWidthGranularity();
             if (StringConstants.OPENROADM_DEVICE_VERSION_1_2_1.equals(pceNodeVersion)) {
-                LOG.debug("Node {}: version is {} with slot width granularity {} - fixed grid mode",
-                    pceNode.getNodeId(), pceNodeVersion, sltWdthGran);
                 isFlexGrid = false;
-                continue;
             }
-            if (!sltWdthGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
-                continue;
-            }
-            BigDecimal ctralFreqGran = pceNode.getCentralFreqGranularity();
-            if (!ctralFreqGran.setScale(0, RoundingMode.CEILING).equals(GridConstant.SLOT_WIDTH_50)) {
-                continue;
-            }
+
             LOG.debug(
-                "Node {}: version is {} with slot width and central frequency granularities {} {} - fixed grid mode",
-                pceNode.getNodeId(), pceNodeVersion, sltWdthGran, ctralFreqGran);
-            isFlexGrid = false;
+                "Node {}: version is {} with slot width and central frequency granularities {} {}, flex grid = {}",
+                pceNode.getNodeId(), pceNodeVersion, sltWdthGran, pceNode.getCentralFreqGranularity(), isFlexGrid);
         }
 
         LOG.debug("Available bitset on nodes: {}", result);
