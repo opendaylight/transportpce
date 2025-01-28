@@ -18,6 +18,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -50,8 +51,6 @@ import org.opendaylight.transportpce.tapi.utils.TapiInitialORMapping;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.transportpce.tapi.utils.TapiTopoContextInit;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
@@ -88,10 +87,6 @@ public class TapiProvider {
     private static final DataObjectReference<Node> NETCONF_NODE_II = DataObjectReference.builder(NetworkTopology.class)
             .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
             .child(Node.class)
-            .build();
-    private static final DataObjectReference<Nodes> MAPPING_II = DataObjectReference.builder(Network.class)
-            .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network
-                    .Nodes.class)
             .build();
     private static final DataObjectReference<Link> LINK_II = DataObjectReference.builder(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
@@ -170,8 +165,8 @@ public class TapiProvider {
                 orLinkListener));
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,
                 topologyListener));
-        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, MAPPING_II,
-                tapiPortMappingListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
+                InstanceIdentifiers.PORTMAPPING_NODE_II, tapiPortMappingListener));
         TapiListener tapiListener = new TapiListener();
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 DataObjectReference.builder(ServiceInterfacePoints.class).build(),

@@ -89,7 +89,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -573,9 +573,10 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     private String getRealNodeId(String mappedNodeId) {
-        KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII = InstanceIdentifiers.OPENROADM_TOPOLOGY_II
-                .toLegacy()
-                .child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
+        WithKey<Node, NodeKey> mappedNodeII = InstanceIdentifiers.OPENROADM_TOPOLOGY_II
+                .toBuilder()
+                .child(Node.class, new NodeKey(new NodeId(mappedNodeId)))
+                .build();
         Optional<Node> realNode;
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();

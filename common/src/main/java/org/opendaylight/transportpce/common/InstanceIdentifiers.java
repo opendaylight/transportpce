@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common;
 
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -25,32 +26,40 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 
 public final class InstanceIdentifiers {
 
-    public static final DataObjectIdentifier<Topology> NETCONF_TOPOLOGY_II =
-            DataObjectIdentifier.builder(NetworkTopology.class)
-                .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
-                .build();
+    public static final WithKey<Topology, TopologyKey> NETCONF_TOPOLOGY_II = DataObjectIdentifier
+            .builder(NetworkTopology.class)
+            .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())))
+            .build();
 
-    public static final DataObjectIdentifier<Network> OPENROADM_NETWORK_II = DataObjectIdentifier
+    public static final WithKey<Network, NetworkKey> OPENROADM_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_NETWORK)))
             .build();
 
-    public static final DataObjectIdentifier<Network> OPENROADM_TOPOLOGY_II = DataObjectIdentifier
-        .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-        .build();
+    public static final WithKey<Network, NetworkKey> OPENROADM_TOPOLOGY_II = DataObjectIdentifier
+            .builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
+            .build();
 
-    public static final DataObjectIdentifier<Network> OTN_NETWORK_II = DataObjectIdentifier
-        .builder(Networks.class)
-        .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
-        .build();
+    public static final WithKey<Network, NetworkKey> OTN_NETWORK_II = DataObjectIdentifier
+            .builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OTN_NETWORK)))
+            .build();
 
-    public static final DataObjectIdentifier<Network> CLLI_NETWORK_II = DataObjectIdentifier
+    public static final WithKey<Network, NetworkKey> CLLI_NETWORK_II = DataObjectIdentifier
             .builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.CLLI_NETWORK)))
+            .build();
+
+    public static final DataObjectReference<Nodes> PORTMAPPING_NODE_II = DataObjectReference
+            .builder(
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network.class)
+            .child(Nodes.class)
             .build();
 
     private InstanceIdentifiers() {
@@ -110,5 +119,4 @@ public final class InstanceIdentifiers {
                         .Node1.class)
                 .build();
     }
-
 }
