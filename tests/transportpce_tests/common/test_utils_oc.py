@@ -35,7 +35,8 @@ def metadata_input():
                             "operational-mode": [
                                 {
                                     "mode-id": 1,
-                                    "catalog-id": "4308"
+                                    "catalog-id": "4308",
+                                    "rate": "400"
                                 }
                             ]
                         },
@@ -50,6 +51,34 @@ def metadata_input():
                                     {
                                         "position": 2,
                                         "interface-type": "openconfig-transport-types:PROT_ODUCN",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "part-no": "Transceiver-client-part-1",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308",
+                                    "rate": "100"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "openconfig-transport-types:PROT_100GE",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "openconfig-transport-types:PROT_ODU4",
                                         "max-interfaces": 1
                                     }
                                 ]
@@ -99,9 +128,27 @@ def metadata_input():
                                         "nbl-id": 1,
                                         "connectable-port": [
                                             5,
-                                            1,
-                                            2,
-                                            3,
+                                            1
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 2,
+                                        "connectable-port": [
+                                            5,
+                                            2
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 3,
+                                        "connectable-port": [
+                                            5,
+                                            3
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 4,
+                                        "connectable-port": [
+                                            5,
                                             4
                                         ]
                                     }

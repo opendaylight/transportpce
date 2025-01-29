@@ -7166,7 +7166,7 @@
         <description>QSFP TRANSCEIVER 1</description>
         <mfg-name>FS</mfg-name>
         <serial-no>C2206417554</serial-no>
-        <part-no>QSFP28-LR4-100G</part-no>
+        <part-no>Transceiver-client-part-1</part-no>
         <removable>true</removable>
         <oper-status xmlns:oc-platform-types="http://openconfig.net/yang/platform-types">oc-platform-types:ACTIVE</oper-status>
         <parent>client-qsfp-1</parent>
