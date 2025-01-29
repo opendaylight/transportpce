@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1e9e9a_4faea001",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/Message.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:07:50Z",
+      "side": 1,
+      "message": "can you please use the style code mainly used in the project (arguments are preferably on the same line, +8 spaces when wrapped onto the next line)",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 67
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a0437b_ae5a82ce",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/Message.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:07:50Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 28,
+        "startChar": 37,
+        "endLine": 28,
+        "endChar": 64
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58595629_6f44c04e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/WeightedResultMessage.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:07:50Z",
+      "side": 1,
+      "message": "idem...",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 53
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
