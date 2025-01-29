@@ -84,6 +84,7 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
                 'logical-connection-point': 'XPDR1-NETWORK5',
                 'port-qual': 'switch-network',
                 'port-oper-state': 'ACTIVE',
+                "rate": "400",
                 'xpdr-type': 'mpdr',
                 'supporting-circuit-pack-name': 'cfp2-transceiver-1',
                 'lcp-hash-val': 'AOVxBCXPOzbw',
@@ -101,9 +102,11 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
             {'logical-connection-point': 'XPDR1-CLIENT1',
              'port-qual': 'switch-client',
              'port-oper-state': 'ACTIVE',
+             'rate': '100',
              'xpdr-type': 'mpdr',
              'supporting-circuit-pack-name': 'qsfp-transceiver-1',
              'lcp-hash-val': 'ALoMFfw9DapP',
+             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
              'port-direction': 'bidirectional',
              'port-admin-state': 'ENABLED',
              'supporting-port': 'client-qsfp-1'
@@ -116,12 +119,11 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("blocking",
                          response['switching-pool-lcp'][0]['switching-pool-type'])
-        self.assertEqual(1,
+        self.assertEqual(4,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
         actual_lcp_list = response['switching-pool-lcp'][0]['non-blocking-list'][0]['lcp-list']
         sorted_actual_lcp_list = sorted(actual_lcp_list)
-        expected_lcp_list = sorted(['XPDR1-CLIENT4', 'XPDR1-CLIENT3',
-                                   'XPDR1-NETWORK5', 'XPDR1-CLIENT2', 'XPDR1-CLIENT1'])
+        expected_lcp_list = sorted(['XPDR1-CLIENT4', 'XPDR1-NETWORK5'])
         self.assertEqual(sorted_actual_lcp_list, expected_lcp_list)
 
     def test_09_check_mccapprofile(self):

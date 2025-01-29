@@ -196,6 +196,8 @@ public class OCPortMappingTest {
                 componentPort, null);
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
+        String rate = "";
+        doReturn(rate).when(ocPortMappingVersion190Test).getRate(transceiver.get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
         doNothing().when(ocPortMappingVersion190Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
         Map<String, String> lcpMap = new HashMap<>();
@@ -203,7 +205,7 @@ public class OCPortMappingTest {
         Port1 augmentationPort = componentPort.getPort().augmentation(Port1.class);
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentPort, augmentationPort,
                 NETWORK_TOKEN, 1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf);
+                componentList, supportedIntf, rate);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         Map<String, Set<String>> lcpNamingMap = ocPortMappingVersion190Test.createNetworkLcpMapping("node1",
@@ -232,6 +234,8 @@ public class OCPortMappingTest {
                 componentPort, null);
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
+        String rate = "";
+        doReturn(rate).when(ocPortMappingVersion190Test).getRate(transceiver.get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
         doNothing().when(ocPortMappingVersion190Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
         Port1 augmentationPort = componentPort.getPort().augmentation(Port1.class);
@@ -239,7 +243,7 @@ public class OCPortMappingTest {
         Map<String, Mapping> mappingMap = new HashMap<>();
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentPort, augmentationPort,
                 CLIENT_TOKEN,1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf);
+                componentList, supportedIntf, rate);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         ocPortMappingVersion190Test.createClientLcpMapping("node1", componentList, lcpMap, mappingMap,
@@ -366,7 +370,7 @@ public class OCPortMappingTest {
         Map<LineCardKey, LineCard> lineCardMap = new HashMap<>();
         lineCardMap.put(lineCard.key(),lineCard);
         OperationalMode operationalMode = new OperationalModeBuilder().setModeId(Uint16.valueOf(1))
-                .setCatalogId("1").build();
+                .setCatalogId("1").setRate("400").build();
         Map<OperationalModeKey, OperationalMode> operationalModeMap = new HashMap<>();
         operationalModeMap.put(operationalMode.key(), operationalMode);
         OperationalModes operationalModes = new OperationalModesBuilder()

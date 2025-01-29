@@ -384,13 +384,14 @@ public class OCPortMappingVersion190 {
                     .getOpticalPortType().toString().contains(TERMINALLINE)) {
                 Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 Set<SupportedIfCapability> supportedIfCapabilities = null;
+                String rate = "";
                 if (transceiver != null) {
                     supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                     createCentralFrequency(transceiver, frequencyGHzSet);
+                    rate = getRate(transceiver);
                 } else {
                     LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
                 }
-                Set<String> clientSet = new HashSet<>();
                 String network;
                 Map<SupportedPortKey, SupportedPort> supportedPortMap = lineCardMetaData.getSupportedPort();
                 XpdrType xpdrType = lineCardMetaData.getXpdrType();
@@ -401,29 +402,33 @@ public class OCPortMappingVersion190 {
                     Uint8 networkPortId = supportedPort.orElseThrow().getId();
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.NETWORK_TOKEN,
                             networkPortId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
-                            supportedIfCapabilities);
+                            supportedIfCapabilities, rate);
                     network =
                             PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, networkPortId.intValue(),
                                     StringConstants.NETWORK_TOKEN);
-                    var nblValue =
-                            Objects.requireNonNull(nblMap).values().stream().toList().stream()
+                    var nblList = Objects.requireNonNull(nblMap).values().stream().toList().stream()
                                     .filter(nonBlockingList -> Objects.requireNonNull(nonBlockingList
-                                                    .getConnectablePort()).contains(networkPortId)).findFirst();
-                    if (nblValue.isPresent()) {
-                        Set<Uint8> connectablePorts = nblValue.orElseThrow().getConnectablePort();
-                        Set<Uint8> connectablePortsSet = new HashSet<>(Objects.requireNonNull(connectablePorts));
-                        Objects.requireNonNull(connectablePortsSet).remove(networkPortId);
-                        List<Optional<SupportedPort>> clientPorts =
-                                getSupportedClientPorts(connectablePortsSet, supportedPortMap);
-                        Set<Uint8> neClientIds = clientPortsExistsOnNELineCard(clientPorts, subcomponents);
-                        for (Uint8 unit8 : neClientIds) {
-                            clientSet.add(PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex,
-                                    unit8.intValue(), StringConstants.CLIENT_TOKEN));
+                                            .getConnectablePort()).contains(networkPortId)).toList();
+                    Set<String> clients = new HashSet<>();
+                    for (NonBlockingList nblValue : nblList) {
+                        if (nblValue != null) {
+                            Set<String> clientSet = new HashSet<>();
+                            Set<Uint8> connectablePorts = nblValue.getConnectablePort();
+                            Set<Uint8> connectablePortsSet = new HashSet<>(Objects.requireNonNull(connectablePorts));
+                            Objects.requireNonNull(connectablePortsSet).remove(networkPortId);
+                            List<Optional<SupportedPort>> clientPorts =
+                                    getSupportedClientPorts(connectablePortsSet, supportedPortMap);
+                            Set<Uint8> neClientIds = clientPortsExistsOnNELineCard(clientPorts, subcomponents);
+                            for (Uint8 unit8 : neClientIds) {
+                                clientSet.add(PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex,
+                                        unit8.intValue(), StringConstants.CLIENT_TOKEN));
+                            }
+                            clients.addAll(clientSet);
+                            createSwitchingPool(mappingMap, nblValue, xpdrType, clientSet, network, nbMap,
+                                    nblMap, networkPortId);
                         }
-                        createSwitchingPool(mappingMap, nblValue.orElseThrow(), xpdrType, clientSet, network, nbMap,
-                                nblMap, networkPortId);
-                        lcpNamingMap.put(network, clientSet);
                     }
+                    lcpNamingMap.put(network, clients);
                 }
             }
         }
@@ -575,7 +580,8 @@ public class OCPortMappingVersion190 {
                     .build();
             String key = null;
             for (Map.Entry<String, NonBlockingList> entry: nblMap.entrySet()) {
-                if (entry.getValue().getConnectablePort().contains(networkPortId)) {
+                if (entry.getValue().getConnectablePort() != null
+                        && entry.getValue().getConnectablePort().equals(nblVal.getConnectablePort())) {
                     key = entry.getKey();
                 }
             }
@@ -586,7 +592,7 @@ public class OCPortMappingVersion190 {
                 String clientConnectionMapLcp = clientList.stream().findFirst().orElseThrow();
                 mappingMap.put(network, createXpdrMappingObject(null, null, null,
                         null, null, mapping, clientConnectionMapLcp,
-                        null, null,null));
+                        null, null, null, null));
             }
         }
     }
@@ -639,15 +645,17 @@ public class OCPortMappingVersion190 {
                             PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, supportedId.intValue(),
                                     StringConstants.CLIENT_TOKEN);
                     Set<SupportedIfCapability> supportedIfCapabilities = null;
+                    String rate = "";
                     if (transceiver != null) {
                         supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                         createCentralFrequency(transceiver, frequencyGHzSet);
+                        rate = getRate(transceiver);
                     } else {
                         LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
                     }
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.CLIENT_TOKEN,
                             supportedId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
-                            supportedIfCapabilities);
+                            supportedIfCapabilities, rate);
                     if (xpdrType.getName().equalsIgnoreCase(XpdrType.TPDR.getName())) {
                         String networkConnectionMapLcp = null;
                         for (Map.Entry<String, Set<String>> stringSetEntry : lcpNamingMap.entrySet()) {
@@ -661,7 +669,7 @@ public class OCPortMappingVersion190 {
                             Mapping mapping = mappingMap.get(clientLCPName);
                             mappingMap.put(clientLCPName, createXpdrMappingObject(null, null,
                                     null, null, null, mapping,
-                                    networkConnectionMapLcp, null, null, null));
+                                    networkConnectionMapLcp, null, null, null, rate));
                         }
                     }
                 }
@@ -698,13 +706,13 @@ public class OCPortMappingVersion190 {
     protected void createLcpMapping(String nodeId, Component portComponent, Port1 augmentationPort, String token,
                                   int lcpValue, Map<String, String> lcpMap, Map<String, Mapping> mappingMap,
                                   XpdrType xpdrType, int xpdrIndex, List<Component> componentsList,
-                                  Set<SupportedIfCapability> supportedIfCapabilities) {
+                                  Set<SupportedIfCapability> supportedIfCapabilities, String rate) {
         String lcpName = PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, lcpValue, token);
         String supportingCircuitPackName = getSupportingCircuitPackName(componentsList, portComponent);
         lcpMap.put(supportingCircuitPackName + '+' + portComponent.getName(), lcpName);
         mappingMap.put(lcpName, createXpdrMappingObject(nodeId, portComponent, augmentationPort,
                 supportingCircuitPackName, lcpName, null, null, xpdrType,
-                supportedIfCapabilities, token));
+                supportedIfCapabilities, token, rate));
     }
 
     /**
@@ -801,6 +809,19 @@ public class OCPortMappingVersion190 {
         return false;
     }
 
+    protected String getRate(Transceiver transceiver) {
+        List<OperationalMode> operationalModes = getOperationalModes(transceiver);
+        String rate = "";
+        if (!operationalModes.isEmpty()) {
+            for (OperationalMode operationalMode : operationalModes) {
+                rate = operationalMode.getRate();
+            }
+        } else {
+            LOG.error("Operational mode does not exist for Transceiver in metadata. Unable to get rate");
+        }
+        return rate;
+    }
+
     /**
      * This method retrieves central frequency granularity for operational modes.
      * We read the list of supported operational-modes from the NE. For each operational-mode,
@@ -815,11 +836,8 @@ public class OCPortMappingVersion190 {
      */
     protected void createCentralFrequency(Transceiver transceiver , Set<Float> frequencySet) {
         CatalogUtils catalogUtils = new CatalogUtils(networkTransactionService);
-        if (transceiver.getOperationalModes() != null && transceiver.getOperationalModes().getOperationalMode()
-                != null) {
-            List<OperationalMode> operationalModeList =
-                    Objects.requireNonNull(transceiver.getOperationalModes().getOperationalMode()).values()
-                            .stream().toList();
+        List<OperationalMode> operationalModeList = getOperationalModes(transceiver);
+        if (!operationalModeList.isEmpty()) {
             for (OperationalMode operationalMode : operationalModeList) {
                 String centerFreqGranularity = catalogUtils.getCFGranularity(operationalMode.getCatalogId());
                 if (centerFreqGranularity != null) {
@@ -829,6 +847,17 @@ public class OCPortMappingVersion190 {
         } else {
             LOG.error("Operational mode does not exist for Transceiver in metadata");
         }
+    }
+
+    private List<OperationalMode> getOperationalModes(Transceiver transceiver) {
+        List<OperationalMode> operationalModes = new ArrayList<>();
+        if (transceiver.getOperationalModes() != null
+                && transceiver.getOperationalModes().getOperationalMode() != null) {
+            operationalModes =
+                    Objects.requireNonNull(transceiver.getOperationalModes().getOperationalMode()).values()
+                            .stream().toList();
+        }
+        return operationalModes;
     }
 
     /**
@@ -858,13 +887,14 @@ public class OCPortMappingVersion190 {
     private Mapping createXpdrMappingObject(String nodeId, Component portComponent, Port1 augmentationPort,
                                             String supportingCircuitPackName, String logicalConnectionPoint,
                                             Mapping mapping, String connectionMapLcp, XpdrType xpdrType,
-                                            Set<SupportedIfCapability> supportedIfCapabilities, String token) {
+                                            Set<SupportedIfCapability> supportedIfCapabilities, String token,
+                                            String rate) {
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
         }
         return createNewXpdrMapping(nodeId, portComponent, augmentationPort,
-                supportingCircuitPackName, logicalConnectionPoint, xpdrType, supportedIfCapabilities, token);
+                supportingCircuitPackName, logicalConnectionPoint, xpdrType, supportedIfCapabilities, token, rate);
     }
 
     /**
@@ -890,14 +920,15 @@ public class OCPortMappingVersion190 {
     private Mapping createNewXpdrMapping(String nodeId, Component portComponent, Port1 augmentationPort,
                                          String supportingCircuitPackName, String logicalConnectionPoint,
                                          XpdrType xpdrType, Set<SupportedIfCapability> supportedIfCapabilities,
-                                         String token) {
+                                         String token, String rate) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(supportingCircuitPackName)
                 .setSupportingPort(portComponent.getName())
                 .setPortDirection(BIDIRECTIONAL)
-                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint));
+                .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
+                .setRate(rate);
         if (augmentationPort.getOpticalPort().getState().getAdminState() != null) {
             mpBldr.setPortAdminState(augmentationPort.getOpticalPort().getState().getAdminState().getName());
         } else if (augmentationPort.getOpticalPort().getConfig().getAdminState() != null) {

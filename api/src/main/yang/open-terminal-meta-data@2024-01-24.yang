@@ -57,6 +57,12 @@ module open-terminal-meta-data {
               description
                 "Corresponding operational-mode-id in the catalog.";
               }
+
+            leaf rate {
+             type string;
+             description
+                "Rate supported by the port";
+             }
           }
         }
         leaf-list supported-operational-mode {
