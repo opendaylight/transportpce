@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b13de2_6aed5358",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:09:58Z",
+      "side": 1,
+      "message": "Thank you Joakim for this new feature.\nOK with it.\nDo you think it could be possible to, may be adapt/complement some existing functional test to see the effects of this change?\nMay be with the output of some RPC?",
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360d43ef_f5255acb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:09:58Z",
+      "side": 1,
+      "message": "Please keep the original indentation.",
+      "range": {
+        "startLine": 267,
+        "startChar": 24,
+        "endLine": 267,
+        "endChar": 30
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84c60636_a9911bc5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:09:58Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 275,
+        "startChar": 24,
+        "endLine": 275,
+        "endChar": 29
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06a3fa6b_c1f5279b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-01-29T15:09:58Z",
+      "side": 1,
+      "message": "idem...",
+      "range": {
+        "startLine": 286,
+        "startChar": 8,
+        "endLine": 286,
+        "endChar": 12
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
