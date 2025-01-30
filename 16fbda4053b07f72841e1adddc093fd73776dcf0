@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db12a15_1ffc834f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/Message.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a1e9e9a_4faea001",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 67
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11a0437b_ae5a82ce",
@@ -47,6 +71,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1e6b23d_8dfa2d33",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/Message.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "11a0437b_ae5a82ce",
+      "range": {
+        "startLine": 28,
+        "startChar": 37,
+        "endLine": 28,
+        "endChar": 64
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58595629_6f44c04e",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-01-29T15:07:50Z",
       "side": 1,
       "message": "idem...",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 53
+      },
+      "revId": "16fbda4053b07f72841e1adddc093fd73776dcf0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c45bcf0_078e10bf",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/result/WeightedResultMessage.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58595629_6f44c04e",
       "range": {
         "startLine": 20,
         "startChar": 8,
