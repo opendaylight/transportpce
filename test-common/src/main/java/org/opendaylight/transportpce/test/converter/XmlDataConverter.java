@@ -8,11 +8,13 @@
 package org.opendaylight.transportpce.test.converter;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Set;
 import javax.xml.XMLConstants;
@@ -68,7 +70,18 @@ public class XmlDataConverter extends AbstractDataConverter {
             nodeWriter.flush();
             return writer.toString();
         } catch (XMLStreamException | IOException e) {
-            throw new ProcessingException("Error serializing a Network1 to the output stream", e);
+            throw new ProcessingException("Error serializing a DataObject to the output stream", e);
+        }
+    }
+
+    @Override
+    public void serializeToFile(DataObjectIdentifier id, DataObject dataContainer, String filename)
+            throws ProcessingException {
+        try (FileWriter fileWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
+            String output = serialize(id, dataContainer);
+            fileWriter.write(output);
+        } catch (IOException e) {
+            throw new ProcessingException("Error serializing a DataObject to the output file", e);
         }
     }
 
@@ -89,7 +102,6 @@ public class XmlDataConverter extends AbstractDataConverter {
             XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(value));
             xmlParser.parse(reader);
             xmlParser.flush();
-            xmlParser.close();
 
             Optional<NormalizedNode> nodeOpt = Optional.ofNullable(resultHolder.getResult().data());
             NormalizedNode node = nodeOpt.orElseThrow();
@@ -98,7 +110,7 @@ public class XmlDataConverter extends AbstractDataConverter {
             DataObject result = getBindingCodecContext().fromNormalizedNode(path, data.orElseThrow()).getValue();
             return result;
         } catch (IOException | XMLStreamException e) {
-            throw new ProcessingException("Error serializing a Network1 to the output stream", e);
+            throw new ProcessingException("Error deserializing an XML string to the DataObject", e);
         }
     }
 
@@ -119,7 +131,6 @@ public class XmlDataConverter extends AbstractDataConverter {
             XMLStreamReader reader = inputFactory.createXMLStreamReader(new StringReader(value));
             xmlParser.parse(reader);
             xmlParser.flush();
-            xmlParser.close();
 
             Optional<NormalizedNode> nodeOpt = Optional.ofNullable(resultHolder.getResult().data());
             NormalizedNode node = nodeOpt.orElseThrow();
@@ -128,7 +139,7 @@ public class XmlDataConverter extends AbstractDataConverter {
             DataObject result = getBindingCodecContext().fromNormalizedNode(path, data.orElseThrow()).getValue();
             return result;
         } catch (IOException | XMLStreamException e) {
-            throw new ProcessingException("Error serializing a Network1 to the output stream", e);
+            throw new ProcessingException("Error deserializing a reader to the output DataObject", e);
         }
     }
 

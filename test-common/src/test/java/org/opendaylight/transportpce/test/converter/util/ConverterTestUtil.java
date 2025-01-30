@@ -47,7 +47,7 @@ public final class ConverterTestUtil {
                 .setType(EthernetCsmacd.VALUE)
                 .setOperationalState(State.InService)
                 .build();
-        Map<InterfaceKey, Interface> interfaceMap = new HashMap();
+        Map<InterfaceKey, Interface> interfaceMap = new HashMap<>();
         interfaceMap.put(interfaceList.key(), interfaceList);
         SupportingPortList supPortList = new SupportingPortListBuilder()
             .setIndex(Uint8.valueOf(1))

@@ -10,7 +10,9 @@ package org.opendaylight.transportpce.test.converter;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -51,6 +53,26 @@ class XmlDataConverterTest {
                     "OrgOpenroadmDevice should be as in the device.json file");
         } catch (IOException e1) {
             fail("Cannot load json file with expected result");
+        }
+    }
+
+    @Test
+    void serializeToFileTest() {
+        final var fileName = "testSerializeToXmlFile.xml";
+        XmlDataConverter converter = new XmlDataConverter(null);
+        File file = new File(fileName);
+        try {
+            converter.serializeToFile(
+                    DataObjectIdentifier
+                        .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                        .build(),
+                    device,
+                    fileName);
+            assertTrue(file.exists());
+        } catch (ProcessingException e) {
+            fail("Cannot serialise object to json file");
+        } finally {
+            file.delete();
         }
     }
 

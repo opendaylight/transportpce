@@ -46,9 +46,21 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-common-7.1.0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce.models</groupId>
+      <artifactId>openroadm-device-7.1.0</artifactId>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <artifactId>rfc6241</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
@@ -117,6 +129,22 @@
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
       <artifactId>binding-runtime-spi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-parser-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-parser-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-xpath-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.yangtools</groupId>
+      <artifactId>yang-xpath-impl</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
