@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -699,11 +700,11 @@ public class PortMappingVersion221 {
         LOG.info(PortMappingUtils.GETTING_MC_CAPA_LOGMSG , nodeId, "degrees");
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = degrees.values().stream()
             .map(degree -> createMcCapDegreeObject(degree, nodeId))
-            .collect(Collectors.toMap(McCapabilities::key, mcc -> mcc));
+            .collect(Collectors.toMap(McCapabilities::key, Function.identity()));
         // Add the SRG mc-capabilities
         LOG.info(PortMappingUtils.GETTING_MC_CAPA_LOGMSG , nodeId, "SRGs");
         mcCapabilities.putAll(srgs.stream().map(srg -> createMcCapSrgObject(srg, nodeId))
-            .collect(Collectors.toMap(McCapabilities::key, mcCapabilities2 -> mcCapabilities2)));
+            .collect(Collectors.toMap(McCapabilities::key, Function.identity())));
         return mcCapabilities;
     }
 

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.gnpy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.gnpy.consumer.GnpyConsumer;
@@ -28,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev22
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 /**
@@ -118,12 +118,12 @@ public class GnpyUtilitiesImpl {
         return gnpyConsumer.computePaths(new RequestBuilder()
             .setTopology(
                 new TopologyBuilder()
-                .setElements(elementsList.stream().collect(Collectors.toMap(Elements::key, element -> element)))
+                .setElements(elementsList.stream().collect(BindingMap.toMap()))
                 .setConnections(connectionsList).build())
             .setService(
                 new ServiceBuilder()
                 .setPathRequest(pathRequestList.stream()
-                        .collect(Collectors.toMap(PathRequest::key, pathRequest -> pathRequest)))
+                        .collect(BindingMap.toMap()))
                 .build())
             .build());
     }
