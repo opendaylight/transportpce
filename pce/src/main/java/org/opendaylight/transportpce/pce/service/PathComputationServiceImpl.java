@@ -162,17 +162,21 @@ public class PathComputationServiceImpl implements PathComputationService {
                 PceComplianceCheckResult check = PceComplianceCheck.check(input);
                 if (!check.hasPassed()) {
                     LOG.error("Path not calculated, service not compliant : {}", check.getMessage());
+                    String errMessage = String.format(
+                        "Path not calculated, service not compliant : %s",
+                        check.getMessage()
+                    );
                     sendNotifications(
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated, service not compliant",
+                        errMessage,
                         null);
                     configurationResponseCommon
                             .setAckFinalIndicator("Yes")
                             .setRequestId(input.getServiceHandlerHeader().getRequestId())
                             .setResponseCode("Path not calculated")
-                            .setResponseMessage(check.getMessage());
+                            .setResponseMessage(errMessage);
                     return output
                         .setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(null)
@@ -214,7 +218,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         ServicePathNotificationTypes.PathComputationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        "Path not calculated",
+                        message,
                         null);
                     return output
                         .setConfigurationResponseCommon(
