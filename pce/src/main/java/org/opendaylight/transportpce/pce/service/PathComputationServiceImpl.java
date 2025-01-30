@@ -55,6 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -206,7 +207,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 output
                     .setGnpyResponse(
                         listResponse.stream()
-                            .collect(Collectors.toMap(GnpyResponse::key, gnpyResponse -> gnpyResponse)));
+                            .collect(BindingMap.toMap()));
 
                 PathDescriptionBuilder path = sendingPCE.getPathDescription();
                 if (Boolean.FALSE.equals(sendingPCE.getSuccess()) || (path == null)) {
@@ -372,8 +373,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     new PathCaseBuilder()
                         .setPathProperties(
                             new PathPropertiesBuilder()
-                                .setPathMetric(gnpyPathMetricList.stream()
-                                    .collect(Collectors.toMap(PathMetric::key, pathMetric -> pathMetric)))
+                                .setPathMetric(gnpyPathMetricList.stream().collect(BindingMap.toMap()))
                                 .build())
                         .build())
                 .setFeasibility(true)
