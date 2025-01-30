@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc53a54c_0c1f49ab",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:27:14Z",
+      "side": 1,
+      "message": "Unintentional edit on my part. Thanks for finding it.",
+      "parentUuid": "360d43ef_f5255acb",
+      "range": {
+        "startLine": 267,
+        "startChar": 24,
+        "endLine": 267,
+        "endChar": 30
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84c60636_a9911bc5",
@@ -64,6 +88,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13982f5_f93b82bd",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:27:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84c60636_a9911bc5",
+      "range": {
+        "startLine": 275,
+        "startChar": 24,
+        "endLine": 275,
+        "endChar": 29
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06a3fa6b_c1f5279b",
@@ -77,6 +125,30 @@
       "writtenOn": "2025-01-29T15:09:58Z",
       "side": 1,
       "message": "idem...",
+      "range": {
+        "startLine": 286,
+        "startChar": 8,
+        "endLine": 286,
+        "endChar": 12
+      },
+      "revId": "ed7cf6f0f95ad65fd328fb7b08afbbb5121a0884",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bad89e9_f214ab98",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-01-30T08:27:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "06a3fa6b_c1f5279b",
       "range": {
         "startLine": 286,
         "startChar": 8,
