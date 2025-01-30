@@ -8,11 +8,13 @@
 package org.opendaylight.transportpce.test.converter;
 
 import com.google.gson.stream.JsonReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.yangtools.binding.DataObject;
@@ -59,7 +61,18 @@ public class JsonDataConverter extends AbstractDataConverter {
             }
             return writer.toString();
         } catch (IOException e) {
-            throw new ProcessingException("Error serializing a Network1 to the output stream", e);
+            throw new ProcessingException("Error serializing a DataObject to the output stream", e);
+        }
+    }
+
+    @Override
+    public void serializeToFile(DataObjectIdentifier id, DataObject dataContainer, String filename)
+            throws ProcessingException {
+        try (FileWriter fileWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
+            String output = serialize(id, dataContainer);
+            fileWriter.write(output);
+        } catch (IOException e) {
+            throw new ProcessingException("Error serializing a DataObject to the output file", e);
         }
     }
 
@@ -80,7 +93,7 @@ public class JsonDataConverter extends AbstractDataConverter {
                     .getValue();
             return result == null ? null : result;
         } catch (IOException e) {
-            throw new ProcessingException("Error serializing a Network1 to the output stream", e);
+            throw new ProcessingException("Error deserializing a Json String to a DataObject", e);
         }
     }
 
@@ -103,5 +116,4 @@ public class JsonDataConverter extends AbstractDataConverter {
             return null;
         }
     }
-
 }

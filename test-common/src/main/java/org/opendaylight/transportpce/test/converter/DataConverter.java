@@ -24,6 +24,8 @@ public interface DataConverter<T extends DataObject> {
 
     String serialize(DataObjectIdentifier<T> id, T dataContainer) throws ProcessingException;
 
+    void serializeToFile(DataObjectIdentifier<T> id, T dataContainer, String filename) throws ProcessingException;
+
     T deserialize(String data, QName object) throws ProcessingException;
 
     T deserialize(Reader data, QName object) throws ProcessingException;
