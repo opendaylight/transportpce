@@ -42,6 +42,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.tr
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
+import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,13 +145,13 @@ public class ConvertTapiTopoToAbstracted {
         this.tapiLinks = this.tapiLinks.values().stream()
             .filter(l -> l.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_OTS_XPDR_RDM_LINK))
                 || l.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)))
-            .collect(Collectors.toMap(Link::key, link -> link));
+            .collect(BindingMap.toMap());
     }
 
     private void purgeTapiNodes() {
         this.tapiNodes = this.tapiNodes.values().stream()
             .filter(n -> !n.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_ROADM_NODE)))
-            .collect(Collectors.toMap(Node::key, node -> node));
+            .collect(BindingMap.toMap());
     }
 
 
