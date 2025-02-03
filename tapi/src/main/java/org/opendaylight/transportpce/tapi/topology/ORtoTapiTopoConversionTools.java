@@ -23,7 +23,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Available;
 import org.opendaylight.transportpce.tapi.frequency.AvailableGrid;
 import org.opendaylight.transportpce.tapi.frequency.FrequencyMath;
@@ -347,7 +347,7 @@ public class ORtoTapiTopoConversionTools {
 
         // node creation [DSR/ODU] ([DSR/ODU] and OTSI merged in R 2.4.X)
         LOG.info("creation of a DSR/ODU node for {}", this.ietfNodeId);
-        String nodeIdXpdr = String.join("+", this.ietfNodeId, TapiStringConstants.XPDR);
+        String nodeIdXpdr = String.join("+", this.ietfNodeId, TapiConstants.XPDR);
         this.uuidMap.put(nodeIdXpdr,
                 //nodeUuid
                 new Uuid(UUID.nameUUIDFromBytes(nodeIdXpdr.getBytes(StandardCharsets.UTF_8)).toString()));
@@ -805,7 +805,7 @@ public class ORtoTapiTopoConversionTools {
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec, boolean srg) {
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
-        String nodeNepId = String.join("+",id.split("\\+")[0], TapiStringConstants.PHTNC_MEDIA);
+        String nodeNepId = String.join("+",id.split("\\+")[0], TapiConstants.PHTNC_MEDIA);
         String extendedNepId = lowerFreqIndex == 0 && higherFreqIndex == 0
             ? nepId
             : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
@@ -826,22 +826,22 @@ public class ORtoTapiTopoConversionTools {
         String clientQualifier = "";
 
         switch (qualifier) {
-            case TapiStringConstants.PHTNC_MEDIA_OTS:
-                clientQualifier = TapiStringConstants.PHTNC_MEDIA_OMS;
+            case TapiConstants.PHTNC_MEDIA_OTS:
+                clientQualifier = TapiConstants.PHTNC_MEDIA_OMS;
                 break;
-            case TapiStringConstants.PHTNC_MEDIA_OMS:
-                clientQualifier = TapiStringConstants.MC;
+            case TapiConstants.PHTNC_MEDIA_OMS:
+                clientQualifier = TapiConstants.MC;
                 break;
-            case TapiStringConstants.MC:
-                clientQualifier = TapiStringConstants.OTSI_MC;
+            case TapiConstants.MC:
+                clientQualifier = TapiConstants.OTSI_MC;
                 break;
             default:
                 LOG.debug("not currently handling client NEP for OTSiMC CEP {}", nepId);
                 break;
         }
         // If the CEP is OTS and created for an SRG, we force client qualifier to MC as there is no OMS on PPs
-        clientQualifier = srg && qualifier.equals(TapiStringConstants.PHTNC_MEDIA_OTS)
-            ? TapiStringConstants.MC
+        clientQualifier = srg && qualifier.equals(TapiConstants.PHTNC_MEDIA_OTS)
+            ? TapiConstants.MC
             : clientQualifier;
         ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -867,27 +867,27 @@ public class ORtoTapiTopoConversionTools {
             .setLifecycleState(LifecycleState.INSTALLED)
             .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA);
         switch (qualifier) {
-            case TapiStringConstants.PHTNC_MEDIA_OTS:
+            case TapiConstants.PHTNC_MEDIA_OTS:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
                 if (omCepSpec != null) {
                     cepBldr.addAugmentation(cep2builder.setOtsMediaConnectionEndPointSpec(omCepSpec).build());
                     LOG.info("In ConverTORToTapiTopology LINE599, add Augment to cep {}", cepBldr.build());
                 }
                 break;
-            case TapiStringConstants.PHTNC_MEDIA_OMS:
+            case TapiConstants.PHTNC_MEDIA_OMS:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);
                 break;
-            case TapiStringConstants.MC:
+            case TapiConstants.MC:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIERMC.VALUE);
                 break;
-            case TapiStringConstants.OTSI_MC:
+            case TapiConstants.OTSI_MC:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE);
                 break;
             default:
                 break;
         }
 
-        return TapiStringConstants.OTSI_MC.equals(qualifier)
+        return TapiConstants.OTSI_MC.equals(qualifier)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
@@ -895,7 +895,7 @@ public class ORtoTapiTopoConversionTools {
     public ConnectionEndPoint createOTSCepXpdr(String nepId) {
 //        String nepId = String.join("+", id.split("\\+")[0], TapiStringConstants.PHTNC_MEDIA_OTS, id.split("\\+")[1]);
 //        String nepNodeId = String.join("+",id.split("\\+")[0], TapiStringConstants.XPDR);
-        String nepNodeId = String.join("+",nepId.split("\\+")[0], TapiStringConstants.XPDR);
+        String nepNodeId = String.join("+",nepId.split("\\+")[0], TapiConstants.XPDR);
         LOG.debug("ConvertORToTapiTopology 722 CreateOTSCepXpdr for Nep {}", nepId);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
@@ -912,8 +912,8 @@ public class ORtoTapiTopoConversionTools {
         ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
 //                (String.join("+", id.split("\\+")[0], clientQualifier, id.split("\\+")[1]))
-                String.join("+", nepId.split("\\+" + TapiStringConstants.PHTNC_MEDIA_OTS)[0],
-                    TapiStringConstants.OTSI_MC, nepId.split((TapiStringConstants.PHTNC_MEDIA_OTS + "\\+"))[1])
+                String.join("+", nepId.split("\\+" + TapiConstants.PHTNC_MEDIA_OTS)[0],
+                    TapiConstants.OTSI_MC, nepId.split((TapiConstants.PHTNC_MEDIA_OTS + "\\+"))[1])
                     .getBytes(StandardCharsets.UTF_8)).toString()))
             .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
                     nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
@@ -1274,8 +1274,8 @@ public class ORtoTapiTopoConversionTools {
     public OwnedNodeEdgePointBuilder addPayloadStructureAndPhotSpecToOnep(String nodeId, String rate,
             Map<Double, Double> freqMap, List<OperationalModeKey> operModeList,
             Collection<SupportedInterfaceCapability> sicColl, OwnedNodeEdgePointBuilder onepBldr, String keyword) {
-        if (!String.join("+", nodeId, TapiStringConstants.OTSI_MC).equals(keyword)
-                && !String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
+        if (!String.join("+", nodeId, TapiConstants.OTSI_MC).equals(keyword)
+                && !String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS).equals(keyword)) {
             return onepBldr;
         }
         LOG.debug("Entering LOOP Step1");
@@ -1349,8 +1349,8 @@ public class ORtoTapiTopoConversionTools {
             OwnedNodeEdgePointBuilder onepBldr, String keyword) {
         LOG.debug("Entering Add PhotSpec to Roadm, ConvertToTopology LINE 1050 , availfreqmap is {} Used FreqMap {}",
             availableFreqMap, usedFreqMap);
-        if (String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OTS).equals(keyword)
-                || String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA_OMS).equals(keyword)) {
+        if (String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS).equals(keyword)
+                || String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OMS).equals(keyword)) {
             // Creating OTS/OMS NEP specific attributes
             SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
             if ((usedFreqMap == null || usedFreqMap.isEmpty())
@@ -1471,13 +1471,13 @@ public class ORtoTapiTopoConversionTools {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
@@ -1524,7 +1524,7 @@ public class ORtoTapiTopoConversionTools {
         List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
         for (int i = 0; i < oorClientPortList.size(); i++) {
             String nodeIdDsr = String.join("+",
-                this.ietfNodeId, TapiStringConstants.DSR, oorClientPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.DSR, oorClientPortList.get(i).getTpId().getValue());
             Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdDsr.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdDsr, nepUuid);
             this.uuidMap.put(nodeIdDsr, nepUuid);
@@ -1536,12 +1536,12 @@ public class ORtoTapiTopoConversionTools {
                 oorClientPortList.get(i),
                 Map.of(name.key(), name),
                 LayerProtocolName.DSR, LayerProtocolName.DSR, true,
-                String.join("+", this.ietfNodeId, TapiStringConstants.DSR)));
+                String.join("+", this.ietfNodeId, TapiConstants.DSR)));
         }
         // CLIENT NEP E_ODU creation on DSR/ODU node
         for (int i = 0; i < oorClientPortList.size(); i++) {
             String nodeIdEodu = String.join("+",
-                this.ietfNodeId, TapiStringConstants.E_ODU, oorClientPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.E_ODU, oorClientPortList.get(i).getTpId().getValue());
             Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdEodu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdEodu, nepUuid1);
             this.uuidMap.put(nodeIdEodu, nepUuid1);
@@ -1553,12 +1553,12 @@ public class ORtoTapiTopoConversionTools {
                 oorClientPortList.get(i),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, false,
-                String.join("+", this.ietfNodeId, TapiStringConstants.E_ODU)));
+                String.join("+", this.ietfNodeId, TapiConstants.E_ODU)));
         }
         // NETWORK NEPs I_ODU creation on DSR/ODU node
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdIodu = String.join("+",
-                this.ietfNodeId, TapiStringConstants.I_ODU, oorNetworkPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.I_ODU, oorNetworkPortList.get(i).getTpId().getValue());
             Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdIodu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdIodu, nepUuid1);
             this.uuidMap.put(nodeIdIodu, nepUuid1);
@@ -1570,12 +1570,12 @@ public class ORtoTapiTopoConversionTools {
                 oorNetworkPortList.get(i),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.ODU, LayerProtocolName.DSR, true,
-                String.join("+", this.ietfNodeId, TapiStringConstants.I_ODU)));
+                String.join("+", this.ietfNodeId, TapiConstants.I_ODU)));
         }
         // NETWORK NEP OTS network on DSR/ODU node
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdPmOts = String.join("+",
-                this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, oorNetworkPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.PHTNC_MEDIA_OTS, oorNetworkPortList.get(i).getTpId().getValue());
             Uuid nepUuid2 = new Uuid(UUID.nameUUIDFromBytes(nodeIdPmOts.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdPmOts, nepUuid2);
             this.uuidMap.put(nodeIdPmOts, nepUuid2);
@@ -1587,11 +1587,11 @@ public class ORtoTapiTopoConversionTools {
                 oorNetworkPortList.get(i),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA, true,
-                String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA_OTS)));
+                String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA_OTS)));
         }
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdOtMc = String.join("+",
-                this.ietfNodeId, TapiStringConstants.OTSI_MC, oorNetworkPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.OTSI_MC, oorNetworkPortList.get(i).getTpId().getValue());
             Uuid nepUuid3 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtMc.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdOtMc, nepUuid3);
             this.uuidMap.put(nodeIdOtMc, nepUuid3);
@@ -1603,11 +1603,11 @@ public class ORtoTapiTopoConversionTools {
                 oorNetworkPortList.get(i),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.PHOTONICMEDIA, LayerProtocolName.PHOTONICMEDIA, true,
-                String.join("+", this.ietfNodeId, TapiStringConstants.OTSI_MC)));
+                String.join("+", this.ietfNodeId, TapiConstants.OTSI_MC)));
         }
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdOtu = String.join("+",
-                this.ietfNodeId, TapiStringConstants.I_OTU, oorNetworkPortList.get(i).getTpId().getValue());
+                this.ietfNodeId, TapiConstants.I_OTU, oorNetworkPortList.get(i).getTpId().getValue());
             Uuid nepUuid4 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdOtu, nepUuid4);
             this.uuidMap.put(nodeIdOtu, nepUuid4);
@@ -1619,14 +1619,14 @@ public class ORtoTapiTopoConversionTools {
                 oorNetworkPortList.get(i),
                 Map.of(onedName.key(), onedName),
                 LayerProtocolName.DIGITALOTN, LayerProtocolName.DIGITALOTN, false,
-                String.join("+", this.ietfNodeId, TapiStringConstants.I_OTU)));
+                String.join("+", this.ietfNodeId, TapiConstants.I_OTU)));
         }
         for (OwnedNodeEdgePoint onep : onepList) {
             onepl.put(onep.key(), onep);
         }
 
         // create NodeRuleGroup
-        String ietfXpdr = String.join("+", this.ietfNodeId, TapiStringConstants.XPDR);
+        String ietfXpdr = String.join("+", this.ietfNodeId, TapiConstants.XPDR);
         nodeRuleGroupList.putAll(createNodeRuleGroupForXpdrNode(this.ietfNodeId, this.oorOduSwitchingPool));
 
         return this.uuidMap.get(ietfXpdr);
@@ -1647,7 +1647,7 @@ public class ORtoTapiTopoConversionTools {
         }
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         Uuid nodeUuid = new Uuid(
-            UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.XPDR))
+            UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiConstants.XPDR))
                 .getBytes(StandardCharsets.UTF_8)).toString());
         int count = 0;
         RuleBuilder nblRuleBd = new RuleBuilder()
@@ -1675,7 +1675,7 @@ public class ORtoTapiTopoConversionTools {
             }
             int nblCount = 0;
 
-            String ietfXpdr = String.join("+", nodeId, TapiStringConstants.XPDR);
+            String ietfXpdr = String.join("+", nodeId, TapiConstants.XPDR);
             for (Map.Entry<NonBlockingListKey, NonBlockingList> nblEntry :
                 oduSwPool.getValue().getNonBlockingList().entrySet()) {
                 nblCount++;
@@ -1694,20 +1694,20 @@ public class ORtoTapiTopoConversionTools {
 
                 for (TpId tp : nblEntry.getValue().getTpList()) {
                     String tpValue = tp.getValue();
-                    String ietfEoduTp = String.join("+", nodeId, TapiStringConstants.E_ODU, tpValue);
+                    String ietfEoduTp = String.join("+", nodeId, TapiConstants.E_ODU, tpValue);
                     LOG.debug("UuidKey={}", ietfEoduTp);
-                    String ietfIoduTp = String.join("+", nodeId, TapiStringConstants.I_ODU, tpValue);
+                    String ietfIoduTp = String.join("+", nodeId, TapiConstants.I_ODU, tpValue);
                     //Following Nep MAp is currently not used
                     // TODO: consolidate or remove after PCE for TAPI is consolidated
-                    if (this.uuidMap.containsKey(String.join("+", nodeId, TapiStringConstants.DSR, tpValue))
+                    if (this.uuidMap.containsKey(String.join("+", nodeId, TapiConstants.DSR, tpValue))
                             || this.uuidMap.containsKey(ietfIoduTp)) {
                         var nep = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                                     .node.rule.group.NodeEdgePointBuilder()
                                 .setTopologyUuid(tapiTopoUuid)
                                 .setNodeUuid(this.uuidMap.get(ietfXpdr))
                                 .setNodeEdgePointUuid(this.uuidMap.get(
-                                    String.join("+", nodeId, tpValue.contains("CLIENT") ? TapiStringConstants.DSR
-                                            : TapiStringConstants.I_ODU,
+                                    String.join("+", nodeId, tpValue.contains("CLIENT") ? TapiConstants.DSR
+                                            : TapiConstants.I_ODU,
                                         tpValue)))
                                 .build();
                         nepList.put(nep.key(), nep);
@@ -1766,13 +1766,13 @@ public class ORtoTapiTopoConversionTools {
                 CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
                     .setCostAlgorithm("Restricted Shortest Path - RSP")
                     .setCostName("HOP_COUNT")
-                    .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+                    .setCostValue(TapiConstants.COST_HOP_VALUE)
                     .build();
                 LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                    .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-                    .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-                    .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-                    .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+                    .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+                    .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+                    .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+                    .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
                     .setTrafficPropertyName("FIXED_LATENCY")
                     .build();
                 RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
@@ -1929,7 +1929,7 @@ public class ORtoTapiTopoConversionTools {
                 createMSIP(1, nepProtocol, oorTpIdValue, keyword, sicColl, operState, adminState));
         }
         List<OwnedNodeEdgePoint> onepList = new ArrayList<>();
-        if (!keyword.contains(TapiStringConstants.OTSI_MC) && !keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+        if (!keyword.contains(TapiConstants.OTSI_MC) && !keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             if (sicColl == null || sicColl.isEmpty()) {
                 onepList.add(onepBldr.build());
                 return onepList;
@@ -2015,14 +2015,14 @@ public class ORtoTapiTopoConversionTools {
                             onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
                                 false, Double.valueOf(rate), 0, lpqSet));
                             //Recursive call to create ODUCN NEP just after OTUCN one
-                            String onedNameVal = String.join("+", this.ietfNodeId, TapiStringConstants.E_ODUCN,
+                            String onedNameVal = String.join("+", this.ietfNodeId, TapiConstants.E_ODUCN,
                                 oorTp.getTpId().getValue());
                             LOG.info("Creating eODUCN NEP = {} recursivly after processing OTUCN NEP", onedNameVal);
                             Name onedName = new NameBuilder().setValueName("eNodeEdgePoint_N").setValue(onedNameVal)
                                 .build();
                             onepList.addAll(createNep(oorTp, Map.of(onedName.key(), onedName),
                                 LayerProtocolName.DIGITALOTN, LayerProtocolName.DIGITALOTN, true,
-                                String.join("+", this.ietfNodeId, TapiStringConstants.E_ODUCN)));
+                                String.join("+", this.ietfNodeId, TapiConstants.E_ODUCN)));
                         } else {
                             lpqSet.add(ODUTYPEODUCN.VALUE);
                             onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
@@ -2040,7 +2040,7 @@ public class ORtoTapiTopoConversionTools {
             onepBldr = addPayloadStructureAndPhotSpecToOnep(
                 this.ietfNodeId, rate, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
         }
-        if (keyword.contains(TapiStringConstants.PHTNC_MEDIA_OTS)) {
+        if (keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             String nepId = nepNames.entrySet().stream()
                 .filter(n -> n.getKey().equals(new NameKey("eNodeEdgePoint")))
                 .findAny().orElseThrow().getValue().getValue();
@@ -2073,7 +2073,7 @@ public class ORtoTapiTopoConversionTools {
             OperationalState operState, AdministrativeState adminState, String nepPhotonicSublayer) {
         //TODO : complete implementation with SIP
         Name nepName = new NameBuilder()
-                .setValueName(TapiStringConstants.PHTNC_MEDIA + "NodeEdgePoint")
+                .setValueName(TapiConstants.PHTNC_MEDIA + "NodeEdgePoint")
                 .setValue(String.join("+", orNodeId, nepPhotonicSublayer, tpId))
                 .build();
         return new OwnedNodeEdgePointBuilder()
@@ -2087,7 +2087,7 @@ public class ORtoTapiTopoConversionTools {
                 new ArrayList<>(List.of(
                     new SupportedCepLayerProtocolQualifierInstancesBuilder()
                         .setLayerProtocolQualifier(
-                            TapiStringConstants.MC.equals(nepPhotonicSublayer)
+                            TapiConstants.MC.equals(nepPhotonicSublayer)
                                 ? PHOTONICLAYERQUALIFIERMC.VALUE
                                 : PHOTONICLAYERQUALIFIEROTSiMC.VALUE)
                         .setNumberOfCepInstances(Uint64.ONE)

@@ -30,7 +30,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
@@ -178,7 +178,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     .build())
             .get().orElseThrow().getLink();
         topologyUuid = new Uuid(
-            UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+            UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
         LOG.info("TEST SETUP READY");
@@ -678,13 +678,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR2-CLIENT4")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C",
-                    otnSwitch.getNodeId().getValue(), TapiStringConstants.DSR);
+                    otnSwitch.getNodeId().getValue(), TapiConstants.DSR);
                 OwnedNodeEdgePoint nep2 = nepsN.get(3);
                 Uuid networkNepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR2-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "iNodeEdgePoint_N",
-                    otnSwitch.getNodeId().getValue(), TapiStringConstants.I_ODU);
+                    otnSwitch.getNodeId().getValue(), TapiConstants.I_ODU);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -702,14 +702,14 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR1-CLIENT3")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C",
-                    otnMuxA.getNodeId().getValue(), TapiStringConstants.DSR);
+                    otnMuxA.getNodeId().getValue(), TapiConstants.DSR);
 
                 OwnedNodeEdgePoint nep4 = nepsN.get(0);
                 Uuid networkNepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    otnMuxA.getNodeId().getValue(), TapiStringConstants.I_ODU);
+                    otnMuxA.getNodeId().getValue(), TapiConstants.I_ODU);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -727,14 +727,14 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR1-CLIENT1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr",
-                    tpdr100G.getNodeId().getValue(), TapiStringConstants.DSR);
+                    tpdr100G.getNodeId().getValue(), TapiConstants.DSR);
 
                 OwnedNodeEdgePoint nep6 = nepsN.get(1);
                 Uuid networkNepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint_N",
-                    tpdr100G.getNodeId().getValue(), TapiStringConstants.I_ODU);
+                    tpdr100G.getNodeId().getValue(), TapiConstants.I_ODU);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -779,13 +779,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR2-NETWORK2")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint",
-                    otnSwitch.getNodeId().getValue(), TapiStringConstants.I_OTSI);
+                    otnSwitch.getNodeId().getValue(), TapiConstants.I_OTSI);
                 OwnedNodeEdgePoint nep2 = nepsE.get(0);
                 Uuid enepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint",
-                    otnSwitch.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
+                    otnSwitch.getNodeId().getValue(), TapiConstants.PHTNC_MEDIA_OTS);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -799,13 +799,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint",
-                    otnMuxA.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
+                    otnMuxA.getNodeId().getValue(), TapiConstants.PHTNC_MEDIA_OTS);
                 OwnedNodeEdgePoint nep4 = nepsI.get(0);
                 Uuid inepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint",
-                    otnMuxA.getNodeId().getValue(), TapiStringConstants.I_OTSI);
+                    otnMuxA.getNodeId().getValue(), TapiConstants.I_OTSI);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
@@ -819,13 +819,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep5, enepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint",
-                    tpdr100G.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
+                    tpdr100G.getNodeId().getValue(), TapiConstants.PHTNC_MEDIA_OTS);
                 OwnedNodeEdgePoint nep6 = nepsI.get(0);
                 Uuid inepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR1-NETWORK1")
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep6, inepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint",
-                    tpdr100G.getNodeId().getValue(), TapiStringConstants.I_OTSI);
+                    tpdr100G.getNodeId().getValue(), TapiConstants.I_OTSI);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());

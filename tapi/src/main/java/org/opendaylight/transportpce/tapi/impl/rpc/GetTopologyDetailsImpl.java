@@ -27,7 +27,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.ConvertTopoORtoTapiNbi;
 import org.opendaylight.transportpce.tapi.topology.ConvertTopoTapiToTapiNbi;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
@@ -114,19 +114,19 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         Uuid topoId = input.getTopologyId();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology;
         Uuid topologyUuid100G = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
+                UUID.nameUUIDFromBytes(TapiConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
         if (!topologyUuid100G.equals(topoId)
-                && !TapiStringConstants.T0_TAPI_MULTILAYER_UUID.equals(topoId)
-                && !TapiStringConstants.T0_MULTILAYER_UUID.equals(topoId)) {
+                && !TapiConstants.T0_TAPI_MULTILAYER_UUID.equals(topoId)
+                && !TapiConstants.T0_MULTILAYER_UUID.equals(topoId)) {
             Map<TopologyKey,
                     org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology>
                 topologyMap = this.tapiContext.getTapiContext().augmentation(Context1.class).getTopologyContext()
                     .getTopology();
             if (topologyMap == null || (
-                    !topologyMap.containsKey(new TopologyKey(new Uuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID)))
-                    && !topologyMap.containsKey(new TopologyKey(new Uuid(TapiStringConstants.SBI_TAPI_TOPOLOGY_UUID)))
+                    !topologyMap.containsKey(new TopologyKey(new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)))
+                    && !topologyMap.containsKey(new TopologyKey(new Uuid(TapiConstants.SBI_TAPI_TOPOLOGY_UUID)))
                     && !topologyMap.containsKey(new TopologyKey(new Uuid(
-                        TapiStringConstants.ALIEN_XPDR_TAPI_TOPOLOGY_UUID))))) {
+                        TapiConstants.ALIEN_XPDR_TAPI_TOPOLOGY_UUID))))) {
                 LOG.error("Topology {} not found in datastore", topoId);
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Invalid Topology name")
@@ -138,7 +138,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .build())
                 .buildFuture();
         }
-        if (input.getTopologyId().equals(TapiStringConstants.T0_TAPI_MULTILAYER_UUID)) {
+        if (input.getTopologyId().equals(TapiConstants.T0_TAPI_MULTILAYER_UUID)) {
             LOG.info("Building TAPI Topology abstraction for {}", topoId);
             topology = createAbsTopologyFromTapiTopo();
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
@@ -146,11 +146,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .buildFuture();
         }
         if (topologyUuid100G.equals(topoId)
-                || TapiStringConstants.T0_MULTILAYER_UUID.equals(topoId)) {
+                || TapiConstants.T0_MULTILAYER_UUID.equals(topoId)) {
             try {
                 LOG.info("Building TAPI Topology abstraction for {}", topoId);
                 topology = createAbstractedOtnTopology();
-                if (topoId.equals(TapiStringConstants.T0_MULTILAYER_UUID)) {
+                if (topoId.equals(TapiConstants.T0_MULTILAYER_UUID)) {
                     return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
                         .setTopology(this.topologyUtils.transformTopology(topology)).build())
                         .buildFuture();
@@ -183,10 +183,10 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             nep100GTpdrList.addAll(nepList);
         }
         Name topoName = new NameBuilder()
-                .setValue(TapiStringConstants.TPDR_100G)
+                .setValue(TapiConstants.TPDR_100G)
                 .setValueName("TAPI Topology Name")
                 .build();
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8))
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8))
             .toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             createTapiNode(nep100GTpdrList, topoUuid);
@@ -242,7 +242,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> tapiLinkList
                 = new HashMap<>();
         Uuid topoUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+                UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         ConvertTopoORtoTapiNbi tapiAbstractFactory = new ConvertTopoORtoTapiNbi(topoUuid, this.tapiLink);
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topoUuid);
         Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
@@ -270,7 +270,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
             tapiLinkList.putAll(tapiAbstractFactory.getTapiLinks());
         }
         Name name = new NameBuilder().setValue(
-                TapiStringConstants.T0_MULTILAYER).setValueName("TAPI Topology Name")
+                TapiConstants.T0_MULTILAYER).setValueName("TAPI Topology Name")
             .build();
         LOG.debug("TOPOABSTRACTED : the list of node is as follows {}", tapiNodeList);
         this.tapiSips.putAll(tapiAbstractFactory.getTapiSips());
@@ -285,7 +285,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
 
     public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
             createAbsTopologyFromTapiTopo() {
-        Uuid refTopoUuid = TapiStringConstants.T0_FULL_MULTILAYER_UUID;
+        Uuid refTopoUuid = TapiConstants.T0_FULL_MULTILAYER_UUID;
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology tapiFullTopo =
             this.tapiContext
                 .getTopologyContext().entrySet().stream().filter(topo -> topo.getKey().getUuid().equals(refTopoUuid))
@@ -302,10 +302,10 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         tapiNodeList.putAll(absTapiTopo.getTapiNodes());
         tapiLinkList.putAll(absTapiTopo.getTapiLinks());
         Name name = new NameBuilder()
-            .setValue(TapiStringConstants.T0_MULTILAYER)
+            .setValue(TapiConstants.T0_MULTILAYER)
             .setValueName("TAPI Topology Name")
             .build();
-        Uuid topoUuid = TapiStringConstants.T0_TAPI_MULTILAYER_UUID;
+        Uuid topoUuid = TapiConstants.T0_TAPI_MULTILAYER_UUID;
         LOG.info("ABSTRACTED TAPI TOPOLOGY : the list of node is as follows {}", tapiNodeList);
         return new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context
                 .TopologyBuilder()

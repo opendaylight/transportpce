@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
@@ -57,7 +57,7 @@ public class TapiTopologyImplExceptionTest {
         when(rpcService.getRpc(GetTopologyDetails.class))
             .thenReturn(new GetTopologyDetailsImpl(tapiContext, topologyUtils, tapiLink, networkTransactionService));
         Uuid topologyUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+                UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = rpcService
                 .getRpc(GetTopologyDetails.class).invoke(input);
