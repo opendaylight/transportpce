@@ -135,8 +135,6 @@ public class TapiTopologyImplTest extends AbstractTest {
                 UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("TPDR100GUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-//        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-//            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
                 topologyUtils, tapiLink, networkTransactionService)
             .invoke(input);
