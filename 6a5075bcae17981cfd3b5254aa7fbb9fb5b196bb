@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d10a73ad_a68262bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-02-03T09:05:19Z",
+      "side": 1,
+      "message": "Hi Olivier and team,\n\nWe\u0027ve done the changes you suggested for port-mapping.\nPlease review.",
+      "revId": "6a5075bcae17981cfd3b5254aa7fbb9fb5b196bb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
