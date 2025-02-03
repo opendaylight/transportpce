@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Set;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitRoadmRoadmTapiLink;
@@ -44,8 +44,8 @@ public class InitRoadmRoadmTapiLinkImpl implements InitRoadmRoadmTapiLink {
         String destNode = input.getRdmZNode();
         String destTp = input.getDegZTp();
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
-            TapiStringConstants.OMS_RDM_RDM_LINK, TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
-            TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+            TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),

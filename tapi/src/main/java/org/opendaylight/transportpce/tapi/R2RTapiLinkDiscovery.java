@@ -249,8 +249,8 @@ public class R2RTapiLinkDiscovery {
         LOG.info("Tapi R2R Link Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , "
             + "DestDegId: {}, DestTPId: {}", nodeId.getValue(), srcDegId, srcTpTx, destNodeId, destDegId, destTpRx);
         Link omsLink = this.tapiLink.createTapiLink(nodeId.getValue(), srcTpTx, destNodeId.getValue(), destTpTx,
-            TapiStringConstants.OMS_RDM_RDM_LINK, TapiStringConstants.PHTNC_MEDIA, TapiStringConstants.PHTNC_MEDIA,
-            TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+            TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);

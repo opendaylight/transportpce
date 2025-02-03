@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
@@ -142,11 +142,11 @@ public class ConvertTopoORtoTapiAtInit {
                 linkSrc.getSourceTp().getValue(),
                 String.join("-", linkDstNodeValue.split("-")[0], linkDstNodeValue.split("-")[1]),
                 linkDst.getDestTp().getValue(),
-                TapiStringConstants.OMS_RDM_RDM_LINK,
-                TapiStringConstants.PHTNC_MEDIA,
-                TapiStringConstants.PHTNC_MEDIA,
-                TapiStringConstants.PHTNC_MEDIA_OTS,
-                TapiStringConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.OMS_RDM_RDM_LINK,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA,
+                TapiConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
                 lnkAdmState == null || oppLnkAdmState == null
                     ? null : this.tapiLink.setTapiAdminState(lnkAdmState, oppLnkAdmState).getName(),
@@ -286,9 +286,9 @@ public class ConvertTopoORtoTapiAtInit {
                     LOG.info("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
                     oneplist.putAll(populateNepsForRdmNode(false,
-                        nodeId, degPortList, true, TapiStringConstants.PHTNC_MEDIA_OTS));
+                        nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
                     oneplist.putAll(populateNepsForRdmNode(false,
-                        nodeId, degPortList, false, TapiStringConstants.PHTNC_MEDIA_OMS));
+                        nodeId, degPortList, false, TapiConstants.PHTNC_MEDIA_OMS));
                     numNeps += degPortList.size() * 2;
                     break;
                 case 12:
@@ -305,7 +305,7 @@ public class ConvertTopoORtoTapiAtInit {
                     // Convert TP List in NEPs and put it in onepl
                     LOG.info("Srg port List: {}", srgPortList);
                     oneplist.putAll(populateNepsForRdmNode(true,
-                        nodeId, srgPortList, true, TapiStringConstants.PHTNC_MEDIA_OTS));
+                        nodeId, srgPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
 
                     numNeps += srgPortList.size();
                     numSips += srgPortList.size();
@@ -316,7 +316,7 @@ public class ConvertTopoORtoTapiAtInit {
         }
         // create tapi Node
         // UUID
-        String nodeIdPhMed = String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA);
+        String nodeIdPhMed = String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA);
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", this.ietfNodeId, nodeUuid);
         // Names
@@ -337,9 +337,9 @@ public class ConvertTopoORtoTapiAtInit {
         var roadmNode = createRoadmTapiNode(nodeUuid,
             Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist, "Full");
         // TODO add states corresponding to device config
-        LOG.info("ROADM node {} should have {} NEPs and {} SIPs", TapiStringConstants.RDM_INFRA, numNeps, numSips);
+        LOG.info("ROADM node {} should have {} NEPs and {} SIPs", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs",
-            TapiStringConstants.RDM_INFRA,
+            TapiConstants.RDM_INFRA,
             roadmNode.nonnullOwnedNodeEdgePoint().values().size(),
             roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getMappedServiceInterfacePoint() != null)
@@ -392,15 +392,15 @@ public class ConvertTopoORtoTapiAtInit {
             // Convert TP List in NEPs and put it in onepl
             LOG.debug("Srg port List: {}", srgPortList);
             oneMap.putAll(populateNepsForRdmNode(true, node.getNodeId().getValue(), srgPortList, true,
-                TapiStringConstants.PHTNC_MEDIA_OTS));
+                TapiConstants.PHTNC_MEDIA_OTS));
             numNeps += srgPortList.size();
             numSips += srgPortList.size();
         }
         // create a unique ROADM tapi Node
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(
-            TapiStringConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
-        Name nodeName =  new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA)
+            TapiConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
+        Name nodeName =  new NameBuilder().setValueName("roadm node name").setValue(TapiConstants.RDM_INFRA)
             .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
             .setValue(OpenroadmNodeType.ROADM.getName()).build();
@@ -412,8 +412,8 @@ public class ConvertTopoORtoTapiAtInit {
             createRoadmTapiNode(nodeUuid, Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType),
             layerProtocols, oneMap, "Abstracted");
         // TODO add states corresponding to device config
-        LOG.info("ROADM node {} should have {} NEPs and {} SIPs", TapiStringConstants.RDM_INFRA, numNeps, numSips);
-        LOG.info("ROADM node {} has {} NEPs and {} SIPs", TapiStringConstants.RDM_INFRA,
+        LOG.info("ROADM node {} should have {} NEPs and {} SIPs", TapiConstants.RDM_INFRA, numNeps, numSips);
+        LOG.info("ROADM node {} has {} NEPs and {} SIPs", TapiConstants.RDM_INFRA,
             roadmNode.nonnullOwnedNodeEdgePoint().values().size(),
             roadmNode.nonnullOwnedNodeEdgePoint().values().stream()
                 .filter(nep -> nep.getMappedServiceInterfacePoint() != null).count());
@@ -438,13 +438,13 @@ public class ConvertTopoORtoTapiAtInit {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
@@ -516,16 +516,16 @@ public class ConvertTopoORtoTapiAtInit {
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
                     .setNumberOfCepInstances(Uint64.ONE);
             switch (nepPhotonicSublayer) {
-                case TapiStringConstants.PHTNC_MEDIA_OMS:
+                case TapiConstants.PHTNC_MEDIA_OMS:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);
                     break;
-                case TapiStringConstants.PHTNC_MEDIA_OTS:
+                case TapiConstants.PHTNC_MEDIA_OTS:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
                     break;
-                case TapiStringConstants.MC:
+                case TapiConstants.MC:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIERMC.VALUE);
                     break;
-                case TapiStringConstants.OTSI_MC:
+                case TapiConstants.OTSI_MC:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTSiMC.VALUE);
                     break;
                 default:
@@ -547,7 +547,7 @@ public class ConvertTopoORtoTapiAtInit {
                     new ArrayList<>(List.of(
                         new SupportedCepLayerProtocolQualifierInstancesBuilder()
                             .setLayerProtocolQualifier(
-                                TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
+                                TapiConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
                                     ? PHOTONICLAYERQUALIFIEROMS.VALUE
                                     : PHOTONICLAYERQUALIFIEROTS.VALUE)
                             .setNumberOfCepInstances(Uint64.ONE)
@@ -560,8 +560,8 @@ public class ConvertTopoORtoTapiAtInit {
 
             ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
 
-            if (!nepPhotonicSublayer.equals(TapiStringConstants.MC)
-                    && !nepPhotonicSublayer.equals(TapiStringConstants.OTSI_MC)) {
+            if (!nepPhotonicSublayer.equals(TapiConstants.MC)
+                    && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
                 Map<Double,Double> usedFreqMap = new HashMap<>();
                 Map<Double,Double> availableFreqMap = new HashMap<>();
                 switch (tpType) {
@@ -579,9 +579,9 @@ public class ConvertTopoORtoTapiAtInit {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
                                 usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
                             onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiStringConstants.MC));
+                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC));
                             onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiStringConstants.OTSI_MC));
+                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.OTSI_MC));
                         }
                         break;
                     case DEGREERXTTP:
@@ -612,7 +612,7 @@ public class ConvertTopoORtoTapiAtInit {
                 var uuidMap = new HashMap<>(Map.of(
                     new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
                         tpId)).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA))
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA))
                         .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
                 this.srgOtsCepMap.put(uuidMap, cep);
                 CepList cepList = new CepListBuilder()
@@ -665,10 +665,10 @@ public class ConvertTopoORtoTapiAtInit {
             Link tapLink = this.tapiLink.createTapiLink(
                 sourceNode, link.getSource().getSourceTp().getValue(),
                 destNode, link.getDestination().getDestTp().getValue(),
-                TapiStringConstants.OMS_XPDR_RDM_LINK,
-                sourceNode.contains("ROADM") ? TapiStringConstants.PHTNC_MEDIA : TapiStringConstants.XPDR,
-                destNode.contains("ROADM") ? TapiStringConstants.PHTNC_MEDIA : TapiStringConstants.XPDR,
-                TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.OMS_XPDR_RDM_LINK,
+                sourceNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
+                destNode.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR,
+                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
                 //adminState,
                 link.augmentation(Link1.class).getAdministrativeState() == null || oppLnkAdmState == null
                     ? null

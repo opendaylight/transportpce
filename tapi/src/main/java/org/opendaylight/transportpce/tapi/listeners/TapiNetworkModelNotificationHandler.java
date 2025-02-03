@@ -27,7 +27,7 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationServiceBuilder;
@@ -83,7 +83,7 @@ public class TapiNetworkModelNotificationHandler {
     private final NetworkTransactionService networkTransactionService;
     private final NotificationPublishService notificationPublishService;
     private final List<ConnectivityService> connectivityServiceChanges = new ArrayList<>();
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
+    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
     private final List<LayerProtocolName> orderedServiceLayerList;
 
@@ -293,7 +293,7 @@ public class TapiNetworkModelNotificationHandler {
                     .onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext> optConnContext =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivityContextIID).get();
             if (optConnContext.isEmpty()) {
-                LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+                LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR);
                 return;
             }
             if (optConnContext.orElseThrow().getConnectivityService() == null) {
@@ -325,7 +325,7 @@ public class TapiNetworkModelNotificationHandler {
                     Optional<Connection> optConn =
                         this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                     if (optConn.isEmpty()) {
-                        LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
+                        LOG.error(TapiConstants.TAPI_CONNECTION_READ_ERROR);
                         continue;
                     }
                     Connection newConn = optConn.orElseThrow();
@@ -354,7 +354,7 @@ public class TapiNetworkModelNotificationHandler {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR);
         }
     }
 
@@ -391,7 +391,7 @@ public class TapiNetworkModelNotificationHandler {
                 Optional<Connection> optConn =
                         this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                 if (optConn.isEmpty()) {
-                    LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
+                    LOG.error(TapiConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
                 Connection newConn = optConn.orElseThrow(); // Current state of connection
@@ -421,7 +421,7 @@ public class TapiNetworkModelNotificationHandler {
             }
             return OperationalState.DISABLED;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR);
             return topConnectionState;
         }
     }
@@ -491,7 +491,7 @@ public class TapiNetworkModelNotificationHandler {
                 Optional<Connection> optConn =
                     this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connIID).get();
                 if (optConn.isEmpty()) {
-                    LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
+                    LOG.error(TapiConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
                 Connection newConn = optConn.orElseThrow(); // Current state of connection
@@ -503,7 +503,7 @@ public class TapiNetworkModelNotificationHandler {
             }
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiConstants.TAPI_CONNECTION_UPDATE_ERROR);
             return false;
         }
     }
