@@ -35,7 +35,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetLinkDetailsImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetNodeDetailsImpl;
@@ -122,7 +122,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService, new Uuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID));
+            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID));
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
@@ -132,11 +132,9 @@ public class TapiTopologyImplTest extends AbstractTest {
     @Test
     void getTopologyDetailsForTransponder100GTopologyWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
+                UUID.nameUUIDFromBytes(TapiConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("TPDR100GUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
-//        TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(networkTransactionService, tapiContext, topologyUtils,
-//            tapiLink);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
                 topologyUtils, tapiLink, networkTransactionService)
             .invoke(input);
@@ -145,7 +143,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         assertNotNull(topology, "Topology should not be null");
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8))
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8))
             .toString());
         assertEquals(topoUuid, topology.getUuid(), "incorrect topology uuid");
         assertEquals(1, topology.getNode().size(), "Node list size should be 1");
@@ -177,7 +175,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     @Test
     void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful() throws ExecutionException, InterruptedException {
         Uuid topologyUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+                UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("T0MultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
@@ -320,7 +318,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     @Test
     void getTopologyDetailsForFullTapiTopologyWithLinksWhenSuccessful()
             throws ExecutionException, InterruptedException {
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER.getBytes(
             StandardCharsets.UTF_8)).toString());
         LOG.info("T0FullMultilayerUuid = {}", topologyUuid);
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
@@ -502,7 +500,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     void getNodeAndNepsDetailsWhenSuccessful() throws ExecutionException, InterruptedException {
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER.getBytes(
             StandardCharsets.UTF_8)).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,
@@ -537,7 +535,7 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @Test
     void getLinkDetailsWhenSuccessful() throws ExecutionException, InterruptedException {
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(
+        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER.getBytes(
             StandardCharsets.UTF_8)).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = new GetTopologyDetailsImpl(tapiContext,

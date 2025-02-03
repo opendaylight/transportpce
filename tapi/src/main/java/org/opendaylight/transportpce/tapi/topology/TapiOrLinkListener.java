@@ -20,7 +20,7 @@ import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
@@ -50,7 +50,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     private final TapiLink tapiLink;
     private final NetworkTransactionService networkTransactionService;
     private final Uuid tapiTopoUuid = new Uuid(
-            UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
+            UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
 
     public TapiOrLinkListener(final TapiLink tapiLink, final NetworkTransactionService networkTransactionService) {
         this.tapiLink = tapiLink;
@@ -94,7 +94,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
             String destTp = link.getDestination().getDestTp().getValue();
             //Configuring link type to default OMS_XPDR-RDM
-            String linkType = TapiStringConstants.OMS_XPDR_RDM_LINK;
+            String linkType = TapiConstants.OMS_XPDR_RDM_LINK;
 
             if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
                 // For ROADM to ROADM link, only capture change on existing links to track change in OMS
@@ -103,12 +103,12 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 // Thus check that the link already exist in Datastore to upgrade it rather than creating an additional
                 // unidirectional link
                 if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp, getQual(srcNode), getQual(destNode),
-                        TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS))) {
+                        TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS))) {
                     continue;
                 }
                 LOG.warn("Now triggering creation of link for type = {} to account for OMS change",
                     link1.getLinkType().getName());
-                linkType = TapiStringConstants.OMS_RDM_RDM_LINK;
+                linkType = TapiConstants.OMS_RDM_RDM_LINK;
             }
 
             // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
@@ -118,7 +118,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             }
             putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
                 linkType, getQual(srcNode), getQual(destNode),
-                TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
                 link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
                 Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                 tapiTopoUuid));
@@ -173,7 +173,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     }
 
     private String getQual(String node) {
-        return node.contains("ROADM") ? TapiStringConstants.PHTNC_MEDIA : TapiStringConstants.XPDR;
+        return node.contains("ROADM") ? TapiConstants.PHTNC_MEDIA : TapiConstants.XPDR;
     }
 
     private boolean oppositeLinkExists(LinkId oppositeLink) {

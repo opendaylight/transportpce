@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.rpc.DeleteTapiLinkImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.InitRoadmRoadmTapiLinkImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.InitXpdrRdmTapiLinkImpl;
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class TapiNetworkUtilsImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkUtilsImpl.class);
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
+    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
 
     private final NetworkTransactionService networkTransactionService;

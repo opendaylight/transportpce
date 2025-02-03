@@ -21,7 +21,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.connectivity.ConnectivityUtils;
 import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
@@ -95,7 +95,7 @@ public class TapiProvider {
             .build();
     //TODO: When setting of TAPI Topology externalized, change setting to the value set at tapi feature install for the
     // 2 following constants
-    public static final Uuid TAPI_TOPO_UUID = TapiStringConstants.T0_FULL_MULTILAYER_UUID;
+    public static final Uuid TAPI_TOPO_UUID = TapiConstants.T0_FULL_MULTILAYER_UUID;
     public static final String TOPOLOGICAL_MODE = "Full";
     private final DataBroker dataBroker;
     private final NetworkModelService netModServ;

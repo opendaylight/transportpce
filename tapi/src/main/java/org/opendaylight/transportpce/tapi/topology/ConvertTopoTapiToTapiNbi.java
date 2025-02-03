@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -81,9 +81,9 @@ public class ConvertTopoTapiToTapiNbi {
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(
-            UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
+            UUID.nameUUIDFromBytes(TapiConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
         Name nodeName =
-            new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
+            new NameBuilder().setValueName("otsi node name").setValue(TapiConstants.RDM_INFRA).build();
         Name nameNodeType =
             new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = pruneTapiRoadmNeps();
@@ -98,13 +98,13 @@ public class ConvertTopoTapiToTapiNbi {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
@@ -166,8 +166,8 @@ public class ConvertTopoTapiToTapiNbi {
      */
     private void purgeTapiLinks() {
         this.tapiLinks = this.tapiLinks.values().stream()
-            .filter(l -> l.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_OTS_XPDR_RDM_LINK))
-                || l.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)))
+            .filter(l -> l.getName().containsKey(new NameKey(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK))
+                || l.getName().containsKey(new NameKey(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)))
             .collect(BindingMap.toMap());
     }
 
@@ -176,7 +176,7 @@ public class ConvertTopoTapiToTapiNbi {
      */
     private void purgeTapiNodes() {
         this.tapiNodes = this.tapiNodes.values().stream()
-            .filter(n -> !n.getName().containsKey(new NameKey(TapiStringConstants.VALUE_NAME_ROADM_NODE)))
+            .filter(n -> !n.getName().containsKey(new NameKey(TapiConstants.VALUE_NAME_ROADM_NODE)))
             .collect(BindingMap.toMap());
     }
 

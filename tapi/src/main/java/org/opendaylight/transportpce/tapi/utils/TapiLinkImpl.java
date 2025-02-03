@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -129,35 +129,35 @@ public class TapiLinkImpl implements TapiLink {
         NameBuilder linkName = new NameBuilder();
         // TODO: variables for each type
         switch (linkType) {
-            case TapiStringConstants.OMS_RDM_RDM_LINK:
+            case TapiConstants.OMS_RDM_RDM_LINK:
                 LOG.info("Roadm to roadm link");
                 LOG.info("TAPILinkImpl Building LinkId {}", buildORLinkId(
                     String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
                     String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)
                     .toString());
                 linkName
-                    .setValueName(TapiStringConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
+                    .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                     .setValue(linkKey);
                 createCepForLink(getORLinkFromLinkId(buildORLinkId(
                     String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
                     String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)));
                 break;
-            case TapiStringConstants.TRANSITIONAL_LINK:
+            case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
                 linkName
                     .setValueName("transitional link name")
                     .setValue(linkKey);
                 break;
-            case TapiStringConstants.OMS_XPDR_RDM_LINK:
-                LOG.info(TapiStringConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
+            case TapiConstants.OMS_XPDR_RDM_LINK:
+                LOG.info(TapiConstants.VALUE_NAME_OTS_XPDR_RDM_LINK);
                 linkName
                     .setValueName("XPDR-RDM link name")
                     .setValue(linkKey);
                 break;
-            case TapiStringConstants.OTN_XPDR_XPDR_LINK:
+            case TapiConstants.OTN_XPDR_XPDR_LINK:
                 LOG.info("OTN Xpdr to roadm link");
                 linkName
-                    .setValueName(TapiStringConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
+                    .setValueName(TapiConstants.VALUE_NAME_OTN_XPDR_XPDR_LINK)
                     .setValue(linkKey);
                 break;
             default:
@@ -168,13 +168,13 @@ public class TapiLinkImpl implements TapiLink {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
@@ -194,8 +194,8 @@ public class TapiLinkImpl implements TapiLink {
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
             // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
-            .setTransitionedLayerProtocolName(Set.of(TapiStringConstants.PHTNC_MEDIA_OMS,
-                TapiStringConstants.PHTNC_MEDIA_OTS))
+            .setTransitionedLayerProtocolName(Set.of(TapiConstants.PHTNC_MEDIA_OMS,
+                TapiConstants.PHTNC_MEDIA_OTS))
             .setLayerProtocolName(layerProtoNameList)
             .setNodeEdgePoint(
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
@@ -363,39 +363,39 @@ public class TapiLinkImpl implements TapiLink {
 
 
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(
-            TapiStringConstants.T0_FULL_MULTILAYER_UUID);
+            TapiConstants.T0_FULL_MULTILAYER_UUID);
 
         String intermediateSupNodeId = getSupportingNodeFromNodeId(link.getSource().getSourceNode().getValue());
         String intermediateTp = link.getSource().getSourceTp().getValue();
 
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCmCepSpecA, false);
+            intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCmCepSpecA, false);
         LOG.debug("TAPILINKIMPLLINE378 CepSpec is {}", otsMCmCepSpecA);
         LOG.debug("TAPILINKIMPLLINE379 Cep Node A OTS is {}", cepNodeAots);
 
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiStringConstants.PHTNC_MEDIA_OTS, cepNodeAots);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots);
         LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null, false);
+            intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiStringConstants.PHTNC_MEDIA_OMS, cepNodeAoms);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms);
         LOG.info("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
         intermediateSupNodeId = getSupportingNodeFromNodeId(link.getDestination().getDestNode().getValue());
         intermediateTp = link.getDestination().getDestTp().getValue();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZots = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
+            intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiStringConstants.PHTNC_MEDIA_OTS, cepNodeZots);
+            TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots);
         LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
-            intermediateTp), TapiStringConstants.PHTNC_MEDIA_OMS, null, false);
+            intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
-            TapiStringConstants.PHTNC_MEDIA_OMS, cepNodeZoms);
+            TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms);
         LOG.info("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
 
     }
@@ -478,10 +478,10 @@ public class TapiLinkImpl implements TapiLink {
     @Override
     public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
+                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
-                String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
+                String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA_OTS, sourceTpId)
                     .getBytes(StandardCharsets.UTF_8))
             .toString());
         try {
@@ -493,7 +493,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
-                                    String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                    String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA)
                                         .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
@@ -504,7 +504,7 @@ public class TapiLinkImpl implements TapiLink {
                 return null;
             }
             Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
-                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
+                    String.join("+", destNodeId, TapiConstants.PHTNC_MEDIA_OTS, destTpId)
                         .getBytes(StandardCharsets.UTF_8))
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
@@ -515,7 +515,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Topology.class, new TopologyKey(tapiTopoUuid))
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
-                                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                    String.join("+", destNodeId, TapiConstants.PHTNC_MEDIA)
                                         .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
@@ -537,10 +537,10 @@ public class TapiLinkImpl implements TapiLink {
     @Override
     public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
+                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
-                String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
+                String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA_OTS, sourceTpId)
                     .getBytes(StandardCharsets.UTF_8))
             .toString());
         try {
@@ -553,7 +553,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Node.class, new NodeKey(
                             //nodeUuid
                             new Uuid(UUID.nameUUIDFromBytes(
-                                    String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                    String.join("+", srcNodeId, TapiConstants.PHTNC_MEDIA)
                                         .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
@@ -564,7 +564,7 @@ public class TapiLinkImpl implements TapiLink {
                 return null;
             }
             Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
-                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
+                    String.join("+", destNodeId, TapiConstants.PHTNC_MEDIA_OTS, destTpId)
                         .getBytes(StandardCharsets.UTF_8))
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
@@ -576,7 +576,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Node.class, new NodeKey(
                             //node1Uuid
                             new Uuid(UUID.nameUUIDFromBytes(
-                                    String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
+                                    String.join("+", destNodeId, TapiConstants.PHTNC_MEDIA)
                                         .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
@@ -600,7 +600,7 @@ public class TapiLinkImpl implements TapiLink {
             cep) {
         LOG.debug("TAPILINKIMPLLINE566 nodeId {}, tpId {}, qual {}", nodeId, tpId, qual);
         String nepId = String.join("+", nodeId, qual, tpId);
-        String nodeNepId = String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA);
+        String nodeNepId = String.join("+", nodeId, TapiConstants.PHTNC_MEDIA);
         var uuidMap = new HashMap<>(Map.of(
             new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()).toString(),
             new Uuid(UUID.nameUUIDFromBytes(nodeNepId.getBytes(StandardCharsets.UTF_8)).toString()).toString()));
@@ -611,7 +611,7 @@ public class TapiLinkImpl implements TapiLink {
         tapiContext.updateTopologyWithCep(
             //TopoUuid
             new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()),
+                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString()),
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(nodeNepId.getBytes(StandardCharsets.UTF_8)).toString()),
             //nepUuid,

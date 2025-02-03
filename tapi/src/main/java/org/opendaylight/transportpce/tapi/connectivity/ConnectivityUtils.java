@@ -27,7 +27,7 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.ServiceEndpointType;
@@ -226,14 +226,14 @@ public final class ConnectivityUtils {
                     .setPort(new PortBuilder()
                         .setPortDeviceName(txPortDeviceName)
                         .setPortName(txPortName)
-                        .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setPortRack(TapiConstants.PORT_RACK_VALUE)
                         .setPortShelf("00")
-                        .setPortType(TapiStringConstants.PORT_TYPE)
+                        .setPortType(TapiConstants.PORT_TYPE)
                         .build())
                     .setLgx(new LgxBuilder()
-                        .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                        .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                        .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                        .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                        .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                         .setLgxPortShelf("00")
                         .build())
                     .build()))
@@ -243,14 +243,14 @@ public final class ConnectivityUtils {
                     .setPort(new PortBuilder()
                         .setPortDeviceName(rxPortDeviceName)
                         .setPortName(rxPortName)
-                        .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setPortRack(TapiConstants.PORT_RACK_VALUE)
                         .setPortShelf("00")
-                        .setPortType(TapiStringConstants.PORT_TYPE)
+                        .setPortType(TapiConstants.PORT_TYPE)
                         .build())
                     .setLgx(new LgxBuilder()
-                        .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                        .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                        .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                        .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                        .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                        .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                         .setLgxPortShelf("00")
                         .build())
                     .build()))
@@ -268,14 +268,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(txPortDeviceName)
                     .setPortName(txPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .build()))
@@ -283,14 +283,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(rxPortDeviceName)
                     .setPortName(rxPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .build()))
@@ -381,7 +381,7 @@ public final class ConnectivityUtils {
                 .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
             resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
             switch (resourceType) {
-                case TapiStringConstants.TP:
+                case TapiConstants.TP:
                     TerminationPoint tp = (TerminationPoint) elem.getResource().getResource();
                     String tpID = tp.getTpId();
                     String tpNode;
@@ -412,7 +412,7 @@ public final class ConnectivityUtils {
                         }
                     }
                     break;
-                case TapiStringConstants.NODE:
+                case TapiConstants.NODE:
                     Node node = (Node) elem.getResource().getResource();
                     String nodeId = node.getNodeId();
                     if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
@@ -727,10 +727,10 @@ public final class ConnectivityUtils {
         ServiceFormat serviceFormat = null;
         String nodeAid = String.join("+",
             endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.XPDR);
+            TapiConstants.XPDR);
         String nodeZid = String.join("+",
             endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
-            TapiStringConstants.XPDR);
+            TapiConstants.XPDR);
         LOG.info("NodeAid = {}", nodeAid);
         LOG.info("NodeZid = {}", nodeZid);
         //switch (constraint.getServiceLayer().getIntValue()) {
@@ -863,7 +863,7 @@ public final class ConnectivityUtils {
             this.tapiContext.getTapiNode(
                 this.tapiTopoUuid,
                 new Uuid(UUID.nameUUIDFromBytes(
-                        (String.join("+",nodeName, TapiStringConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
+                        (String.join("+",nodeName, TapiConstants.XPDR)).getBytes(StandardCharsets.UTF_8))
                     .toString()));
         return tapiNode == null
             ? null
@@ -879,7 +879,7 @@ public final class ConnectivityUtils {
             LowerConnection conn = new LowerConnectionBuilder().setConnectionUuid(lowConn.getConnectionUuid()).build();
             xcMap.put(conn.key(), conn);
         }
-        xcMap.putAll(getLowerConnectionMap(TapiStringConstants.DSR));
+        xcMap.putAll(getLowerConnectionMap(TapiConstants.DSR));
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapDsr = new HashMap<>();
         // Create 1 cep per Xpdr in the CLIENT
@@ -889,10 +889,10 @@ public final class ConnectivityUtils {
             String spcXpdrClient =
                 xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             ConnectionEndPoint netCep1 =
-                createCepXpdr(0, 0, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR,
+                createCepXpdr(0, 0, spcXpdrClient, TapiConstants.DSR, TapiConstants.XPDR,
                     LayerProtocolName.DSR);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, netCep1);
+                xpdr, spcXpdrClient, TapiConstants.DSR, TapiConstants.XPDR, netCep1);
             cepMapDsr.put(netCep1.key(), netCep1);
         }
         // DSR top connection between edge xpdr CLIENT DSR
@@ -905,13 +905,13 @@ public final class ConnectivityUtils {
                 //spcXpdr2,
                 xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
                     .findFirst().orElseThrow(),
-                cepMapDsr, TapiStringConstants.DSR, LayerProtocolName.DSR,
+                cepMapDsr, TapiConstants.DSR, LayerProtocolName.DSR,
                 xcMap, this.topConnXpdrXpdrPhtn);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionDsr.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connectionDsr.getUuid(), TapiStringConstants.DSR);
+            connectionDsr.getUuid(), TapiConstants.DSR);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
         // DSR top connection that will be added to the service object
         Connection conn1 = new ConnectionBuilder().setConnectionUuid(connectionDsr.getUuid()).build();
@@ -934,13 +934,13 @@ public final class ConnectivityUtils {
                 xpdrClientTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             ConnectionEndPoint clientCep1 =
                 createCepXpdr(0, 0,
-                    spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, LayerProtocolName.DSR);
+                    spcXpdrClient, TapiConstants.DSR, TapiConstants.XPDR, LayerProtocolName.DSR);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrClient, TapiStringConstants.DSR, TapiStringConstants.XPDR, clientCep1);
-            ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, spcXpdrClient, TapiStringConstants.E_ODU,
-                    TapiStringConstants.XPDR, LayerProtocolName.ODU);
+                xpdr, spcXpdrClient, TapiConstants.DSR, TapiConstants.XPDR, clientCep1);
+            ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, spcXpdrClient, TapiConstants.E_ODU,
+                    TapiConstants.XPDR, LayerProtocolName.ODU);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrClient, TapiStringConstants.E_ODU, TapiStringConstants.XPDR, clientCep2);
+                xpdr, spcXpdrClient, TapiConstants.E_ODU, TapiConstants.XPDR, clientCep2);
             cepMapDsr.put(clientCep1.key(), clientCep1);
             cepMapOdu.put(clientCep2.key(), clientCep2);
 
@@ -950,12 +950,12 @@ public final class ConnectivityUtils {
                     .connectivity.context.Connection connection =
                 createXCBetweenCeps(
                     clientCep2, getAssociatediODUCep(spcXpdrNetwork),
-                     spcXpdrClient, spcXpdrNetwork, TapiStringConstants.ODU, LayerProtocolName.ODU);
+                     spcXpdrClient, spcXpdrNetwork, TapiConstants.ODU, LayerProtocolName.ODU);
             populateConnectionInConnectionVsService(serviceName, serviceUuid,
                 connection.getName().entrySet().stream()
                     .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                     .getValue().getValue(),
-                connection.getUuid(), TapiStringConstants.ODU);
+                connection.getUuid(), TapiConstants.ODU);
             this.connectionFullMap.put(connection.key(), connection);
         }
 
@@ -970,13 +970,13 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connectionOdu =
             createTopConnection(
-                spcXpdr1, spcXpdr2, cepMapOdu, TapiStringConstants.E_ODU, LayerProtocolName.ODU,
-                getLowerConnectionMap(TapiStringConstants.E_ODU), this.topConnXpdrXpdrOdu);
+                spcXpdr1, spcXpdr2, cepMapOdu, TapiConstants.E_ODU, LayerProtocolName.ODU,
+                getLowerConnectionMap(TapiConstants.E_ODU), this.topConnXpdrXpdrOdu);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionOdu.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connectionOdu.getUuid(), TapiStringConstants.E_ODU);
+            connectionOdu.getUuid(), TapiConstants.E_ODU);
         this.connectionFullMap.put(connectionOdu.key(), connectionOdu);
 
         Map<ConnectionKey, Connection> connServMap = new HashMap<>();
@@ -987,13 +987,13 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connectionDsr =
             createTopConnection(
-                spcXpdr1, spcXpdr2, cepMapDsr, TapiStringConstants.DSR,
-                LayerProtocolName.DSR, getLowerConnectionMap(TapiStringConstants.DSR), this.topConnXpdrXpdrPhtn);
+                spcXpdr1, spcXpdr2, cepMapDsr, TapiConstants.DSR,
+                LayerProtocolName.DSR, getLowerConnectionMap(TapiConstants.DSR), this.topConnXpdrXpdrPhtn);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionDsr.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connectionDsr.getUuid(), TapiStringConstants.DSR);
+            connectionDsr.getUuid(), TapiConstants.DSR);
         this.connectionFullMap.put(connectionDsr.key(), connectionDsr);
         // DSR top connection that will be added to the service object
         Connection conn1 = new ConnectionBuilder().setConnectionUuid(connectionDsr.getUuid()).build();
@@ -1013,10 +1013,10 @@ public final class ConnectivityUtils {
             LOG.debug("Con.Utils Line 830 : Creating client ceps E_ODU and DSR for ports {} connected to {} in xpdr {}",
                 clientConnectedPortList, spcXpdrNw, xpdr);
             for (String clientPort : clientConnectedPortList) {
-                ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, clientPort, TapiStringConstants.E_ODU,
-                        TapiStringConstants.XPDR, LayerProtocolName.ODU);
+                ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, clientPort, TapiConstants.E_ODU,
+                        TapiConstants.XPDR, LayerProtocolName.ODU);
                 putXpdrCepInTopologyContext(
-                    xpdr, clientPort, TapiStringConstants.E_ODU, TapiStringConstants.XPDR, clientCep2);
+                    xpdr, clientPort, TapiConstants.E_ODU, TapiConstants.XPDR, clientCep2);
             }
         }
     }
@@ -1033,9 +1033,9 @@ public final class ConnectivityUtils {
                 xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             ConnectionEndPoint netCep1 =
                 createCepXpdr(0, 0,
-                    spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.XPDR, LayerProtocolName.ODU);
+                    spcXpdrNetwork, TapiConstants.I_ODU, TapiConstants.XPDR, LayerProtocolName.ODU);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrNetwork, TapiStringConstants.I_ODU, TapiStringConstants.XPDR, netCep1);
+                xpdr, spcXpdrNetwork, TapiConstants.I_ODU, TapiConstants.XPDR, netCep1);
             cepMap1.put(netCep1.key(), netCep1);
         }
 
@@ -1049,13 +1049,13 @@ public final class ConnectivityUtils {
                 //spcXpdr2,
                 xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
                     .findFirst().orElseThrow(),
-                cepMap1, TapiStringConstants.I_ODU,
-                LayerProtocolName.ODU, getLowerConnectionMap(TapiStringConstants.I_ODU), this.topConnXpdrXpdrOtu);
+                cepMap1, TapiConstants.I_ODU,
+                LayerProtocolName.ODU, getLowerConnectionMap(TapiConstants.I_ODU), this.topConnXpdrXpdrOtu);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionOdu.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connectionOdu.getUuid(), TapiStringConstants.I_ODU);
+            connectionOdu.getUuid(), TapiConstants.I_ODU);
         this.connectionFullMap.put(connectionOdu.key(), connectionOdu);
         // ODU top connection that will be added to the service object
         Connection connOdu = new ConnectionBuilder().setConnectionUuid(connectionOdu.getUuid()).build();
@@ -1088,24 +1088,24 @@ public final class ConnectivityUtils {
             // Create 2 ceps per Xpdr in the OTS, OTSiMC and in the I_OTU layer, as well as a top
             // connection iODU and iOTU between the xpdrs
             ConnectionEndPoint netCep1 = createCepXpdr(0, 0,
-                    spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS,
-                    TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
+                    spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS,
+                    TapiConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrNetwork, TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.XPDR, netCep1);
+                xpdr, spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.XPDR, netCep1);
             ConnectionEndPoint netCep2 = createCepXpdr(lowerFreqIndex, higherFreqIndex,
-                    spcXpdrNetwork, TapiStringConstants.OTSI_MC,
-                    TapiStringConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
+                    spcXpdrNetwork, TapiConstants.OTSI_MC,
+                    TapiConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrNetwork, TapiStringConstants.OTSI_MC, TapiStringConstants.XPDR, netCep2);
+                xpdr, spcXpdrNetwork, TapiConstants.OTSI_MC, TapiConstants.XPDR, netCep2);
             cepMap.put(netCep1.key(), netCep1);
             cepMap.put(netCep2.key(), netCep2);
             slotFreqExtension = "[" + netCep2.getName().entrySet().iterator().next().getValue().getValue()
                 .split("\\[")[1];
             ConnectionEndPoint netCep3 =
                 createCepXpdr(0, 0,
-                    spcXpdrNetwork, TapiStringConstants.I_OTU, TapiStringConstants.XPDR, LayerProtocolName.DIGITALOTN);
+                    spcXpdrNetwork, TapiConstants.I_OTU, TapiConstants.XPDR, LayerProtocolName.DIGITALOTN);
             putXpdrCepInTopologyContext(
-                xpdr, spcXpdrNetwork, TapiStringConstants.I_OTU, TapiStringConstants.XPDR, netCep3);
+                xpdr, spcXpdrNetwork, TapiConstants.I_OTU, TapiConstants.XPDR, netCep3);
             cepMapOTU.put(netCep3.key(), netCep3);
 
         }
@@ -1118,14 +1118,14 @@ public final class ConnectivityUtils {
                     .findFirst().orElseThrow(), slotFreqExtension),
                 String.join("-", xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist
                     .get(xpdrNodelist.size() - 1))).findFirst().orElseThrow(), slotFreqExtension),
-                cepMap, TapiStringConstants.OTSI_MC,
-                LayerProtocolName.PHOTONICMEDIA, getLowerConnectionMap(TapiStringConstants.OTSI_MC),
+                cepMap, TapiConstants.OTSI_MC,
+                LayerProtocolName.PHOTONICMEDIA, getLowerConnectionMap(TapiConstants.OTSI_MC),
                 this.topConnRdmRdm);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connection.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connection.getUuid(), TapiStringConstants.OTSI_MC);
+            connection.getUuid(), TapiConstants.OTSI_MC);
         this.connectionFullMap.put(connection.key(), connection);
         // OTSi top connection that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
@@ -1144,14 +1144,14 @@ public final class ConnectivityUtils {
                 //spcXpdr2,
                 xpdrNetworkTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
                     .findFirst().orElseThrow(),
-                cepMapOTU, TapiStringConstants.I_OTU,
-                LayerProtocolName.DIGITALOTN, getLowerConnectionMap(TapiStringConstants.I_OTU),
+                cepMapOTU, TapiConstants.I_OTU,
+                LayerProtocolName.DIGITALOTN, getLowerConnectionMap(TapiConstants.I_OTU),
                 this.topConnXpdrXpdrPhtn);
         populateConnectionInConnectionVsService(serviceName, serviceUuid,
             connectionOtu.getName().entrySet().stream()
                 .filter(nm -> nm.getKey().equals(new NameKey("Connection name"))).findAny().orElseThrow()
                 .getValue().getValue(),
-            connectionOtu.getUuid(), TapiStringConstants.I_OTU);
+            connectionOtu.getUuid(), TapiConstants.I_OTU);
         this.connectionFullMap.put(connectionOtu.key(), connectionOtu);
         // ODU top connection that will be added to the service object
         Connection conOtu = new ConnectionBuilder().setConnectionUuid(connectionOtu.getUuid()).build();
@@ -1171,10 +1171,10 @@ public final class ConnectivityUtils {
 
         if (withOMS) {
             // WithOMS is true for degree for which OTS Cep is created during link discovery/update
-            clientQualifier = TapiStringConstants.MC;
+            clientQualifier = TapiConstants.MC;
             OwnedNodeEdgePoint onepMC = tapiFactory.createRoadmNep(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1],
                 false, OperationalState.ENABLED, AdministrativeState.UNLOCKED, clientQualifier);
-            putRdmNepInTopologyContext(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1], TapiStringConstants.MC, onepMC);
+            putRdmNepInTopologyContext(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1], TapiConstants.MC, onepMC);
         } else {
             // WithOMS is false for Add/drop ports for which no OTS was created during initial mapping
             // With new process of CEP creation, OTS CEP are created also on PPs at initialization.
@@ -1185,23 +1185,23 @@ public final class ConnectivityUtils {
 //            cepMap.put(rdmCep0.key(), rdmCep0);
         }
 
-        clientQualifier = TapiStringConstants.OTSI_MC;
+        clientQualifier = TapiConstants.OTSI_MC;
         OwnedNodeEdgePoint onepOTSiMC = tapiFactory.createRoadmNep(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1],
             false, OperationalState.ENABLED, AdministrativeState.UNLOCKED, clientQualifier);
         putRdmNepInTopologyContext(rdmTp.split("\\+")[0], rdmTp.split("\\+")[1],
-            TapiStringConstants.OTSI_MC, onepOTSiMC);
+            TapiConstants.OTSI_MC, onepOTSiMC);
         // For MC Cep creation process last parameter (boolean srg) is not checked so that we don't care whether we
         //create this Cep for PP or for TTP that srg is set to false or true
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
             .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
         ConnectionEndPoint rdmCep2 = tapiFactory.createCepRoadm(lowerFreqIndex, higherFreqIndex, rdmTp,
-            TapiStringConstants.MC, null, false);
-        putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.MC, rdmCep2);
+            TapiConstants.MC, null, false);
+        putRdmCepInTopologyContext(roadm, rdmTp, TapiConstants.MC, rdmCep2);
         cepMap.put(rdmCep2.key(), rdmCep2);
 
         ConnectionEndPoint rdmCep3 = tapiFactory.createCepRoadm(lowerFreqIndex, higherFreqIndex, rdmTp,
-            TapiStringConstants.OTSI_MC, null, false);
-        putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.OTSI_MC, rdmCep3);
+            TapiConstants.OTSI_MC, null, false);
+        putRdmCepInTopologyContext(roadm, rdmTp, TapiConstants.OTSI_MC, rdmCep3);
         cepMap.put(rdmCep3.key(), rdmCep3);
         return cepMap;
     }
@@ -1257,13 +1257,13 @@ public final class ConnectivityUtils {
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.context.Connection connection1 =
                     createXCBetweenCeps(
-                        adCepMC, degCepMC, spcRdmAD, spcRdmDEG, TapiStringConstants.MC,
+                        adCepMC, degCepMC, spcRdmAD, spcRdmDEG, TapiConstants.MC,
                         LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 1 created = {}", connection1);
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.context.Connection connection2 =
                     createXCBetweenCeps(
-                        adCepOTSiMC, degCepOTSiMC, spcRdmAD, spcRdmDEG, TapiStringConstants.OTSI_MC,
+                        adCepOTSiMC, degCepOTSiMC, spcRdmAD, spcRdmDEG, TapiConstants.OTSI_MC,
                         LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 2 created = {}", connection2);
                 this.connectionFullMap.put(connection1.key(), connection1);
@@ -1312,13 +1312,13 @@ public final class ConnectivityUtils {
                         .connectivity.context.Connection connection1 =
                     createXCBetweenCeps(
                         deg1CepMC, deg2CepMC, spcRdmDEG1, spcRdmDEG2,
-                        TapiStringConstants.MC, LayerProtocolName.PHOTONICMEDIA);
+                        TapiConstants.MC, LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 1 created = {}", connection1);
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.context.Connection connection2 =
                     createXCBetweenCeps(
                         deg1CepOTSiMC, deg2CepOTSiMC, spcRdmDEG1, spcRdmDEG2,
-                        TapiStringConstants.OTSI_MC, LayerProtocolName.PHOTONICMEDIA);
+                        TapiConstants.OTSI_MC, LayerProtocolName.PHOTONICMEDIA);
                 LOG.info("Cross connection 2 created = {}", connection2.toString());
                 this.connectionFullMap.put(connection1.key(), connection1);
                 this.connectionFullMap.put(connection2.key(), connection2);
@@ -1338,7 +1338,7 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection =
             createTopConnection(String.join("-", spcRdmAD1, slotFreqExtension),
-                String.join("-", spcRdmAD2, slotFreqExtension), cepMap, TapiStringConstants.MC,
+                String.join("-", spcRdmAD2, slotFreqExtension), cepMap, TapiConstants.MC,
                 LayerProtocolName.PHOTONICMEDIA, xcLowerMap, null);
         this.connectionFullMap.put(connection.key(), connection);
         LOG.info("Top connection created = {}", connection);
@@ -1349,7 +1349,7 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection1 =
             createTopConnection(String.join("-", spcRdmAD1, slotFreqExtension),
-                String.join("-", spcRdmAD2, slotFreqExtension), cepMap, TapiStringConstants.OTSI_MC,
+                String.join("-", spcRdmAD2, slotFreqExtension), cepMap, TapiConstants.OTSI_MC,
                 LayerProtocolName.PHOTONICMEDIA,
                 //topLowerMap,
                 new HashMap<>(Map.of(conn1.key(), conn1)),
@@ -1481,7 +1481,7 @@ public final class ConnectivityUtils {
     private ConnectionEndPoint createCepXpdr(int lowerFreqIndex, int higherFreqIndex,
             String id, String qualifier, String nodeLayer, LayerProtocolName cepProtocol) {
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
-        String nepNodeId = String.join("+",id.split("\\+")[0], TapiStringConstants.XPDR);
+        String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
         String extendedNepId = (lowerFreqIndex == 0 && higherFreqIndex == 0)
             ? nepId
             : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
@@ -1499,17 +1499,17 @@ public final class ConnectivityUtils {
             .build();
         String clientQualifier = "";
         switch (qualifier) {
-            case TapiStringConstants.PHTNC_MEDIA_OTS:
-                clientQualifier = TapiStringConstants.OTSI_MC;
+            case TapiConstants.PHTNC_MEDIA_OTS:
+                clientQualifier = TapiConstants.OTSI_MC;
                 break;
-            case TapiStringConstants.OTSI_MC:
-                clientQualifier = TapiStringConstants.I_OTU;
+            case TapiConstants.OTSI_MC:
+                clientQualifier = TapiConstants.I_OTU;
                 break;
-            case TapiStringConstants.I_OTU:
-                clientQualifier = TapiStringConstants.I_ODU;
+            case TapiConstants.I_OTU:
+                clientQualifier = TapiConstants.I_ODU;
                 break;
-            case TapiStringConstants.E_ODU:
-                clientQualifier = TapiStringConstants.DSR;
+            case TapiConstants.E_ODU:
+                clientQualifier = TapiConstants.DSR;
                 break;
             default :
                 LOG.debug("no client CEP for DSR NEP {}", nepId);
@@ -1547,24 +1547,24 @@ public final class ConnectivityUtils {
 
         List<String> lpnList = new ArrayList<>();
         switch (lpq) {
-            case TapiStringConstants.OTSI_MC:
+            case TapiConstants.OTSI_MC:
                 break;
-            case TapiStringConstants.I_OTU:
-                lpnList.add(TapiStringConstants.OTSI_MC);
+            case TapiConstants.I_OTU:
+                lpnList.add(TapiConstants.OTSI_MC);
                 break;
             //ODU used for cross connections between E_ODU and I_ODU ceps, and is at the same level as I_ODU
             //I_ODU connection is between the end Xponders I_ODU, ODU (cross)-connections extend them to the endpoints
-            case TapiStringConstants.I_ODU:
-            case TapiStringConstants.ODU:
-                lpnList.addAll(List.of(TapiStringConstants.OTSI_MC,TapiStringConstants.I_OTU));
+            case TapiConstants.I_ODU:
+            case TapiConstants.ODU:
+                lpnList.addAll(List.of(TapiConstants.OTSI_MC,TapiConstants.I_OTU));
                 break;
-            case TapiStringConstants.E_ODU:
-                lpnList.addAll(List.of(TapiStringConstants.OTSI_MC,TapiStringConstants.I_OTU,
-                    TapiStringConstants.I_ODU, TapiStringConstants.ODU));
+            case TapiConstants.E_ODU:
+                lpnList.addAll(List.of(TapiConstants.OTSI_MC,TapiConstants.I_OTU,
+                    TapiConstants.I_ODU, TapiConstants.ODU));
                 break;
-            case TapiStringConstants.DSR:
-                lpnList.addAll(List.of(TapiStringConstants.OTSI_MC,TapiStringConstants.I_OTU,
-                    TapiStringConstants.I_ODU, TapiStringConstants.E_ODU));
+            case TapiConstants.DSR:
+                lpnList.addAll(List.of(TapiConstants.OTSI_MC,TapiConstants.I_OTU,
+                    TapiConstants.I_ODU, TapiConstants.E_ODU));
                 break;
             default :
                 break;
@@ -1713,9 +1713,9 @@ public final class ConnectivityUtils {
                 mapztoa.values().stream().filter(ztoa -> ztoa.getId().equals("0")).findFirst().orElseThrow();
             TerminationPoint tp = (TerminationPoint) firstElement.getResource().getResource();
             Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()))
+                (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.MC, tp.getTpId()))
                     .getBytes(StandardCharsets.UTF_8)).toString());
-            LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()));
+            LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiConstants.MC, tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (sip.getUuid().equals(sipUuid)) {
                     return sip.getUuid();
@@ -1735,9 +1735,9 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Network-Network ports --> iODU layer SIPs TODO --> updated to E_ODU
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.I_ODU, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
-                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()));
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiConstants.I_ODU, tp.getTpId()));
                 break;
             case OTU:
                 firstElement =
@@ -1745,9 +1745,9 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Network-Network ports --> iOTSi layer SIPs
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.I_OTSI, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
-                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()));
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiConstants.I_OTSI, tp.getTpId()));
                 break;
             case Ethernet:
                 LOG.info("Elements ZA = {}", mapztoa.values());
@@ -1756,9 +1756,9 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Client-client ports --> DSR layer SIPs
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.DSR, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
-                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()));
+                LOG.info("SIP name = {}", String.join("+", tp.getTpNodeId(), TapiConstants.DSR, tp.getTpId()));
                 break;
             default:
                 sipUuid = null;
@@ -1784,10 +1784,10 @@ public final class ConnectivityUtils {
             LOG.info("First element of service path = {}", firstElement.getResource().getResource());
             TerminationPoint tp = (TerminationPoint) firstElement.getResource().getResource();
             Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()))
+                (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.MC, tp.getTpId()))
                     .getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("ROADM SIP name = {}",
-                String.join("+", tp.getTpNodeId(), TapiStringConstants.MC, tp.getTpId()));
+                String.join("+", tp.getTpNodeId(), TapiConstants.MC, tp.getTpId()));
             for (ServiceInterfacePoint sip:this.sipMap.values()) {
                 if (sip.getUuid().equals(sipUuid)) {
                     return sip.getUuid();
@@ -1807,10 +1807,10 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Network-Network ports --> iODU layer SIPs. TODO -> updated to eODU
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.I_ODU, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 LOG.info("ODU XPDR SIP name = {}",
-                    String.join("+", tp.getTpNodeId(), TapiStringConstants.I_ODU, tp.getTpId()));
+                    String.join("+", tp.getTpNodeId(), TapiConstants.I_ODU, tp.getTpId()));
                 break;
             case OTU:
                 firstElement =
@@ -1818,10 +1818,10 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Network-Network ports --> iOTSi layer SIPs
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.I_OTSI, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 LOG.info("OTU XPDR SIP name = {}",
-                    String.join("+", tp.getTpNodeId(), TapiStringConstants.I_OTSI, tp.getTpId()));
+                    String.join("+", tp.getTpNodeId(), TapiConstants.I_OTSI, tp.getTpId()));
                 break;
             case Ethernet:
                 LOG.info("Elements AZ = {}", mapatoz.values());
@@ -1830,10 +1830,10 @@ public final class ConnectivityUtils {
                 tp = (TerminationPoint) firstElement.getResource().getResource();
                 // Client-client ports --> DSR layer SIPs
                 sipUuid = new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "SIP", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()))
+                    (String.join("+", "SIP", tp.getTpNodeId(), TapiConstants.DSR, tp.getTpId()))
                         .getBytes(StandardCharsets.UTF_8)).toString());
                 LOG.info("DSR XPDR SIP name = {}",
-                    String.join("+", tp.getTpNodeId(), TapiStringConstants.DSR, tp.getTpId()));
+                    String.join("+", tp.getTpNodeId(), TapiConstants.DSR, tp.getTpId()));
                 break;
             default:
                 sipUuid = null;
@@ -1850,7 +1850,7 @@ public final class ConnectivityUtils {
 
     public void putRdmCepInTopologyContext(String node, String spcRdmAD, String qual, ConnectionEndPoint cep) {
         String nepId = String.join("+", node, qual, spcRdmAD.split("\\+")[1]);
-        String nodeNepId = String.join("+", node, TapiStringConstants.PHTNC_MEDIA);
+        String nodeNepId = String.join("+", node, TapiConstants.PHTNC_MEDIA);
         LOG.info("NEP id before Merge = {}", nepId);
         LOG.info("Node of NEP id before Merge = {}", nodeNepId);
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
@@ -1883,7 +1883,7 @@ public final class ConnectivityUtils {
 
     public void putRdmNepInTopologyContext(String orNodeId, String orTpId, String qual, OwnedNodeEdgePoint onep) {
         String nepId = String.join("+", orNodeId, qual, orTpId);
-        String nepNodeId = String.join("+", orNodeId, TapiStringConstants.PHTNC_MEDIA);
+        String nepNodeId = String.join("+", orNodeId, TapiConstants.PHTNC_MEDIA);
         LOG.info("NEP id before Merge = {}", nepId);
         LOG.info("Node of NEP id before Merge = {}", nepNodeId);
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
@@ -1970,14 +1970,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(txPortDeviceName)
                     .setPortName(txPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .setIndex(Uint8.ZERO)
@@ -1986,14 +1986,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(rxPortDeviceName)
                     .setPortName(rxPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .setIndex(Uint8.ZERO)
@@ -2084,14 +2084,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(txPortDeviceName)
                     .setPortName(txPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .setIndex(Uint8.ZERO)
@@ -2100,14 +2100,14 @@ public final class ConnectivityUtils {
                 .setPort(new PortBuilder()
                     .setPortDeviceName(rxPortDeviceName)
                     .setPortName(rxPortName)
-                    .setPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setPortShelf("00")
-                    .setPortType(TapiStringConstants.PORT_TYPE)
+                    .setPortType(TapiConstants.PORT_TYPE)
                     .build())
                 .setLgx(new LgxBuilder()
-                    .setLgxDeviceName(TapiStringConstants.LGX_DEVICE_NAME)
-                    .setLgxPortName(TapiStringConstants.LGX_PORT_NAME)
-                    .setLgxPortRack(TapiStringConstants.PORT_RACK_VALUE)
+                    .setLgxDeviceName(TapiConstants.LGX_DEVICE_NAME)
+                    .setLgxPortName(TapiConstants.LGX_PORT_NAME)
+                    .setLgxPortRack(TapiConstants.PORT_RACK_VALUE)
                     .setLgxPortShelf("00")
                     .build())
                 .setIndex(Uint8.ZERO)
@@ -2158,13 +2158,13 @@ public final class ConnectivityUtils {
             new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+",
                         spcXpdrNetwork.split("\\+")[0],
-                        TapiStringConstants.XPDR)
+                        TapiConstants.XPDR)
                     .getBytes(StandardCharsets.UTF_8))).toString()),
             //nepUuid,
             new Uuid(UUID.nameUUIDFromBytes(
                 (String.join("+",
                         spcXpdrNetwork.split("\\+")[0],
-                        TapiStringConstants.I_ODU,
+                        TapiConstants.I_ODU,
                         spcXpdrNetwork.split("\\+")[1])
                     .getBytes(StandardCharsets.UTF_8))).toString()),
             //cepUuid,
@@ -2172,7 +2172,7 @@ public final class ConnectivityUtils {
                 (String.join("+",
                         "CEP",
                         spcXpdrNetwork.split("\\+")[0],
-                        TapiStringConstants.I_ODU,
+                        TapiConstants.I_ODU,
                         spcXpdrNetwork.split("\\+")[1]))
                     .getBytes(StandardCharsets.UTF_8)).toString()));
     }
@@ -2287,7 +2287,7 @@ public final class ConnectivityUtils {
                         new NodeKey(
                             //nodeUUID
                             new Uuid(UUID.nameUUIDFromBytes(
-                                (String.join("+",xpdrNode, TapiStringConstants.XPDR))
+                                (String.join("+",xpdrNode, TapiConstants.XPDR))
                                     .getBytes(StandardCharsets.UTF_8)).toString())))
                     .build();
             try {

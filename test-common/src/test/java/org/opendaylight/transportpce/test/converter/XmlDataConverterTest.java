@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.test.converter;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -23,40 +24,50 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.opendaylight.transportpce.test.converter.util.ConverterTestUtil;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.Diff;
+import org.xmlunit.diff.ElementSelectors;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class XmlDataConverterTest {
     private static final Logger LOG = LoggerFactory.getLogger(XmlDataConverterTest.class);
     private OrgOpenroadmDevice device;
+    private Context context;
 
     @BeforeAll
     void setup() {
         this.device = ConverterTestUtil.buildDevice();
+        this.context = ConverterTestUtil.buildContext();
     }
 
     @Test
     void serializeOrgOpenroadmDeviceTest() {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
-            assertEquals(
-                    Files.readString(Path.of("src/test/resources/device.xml")),
-                    converter.serialize(
-                            DataObjectIdentifier
-                                .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-                                .build(),
-                            device),
-                    "OrgOpenroadmDevice should be as in the device.json file");
+            Diff diff = DiffBuilder.compare(
+                    converter.serialize(DataObjectIdentifier
+                            .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
+                            .build(),
+                    device))
+                .withTest(Files.readString(Path.of("src/test/resources/device.xml")))
+                .ignoreWhitespace()
+                .withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText))
+                .checkForSimilar()
+                .build();
+            assertFalse(diff.hasDifferences(), "XML structures are not similar: " + diff.toString());
         } catch (IOException e1) {
-            fail("Cannot load json file with expected result");
+            fail("Cannot load xml file with expected result");
         }
     }
 
     @Test
-    void serializeToFileTest() {
-        final Path filePath = Path.of("testSerializeToXmlFile.xml");
+    void serializeOrgOpenroadmDeviceToFileTest() {
+        final Path filePath = Path.of("testSerializeDeviceToXmlFile.xml");
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             converter.serializeToFile(
@@ -109,4 +120,69 @@ class XmlDataConverterTest {
         }
     }
 
+    @Test
+    void serializeContextTest() {
+        XmlDataConverter converter = new XmlDataConverter(null);
+        try {
+            Diff diff = DiffBuilder.compare(
+                    converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context))
+                .withTest(Files.readString(Path.of("src/test/resources/context.xml")))
+                .ignoreWhitespace()
+                .withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText))
+                .checkForSimilar()
+                .build();
+            assertFalse(diff.hasDifferences(), "XML structures are not similar: " + diff.toString());
+        } catch (IOException e1) {
+            fail("Cannot load xml file with expected result");
+        }
+    }
+
+    @Test
+    void serializeContextToFileTest() {
+        final Path filePath = Path.of("testSerializeContextToXmlFile.xml");
+        XmlDataConverter converter = new XmlDataConverter(null);
+        try {
+            converter.serializeToFile(DataObjectIdentifier.builder(Context.class).build(), context, filePath);
+            assertTrue(Files.exists(filePath));
+        } catch (ProcessingException e) {
+            fail("Cannot serialise object to json file");
+        } finally {
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                fail("Failed to delete the test file: " + e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    void deserializeXmlToContextTest() {
+        XmlDataConverter converter = new XmlDataConverter(null);
+        try {
+            Context deserializedContext = (Context) converter.deserialize(
+                    Files.readString(Path.of("src/test/resources/context.xml")), Context.QNAME);
+            LOG.info("deserializedContext = {}", deserializedContext);
+            assertEquals(this.context, deserializedContext);
+        } catch (ProcessingException e) {
+            fail("Error deserializing xml to TAPI Context object");
+        } catch (IOException e) {
+            fail("Cannot load xml file with input xml data");
+        }
+    }
+
+    @Test
+    void deserializeXmlReaderToContextTest() {
+        XmlDataConverter converter = new XmlDataConverter(null);
+        try {
+            Context deserializedContext = (Context) converter.deserialize(
+                    Files.newBufferedReader(Path.of("src/test/resources/context.xml"), StandardCharsets.UTF_8),
+                    Context.QNAME);
+            LOG.info("deserializedContext = {}", deserializedContext);
+            assertEquals(this.context, deserializedContext);
+        } catch (ProcessingException e) {
+            fail("Error deserializing xml to TAPI Context object");
+        } catch (IOException e) {
+            fail("Cannot load xml file with input xml data");
+        }
+    }
 }

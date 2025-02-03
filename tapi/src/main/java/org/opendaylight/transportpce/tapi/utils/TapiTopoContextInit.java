@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
@@ -33,8 +33,8 @@ public class TapiTopoContextInit {
     }
 
     public void initializeTopoContext() {
-        String sbiTopoType = TapiStringConstants.SBI_TAPI_TOPOLOGY;
-        String alienTopoType = TapiStringConstants.ALIEN_XPDR_TAPI_TOPOLOGY;
+        String sbiTopoType = TapiConstants.SBI_TAPI_TOPOLOGY;
+        String alienTopoType = TapiConstants.ALIEN_XPDR_TAPI_TOPOLOGY;
         Uuid sbiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(sbiTopoType.getBytes(StandardCharsets.UTF_8)).toString());
         Uuid alTopoUuid = new Uuid(UUID.nameUUIDFromBytes(alienTopoType.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("TOPO tapi-utils TapiTopoContextInit, Initializing Topo Context for topology {} UUID {} & {} UUID {}",
