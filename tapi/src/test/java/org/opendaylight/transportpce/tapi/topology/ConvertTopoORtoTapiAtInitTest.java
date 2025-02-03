@@ -29,7 +29,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
@@ -199,7 +199,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             .get().orElseThrow();
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
+                TapiConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));

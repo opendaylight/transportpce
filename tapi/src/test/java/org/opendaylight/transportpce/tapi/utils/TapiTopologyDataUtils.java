@@ -26,6 +26,7 @@ public final class TapiTopologyDataUtils {
     public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";
     public static final String OPENROADM_NETWORK_FILE = "src/test/resources/openroadm-network.xml";
     public static final String OTN_TOPOLOGY_FILE = "src/test/resources/otn-topology.xml";
+    public static final String TAPI_SBI_TOPOLOGY_FILE = "src/test/resources/refTopoTapiFull.xml";
     public static final String PORTMAPPING_FILE = "src/test/resources/portmapping.xml";
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput(Uuid topoId) {

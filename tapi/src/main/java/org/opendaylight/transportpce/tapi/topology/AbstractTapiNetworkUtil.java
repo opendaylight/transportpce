@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractTapiNetworkUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTapiNetworkUtil.class);
-    protected final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
+    protected final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER
             .getBytes(StandardCharsets.UTF_8)).toString());
     private final NetworkTransactionService networkTransactionService;
 

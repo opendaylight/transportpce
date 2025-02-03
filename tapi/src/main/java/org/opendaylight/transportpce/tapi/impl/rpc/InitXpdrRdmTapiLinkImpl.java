@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Set;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.topology.AbstractTapiNetworkUtil;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLink;
@@ -44,8 +44,8 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
         String sourceNode = input.getXpdrNode();
         String sourceTp = input.getNetworkTp();
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
-            TapiStringConstants.OMS_XPDR_RDM_LINK, TapiStringConstants.OTSI, TapiStringConstants.PHTNC_MEDIA,
-            TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
+            TapiConstants.OMS_XPDR_RDM_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
+            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),

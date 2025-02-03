@@ -39,7 +39,7 @@ import org.opendaylight.transportpce.servicehandler.listeners.PceListener;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.rpc.CreateConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.DeleteConnectivityServiceImpl;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
@@ -140,7 +140,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapilink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService, new Uuid(TapiStringConstants.T0_FULL_MULTILAYER_UUID));
+            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID));
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();

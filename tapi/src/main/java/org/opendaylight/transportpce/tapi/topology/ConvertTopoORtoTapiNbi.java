@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
@@ -130,7 +130,7 @@ public class ConvertTopoORtoTapiNbi {
             }
             // TODO: Handle not only OTU4 but also other cases
             String prefix = otnlinkId.split("-")[0];
-            String tpsQual = prefix.equals("OTU4") ? TapiStringConstants.I_OTSI : TapiStringConstants.E_ODU;
+            String tpsQual = prefix.equals("OTU4") ? TapiConstants.I_OTSI : TapiConstants.E_ODU;
             LayerProtocolName layerProtocolName =
                 prefix.equals("OTU4") ? LayerProtocolName.PHOTONICMEDIA : LayerProtocolName.ODU;
             var otnlinkSrc = otnlink.getSource();
@@ -140,9 +140,9 @@ public class ConvertTopoORtoTapiNbi {
                 otnlinkSrc.getSourceTp().getValue(),
                 otnlinkDst.getDestNode().getValue(),
                 otnlinkDst.getDestTp().getValue(),
-                TapiStringConstants.OTN_XPDR_XPDR_LINK,
+                TapiConstants.OTN_XPDR_XPDR_LINK,
                 // nodesQual, nodesQual,
-                TapiStringConstants.XPDR, TapiStringConstants.XPDR,
+                TapiConstants.XPDR, TapiConstants.XPDR,
                 tpsQual, tpsQual,
                 otnlinkAug.getAdministrativeState() == null || oppLnkAdmState == null ? null
                     : this.tapiLink.setTapiAdminState(
@@ -164,14 +164,12 @@ public class ConvertTopoORtoTapiNbi {
      */
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
-            .getBytes(StandardCharsets.UTF_8)).toString());
-        Name nodeName =
-            new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
-        Name nodeName2 =
-            new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA).build();
-        Name nameNodeType =
-            new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName()).build();
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8))
+            .toString());
+        Name nodeName = new NameBuilder().setValueName("otsi node name").setValue(TapiConstants.RDM_INFRA).build();
+        Name nodeName2 = new NameBuilder().setValueName("roadm node name").setValue(TapiConstants.RDM_INFRA).build();
+        Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(OpenroadmNodeType.ROADM.getName())
+            .build();
         Set<LayerProtocolName> nodeLayerProtocols = Set.of(LayerProtocolName.PHOTONICMEDIA);
         //At that stage, there is no Roadm in the tapiPhotonicNodes Map / only the transponders
         Map<String, String> photonicNepUuisMap =
@@ -192,13 +190,13 @@ public class ConvertTopoORtoTapiNbi {
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
             .setCostName("HOP_COUNT")
-            .setCostValue(TapiStringConstants.COST_HOP_VALUE)
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
             .build();
         LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-            .setFixedLatencyCharacteristic(TapiStringConstants.FIXED_LATENCY_VALUE)
-            .setQueuingLatencyCharacteristic(TapiStringConstants.QUEING_LATENCY_VALUE)
-            .setJitterCharacteristic(TapiStringConstants.JITTER_VALUE)
-            .setWanderCharacteristic(TapiStringConstants.WANDER_VALUE)
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
             .setTrafficPropertyName("FIXED_LATENCY")
             .build();
         RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()

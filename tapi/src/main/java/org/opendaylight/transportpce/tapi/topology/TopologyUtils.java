@@ -26,7 +26,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
@@ -140,8 +140,8 @@ public final class TopologyUtils {
     public Topology createOtnTopology() throws TapiTopologyException {
         // read openroadm-topology
         Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
-        String topoType = TOPOLOGICAL_MODE.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
-            : TapiStringConstants.T0_TAPI_MULTILAYER;
+        String topoType = TOPOLOGICAL_MODE.equals("Full") ? TapiConstants.T0_FULL_MULTILAYER
+            : TapiConstants.T0_TAPI_MULTILAYER;
         LOG.info("TOPOUTILS, createOtnTopology, the TOPOLOGICAL_MODE is {} ",topoType);
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(topoType.getBytes(StandardCharsets.UTF_8)).toString());
         Name name = new NameBuilder().setValue(topoType).setValueName("TAPI Topology Name").build();

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.nio.charset.Charset;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.opendaylight.transportpce.tapi.TapiStringConstants;
+import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 
 public class TapiStringConstantTest {
@@ -28,23 +28,23 @@ public class TapiStringConstantTest {
     void testTopologyUUID() {
         assertEquals(
                 T0_MULTILAYER_UUID,
-                new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER
+                new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_MULTILAYER
                         .getBytes(Charset.forName("UTF-8"))).toString()).getValue());
         assertEquals(
                 T0_TAPI_MULTILAYER_UUID,
-                new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_TAPI_MULTILAYER
+                new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_TAPI_MULTILAYER
                         .getBytes(Charset.forName("UTF-8"))).toString()).getValue());
         assertEquals(
                 T0_FULL_MULTILAYER_UUID,
-                new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
+                new Uuid(UUID.nameUUIDFromBytes(TapiConstants.T0_FULL_MULTILAYER
                         .getBytes(Charset.forName("UTF-8"))).toString()).getValue());
         assertEquals(
                 SBI_TAPI_TOPOLOGY_UUID,
-                new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.SBI_TAPI_TOPOLOGY
+                new Uuid(UUID.nameUUIDFromBytes(TapiConstants.SBI_TAPI_TOPOLOGY
                         .getBytes(Charset.forName("UTF-8"))).toString()).getValue());
         assertEquals(
                 ALIEN_XPDR_TAPI_TOPOLOGY_UUID,
-                new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.ALIEN_XPDR_TAPI_TOPOLOGY
+                new Uuid(UUID.nameUUIDFromBytes(TapiConstants.ALIEN_XPDR_TAPI_TOPOLOGY
                         .getBytes(Charset.forName("UTF-8"))).toString()).getValue());
 
     }
