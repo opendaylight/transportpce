@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb581751_d81dbcc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T11:15:08Z",
+      "side": 1,
+      "message": "Thank you Roshan for this change.\nI rebased and tested it and it is ok for me.\nI only slighty modified the footer of the commit message:\n- added the JIRA ticket reference\n- removed a changeid en excess\n- reformated the list items without\n\nThanks again.",
+      "revId": "a13db975787652d71061296845dad0266ca92749",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
