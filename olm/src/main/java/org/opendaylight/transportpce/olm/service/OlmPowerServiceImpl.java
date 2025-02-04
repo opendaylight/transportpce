@@ -506,6 +506,66 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     LOG.info("Spanloss Value update completed successfully");
                     return true;
                 } else {
+                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId, interfaceName);
+                    return false;
+                }
+            } else if (mappingUtils.getOpenRoadmVersion(realNodeId)
+                    .equals(StringConstants.OPENROADM_DEVICE_VERSION_7_1)) {
+
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB spanLossRx;
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB spanLossTx;
+                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529
+                        .interfaces.grp.Interface> interfaceObject =
+                        openRoadmInterfaces.getInterface(realNodeId, interfaceName);
+                if (interfaceObject.isPresent()) {
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.device
+                            .rev200529.interfaces.grp.InterfaceBuilder interfaceBuilder =
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm.device
+                                    .rev200529.interfaces.grp.InterfaceBuilder(interfaceObject.orElseThrow());
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical
+                            .transport.interfaces.rev200529.ots.container.OtsBuilder otsBuilder =
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm
+                                    .optical.transport.interfaces.rev200529.ots.container.OtsBuilder();
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.Interface intf =
+                            interfaceObject.orElseThrow();
+                    if (intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
+                            .transport.interfaces.rev200529.Interface1.class) != null
+                            && intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport
+                            .interfaces.rev200529.Interface1.class).getOts() != null) {
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
+                                .rev200529.ots.container.Ots ots =
+                                intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
+                                        .transport.interfaces.rev200529.Interface1.class).getOts();
+
+                        otsBuilder.setFiberType(ots.getFiberType());
+                        spanLossRx = ots.getSpanLossReceive();
+                        spanLossTx = ots.getSpanLossTransmit();
+                    } else {
+                        spanLossRx = new org.opendaylight.yang.gen.v1.http.org
+                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss));
+                        spanLossTx = new org.opendaylight.yang.gen.v1.http.org
+                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss));
+                    }
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
+                            .rev200529.Interface1Builder intf1Builder =
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical
+                                    .transport.interfaces.rev200529.Interface1Builder();
+                    if (direction.equals("TX")) {
+                        otsBuilder.setSpanLossTransmit(new org.opendaylight.yang.gen.v1.http.org
+                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss)));
+                        otsBuilder.setSpanLossReceive(spanLossRx);
+                    } else {
+                        otsBuilder
+                            .setSpanLossTransmit(spanLossTx)
+                            .setSpanLossReceive(
+                                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB(
+                                        Decimal64.valueOf(spanLoss)));
+                    }
+                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
+                    openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
+                    LOG.info("Spanloss Value update completed successfully");
+                    return true;
+                } else {
                     LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId,interfaceName);
                     return false;
                 }
