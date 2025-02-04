@@ -1,0 +1,320 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b31b67c_ac7d539b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "Hey Olivier,\nPlease find few questions on this funny tapi ext node...",
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "547d1904_13587e54",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "Do we really need to set this augmentation for a TapiExtNode?\nWe don\u0027t set this for classic OpenROADM equipment... And in addition here the NodeType is not appropriate for the situation (should rather be something like a \"ROADM infrastructure\"...)",
+      "range": {
+        "startLine": 676,
+        "startChar": 12,
+        "endLine": 676,
+        "endChar": 40
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6422b09_4776b382",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 685,
+        "startChar": 8,
+        "endLine": 685,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c867b516_fb9e82f4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "What is the interest to set again this augmentation which is already set in the clli layer?",
+      "range": {
+        "startLine": 703,
+        "startChar": 16,
+        "endLine": 703,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45ba0d4_b0601c3c",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "What is the interest to set again clli for the node in the openroadm-network layer?\nThis is redundant 1) with the node already represented in the clli layer and 2) with supporting-node/node-ref",
+      "range": {
+        "startLine": 704,
+        "startChar": 16,
+        "endLine": 704,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72dd119d_b168225f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "really necessary?",
+      "range": {
+        "startLine": 705,
+        "startChar": 16,
+        "endLine": 705,
+        "endChar": 44
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0184d4d_4b5cb43a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 707,
+        "startChar": 8,
+        "endLine": 707,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac010e3_fcb76792",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "Why we only set the network layer as the supporting node for TapiExtNode and not also the clli layer as for OpenROADM device?",
+      "range": {
+        "startLine": 716,
+        "startChar": 12,
+        "endLine": 716,
+        "endChar": 33
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a81d375_617fe3ff",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 721,
+        "startChar": 8,
+        "endLine": 721,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "944250c4_ef8a123f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "Why we only set the openroadm-topology layer as the supporting node for TapiExtNode and not also all other layers as for OpenROADM device?",
+      "range": {
+        "startLine": 730,
+        "startChar": 12,
+        "endLine": 730,
+        "endChar": 33
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "839fca86_501a865c",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "You should commit at the last step only.",
+      "range": {
+        "startLine": 749,
+        "startChar": 12,
+        "endLine": 749,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "702cd4d1_dad917a2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 757,
+        "startChar": 12,
+        "endLine": 757,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0ffaf59_9d740540",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 765,
+        "startChar": 12,
+        "endLine": 765,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e836b4a2_e9bf7f3a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-04T17:48:26Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 816,
+        "startChar": 20,
+        "endLine": 816,
+        "endChar": 80
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
