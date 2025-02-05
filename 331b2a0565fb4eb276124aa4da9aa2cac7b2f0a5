@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ed9a465_0a1698f8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-05T13:32:09Z",
+      "side": 1,
+      "message": "can you please remove this commented code?",
+      "range": {
+        "startLine": 743,
+        "startChar": 0,
+        "endLine": 773,
+        "endChar": 9
+      },
+      "revId": "331b2a0565fb4eb276124aa4da9aa2cac7b2f0a5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
