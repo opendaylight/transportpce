@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -34,6 +35,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.switching.pool.lcp.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.equipment.types.rev191129.OpticTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
@@ -48,6 +53,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.subrate.eth.sla.SubrateEthSlaBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OTU4;
@@ -444,6 +450,8 @@ public final class ConnectivityUtils {
                             .getAToZMaxFrequency().getValue()),
                         xpdrNetworkTplist, xpdrNodelist));
                     LOG.debug("CONNECTIVITYUTILS 445 Connservmap = {}", connectionServMap);
+                    // - Create E_ODU and DSR CEPs on all client ports connected to the activated Network Port
+                    createXpdrCepsOnNwPortActivation(xpdrNetworkTplist, xpdrNodelist);
                 }
                 this.topConnRdmRdm = null;
                 break;
@@ -808,6 +816,31 @@ public final class ConnectivityUtils {
         Connection conn1 = new ConnectionBuilder().setConnectionUuid(connectionDsr.getUuid()).build();
         connServMap.put(conn1.key(), conn1);
         return connServMap;
+    }
+
+    private void createXpdrCepsOnNwPortActivation(List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
+
+        // Create E_ODU and DSR CEPs on all CLIENT-PORTS in visibility (through an ODU switching pool) of the activated
+        //  Network Port, considering that the ODU switching pull becomes active. Each client port that can potentially
+        // be connected to the network port must be visible to the PCE for further multiplexed service provisioning.
+        for (String xpdr:xpdrNodelist) {
+            String spcXpdrNw =
+                xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+            List<String> clientConnectedPortList = getNwConnectedClientsPortForSW(spcXpdrNw);
+            LOG.info("Con.Utils Line 830 : Creating client ceps E_ODU and DSR for ports {} connected to {} in xpdr {}",
+                clientConnectedPortList, spcXpdrNw, xpdr);
+            for (String clientPort : clientConnectedPortList) {
+                ConnectionEndPoint clientCep1 =
+                    createCepXpdr(0, 0,
+                        clientPort, TapiStringConstants.DSR, TapiStringConstants.XPDR, LayerProtocolName.DSR);
+                putXpdrCepInTopologyContext(
+                    xpdr, clientPort, TapiStringConstants.DSR, TapiStringConstants.XPDR, clientCep1);
+                ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, clientPort, TapiStringConstants.E_ODU,
+                        TapiStringConstants.XPDR, LayerProtocolName.ODU);
+                putXpdrCepInTopologyContext(
+                    xpdr, clientPort, TapiStringConstants.E_ODU, TapiStringConstants.XPDR, clientCep2);
+            }
+        }
     }
 
     private Map<ConnectionKey, Connection> createXpdrCepsAndConnectionsOdu(
@@ -1229,7 +1262,7 @@ public final class ConnectivityUtils {
         LOG.debug("CONNECTIVITYUTILS 1307 CreateCepXpdr {}", extendedNepId);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(extendedNepId)
+            .setValue(String.join("+", "CEP", extendedNepId))
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -1244,7 +1277,10 @@ public final class ConnectivityUtils {
                 clientQualifier = TapiStringConstants.OTSI_MC;
                 break;
             case TapiStringConstants.OTSI_MC:
-                clientQualifier = TapiStringConstants.E_ODU;
+                clientQualifier = TapiStringConstants.I_OTU;
+                break;
+            case TapiStringConstants.I_OTU:
+                clientQualifier = TapiStringConstants.I_ODU;
                 break;
             case TapiStringConstants.E_ODU:
                 clientQualifier = TapiStringConstants.DSR;
@@ -1253,14 +1289,17 @@ public final class ConnectivityUtils {
                 LOG.debug("no client CEP for DSR NEP {}", nepId);
                 break;
         }
-        ClientNodeEdgePoint cnep = new ClientNodeEdgePointBuilder()
-            .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
-                (String.join("+", id.split("\\+")[0], clientQualifier, id.split("\\+")[1]))
-                    .getBytes(StandardCharsets.UTF_8)).toString()))
-            .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
-                    nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
-            .setTopologyUuid(this.tapiTopoUuid)
-            .build();
+        ClientNodeEdgePoint cnep = null;
+        if (!clientQualifier.equals("")) {
+            cnep = new ClientNodeEdgePointBuilder()
+                .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
+                    (String.join("+", id.split("\\+")[0], clientQualifier, id.split("\\+")[1]))
+                        .getBytes(StandardCharsets.UTF_8)).toString()))
+                .setNodeUuid(new Uuid(UUID.nameUUIDFromBytes(
+                        nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()))
+                .setTopologyUuid(this.tapiTopoUuid)
+                .build();
+        }
         // TODO: add augmentation with the corresponding cep-spec (i.e. MC, OTSiMC...)
         ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
             .setUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -1273,7 +1312,7 @@ public final class ConnectivityUtils {
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
             .setLayerProtocolName(cepProtocol);
-        return TapiStringConstants.DSR.equals(qualifier)
+        return (cnep == null)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
@@ -1907,6 +1946,59 @@ public final class ConnectivityUtils {
 
         }
         return clientPortList;
+    }
+
+    private List<String> getNwConnectedClientsPortForSW(String xpdrNetworkTp) {
+
+        String nodeId = String.join("-",
+            xpdrNetworkTp.split("\\+")[0].split("-")[0],
+            xpdrNetworkTp.split("\\+")[0].split("-")[1]);
+        String tpId = xpdrNetworkTp.split("\\+")[1];
+        LOG.debug("Con.Utils Line 1957 : processing NodeId {} with TpId {}", nodeId, tpId);
+        DataObjectIdentifier<Nodes> nodeIID = DataObjectIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId))
+            .build();
+        List<String> connectedPorts = new ArrayList<>();
+        try {
+            Optional<Nodes> optNode =
+                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nodeIID).get();
+            if (optNode.isEmpty()) {
+                LOG.error("Couldnt find mapping for node {}", nodeId);
+            }
+            boolean nwPortFound = false;
+            Nodes node = optNode.orElseThrow();
+            LOG.debug("Con.Utils Line 1969 :  switching pool for node {} = {}",
+                nodeId, node.getSwitchingPoolLcp());
+            for (Map.Entry<SwitchingPoolLcpKey, SwitchingPoolLcp> swplcp : node.getSwitchingPoolLcp().entrySet()) {
+                for (Map.Entry<NonBlockingListKey, NonBlockingList>
+                        nbl : swplcp.getValue().getNonBlockingList().entrySet()) {
+                    List<String> lcpList = nbl.getValue().getLcpList().stream().collect(Collectors.toList());
+                    LOG.debug("Con.Utils Line 1975 :  lcpList for nbl {} = {}", nbl, lcpList);
+                    if (lcpList.contains(tpId)) {
+                        nwPortFound = true;
+                        for (String lcp : lcpList) {
+                            if (node.getMapping().get(new MappingKey(lcp)).getPortQual()
+                                    .equals(PortQual.SwitchClient.getName())
+                                    || node.getMapping().get(new MappingKey(lcp)).getPortQual()
+                                    .equals(PortQual.XpdrClient.getName())) {
+                                connectedPorts.add(String.join("+", nodeId, lcp));
+                            }
+                        }
+                    }
+                }
+                connectedPorts.stream().distinct().collect(Collectors.toList());
+                // If network Port was found in a Switching Pool don't need to investigate on other switchig pools
+                if (nwPortFound) {
+                    break;
+                }
+            }
+            LOG.info("ConnectivityUtils 1991 : Connected client ports found for node+port {}+{} = {}",
+                nodeId, tpId, connectedPorts);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt read mapping from datastore", e);
+            return null;
+        }
+        return connectedPorts;
     }
 
     private OpenroadmNodeType getOpenRoadmNodeType(List<String> xpdrNodelist) {
