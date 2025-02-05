@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c573281a_087b1f2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "Hi Gilles. Thanks for your review. \nTried to address most of your comments.\nUnderstand that you are willing to have homogeneous code whatever is the node (pure OR or Tapi in OR) to use existing functions (which I was not aware of when I wrote the code, since my knowledge of this module is limited).\nTo make it clear, I tried on my side to minimize the effort, since I still have a lot to do on debugging my preliminary implementation of abstracted Pce Tapi nodes and links...\nWill update soon patchset 10 which addresses the multiple commit issues.",
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "547d1904_13587e54",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d486835b_0b45ed09",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "Yes this is needed. To be honest don\u0027t remember exactly where, as this changes is just the latest of a relation chain containing a lot of others, done quite a while ago and already merged. I remember doing it for the NodeType that is needed somewhere, and adding the states because they are in the same augmentation and that makes sense.\n\"We don\u0027t set this for classic OpenROADM equipment\" : we may not use this augmentation in all layers for OpenROADM, but it is used by some OpenROADM nodes in some layers (I guess the disaggregated ones on which we mainly work), as the states of the node are there. \nROADM node type fits. I agree on the fact that ultimately ROADM-infrastructure would be more precise, but this would imply to make an augmentation of the identity or enum. And I don\u0027t need this level of details. So I did it trying to minimize the effort.",
+      "parentUuid": "547d1904_13587e54",
+      "range": {
+        "startLine": 676,
+        "startChar": 12,
+        "endLine": 676,
+        "endChar": 40
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6422b09_4776b382",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 9
@@ -54,6 +95,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 685,
+        "startChar": 8,
+        "endLine": 685,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e41e13_2a97586a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "b6422b09_4776b382",
       "range": {
         "startLine": 685,
         "startChar": 8,
@@ -89,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d5969d7_2a8653c1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "I worked trying to minimize the chance of raising errors, and with the scope of simplifying the developments. TapiExt1, clliExt1 are augmentations that are present in all layers. Yes, to some extent it replicates the information, but the purpose is to avoid having to switch from one to another layer to get the info, as this info is supposed to be the same in each of the layers.\nIf for OpenROADM we rely on desaggregation and work mainly on Topology and OTN layers, for the Tapi Ext node, we have a macro-ROADM node that won\u0027t be disaggregated. \nI did not 100% formalize at that time the way I am going to consolidate the PCE so that we can route demands that span across several domains (go through OR infra and the Tapi Ext Node), which may be complex depending on the choice we make since PCE is working on only one layer at a time, but I try to build things in a way that will simplify my life in doing so.",
+      "parentUuid": "c867b516_fb9e82f4",
+      "range": {
+        "startLine": 703,
+        "startChar": 16,
+        "endLine": 703,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f45ba0d4_b0601c3c",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 9
@@ -100,6 +189,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "What is the interest to set again clli for the node in the openroadm-network layer?\nThis is redundant 1) with the node already represented in the clli layer and 2) with supporting-node/node-ref",
+      "range": {
+        "startLine": 704,
+        "startChar": 16,
+        "endLine": 704,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53fddcc9_f8b8014b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "see previous answer",
+      "parentUuid": "f45ba0d4_b0601c3c",
       "range": {
         "startLine": 704,
         "startChar": 16,
@@ -135,6 +248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99b7faf6_dc9e55b7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "see previous answer",
+      "parentUuid": "72dd119d_b168225f",
+      "range": {
+        "startLine": 705,
+        "startChar": 16,
+        "endLine": 705,
+        "endChar": 44
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0184d4d_4b5cb43a",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 9
@@ -146,6 +283,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 707,
+        "startChar": 8,
+        "endLine": 707,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d965dde_5977880b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "a0184d4d_4b5cb43a",
       "range": {
         "startLine": 707,
         "startChar": 8,
@@ -181,6 +342,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b278170_309be85f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "It made sense to me to put only the layer that is directly supporting it, considering that this last contains itself the info on its supporting layer...\nIs it done in a different way for other OpenROADM nodes?",
+      "parentUuid": "eac010e3_fcb76792",
+      "range": {
+        "startLine": 716,
+        "startChar": 12,
+        "endLine": 716,
+        "endChar": 33
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a81d375_617fe3ff",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 9
@@ -192,6 +377,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "You should commit only at the last step of this node creation.",
+      "range": {
+        "startLine": 721,
+        "startChar": 8,
+        "endLine": 721,
+        "endChar": 43
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "514bf5ac_7cdc9be6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "2a81d375_617fe3ff",
       "range": {
         "startLine": 721,
         "startChar": 8,
@@ -248,6 +457,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9677c5ae_8a252087",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "839fca86_501a865c",
+      "range": {
+        "startLine": 749,
+        "startChar": 12,
+        "endLine": 749,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "702cd4d1_dad917a2",
@@ -261,6 +494,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 757,
+        "startChar": 12,
+        "endLine": 757,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5528cc4_1fcd7b02",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "702cd4d1_dad917a2",
       "range": {
         "startLine": 757,
         "startChar": 12,
@@ -294,6 +551,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02db33ae_e36f63d6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "a0ffaf59_9d740540",
+      "range": {
+        "startLine": 765,
+        "startChar": 12,
+        "endLine": 765,
+        "endChar": 72
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e836b4a2_e9bf7f3a",
@@ -307,6 +588,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 816,
+        "startChar": 20,
+        "endLine": 816,
+        "endChar": 80
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf97511_59a7a71b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-05T10:47:24Z",
+      "side": 1,
+      "message": "OK, done in Patchset 10",
+      "parentUuid": "e836b4a2_e9bf7f3a",
       "range": {
         "startLine": 816,
         "startChar": 20,
