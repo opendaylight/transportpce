@@ -447,7 +447,7 @@ class TransportPCEtesting(unittest.TestCase):
 #                self.assertEqual(ele['service-layer'], 'PHOTONIC_MEDIA')
                 self.assertEqual(ele['layer-protocol-name'], 'PHOTONIC_MEDIA')
                 nbconnection = len(ele['connection'])
-                self.assertEqual(nbconnection, 3, 'There should be 3 connections')
+                self.assertEqual(nbconnection, 4, 'There should be 4 connections')
             elif ele['uuid'] == self.uuid_services.odu:
                 self.assertEqual(ele['operational-state'], 'ENABLED')
 #                self.assertEqual(ele['service-layer'], 'ODU')

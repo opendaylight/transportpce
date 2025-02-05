@@ -126,6 +126,7 @@ public class TapiPceNotificationHandler {
             .setZToADirection(servicePathRpcResult.getPathDescription().getZToADirection())
             .build();
         LOG.info("PathDescription for TAPI gets : {}", pathDescription);
+        String serviceName = servicePathRpcResult.getServiceName();
         if (input == null) {
             LOG.error("Input is null !");
             return;
@@ -134,11 +135,14 @@ public class TapiPceNotificationHandler {
         //  verify the type of XPDR and the capacity and determine if it is an OTN service or pure WDM service
         // Create connections and ceps for the connectivity service.
         //  Connections must be with a locked stated. As the renderer hasnt implemented yet the oc's
+        LOG.info("TapiPceNotificationHandler Line 141 : calls createConnectionsForService for Service {}, Uuid {}",
+            serviceName, serviceUuid);
         Map<ConnectionKey, Connection> connectionMap = connectivityUtils.createConnectionsFromService(
-                pathDescription, input.getLayerProtocolName());
+                pathDescription, input.getLayerProtocolName(), serviceName, serviceUuid);
         this.connectionFullMap.putAll(connectivityUtils.getConnectionFullMap());
-        LOG.debug("Connection Map from createConnectionsAndCepsForService is {}, LAYERPROTOCOL of service is {} ",
-            connectionMap.toString(), input.getLayerProtocolName());
+        LOG.info("TapiPceNotificationHandler Line 144 : Connection Map from createConnectionsAndCepsForService is {},"
+            + "for Service {} of Uuid {} and LAYERPROTOCOL  {} ",
+            serviceName, serviceUuid, connectionMap.toString(), input.getLayerProtocolName());
         // add connections to connection context and to connectivity context
         updateConnectionContextWithConn(this.connectionFullMap, connectionMap, serviceUuid);
     }
