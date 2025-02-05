@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -126,6 +127,9 @@ public class TapiPceNotificationHandler {
             .setZToADirection(servicePathRpcResult.getPathDescription().getZToADirection())
             .build();
         LOG.info("PathDescription for TAPI gets : {}", pathDescription);
+        String serviceName = servicePathRpcResult.getServiceName();
+        serviceUuid =
+            new Uuid(UUID.nameUUIDFromBytes(serviceName.getBytes(StandardCharsets.UTF_8)).toString());
         if (input == null) {
             LOG.error("Input is null !");
             return;
@@ -135,7 +139,7 @@ public class TapiPceNotificationHandler {
         // Create connections and ceps for the connectivity service.
         //  Connections must be with a locked stated. As the renderer hasnt implemented yet the oc's
         Map<ConnectionKey, Connection> connectionMap = connectivityUtils.createConnectionsFromService(
-                pathDescription, input.getLayerProtocolName());
+                pathDescription, input.getLayerProtocolName(), serviceName, serviceUuid);
         this.connectionFullMap.putAll(connectivityUtils.getConnectionFullMap());
         LOG.debug("Connection Map from createConnectionsAndCepsForService is {}, LAYERPROTOCOL of service is {} ",
             connectionMap.toString(), input.getLayerProtocolName());
