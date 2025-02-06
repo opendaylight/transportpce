@@ -34,7 +34,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.PreferenceFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;

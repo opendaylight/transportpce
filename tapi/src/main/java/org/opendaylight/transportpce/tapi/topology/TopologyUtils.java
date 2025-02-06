@@ -29,10 +29,10 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
@@ -273,7 +273,7 @@ public final class TopologyUtils {
         FluentFuture<Optional<Mapping>> mappingOpt = this.dataBroker.newReadOnlyTransaction().read(
                 LogicalDatastoreType.CONFIGURATION,
                 DataObjectIdentifier.builder(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.Network.class)
                 .child(Nodes.class, new NodesKey(nodeIdPortMap))
                 .child(Mapping.class, new MappingKey(networkLcp))
                 .build());
