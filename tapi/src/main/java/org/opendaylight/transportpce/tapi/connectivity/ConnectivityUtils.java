@@ -25,6 +25,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -128,8 +129,17 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrum;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrum;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
@@ -493,6 +503,21 @@ public final class ConnectivityUtils {
                     LOG.debug("CONNECTIVITYUTILS 445 Connservmap = {}", connectionServMap);
                     // - Create E_ODU and DSR CEPs on all client ports connected to the activated Network Port
                     createXpdrCepsOnNwPortActivation(xpdrNetworkTplist, xpdrNodelist);
+                    // - Update spectrum information on the activated Network Ports
+                    for (String xpdr:xpdrNodelist) {
+                        String spcXpdrNetwork =
+                            xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+                        updateXpdrNepSpectrum(
+                            pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
+                            pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
+                            spcXpdrNetwork,
+                            TapiConstants.OTSI_MC);
+                        updateXpdrNepSpectrum(
+                            pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
+                            pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
+                            spcXpdrNetwork,
+                            TapiConstants.PHTNC_MEDIA_OTS);
+                    }
                 }
                 this.topConnRdmRdm = null;
                 break;
@@ -557,7 +582,8 @@ public final class ConnectivityUtils {
         return connectionServMap;
     }
 
-    private void updateTopologyWithNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep) {
+    private void addNepToTopology(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep,
+            boolean newNep) {
         DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
             .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
@@ -569,12 +595,12 @@ public final class ConnectivityUtils {
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
-            if (optionalOnep.isPresent()) {
+            if (optionalOnep.isPresent() && newNep) {
                 LOG.error("ONEP is already present in datastore");
                 return;
             }
-            // merge in datastore
-            this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, onep);
+            // put in datastore
+            this.networkTransactionService.put(LogicalDatastoreType.OPERATIONAL, onepIID, onep);
             this.networkTransactionService.commit().get();
             LOG.info("NEP {} added successfully.", onep.getName());
         } catch (InterruptedException | ExecutionException e) {
@@ -710,6 +736,27 @@ public final class ConnectivityUtils {
             LOG.warn("Reading service {} failed:", servName, e);
         }
         return Optional.empty();
+    }
+
+    private OwnedNodeEdgePoint getNepFromDS(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid) {
+        DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
+            .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1.class)
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
+            .child(Topology.class, new TopologyKey(topoUuid))
+            .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node.class,
+                new NodeKey(nodeUuid))
+            .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
+            .build();
+        try {
+            Optional<OwnedNodeEdgePoint> optionalOnep =
+                this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
+            OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();
+            LOG.info("Did succeed retrieving NEP {} for node {}", nepUuid, nodeUuid);
+            return onep;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Couldnt find NEP {} for node {}", nepUuid, nodeUuid, e);
+            return null;
+        }
     }
 
     public Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -1581,6 +1628,49 @@ public final class ConnectivityUtils {
         return lowConMap;
     }
 
+    private void updateXpdrNepSpectrum(Decimal64 lowFreq, Decimal64 highFreq,
+            String id, String qualifier) {
+        String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
+        String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString());
+        //Capture initial OTSiMC/OTS nep from DataStore
+        var onep = getNepFromDS(this.tapiTopoUuid, nodeUuid, nepUuid);
+        //create a new onepBuilder set with current settings
+        OwnedNodeEdgePointBuilder onepBdr = new OwnedNodeEdgePointBuilder(onep);
+        // Compute the new spectrum Pac (no AvailableSpectrum as the TP is provisonned with a wavelength)
+        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+        OccupiedSpectrum ospec = new OccupiedSpectrumBuilder()
+            .setLowerFrequency(Uint64.valueOf(Math.round(lowFreq.doubleValue() * 1E012)))
+            .setUpperFrequency(Uint64.valueOf(Math.round(highFreq.doubleValue() * 1E012)))
+            .build();
+        spectrumPac.setOccupiedSpectrum(
+            new HashMap<OccupiedSpectrumKey, OccupiedSpectrum>(Map.of(
+                new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec)));
+        double naz = 0.01;
+        Double gridLowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E012 ;
+        Double gridUpSupFreq = gridLowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz;
+        SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+            .setLowerFrequency(Uint64.valueOf(Math.round(gridLowSupFreq)))
+            .setUpperFrequency(Uint64.valueOf(Math.round(gridUpSupFreq)))
+            .build();
+        spectrumPac.setSupportableSpectrum(
+            new HashMap<SupportableSpectrumKey, SupportableSpectrum>(Map.of(
+                new SupportableSpectrumKey(sspec.getLowerFrequency(), sspec.getUpperFrequency()), sspec)));
+
+        var onep1 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+            .OwnedNodeEdgePoint1Builder()
+            .setPhotonicMediaNodeEdgePointSpec(
+                new PhotonicMediaNodeEdgePointSpecBuilder().setSpectrumCapabilityPac(spectrumPac.build()).build())
+            .build();
+        onepBdr.addAugmentation(onep1);
+        addNepToTopology(
+            this.tapiTopoUuid,
+            new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()),
+            onepBdr.build(), false);
+    }
+
     private EndPoint mapServiceZEndPoint(
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526
                 .service.ServiceZEnd serviceZEnd, PathDescription pathDescription) {
@@ -1873,15 +1963,16 @@ public final class ConnectivityUtils {
         String nepNodeId = String.join("+", orNodeId, TapiConstants.PHTNC_MEDIA);
         LOG.info("NEP id before Merge = {}", nepId);
         LOG.info("Node of NEP id before Merge = {}", nepNodeId);
-        // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
-        updateTopologyWithNep(
+        // Give uuids putRdmNepInTopologyContextso that it is easier to look for things:
+        //  topology uuid, node uuid, nep uuid, cep
+        addNepToTopology(
             //topoUuid,
             this.tapiTopoUuid,
             //nodeUuid,
             new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()),
             //nepUuid,
             new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()),
-            onep);
+            onep, true);
     }
 
     private String getIdBasedOnModelVersion(String nodeid) {
