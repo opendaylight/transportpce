@@ -743,7 +743,7 @@
           </if-name>
           <if-name>
             <ifName>1GE-interface-2</ifName>
-            <remoteSysName>ROADM-C1</remoteSysName>
+            <remoteSysName>ROADM-D1</remoteSysName>
             <remoteMgmtAddress>1.1.1.1</remoteMgmtAddress>
             <remoteChassisId>1?</remoteChassisId>
             <remotePortId>1GE-interface-1</remotePortId>
