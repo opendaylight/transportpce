@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f92af75f_008414d9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORToTapiTopoConversionFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2025-02-06T15:36:52Z",
+      "side": 1,
+      "message": "Uint64.ONE is a faster equivalent",
+      "range": {
+        "startLine": 240,
+        "startChar": 51,
+        "endLine": 240,
+        "endChar": 61
+      },
+      "revId": "45e6bc418108d5f3bdd51578d553c4523f28c5b9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59254c0e_1c1ebe48",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORToTapiTopoConversionFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2025-02-06T15:36:52Z",
+      "side": 1,
+      "message": "Uint64.ZERO is a faster equivalent",
+      "range": {
+        "startLine": 248,
+        "startChar": 46,
+        "endLine": 248,
+        "endChar": 63
+      },
+      "revId": "45e6bc418108d5f3bdd51578d553c4523f28c5b9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
