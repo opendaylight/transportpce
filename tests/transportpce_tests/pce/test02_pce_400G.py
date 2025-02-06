@@ -132,7 +132,6 @@ class TransportPCE400Gtesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request('transportpce-pce',
                                                            'path-computation-request',
                                                            self.path_computation_input_data)
-        print(response)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
@@ -146,7 +145,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-max-frequency']))
         self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
-                                          ['aToZ-direction']['central-frequency']))
+                         ['aToZ-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
@@ -159,7 +158,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-max-frequency']))
         self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
-                                       ['zToA-direction']['central-frequency']))
+                         ['zToA-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
         time.sleep(2)

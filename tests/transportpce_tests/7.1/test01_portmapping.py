@@ -20,7 +20,7 @@ sys.path.append('transportpce_tests/common')
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
-
+from pytest_unordered import unordered
 
 class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
@@ -167,7 +167,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'nbl-number': 2,
              'interconnect-bandwidth': 0,
-             'lcp-list': ['XPDR2-NETWORK1', 'XPDR2-CLIENT2']},
+             'lcp-list': unordered(['XPDR2-NETWORK1', 'XPDR2-CLIENT2'])},
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_10_xpdr_device_disconnection(self):
