@@ -146,7 +146,7 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-max-frequency']))
         self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
-                                          ['aToZ-direction']['central-frequency']))
+                                       ['aToZ-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
