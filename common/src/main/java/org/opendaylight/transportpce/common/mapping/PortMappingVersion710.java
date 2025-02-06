@@ -1324,9 +1324,23 @@ public class PortMappingVersion710 {
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
+                McCapabilityProfile mcCapabilityProfile = mcCapProfile.getValue();
                 mcCapabilitiesBuilder
-                    .setCenterFreqGranularity(mcCapProfile.getValue().getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapProfile.getValue().getSlotWidthGranularity());
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+
+                if (mcCapabilityProfile.getMinSlots() != null) {
+                    mcCapabilitiesBuilder.setMinSlots(mcCapabilityProfile.getMinSlots());
+                } else {
+                    mcCapabilitiesBuilder.setMinSlots(Uint32.valueOf(1));
+                }
+
+                if (mcCapabilityProfile.getMaxSlots() != null) {
+                    mcCapabilitiesBuilder.setMaxSlots(mcCapabilityProfile.getMaxSlots());
+                } else {
+                    mcCapabilitiesBuilder.setMaxSlots(Uint32.valueOf(1));
+                }
+
                 // Build and add to the Map
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 LOG.info("Finished building mc-capability profile for XPDR {}", nodeId);
