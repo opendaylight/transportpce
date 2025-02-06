@@ -21,6 +21,7 @@ import requests
 # pylint: disable=wrong-import-order
 import sys
 sys.path.append('transportpce_tests/common/')
+print(sys.path)
 # pylint: disable=wrong-import-position
 # pylint: disable=import-error
 import test_utils  # nopep8
@@ -142,7 +143,7 @@ class TransportPCEtesting(unittest.TestCase):
         cls.processes = test_utils.start_tpce()
         cls.processes = test_utils.start_sims([('xpdra2', cls.NODE_VERSION_71),
                                                ('roadma', cls.NODE_VERSION_221),
-                                               ('roadmc', cls.NODE_VERSION_221),
+                                               ('roadmd', cls.NODE_VERSION_71),
                                                ('xpdrc2', cls.NODE_VERSION_71)])
 
     @classmethod
@@ -171,7 +172,7 @@ class TransportPCEtesting(unittest.TestCase):
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_004_connect_rdmc(self):
-        response = test_utils.mount_device("ROADM-C1", ('roadmc', self.NODE_VERSION_221))
+        response = test_utils.mount_device("ROADM-D1", ('roadmd', self.NODE_VERSION_71))
         self.assertEqual(response.status_code,
                          requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
@@ -195,7 +196,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '2', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+                             'rdm-node': 'ROADM-D1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
 
@@ -203,7 +204,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '2', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
+                             'rdm-node': 'ROADM-D1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP2-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
@@ -220,7 +221,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
         response = test_utils.add_oms_attr_request(
-            "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX", data)
+            "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-D1-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_010_add_omsAttributes_roadmc_roadma(self):
@@ -236,7 +237,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
         response = test_utils.add_oms_attr_request(
-            "ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
+            "ROADM-D1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     # test service-create for OCH-OTU4 service from xpdra2 to xpdrc2
@@ -1310,7 +1311,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-xpdr-rdm-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+                             'rdm-node': 'ROADM-D1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Xponder Roadm Link created successfully', response["output"]["result"])
 
@@ -1318,7 +1319,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-networkutils', 'init-rdm-xpdr-links',
             {'links-input': {'xpdr-node': 'XPDR-C2', 'xpdr-num': '1', 'network-num': '1',
-                             'rdm-node': 'ROADM-C1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
+                             'rdm-node': 'ROADM-D1', 'srg-num': '1', 'termination-point-num': 'SRG1-PP1-TXRX'}})
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Roadm Xponder links created successfully', response["output"]["result"])
 
@@ -1673,7 +1674,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
     def test_109_disconnect_roadmC(self):
-        response = test_utils.unmount_device("ROADM-C1")
+        response = test_utils.unmount_device("ROADM-D1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
 
