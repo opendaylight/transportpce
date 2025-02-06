@@ -72,8 +72,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG1-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
-                      [[{'mc-node-name': 'DEG1-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
-                       [{'mc-node-name': 'DEG1-TTP', 'center-freq-granularity': 6.25, 'slot-width-granularity': 12.5}]])
+                      [[{'mc-node-name': 'DEG1-TTP', 'max-slots': 384, 'center-freq-granularity': 6.25, 'min-slots': 3, 'slot-width-granularity': 12.5}],
+                       [{'mc-node-name': 'DEG1-TTP', 'max-slots': 384, 'center-freq-granularity': '6.25', 'min-slots': 3, 'slot-width-granularity': '12.5'}]])
         time.sleep(3)
 
     def test_05_rdm_deg2_lcp(self):
@@ -81,8 +81,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "DEG2-TTP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
-                      [[{'mc-node-name': 'DEG2-TTP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
-                       [{'mc-node-name': 'DEG2-TTP', 'center-freq-granularity': 6.25, 'slot-width-granularity': 12.5}]])
+                      [[{'mc-node-name': 'DEG2-TTP', 'max-slots': 384, 'center-freq-granularity': 6.25, 'min-slots': 3, 'slot-width-granularity': 12.5}],
+                       [{'mc-node-name': 'DEG2-TTP', 'max-slots': 384, 'center-freq-granularity': '6.25', 'min-slots': 3, 'slot-width-granularity': '12.5'}]])
         time.sleep(3)
 
     def test_06_rdm_srg1_lcp(self):
@@ -90,8 +90,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("ROADM-D1", "mc-capabilities", "SRG1-PP")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(response['mc-capabilities'],
-                      [[{'mc-node-name': 'SRG1-PP', 'center-freq-granularity': '6.25', 'slot-width-granularity': '12.5'}],
-                       [{'mc-node-name': 'SRG1-PP', 'center-freq-granularity': 6.25, 'slot-width-granularity': 12.5}]])
+                      [[{'mc-node-name': 'SRG1-PP', 'max-slots': 384, 'center-freq-granularity': 6.25, 'min-slots': 3, 'slot-width-granularity': 12.5}],
+                       [{'mc-node-name': 'SRG1-PP', 'max-slots': 384, 'center-freq-granularity': '6.25', 'min-slots': 3, 'slot-width-granularity': '12.5'}]])
         time.sleep(3)
 
     # Renderer interface creations

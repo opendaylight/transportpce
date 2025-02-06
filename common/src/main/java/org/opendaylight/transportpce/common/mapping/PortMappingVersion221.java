@@ -775,17 +775,23 @@ public class PortMappingVersion221 {
         McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
-        if (degree.getMcCapabilities() == null) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device
+            .rev181019.mc.capabilities.g.McCapabilities mcCapabilities = degree.getMcCapabilities();
+        if (mcCapabilities == null) {
             LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "degree", degree.getDegreeNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                .setMinSlots(Uint32.valueOf(1))
+                .setMaxSlots(Uint32.valueOf(1));
         } else {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
                     .getCenterFreqGranularity().getValue().toString()))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
-                    .getSlotWidthGranularity().getValue().toString()));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
+                    .getSlotWidthGranularity().getValue().toString()))
+                .setMinSlots(mcCapabilities.getMinSlots())
+                .setMaxSlots(mcCapabilities.getMaxSlots());
         }
         return mcCapabilitiesBuilder.build();
     }
@@ -795,17 +801,23 @@ public class PortMappingVersion221 {
         McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
-        if (srg.getMcCapabilities() == null) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device
+            .rev181019.mc.capabilities.g.McCapabilities mcCapabilities = srg.getMcCapabilities();
+        if (mcCapabilities == null) {
             LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "SRG", srg.getSrgNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                .setMinSlots(Uint32.valueOf(1))
+                .setMaxSlots(Uint32.valueOf(1));
         } else {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
                     .getCenterFreqGranularity().getValue().toString()))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
-                    .getSlotWidthGranularity().getValue().toString()));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
+                    .getSlotWidthGranularity().getValue().toString()))
+                .setMinSlots(mcCapabilities.getMinSlots())
+                .setMaxSlots(mcCapabilities.getMaxSlots());
         }
         return mcCapabilitiesBuilder.build();
     }
