@@ -11,6 +11,7 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+from pytest_unordered import unordered
 import unittest
 import time
 import requests
@@ -167,7 +168,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'nbl-number': 2,
              'interconnect-bandwidth': 0,
-             'lcp-list': ['XPDR2-NETWORK1', 'XPDR2-CLIENT2']},
+             'lcp-list': unordered(['XPDR2-NETWORK1', 'XPDR2-CLIENT2'])},
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_10_xpdr_device_disconnection(self):
