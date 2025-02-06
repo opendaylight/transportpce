@@ -156,6 +156,8 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(res['mc-capabilities'][0]['mc-node-name'], 'XPDR-mcprofile')
         self.assertEqual(float(res['mc-capabilities'][0]['center-freq-granularity']), 3.125)
         self.assertEqual(float(res['mc-capabilities'][0]['slot-width-granularity']), 6.25)
+        self.assertEqual(float(res['mc-capabilities'][0]['min-slots']), 1)
+        self.assertEqual(float(res['mc-capabilities'][0]['max-slots']), 14)
 
     def test_09_mpdr_switching_pool(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "switching-pool-lcp", "1")
