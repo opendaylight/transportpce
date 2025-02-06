@@ -65,6 +65,8 @@ public final class PortMappingUtils {
         "{} : no connection-map found inside device configuration";
     public static final String NO_MC_LOGMSG =
         "{} : no MC profile found on {} {} - assuming fixed grid";
+    public static final String NO_USABLE_MC =
+        "{} : no practically usable MC profile found on {} {} (slot-width-granularity: {}GHz, max-slots: {})";
     public static final String NO_PORT_ON_CP_LOGMSG =
         "{} : no port {} on circuit pack {}";
     public static final String NO_VALID_PARTNERPORT_LOGMSG =

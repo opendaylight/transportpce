@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1323,9 +1324,29 @@ public class PortMappingVersion710 {
                 McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
                     .withKey(new McCapabilitiesKey(mcNodeName))
                     .setMcNodeName(mcNodeName);
+                McCapabilityProfile mcCapabilityProfile = mcCapProfile.getValue();
                 mcCapabilitiesBuilder
-                    .setCenterFreqGranularity(mcCapProfile.getValue().getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapProfile.getValue().getSlotWidthGranularity());
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+
+                if (mcCapabilityProfile.getMinSlots() != null) {
+                    mcCapabilitiesBuilder.setMinSlots(mcCapabilityProfile.getMinSlots());
+                } else {
+                    mcCapabilitiesBuilder.setMinSlots(Uint32.valueOf(1));
+                }
+
+                if (mcCapabilityProfile.getMaxSlots() != null) {
+                    mcCapabilitiesBuilder.setMaxSlots(mcCapabilityProfile.getMaxSlots());
+                } else {
+                    mcCapabilitiesBuilder.setMaxSlots(Uint32.valueOf(1));
+                }
+
+                if (!usableMc(mcCapabilitiesBuilder)) {
+                    LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "XPDR", "",
+                            mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
+                            mcCapabilitiesBuilder.getMaxSlots().intValue());
+                }
+
                 // Build and add to the Map
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 LOG.info("Finished building mc-capability profile for XPDR {}", nodeId);
@@ -1335,6 +1356,11 @@ public class PortMappingVersion710 {
 
         }
         return true;
+    }
+
+    private boolean usableMc(McCapabilitiesBuilder mcCapabilitiesBuilder) {
+        return BigDecimal.valueOf(mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue())
+                .multiply(BigDecimal.valueOf(mcCapabilitiesBuilder.getMaxSlots().intValue())).doubleValue() >= 37.5;
     }
 
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
