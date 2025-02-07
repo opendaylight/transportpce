@@ -43,6 +43,13 @@ class TransportPCEtesting(unittest.TestCase):
     uuidTpZiOTSI = "febb4502-6b27-3701-990b-3aa4941f48c4"
     uuidTpADSR = "3aca9b37-bc46-335d-b147-2423690dee18"
     uuidTpZDSR = "709d3595-6d56-3ad6-a3cd-5a4a09ce6f9d"
+    uuidSpdrSA1xpdr1 = "4e44bcc5-08d3-3fee-8fac-f021489e5a61"
+    uuidOnepSpdrSA1xpdr1OTS = "21efd6a4-2d81-3cdb-aabb-b983fb61904e"
+    uuidOnepSpdrSA1xpdr1OTU = "7d2a0549-63e3-3c7f-b4dc-5653e8a81dbe"
+    uuidOnepSpdrSA1xpdr1OTSi = "f32f5e9e-d167-31ba-a9e4-8f1efdb8786d"
+    uuidOnepSpdrSA1xpdr1iODU = "2bdca70f-ef1e-3e56-b251-07eda88f31ba"
+    uuidOnepSpdrSA1xpdr1eODUC1 = "72c6b97a-3944-3d88-9882-b7e688bb2772"
+    uuidOnepSpdrSA1xpdr1DSRC1 = "c6cd334c-51a1-3995-bed3-5cf2b7445c04"
 #   SIP uuids
     # SIP+SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1 UUID IS
     sAOTS = "38d81f55-1798-3520-ba16-08efa56630c4"
@@ -284,8 +291,22 @@ class TransportPCEtesting(unittest.TestCase):
             'tapi-common', 'get-service-interface-point-list', None)
         self.assertEqual(len(response['output']['sip']), 84, 'There should be 84 service interface point')
 
+    def test_15_get_tapi_node_details_before_PhtService_creation(self):
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTS, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        input_dict_1 = {"spectrum-capability-pac": {"available-spectrum": [{"upper-frequency": "196125000000000",
+                                                                            "lower-frequency": "191325000000000"}],
+                                                    "supportable-spectrum": [{"upper-frequency": "196125000000000",
+                                                                              "lower-frequency": "191325000000000"}]}
+                        }
+        self.assertDictEqual(dict(input_dict_1,
+                                  **response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec']),
+                             response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec'])
+
 # test create connectivity service from spdrA to spdrC for Photonic_media
-    def test_15_create_connectivity_service_PhotonicMedia(self):
+    def test_16_create_connectivity_service_PhotonicMedia(self):
         self.cr_serv_input_data["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = self.sAOTS
         self.cr_serv_input_data["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = self.sZOTS
         response = test_utils.transportpce_api_rpc_request(
@@ -319,7 +340,7 @@ class TransportPCEtesting(unittest.TestCase):
         # If the gate fails is because of the waiting time not being enough
 #        time.sleep(self.WAITING)
 
-    def test_16_get_service_PhotonicMedia(self):
+    def test_17_get_service_PhotonicMedia(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.pm))
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -328,8 +349,105 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
 
+    def test_18a_get_tapi_Pht_node_details_at_Pht_Service_creation(self):
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTS, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        input_dict_1 = {"spectrum-capability-pac": {"occupied-spectrum": [{"upper-frequency": "196125000000000",
+                                                                           "lower-frequency": "196075000000000"}],
+                                                    "supportable-spectrum": [{"upper-frequency": "196125000000000",
+                                                                              "lower-frequency": "191325000000000"}]}
+                        }
+
+        self.assertDictEqual(dict(input_dict_1,
+                                  **response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec']),
+                             response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec'])
+        self.assertEqual(response['onep'][0]['name'][0]['value-name'], 'eNodeEdgePoint')
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['client-node-edge-point'][0]['node-edge-point-uuid'], 'f32f5e9e-d167-31ba-a9e4-8f1efdb8786d')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], '21efd6a4-2d81-3cdb-aabb-b983fb61904e')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTSi, "nonconfig")
+        time.sleep(2)
+        self.assertDictEqual(dict(input_dict_1,
+                                  **response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec']),
+                             response['onep'][0]['tapi-photonic-media:photonic-media-node-edge-point-spec'])
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['onep'][0]['name'][0]['value-name'], 'PhotMedNodeEdgePoint')
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['client-node-edge-point'][0]['node-edge-point-uuid'], '7d2a0549-63e3-3c7f-b4dc-5653e8a81dbe')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], 'f32f5e9e-d167-31ba-a9e4-8f1efdb8786d')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTU, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['onep'][0]['name'][0]['value-name'], 'iNodeEdgePoint_OTU')
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+iOTU+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['client-node-edge-point'][0]['node-edge-point-uuid'], '2bdca70f-ef1e-3e56-b251-07eda88f31ba')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], '7d2a0549-63e3-3c7f-b4dc-5653e8a81dbe')
+
+    def test_18b_get_tapi_OTN_node_details_at_Pht_Service_creation(self):
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1iODU, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value-name'], 'iNodeEdgePoint_N')
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '100.0')
+
+        response = test_utils.get_tapi_topology_node(test_utils.T0_FULL_MULTILAYER_TOPO_UUID,
+                                                     self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1eODUC1,
+                                                     "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value-name'], 'eNodeEdgePoint_N')
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], '72c6b97a-3944-3d88-9882-b7e688bb2772')
+
 # test create connectivity service from spdrA to spdrC for odu
-    def test_17_create_connectivity_service_ODU(self):
+    def test_19_create_connectivity_service_ODU(self):
         # pylint: disable=line-too-long
         self.cr_serv_input_data["layer-protocol-name"] = "ODU"
         self.cr_serv_input_data["end-point"][0]["layer-protocol-name"] = "ODU"
@@ -368,7 +486,67 @@ class TransportPCEtesting(unittest.TestCase):
         # If the gate fails is because of the waiting time not being enough
 #        time.sleep(self.WAITING)
 
-    def test_18_get_service_ODU(self):
+    def test_20_get_tapi_node_details_at_ODU_Service_creation(self):
+        # ODU service creation correspond to the creation of HO-ODU between 2 Network ports and is associated an
+        # iODU4 top connection which uses 100% of underlying OTU4
+        response = test_utils.get_tapi_topology_node(test_utils.T0_FULL_MULTILAYER_TOPO_UUID,
+                                                     self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1eODUC1,
+                                                     "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['client-node-edge-point'][0]['node-edge-point-uuid'], 'c6cd334c-51a1-3995-bed3-5cf2b7445c04')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], '72c6b97a-3944-3d88-9882-b7e688bb2772')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTS, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '0.0')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTSi, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+OTSi_MEDIA_CHANNEL+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '0.0')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1OTU, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+iOTU+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '0.0')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1iODU, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], '2bdca70f-ef1e-3e56-b251-07eda88f31ba')
+
+    def test_21_get_service_ODU(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.odu))
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -378,7 +556,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
 # test create connectivity service from spdrA to spdrC for dsr
-    def test_19_create_connectivity_service_DSR(self):
+    def test_22_create_connectivity_service_DSR(self):
         # pylint: disable=line-too-long
         self.cr_serv_input_data["layer-protocol-name"] = "DSR"
         self.cr_serv_input_data["end-point"][0]["layer-protocol-name"] = "DSR"
@@ -421,7 +599,44 @@ class TransportPCEtesting(unittest.TestCase):
         # The sleep here is okey as the DSR service creation is very fast
 #        time.sleep(self.WAITING)
 
-    def test_20_get_service_DSR(self):
+    def test_23_get_tapi_node_details_at_DSR_Service_creation(self):
+
+        response = test_utils.get_tapi_topology_node(test_utils.T0_FULL_MULTILAYER_TOPO_UUID,
+                                                     self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1eODUC1,
+                                                     "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+eODU+XPDR1-CLIENT1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '0.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['client-node-edge-point'][0]['node-edge-point-uuid'], 'c6cd334c-51a1-3995-bed3-5cf2b7445c04')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1iODU, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+iODU+XPDR1-NETWORK1')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '100.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '90.0')
+
+        response = test_utils.get_tapi_topology_node(
+            test_utils.T0_FULL_MULTILAYER_TOPO_UUID, self.uuidSpdrSA1xpdr1, self.uuidOnepSpdrSA1xpdr1DSRC1, "nonconfig")
+        time.sleep(2)
+        self.assertEqual(response['onep'][0]['name'][0]['value'], 'SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT1')
+        self.assertEqual(response['onep'][0]['administrative-state'], 'UNLOCKED')
+        self.assertEqual(response['onep'][0]['operational-state'], 'ENABLED')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['number-of-cep-instances'], '0')
+        self.assertEqual(response['onep'][0]['available-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['number-of-cep-instances'], '1')
+        self.assertEqual(response['onep'][0]['supported-payload-structure'][0]['capacity']['value'], '10.0')
+        self.assertEqual(response['onep'][0]['available-capacity']['total-size']['value'], '0.0')
+        self.assertEqual(response['onep'][0]['tapi-connectivity:cep-list']['connection-end-point'][0]
+                         ['parent-node-edge-point']['node-edge-point-uuid'], 'c6cd334c-51a1-3995-bed3-5cf2b7445c04')
+
+    def test_24_get_service_DSR(self):
         response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.dsr))
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -430,7 +645,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
 
-    def test_21_get_connectivity_service_list(self):
+    def test_25_get_connectivity_service_list(self):
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-list', None)
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -458,28 +673,28 @@ class TransportPCEtesting(unittest.TestCase):
                 self.fail("get connectivity service failed")
         time.sleep(2)
 
-    def test_22_delete_connectivity_service_DSR(self):
+    def test_26_delete_connectivity_service_DSR(self):
         self.del_serv_input_data["uuid"] = str(self.uuid_services.dsr)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.del_serv_input_data)
         self.assertIn(response["status_code"], (requests.codes.ok, requests.codes.no_content))
         time.sleep(self.WAITING)
 
-    def test_23_delete_connectivity_service_ODU(self):
+    def test_27_delete_connectivity_service_ODU(self):
         self.del_serv_input_data["uuid"] = str(self.uuid_services.odu)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.del_serv_input_data)
         self.assertIn(response["status_code"], (requests.codes.ok, requests.codes.no_content))
         time.sleep(self.WAITING)
 
-    def test_24_delete_connectivity_service_PhotonicMedia(self):
+    def test_28_delete_connectivity_service_PhotonicMedia(self):
         self.del_serv_input_data["uuid"] = str(self.uuid_services.pm)
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'delete-connectivity-service', self.del_serv_input_data)
         self.assertIn(response["status_code"], (requests.codes.ok, requests.codes.no_content))
         time.sleep(self.WAITING)
 
-    def test_25_get_no_tapi_services(self):
+    def test_29_get_no_tapi_services(self):
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'get-connectivity-service-list', None)
         self.assertEqual(response['status_code'], requests.codes.internal_server_error)
@@ -488,31 +703,31 @@ class TransportPCEtesting(unittest.TestCase):
              "error-message": "No services exist in datastore"},
             response['output']['errors']['error'])
 
-    def test_26_get_no_openroadm_services(self):
+    def test_30_get_no_openroadm_services(self):
         response = test_utils.get_ordm_serv_list_request()
         self.assertEqual(response['status_code'], requests.codes.conflict)
 
-    def test_27_disconnect_spdrA(self):
+    def test_31_disconnect_spdrA(self):
         response = test_utils.unmount_device("SPDR-SA1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(2)
 
-    def test_28_disconnect_spdrC(self):
+    def test_32_disconnect_spdrC(self):
         response = test_utils.unmount_device("SPDR-SC1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(2)
 
-    def test_29_disconnect_roadmA(self):
+    def test_33_disconnect_roadmA(self):
         response = test_utils.unmount_device("ROADM-A1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(2)
 
-    def test_30_disconnect_roadmC(self):
+    def test_34_disconnect_roadmC(self):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
         time.sleep(2)
 
-    def test_31_check_uninstall_Tapi_Feature(self):
+    def test_35_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
         time.sleep(16)
         print("Tapi Feature uninstalled")

@@ -135,12 +135,12 @@ public class TapiPceNotificationHandler {
         //  verify the type of XPDR and the capacity and determine if it is an OTN service or pure WDM service
         // Create connections and ceps for the connectivity service.
         //  Connections must be with a locked stated. As the renderer hasnt implemented yet the oc's
-        LOG.info("TapiPceNotificationHandler Line 141 : calls createConnectionsForService for Service {}, Uuid {}",
+        LOG.debug("TapiPceNotificationHandler Line 141 : calls createConnectionsForService for Service {}, Uuid {}",
             serviceName, serviceUuid);
         Map<ConnectionKey, Connection> connectionMap = connectivityUtils.createConnectionsFromService(
                 pathDescription, input.getLayerProtocolName(), serviceName, serviceUuid);
         this.connectionFullMap.putAll(connectivityUtils.getConnectionFullMap());
-        LOG.info("TapiPceNotificationHandler Line 144 : Connection Map from createConnectionsAndCepsForService is {},"
+        LOG.debug("TapiPceNotificationHandler Line 144 : Connection Map from createConnectionsAndCepsForService is {},"
             + "for Service {} of Uuid {} and LAYERPROTOCOL  {} ",
             serviceName, serviceUuid, connectionMap.toString(), input.getLayerProtocolName());
         // add connections to connection context and to connectivity context
