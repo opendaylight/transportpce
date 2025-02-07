@@ -500,6 +500,29 @@ def get_portmapping_node_attr(node: str, attr: str, value: str):
     return {'status_code': response.status_code,
             attr: return_output}
 
+
+def get_tapi_topology_node(topouuid: str, nodeuuid: str, onepuuid: str, content: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/tapi-common:context/tapi-topology:topology-context/topology={}/node={}/owned-node-edge-point={}?content={}',
+           'draft-bierman02': '{}/{}/tapi-common:context/topology-context/tapi-topology:topology/{}/node/{}/owned-node-edge-point/{}'}
+    if RESTCONF_VERSION in ('rfc8040'):
+        format_args = ('{}', topouuid, nodeuuid, onepuuid, content)
+    elif content == 'config':
+        format_args = ('{}', content, topouuid, nodeuuid, onepuuid)
+    else:
+        format_args = ('{}', 'operational', topouuid, nodeuuid, onepuuid)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    if bool(response):
+        res = response.json()
+        # print('response in testUtils = {}', res)
+        return_key = {'rfc8040': 'tapi-topology:owned-node-edge-point',
+                      'draft-bierman02': 'tapi-topology:owned-node-edge-point'}
+        onep = res[return_key[RESTCONF_VERSION]]
+    else:
+        onep = None
+    return {'status_code': response.status_code,
+            'onep': onep}
+
 #
 # Topology operations
 #
