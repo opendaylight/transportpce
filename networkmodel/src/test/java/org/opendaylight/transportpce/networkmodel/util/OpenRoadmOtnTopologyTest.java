@@ -7,14 +7,7 @@
  */
 package org.opendaylight.transportpce.networkmodel.util;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -453,20 +446,18 @@ public class OpenRoadmOtnTopologyTest {
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getTsPool().size(),
             "after 10G creation, 8 (over 80) trib slot should be occupied");
-        assertThat(
-            "trib slot 1-8 should no longer be present in Trib slot list",
-            topoShard.getTps().get(0).augmentation(
+
+        assertThat(topoShard.getTps().get(0).augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+                            .TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getTsPool())
+            .withFailMessage("trib slot 1-8 should no longer be present in Trib slot list")
+            .doesNotContain(Uint16.ONE, Uint16.valueOf(8));
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            not(hasItems(Uint16.valueOf(1), Uint16.valueOf(8))));
-        assertThat(
-            "trib slot 9 should always be present in trib slot list",
-            topoShard.getTps().get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
-                        .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            hasItem(Uint16.valueOf(9)));
+                .getXpdrTpPortConnectionAttributes().getTsPool())
+                .withFailMessage("trib slot 9 should always be present in trib slot list")
+            .contains(Uint16.valueOf(9));
         assertEquals(
             79,
             topoShard.getTps().get(0).augmentation(
@@ -475,14 +466,13 @@ public class OpenRoadmOtnTopologyTest {
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
                 .getTpnPool().size(),
             "after 10G creation, 1 (over 80) trib port should be occupied");
-        assertThat(
-            "trib port 1 should no longer be present",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
-                .getTpnPool(),
-            not(hasItem(Uint16.valueOf(1))));
+                .getTpnPool())
+            .withFailMessage("trib port 1 should no longer be present")
+            .doesNotContain(Uint16.ONE);
 
         // tests update for 10G deletion
         sortedLinks.clear();
@@ -509,13 +499,12 @@ public class OpenRoadmOtnTopologyTest {
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getTsPool().size(),
             "after 10G deletion, trib slot list should be full");
-        assertThat(
-            "after 10G deletion, trib slot list should contain items 1-8",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            hasItems(Uint16.valueOf(1), Uint16.valueOf(8), Uint16.valueOf(9)));
+                .getXpdrTpPortConnectionAttributes().getTsPool())
+            .withFailMessage("after 10G deletion, trib slot list should contain items 1-8")
+            .contains(Uint16.ONE, Uint16.valueOf(8), Uint16.valueOf(9));
         assertEquals(
                 80,
                 topoShard.getTps().get(0).augmentation(
@@ -524,14 +513,13 @@ public class OpenRoadmOtnTopologyTest {
                     .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
                     .getTpnPool().size(),
                 "after 10G deletion, trib port list should be full");
-        assertThat(
-            "after 10G deletion, trib port list should contain items 1",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
-                .getTpnPool(),
-            hasItem(Uint16.valueOf(1)));
+                .getTpnPool())
+            .withFailMessage("after 10G deletion, trib port list should contain items 1")
+            .contains(Uint16.ONE);
     }
 
     @Test
@@ -564,20 +552,18 @@ public class OpenRoadmOtnTopologyTest {
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getTsPool().size(),
             "after 1G creation, 1 (over 80) trib slot should be occupied");
-        assertThat(
-            "trib slot 1 should no longer be present in Trib slot list",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            not(hasItem(Uint16.valueOf(1))));
-        assertThat(
-            "trib slot 2 should always be present in Trib slot list",
-            topoShard.getTps().get(0).augmentation(
+                .getXpdrTpPortConnectionAttributes().getTsPool())
+            .withFailMessage("trib slot 1 should no longer be present in Trib slot list")
+            .doesNotContain(Uint16.ONE);
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            hasItem(Uint16.valueOf(2)));
+                .getXpdrTpPortConnectionAttributes().getTsPool())
+            .withFailMessage("trib slot 2 should always be present in Trib slot list")
+            .contains(Uint16.valueOf(2));
         assertEquals(
             79,
             topoShard.getTps().get(0).augmentation(
@@ -586,14 +572,13 @@ public class OpenRoadmOtnTopologyTest {
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
                 .getTpnPool().size(),
             "after 1G creation, 1 (over 80) trib port should be occupied");
-        assertThat(
-            "trib port 1 should no longer be present in Trib port list",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
-                .getTpnPool(),
-            not(hasItem(Uint16.valueOf(1))));
+                .getTpnPool())
+            .withFailMessage("trib port 1 should no longer be present in Trib port list")
+            .doesNotContain(Uint16.ONE);
 
         // tests update for 1G deletion
         sortedLinks.clear();
@@ -622,13 +607,12 @@ public class OpenRoadmOtnTopologyTest {
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getTsPool().size(),
             "after 1G deletion, trib slot list should be full");
-        assertThat(
-            "after 1G deletion, trib slot list should contain items 1 and 2",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
-                .getXpdrTpPortConnectionAttributes().getTsPool(),
-            hasItems(Uint16.valueOf(1), Uint16.valueOf(2)));
+                .getXpdrTpPortConnectionAttributes().getTsPool())
+            .withFailMessage("after 1G deletion, trib slot list should contain items 1 and 2")
+            .contains(Uint16.ONE, Uint16.valueOf(2));
         assertEquals(
             80,
             topoShard.getTps().get(0).augmentation(
@@ -637,14 +621,13 @@ public class OpenRoadmOtnTopologyTest {
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
                 .getTpnPool().size(),
             "after 1G deletion, trib port list should be full");
-        assertThat(
-            "after 1G deletion, trib port list should contain items 1",
-            topoShard.getTps().get(0).augmentation(
+        assertThat(topoShard.getTps().get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values().stream().findFirst().orElseThrow()
-                .getTpnPool(),
-            hasItem(Uint16.valueOf(1)));
+                .getTpnPool())
+            .withFailMessage("after 1G deletion, trib port list should contain items 1")
+            .contains(Uint16.ONE);
     }
 
     @Test
@@ -743,28 +726,26 @@ public class OpenRoadmOtnTopologyTest {
                     nbl.getAvailableInterconnectBandwidth(),
                     "for a 10G mux, interconnect BW should be 10G");
                 assertEquals(Uint32.valueOf(1000000000), nbl.getInterconnectBandwidthUnit());
-                assertThat(
-                    "for a 10G mux, non blocking list should contain 2 entries (client + network ports)",
-                    nbl.getTpList(),
-                    hasSize(2));
+                assertThat(nbl.getTpList())
+                    .withFailMessage(
+                            "for a 10G mux, non blocking list should contain 2 entries (client + network ports)")
+                    .hasSize(2);
                 String nb = nbl.getNblNumber().toString();
-                assertThat(
-                    nbl.getTpList(),
-                    containsInAnyOrder(new TpId("XPDR1-NETWORK1"), new TpId("XPDR1-CLIENT" + nb)));
+                assertThat(nbl.getTpList())
+                    .containsExactlyInAnyOrder(new TpId("XPDR1-NETWORK1"), new TpId("XPDR1-CLIENT" + nb));
             }
         } else if (xpdrNb.equals(Uint16.valueOf(2))) {
             assertEquals(1, nonBlockingList.size(), "Switch should contain a single non blocking list");
             assertEquals(Uint16.valueOf(1), nonBlockingList.get(0).getNblNumber());
-            assertThat(
-                "for a 100G Switch, non blocking list should contain 8 entries (4 clients + 4 network ports)",
-                nonBlockingList.get(0).getTpList(),
-                hasSize(8));
-            assertThat(
-                nonBlockingList.get(0).getTpList(),
-                containsInAnyOrder(
+            assertThat(nonBlockingList.get(0).getTpList())
+                .withFailMessage(
+                        "for a 100G Switch, non blocking list should contain 8 entries (4 clients + 4 network ports)")
+                .hasSize(8);
+            assertThat(nonBlockingList.get(0).getTpList())
+                .containsExactlyInAnyOrder(
                     new TpId("XPDR2-CLIENT1"), new TpId("XPDR2-NETWORK1"), new TpId("XPDR2-CLIENT2"),
                     new TpId("XPDR2-NETWORK2"), new TpId("XPDR2-CLIENT3"), new TpId("XPDR2-NETWORK3"),
-                    new TpId("XPDR2-CLIENT4"), new TpId("XPDR2-NETWORK4")));
+                    new TpId("XPDR2-CLIENT4"), new TpId("XPDR2-NETWORK4"));
         }
     }
 
@@ -822,10 +803,10 @@ public class OpenRoadmOtnTopologyTest {
                 .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream()
                 .collect(Collectors.toList());
             for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient1) {
-                assertThat("tp should have 2 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2",
-                    String.valueOf(supportedInterfaceCapability.getIfCapType()),
-                    either(containsString(String.valueOf(If10GEODU2e.VALUE)))
-                        .or(containsString(String.valueOf(If10GEODU2.VALUE))));
+                assertThat(String.valueOf(supportedInterfaceCapability.getIfCapType()))
+                    .withFailMessage("tp should have 2 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2")
+                    .matches(value -> value.contains(String.valueOf(If10GEODU2e.VALUE))
+                            || value.contains(String.valueOf(If10GEODU2.VALUE)));
             }
             List<SupportedInterfaceCapability> sicListClient3 = tpList.get(3).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
@@ -833,19 +814,19 @@ public class OpenRoadmOtnTopologyTest {
                 .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream()
                 .collect(Collectors.toList());
             for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient3) {
-                assertThat("tp should have 3 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2, if-10GE",
-                    String.valueOf(supportedInterfaceCapability.getIfCapType()),
-                    either(containsString(String.valueOf(If10GEODU2e.VALUE)))
-                        .or(containsString(String.valueOf(If10GEODU2.VALUE)))
-                        .or(containsString(String.valueOf(If10GE.VALUE))));
+                assertThat(String.valueOf(supportedInterfaceCapability.getIfCapType()))
+                    .withFailMessage("tp should have 3 if-cap-type: if-10GE-ODU2e, if-10GE-ODU2, if-10GE")
+                    .matches(value -> value.contains(String.valueOf(If10GEODU2e.VALUE))
+                            || value.contains(String.valueOf(If10GEODU2.VALUE))
+                            || value.contains(String.valueOf(If10GE.VALUE)));
             }
-            assertThat("the rate should be ODU2 or ODU2e",
-                String.valueOf(tpList.get(2).augmentation(
+            assertThat(String.valueOf(tpList.get(2).augmentation(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
                             .TerminationPoint1.class)
-                    .getXpdrTpPortConnectionAttributes().getRate()),
-                either(containsString(String.valueOf(ODU2e.VALUE)))
-                    .or(containsString(String.valueOf(ODU2.VALUE))));
+                    .getXpdrTpPortConnectionAttributes().getRate()))
+                .withFailMessage("the rate should be ODU2 or ODU2e")
+                .matches(value -> value.contains(String.valueOf(ODU2e.VALUE))
+                        || value.contains(String.valueOf(ODU2.VALUE)));
             assertEquals(
                 OpenroadmTpType.XPONDERCLIENT,
                 tpList.get(2).augmentation(TerminationPoint1.class).getTpType(),
@@ -881,11 +862,10 @@ public class OpenRoadmOtnTopologyTest {
                 .getTpSupportedInterfaces().getSupportedInterfaceCapability().values().stream()
                 .collect(Collectors.toList());
             for (SupportedInterfaceCapability supportedInterfaceCapability : sicListClient3) {
-                assertThat(
-                    "tp should have 2 if-cap-type: if-100GE-ODU4, if-100GE",
-                    String.valueOf(supportedInterfaceCapability.getIfCapType()),
-                    either(containsString(String.valueOf(If100GEODU4.VALUE)))
-                        .or(containsString(String.valueOf(If100GE.VALUE))));
+                assertThat(String.valueOf(supportedInterfaceCapability.getIfCapType()))
+                    .withFailMessage("tp should have 2 if-cap-type: if-100GE-ODU4, if-100GE")
+                    .matches(value -> value.contains(String.valueOf(If100GEODU4.VALUE))
+                            || value.contains(String.valueOf(If100GE.VALUE)));
             }
             assertEquals(
                 OpenroadmTpType.XPONDERCLIENT,
