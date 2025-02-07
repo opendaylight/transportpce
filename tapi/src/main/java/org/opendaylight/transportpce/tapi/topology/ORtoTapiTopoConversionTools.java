@@ -196,44 +196,44 @@ public class ORtoTapiTopoConversionTools {
         LPN_MAP = new HashMap<>(Map.of(
             "ETH", new HashMap<>(Map.of(
                 "If1GEODU0", Map.of(
-                    ODUTYPEODU0.VALUE, Uint64.ZERO, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ZERO),
+                    ODUTYPEODU0.VALUE, Uint64.ONE, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ONE),
                 "If10GEODU2e", Map.of(
-                    ODUTYPEODU2E.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2E.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If10GEODU2", Map.of(
-                    ODUTYPEODU2.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
-                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
+                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If100GEODU4", Map.of(
-                    ODUTYPEODU4.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
-                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    ODUTYPEODU4.VALUE, Uint64.ONE, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
+                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "OTU", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "ODU", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE),
                 "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
-                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
+                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
             "DIGITAL_OTN", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
                         OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE, ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
@@ -245,7 +245,7 @@ public class ORtoTapiTopoConversionTools {
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO,
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE)
              ))
