@@ -104,6 +104,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.topology.context.topology.node.owned.node.edge.point.CepListBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU4;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODUCN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.OTUTYPEOTU4;
@@ -1088,15 +1091,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .findFirst().orElseThrow().getIfCapType().implementedInterface().getSimpleName()));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
-                    if (mapping.getSupportingEthernet() != null && (operState == null
+                    if (mapping.getSupportingEthernet() == null && (operState == null
                             || operState.equals(OperationalState.ENABLED))) {
                         onepBldr.setAvailablePayloadStructure(this.tapiFactory
                             .createAvailablePayloadStructureForCommonNeps(
-                            true, Double.valueOf(0), Integer.valueOf(0), supInt.keySet()));
+                            true, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
                     } else {
                         onepBldr.setAvailablePayloadStructure(
                             this.tapiFactory.createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate),
-                                Integer.valueOf(1), supInt.keySet()));
+                                Integer.valueOf(0), supInt.keySet()));
                     }
                 } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
                         .contains("OTU4")).findFirst().orElseThrow().toString().isEmpty()) {
@@ -1104,15 +1107,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     supInt.putAll(ORtoTapiTopoConversionTools.LPN_MAP.get("ETH").get("IfOCH"));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
-                    if (mapping.getSupportingOtu4() != null  && (operState == null
+                    if (mapping.getSupportingOtu4() == null  && (operState == null
                         || operState.equals(OperationalState.ENABLED))) {
                         onepBldr.setAvailablePayloadStructure(this.tapiFactory
                             .createAvailablePayloadStructureForCommonNeps(
-                            true, Double.valueOf(0), Integer.valueOf(0), supInt.keySet()));
+                            true, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
                     } else {
                         onepBldr.setAvailablePayloadStructure(
                             this.tapiFactory.createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate),
-                                Integer.valueOf(1), supInt.keySet()));
+                                Integer.valueOf(0), supInt.keySet()));
                     }
                 } else {
                     onepList.add(onepBldr.build());
@@ -1127,15 +1130,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(100), Integer.valueOf(1), supInt.keySet()));
-                    if (mapping.getSupportingOdu4() == null && (operState == null
+                    if (mapping.getSupportingOdu4() != null && (operState == null
                         || operState.equals(OperationalState.ENABLED))) {
                         onepBldr.setAvailablePayloadStructure(this.tapiFactory
                             .createAvailablePayloadStructureForCommonNeps(
-                            false, Double.valueOf(100), Integer.valueOf(0), supInt.keySet()));
+                            false, Double.valueOf(100), Integer.valueOf(1), supInt.keySet()));
                     } else {
                         onepBldr.setAvailablePayloadStructure(this.tapiFactory
                             .createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(100),
-                                Integer.valueOf(1), supInt.keySet()));
+                                Integer.valueOf(0), supInt.keySet()));
                     }
                 } else {
                     // this is the case where SicColl does not contain ODU4 and nep Protocol is digital OTN
@@ -1180,6 +1183,32 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         false, Double.valueOf(rate), 1, lpqSet));
                 }
 
+            } else if ((nepProtocol.equals(LayerProtocolName.ODU) || nepProtocol.equals(LayerProtocolName.DIGITALOTN))
+                    && mapping.getPortQual() == "xpdr-client") {
+                Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
+                if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU4")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU2e")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU2")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU2.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                    .contains("ODU0")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU0.VALUE, Uint64.ONE));
+                }
+                onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
+                    false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
+                if (operState == null || operState.equals(OperationalState.ENABLED)) {
+                    onepBldr.setAvailablePayloadStructure(this.tapiFactory.createAvailablePayloadStructureForCommonNeps(
+                        true, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
+                } else if (operState.equals(OperationalState.DISABLED)) {
+                    onepBldr.setAvailablePayloadStructure(this.tapiFactory
+                        .createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate),
+                            Integer.valueOf(0), supInt.keySet()));
+                }
             }
             onepList.add(onepBldr.build());
             return onepList;
