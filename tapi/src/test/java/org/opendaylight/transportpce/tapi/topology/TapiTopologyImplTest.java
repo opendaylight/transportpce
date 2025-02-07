@@ -7,9 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -620,18 +618,18 @@ public class TapiTopologyImplTest extends AbstractTest {
             "topology uuid should be the same for the two termination point of the link");
         assertEquals(topoUuid, nodeEdgePointList.get(1).getTopologyUuid(),
             "topology uuid should be the same for the two termination point of the link");
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(0).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct nodes",
-            nodeEdgePointList.get(1).getNodeUuid().getValue(),
-            either(containsString(node1Uuid.getValue())).or(containsString(node2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
-        assertThat("otn links should terminate on two distinct tps",
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(tp1Uuid.getValue())).or(containsString(tp2Uuid.getValue())));
+        assertThat(nodeEdgePointList.get(0).getNodeUuid().getValue())
+            .withFailMessage("otn links should terminate on two distinct nodes")
+            .matches(value -> value.contains(node1Uuid.getValue()) || value.contains(node2Uuid.getValue()));
+        assertThat(nodeEdgePointList.get(1).getNodeUuid().getValue())
+            .withFailMessage("otn links should terminate on two distinct nodes")
+            .matches(value -> value.contains(node1Uuid.getValue()) || value.contains(node2Uuid.getValue()));
+        assertThat(nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue())
+            .withFailMessage("otn links should terminate on two distinct tps")
+            .matches(value -> value.contains(tp1Uuid.getValue()) || value.contains(tp2Uuid.getValue()));
+        assertThat(nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue())
+            .withFailMessage("otn links should terminate on two distinct tps")
+            .matches(value -> value.contains(tp1Uuid.getValue()) || value.contains(tp2Uuid.getValue()));
         assertEquals(OperationalState.ENABLED, link.getOperationalState(), "operational state should be ENABLED");
         assertEquals(AdministrativeState.UNLOCKED, link.getAdministrativeState(),
             "administrative state should be UNLOCKED");
