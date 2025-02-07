@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -91,12 +92,14 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPA
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.TotalSizeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameKey;
@@ -141,7 +144,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.co
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.AvailablePayloadStructure;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.AvailablePayloadStructureBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.MappedServiceInterfacePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SupportedPayloadStructure;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
@@ -614,7 +620,7 @@ public final class ConnectivityUtils {
                 .map(set -> set.stream().sorted().collect(Collectors.toList()))
                 .orElseGet(Collections::emptyList);
         if (supServiceList == null) {
-            LOG.info("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
+            LOG.debug("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
                 this.servicesMap);
             return;
         }
@@ -629,7 +635,7 @@ public final class ConnectivityUtils {
         }
         var servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
             .rev250207.connection.vs.service.ServicesBuilder();
-        LOG.info("CU Line 593 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
+        LOG.debug("CU Line 593 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
         if (!servicesMap.isEmpty()
                 && this.servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
@@ -659,7 +665,7 @@ public final class ConnectivityUtils {
         //  After we have Updated the list of supporting Services in connVsServices we make a recursive call of the same
         //  method to complement the list of supporting services and associated connections until we don't find any
         //  supporting service meaning we are at the lowest service layer
-        LOG.info("CU Line 622 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
+        LOG.debug("CU Line 622 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
         if (!supServiceMap.isEmpty()) {
             String serviName = supServiceMap.entrySet().stream()
@@ -675,7 +681,7 @@ public final class ConnectivityUtils {
 
         var servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
             .rev250207.connection.vs.service.ServicesBuilder();
-        LOG.info("CU Line 640 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
+        LOG.debug("CU Line 640 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
         if (!servicesMap.isEmpty()
                 && !this.servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
@@ -689,14 +695,14 @@ public final class ConnectivityUtils {
         }
         servBldr.setServiceUuid(servUuid);
         this.servicesMap.put(servBldr.build().key(), servBldr.build());
-        LOG.info("CU Line 654 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
+        LOG.debug("CU Line 654 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
     }
 
     private void populateConnectionInConnectionVsService(String servName, Uuid servUuid,
         String connectionName, Uuid connectionUuid, String lpq) {
 
-        LOG.info("CU Line 671 populateConnectionInConnectionVsService: supporting Connection {}, for Service {}",
+        LOG.debug("CU Line 671 populateConnectionInConnectionVsService: supporting Connection {}, for Service {}",
             connectionName, serviceName);
         SupportingConnectionsBuilder sconBldr = new SupportingConnectionsBuilder()
             .setConnectionName(connectionName)
@@ -720,7 +726,7 @@ public final class ConnectivityUtils {
             .setSupportingConnections(supConnectionMap);
 
         this.servicesMap.put(servBldr.build().key(), servBldr.build());
-        LOG.info("CU Line 695 populateConnectionInConnectionVsService: updated supConnections {}, for Service {}",
+        LOG.debug("CU Line 695 populateConnectionInConnectionVsService: updated supConnections {}, for Service {}",
             supConnectionMap, serviceName);
     }
 
@@ -969,8 +975,6 @@ public final class ConnectivityUtils {
                 .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapDsr = new HashMap<>();
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMapOdu = new HashMap<>();
-        // TODO: when upgrading the models to 2.1.3, get the connection inclusion because those connections will
-        //  be added to the lower connection of a top connection
         // Create 1 cep per Xpdr in the CLIENT, 1 cep per Xpdr eODU, 1 XC between eODU and iODE,
         // 1 top connection between eODU and a top connection DSR between the CLIENT xpdrs
         for (String xpdr:xpdrNodelist) {
@@ -1012,6 +1016,16 @@ public final class ConnectivityUtils {
             xpdrClientTplist.stream().filter(adp -> adp.contains(xpdrNodelist.get(xpdrNodelist.size() - 1)))
                 .findFirst().orElseThrow();
 
+        // Identify rate of the client port
+        Double rate = (getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU) < 100.0)
+            ? getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU)
+            : getClientRateFromNep(spcXpdr2, TapiConstants.E_ODU);
+        LOG.debug("CU Line 1026 : get rate from E_ODU Nep of {} = {} for decrementation on IODU Nep",
+            spcXpdr1, rate);
+        if (rate > 100.0) {
+            rate = 100.0;
+        }
+
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connectionOdu =
             createTopConnection(
@@ -1043,6 +1057,17 @@ public final class ConnectivityUtils {
         // DSR top connection that will be added to the service object
         Connection conn1 = new ConnectionBuilder().setConnectionUuid(connectionDsr.getUuid()).build();
         connServMap.put(conn1.key(), conn1);
+        // Update capacity of the network associated port
+        updateXpdrNepPayloadStructure(getAssociatedNetworkPort(spcXpdr1, xpdrNetworkTplist),
+            TapiConstants.I_ODU, rate);
+        updateXpdrNepPayloadStructure(getAssociatedNetworkPort(spcXpdr2, xpdrNetworkTplist),
+            TapiConstants.I_ODU, rate);
+        // Update capacity of the client ports
+        updateXpdrNepPayloadStructure(spcXpdr1, TapiConstants.DSR, rate);
+        updateXpdrNepPayloadStructure(spcXpdr2, TapiConstants.DSR, rate);
+        updateXpdrNepPayloadStructure(spcXpdr1, TapiConstants.E_ODU, rate);
+        updateXpdrNepPayloadStructure(spcXpdr2, TapiConstants.E_ODU, rate);
+
         return connServMap;
     }
 
@@ -1069,7 +1094,7 @@ public final class ConnectivityUtils {
             List<String> xpdrNetworkTplist, List<String> xpdrNodelist) {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
             .cep.list.ConnectionEndPointKey, ConnectionEndPoint> cepMap1 = new HashMap<>();
-        // Create 2 ceps per Xpdr in the I_ODU and in the I_OTU, as well as a top
+        // Create 1 cep per Xpdr in the I_ODU Layer, as well as a top
         // connection iODU between the xpdrs
         for (String xpdr:xpdrNodelist) {
             LOG.info("Creating iODU ceps and xc for xpdr {}", xpdr);
@@ -1079,6 +1104,9 @@ public final class ConnectivityUtils {
                 createCepXpdr(0, 0, spcXpdrNetwork, TapiConstants.I_ODU, TapiConstants.XPDR, LayerProtocolName.ODU);
             putXpdrCepInTopologyContext(xpdr, spcXpdrNetwork, TapiConstants.I_ODU, TapiConstants.XPDR, netCep1);
             cepMap1.put(netCep1.key(), netCep1);
+            updateXpdrNepPayloadStructure(spcXpdrNetwork, TapiConstants.I_OTU, 100.0);
+            updateXpdrNepPayloadStructure(spcXpdrNetwork, TapiConstants.OTSI_MC, 100.0);
+            updateXpdrNepPayloadStructure(spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS, 100.0);
         }
 
         // ODU top connection between edge xpdr i_ODU
@@ -1126,7 +1154,7 @@ public final class ConnectivityUtils {
                 xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             // There should be 1 network tp per xpdr
             // Create 2 ceps per Xpdr in the OTS, OTSiMC and in the I_OTU layer, as well as a top
-            // connection iODU and iOTU between the xpdrs
+            //connection  iOTU between the xpdrs
             ConnectionEndPoint netCep1 = createCepXpdr(0, 0, spcXpdrNetwork, TapiConstants.PHTNC_MEDIA_OTS,
                     TapiConstants.XPDR, LayerProtocolName.PHOTONICMEDIA);
             putXpdrCepInTopologyContext(
@@ -1214,8 +1242,8 @@ public final class ConnectivityUtils {
             // With new process of CEP creation, OTS CEP are created also on PPs at initialization.
             // Don't need to recreate it
 //            ConnectionEndPoint rdmCep0 = tapiFactory.createCepRoadm(0, 0, rdmTp,
-//                TapiStringConstants.PHTNC_MEDIA_OTS, null, true);
-//            putRdmCepInTopologyContext(roadm, rdmTp, TapiStringConstants.PHTNC_MEDIA_OTS, rdmCep0);
+//                TapiConstants.PHTNC_MEDIA_OTS, null, true);
+//            putRdmCepInTopologyContext(roadm, rdmTp, TapiConstants.PHTNC_MEDIA_OTS, rdmCep0);
 //            cepMap.put(rdmCep0.key(), rdmCep0);
         }
 
@@ -1628,6 +1656,43 @@ public final class ConnectivityUtils {
         return lowConMap;
     }
 
+    private double getClientRateFromNep(String id, String qualifier) {
+        String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString());
+        String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString());
+        var onep = getNepFromDS(this.tapiTopoUuid, nodeUuid, nepUuid);
+        Double minRate = 999999.9;
+        if (onep == null) {
+            LOG.info("getClientRateFromNep in ConnectivityUtils : unable to get NEP {} from DS for rate identification",
+                nepId);
+            return minRate;
+        }
+        List<Double> rateList = new ArrayList<>();
+        List<SupportedPayloadStructure> splList = onep.getSupportedPayloadStructure();
+        if (splList == null || splList.isEmpty()) {
+            LOG.info("getClientRateFromNep in ConnectivityUtils: Unable to get supported payload Structure from NEP {}",
+                nepId);
+            return minRate;
+        }
+        for (SupportedPayloadStructure spl : splList) {
+            for (LAYERPROTOCOLQUALIFIER lpq : spl.getMultiplexingSequence()) {
+                if (lpq.toString().contains("ODU0") || lpq.toString().contains("TYPEGigE")) {
+                    rateList.add(1.0);
+                } else if (lpq.toString().contains("ODU2") || lpq.toString().contains("TYPE10GigE")) {
+                    rateList.add(10.0);
+                } else if (lpq.toString().contains("ODU4") || lpq.toString().contains("TYPE100GigE")) {
+                    rateList.add(100.0);
+                }
+            }
+        }
+        minRate = 100.0;
+        for (Double rate : rateList) {
+            minRate = (rate < minRate) ? rate : minRate;
+        }
+        return minRate;
+    }
+
     private void updateXpdrNepSpectrum(Decimal64 lowFreq, Decimal64 highFreq,
             String id, String qualifier) {
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
@@ -1664,6 +1729,82 @@ public final class ConnectivityUtils {
                 new PhotonicMediaNodeEdgePointSpecBuilder().setSpectrumCapabilityPac(spectrumPac.build()).build())
             .build();
         onepBdr.addAugmentation(onep1);
+        addNepToTopology(
+            this.tapiTopoUuid,
+            new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()),
+            onepBdr.build(), false);
+    }
+
+    private void updateXpdrNepPayloadStructure(String id, String qualifier, Double capacityDecrement) {
+        String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
+        String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
+        Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString());
+        //Capture initial OTSiMC/OTS nep from DataStore
+        var onep = getNepFromDS(this.tapiTopoUuid, nodeUuid, nepUuid);
+        if (onep == null) {
+            LOG.info("Unable to access Nep {} while trying to update its capacity", nepId);
+            return;
+        }
+        LOG.info("CU line 1762 updating payload for Nep {}, decreasing capacity of {}", nepId, capacityDecrement);
+        //create a new onepBuilder set with current settings
+        OwnedNodeEdgePointBuilder onepBdr = new OwnedNodeEdgePointBuilder(onep);
+        // Compute the new spectrum Pac (no AvailableSpectrum as the TP is provisonned with a wavelength)
+        List<AvailablePayloadStructure> targetApsList = new ArrayList<>();
+        List<AvailablePayloadStructure> existingApsList = onep.getAvailablePayloadStructure();
+        if (existingApsList != null && !existingApsList.isEmpty()) {
+            for (AvailablePayloadStructure asp : existingApsList) {
+
+                AvailablePayloadStructureBuilder apsBldr = new AvailablePayloadStructureBuilder();
+                org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.payload.structure.CapacityBuilder
+                    capaBldr = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                        .payload.structure.CapacityBuilder();
+                capaBldr.setUnit(asp.getCapacity().getUnit()).setValue(asp.getCapacity().getValue()).build();
+                if (asp.getNumberOfCepInstances() != null
+                    && asp.getNumberOfCepInstances().compareTo(Uint64.ZERO) == 1) {
+                    apsBldr.setNumberOfCepInstances(
+                        Uint64.valueOf(Math.round(asp.getNumberOfCepInstances().doubleValue() - 1)));
+                } else {
+                    apsBldr.setNumberOfCepInstances(Uint64.ZERO);
+                }
+                if (asp.getCapacity() != null
+                        && asp.getMultiplexingSequence() != null && !asp.getMultiplexingSequence().isEmpty()) {
+                    capaBldr.setValue(asp.getCapacity().getValue());
+                    apsBldr.setMultiplexingSequence(asp.getMultiplexingSequence());
+                    apsBldr.setCapacity(capaBldr.build());
+                }
+                targetApsList.add(apsBldr.build());
+            }
+        }
+        onepBdr.setAvailablePayloadStructure(targetApsList);
+        AvailableCapacityBuilder avCapBldr = new AvailableCapacityBuilder();
+        TotalSizeBuilder tsbBldr = new TotalSizeBuilder();
+        tsbBldr.setUnit(CAPACITYUNITGBPS.VALUE);
+        if (onep.getAvailableCapacity() != null && onep.getAvailableCapacity().getTotalSize() != null
+                && onep.getAvailableCapacity().getTotalSize().getValue() != null) {
+            double initialCapa = onep.getAvailableCapacity().getTotalSize().getValue().doubleValue();
+            LOG.debug("CU line 1800 updating Available Capacity for Nep {}, nonNullAvailableCapa and TotalSize", nepId);
+            if (initialCapa >= capacityDecrement) {
+                tsbBldr.setValue(Decimal64.valueOf((initialCapa - capacityDecrement), RoundingMode.DOWN));
+                LOG.debug("CU line 1801 updating Available Capacity for Nep {}, from {} to {}",
+                    nepId, initialCapa, initialCapa - capacityDecrement);
+            }
+        } else {
+            LOG.debug("CU line 1802 updating Available Capacity for Nep {}, NullAvailableCapa or TotalSize", nepId);
+            tsbBldr.setValue(Decimal64.valueOf(0.0, RoundingMode.DOWN));
+        }
+        // As addNepToTopology is based on Put (depending on the context, we sometimes need to remove some attributes)
+        // We need to get and add the augmentation to avoid crashing it during the PUT
+        onepBdr.setAvailableCapacity(avCapBldr.setTotalSize(tsbBldr.build()).build());
+
+        if (onep.augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+            .OwnedNodeEdgePoint1.class) != null) {
+            var onep1 = onep.augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                .OwnedNodeEdgePoint1.class);
+            onepBdr.addAugmentation(onep1);
+        }
+
         addNepToTopology(
             this.tapiTopoUuid,
             new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()),
