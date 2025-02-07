@@ -195,44 +195,44 @@ public class ORtoTapiTopoConversionTools {
         LPN_MAP = new HashMap<>(Map.of(
             "ETH", new HashMap<>(Map.of(
                 "If1GEODU0", Map.of(
-                    ODUTYPEODU0.VALUE, Uint64.ZERO, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ZERO),
+                    ODUTYPEODU0.VALUE, Uint64.ONE, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ONE),
                 "If10GEODU2e", Map.of(
-                    ODUTYPEODU2E.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2E.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If10GEODU2", Map.of(
-                    ODUTYPEODU2.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
-                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
+                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If100GEODU4", Map.of(
-                    ODUTYPEODU4.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
-                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    ODUTYPEODU4.VALUE, Uint64.ONE, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
+                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "OTU", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "ODU", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE),
                 "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
-                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
+                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
             "DIGITAL_OTN", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
                         OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE, ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
@@ -244,7 +244,7 @@ public class ORtoTapiTopoConversionTools {
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO,
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE)
              ))
@@ -694,6 +694,7 @@ public class ORtoTapiTopoConversionTools {
         Integer cepInstanceNber = otsiProvisioned ? 0 : 1;
         for (SupportedInterfaceCapability sic : sicList) {
             switch (sic.getIfCapType().toString().split("\\{")[0]) {
+                case "IfOCH":
                 case "IfOCHOTU4ODU4":
                 case "IfOCHOTU4ODU4Regen":
                 case "IfOCHOTU4ODU4Uniregen":
@@ -846,6 +847,18 @@ public class ORtoTapiTopoConversionTools {
             .build());
 
         return sps.stream().distinct().toList();
+    }
+
+    /**
+     * Provides TotalSize for a Generic Node Edge Point whether it is for total-potential or available capacity.
+     * Returns a Total Size.
+     * @param rate The rate to be set in either total-potential or available capacity,
+     */
+    public TotalSize createTotalSizeForCommonNeps(Double rate) {
+        return new TotalSizeBuilder()
+            .setUnit(CAPACITYUNITGBPS.VALUE)
+            .setValue(Decimal64.valueOf(rate, RoundingMode.DOWN))
+            .build();
     }
 
     /**
@@ -1337,15 +1350,17 @@ public class ORtoTapiTopoConversionTools {
             return onepBldr;
         }
         LOG.debug("Entering LOOP Step1");
+        // Creating OTS & OTSI_MC NEP specific attributes
+        onepBldr.setSupportedPayloadStructure(
+            createSupportedPayloadStructureForPhtncMedia(rate, sicColl,operModeList));
+        onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+            createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
+        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+        OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
         double naz = 0.01;
         Double lowSupFreq = GridConstant.START_EDGE_FREQUENCY * 1E012 ;
         Double upSupFreq = lowSupFreq + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz;
         lowSupFreq += naz;
-        // Creating OTS & OTSI_MC NEP specific attributes
-        onepBldr.setSupportedPayloadStructure(
-            createSupportedPayloadStructureForPhtncMedia(rate, sicColl,operModeList));
-        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-        OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
         if (freqMap == null || freqMap.isEmpty()) {
 //                TODO: verify if we need to fill OcupiedSpectrum as follows when no lambda provisioned
 //                ospecBd
@@ -1353,6 +1368,8 @@ public class ORtoTapiTopoConversionTools {
 //                    .setLowerFrequency(Uint64.ZERO);
             onepBldr.setAvailablePayloadStructure(
                 createAvailablePayloadStructureForPhtncMedia(rate, false, sicColl,operModeList));
+            onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
             AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
                 .setLowerFrequency(Uint64.valueOf(Math.round(lowSupFreq)))
                 .setUpperFrequency(Uint64.valueOf(Math.round(upSupFreq)))
@@ -1364,6 +1381,8 @@ public class ORtoTapiTopoConversionTools {
             LOG.debug("Entering LOOP Step2");
             onepBldr.setAvailablePayloadStructure(
                 createAvailablePayloadStructureForPhtncMedia(rate, true, sicColl,operModeList));
+            onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                createTotalSizeForCommonNeps(Double.valueOf(0.0))).build());
             for (Map.Entry<Double, Double> frequency : freqMap.entrySet()) {
                 ospecBd
                     .setLowerFrequency(Uint64.valueOf(Math.round(frequency.getKey().doubleValue() * 1E12)))
@@ -1958,6 +1977,23 @@ public class ORtoTapiTopoConversionTools {
             }
         }
 
+        double clientRate = 100.0;
+        List<Double> rateList = new ArrayList<>();
+        if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
+            for (SupportedInterfaceCapability sic : sicColl) {
+                String ifCapType = sic.getIfCapType().toString().split("\\{")[0];
+                if (ifCapType.contains("ODU0") || ifCapType.contains("TYPEGigE")) {
+                    rateList.add(1.0);
+                } else if (ifCapType.contains("ODU2") || ifCapType.contains("TYPE10GigE")) {
+                    rateList.add(10.0);
+                } else if (ifCapType.contains("ODU4") || ifCapType.contains("TYPE100GigE")) {
+                    rateList.add(100.0);
+                }
+            }
+            for (Double rateOfList : rateList) {
+                clientRate = (rateOfList < clientRate) ? rateOfList : clientRate;
+            }
+        }
         String key = keyword;
         if (keyword.contains(("ODU"))) {
             key = "ODU";
@@ -2003,15 +2039,21 @@ public class ORtoTapiTopoConversionTools {
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("GE"))
                         .findFirst().orElseThrow().getIfCapType().implementedInterface().getSimpleName()));
                     onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
-                        false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
+                        false, clientRate, Integer.valueOf(1), supInt.keySet()));
+                    onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
                     if (oorTpAug.getOperationalState() == null
                             || oorTpAug.getOperationalState().getName().equals("inService")) {
                         onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
-                            true, Double.valueOf(0), Integer.valueOf(0), supInt.keySet()));
+                            true, clientRate, Integer.valueOf(1), supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
                     } else if (oorTpAug.getOperationalState().getName().equals("outOfService")) {
                         onepBldr.setAvailablePayloadStructure(
-                            createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate),
-                                Integer.valueOf(1), supInt.keySet()));
+                            createAvailablePayloadStructureForCommonNeps(false, clientRate,
+                                Integer.valueOf(0), supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(0.0)).build());
                     }
                 } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
                         .contains("OTU4")).findFirst().orElseThrow().toString().isEmpty()) {
@@ -2019,13 +2061,19 @@ public class ORtoTapiTopoConversionTools {
                     supInt.putAll(LPN_MAP.get("ETH").get("IfOCH"));
                     onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), Integer.valueOf(1), supInt.keySet()));
+                    onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
                     if (oorTpAug.getOperationalState().getName().equals("inService")) {
                         onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
-                            true, Double.valueOf(0), Integer.valueOf(0), supInt.keySet()));
+                            true, Double.valueOf(rate), Integer.valueOf(0), supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
                     } else if (oorTpAug.getOperationalState().getName().equals("outOfService")) {
                         onepBldr.setAvailablePayloadStructure(
                             createAvailablePayloadStructureForCommonNeps(false, Double.valueOf(rate),
-                                Integer.valueOf(1), supInt.keySet()));
+                                Integer.valueOf(0), supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(0.0)).build());
                     }
                 } else {
                     onepList.add(onepBldr.build());
@@ -2041,11 +2089,15 @@ public class ORtoTapiTopoConversionTools {
                     supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO));
                     onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                    onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(100.0)).build());
                     if (tp1.getXpdrTpPortConnectionAttributes() == null
                             || tp1.getXpdrTpPortConnectionAttributes().getTsPool() == null
                             || tp1.getXpdrTpPortConnectionAttributes().getTsPool().isEmpty()) {
                         onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
                             false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(100.0 * numberOfInstance)).build());
                     } else {
                         if (Integer.parseInt(rate)
                                 - tp1.getXpdrTpPortConnectionAttributes().getTsPool().size() * 5 < 0) {
@@ -2056,6 +2108,8 @@ public class ORtoTapiTopoConversionTools {
                         }
                         onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
                             false, Double.valueOf(100), numberOfInstance, supInt.keySet()));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(100.0 * numberOfInstance)).build());
                     }
                 } else {
                     // this is the case where SicColl does not contain ODU4 and nep Protocol is digital OTN
@@ -2066,6 +2120,8 @@ public class ORtoTapiTopoConversionTools {
                         lpqSet.add(OTUTYPEOTU4.VALUE);
                         onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
                             false, Double.valueOf(100), 0, lpqSet));
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(100.0)).build());
                     } else {
                         if (key.equals("OTU")) {
                             lpqSet.add(OTUTYPEOTUCN.VALUE);
@@ -2085,9 +2141,46 @@ public class ORtoTapiTopoConversionTools {
                             onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
                                 false, Double.valueOf(rate), 0, lpqSet));
                         }
+                        onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                            createTotalSizeForCommonNeps(0.0)).build());
                     }
                     onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(rate), 1, lpqSet));
+                    onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
+                }
+            } else if ((nepProtocol.equals(LayerProtocolName.ODU) || nepProtocol.equals(LayerProtocolName.DIGITALOTN))
+                    && oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
+                Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
+                if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU4")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU2e")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                        .contains("ODU2")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU2.VALUE, Uint64.ONE));
+                } else if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
+                    .contains("ODU0")).collect(Collectors.toList()).isEmpty()) {
+                    supInt.putAll(Map.of(ODUTYPEODU0.VALUE, Uint64.ONE));
+                }
+                onepBldr.setSupportedPayloadStructure(createSupportedPayloadStructureForCommonNeps(
+                    false, clientRate, Integer.valueOf(1), supInt.keySet()));
+                onepBldr.setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                    createTotalSizeForCommonNeps(clientRate)).build());
+                if (oorTpAug.getOperationalState() == null
+                        || oorTpAug.getOperationalState().getName().equals("inService")) {
+                    onepBldr.setAvailablePayloadStructure(createAvailablePayloadStructureForCommonNeps(
+                        true, clientRate, Integer.valueOf(1), supInt.keySet()));
+                    onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(clientRate)).build());
+                } else if (oorTpAug.getOperationalState().getName().equals("outOfService")) {
+                    onepBldr.setAvailablePayloadStructure(
+                        createAvailablePayloadStructureForCommonNeps(false, clientRate,
+                            Integer.valueOf(0), supInt.keySet()));
+                    onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                        createTotalSizeForCommonNeps(0.0)).build());
                 }
             }
             onepList.add(onepBldr.build());
