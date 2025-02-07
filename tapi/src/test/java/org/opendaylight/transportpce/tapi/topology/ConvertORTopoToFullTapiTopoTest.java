@@ -7,11 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -444,12 +440,14 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             "administrative state should be UNLOCKED");
         assertEquals(LifecycleState.INSTALLED, node.getLifecycleState(), "life-cycle state should be INSTALLED");
         assertEquals(OperationalState.ENABLED, node.getOperationalState(), "operational state should be ENABLED");
-        assertThat("one value-name should be 'dsr/odu node name'",
-            new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey("dsr/odu node name")));
+        assertThat(new ArrayList<>(node.nonnullName().keySet()))
+            .withFailMessage("one value-name should be 'dsr/odu node name'")
+            .contains(new NameKey("dsr/odu node name"));
         assertEquals(4, node.getLayerProtocolName().size(), "dsr node should manage 4 protocol layers : dsr and odu"
             + " DIGITALOTN, PHOTONICMEDIA");
-        assertThat("dsr node should manage 2 protocol layers : dsr and odu",
-            node.getLayerProtocolName(), hasItems(LayerProtocolName.DSR, LayerProtocolName.ODU));
+        assertThat(node.getLayerProtocolName())
+            .withFailMessage("dsr node should manage 2 protocol layers : dsr and odu")
+            .contains(LayerProtocolName.DSR, LayerProtocolName.ODU);
         int enepsNsize = 4;
         int inepsNsize = 1;
         int nepsCsize = 4;
@@ -576,8 +574,9 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
                 .collect(Collectors.toList());
         }
         assertEquals(nodeId + suffix, node.getName().get(new NameKey(namekey)).getValue(), "incorrect node name");
-        assertThat("one value-name should be 'dsr/odu node name'",
-            new ArrayList<>(node.nonnullName().keySet()), hasItem(new NameKey(namekey)));
+        assertThat(new ArrayList<>(node.nonnullName().keySet()))
+            .withFailMessage("one value-name should be 'dsr/odu node name'")
+            .contains(new NameKey(namekey));
         assertEquals(AdministrativeState.UNLOCKED, node.getAdministrativeState(),
             "administrative state should be UNLOCKED");
         assertEquals(LifecycleState.INSTALLED, node.getLifecycleState(), "life-cycle state should be INSTALLED");
@@ -815,10 +814,11 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
         } else {
             nodeEdgePointList = new ArrayList<>(nrgCltAndNet.nonnullNodeEdgePoint().values());
             for (int i : nepUuidCheckList) {
-                assertThat("node-rule-group nb " + nrgNb + " should be between nep-client" + nepClNb
-                        + " and nep-network1",
-                    nodeEdgePointList.get(i).getNodeEdgePointUuid().getValue(),
-                    either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+                assertThat(nodeEdgePointList.get(i).getNodeEdgePointUuid().getValue())
+                    .withFailMessage("node-rule-group nb " + nrgNb + " should be between nep-client " + nepClNb
+                            + " and nep-network1")
+                    .matches(value -> value.contains(networkNepUuid.getValue())
+                            || value.contains(clientNepUuid.getValue()));
             }
         }
         for (int i : nodeIdCheckList) {
@@ -920,12 +920,12 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             assertEquals(2, nodeRuleGroup.getNodeEdgePoint().size(),
                 "each node-rule-group should contain 2 NEP for " + nodeType + "-OTSi");
         }
-        assertThat(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network,
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
-        assertThat(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network,
-            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
-            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
+        assertThat(nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue())
+            .withFailMessage(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network)
+            .matches(value -> value.contains(enepUuid.getValue()) || value.contains(inepUuid.getValue()));
+        assertThat(nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue())
+            .withFailMessage(nodeType + "-OTSi node-rule-group should be between eNEP and iNEP of " + network)
+            .matches(value -> value.contains(enepUuid.getValue()) || value.contains(inepUuid.getValue()));
         assertEquals(nodeUuid, nodeEdgePointList.get(0).getNodeUuid(),
             "any item of the node-rule-group should have the same nodeUuid");
         assertEquals(nodeUuid, nodeEdgePointList.get(1).getNodeUuid(),
@@ -1054,7 +1054,7 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             } else {
                 assertEquals(lpqList.size(), lpql.size(), "nep should support " + lpqList.size() + " kind of cep(s)");
                 for (LAYERPROTOCOLQUALIFIER lpq: lpqList) {
-                    assertThat("nep should support " + lpq +  " cep", lpql, hasItem(lpq));
+                    assertThat(lpql).withFailMessage("nep should support " + lpq +  " cep").contains(lpq);
                 }
                 assertEquals(lpn, nep.getLayerProtocolName(), "nep should be of " + lpn.toString() + " protocol type");
             }
@@ -1147,16 +1147,20 @@ public class ConvertORTopoToFullTapiTopoTest extends AbstractTest {
             "topology uuid should be the same for the two termination point of the link");
         String node1UuidVal = node1Uuid.getValue();
         String node2UuidVal = node2Uuid.getValue();
-        assertThat("oms links should terminate on two distinct nodes",
-            nep0.getNodeUuid().getValue(), either(containsString(node1UuidVal)).or(containsString(node2UuidVal)));
-        assertThat("oms links should terminate on two distinct nodes",
-            nep1.getNodeUuid().getValue(), either(containsString(node1UuidVal)).or(containsString(node2UuidVal)));
+        assertThat(nep0.getNodeUuid().getValue())
+            .withFailMessage("oms links should terminate on two distinct nodes")
+            .matches(value -> value.contains(node1UuidVal) || value.contains(node2UuidVal));
+        assertThat(nep1.getNodeUuid().getValue())
+            .withFailMessage("oms links should terminate on two distinct nodes")
+            .matches(value -> value.contains(node1UuidVal) || value.contains(node2UuidVal));
         String tp1UuidVal = tp1Uuid.getValue();
         String tp2UuidVal = tp2Uuid.getValue();
-        assertThat("oms links should terminate on two distinct tps",
-            nep0.getNodeEdgePointUuid().getValue(), either(containsString(tp1UuidVal)).or(containsString(tp2UuidVal)));
-        assertThat("oms links should terminate on two distinct tps",
-            nep1.getNodeEdgePointUuid().getValue(), either(containsString(tp1UuidVal)).or(containsString(tp2UuidVal)));
+        assertThat(nep0.getNodeEdgePointUuid().getValue())
+            .withFailMessage("oms links should terminate on two distinct tps")
+            .matches(value -> value.contains(tp1UuidVal) || value .contains(tp2UuidVal));
+        assertThat(nep1.getNodeEdgePointUuid().getValue())
+            .withFailMessage("oms links should terminate on two distinct tps")
+            .matches(value -> value.contains(tp1UuidVal) || value.contains(tp2UuidVal));
     }
 
     private Node changeTerminationPointState(
