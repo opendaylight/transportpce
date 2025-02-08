@@ -8,13 +8,14 @@
 package org.opendaylight.transportpce.test.converter;
 
 import com.google.gson.stream.JsonReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Set;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.yangtools.binding.DataObject;
@@ -66,11 +67,11 @@ public class JsonDataConverter extends AbstractDataConverter {
     }
 
     @Override
-    public void serializeToFile(DataObjectIdentifier id, DataObject dataContainer, String filename)
+    public void serializeToFile(DataObjectIdentifier id, DataObject dataContainer, Path filepath)
             throws ProcessingException {
-        try (FileWriter fileWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
+        try {
             String output = serialize(id, dataContainer);
-            fileWriter.write(output);
+            Files.write(filepath, output.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new ProcessingException("Error serializing a DataObject to the output file", e);
         }

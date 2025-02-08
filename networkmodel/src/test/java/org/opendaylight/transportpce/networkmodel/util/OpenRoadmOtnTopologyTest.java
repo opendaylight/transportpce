@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,9 @@ public class OpenRoadmOtnTopologyTest {
     private Nodes portMappingBad;
 
     public OpenRoadmOtnTopologyTest() {
-        try (Reader reader = new FileReader("src/test/resources/portMapping.json", StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(
+                Path.of("src/test/resources/portMapping.json"),
+                StandardCharsets.UTF_8)) {
             Network portMapping = (Network) new JsonDataConverter(null).deserialize(reader, Network.QNAME);
             for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {

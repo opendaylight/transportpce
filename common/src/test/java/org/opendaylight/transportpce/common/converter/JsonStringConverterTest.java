@@ -12,12 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
@@ -30,9 +29,11 @@ public class JsonStringConverterTest extends AbstractTest {
 
     @Test
     void createJsonStringFromDataObjectTest() {
-        try (Reader reader = new FileReader("src/test/resources/gnpy_request.json", StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(
+                Path.of("src/test/resources/gnpy_request.json"),
+                StandardCharsets.UTF_8)) {
             assertEquals(
-                Files.readString(Paths.get("src/test/resources/expected_string.json")),
+                Files.readString(Path.of("src/test/resources/expected_string.json")),
                 new JsonStringConverter<Request>(getDataStoreContextUtil().getBindingDOMCodecServices())
                     .createJsonStringFromDataObject(
                         DataObjectIdentifier.builder(Request.class).build(),
@@ -59,7 +60,7 @@ public class JsonStringConverterTest extends AbstractTest {
             new JsonStringConverter<Request>(getDataStoreContextUtil().getBindingDOMCodecServices())
                 .createDataObjectFromJsonString(
                     YangInstanceIdentifier.of(Request.QNAME),
-                    Files.readString(Paths.get("src/test/resources/expected_string.json")),
+                    Files.readString(Path.of("src/test/resources/expected_string.json")),
                     JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02),
             "Should not be null");
     }

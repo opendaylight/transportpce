@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.BitSet;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -63,7 +64,7 @@ public class FrequenciesServiceTest extends AbstractTest {
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
-        try (Reader reader = new FileReader(PATH_DESCRIPTION_FILE, StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of(PATH_DESCRIPTION_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             pathDescription = (PathDescription) getDataStoreContextUtil()
                     .getBindingDOMCodecServices().fromNormalizedNode(YangInstanceIdentifier

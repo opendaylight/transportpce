@@ -10,10 +10,11 @@ package org.opendaylight.transportpce.pce.constraints;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.BitSet;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
@@ -63,7 +64,7 @@ public class OperatorConstraintsTest extends AbstractTest {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
             .createWithDataStoreUtil(getDataStoreContextUtil());
         // The Spectrum filling rules associated with CustomerProfileLamda1 is populated from a file in the Data Store
-        try (Reader reader = new FileReader(SPEC_FILLING_FILE, StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of(SPEC_FILLING_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             cbSettings = (ControllerBehaviourSettings) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()

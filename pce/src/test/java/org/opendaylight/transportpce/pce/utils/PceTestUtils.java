@@ -7,11 +7,12 @@
  */
 package org.opendaylight.transportpce.pce.utils;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,10 @@ public final class PceTestUtils {
 
         try (
                 // load openroadm-network
-                Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json",
+                Reader gnpyNetwork = Files.newBufferedReader(Path.of("src/test/resources/gnpy/gnpy_network.json"),
                         StandardCharsets.UTF_8);
                 // load openroadm-topology
-                Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
+                Reader gnpyTopo = Files.newBufferedReader(Path.of("src/test/resources/gnpy/gnpy_topology.json"),
                         StandardCharsets.UTF_8);
         ) {
 

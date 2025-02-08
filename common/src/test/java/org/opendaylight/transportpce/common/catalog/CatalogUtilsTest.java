@@ -12,10 +12,11 @@ package org.opendaylight.transportpce.common.catalog;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +50,7 @@ public class CatalogUtilsTest extends AbstractTest {
         ExecutionException {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
             .createWithDataStoreUtil(getDataStoreContextUtil());
-        try (Reader reader = new FileReader(CATALOG_FILE, StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of(CATALOG_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
                 .transformIntoNormalizedNode(reader).orElseThrow();
             omCatalog = (OperationalModeCatalog) getDataStoreContextUtil()

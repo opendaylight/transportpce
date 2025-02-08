@@ -8,10 +8,10 @@
 package org.opendaylight.transportpce.test.utils;
 
 import com.google.common.util.concurrent.FluentFuture;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -37,14 +37,14 @@ public final class TopologyDataUtils {
     // Raw types use are discouraged since they lack type safety.
     // Resulting Problems are observed at run time and not at compile time
     public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
-        DataObjectIdentifier ii) throws InterruptedException, ExecutionException {
+            DataObjectIdentifier ii) throws InterruptedException, ExecutionException {
         Networks networks = null;
-        File topoFile = new File(file);
-        if (topoFile.exists()) {
-            String fileName = topoFile.getName();
-            try (InputStream targetStream = new FileInputStream(topoFile)) {
+        Path path = Path.of(file);
+        if (Files.exists(path)) {
+            String fileName = path.getFileName().toString();
+            try (InputStream inputStream = Files.newInputStream(path)) {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
-                        .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(targetStream);
+                        .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(inputStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
                     throw new IllegalStateException(String.format(
                         "Could not transform the input %s into normalized nodes", fileName));
@@ -60,7 +60,7 @@ public final class TopologyDataUtils {
                 LOG.error("An error occured while reading file {}", file, e);
             }
         } else {
-            LOG.error("xml file {} not found at {}", topoFile.getName(), topoFile.getAbsolutePath());
+            LOG.error("xml file {} not found at {}", path.getFileName(), path.toAbsolutePath());
         }
         if (networks == null) {
             throw new IllegalStateException("Network is null cannot write it to datastore");
@@ -68,7 +68,7 @@ public final class TopologyDataUtils {
         FluentFuture<? extends CommitInfo> commitFuture = writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
                 networks.nonnullNetwork().values().stream().findFirst().orElseThrow());
         commitFuture.get();
-        LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
+        LOG.info("extraction from {} stored with success in datastore", path.getFileName());
     }
 
     @SuppressWarnings({"unchecked","rawtypes"})
@@ -85,13 +85,13 @@ public final class TopologyDataUtils {
     public static void writePortmappingFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file)
         throws InterruptedException, ExecutionException {
         Network result = null;
-        File portmappingFile = new File(file);
-        if (portmappingFile.exists()) {
-            String fileName = portmappingFile.getName();
-            try (InputStream targetStream = new FileInputStream(portmappingFile)) {
+        Path path = Path.of(file);
+        if (Files.exists(path)) {
+            String fileName = path.getFileName().toString();
+            try (InputStream inputStream = Files.newInputStream(path)) {
                 Optional<NormalizedNode> transformIntoNormalizedNode = null;
                 transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .transformIntoNormalizedNode(targetStream);
+                    .transformIntoNormalizedNode(inputStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
                     throw new IllegalStateException(String.format(
                         "Could not transform the input %s into normalized nodes", fileName));
@@ -107,7 +107,7 @@ public final class TopologyDataUtils {
                 LOG.error("An error occured while reading file {}", file, e);
             }
         } else {
-            LOG.error("xml file {} not found at {}", portmappingFile.getName(), portmappingFile.getAbsolutePath());
+            LOG.error("xml file {} not found at {}", path.getFileName(), path.toAbsolutePath());
         }
         DataObjectIdentifier<Network> portmappingIID = DataObjectIdentifier.builder(Network.class).build();
         FluentFuture<? extends CommitInfo> writeTransaction = writeTransaction(dataStoreContextUtil.getDataBroker(),

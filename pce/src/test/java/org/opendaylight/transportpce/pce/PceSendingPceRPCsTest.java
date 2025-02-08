@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,16 +85,14 @@ class PceSendingPceRPCsTest extends AbstractTest {
         WireMockServer wireMockServer = new WireMockServer(9998);
         wireMockServer.start();
         wireMockServer.stubFor(get(urlEqualTo("/api/v1/status"))
-                .willReturn(okJson(Files
-                        .readString(Paths
-                                .get("src", "test", "resources", "gnpy", "gnpy_status.json")))));
+                .willReturn(okJson(Files.readString(Path.of("src", "test", "resources", "gnpy", "gnpy_status.json")))));
         wireMockServer.stubFor(post(urlEqualTo("/api/v1/path-computation"))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/json")
                         .withBody(Files
-                                .readString(Paths
-                                        .get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
+                                .readString(
+                                        Path.of("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
                 networkTransaction, gnpyConsumer, portMapping);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);

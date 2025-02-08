@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Map;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class NotificationServiceSerializerTest extends AbstractTest {
     void serializeTest() throws IOException, JSONException {
         JsonStringConverter<NotificationProcessService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
-        String json = Files.readString(Paths.get("src/test/resources/event.json"));
+        String json = Files.readString(Path.of("src/test/resources/event.json"));
         NotificationProcessService notificationService = converter
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationProcessService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
@@ -41,7 +41,7 @@ public class NotificationServiceSerializerTest extends AbstractTest {
         byte[] data = serializer.serialize("test", notificationService);
         serializer.close();
         assertNotNull(data, "Serialized data should not be null");
-        String expectedJson = Files.readString(Paths.get("src/test/resources/expected_event.json"));
+        String expectedJson = Files.readString(Path.of("src/test/resources/expected_event.json"));
         // Minify the json string
         expectedJson = new ObjectMapper().readValue(expectedJson, JsonNode.class).toString();
         JSONAssert.assertEquals(expectedJson, new String(data, StandardCharsets.UTF_8), true);

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.gnpy.consumer;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -45,7 +44,8 @@ public class GnpyStub {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStatus() {
         try {
-            String response = Files.readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_status.json"));
+            String response = Files.readString(
+                    java.nio.file.Path.of("src", "test", "resources", "gnpy", "gnpy_status.json"));
             return Response.ok(response).build();
         } catch (IOException e) {
             LOG.error("Cannot manage request", e);
@@ -77,10 +77,11 @@ public class GnpyStub {
             List<PathRequest> pathRequest = new ArrayList<>(data.getService().nonnullPathRequest().values());
             // this condition is totally arbitrary and could be modified
             if (!pathRequest.isEmpty() && "XPONDER-3".contentEquals(pathRequest.get(0).getSource())) {
-                response = Files
-                        .readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json"));
+                response = Files.readString(
+                        java.nio.file.Path.of("src", "test", "resources", "gnpy", "gnpy_result_with_path.json"));
             } else {
-                response = Files.readString(Paths.get("src", "test", "resources", "gnpy", "gnpy_result_no_path.json"));
+                response = Files.readString(
+                        java.nio.file.Path.of("src", "test", "resources", "gnpy", "gnpy_result_no_path.json"));
             }
 
             return Response.created(location).entity(response).build();

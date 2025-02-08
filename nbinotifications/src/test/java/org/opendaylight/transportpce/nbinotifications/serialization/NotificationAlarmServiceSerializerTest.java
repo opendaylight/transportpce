@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Map;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class NotificationAlarmServiceSerializerTest extends AbstractTest {
     void serializeTest() throws IOException, JSONException {
         JsonStringConverter<NotificationAlarmService> converter =
                 new JsonStringConverter<>(getDataStoreContextUtil().getBindingDOMCodecServices());
-        String json = Files.readString(Paths.get("src/test/resources/event_alarm_service.json"));
+        String json = Files.readString(Path.of("src/test/resources/event_alarm_service.json"));
         NotificationAlarmService notificationAlarmService = converter
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationAlarmService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
@@ -41,7 +41,7 @@ public class NotificationAlarmServiceSerializerTest extends AbstractTest {
         byte[] data = serializer.serialize("test", notificationAlarmService);
         serializer.close();
         assertNotNull(data, "Serialized data should not be null");
-        String expectedJson = Files.readString(Paths.get("src/test/resources/expected_event_alarm_service.json"));
+        String expectedJson = Files.readString(Path.of("src/test/resources/expected_event_alarm_service.json"));
         // Minify the json string
         expectedJson = new ObjectMapper().readValue(expectedJson, JsonNode.class).toString();
         JSONAssert.assertEquals(expectedJson, new String(data, StandardCharsets.UTF_8), true);

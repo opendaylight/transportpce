@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
@@ -30,7 +30,7 @@ public class NotificationTapiServiceDeserializerTest extends AbstractTest {
         Map<String, Object> configs = Map.of(ConfigConstants.CONVERTER, converter);
         deserializer.configure(configs, false);
         Notification readEvent = deserializer.deserialize("76d8f07b-ead5-4132-8eb8-cf3fdef7e079",
-                Files.readAllBytes(Paths.get("src/test/resources/tapi_event.json")));
+                Files.readAllBytes(Path.of("src/test/resources/tapi_event.json")));
         deserializer.close();
         assertEquals("76d8f07b-ead5-4132-8eb8-cf3fdef7e079", readEvent.getTargetObjectIdentifier().getValue(),
             "Service uuid should be 76d8f07b-ead5-4132-8eb8-cf3fdef7e079");
