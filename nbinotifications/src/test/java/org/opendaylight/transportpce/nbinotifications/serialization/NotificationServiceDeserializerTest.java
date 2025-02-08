@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
@@ -30,7 +30,7 @@ public class NotificationServiceDeserializerTest extends AbstractTest {
         Map<String, Object> configs = Map.of(ConfigConstants.CONVERTER, converter);
         deserializer.configure(configs, false);
         NotificationsProcessService readEvent = deserializer.deserialize("Test",
-                Files.readAllBytes(Paths.get("src/test/resources/event.json")));
+                Files.readAllBytes(Path.of("src/test/resources/event.json")));
         deserializer.close();
         assertEquals("service1", readEvent.getServiceName(), "Service name should be service1");
     }

@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.test.converter;
 
 import java.io.Reader;
+import java.nio.file.Path;
 import org.opendaylight.yangtools.binding.BindingObject;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
@@ -24,7 +25,7 @@ public interface DataConverter<T extends DataObject> {
 
     String serialize(DataObjectIdentifier<T> id, T dataContainer) throws ProcessingException;
 
-    void serializeToFile(DataObjectIdentifier<T> id, T dataContainer, String filename) throws ProcessingException;
+    void serializeToFile(DataObjectIdentifier<T> id, T dataContainer, Path filepath) throws ProcessingException;
 
     T deserialize(String data, QName object) throws ProcessingException;
 

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +101,7 @@ public class PublisherTest extends AbstractTest {
 
     @Test
     void sendEventServiceShouldBeSuccessful() throws IOException {
-        String json = Files.readString(Paths.get("src/test/resources/event.json"));
+        String json = Files.readString(Path.of("src/test/resources/event.json"));
         NotificationProcessService notificationProcessService = converterService
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationProcessService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
@@ -112,7 +112,7 @@ public class PublisherTest extends AbstractTest {
 
     @Test
     void sendEventAlarmShouldBeSuccessful() throws IOException {
-        String json = Files.readString(Paths.get("src/test/resources/event_alarm_service.json"));
+        String json = Files.readString(Path.of("src/test/resources/event_alarm_service.json"));
         NotificationAlarmService notificationAlarmService = converterAlarm
                 .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationAlarmService.QNAME),
                         json, JSONCodecFactorySupplier.RFC7951);
@@ -132,7 +132,7 @@ public class PublisherTest extends AbstractTest {
         builder.setSubscriptionFilter(subscriptionFilter);
 
         new CreateNotificationSubscriptionServiceImpl(nbiNotifications, topicManager).invoke(builder.build());
-        String json = Files.readString(Paths.get("src/test/resources/tapi_event.json"));
+        String json = Files.readString(Path.of("src/test/resources/tapi_event.json"));
         NotificationTapiService notificationTapiService = converterTapiService
             .createDataObjectFromJsonString(YangInstanceIdentifier.of(NotificationTapiService.QNAME),
                 json, JSONCodecFactorySupplier.RFC7951);

@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.common.collect.ImmutableMap;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -153,7 +154,7 @@ public class PceGraphTest extends AbstractTest {
         // can retrieve physical parameters of the nodes of the path
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
             .createWithDataStoreUtil(getDataStoreContextUtil());
-        try (Reader reader = new FileReader(CATALOG_FILE, StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of(CATALOG_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
                 .transformIntoNormalizedNode(reader)
                 .orElseThrow();
@@ -174,7 +175,7 @@ public class PceGraphTest extends AbstractTest {
             fail("Cannot load openROADM operational modes ");
         }
         // The mapping corresponding to the topology is directly populated from a file in the Dta Store
-        try (Reader reader = new FileReader(MAPPING_FILE, StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(Path.of(MAPPING_FILE), StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
                     .transportpce.portmapping.rev240315.Network) getDataStoreContextUtil()
@@ -200,11 +201,13 @@ public class PceGraphTest extends AbstractTest {
         // The topology (openROADM-Network and openROADM-topology layers) is loaded from a file
         try {
             // load openroadm-network
-            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
+            Reader gnpyNetwork = Files.newBufferedReader(
+                    Path.of("src/test/resources/gnpy/gnpy_network.json"),
+                    StandardCharsets.UTF_8);
             Networks networks = (Networks) new JsonDataConverter(null).deserialize(gnpyNetwork, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_NETWORK);
             // load openroadm-topology
-            Reader gnpyTopo = new FileReader("src/test/resources/topologyData/or-base-topology.json",
+            Reader gnpyTopo = Files.newBufferedReader(Path.of("src/test/resources/topologyData/or-base-topology.json"),
                     StandardCharsets.UTF_8);
             networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);

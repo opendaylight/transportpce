@@ -12,12 +12,10 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,7 +40,7 @@ class JsonDataConverterTest {
         JsonDataConverter converter = new JsonDataConverter(null);
         try {
             assertEquals(
-                    Files.readString(Paths.get("src/test/resources/device.json")),
+                    Files.readString(Path.of("src/test/resources/device.json")),
                     converter.serialize(
                             DataObjectIdentifier
                                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
@@ -56,21 +54,24 @@ class JsonDataConverterTest {
 
     @Test
     void serializeToFileTest() {
-        final var fileName = "testSerializeToJsonFile.json";
+        final Path filePath = Path.of("testSerializeToXmlFile.xml");
         JsonDataConverter converter = new JsonDataConverter(null);
-        File file = new File(fileName);
         try {
             converter.serializeToFile(
                     DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .build(),
                     device,
-                    fileName);
-            assertTrue(file.exists());
+                    filePath);
+            assertTrue(Files.exists(filePath));
         } catch (ProcessingException e) {
             fail("Cannot serialise object to json file");
         } finally {
-            file.delete();
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                fail("Failed to delete the test file: " + e.getMessage());
+            }
         }
     }
 
@@ -79,7 +80,7 @@ class JsonDataConverterTest {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    Files.readString(Paths.get("src/test/resources/device.json")),
+                    Files.readString(Path.of("src/test/resources/device.json")),
                     OrgOpenroadmDevice.QNAME);
             assertEquals(this.device, deserializedDevice);
         } catch (ProcessingException e) {
@@ -94,7 +95,7 @@ class JsonDataConverterTest {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    new FileReader("src/test/resources/device.json", Charset.forName("UTF8")),
+                    Files.newBufferedReader(Path.of("src/test/resources/device.json"), Charset.forName("UTF8")),
                     OrgOpenroadmDevice.QNAME);
             assertEquals(this.device, deserializedDevice);
         } catch (ProcessingException e) {

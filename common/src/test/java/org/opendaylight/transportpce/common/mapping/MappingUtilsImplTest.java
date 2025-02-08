@@ -15,10 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,9 @@ public class MappingUtilsImplTest extends AbstractTest {
     static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
-        try (Reader reader = new FileReader("src/test/resources/network.json", StandardCharsets.UTF_8)) {
+        try (Reader reader = Files.newBufferedReader(
+                Path.of("src/test/resources/network.json"),
+                StandardCharsets.UTF_8)) {
             NormalizedNode normalizedNode = dataObjectConverter
                     .transformIntoNormalizedNode(reader).orElseThrow();
             Network network = (Network) getDataStoreContextUtil()

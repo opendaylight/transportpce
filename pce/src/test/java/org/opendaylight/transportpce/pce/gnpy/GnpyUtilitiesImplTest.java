@@ -21,12 +21,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.AfterEach;
@@ -77,9 +76,7 @@ class GnpyUtilitiesImplTest extends AbstractTest {
         wireMockServer.resetAll();
         configureFor("localhost", 9998);
         stubFor(get(urlEqualTo("/api/v1/status"))
-                .willReturn(okJson(Files
-                        .readString(Paths
-                                .get("src", "test", "resources", "gnpy", "gnpy_status.json")))));
+                .willReturn(okJson(Files.readString(Path.of("src", "test", "resources", "gnpy", "gnpy_status.json")))));
     }
 
     @AfterEach
@@ -91,11 +88,15 @@ class GnpyUtilitiesImplTest extends AbstractTest {
         networkTransaction = new NetworkTransactionImpl(getDataBroker());
         try {
             // load openroadm-network
-            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json", StandardCharsets.UTF_8);
+            Reader gnpyNetwork = Files.newBufferedReader(
+                    Path.of("src/test/resources/gnpy/gnpy_network.json"),
+                    StandardCharsets.UTF_8);
             Networks networks = (Networks) new JsonDataConverter(null).deserialize(gnpyNetwork, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_NETWORK);
             // load openroadm-topology
-            Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json", StandardCharsets.UTF_8);
+            Reader gnpyTopo = Files.newBufferedReader(
+                    Path.of("src/test/resources/gnpy/gnpy_topology.json"),
+                    StandardCharsets.UTF_8);
             networks = (Networks) new JsonDataConverter(null).deserialize(gnpyTopo, Networks.QNAME);
             saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (FileNotFoundException | InterruptedException | ExecutionException e) {
@@ -130,8 +131,7 @@ class GnpyUtilitiesImplTest extends AbstractTest {
                         .withStatus(201)
                         .withHeader("Content-Type", "application/json")
                         .withBody(Files
-                                .readString(Paths
-                                        .get("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
+                                .readString(Path.of("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
        // WHEN
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
@@ -147,8 +147,8 @@ class GnpyUtilitiesImplTest extends AbstractTest {
                         .withStatus(201)
                         .withHeader("Content-Type", "application/json")
                         .withBody(Files
-                                .readString(Paths
-                                        .get("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
+                                .readString(
+                                        Path.of("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
                 gnpyConsumer);
@@ -165,8 +165,7 @@ class GnpyUtilitiesImplTest extends AbstractTest {
                         .withStatus(201)
                         .withHeader("Content-Type", "application/json")
                         .withBody(Files
-                                .readString(Paths
-                                        .get("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
+                                .readString(Path.of("src", "test", "resources", "gnpy", "gnpy_result_no_path.json")))));
         // build AtoZ
         AToZDirectionBuilder atoZDirectionBldr = buildAtZ();
         // build ZtoA

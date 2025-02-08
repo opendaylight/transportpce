@@ -12,12 +12,10 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -44,7 +42,7 @@ class XmlDataConverterTest {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
             assertEquals(
-                    Files.readString(Paths.get("src/test/resources/device.xml")),
+                    Files.readString(Path.of("src/test/resources/device.xml")),
                     converter.serialize(
                             DataObjectIdentifier
                                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
@@ -58,21 +56,24 @@ class XmlDataConverterTest {
 
     @Test
     void serializeToFileTest() {
-        final var fileName = "testSerializeToXmlFile.xml";
+        final Path filePath = Path.of("testSerializeToXmlFile.xml");
         XmlDataConverter converter = new XmlDataConverter(null);
-        File file = new File(fileName);
         try {
             converter.serializeToFile(
                     DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .build(),
                     device,
-                    fileName);
-            assertTrue(file.exists());
+                    filePath);
+            assertTrue(Files.exists(filePath));
         } catch (ProcessingException e) {
             fail("Cannot serialise object to json file");
         } finally {
-            file.delete();
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                fail("Failed to delete the test file: " + e.getMessage());
+            }
         }
     }
 
@@ -81,7 +82,7 @@ class XmlDataConverterTest {
         XmlDataConverter converter = new XmlDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    Files.readString(Paths.get("src/test/resources/device.xml")),
+                    Files.readString(Path.of("src/test/resources/device.xml")),
                     OrgOpenroadmDevice.QNAME);
             LOG.info("deserializedDevice = {}", deserializedDevice);
             assertEquals(this.device, deserializedDevice);
@@ -97,7 +98,7 @@ class XmlDataConverterTest {
         XmlDataConverter converter = new XmlDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    new FileReader("src/test/resources/device.xml", Charset.forName("UTF8")),
+                    Files.newBufferedReader(Path.of("src/test/resources/device.xml"), Charset.forName("UTF8")),
                     OrgOpenroadmDevice.QNAME);
             LOG.info("deserializedDevice = {}", deserializedDevice);
             assertEquals(this.device, deserializedDevice);
