@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7867c7a0_31affe15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:08:15Z",
+      "side": 1,
+      "message": "Add in the commit message body a sentence explaining the use of the UintX predefined constants",
+      "revId": "e4ed2860f36b3482515dc4f20bdaac425bbdc27e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d61d9b9c_af07bf89",
