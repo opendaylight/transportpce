@@ -69,8 +69,8 @@ public class RendererNotificationHandler implements RendererListener {
             @Reference NotificationPublishService notificationPublishService,
             @Reference NetworkModelService networkModelService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
-        setServiceInput(null);
-        setTempService(false);
+        this.input = null;
+        this.tempService = false;
         this.notificationPublishService = notificationPublishService;
         this.networkModelService = networkModelService;
     }

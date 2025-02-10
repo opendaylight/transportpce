@@ -26,14 +26,16 @@ public class CatalogInput {
 
     public CatalogInput(AddOpenroadmOperationalModesToCatalogInput addORToCatalogInput) {
         LOG.info("CatalogInput AddOpenroadmOperationalModesToCatalogInput");
-        setSdncRequestHeader(addORToCatalogInput.getSdncRequestHeader());
-        setOperationalModeInfo(addORToCatalogInput.getOperationalModeInfo());
+        this.sdncRequestHeader = addORToCatalogInput.getSdncRequestHeader();
+        this.operationalModeInfo = addORToCatalogInput.getOperationalModeInfo();
+        this.operationalModeInfoSpecific = null;
     }
 
     public CatalogInput(AddSpecificOperationalModesToCatalogInput addSpecificToCatalogInput) {
         LOG.info("CatalogInput AddSpecificOperationalModesToCatalogInput");
-        setSdncRequestHeader(addSpecificToCatalogInput.getSdncRequestHeader());
-        setOperationalModeInfoSpecific(addSpecificToCatalogInput.getOperationalModeInfo());
+        this.sdncRequestHeader = addSpecificToCatalogInput.getSdncRequestHeader();
+        this.operationalModeInfo = null;
+        this.operationalModeInfoSpecific = addSpecificToCatalogInput.getOperationalModeInfo();
     }
 
     public SdncRequestHeader getSdncRequestHeader() {

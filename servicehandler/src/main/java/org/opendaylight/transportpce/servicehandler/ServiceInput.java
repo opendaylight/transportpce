@@ -48,87 +48,90 @@ public class ServiceInput {
     private boolean serviceReconfigure;
 
     public ServiceInput(ServiceCreateInput serviceCreateInput) {
-        setServiceName(serviceCreateInput.getServiceName());
-        setCommonId(serviceCreateInput.getCommonId());
-        setConnectionType(serviceCreateInput.getConnectionType());
-        setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader());
-        setHardConstraints(serviceCreateInput.getHardConstraints());
-        setSoftConstraints(serviceCreateInput.getSoftConstraints());
-        setServiceAEnd(serviceCreateInput.getServiceAEnd());
-        setServiceZEnd(serviceCreateInput.getServiceZEnd());
-        setCustomer(serviceCreateInput.getCustomer());
-        setCustomerContact(serviceCreateInput.getCustomerContact());
-        setServiceResiliency(serviceCreateInput.getServiceResiliency());
-        setServiceReconfigure(false);
+        this.serviceName = serviceCreateInput.getServiceName();
+        this.commonId = serviceCreateInput.getCommonId();
+        this.connectionType = serviceCreateInput.getConnectionType();
+        this.sdncRequestHeader = serviceCreateInput.getSdncRequestHeader();
+        this.hardConstraints = serviceCreateInput.getHardConstraints();
+        this.softConstraints = serviceCreateInput.getSoftConstraints();
+        this.serviceAEnd = serviceCreateInput.getServiceAEnd();
+        this.serviceZEnd = serviceCreateInput.getServiceZEnd();
+        this.customer = serviceCreateInput.getCustomer();
+        this.customerContact = serviceCreateInput.getCustomerContact();
+        this.serviceResiliency = serviceCreateInput.getServiceResiliency();
+        this.serviceReconfigure = false;
     }
 
     public ServiceInput(ServiceReconfigureInput serviceReconfigureInput) {
-        setServiceName(serviceReconfigureInput.getServiceName());
-        setNewServiceName(serviceReconfigureInput.getNewServiceName());
-        setSdncRequestHeader(new SdncRequestHeaderBuilder()
+        this.serviceName = serviceReconfigureInput.getServiceName();
+        this.newServiceName = serviceReconfigureInput.getNewServiceName();
+        this.sdncRequestHeader = new SdncRequestHeaderBuilder()
                 .setRequestId(serviceReconfigureInput.getServiceName() + "-reconfigure")
-                .setRpcAction(RpcActions.ServiceReconfigure).build());
-        setCommonId(serviceReconfigureInput.getCommonId());
-        setConnectionType(serviceReconfigureInput.getConnectionType());
-        setHardConstraints(serviceReconfigureInput.getHardConstraints());
-        setSoftConstraints(serviceReconfigureInput.getSoftConstraints());
-        setServiceAEnd(serviceReconfigureInput.getServiceAEnd());
-        setServiceZEnd(serviceReconfigureInput.getServiceZEnd());
-        setCustomer(serviceReconfigureInput.getCustomer());
-        setCustomerContact(serviceReconfigureInput.getCustomerContact());
-        setServiceResiliency(serviceReconfigureInput.getServiceResiliency());
-        setServiceReconfigure(true);
+                .setRpcAction(RpcActions.ServiceReconfigure)
+                .build();
+        this.commonId = serviceReconfigureInput.getCommonId();
+        this.connectionType = serviceReconfigureInput.getConnectionType();
+        this.hardConstraints = serviceReconfigureInput.getHardConstraints();
+        this.softConstraints = serviceReconfigureInput.getSoftConstraints();
+        this.serviceAEnd = serviceReconfigureInput.getServiceAEnd();
+        this.serviceZEnd = serviceReconfigureInput.getServiceZEnd();
+        this.customer = serviceReconfigureInput.getCustomer();
+        this.customerContact = serviceReconfigureInput.getCustomerContact();
+        this.serviceResiliency = serviceReconfigureInput.getServiceResiliency();
+        this.serviceReconfigure = true;
     }
 
     public ServiceInput(ServiceDeleteInput serviceDeleteInput) {
-        setServiceName(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName());
-        setSdncRequestHeader(serviceDeleteInput.getSdncRequestHeader());
-        setServiceReconfigure(false);
+        this.serviceName = serviceDeleteInput.getServiceDeleteReqInfo().getServiceName();
+        this.sdncRequestHeader = serviceDeleteInput.getSdncRequestHeader();
+        this.serviceReconfigure = false;
     }
 
     public ServiceInput(TempServiceCreateInput tempServiceCreateInput) {
-        setServiceName(tempServiceCreateInput.getCommonId());
-        setCommonId(tempServiceCreateInput.getCommonId());
-        setConnectionType(tempServiceCreateInput.getConnectionType());
-        setSdncRequestHeader(tempServiceCreateInput.getSdncRequestHeader());
-        setHardConstraints(tempServiceCreateInput.getHardConstraints());
-        setSoftConstraints(tempServiceCreateInput.getSoftConstraints());
-        setServiceAEnd(tempServiceCreateInput.getServiceAEnd());
-        setServiceZEnd(tempServiceCreateInput.getServiceZEnd());
-        setCustomer(tempServiceCreateInput.getCustomer());
-        setCustomerContact(tempServiceCreateInput.getCustomerContact());
-        setServiceResiliency(tempServiceCreateInput.getServiceResiliency());
-        setServiceReconfigure(false);
+        this.serviceName = tempServiceCreateInput.getCommonId();
+        this.commonId = tempServiceCreateInput.getCommonId();
+        this.connectionType = tempServiceCreateInput.getConnectionType();
+        this.sdncRequestHeader = tempServiceCreateInput.getSdncRequestHeader();
+        this.hardConstraints = tempServiceCreateInput.getHardConstraints();
+        this.softConstraints = tempServiceCreateInput.getSoftConstraints();
+        this.serviceAEnd = tempServiceCreateInput.getServiceAEnd();
+        this.serviceZEnd = tempServiceCreateInput.getServiceZEnd();
+        this.customer = tempServiceCreateInput.getCustomer();
+        this.customerContact = tempServiceCreateInput.getCustomerContact();
+        this.serviceResiliency = tempServiceCreateInput.getServiceResiliency();
+        this.serviceReconfigure = false;
     }
 
     public ServiceInput(ServiceFeasibilityCheckInput serviceFeasibilityCheckInput) {
-        setServiceName(serviceFeasibilityCheckInput.getCommonId());
-        setCommonId(serviceFeasibilityCheckInput.getCommonId());
-        setConnectionType(serviceFeasibilityCheckInput.getConnectionType());
-        setSdncRequestHeader(serviceFeasibilityCheckInput.getSdncRequestHeader());
-        setHardConstraints(serviceFeasibilityCheckInput.getHardConstraints());
-        setSoftConstraints(serviceFeasibilityCheckInput.getSoftConstraints());
-        setServiceAEnd(serviceFeasibilityCheckInput.getServiceAEnd());
-        setServiceZEnd(serviceFeasibilityCheckInput.getServiceZEnd());
-        setCustomer(serviceFeasibilityCheckInput.getCustomer());
-        setCustomerContact(serviceFeasibilityCheckInput.getCustomerContact());
-        setServiceResiliency(serviceFeasibilityCheckInput.getServiceResiliency());
-        setServiceReconfigure(false);
+        this.serviceName = serviceFeasibilityCheckInput.getCommonId();
+        this.commonId = serviceFeasibilityCheckInput.getCommonId();
+        this.connectionType = serviceFeasibilityCheckInput.getConnectionType();
+        this.sdncRequestHeader = serviceFeasibilityCheckInput.getSdncRequestHeader();
+        this.hardConstraints = serviceFeasibilityCheckInput.getHardConstraints();
+        this.softConstraints = serviceFeasibilityCheckInput.getSoftConstraints();
+        this.serviceAEnd = serviceFeasibilityCheckInput.getServiceAEnd();
+        this.serviceZEnd = serviceFeasibilityCheckInput.getServiceZEnd();
+        this.customer = serviceFeasibilityCheckInput.getCustomer();
+        this.customerContact = serviceFeasibilityCheckInput.getCustomerContact();
+        this.serviceResiliency = serviceFeasibilityCheckInput.getServiceResiliency();
+        this.serviceReconfigure = false;
     }
 
     public ServiceInput(TempServiceDeleteInput tempServiceDeleteInput) {
         String comId = tempServiceDeleteInput.getCommonId();
-        setServiceName(comId);
-        setCommonId(comId);
-        setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId(comId).build());
-        setServiceReconfigure(false);
+        this.serviceName = comId;
+        this.commonId = comId;
+        this.sdncRequestHeader = new SdncRequestHeaderBuilder()
+                .setRequestId(comId)
+                .build();
+        this.serviceReconfigure = false;
     }
 
     public ServiceInput(ServiceRerouteInput serviceRerouteInput) {
-        setServiceName(serviceRerouteInput.getServiceName());
-        setSdncRequestHeader(serviceRerouteInput.getSdncRequestHeader());
-        setServiceResiliency(serviceRerouteInput.getServiceResiliency());
-        setServiceReconfigure(false);
+        this.serviceName = serviceRerouteInput.getServiceName();
+        this.sdncRequestHeader = serviceRerouteInput.getSdncRequestHeader();
+        this.serviceResiliency = serviceRerouteInput.getServiceResiliency();
+        this.serviceReconfigure = false;
     }
 
     public ServiceCreateInput getServiceCreateInput() {
