@@ -46,8 +46,8 @@ public class JsonDataConverter extends AbstractDataConverter {
 
     public JsonDataConverter(Set<YangModuleInfo> models) {
         super(models);
-        this.codecFactory = JSONCodecFactorySupplier.RFC7951.createLazy(getBindingRuntimeContext().modelContext());
-        this.codec = new ConstantAdapterContext(getBindingCodecContext());
+        this.codecFactory = JSONCodecFactorySupplier.RFC7951.createLazy(runtimeContext.modelContext());
+        this.codec = new ConstantAdapterContext(bindingCodecContext);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class JsonDataConverter extends AbstractDataConverter {
         try (JsonParserStream jsonParser = JsonParserStream.create(writer, codecFactory, schema)) {
             JsonReader reader = new JsonReader(new StringReader(jsonValue));
             jsonParser.parse(reader);
-            DataObject result = getBindingCodecContext()
+            DataObject result = bindingCodecContext
                     .fromNormalizedNode(path, resultHolder.getResult().data())
                     .getValue();
             return result == null ? null : result;
@@ -108,7 +108,7 @@ public class JsonDataConverter extends AbstractDataConverter {
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(resultHolder);
                 JsonParserStream jsonParser = JsonParserStream.create(streamWriter, codecFactory, schema);) {
             jsonParser.parse(jsonReader);
-            DataObject result = getBindingCodecContext()
+            DataObject result = bindingCodecContext
                     .fromNormalizedNode(path, resultHolder.getResult().data())
                     .getValue();
             return result == null ? null : result;

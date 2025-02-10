@@ -69,7 +69,7 @@ public class DataStoreContextImpl implements DataStoreContext {
         domNotificationPublishService = new RouterDOMPublishNotificationService(domNotificationRouter);
         datastores = createDatastores();
         domDataBroker = createDOMDataBroker();
-        dataBroker = createDataBroker();
+        dataBroker = adapterFactory.createDataBroker(domDataBroker);
         notificationService = createNotificationService();
         notificationPublishService = createNotificationPublishService();
     }
@@ -112,10 +112,6 @@ public class DataStoreContextImpl implements DataStoreContext {
     private DOMDataBroker createDOMDataBroker() {
         return new SerializedDOMDataBroker(datastores,
                 MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor()));
-    }
-
-    private DataBroker createDataBroker() {
-        return adapterFactory.createDataBroker(getDOMDataBroker());
     }
 
     private Map<LogicalDatastoreType, DOMStore> createDatastores() {

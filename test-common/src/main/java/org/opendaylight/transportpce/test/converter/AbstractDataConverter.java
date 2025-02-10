@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractDataConverter<T extends DataObject> implements DataConverter<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDataConverter.class);
-    private final AbstractBindingRuntimeContext runtimeContext;
-    private final BindingCodecContext bindingCodecContext;
+    protected final AbstractBindingRuntimeContext runtimeContext;
+    protected final BindingCodecContext bindingCodecContext;
 
 
     protected AbstractDataConverter(Set<YangModuleInfo> models) {
@@ -41,13 +41,6 @@ public abstract class AbstractDataConverter<T extends DataObject> implements Dat
         this.bindingCodecContext = new BindingCodecContext(runtimeContext);
     }
 
-    protected final BindingCodecContext getBindingCodecContext() {
-        return this.bindingCodecContext;
-    }
-
-    protected final AbstractBindingRuntimeContext getBindingRuntimeContext() {
-        return this.runtimeContext;
-    }
 
     /**
      * Helper method for loading {@link YangModuleInfo}s from the classpath.
