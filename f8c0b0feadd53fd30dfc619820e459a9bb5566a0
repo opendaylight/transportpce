@@ -82,6 +82,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f31cf2_cd48c06a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d486835b_0b45ed09",
+      "range": {
+        "startLine": 676,
+        "startChar": 12,
+        "endLine": 676,
+        "endChar": 40
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6422b09_4776b382",
@@ -176,6 +200,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e087a0ab_99cff978",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d5969d7_2a8653c1",
+      "range": {
+        "startLine": 703,
+        "startChar": 16,
+        "endLine": 703,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45ba0d4_b0601c3c",
@@ -223,6 +271,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a33086_b19c0a61",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "53fddcc9_f8b8014b",
+      "range": {
+        "startLine": 704,
+        "startChar": 16,
+        "endLine": 704,
+        "endChar": 42
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72dd119d_b168225f",
@@ -260,6 +332,30 @@
       "side": 1,
       "message": "see previous answer",
       "parentUuid": "72dd119d_b168225f",
+      "range": {
+        "startLine": 705,
+        "startChar": 16,
+        "endLine": 705,
+        "endChar": 44
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e4f397_300102c6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "99b7faf6_dc9e55b7",
       "range": {
         "startLine": 705,
         "startChar": 16,
@@ -364,6 +460,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3b4a3cd_b9aee75b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1b278170_309be85f",
+      "range": {
+        "startLine": 716,
+        "startChar": 12,
+        "endLine": 716,
+        "endChar": 33
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a81d375_617fe3ff",
@@ -424,6 +544,30 @@
       "writtenOn": "2025-02-04T17:48:26Z",
       "side": 1,
       "message": "Why we only set the openroadm-topology layer as the supporting node for TapiExtNode and not also all other layers as for OpenROADM device?",
+      "range": {
+        "startLine": 730,
+        "startChar": 12,
+        "endLine": 730,
+        "endChar": 33
+      },
+      "revId": "f8c0b0feadd53fd30dfc619820e459a9bb5566a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e73b6c5_49b78156",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-10T09:13:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "944250c4_ef8a123f",
       "range": {
         "startLine": 730,
         "startChar": 12,
