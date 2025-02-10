@@ -128,9 +128,9 @@ public class PceOtnNode implements PceNode {
             .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
             .getOperationalState();
         this.tpAvailableTribPort.clear();
-        checkAvailableTribPort();
+        initializeAvailableTribPort();
         this.tpAvailableTribSlot.clear();
-        checkAvailableTribSlot();
+        initializeAvailableTribSlot();
         this.clientPort = clientPort;
         if (node == null
                 || nodeId == null
@@ -412,7 +412,7 @@ public class PceOtnNode implements PceNode {
         }
     }
 
-    public void checkAvailableTribPort() {
+    private void initializeAvailableTribPort() {
         for (TerminationPoint tp :
             node.augmentation(
                     org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -436,7 +436,11 @@ public class PceOtnNode implements PceNode {
         }
     }
 
-    public void checkAvailableTribSlot() {
+    public void checkAvailableTribPort() {
+        initializeAvailableTribPort();
+    }
+
+    private void initializeAvailableTribSlot() {
         for (TerminationPoint tp :
             node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -455,6 +459,10 @@ public class PceOtnNode implements PceNode {
                 tpAvailableTribSlot.put(tp.getTpId().getValue(), new ArrayList<>(portConAttr.getTsPool()));
             }
         }
+    }
+
+    public void checkAvailableTribSlot() {
+        initializeAvailableTribSlot();
     }
 
     public boolean isValid() {

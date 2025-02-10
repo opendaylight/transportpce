@@ -62,10 +62,10 @@ public class PceNotificationHandler implements PceListener {
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
-        setServiceReconfigure(false);
-        setInput(null);
-        setTempService(false);
-        setServiceFeasiblity(false);
+        this.serviceReconfigure = false;
+        this.input = null;
+        this.tempService = false;
+        this.serviceFeasiblity = false;
         this.notificationPublishService = notificationPublishService;
     }
 
