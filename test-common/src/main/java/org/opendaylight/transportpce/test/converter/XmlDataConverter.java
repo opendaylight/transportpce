@@ -53,8 +53,8 @@ public class XmlDataConverter extends AbstractDataConverter {
 
     public XmlDataConverter(Set<YangModuleInfo> models) {
         super(models);
-        this.codecFactory = XmlCodecFactory.create(getBindingRuntimeContext().modelContext());
-        this.codec = new ConstantAdapterContext(getBindingCodecContext());
+        this.codecFactory = XmlCodecFactory.create(runtimeContext.modelContext());
+        this.codec = new ConstantAdapterContext(bindingCodecContext);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class XmlDataConverter extends AbstractDataConverter {
             factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, true);
             XMLStreamWriter xmlStreamWriter = factory.createXMLStreamWriter(writer);
             NormalizedNodeStreamWriter streamWriter = XMLStreamNormalizedNodeStreamWriter
-                    .create(xmlStreamWriter, getBindingRuntimeContext().modelContext());
+                    .create(xmlStreamWriter, runtimeContext.modelContext());
             NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(streamWriter);
             nodeWriter.write(codec.currentSerializer().toNormalizedDataObject(id, dataContainer).node());
             nodeWriter.flush();
@@ -108,7 +108,7 @@ public class XmlDataConverter extends AbstractDataConverter {
             NormalizedNode node = nodeOpt.orElseThrow();
             Optional<NormalizedNode> data = NormalizedNodes.getDirectChild(node,
                     YangInstanceIdentifier.of(object).getLastPathArgument());
-            DataObject result = getBindingCodecContext().fromNormalizedNode(path, data.orElseThrow()).getValue();
+            DataObject result = bindingCodecContext.fromNormalizedNode(path, data.orElseThrow()).getValue();
             return result;
         } catch (IOException | XMLStreamException e) {
             throw new ProcessingException("Error deserializing an XML string to the DataObject", e);
@@ -137,7 +137,7 @@ public class XmlDataConverter extends AbstractDataConverter {
             NormalizedNode node = nodeOpt.orElseThrow();
             Optional<NormalizedNode> data = NormalizedNodes.getDirectChild(node,
                     YangInstanceIdentifier.of(object).getLastPathArgument());
-            DataObject result = getBindingCodecContext().fromNormalizedNode(path, data.orElseThrow()).getValue();
+            DataObject result = bindingCodecContext.fromNormalizedNode(path, data.orElseThrow()).getValue();
             return result;
         } catch (IOException | XMLStreamException e) {
             throw new ProcessingException("Error deserializing a reader to the output DataObject", e);
