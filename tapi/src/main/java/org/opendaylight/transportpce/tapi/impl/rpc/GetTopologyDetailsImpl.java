@@ -337,10 +337,10 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException("Unable to get from mdsal topology: "
-                    + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId().getValue(), e);
+                    + networkIID.firstKeyOf(Network.class).getNetworkId().getValue(), e);
         }
         return topology;
     }
