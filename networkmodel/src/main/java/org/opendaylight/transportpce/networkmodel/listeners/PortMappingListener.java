@@ -7,17 +7,14 @@
  */
 package org.opendaylight.transportpce.networkmodel.listeners;
 
-import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
-import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
-import org.opendaylight.yangtools.binding.DataObjectStep;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 /**
  * Implementation that listens to any data change on
@@ -51,21 +48,17 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
                 return;
             }
             networkModelService.updateOpenRoadmTopologies(
-                getNodeIdFromMappingDataTreeIdentifier(change.getRootPath()),
+                getNodeIdFromMappingDataTreeIdentifier(change.path()),
                 newMapping);
         }
     }
 
     /**
      * Retrieve from the data change the node id that emits the device notification.
-     * @param dataTreeIdentifier Instance Identifiers of the mapping change.
+     * @param identifier Instance Identifiers of the mapping change.
      * @return the node ID, parent of the data tree change.
      */
-    protected String getNodeIdFromMappingDataTreeIdentifier(DataTreeIdentifier<Mapping> dataTreeIdentifier) {
-        LinkedList<DataObjectStep<?>> path = new LinkedList<>();
-        dataTreeIdentifier.path().getPathArguments().forEach(p -> path.add(p));
-        path.removeLast();
-        InstanceIdentifier<Nodes> portMappingNodeID = InstanceIdentifier.unsafeOf(path);
-        return InstanceIdentifier.keyOf(portMappingNodeID).getNodeId();
+    protected String getNodeIdFromMappingDataTreeIdentifier(DataObjectIdentifier<Mapping> identifier) {
+        return identifier.firstKeyOf(Nodes.class).getNodeId();
     }
 }

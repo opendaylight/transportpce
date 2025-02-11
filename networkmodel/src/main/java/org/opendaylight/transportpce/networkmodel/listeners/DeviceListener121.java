@@ -72,6 +72,7 @@ public class DeviceListener121 {
                 continue;
             }
             // 1. Detect the org-openroadm-device object modified
+            @SuppressWarnings("unchecked")
             DataObjectIdentifier<?> path = DataObjectIdentifier.ofUnsafeSteps(
                     (Iterable<? extends @NonNull ExactDataObjectStep<?>>) edit.getTarget().steps());
             Iterator<? extends @NonNull ExactDataObjectStep<?>> ite = path.steps().iterator();
@@ -82,8 +83,8 @@ public class DeviceListener121 {
             LOG.debug("Instance Identifier received = {} from node {}", path.toString(), nodeId);
             switch (path.lastStep().type().getSimpleName()) {
                 case "Ports":
-                    String portName = path.toLegacy().firstKeyOf(Ports.class).getPortName();
-                    String cpName = path.toLegacy().firstKeyOf(CircuitPacks.class).getCircuitPackName();
+                    String portName = path.firstKeyOf(Ports.class).getPortName();
+                    String cpName = path.firstKeyOf(CircuitPacks.class).getCircuitPackName();
                     LOG.info("port {} of circruit-pack {} modified on device {}", portName, cpName, this.nodeId);
                     Mapping oldMapping = portMapping.getMapping(nodeId, cpName, portName);
                     if (oldMapping == null) {
