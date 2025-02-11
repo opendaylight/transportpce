@@ -31,11 +31,9 @@ import org.slf4j.LoggerFactory;
  * Represents read-write transaction on netconf device.
  * This transaction can be obtained by {@link DeviceTransactionManager}.
  *
- * <p>
- * WARNING: Only one transaction can be opened at the same time on device!
+ * <p>WARNING: Only one transaction can be opened at the same time on device!
  * It's important to close (cancel/submit) transaction when work is done with it
  * (so others can access the device).
- * </p>
  */
 public class DeviceTransaction {
 

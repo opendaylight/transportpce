@@ -20,10 +20,8 @@ public interface ClientInput {
      * and the available frequencies. Subsequently, a service frequency range
      * is picked from the result.
      *
-     * <p>
-     * The implementing class is free to interpret how to handle the situation where
+     * <p>The implementing class is free to interpret how to handle the situation where
      * the client has no preference.
-     * </p>
      */
     @NonNull Collection clientRangeWishListIntersection();
 
@@ -34,20 +32,17 @@ public interface ClientInput {
      * and the available frequencies. Subsequently, a service frequency range may be
      * setup from the result.
      *
-     * <p>
-     * The implementing class is free to interpret how to handle the situation where
+     * <p>The implementing class is free to interpret how to handle the situation where
      * the client has no preference.
-     * </p>
      */
     @NonNull Collection clientRangeWishListSubset();
 
     /**
      * The number of slots for the service.
      *
-     * <p>
-     * The implementing class is free to prioritize what value is returned. Either the spectralWidth
+     * <p>The implementing class is free to prioritize what value is returned. Either the spectralWidth
      * is returned or the nr of slots the client wishes to use.
-     * </p>
+     *
      * @param spectralWidth The nr of slots TPCE has determined is needed for the service.
      */
     int slotWidth(int spectralWidth);
