@@ -93,11 +93,11 @@ public final class TopologyUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId()
+                "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
                 .getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + networkIID.toLegacy().firstKeyOf(Network.class).getNetworkId()
+                "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
                 .getValue(), e);
         } catch (NoSuchElementException e) {
             return null;
@@ -118,11 +118,11 @@ public final class TopologyUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + topoIID.toLegacy().firstKeyOf(Topology.class).getUuid()
+                "Unable to get from mdsal topology: " + topoIID.firstKeyOf(Topology.class).getUuid()
                 .getValue(), e);
         } catch (ExecutionException e) {
             throw new TapiTopologyException(
-                "Unable to get from mdsal topology: " + topoIID.toLegacy().firstKeyOf(Topology.class).getUuid()
+                "Unable to get from mdsal topology: " + topoIID.firstKeyOf(Topology.class).getUuid()
                 .getValue(), e);
         } catch (NoSuchElementException e) {
             return null;
