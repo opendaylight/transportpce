@@ -16,6 +16,23 @@
       "message": "Thanks Gilles. Kept it as I did additional work on this change. Completed the commit message to reflect what was done.",
       "revId": "dd5922c241aac7b9497e12637ac55d9bb3adbb75",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "825e910c_6525906c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-11T16:54:22Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "dd5922c241aac7b9497e12637ac55d9bb3adbb75",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
