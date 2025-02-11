@@ -136,10 +136,10 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
             // violation error)
         } catch (ExecutionException e) {
             throw new ExecutionException("Unable to get from mdsal service: "
-                    + nodeIID.toLegacy().firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Unable to get from mdsal service: "
-                    + nodeIID.toLegacy().firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
+                    + nodeIID.firstKeyOf(ConnectivityService.class).getUuid().getValue(), e);
         }
         LOG.debug("The service name of service {}, is {}", uuid, nameList);
         return nameList;
