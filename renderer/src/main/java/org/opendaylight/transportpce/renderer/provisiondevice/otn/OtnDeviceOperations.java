@@ -30,9 +30,8 @@ public interface OtnDeviceOperations {
     /**
      * This method retrieves the possible network ports.
      *
-     *<p>
-     *     checks for the possible network ports in odu-switching-pool
-     *</p>
+     *<p>checks for the possible network ports in odu-switching-pool
+     *
      * @param circuitPackName Circuit pack name of the client port
      * @param portName port name of the client port
      * @param oduSwitchingPools TODO

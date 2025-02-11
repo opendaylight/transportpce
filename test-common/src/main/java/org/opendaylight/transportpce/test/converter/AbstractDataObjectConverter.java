@@ -60,13 +60,11 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     /**
      * Transforms the given input {@link NormalizedNode} into the given
      * {@link DataObject}.
+     * The input object should be {@link ContainerNode}
      *
      * @param normalizedNode normalized node you want to convert
      * @param rootNode {@link QName} of converted normalized node root
      *
-     *     <p>
-     *     The input object should be {@link ContainerNode}
-     *     </p>
      */
     @Override
     @SuppressWarnings("unchecked")

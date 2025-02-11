@@ -16,11 +16,9 @@ public interface OpenRoadmInterfaces {
      * This methods does an edit-config operation on the openROADM device in
      * order to create the given interface.
      *
-     * <p>
-     * Before posting the interface it checks if: 1. Interface with same name
+     * <p>Before posting the interface it checks if: 1. Interface with same name
      * does not exist 2. If exists then admin state of interface is
      * outOfState/Maintenance
-     * </p>
      *
      * @param nodeId node ID
      * @param ifBuilder Builder object containing the data to post.
@@ -67,10 +65,8 @@ public interface OpenRoadmInterfaces {
      * This methods does an edit-config operation on the openROADM device in
      * order to delete the given interface.
      *
-     * <p>
-     * Before deleting the method: 1. Checks if interface exists 2. If exists
+     * <p>Before deleting the method: 1. Checks if interface exists 2. If exists
      * then changes the state of interface to outOfService
-     * </p>
      *
      * @param nodeId node ID
      *

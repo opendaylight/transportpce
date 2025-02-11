@@ -24,16 +24,14 @@ public interface DeviceRendererService {
     /**
      * This method set's wavelength path based on following steps.
      *
-     * <p>
-     * For each node:
+     * <p>For each node:
      * 1. Create Och interface on source termination point.
      * 2. Create Och interface on destination termination point.
      * 3. Create cross connect between source and destination tps created in step 1
      *    and 2.
      *
-     * Naming convention used for OCH interfaces name : tp-wavenumber Naming
+     * <p>Naming convention used for OCH interfaces name : tp-wavenumber Naming
      * convention used for cross connect name : src-dest-wavenumber
-     * </p>
      *
      * @param input
      *            Input parameter from the service-path yang model
@@ -48,8 +46,7 @@ public interface DeviceRendererService {
     /**
      * This method set's wavelength path based on following steps.
      *
-     * <p>
-     * For each node:
+     * <p>For each node:
      * 1. Create Och interface on source termination point.
      * 2. Create Och interface on destination termination point.
      * 3. Create cross connect between source and destination tps created in step 1
@@ -77,8 +74,7 @@ public interface DeviceRendererService {
     /**
      * This method removes wavelength path based on following steps.
      *
-     * <p>
-     * For each node:
+     * <p>For each node:
      * 1. Delete Cross connect between source and destination tps.
      * 2. Delete Och interface on source termination point.
      * 3. Delete Och interface on destination termination point.
