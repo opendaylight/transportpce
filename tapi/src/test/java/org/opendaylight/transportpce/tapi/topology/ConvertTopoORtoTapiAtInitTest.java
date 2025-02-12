@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
@@ -85,12 +84,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSi;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.cep.list.connection.end.point.OtsMediaConnectionEndPointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.impairments.ImpairmentRouteEntry;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrumKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrum;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.OccupiedSpectrumKey;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrum;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.SupportableSpectrumKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULECANNOTFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.FORWARDINGRULEMAYFORWARDACROSSGROUP;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.RuleType;
@@ -102,7 +95,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -608,29 +600,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
 //                assertEquals(0, nepsOtsimc.size(), "Roadm node should have 10 OTSiMC NEPs");
                 assertEquals(12, nepsPhot.size(), "Roadm node should have 12 PHOT_MEDIA NEPs (2x4 OTS +2x(OTS+OMS)");
                 // For Degree node
-//<<<<<<< HEAD
-//                String mcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("DEG1-TTP", nepsOMS),
-//                    new Uuid(UUID.nameUUIDFromBytes(mcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    mcnepUuidSeed, pmOMSnep , false);
-//                String otmcnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("DEG1-TTP", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otmcnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otmcnepUuidSeed, pmOTSnep, false);
-//                // For srg node
-//                String otscnepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("SRG1-PP1", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otscnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otscnepUuidSeed, pmOTSnep, false);
-//                String otscnep4UuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX";
-//                checkNepOtsiRdmNode(
-//                    getOnep("SRG1-PP3", nepsOTS),
-//                    new Uuid(UUID.nameUUIDFromBytes(otscnep4UuidSeed.getBytes(Charset.forName("UTF-8"))).toString()),
-//                    otscnep4UuidSeed, pmOTSnep, false);
-//=======
                 OwnedNodeEdgePoint nepOmsDeg = getOnep("DEG2-TTP", nepsOMS);
                 Uuid omsNepDegUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX").getBytes(Charset
@@ -644,7 +613,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                     String.join("+", nodeId, "PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"), otsNepDegUuid);
                 checkNepOtsiRdmNode(nepOtsDeg, otsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
-                OwnedNodeEdgePoint omsNep3 = getOnep("DEG2-TTP", nepsOMS);
                 LOG.info("Node tested in 800 is Node {}", node);
                 if (includingCep) {
                     checkCepOtsiRdmNode(nepOmsDeg, omsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX",
@@ -665,7 +633,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                     .getBytes(Charset.forName("UTF-8"))).toString());
                 checkNepOtsiRdmNode(nepOtsSrg2, otsNepUuidSrg2, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
-//>>>>>>> 381b4f2d (Consolidate ConnectivityUtils)
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getName().entrySet().iterator().next().getValue().toString()
                         .compareTo(nrg2.getName().entrySet().iterator().next().getValue().toString()))
@@ -887,16 +854,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                     "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
     }
 
-    private void checkNodeRuleGroupForMuxOTSi(
-            List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
-        rawCheckNodeRuleGroupOTsi("Mux", nrgList, enepUuid, inepUuid, nodeUuid);
-    }
-
-    private void checkNodeRuleGroupForSwitchOTSi(
-            List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
-        rawCheckNodeRuleGroupOTsi("Switch", nrgList, enepUuid, inepUuid, nodeUuid);
-    }
-
     private void rawCheckNodeRuleGroupOTsi(String nodeType,
             List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid, Uuid nodeUuid) {
         int nrgListSize;
@@ -1077,40 +1034,6 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             "operational state of client nep should be ENABLED");
         assertEquals(PortRole.SYMMETRIC, nep.getLinkPortRole(),
             "link-port-role of client nep should be SYMMETRIC");
-    }
-
-    private void checkPhotPartOfNep(OwnedNodeEdgePoint nep) {
-
-        var onep1 = nep.augmentation(
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1.class);
-
-        Map<SupportableSpectrumKey, SupportableSpectrum> supSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
-            .getSpectrumCapabilityPac().getSupportableSpectrum();
-
-        double naz = 0.01;
-        assertEquals(supSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getLowerFrequency()
-            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz))).doubleValue(),
-            "Lower Freq of supportable spectrum shall be 191.325 THz");
-        assertEquals(supSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getUpperFrequency()
-            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
-                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz))).doubleValue(),
-            "Higher Freq of supportable spectrum shall be 196.100 THz");
-
-        Map<AvailableSpectrumKey, AvailableSpectrum> availSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
-            .getSpectrumCapabilityPac().getAvailableSpectrum();
-        assertEquals(availSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getLowerFrequency()
-            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12 + naz))).doubleValue(),
-            "In absence of service provisionning Lower Freq of available spectrum shall be 191.325 THz");
-        assertEquals(availSpectrum.entrySet().stream().findFirst().orElseThrow().getValue().getUpperFrequency()
-            .doubleValue(), (Uint64.valueOf(Math.round(GridConstant.START_EDGE_FREQUENCY * 1E12
-                + GridConstant.GRANULARITY * GridConstant.EFFECTIVE_BITS * 1E09 + naz))).doubleValue(),
-            "In absence of service provisionning Higher Freq of available spectrum shall be 191.325 THz");
-
-        Map<OccupiedSpectrumKey, OccupiedSpectrum> occSpectrum = onep1.getPhotonicMediaNodeEdgePointSpec()
-            .getSpectrumCapabilityPac().getOccupiedSpectrum();
-        assertEquals(occSpectrum, null,
-            "In absence of service provisionning occupied spectrum shall be null");
-
     }
 
     private void checkOmsLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link,
