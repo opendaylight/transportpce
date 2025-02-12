@@ -22,7 +22,7 @@
   <name>OpenDaylight :: transportpce :: dmaap-client</name>
 
   <properties>
-    <skip.karaf.featureTest>false</skip.karaf.featureTest>
+    <sft.skip>false</sft.skip>
   </properties>
 
   <dependencies>
