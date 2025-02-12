@@ -214,7 +214,7 @@ public final class TopologyUtils {
         }
         // roadm infrastructure not abstracted
         // read openroadm-network
-        Network openroadmNet = readTopology(InstanceIdentifiers.OPENROADM_NETWORK_II.toIdentifier());
+        Network openroadmNet = readTopology(InstanceIdentifiers.OPENROADM_NETWORK_II);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                 .networks.network.Node> rdmList =
             openroadmNet == null ? new ArrayList<>()

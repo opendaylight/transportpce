@@ -85,7 +85,7 @@ final class OlmUtils710 {
 
         DataObjectIdentifier<?> resourceKeyIID =
                 findClassKeyIdentifiers(input.getResourceType(), input.getResourceIdentifier());
-        CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID.toIdentifier(),
+        CurrentPmEntryKey resourceKey = new CurrentPmEntryKey(resourceKeyIID,
                 convertResourceTypeEnum(input.getResourceType()), "");
 
         DataObjectIdentifier<CurrentPmList> iidCurrentPmList = DataObjectIdentifier

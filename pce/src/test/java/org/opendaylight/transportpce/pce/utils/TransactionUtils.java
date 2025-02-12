@@ -259,7 +259,7 @@ public final class TransactionUtils {
             .build();
         CurrentPmEntry currentPmEntryA = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpA.key(),cpA))
-                .setPmResourceInstance(interfaceIIDA.toIdentifier())
+                .setPmResourceInstance(interfaceIIDA)
                 .setPmResourceType(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum
                                 .Interface)
@@ -289,7 +289,7 @@ public final class TransactionUtils {
             .build();
         CurrentPmEntry currentPmEntryC = new CurrentPmEntryBuilder()
                 .setCurrentPm(Map.of(cpC.key(),cpC))
-                .setPmResourceInstance(interfaceIIDC.toIdentifier())
+                .setPmResourceInstance(interfaceIIDC)
                 .setPmResourceType(
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum
                                 .Interface)
