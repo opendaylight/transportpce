@@ -177,8 +177,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Profile1;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ProfileRef;
 
 @Component
 public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
@@ -343,7 +341,6 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         LOG.info("Updated TAPI topology successfully.");
     }
 
-    @SuppressWarnings("rawtypes")
     private void sendNotification(List<Uuid> changedOneps, Mapping mapping) {
         try {
             notificationPublishService.putNotification(

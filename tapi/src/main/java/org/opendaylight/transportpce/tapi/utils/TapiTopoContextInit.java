@@ -27,11 +27,9 @@ import org.slf4j.LoggerFactory;
 public class TapiTopoContextInit {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopoContextInit.class);
-    private final NetworkTransactionService networkTransactionService;
     private final TapiContext tapiContext;
 
     public TapiTopoContextInit(TapiContext tapiContext, NetworkTransactionService networkTransactionService) {
-        this.networkTransactionService = networkTransactionService;
         this.tapiContext = tapiContext;
     }
 
