@@ -126,7 +126,7 @@ public class DeviceListener710 {
             }
         }
         if (!nbliidMap.isEmpty() && ospIID != null) {
-            DataObjectIdentifier<OduSwitchingPools> id = ospIID.toIdentifier();
+            DataObjectIdentifier<OduSwitchingPools> id = ospIID;
             Runnable handleNetconfEvent = new Runnable() {
                 @Override
                 public void run() {

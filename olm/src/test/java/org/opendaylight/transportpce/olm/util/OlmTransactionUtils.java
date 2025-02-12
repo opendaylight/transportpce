@@ -289,8 +289,7 @@ public final class OlmTransactionUtils {
                 .setPmResourceInstance(DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"))
-                        .build()
-                        .toIdentifier())
+                        .build())
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
@@ -324,8 +323,7 @@ public final class OlmTransactionUtils {
                 .setPmResourceInstance(DataObjectIdentifier
                         .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"))
-                        .build()
-                        .toIdentifier())
+                        .build())
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
