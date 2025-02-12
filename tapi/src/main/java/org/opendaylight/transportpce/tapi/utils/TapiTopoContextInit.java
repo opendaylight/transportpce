@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -27,11 +26,9 @@ import org.slf4j.LoggerFactory;
 public class TapiTopoContextInit {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopoContextInit.class);
-    private final NetworkTransactionService networkTransactionService;
     private final TapiContext tapiContext;
 
-    public TapiTopoContextInit(TapiContext tapiContext, NetworkTransactionService networkTransactionService) {
-        this.networkTransactionService = networkTransactionService;
+    public TapiTopoContextInit(TapiContext tapiContext) {
         this.tapiContext = tapiContext;
     }
 
