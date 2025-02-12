@@ -131,7 +131,7 @@ public class TapiProvider {
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
                 tapiContext, this.networkTransactionService, TAPI_TOPO_UUID);
-        TapiTopoContextInit tapiTopoContextInit = new TapiTopoContextInit(tapiContext,this.networkTransactionService);
+        TapiTopoContextInit tapiTopoContextInit = new TapiTopoContextInit(tapiContext);
         tapiTopoContextInit.initializeTopoContext();
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
                 tapiContext, this.serviceDataStoreOperations);

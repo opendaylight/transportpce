@@ -32,10 +32,6 @@ import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev230526.controller.parameters
-//.SpectrumFilling;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.controller.customization.rev230526.controller.parameters
-//.spectrum.filling.SpectrumFillingRules;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ControllerBehaviourSettings;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -50,7 +46,6 @@ public class OperatorConstraintsTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(PceGraphTest.class);
     private NetworkTransactionImpl networkTransaction;
     private static final String SPEC_FILLING_FILE = "src/test/resources/spectrum-filling-rule1.json";
-//    private static SpectrumFillingRules sfRule;
     private static ControllerBehaviourSettings cbSettings;
     private OperatorConstraints opConstraints;
     private DataBroker dataBroker;
@@ -73,8 +68,6 @@ public class OperatorConstraintsTest extends AbstractTest {
                 .getValue();
             DataObjectIdentifier<ControllerBehaviourSettings> sfIID = DataObjectIdentifier
                     .builder(ControllerBehaviourSettings.class)
-//                    .child(SpectrumFilling.class)
-//                    .child(SpectrumFillingRules.class)
                     .build();
             @NonNull
             WriteTransaction newWriteOnlyTransaction = dataBroker.newWriteOnlyTransaction();
