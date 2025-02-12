@@ -129,7 +129,7 @@ public class TapiConnectivityImplTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.OPENROADM_NETWORK_II.toIdentifier());
+            TapiTopologyDataUtils.OPENROADM_NETWORK_FILE, InstanceIdentifiers.OPENROADM_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil(),
