@@ -31,7 +31,7 @@
     <transporpce.device.backup.prefix></transporpce.device.backup.prefix>
     <transporpce.device.backup.period>600</transporpce.device.backup.period>
     <!-- skipping single feature test because DataSource is not available in Pax4j (H2 possible workaround) -->
-    <skip.karaf.featureTest>false</skip.karaf.featureTest>
+    <sft.skip>false</sft.skip>
   </properties>
 
   <dependencyManagement>
