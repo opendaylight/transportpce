@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,11 +41,13 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 public class DeviceListener221Test {
     @Mock
     private PortMapping portMapping;
+    @Mock
+    private Mapping oldMapping;
+    @Mock
+    private ChangeNotification notification;
 
     @Test
-    void testOnChangeNotificationWhenPortUpdated() throws InterruptedException {
-        ChangeNotification notification = mock(ChangeNotification.class);
-        Mapping oldMapping = mock(Mapping.class);
+    void testOnChangeNotificationWhenPortUpdated() {
         ImmutableList<Edit> editList = createEditListWithPort();
         when(notification.getEdit()).thenReturn(editList);
         when(portMapping.getMapping("node1", "circuit-pack1", "port1")).thenReturn(oldMapping);
@@ -53,14 +55,11 @@ public class DeviceListener221Test {
         DeviceListener221 listener = new DeviceListener221("node1", portMapping);
         listener.onChangeNotification(notification);
         verify(portMapping, times(1)).getMapping("node1", "circuit-pack1", "port1");
-        Thread.sleep(3000);
-        verify(portMapping, times(1)).updateMapping("node1", oldMapping);
+        verify(portMapping, timeout(2000).times(1)).updateMapping("node1", oldMapping);
     }
 
     @Test
-    void testOnChangeNotificationWhenInterfaceUpdated() throws InterruptedException {
-        ChangeNotification notification = mock(ChangeNotification.class);
-        Mapping oldMapping = mock(Mapping.class);
+    void testOnChangeNotificationWhenInterfaceUpdated() {
         ImmutableList<Edit> editList = createEditListWithInterface();
         when(notification.getEdit()).thenReturn(editList);
         when(portMapping.getMappingFromOtsInterface("node1", "interface-1")).thenReturn(oldMapping);
@@ -68,13 +67,11 @@ public class DeviceListener221Test {
         DeviceListener221 listener = new DeviceListener221("node1", portMapping);
         listener.onChangeNotification(notification);
         verify(portMapping, times(1)).getMappingFromOtsInterface("node1", "interface-1");
-        Thread.sleep(3000);
-        verify(portMapping, times(1)).updateMapping("node1", oldMapping);
+        verify(portMapping, timeout(2000).times(1)).updateMapping("node1", oldMapping);
     }
 
     @Test
     void testOnChangeNotificationWhenNoEditList() {
-        ChangeNotification notification = mock(ChangeNotification.class);
         when(notification.getEdit()).thenReturn(null);
         DeviceListener221 listener = new DeviceListener221("node1", portMapping);
         listener.onChangeNotification(notification);
@@ -84,7 +81,6 @@ public class DeviceListener221Test {
 
     @Test
     void testOnChangeNotificationWhenOtherthingUpdated() {
-        ChangeNotification notification = mock(ChangeNotification.class);
         ImmutableList<Edit> editList = createBadEditList();
         when(notification.getEdit()).thenReturn(editList);
         DeviceListener221 listener = new DeviceListener221("node1", portMapping);
