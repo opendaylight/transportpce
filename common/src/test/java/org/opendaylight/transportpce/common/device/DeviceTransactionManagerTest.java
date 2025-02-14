@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.device;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -15,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -98,43 +100,45 @@ public class DeviceTransactionManagerTest {
     @Test
     void advancedPositiveTransactionTest() {
         try {
-            Future<java.util.Optional<DeviceTransaction>> firstDeviceTxFuture =
+            Future<Optional<DeviceTransaction>> firstDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
             DeviceTransaction firstDeviceTx = firstDeviceTxFuture.get().orElseThrow();
 
-            Future<java.util.Optional<DeviceTransaction>> secondDeviceTxFuture =
+            Future<Optional<DeviceTransaction>> secondDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
             assertFalse(secondDeviceTxFuture.isDone());
 
-            Future<java.util.Optional<DeviceTransaction>> thirdDeviceTxFuture =
+            Future<Optional<DeviceTransaction>> thirdDeviceTxFuture =
                     transactionManager.getDeviceTransaction(defaultDeviceId);
             assertFalse(thirdDeviceTxFuture.isDone());
 
             firstDeviceTx.put(defaultDatastore, defaultIid, defaultData);
-            assertFalse(secondDeviceTxFuture.isDone());
-            assertFalse(thirdDeviceTxFuture.isDone());
-            Thread.sleep(200);
-            assertFalse(secondDeviceTxFuture.isDone());
-            assertFalse(thirdDeviceTxFuture.isDone());
+            await("simply wait...").pollDelay(Duration.ofMillis(400)).untilAsserted(() -> {
+                assertFalse(secondDeviceTxFuture.isDone());
+                assertFalse(thirdDeviceTxFuture.isDone());
+            });
 
-            Future<java.util.Optional<DeviceTransaction>> anotherDeviceTxFuture =
+            Future<Optional<DeviceTransaction>> anotherDeviceTxFuture =
                     transactionManager.getDeviceTransaction("another-id");
-            Thread.sleep(50);
-            assertTrue(anotherDeviceTxFuture.isDone());
-            anotherDeviceTxFuture.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+            await("wait transaction for another-device").atMost(Duration.ofMillis(200)).untilAsserted(() -> {
+                assertTrue(anotherDeviceTxFuture.isDone());
+                anotherDeviceTxFuture.get().orElseThrow().commit(defaultTimeout, defaultTimeUnit);
+            });
 
             firstDeviceTx.commit(defaultTimeout, defaultTimeUnit);
-            Thread.sleep(200);
-            assertTrue(secondDeviceTxFuture.isDone());
-            assertFalse(thirdDeviceTxFuture.isDone());
+            await("wait second transaction for default device").atMost(Duration.ofMillis(400)).untilAsserted(() -> {
+                assertTrue(secondDeviceTxFuture.isDone());
+                assertFalse(thirdDeviceTxFuture.isDone());
+            });
 
             DeviceTransaction secondDeviceTx = secondDeviceTxFuture.get().orElseThrow();
             secondDeviceTx.put(defaultDatastore, defaultIid, defaultData);
             assertFalse(thirdDeviceTxFuture.isDone());
 
             secondDeviceTx.commit(defaultTimeout, defaultTimeUnit);
-            Thread.sleep(200);
-            assertTrue(thirdDeviceTxFuture.isDone());
+            await("wait third transaction for default device").atMost(Duration.ofMillis(400)).untilAsserted(() -> {
+                assertTrue(thirdDeviceTxFuture.isDone());
+            });
 
             DeviceTransaction thirdDeviceTx = thirdDeviceTxFuture.get().orElseThrow();
             thirdDeviceTx.put(defaultDatastore, defaultIid, defaultData);
@@ -150,7 +154,7 @@ public class DeviceTransactionManagerTest {
     @Test
     void bigAmountOfTransactionsOnSameDeviceTest() {
         int numberOfTxs = 100;
-        List<Future<java.util.Optional<DeviceTransaction>>> deviceTransactionFutures = new LinkedList<>();
+        List<Future<Optional<DeviceTransaction>>> deviceTransactionFutures = new LinkedList<>();
         List<DeviceTransaction> deviceTransactions = new LinkedList<>();
 
         for (int i = 0; i < numberOfTxs; i++) {
@@ -158,7 +162,7 @@ public class DeviceTransactionManagerTest {
         }
 
         try {
-            for (Future<java.util.Optional<DeviceTransaction>> futureTx : deviceTransactionFutures) {
+            for (Future<Optional<DeviceTransaction>> futureTx : deviceTransactionFutures) {
                 DeviceTransaction deviceTx = futureTx.get().orElseThrow();
                 deviceTx.commit(defaultTimeout, defaultTimeUnit);
                 deviceTransactions.add(deviceTx);
@@ -207,26 +211,27 @@ public class DeviceTransactionManagerTest {
             fail("Exception catched! " + e);
         }
 
-        try {
-            Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
-        } catch (InterruptedException e) {
-            fail("Exception catched! " + e);
-        }
-        deviceTransactions.parallelStream()
-                .forEach(deviceTransaction -> assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
+        await().pollDelay(Duration.ofMillis(transactionManager.getMaxDurationToSubmitTransaction() + 1000))
+            .untilAsserted(() -> {
+                deviceTransactions.parallelStream()
+                    .forEach(deviceTransaction -> assertTrue(deviceTransaction.wasSubmittedOrCancelled().get()));
+            });
     }
 
     @Test
     void notSubmittedTransactionTest() {
-        Future<java.util.Optional<DeviceTransaction>> deviceTxFuture =
+        Future<Optional<DeviceTransaction>> deviceTxFuture =
                 transactionManager.getDeviceTransaction(defaultDeviceId);
+
         try {
             deviceTxFuture.get();
-            Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
+            await().pollDelay(Duration.ofMillis(transactionManager.getMaxDurationToSubmitTransaction() + 1000))
+                .untilAsserted(() -> {
+                    Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
+                });
         } catch (InterruptedException | ExecutionException e) {
             fail("Exception catched! " + e);
         }
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
@@ -243,7 +248,9 @@ public class DeviceTransactionManagerTest {
     @Test
     void dataBrokerTimeoutTransactionTest() {
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
-            Thread.sleep(transactionManager.getMaxDurationToSubmitTransaction() + 1000);
+            await().pollDelay(Duration.ofMillis(transactionManager.getMaxDurationToSubmitTransaction() + 1000))
+                .untilAsserted(() -> {
+                });
             return rwTransactionMock;
         });
 
@@ -271,13 +278,14 @@ public class DeviceTransactionManagerTest {
     @Test
     void getFutureTimeoutTransactionTest() {
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
-            Thread.sleep(3000);
+            await().pollDelay(Duration.ofSeconds(3)).untilAsserted(() -> {
+            });
             return rwTransactionMock;
         });
 
         Exception throwedException = null;
 
-        Future<java.util.Optional<DeviceTransaction>> deviceTxFuture =
+        Future<Optional<DeviceTransaction>> deviceTxFuture =
                 transactionManager.getDeviceTransaction(defaultDeviceId);
         try {
             deviceTxFuture.get(1000, TimeUnit.MILLISECONDS);
@@ -308,7 +316,7 @@ public class DeviceTransactionManagerTest {
     private <T extends DataObject> void putAndSubmit(DeviceTransactionManagerImpl deviceTxManager, String deviceId,
             LogicalDatastoreType store, DataObjectIdentifier<T> path, T data)
             throws ExecutionException, InterruptedException {
-        Future<java.util.Optional<DeviceTransaction>> deviceTxFuture = deviceTxManager.getDeviceTransaction(deviceId);
+        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTxManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow();
         deviceTx.put(store, path, data);
         deviceTx.commit(defaultTimeout, defaultTimeUnit);
