@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.pce.frequency.spectrum.index;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.interval.FrequencyInterval;
 import org.opendaylight.transportpce.pce.frequency.interval.Interval;
@@ -41,7 +40,7 @@ class FrequencySpectrumSetTest {
         Index frequencyIndex = new SpectrumIndex(191.325, 6.25, 768);
         FrequencySpectrum spectrum = new FrequencySpectrum(frequencyIndex, 768);
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
-        Assertions.assertEquals(expected, frequencySpectrumSet.subset(realSubset, available, 768));
+        assertEquals(expected, frequencySpectrumSet.subset(realSubset, available, 768));
     }
 
 
@@ -88,7 +87,7 @@ class FrequencySpectrumSetTest {
         BitSet expected = new BitSet(768);
         expected.set(24, 32);
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
-        Assertions.assertEquals(expected, frequencySpectrumSet.set(collection, 768));
+        assertEquals(expected, frequencySpectrumSet.set(collection, 768));
     }
 
     @Test
@@ -125,7 +124,7 @@ class FrequencySpectrumSetTest {
         BitSet expected = new BitSet(768);
         expected.set(24, 28);
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
-        Assertions.assertEquals(expected, frequencySpectrumSet.set(collection, 768));
+        assertEquals(expected, frequencySpectrumSet.set(collection, 768));
     }
 
     @Test
@@ -133,6 +132,6 @@ class FrequencySpectrumSetTest {
         Spectrum spectrum = mock(FrequencySpectrum.class);
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
         BitSet expected = new BitSet(768);
-        Assertions.assertEquals(expected, frequencySpectrumSet.set(new HashSet<>(), 768));
+        assertEquals(expected, frequencySpectrumSet.set(new HashSet<>(), 768));
     }
 }

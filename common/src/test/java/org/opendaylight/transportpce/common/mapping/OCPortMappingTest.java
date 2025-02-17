@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -35,7 +36,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -417,7 +417,7 @@ public class OCPortMappingTest {
                 .getDeclaredMethod("clientPortsExistsOnNELineCard", List.class, Subcomponents.class);
         method.setAccessible(true);
         Set<Uint8> uint8s = (Set<Uint8>) method.invoke(ocPortMappingVersion190,supportedClientPorts,subcomponents);
-        Assertions.assertNotNull(uint8s);
+        assertNotNull(uint8s);
     }
 }
 

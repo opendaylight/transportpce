@@ -9,12 +9,12 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.tapi.frequency.Math;
@@ -78,25 +78,25 @@ class ORtoTapiTopoConversionToolsTest {
     @Test
     void getTTPUsedFreqMap() {
         Map<Double, Double> expected = Map.of(196.075, 196.125);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPUsedFreqMap(terminationPoint));
+        assertEquals(expected, convertORToTapiTopology.getTTPUsedFreqMap(terminationPoint));
     }
 
     @Test
     void getTTPAvailableFreqMap() {
         Map<Double, Double> expected = Map.of(191.325, 196.075);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTPAvailableFreqMap(terminationPoint));
+        assertEquals(expected, convertORToTapiTopology.getTTPAvailableFreqMap(terminationPoint));
     }
 
     @Test
     void getTTP11UsedFreqMap() {
         Map<Double, Double> expected = Map.of(196.075, 196.125);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11UsedFreqMap(terminationPoint1));
+        assertEquals(expected, convertORToTapiTopology.getTTP11UsedFreqMap(terminationPoint1));
     }
 
     @Test
     void getTTP11AvailableFreqMap() {
         Map<Double, Double> expected = Map.of(191.325, 196.075);
-        Assertions.assertEquals(expected, convertORToTapiTopology.getTTP11AvailableFreqMap(terminationPoint1));
+        assertEquals(expected, convertORToTapiTopology.getTTP11AvailableFreqMap(terminationPoint1));
     }
 
 }

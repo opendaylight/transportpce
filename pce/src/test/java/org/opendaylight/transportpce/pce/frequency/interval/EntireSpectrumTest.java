@@ -8,11 +8,12 @@
 
 package org.opendaylight.transportpce.pce.frequency.interval;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.BitSet;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class EntireSpectrumTest {
@@ -21,7 +22,7 @@ class EntireSpectrumTest {
     void add() {
         Collection entireSpectrum = new EntireSpectrum(768);
         Interval interval = mock(Interval.class);
-        Assertions.assertTrue(entireSpectrum.add(interval));
+        assertTrue(entireSpectrum.add(interval));
     }
 
     @Test
@@ -31,14 +32,12 @@ class EntireSpectrumTest {
         BitSet expected = new BitSet();
         expected.set(16, 24);
 
-        Assertions.assertEquals(expected, entireSpectrum.subset(expected));
+        assertEquals(expected, entireSpectrum.subset(expected));
     }
 
     @Test
     void testSubset() {
-
         Collection entireSpectrum = new EntireSpectrum(768);
-
         Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
@@ -46,14 +45,12 @@ class EntireSpectrumTest {
 
         when(collection.set()).thenReturn(expected);
 
-        Assertions.assertEquals(expected, entireSpectrum.subset(collection));
-
+        assertEquals(expected, entireSpectrum.subset(collection));
     }
 
     @Test
     void intersection() {
         Collection entireSpectrum = new EntireSpectrum(768);
-
         Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
@@ -61,13 +58,12 @@ class EntireSpectrumTest {
 
         when(collection.set()).thenReturn(expected);
 
-        Assertions.assertEquals(expected, entireSpectrum.intersection(expected));
+        assertEquals(expected, entireSpectrum.intersection(expected));
     }
 
     @Test
     void testIntersection() {
         Collection entireSpectrum = new EntireSpectrum(768);
-
         Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
@@ -75,7 +71,7 @@ class EntireSpectrumTest {
 
         when(collection.set()).thenReturn(expected);
 
-        Assertions.assertEquals(expected, entireSpectrum.intersection(collection));
+        assertEquals(expected, entireSpectrum.intersection(collection));
     }
 
     @Test
@@ -85,7 +81,7 @@ class EntireSpectrumTest {
         BitSet expected = new BitSet();
         expected.set(0, 768);
 
-        Assertions.assertEquals(expected, entireSpectrum.set());
+        assertEquals(expected, entireSpectrum.set());
     }
 
     @Test
@@ -95,13 +91,13 @@ class EntireSpectrumTest {
         BitSet expected = new BitSet();
         expected.set(0, 768);
 
-        Assertions.assertEquals(expected, entireSpectrum.set());
+        assertEquals(expected, entireSpectrum.set());
     }
 
     @Test
     void size() {
         Collection entireSpectrum = new EntireSpectrum(768);
 
-        Assertions.assertEquals(1, entireSpectrum.size());
+        assertEquals(1, entireSpectrum.size());
     }
 }

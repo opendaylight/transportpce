@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.frequency.interval;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -15,7 +16,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.BitSet;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.FrequencySpectrumSet;
@@ -64,7 +64,7 @@ class IntervalCollectionTest {
         BitSet expected = new BitSet();
         expected.set(10, 20);
 
-        Assertions.assertEquals(expected, intervalCollection.intersection(available));
+        assertEquals(expected, intervalCollection.intersection(available));
 
         //Even though we've added two ranges, we don't expect more than one range to be processed
         //because the ranges are identical.
@@ -109,7 +109,7 @@ class IntervalCollectionTest {
         // Since one and two are not a subset of the available bitset,
         // we expect an empty bitset returned.
         BitSet expected = new BitSet();
-        Assertions.assertEquals(expected, intervalCollection.subset(available));
+        assertEquals(expected, intervalCollection.subset(available));
     }
 
     @Test
@@ -132,7 +132,7 @@ class IntervalCollectionTest {
 
         BitSet expected = new BitSet();
 
-        Assertions.assertEquals(expected, intervalCollection.subset(available));
+        assertEquals(expected, intervalCollection.subset(available));
     }
 
     @Test
@@ -156,7 +156,7 @@ class IntervalCollectionTest {
         BitSet expected = new BitSet();
         expected.set(15, 20);
 
-        Assertions.assertEquals(expected, intervalCollection.intersection(available));
+        assertEquals(expected, intervalCollection.intersection(available));
     }
 
     @Test
@@ -181,6 +181,6 @@ class IntervalCollectionTest {
         BitSet expected = new BitSet();
         expected.set(15, 20);
 
-        Assertions.assertEquals(expected, intervalCollection.intersection(available));
+        assertEquals(expected, intervalCollection.intersection(available));
     }
 }

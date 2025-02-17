@@ -8,14 +8,15 @@
 
 package org.opendaylight.transportpce.pce.frequency.spectrum;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.Index;
 import org.opendaylight.yangtools.yang.common.Decimal64;
@@ -24,63 +25,44 @@ class FrequencySpectrumTest {
 
     @Test
     void frequencySlotsTwoConsecutiveFrequencies() {
-
         Decimal64 startFrequency = Decimal64.valueOf("192.1");
         Decimal64 endFrequency = Decimal64.valueOf("192.2");
-
         Index index = mock(Index.class);
 
         when(index.index(startFrequency)).thenReturn(120);
         when(index.index(endFrequency)).thenReturn(136);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
-
         BitSet expected = new BitSet();
         expected.set(120, 136);
 
         BigDecimal start = BigDecimal.valueOf(192.1);
         BigDecimal end = BigDecimal.valueOf(192.2);
 
-        Assertions.assertEquals(expected,
-                frequencySpectrum.frequencySlots(
-                        start,
-                        end
-                )
-        );
-
+        assertEquals(expected, frequencySpectrum.frequencySlots(start, end));
     }
 
     @Test
     void frequencySlotsTwoNonConsecutiveFrequencies() {
-
         Decimal64 startFrequency = Decimal64.valueOf("192.1");
         Decimal64 endFrequency = Decimal64.valueOf("192.3");
-
         Index index = mock(Index.class);
 
         when(index.index(startFrequency)).thenReturn(120);
         when(index.index(endFrequency)).thenReturn(152);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
-
         BitSet expected = new BitSet();
         expected.set(120, 152);
 
         BigDecimal start = BigDecimal.valueOf(192.1);
         BigDecimal end = BigDecimal.valueOf(192.3);
 
-        Assertions.assertEquals(expected,
-                frequencySpectrum.frequencySlots(
-                        start,
-                        end
-                )
-        );
-
+        assertEquals(expected, frequencySpectrum.frequencySlots(start, end));
     }
 
     @Test
     void whenNeedleIsFoundInTheMiddleOfHaystack_thenReturnTrue() {
-
         BitSet needle = new BitSet();
         needle.set(3, 15);
         BitSet haystack = new BitSet();
@@ -89,13 +71,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertTrue(spectrum.isSubset(needle, haystack));
-
+        assertTrue(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenNeedleContainsMoreItemsThanHaystack_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(0, 15);
         BitSet haystack = new BitSet();
@@ -104,14 +84,12 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
 
     @Test
     void whenHaystackIsMissingOnItemInNeedle_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(3, 6);
         BitSet haystack = new BitSet();
@@ -121,13 +99,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenHaystackIsEmptyAndNeedleIsNot_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(2, 6);
         BitSet haystack = new BitSet();
@@ -135,13 +111,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenNeedleIsEmptyAndHaystackIsNot_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         BitSet haystack = new BitSet();
         haystack.set(2, 6);
@@ -149,8 +123,7 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
     @Test
@@ -163,14 +136,12 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertTrue(spectrum.isSubset(needle, haystack));
-
+        assertTrue(spectrum.isSubset(needle, haystack));
     }
 
 
     @Test
     void openEndedFrequencyRange() {
-
         Index index = mock(Index.class);
         //when(slots.getLowerSpectralIndexFromFrequency(any(BigDecimal.class))).thenReturn(280);
         //when(slots.getLowerSpectralIndexFromFrequency(any(Decimal64.class))).thenReturn(280);
@@ -179,20 +150,15 @@ class FrequencySpectrumTest {
         when(index.index(any(Decimal64.class))).thenReturn(280);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
-
         BitSet expected = new BitSet();
         expected.set(280, 769);
 
         BigDecimal startFrequency = BigDecimal.valueOf(193.1);
-        Assert.assertEquals(
-                expected, frequencySpectrum.frequencySlots(startFrequency, null)
-        );
-
+        assertEquals(expected, frequencySpectrum.frequencySlots(startFrequency, null));
     }
 
     @Test
     void whenAllTheBitsInNeedleAreFoundInTheBeginningOfHaystack_thenReturnTrue() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -202,13 +168,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertTrue(spectrum.isSubset(needle, haystack));
-
+        assertTrue(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenAllTheBitsInNeedleAreFoundInTheEndOfHaystack_thenReturnTrue() {
-
         BitSet needle = new BitSet();
         needle.set(102, 128);
 
@@ -218,13 +182,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertTrue(spectrum.isSubset(needle, haystack));
-
+        assertTrue(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenAllTheBitsInNeedleAreFoundInTheMiddleOfHaystack_thenReturnTrue() {
-
         BitSet needle = new BitSet();
         needle.set(64, 84);
 
@@ -234,13 +196,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertTrue(spectrum.isSubset(needle, haystack));
-
+        assertTrue(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenHaystackDoesNotContainTheFirstBitInNeedle_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -250,13 +210,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenHaystackDoesNotContainTheLastBitInNeedle_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -266,13 +224,11 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
     @Test
     void whenHaystackDoesNotContainABitInTheMiddleOfNeedle_thenReturnFalse() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -283,14 +239,12 @@ class FrequencySpectrumTest {
         Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
-        Assert.assertFalse(spectrum.isSubset(needle, haystack));
-
+        assertFalse(spectrum.isSubset(needle, haystack));
     }
 
 
     @Test
     void whenNeedleIsSearchedForInHaystack_verifyNeedleHasNotBeenModified() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -305,13 +259,11 @@ class FrequencySpectrumTest {
 
         spectrum.isSubset(needle, haystack);
 
-        Assert.assertEquals(needle, control);
-
+        assertEquals(needle, control);
     }
 
     @Test
     void whenNeedleIsSearchedForInHaystack_verifyHaystackHasNotBeenModified() {
-
         BitSet needle = new BitSet();
         needle.set(0, 16);
 
@@ -326,7 +278,6 @@ class FrequencySpectrumTest {
 
         spectrum.isSubset(needle, haystack);
 
-        Assert.assertEquals(haystack, control);
-
+        assertEquals(haystack, control);
     }
 }
