@@ -8,9 +8,13 @@
 
 package org.opendaylight.transportpce.tapi.frequency;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.util.Arrays;
 import java.util.BitSet;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 class AvailableGridTest {
@@ -21,8 +25,8 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(64, availableGrid.assignedFrequencies().size());
-        Assert.assertEquals(64, availableGrid.availableFrequencies().size());
+        assertEquals(64, availableGrid.assignedFrequencies().size());
+        assertEquals(64, availableGrid.availableFrequencies().size());
     }
 
     @Test
@@ -32,7 +36,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertArrayEquals(expected, availableGrid.availableFrequencyRanges());
+        assertArrayEquals(expected, availableGrid.availableFrequencyRanges());
     }
 
     @Test
@@ -46,10 +50,10 @@ class AvailableGridTest {
         frequencies[0] = -1;
 
         //The arrays are different
-        Assert.assertFalse(Arrays.equals(expected, frequencies));
+        assertFalse(Arrays.equals(expected, frequencies));
 
         //The contents of the assignedFrequencies object are still the same
-        Assert.assertArrayEquals(expected, availableGrid.availableFrequencyRanges());
+        assertArrayEquals(expected, availableGrid.availableFrequencyRanges());
     }
 
 
@@ -61,7 +65,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -72,7 +76,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -83,7 +87,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -94,7 +98,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -105,7 +109,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -116,7 +120,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -127,7 +131,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -137,7 +141,7 @@ class AvailableGridTest {
 
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
-        Assert.assertEquals(expected, availableGrid.availableFrequencies());
+        assertEquals(expected, availableGrid.availableFrequencies());
     }
 
     @Test
@@ -151,12 +155,11 @@ class AvailableGridTest {
         AvailableGrid availableGrid = new AvailableGrid(frequencies);
 
         BitSet assigned = availableGrid.assignedFrequencies();
-        Assert.assertEquals(expected, assigned);
+        assertEquals(expected, assigned);
 
         BitSet available = availableGrid.availableFrequencies();
-        Assert.assertEquals(BitSet.valueOf(frequencies), available);
+        assertEquals(BitSet.valueOf(frequencies), available);
 
-        Assert.assertNotEquals(available, assigned);
+        assertNotEquals(available, assigned);
     }
-
 }

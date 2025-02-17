@@ -8,7 +8,8 @@
 
 package org.opendaylight.transportpce.common.device.observer;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.event.Level;
 
@@ -20,21 +21,21 @@ class EventSubscriberTest {
         subscriber.event(Level.ERROR, "First");
         subscriber.event(Level.ERROR, "Last");
 
-        Assert.assertEquals("Last", subscriber.last(Level.ERROR));
+        assertEquals("Last", subscriber.last(Level.ERROR));
     }
 
     @Test
     void empty() {
         Subscriber subscriber = new EventSubscriber();
 
-        Assert.assertEquals("", subscriber.last(Level.ERROR));
+        assertEquals("", subscriber.last(Level.ERROR));
     }
 
     @Test
     void lastDefault() {
         Subscriber subscriber = new EventSubscriber();
 
-        Assert.assertEquals("Error", subscriber.last(Level.ERROR, "Error"));
+        assertEquals("Error", subscriber.last(Level.ERROR, "Error"));
     }
 
     @Test
@@ -46,7 +47,7 @@ class EventSubscriberTest {
         subscriber.event(Level.ERROR, "Third error");
 
 
-        Assert.assertEquals("First error, Second error, Third error", subscriber.first(Level.ERROR, "", 3));
+        assertEquals("First error, Second error, Third error", subscriber.first(Level.ERROR, "", 3));
     }
 
     @Test
@@ -57,14 +58,14 @@ class EventSubscriberTest {
         subscriber.event(Level.ERROR, "Second error");
 
 
-        Assert.assertEquals("First error, Second error", subscriber.first(Level.ERROR, "", 3));
+        assertEquals("First error, Second error", subscriber.first(Level.ERROR, "", 3));
     }
 
     @Test
     void firstNumberEmpty() {
         Subscriber subscriber = new EventSubscriber();
 
-        Assert.assertEquals("Asdf", subscriber.first(Level.ERROR, "Asdf", 3));
+        assertEquals("Asdf", subscriber.first(Level.ERROR, "Asdf", 3));
     }
 
     @Test
@@ -74,6 +75,6 @@ class EventSubscriberTest {
         subscriber.event(Level.ERROR, "Second error");
         subscriber.event(Level.ERROR, "First error");
 
-        Assert.assertEquals("First error, Second error", subscriber.first(Level.ERROR, "Error", 3));
+        assertEquals("First error, Second error", subscriber.first(Level.ERROR, "Error", 3));
     }
 }

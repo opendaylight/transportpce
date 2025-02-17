@@ -8,9 +8,10 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice.result;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingResult;
@@ -32,31 +33,35 @@ public class WeightedResultMessageTest {
 
     @Test
     public void emptyResults_returnDefaultSuccessMessage() {
-        Assert.assertEquals(defaultSuccessMsg, weightedResultMessage.deviceRenderingResultMessage(
-                new ArrayList<>(), "", defaultSuccessMsg));
+        assertEquals(
+                defaultSuccessMsg,
+                weightedResultMessage.deviceRenderingResultMessage(new ArrayList<>(), "", defaultSuccessMsg));
     }
 
     @Test
     public void mixedSuccessMessages_returnNonEmptySuccessMessage() {
         deviceRenderingResults.add(DeviceRenderingResult.ok(null, null, null));
-        Assert.assertEquals(defaultSuccessMsg, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, defaultSuccessMsg));
+        assertEquals(
+                defaultSuccessMsg,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg,
+                        defaultSuccessMsg));
     }
 
     @Test
     public void successWithEmptyMessage_returnDefaultSuccessMessage() {
         deviceRenderingResults.add(DeviceRenderingResult.failed(""));
-
-        Assert.assertEquals(defaultErrorMsg, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, ""));
+        assertEquals(
+                defaultErrorMsg,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg, ""));
     }
 
     @Test
     public void failWithEmptyMessage_returnDefaultErrorMessage() {
         deviceRenderingResults.add(DeviceRenderingResult.failed(""));
 
-        Assert.assertEquals(defaultErrorMsg, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, ""));
+        assertEquals(
+                defaultErrorMsg,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg, ""));
     }
 
     @Test
@@ -64,8 +69,9 @@ public class WeightedResultMessageTest {
         deviceRenderingResults.add(DeviceRenderingResult.ok(null, null, null));
         deviceRenderingResults.add(DeviceRenderingResult.failed(""));
 
-        Assert.assertEquals(defaultErrorMsg, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, ""));
+        assertEquals(
+                defaultErrorMsg,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg, ""));
     }
 
     @Test
@@ -74,8 +80,9 @@ public class WeightedResultMessageTest {
         String failed = "Operation not successful";
         deviceRenderingResults.add(DeviceRenderingResult.failed(failed));
 
-        Assert.assertEquals(failed, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, ""));
+        assertEquals(
+                failed,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg, ""));
     }
 
     @Test
@@ -85,7 +92,8 @@ public class WeightedResultMessageTest {
         String failed = "Operation not successful";
         deviceRenderingResults.add(DeviceRenderingResult.failed(failed));
 
-        Assert.assertEquals(failed, weightedResultMessage.deviceRenderingResultMessage(
-                deviceRenderingResults, defaultErrorMsg, ""));
+        assertEquals(
+                failed,
+                weightedResultMessage.deviceRenderingResultMessage(deviceRenderingResults, defaultErrorMsg, ""));
     }
 }
