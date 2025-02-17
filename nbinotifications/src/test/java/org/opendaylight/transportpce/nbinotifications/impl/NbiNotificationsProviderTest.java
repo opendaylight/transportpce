@@ -11,10 +11,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -29,7 +29,7 @@ import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetNotificationsP
 import org.opendaylight.transportpce.nbinotifications.impl.rpc.GetSupportedNotificationTypesImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-
+@ExtendWith(MockitoExtension.class)
 public class NbiNotificationsProviderTest  extends AbstractTest {
     public static NetworkTransactionService networkTransactionService;
 
@@ -37,11 +37,6 @@ public class NbiNotificationsProviderTest  extends AbstractTest {
     RpcProviderService rpcProviderRegistry;
     @Mock
     private NotificationService notificationService;
-
-    @BeforeEach
-    void init() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void initTest() {

@@ -8,19 +8,19 @@
 
 package org.opendaylight.transportpce.pce.frequency.spectrum;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.math.BigDecimal;
 import java.util.BitSet;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.Index;
-import org.opendaylight.transportpce.pce.frequency.spectrum.index.SpectrumIndex;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
 class FrequencySpectrumTest {
-
-    private final Index spectrumIndex = new SpectrumIndex(191.325, 6.25, 768);
 
     @Test
     void frequencySlotsTwoConsecutiveFrequencies() {
@@ -28,10 +28,10 @@ class FrequencySpectrumTest {
         Decimal64 startFrequency = Decimal64.valueOf("192.1");
         Decimal64 endFrequency = Decimal64.valueOf("192.2");
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
 
-        Mockito.when(index.index(startFrequency)).thenReturn(120);
-        Mockito.when(index.index(endFrequency)).thenReturn(136);
+        when(index.index(startFrequency)).thenReturn(120);
+        when(index.index(endFrequency)).thenReturn(136);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
 
@@ -56,10 +56,10 @@ class FrequencySpectrumTest {
         Decimal64 startFrequency = Decimal64.valueOf("192.1");
         Decimal64 endFrequency = Decimal64.valueOf("192.3");
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
 
-        Mockito.when(index.index(startFrequency)).thenReturn(120);
-        Mockito.when(index.index(endFrequency)).thenReturn(152);
+        when(index.index(startFrequency)).thenReturn(120);
+        when(index.index(endFrequency)).thenReturn(152);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
 
@@ -86,7 +86,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 17);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertTrue(spectrum.isSubset(needle, haystack));
@@ -101,7 +101,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(1, 17);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -118,7 +118,7 @@ class FrequencySpectrumTest {
         haystack.set(1, 17);
         haystack.set(4, false);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -132,7 +132,7 @@ class FrequencySpectrumTest {
         needle.set(2, 6);
         BitSet haystack = new BitSet();
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -146,7 +146,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(2, 6);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -160,7 +160,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 16);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertTrue(spectrum.isSubset(needle, haystack));
@@ -171,12 +171,12 @@ class FrequencySpectrumTest {
     @Test
     void openEndedFrequencyRange() {
 
-        Index index = Mockito.mock(Index.class);
-        //Mockito.when(slots.getLowerSpectralIndexFromFrequency(Mockito.any(BigDecimal.class))).thenReturn(280);
-        //Mockito.when(slots.getLowerSpectralIndexFromFrequency(Mockito.any(Decimal64.class))).thenReturn(280);
+        Index index = mock(Index.class);
+        //when(slots.getLowerSpectralIndexFromFrequency(any(BigDecimal.class))).thenReturn(280);
+        //when(slots.getLowerSpectralIndexFromFrequency(any(Decimal64.class))).thenReturn(280);
 
-        Mockito.when(index.index(Mockito.any(Decimal64.class))).thenReturn(280);
-        Mockito.when(index.index(Mockito.any(Decimal64.class))).thenReturn(280);
+        when(index.index(any(Decimal64.class))).thenReturn(280);
+        when(index.index(any(Decimal64.class))).thenReturn(280);
 
         FrequencySpectrum frequencySpectrum = new FrequencySpectrum(index, 768);
 
@@ -199,7 +199,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 128);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertTrue(spectrum.isSubset(needle, haystack));
@@ -215,7 +215,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 128);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertTrue(spectrum.isSubset(needle, haystack));
@@ -231,7 +231,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 128);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertTrue(spectrum.isSubset(needle, haystack));
@@ -247,7 +247,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(1, 128);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -263,7 +263,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(0, 15);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -280,7 +280,7 @@ class FrequencySpectrumTest {
         haystack.set(0, 64);
         haystack.set(12, false);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         Assert.assertFalse(spectrum.isSubset(needle, haystack));
@@ -300,7 +300,7 @@ class FrequencySpectrumTest {
         BitSet haystack = new BitSet();
         haystack.set(1, 15);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         spectrum.isSubset(needle, haystack);
@@ -321,7 +321,7 @@ class FrequencySpectrumTest {
         BitSet control = new BitSet();
         control.set(1,15);
 
-        Index index = Mockito.mock(Index.class);
+        Index index = mock(Index.class);
         Spectrum spectrum = new FrequencySpectrum(index, 768);
 
         spectrum.isSubset(needle, haystack);

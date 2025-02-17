@@ -8,27 +8,27 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice.transaction;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Delete;
 
 class ConnectionTest {
 
     @Test
     void rollback() {
-        Delete delete = Mockito.mock(Delete.class);
-        Mockito.when(delete.deleteCrossConnect("ROADM-A", "DEG1", false))
-                .thenReturn(List.of("Interface1"));
-
+        Delete delete = mock(Delete.class);
+        when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(List.of("Interface1"));
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
         Assert.assertTrue(n1.rollback(delete));
-
-        Mockito.verify(delete, Mockito.times(1))
-                .deleteCrossConnect("ROADM-A", "DEG1", false);
+        verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 
     @Test
@@ -58,29 +58,21 @@ class ConnectionTest {
 
     @Test
     void deleteReturnNull() {
-        Delete delete = Mockito.mock(Delete.class);
-        Mockito.when(delete.deleteCrossConnect("ROADM-A", "DEG1", false))
-                .thenReturn(null);
-
+        Delete delete = mock(Delete.class);
+        when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(null);
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
         Assert.assertFalse(n1.rollback(delete));
-
-        Mockito.verify(delete, Mockito.times(1))
-                .deleteCrossConnect("ROADM-A", "DEG1", false);
+        verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 
     @Test
     void deleteReturnEmptyList() {
-        Delete delete = Mockito.mock(Delete.class);
-        Mockito.when(delete.deleteCrossConnect("ROADM-A", "DEG1", false))
-                .thenReturn(new ArrayList<>());
-
+        Delete delete = mock(Delete.class);
+        when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(new ArrayList<>());
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
         Assert.assertFalse(n1.rollback(delete));
-
-        Mockito.verify(delete, Mockito.times(1))
-                .deleteCrossConnect("ROADM-A", "DEG1", false);
+        verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 }

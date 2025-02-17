@@ -8,10 +8,15 @@
 
 package org.opendaylight.transportpce.pce.frequency.interval;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.BitSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
 import org.opendaylight.transportpce.pce.frequency.spectrum.index.FrequencySpectrumSet;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
@@ -20,11 +25,10 @@ class IntervalCollectionTest {
 
     @Test
     public void twoEqualFrequencyRanges_returnIntersectionWithAvailableBitset() {
-
         // The mock is hardwired to return true when determining
         // whether a bitset is a subset of available bitset.
-        Spectrum spectrum = Mockito.mock(Spectrum.class);
-        Mockito.when(spectrum.isSubset(Mockito.any(), Mockito.any())).thenReturn(true);
+        Spectrum spectrum = mock(Spectrum.class);
+        when(spectrum.isSubset(any(), any())).thenReturn(true);
 
         IntervalCollection intervalCollection = new IntervalCollection(new FrequencySpectrumSet(spectrum), 768);
         FrequencyTHz startOne = FrequencyTHz.getDefaultInstance("194.1");
@@ -39,11 +43,8 @@ class IntervalCollectionTest {
 
         //Wiring up the mock to return the (fake) BitSet one in case the input
         // is the range 194.1 - 194.2.
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startOne.getValue().decimalValue(),
-                        endOne.getValue().decimalValue()
-                )).thenReturn(one);
+        when(spectrum.frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue()))
+            .thenReturn(one);
 
         intervalCollection.add(new FrequencyInterval(startOne, endOne));
 
@@ -67,19 +68,16 @@ class IntervalCollectionTest {
 
         //Even though we've added two ranges, we don't expect more than one range to be processed
         //because the ranges are identical.
-        Mockito.verify(spectrum, Mockito.times(1)).frequencySlots(
-                startOne.getValue().decimalValue(),
-                endOne.getValue().decimalValue()
-        );
+        verify(spectrum, times(1))
+            .frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue());
     }
 
     @Test
     public void twoFrequencyRangesNotSubsetOfAvailable_returnEmptyBitset() {
-
         // The mock is hardwired to return false when determining
         // whether a bitset is a subset of available bitset.
-        Spectrum spectrum = Mockito.mock(Spectrum.class);
-        Mockito.when(spectrum.isSubset(Mockito.any(), Mockito.any())).thenReturn(false);
+        Spectrum spectrum = mock(Spectrum.class);
+        when(spectrum.isSubset(any(), any())).thenReturn(false);
 
         IntervalCollection intervalCollection = new IntervalCollection(new FrequencySpectrumSet(spectrum), 768);
         FrequencyTHz startOne = FrequencyTHz.getDefaultInstance("194.1");
@@ -88,11 +86,8 @@ class IntervalCollectionTest {
         // First bitset that is not a subset of the available bitset further down below.
         BitSet one = new BitSet();
         one.set(10, 20);
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startOne.getValue().decimalValue(),
-                        endOne.getValue().decimalValue()
-                )).thenReturn(one);
+        when(spectrum.frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue()))
+            .thenReturn(one);
 
         intervalCollection.add(new FrequencyInterval(startOne, endOne));
 
@@ -102,11 +97,8 @@ class IntervalCollectionTest {
         // Second bitset that is not a subset of the available bitset further down below.
         BitSet two = new BitSet();
         two.set(30, 40);
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startTwo.getValue().decimalValue(),
-                        endTwo.getValue().decimalValue()
-                )).thenReturn(two);
+        when(spectrum.frequencySlots(startTwo.getValue().decimalValue(), endTwo.getValue().decimalValue()))
+            .thenReturn(two);
 
         intervalCollection.add(new FrequencyInterval(startTwo, endTwo));
 
@@ -118,13 +110,11 @@ class IntervalCollectionTest {
         // we expect an empty bitset returned.
         BitSet expected = new BitSet();
         Assertions.assertEquals(expected, intervalCollection.subset(available));
-
     }
 
     @Test
     public void rangesThatAreNotASubsetOfAvailableBitset_returnsAnEmptyBitset() {
-
-        Spectrum spectrum = Mockito.mock(Spectrum.class);
+        Spectrum spectrum = mock(Spectrum.class);
 
         IntervalCollection intervalCollection = new IntervalCollection(new FrequencySpectrumSet(spectrum), 768);
         FrequencyTHz startOne = FrequencyTHz.getDefaultInstance("194.1");
@@ -132,11 +122,8 @@ class IntervalCollectionTest {
 
         BitSet one = new BitSet();
         one.set(10, 20);
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startOne.getValue().decimalValue(),
-                        endOne.getValue().decimalValue()
-                )).thenReturn(one);
+        when(spectrum.frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue()))
+            .thenReturn(one);
 
         intervalCollection.add(new FrequencyInterval(startOne, endOne));
 
@@ -146,13 +133,11 @@ class IntervalCollectionTest {
         BitSet expected = new BitSet();
 
         Assertions.assertEquals(expected, intervalCollection.subset(available));
-
     }
 
     @Test
     public void rangesThatAreWithinTheIntersection_returnsIntersection() {
-
-        Spectrum spectrum = Mockito.mock(Spectrum.class);
+        Spectrum spectrum = mock(Spectrum.class);
 
         IntervalCollection intervalCollection = new IntervalCollection(new FrequencySpectrumSet(spectrum), 768);
         FrequencyTHz startOne = FrequencyTHz.getDefaultInstance("194.1");
@@ -160,11 +145,8 @@ class IntervalCollectionTest {
 
         BitSet one = new BitSet();
         one.set(10, 20);
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startOne.getValue().decimalValue(),
-                        endOne.getValue().decimalValue()
-                )).thenReturn(one);
+        when(spectrum.frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue()))
+            .thenReturn(one);
 
         intervalCollection.add(new FrequencyInterval(startOne, endOne));
 
@@ -175,14 +157,12 @@ class IntervalCollectionTest {
         expected.set(15, 20);
 
         Assertions.assertEquals(expected, intervalCollection.intersection(available));
-
     }
 
     @Test
     public void assertTheIntersectionOfTheAvailableBitsetAndFrequencyCollectionIsReturned() {
-
-        Spectrum spectrum = Mockito.mock(Spectrum.class);
-        Mockito.when(spectrum.isSubset(Mockito.any(), Mockito.any())).thenReturn(true);
+        Spectrum spectrum = mock(Spectrum.class);
+        when(spectrum.isSubset(any(), any())).thenReturn(true);
 
         IntervalCollection intervalCollection = new IntervalCollection(new FrequencySpectrumSet(spectrum), 768);
         FrequencyTHz startOne = FrequencyTHz.getDefaultInstance("194.1");
@@ -190,11 +170,8 @@ class IntervalCollectionTest {
 
         BitSet one = new BitSet();
         one.set(15, 20);
-        Mockito.when(
-                spectrum.frequencySlots(
-                        startOne.getValue().decimalValue(),
-                        endOne.getValue().decimalValue()
-                )).thenReturn(one);
+        when(spectrum.frequencySlots(startOne.getValue().decimalValue(), endOne.getValue().decimalValue()))
+            .thenReturn(one);
 
         intervalCollection.add(new FrequencyInterval(startOne, endOne));
 
@@ -205,6 +182,5 @@ class IntervalCollectionTest {
         expected.set(15, 20);
 
         Assertions.assertEquals(expected, intervalCollection.intersection(available));
-
     }
 }

@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Duration;
@@ -29,7 +31,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -93,8 +94,8 @@ public class DeviceTransactionManagerTest {
             return;
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
+        verify(rwTransactionMock, times(1)).put(defaultDatastore, defaultIid, defaultData);
+        verify(rwTransactionMock, times(1)).commit();
     }
 
     @Test
@@ -144,8 +145,8 @@ public class DeviceTransactionManagerTest {
             thirdDeviceTx.put(defaultDatastore, defaultIid, defaultData);
             thirdDeviceTx.commit(defaultTimeout, defaultTimeUnit);
 
-            Mockito.verify(rwTransactionMock, Mockito.times(3)).put(defaultDatastore, defaultIid, defaultData);
-            Mockito.verify(rwTransactionMock, Mockito.times(4)).commit();
+            verify(rwTransactionMock, times(3)).put(defaultDatastore, defaultIid, defaultData);
+            verify(rwTransactionMock, times(4)).commit();
         } catch (InterruptedException | ExecutionException e) {
             fail("Exception catched! " + e);
         }
@@ -227,7 +228,7 @@ public class DeviceTransactionManagerTest {
             deviceTxFuture.get();
             await().pollDelay(Duration.ofMillis(transactionManager.getMaxDurationToSubmitTransaction() + 1000))
                 .untilAsserted(() -> {
-                    Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
+                    verify(rwTransactionMock, times(1)).cancel();
                 });
         } catch (InterruptedException | ExecutionException e) {
             fail("Exception catched! " + e);
@@ -240,14 +241,14 @@ public class DeviceTransactionManagerTest {
             return;
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
+        verify(rwTransactionMock, times(1)).cancel();
+        verify(rwTransactionMock, times(1)).put(defaultDatastore, defaultIid, defaultData);
+        verify(rwTransactionMock, times(1)).commit();
     }
 
     @Test
     void dataBrokerTimeoutTransactionTest() {
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
+        when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
             await().pollDelay(Duration.ofMillis(transactionManager.getMaxDurationToSubmitTransaction() + 1000))
                 .untilAsserted(() -> {
                 });
@@ -260,9 +261,9 @@ public class DeviceTransactionManagerTest {
             fail("Exception catched! " + e);
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
+        verify(rwTransactionMock, times(1)).commit();
 
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock); // remove sleep
+        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock); // remove sleep
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
@@ -271,13 +272,13 @@ public class DeviceTransactionManagerTest {
             return;
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).commit();
+        verify(rwTransactionMock, times(2)).put(defaultDatastore, defaultIid, defaultData);
+        verify(rwTransactionMock, times(2)).commit();
     }
 
     @Test
     void getFutureTimeoutTransactionTest() {
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
+        when(dataBrokerMock.newReadWriteTransaction()).then(invocation -> {
             await().pollDelay(Duration.ofSeconds(3)).untilAsserted(() -> {
             });
             return rwTransactionMock;
@@ -300,7 +301,7 @@ public class DeviceTransactionManagerTest {
             return;
         }
 
-        Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock); // remove sleep
+        when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock); // remove sleep
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
@@ -309,8 +310,8 @@ public class DeviceTransactionManagerTest {
             return;
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
+        verify(rwTransactionMock, times(1)).put(defaultDatastore, defaultIid, defaultData);
+        verify(rwTransactionMock, times(1)).commit();
     }
 
     private <T extends DataObject> void putAndSubmit(DeviceTransactionManagerImpl deviceTxManager, String deviceId,

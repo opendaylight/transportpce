@@ -19,8 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -67,6 +68,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
+@ExtendWith(MockitoExtension.class)
 public class PceOpticalNodeTest extends AbstractTest {
 
     private PceOpticalNode pceOpticalNode;
@@ -84,7 +86,6 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
         node = node1Builder.setNodeId(new NodeId("test")).build();
         availableBitSet.set(0,8);
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test

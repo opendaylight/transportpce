@@ -16,9 +16,10 @@ import static org.mockito.Mockito.when;
 import com.google.common.util.concurrent.FluentFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -28,6 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
+@ExtendWith(MockitoExtension.class)
 class CatalogDataStoreOperationsImplTest extends AbstractTest {
 
     @Mock
@@ -36,7 +38,6 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
             @Override

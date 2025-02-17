@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -115,7 +114,7 @@ public class CrossConnectImpl221Test {
 
     @Test
     void postOtnCrossConnect() {
-        Nodes nodes = Mockito.mock(Nodes.class);
+        Nodes nodes = mock(Nodes.class);
         when(nodes.getNodeId()).thenReturn("nodeId");
         when(deviceTransactionManager.getDeviceTransaction(any()))
             .thenReturn(CompletableFuture.completedFuture(Optional.of(deviceTransaction)));
