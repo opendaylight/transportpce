@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.nbinotifications.utils;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -258,7 +258,7 @@ public final class NotificationServiceDataUtils {
                         .setTopology(new HashMap<>())
                         .setUuid(
                             new Uuid(
-                                UUID.nameUUIDFromBytes("Network Topo Service".getBytes(Charset.forName("UTF-8")))
+                                UUID.nameUUIDFromBytes("Network Topo Service".getBytes(StandardCharsets.UTF_8))
                                     .toString()))
                     .setName(Map.of(nwTopoServiceName.key(), nwTopoServiceName))
                     .build())
@@ -282,7 +282,7 @@ public final class NotificationServiceDataUtils {
                 new ContextBuilder()
                     .setName(Map.of(contextName.key(), contextName))
                     .setUuid(
-                        new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(Charset.forName("UTF-8"))).toString()))
+                        new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(StandardCharsets.UTF_8)).toString()))
                     .setServiceInterfacePoint(new HashMap<>())
                     .addAugmentation(connectivityContext)
                     .addAugmentation(topologyContext)

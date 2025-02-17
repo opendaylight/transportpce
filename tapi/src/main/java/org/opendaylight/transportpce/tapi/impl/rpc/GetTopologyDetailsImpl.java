@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -113,8 +113,8 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> invoke(GetTopologyDetailsInput input) {
         Uuid topoId = input.getTopologyId();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology topology;
-        Uuid topologyUuid100G = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(
-            Charset.forName("UTF-8"))).toString());
+        Uuid topologyUuid100G = new Uuid(
+                UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8)).toString());
         if (!topologyUuid100G.equals(topoId)
                 && !TapiStringConstants.T0_TAPI_MULTILAYER_UUID.equals(topoId)
                 && !TapiStringConstants.T0_MULTILAYER_UUID.equals(topoId)) {
@@ -193,8 +193,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .setValue(TapiStringConstants.TPDR_100G)
                 .setValueName("TAPI Topology Name")
                 .build();
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.TPDR_100G.getBytes(Charset.forName("UTF-8")))
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.TPDR_100G.getBytes(StandardCharsets.UTF_8))
             .toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             createTapiNode(nep100GTpdrList, topoUuid);
@@ -249,9 +248,8 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 = new HashMap<>();
         Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link> tapiLinkList
                 = new HashMap<>();
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-            .toString());
+        Uuid topoUuid = new Uuid(
+                UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         ConvertTopoORtoTapiNbi tapiAbstractFactory = new ConvertTopoORtoTapiNbi(topoUuid, this.tapiLink);
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(topoUuid);
         Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
@@ -350,7 +348,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
         for (OwnedNodeEdgePoint ownedNodeEdgePoint : nepList) {
             onepMap.put(ownedNodeEdgePoint.key(), ownedNodeEdgePoint);
         }
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(name.getValue().getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(name.getValue().getBytes(StandardCharsets.UTF_8)).toString());
         return new NodeBuilder()
                 .setUuid(nodeUuid)
                 .setName(Map.of(name.key(), name))
@@ -441,8 +439,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
                 .build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(
-                        ("rdm infra node rule group").getBytes(Charset.forName("UTF-8")))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(("rdm infra node rule group").getBytes(StandardCharsets.UTF_8))
                     .toString()))
                 .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
                 .setNodeEdgePoint(nepMap)

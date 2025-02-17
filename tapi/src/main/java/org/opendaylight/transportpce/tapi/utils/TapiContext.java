@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -86,7 +86,7 @@ public class TapiContext {
                 new ContextBuilder()
                     .setName(Map.of(contextName.key(), contextName))
                     .setUuid(
-                        new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(Charset.forName("UTF-8"))).toString()))
+                        new Uuid(UUID.nameUUIDFromBytes(TAPI_CONTEXT.getBytes(StandardCharsets.UTF_8)).toString()))
                     .setServiceInterfacePoint(new HashMap<>())
                     .addAugmentation(
                     //connectivityContext
@@ -106,7 +106,7 @@ public class TapiContext {
                                     .setUuid(
                                         new Uuid(
                                             UUID.nameUUIDFromBytes(
-                                                    "Network Topo Service".getBytes(Charset.forName("UTF-8")))
+                                                    "Network Topo Service".getBytes(StandardCharsets.UTF_8))
                                                 .toString()))
                                     .setName(Map.of(nwTopoServiceName.key(), nwTopoServiceName))
                                     .build())

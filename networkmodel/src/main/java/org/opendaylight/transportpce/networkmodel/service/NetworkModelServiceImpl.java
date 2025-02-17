@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -684,7 +684,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiTapiExtClliNode, tapiExt);
 
         String topoUuid = new Uuid(UUID.nameUUIDFromBytes("SBI - Multi-layer - TAPI topology"
-                .getBytes(Charset.forName("UTF-8"))).toString()).toString();
+                .getBytes(StandardCharsets.UTF_8)).toString()).toString();
         var tapiExt1 = new org.opendaylight.yang.gen.v1.http.org
             .opendaylight.transportpce.or.network.augmentation.rev240923.Node1Builder()
                 .setYangDataModel(DataModelEnum.TapiExt)

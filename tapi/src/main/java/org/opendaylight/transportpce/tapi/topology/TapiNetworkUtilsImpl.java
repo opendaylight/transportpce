@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import com.google.common.collect.ImmutableClassToInstanceMap;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -46,7 +46,7 @@ public class TapiNetworkUtilsImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiNetworkUtilsImpl.class);
     private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER
-            .getBytes(Charset.forName("UTF-8"))).toString());
+            .getBytes(StandardCharsets.UTF_8)).toString());
 
     private final NetworkTransactionService networkTransactionService;
     private Registration reg;

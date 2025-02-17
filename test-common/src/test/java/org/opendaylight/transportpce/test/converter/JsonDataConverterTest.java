@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeAll;
@@ -95,7 +95,7 @@ class JsonDataConverterTest {
         JsonDataConverter converter = new JsonDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    Files.newBufferedReader(Path.of("src/test/resources/device.json"), Charset.forName("UTF8")),
+                    Files.newBufferedReader(Path.of("src/test/resources/device.json"), StandardCharsets.UTF_8),
                     OrgOpenroadmDevice.QNAME);
             assertEquals(this.device, deserializedDevice);
         } catch (ProcessingException e) {

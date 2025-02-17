@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -165,7 +165,7 @@ public class ConvertTopoORtoTapiNbi {
     public void convertRoadmInfrastructure() {
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA
-            .getBytes(Charset.forName("UTF-8"))).toString());
+            .getBytes(StandardCharsets.UTF_8)).toString());
         Name nodeName =
             new NameBuilder().setValueName("otsi node name").setValue(TapiStringConstants.RDM_INFRA).build();
         Name nodeName2 =
@@ -298,7 +298,7 @@ public class ConvertTopoORtoTapiNbi {
                 .build();
             OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes(
-                        (String.join("+", "roadm node", "nep", String.valueOf(i))).getBytes(Charset.forName("UTF-8")))
+                        (String.join("+", "roadm node", "nep", String.valueOf(i))).getBytes(StandardCharsets.UTF_8))
                     .toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
@@ -344,8 +344,7 @@ public class ConvertTopoORtoTapiNbi {
                 .setValue(linkNameValue)
                 .build();
             Link otsLink = new LinkBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(linkNameValue.getBytes(Charset.forName("UTF-8")))
-                    .toString()))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(linkNameValue.getBytes(StandardCharsets.UTF_8)).toString()))
                 .setName(Map.of(linkName.key(), linkName))
                 .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
                 .setNodeEdgePoint(

@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,8 +35,8 @@ public class TapiTopoContextInit {
     public void initializeTopoContext() {
         String sbiTopoType = TapiStringConstants.SBI_TAPI_TOPOLOGY;
         String alienTopoType = TapiStringConstants.ALIEN_XPDR_TAPI_TOPOLOGY;
-        Uuid sbiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(sbiTopoType.getBytes(Charset.forName("UTF-8"))).toString());
-        Uuid alTopoUuid = new Uuid(UUID.nameUUIDFromBytes(alienTopoType.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid sbiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(sbiTopoType.getBytes(StandardCharsets.UTF_8)).toString());
+        Uuid alTopoUuid = new Uuid(UUID.nameUUIDFromBytes(alienTopoType.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("TOPO tapi-utils TapiTopoContextInit, Initializing Topo Context for topology {} UUID {} & {} UUID {}",
             sbiTopoType, sbiTopoUuid, alienTopoType, alTopoUuid);
         Name topoName = new NameBuilder().setValue(sbiTopoType).setValueName("TAPI Topology Name").build();

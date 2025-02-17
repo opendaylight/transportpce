@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
@@ -56,8 +56,8 @@ public class TapiTopologyImplExceptionTest {
             .thenReturn(FluentFuture.from(Futures.immediateFailedFuture(new InterruptedException())));
         when(rpcService.getRpc(GetTopologyDetails.class))
             .thenReturn(new GetTopologyDetailsImpl(tapiContext, topologyUtils, tapiLink, networkTransactionService));
-        Uuid topologyUuid = new Uuid(UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(
-            Charset.forName("UTF-8"))).toString());
+        Uuid topologyUuid = new Uuid(
+                UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         GetTopologyDetailsInput input = TapiTopologyDataUtils.buildGetTopologyDetailsInput(topologyUuid);
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = rpcService
                 .getRpc(GetTopologyDetails.class).invoke(input);

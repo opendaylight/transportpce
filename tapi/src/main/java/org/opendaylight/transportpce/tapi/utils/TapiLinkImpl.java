@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.math.RoundingMode;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,17 +114,17 @@ public class TapiLinkImpl implements TapiLink {
             .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
-                    String.join("+", srcNodeId, srcNodeQual).getBytes(Charset.forName("UTF-8"))).toString()))
+                    String.join("+", srcNodeId, srcNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
             .setNodeEdgePointUuid(
-                new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(Charset.forName("UTF-8"))).toString()))
+                new Uuid(UUID.nameUUIDFromBytes(sourceNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NodeEdgePoint destNep = new NodeEdgePointBuilder()
             .setTopologyUuid(tapiTopoUuid)
             .setNodeUuid(
                 new Uuid(UUID.nameUUIDFromBytes(
-                    String.join("+", dstNodeId, dstNodeQual).getBytes(Charset.forName("UTF-8"))).toString()))
+                    String.join("+", dstNodeId, dstNodeQual).getBytes(StandardCharsets.UTF_8)).toString()))
             .setNodeEdgePointUuid(
-                new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(Charset.forName("UTF-8"))).toString()))
+                new Uuid(UUID.nameUUIDFromBytes(destNepKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .build();
         NameBuilder linkName = new NameBuilder();
         // TODO: variables for each type
@@ -190,7 +189,7 @@ public class TapiLinkImpl implements TapiLink {
         LOG.info("LINKIMPL195, successfully created tapiLink {} of type {}", linkKey, linkType);
         return new LinkBuilder()
             .setUuid(new Uuid(
-                UUID.nameUUIDFromBytes(linkKey.getBytes(Charset.forName("UTF-8"))).toString()))
+                UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(linkName.build().key(), linkName.build()))
             //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
             // Additionally, the grouping defining it requires at least 2 elements.
@@ -479,11 +478,11 @@ public class TapiLinkImpl implements TapiLink {
     @Override
     public String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
             .toString());
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
@@ -495,7 +494,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
-                                        .getBytes(Charset.forName("UTF-8")))
+                                        .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
                         .build())
@@ -506,7 +505,7 @@ public class TapiLinkImpl implements TapiLink {
             }
             Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
-                        .getBytes(Charset.forName("UTF-8")))
+                        .getBytes(StandardCharsets.UTF_8))
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
@@ -517,7 +516,7 @@ public class TapiLinkImpl implements TapiLink {
                         .child(Node.class, new NodeKey(
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
-                                        .getBytes(Charset.forName("UTF-8")))
+                                        .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
                         .build())
@@ -538,11 +537,11 @@ public class TapiLinkImpl implements TapiLink {
     @Override
     public String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId) {
         Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(
                 String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, sourceTpId)
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
             .toString());
         try {
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
@@ -555,7 +554,7 @@ public class TapiLinkImpl implements TapiLink {
                             //nodeUuid
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", srcNodeId, TapiStringConstants.PHTNC_MEDIA)
-                                        .getBytes(Charset.forName("UTF-8")))
+                                        .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
                         .build())
@@ -566,7 +565,7 @@ public class TapiLinkImpl implements TapiLink {
             }
             Uuid nep1Uuid = new Uuid(UUID.nameUUIDFromBytes(
                     String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, destTpId)
-                        .getBytes(Charset.forName("UTF-8")))
+                        .getBytes(StandardCharsets.UTF_8))
                 .toString());
             Optional<OwnedNodeEdgePoint> optionalOnep1 = this.networkTransactionService.read(
                     LogicalDatastoreType.OPERATIONAL,
@@ -578,7 +577,7 @@ public class TapiLinkImpl implements TapiLink {
                             //node1Uuid
                             new Uuid(UUID.nameUUIDFromBytes(
                                     String.join("+", destNodeId, TapiStringConstants.PHTNC_MEDIA)
-                                        .getBytes(Charset.forName("UTF-8")))
+                                        .getBytes(StandardCharsets.UTF_8))
                                 .toString())))
                         .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nep1Uuid))
                         .build())

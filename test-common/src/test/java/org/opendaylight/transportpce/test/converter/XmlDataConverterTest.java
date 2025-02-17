@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeAll;
@@ -98,7 +98,7 @@ class XmlDataConverterTest {
         XmlDataConverter converter = new XmlDataConverter(ModelsUtils.OPENROADM_MODEL_PATHS_71);
         try {
             OrgOpenroadmDevice deserializedDevice = (OrgOpenroadmDevice) converter.deserialize(
-                    Files.newBufferedReader(Path.of("src/test/resources/device.xml"), Charset.forName("UTF8")),
+                    Files.newBufferedReader(Path.of("src/test/resources/device.xml"), StandardCharsets.UTF_8),
                     OrgOpenroadmDevice.QNAME);
             LOG.info("deserializedDevice = {}", deserializedDevice);
             assertEquals(this.device, deserializedDevice);
