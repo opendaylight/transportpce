@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,9 +49,8 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     private static final Logger LOG = LoggerFactory.getLogger(TapiOrLinkListener.class);
     private final TapiLink tapiLink;
     private final NetworkTransactionService networkTransactionService;
-    private final Uuid tapiTopoUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
-            .toString());
+    private final Uuid tapiTopoUuid = new Uuid(
+            UUID.nameUUIDFromBytes(TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
 
     public TapiOrLinkListener(final TapiLink tapiLink, final NetworkTransactionService networkTransactionService) {
         this.tapiLink = tapiLink;
@@ -131,8 +130,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
-        Uuid linkUuid = new Uuid(
-            UUID.nameUUIDFromBytes(linkKey.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString());
         DataObjectIdentifier<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
                 linkIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,7 +199,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             .get().orElseThrow();
 
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes(
-                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(Charset.forName("UTF-8")))
+                TapiStringConstants.T0_FULL_MULTILAYER.getBytes(StandardCharsets.UTF_8))
             .toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
@@ -237,13 +237,13 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         var dsrNodeNnOnep = tapiFactory
             .getTapiNodes()
             .get(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey(new Uuid(
-                UUID.nameUUIDFromBytes((nodeId + "+XPONDER").getBytes(Charset.forName("UTF-8"))).toString())))
+                UUID.nameUUIDFromBytes((nodeId + "+XPONDER").getBytes(StandardCharsets.UTF_8)).toString())))
             .nonnullOwnedNodeEdgePoint();
         OwnedNodeEdgePoint enepN = dsrNodeNnOnep.get(new OwnedNodeEdgePointKey(new Uuid(
-            UUID.nameUUIDFromBytes(String.join("+", nodeId, "eODU", clientId).getBytes(Charset.forName("UTF-8")))
+            UUID.nameUUIDFromBytes(String.join("+", nodeId, "eODU", clientId).getBytes(StandardCharsets.UTF_8))
                 .toString())));
         OwnedNodeEdgePoint inepN = dsrNodeNnOnep.get(new OwnedNodeEdgePointKey(new Uuid(
-            UUID.nameUUIDFromBytes(String.join("+", nodeId, "iODU", networkId).getBytes(Charset.forName("UTF-8")))
+            UUID.nameUUIDFromBytes(String.join("+", nodeId, "iODU", networkId).getBytes(StandardCharsets.UTF_8))
                 .toString())));
         if (admState == null) {
             assertNull(enepN.getAdministrativeState(), "Administrative State should not be present");
@@ -293,7 +293,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         checkOtsiNode(
             getNode("ROADM-A1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes(
-                    (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(Charset.forName("UTF-8")))
+                    (roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA").getBytes(StandardCharsets.UTF_8))
                 .toString()),
             "roadm", "ROADM-A1",
             false);
@@ -326,7 +326,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         checkOtsiNode(
             getNode("ROADM-A1", tapiNodes),
             new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
                 .toString()),
             "roadm", "ROADM-A1",
             true);
@@ -339,11 +339,11 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
             tapiFullFactory.getTapiLinks().values().stream()
                 .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
                 .findFirst().orElseThrow(),
-            new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(roadmC1seed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(roadmA1deg2seed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(roadmC1deg1seed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmC1seed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1deg2seed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmC1deg1seed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(StandardCharsets.UTF_8)).toString()),
             linkseed);
     }
 
@@ -383,7 +383,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 .collect(Collectors.toList());
         checkOtsiNode(getNode("ROADM-A1", tapiNodes),
              new Uuid(UUID.nameUUIDFromBytes((roadmA.getNodeId().getValue() + "+PHOTONIC_MEDIA")
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
                 .toString()),
             "roadm", "ROADM-A1",
             false);
@@ -392,17 +392,17 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         String spdrSA1tpseed = spdrSA1seed + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1";
         String roadmA1tpseed = roadmA1seed + "_OTS+SRG1-PP2-TXRX";
         String linkseed = spdrSA1tpseed + "to" + roadmA1tpseed;
-        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid node2Uuid = new Uuid(UUID.nameUUIDFromBytes(roadmA1seed.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("{} UUID is {}",roadmA1seed, node2Uuid);
         checkXpdrRdmLink(
             tapiFullFactory.getTapiLinks().values().stream()
                 .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
                 .findFirst().orElseThrow(),
-            new Uuid(UUID.nameUUIDFromBytes((spdrSA1seed + "+XPONDER").getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes((spdrSA1seed + "+XPONDER").getBytes(StandardCharsets.UTF_8)).toString()),
             node2Uuid,
-            new Uuid(UUID.nameUUIDFromBytes(spdrSA1tpseed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(roadmA1tpseed.getBytes(Charset.forName("UTF-8"))).toString()),
-            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(spdrSA1tpseed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(roadmA1tpseed.getBytes(StandardCharsets.UTF_8)).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(linkseed.getBytes(StandardCharsets.UTF_8)).toString()),
             linkseed);
     }
 
@@ -420,7 +420,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         //checkDsrNode(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node,
         //    Uuid nodeUuid, String dsrNodeType, String nodeId) {
         Uuid nodeUuid =
-            new Uuid(UUID.nameUUIDFromBytes((nodeId + "+XPONDER").getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes((nodeId + "+XPONDER").getBytes(StandardCharsets.UTF_8)).toString());
         var node =
             tapiFactory.getTapiNodes().values().stream()
                 .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
@@ -495,7 +495,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         OwnedNodeEdgePoint nep5 = nepsC.get(nepsCindex);
         String cl1NepUuidSeed = nodeId + "+DSR+XPDR" + xpdrNb + "-CLIENT" + clientNb;
         Uuid client1NepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(cl1NepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(cl1NepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         switch (dsrNodeType) {
             case "switch":
                 checkNepClient100GSwitch(nep5, client1NepUuid, cl1NepUuidSeed, namekey);
@@ -510,11 +510,11 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         }
         String enetNepUuidSeed = nodeId + "+eODU+XPDR" + xpdrNb + "-CLIENT" + clientNb;
         Uuid enetworkNepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(enetNepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(enetNepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         checkNepeODU4(enepsN.get(enepsNindex), enetworkNepUuid, enetNepUuidSeed, "eNodeEdgePoint_N", false);
         String inetNepUuidSeed = nodeId + "+iODU+XPDR" + xpdrNb + "-NETWORK1";
         Uuid inetworkNepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(inetNepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(inetNepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         checkNepNetworkODU4(inepsN.get(inepsNindex), inetworkNepUuid, inetNepUuidSeed, "iNodeEdgePoint_N", true);
         List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
             .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
@@ -602,13 +602,14 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 // For Degree node
                 OwnedNodeEdgePoint nepOmsDeg = getOnep("DEG2-TTP", nepsOMS);
                 Uuid omsNepDegUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX").getBytes(Charset
-                        .forName("UTF-8"))).toString());
+                    UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX")
+                            .getBytes(StandardCharsets.UTF_8))
+                    .toString());
                 checkNepOtsiRdmNode(nepOmsDeg, omsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX",
                     "PHOTONIC_MEDIA_OMSNodeEdgePoint", false);
                 OwnedNodeEdgePoint nepOtsDeg = getOnep("DEG2-TTP", nepsOTS);
                 Uuid otsNepDegUuid = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX")
-                    .getBytes(Charset.forName("UTF-8"))).toString());
+                    .getBytes(StandardCharsets.UTF_8)).toString());
                 LOG.info("Line797, NEP {} with UUID put in checkCepOtsi Rdm Node {}",
                     String.join("+", nodeId, "PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"), otsNepDegUuid);
                 checkNepOtsiRdmNode(nepOtsDeg, otsNepDegUuid, nodeId + "+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
@@ -625,12 +626,12 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 // For srg node
                 OwnedNodeEdgePoint nepOtsSrg = getOnep("SRG1-PP1", nepsOTS);
                 Uuid otsNepUuidSrg = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX")
-                    .getBytes(Charset.forName("UTF-8"))).toString());
+                    .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiRdmNode(nepOtsSrg, otsNepUuidSrg, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
                 OwnedNodeEdgePoint nepOtsSrg2 = getOnep("SRG1-PP3", nepsOTS);
                 Uuid otsNepUuidSrg2 = new Uuid(UUID.nameUUIDFromBytes((nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX")
-                    .getBytes(Charset.forName("UTF-8"))).toString());
+                    .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiRdmNode(nepOtsSrg2, otsNepUuidSrg2, nodeId + "+PHOTONIC_MEDIA_OTS+SRG1-PP3-TXRX",
                     "PHOTONIC_MEDIA_OTSNodeEdgePoint", false);
                 List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
@@ -664,17 +665,17 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         OwnedNodeEdgePoint enep = nepsE.get(0);
         String enepUuidSeed = nodeId + "+PHOTONIC_MEDIA_OTS+XPDR" + xpdrOrNetNb + "-NETWORK" + xpdrOrNetNb;
         Uuid enepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(enepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(enepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         checkNepOtsiNode(enep, enepUuid, enepUuidSeed, "eNodeEdgePoint", false);
         OwnedNodeEdgePoint inep = nepsI.get(indexNepsIorP);
         String inepUuidSeed = nodeId + "+OTSi+XPDR" + xpdrOrNetNb + "-NETWORK" + xpdrOrNetNb;
         Uuid inepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(inepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(inepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         checkNepOtsiNode(inep, inepUuid, inepUuidSeed, "iNodeEdgePoint", true);
         OwnedNodeEdgePoint photNep = nepsP.get(indexNepsIorP);
         String pnepUuidSeed = nodeId + "+PHOTONIC_MEDIA+XPDR" + xpdrOrNetNb + "-NETWORK" + xpdrOrNetNb;
         Uuid pnepUuid =
-            new Uuid(UUID.nameUUIDFromBytes(pnepUuidSeed.getBytes(Charset.forName("UTF-8"))).toString());
+            new Uuid(UUID.nameUUIDFromBytes(pnepUuidSeed.getBytes(StandardCharsets.UTF_8)).toString());
         checkNepOtsiNode(photNep, pnepUuid, pnepUuidSeed, "PhotMedNodeEdgePoint", false);
         List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
             .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
@@ -770,9 +771,9 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                 xxxxx++;
             }
             LOG.info("nep SPDR-SA1-XPDR2+iODU+XPDR2-NETWORK1 UUID is {} ",
-                UUID.nameUUIDFromBytes(("SPDR-SA1-XPDR2" + "+iODU+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8"))));
+                UUID.nameUUIDFromBytes(("SPDR-SA1-XPDR2" + "+iODU+XPDR2-NETWORK1").getBytes(StandardCharsets.UTF_8)));
             LOG.info("nep SPDR-SA1-XPDR2+DSR+XPDR2-CLIENT4 UUID is {} ",
-                UUID.nameUUIDFromBytes(("SPDR-SA1-XPDR2" + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8"))));
+                UUID.nameUUIDFromBytes(("SPDR-SA1-XPDR2" + "+DSR+XPDR2-CLIENT4").getBytes(StandardCharsets.UTF_8)));
             assertEquals(networkNepUuid, nodeEdgePointList.get(6).getNodeEdgePointUuid(),
                 "in the sorted node-rule-group, nep number 7 should be XPDR2-NETWORK1");
             assertEquals(clientNepUuid, nodeEdgePointList.get(5).getNodeEdgePointUuid(),

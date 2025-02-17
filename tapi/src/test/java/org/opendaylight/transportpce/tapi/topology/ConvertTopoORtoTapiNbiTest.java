@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -178,7 +178,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     .build())
             .get().orElseThrow().getLink();
         topologyUuid = new Uuid(
-            UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes(TapiStringConstants.T0_MULTILAYER.getBytes(StandardCharsets.UTF_8)).toString());
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         tapiLink = new TapiLinkImpl(networkTransactionService, new TapiContext(networkTransactionService));
         LOG.info("TEST SETUP READY");
@@ -197,10 +197,10 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         OwnedNodeEdgePoint nepN = tapiFactory.getTapiNodes()
             .get(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                     .topology.NodeKey(new Uuid(
-                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString())))
+                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString())))
             .nonnullOwnedNodeEdgePoint()
             .get(new OwnedNodeEdgePointKey(new Uuid(
-                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(StandardCharsets.UTF_8))
                     .toString())));
         assertNull(nepN.getAdministrativeState(), "Administrative State should not be present");
         assertNull(nepN.getOperationalState(), "Operational State should not be present");
@@ -221,10 +221,10 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         OwnedNodeEdgePoint nepN = tapiFactory.getTapiNodes()
             .get(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                     .topology.NodeKey(new Uuid(
-                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString())))
+                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString())))
             .nonnullOwnedNodeEdgePoint()
             .get(new OwnedNodeEdgePointKey(new Uuid(
-                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(StandardCharsets.UTF_8))
                     .toString())));
         assertEquals(AdministrativeState.LOCKED, nepN.getAdministrativeState(),
             "Administrative State should be Locked");
@@ -244,10 +244,10 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         OwnedNodeEdgePoint nepN = tapiFactory.getTapiNodes()
             .get(new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
                     .topology.NodeKey(new Uuid(
-                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString())))
+                UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString())))
             .nonnullOwnedNodeEdgePoint()
             .get(new OwnedNodeEdgePointKey(new Uuid(
-                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                UUID.nameUUIDFromBytes(("XPDR-A1-XPDR1+iODU+XPDR1-NETWORK1").getBytes(StandardCharsets.UTF_8))
                     .toString())));
         assertEquals(AdministrativeState.LOCKED, nepN.getAdministrativeState(),
             "Administrative State should be Locked");
@@ -475,7 +475,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0 (no more transitional links)");
 
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
-            new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             "tpdr", "XPDR-A1-XPDR1+XPONDER");
     }
 
@@ -496,7 +496,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR & ODU merged");
         assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0, no more transitional links");
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             "mux", "SPDR-SA1-XPDR1+XPONDER");
     }
 
@@ -516,7 +516,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         assertEquals(1, tapiFactory.getTapiNodes().size(), "Node list size should be 1 (DSR/ODU merged)");
         assertEquals(0, tapiFactory.getTapiLinks().size(), "Link list size should be 0 : no more transitional link");
         checkDsrNode(getNode("SPDR-SA1", tapiNodes),
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR2+XPONDER".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR2+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             "switch", "SPDR-SA1-XPDR2+XPONDER");
     }
 
@@ -543,30 +543,28 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         assertEquals(2, tapiAbsFactory.getTapiLinks().size(), "Link list size should be 2 : no transitional link");
 
         Uuid node1Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid node2Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid node3Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid node4Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid tp1Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid tp2Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid tp3Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8")))
-                .toString());
+            UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid tp4Uuid = new Uuid(
-            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8")))
-                .toString());
+            UUID.nameUUIDFromBytes("SPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1".getBytes(StandardCharsets.UTF_8)).toString());
         Uuid link1Uuid = new Uuid(
             UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+eODU+XPDR1-NETWORK1toSPDR-SC1-XPDR1+eODU+XPDR1-NETWORK1"
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
                 .toString());
         Uuid link2Uuid = new Uuid(
             UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+iOTSi+XPDR1-NETWORK1toSPDR-SC1-XPDR1+iOTSi+XPDR1-NETWORK1"
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
                 .toString());
         List<Link> links = tapiAbsFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
@@ -589,7 +587,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node> tapiNodes =
             tapiAbsFactory.getTapiNodes().values().stream().collect(Collectors.toList());
         Uuid photNodeUuid = new Uuid(
-            UUID.nameUUIDFromBytes("ROADM-infra".getBytes(Charset.forName("UTF-8"))).toString());
+            UUID.nameUUIDFromBytes("ROADM-infra".getBytes(StandardCharsets.UTF_8)).toString());
         checkOtsiNode(tapiNodes.get(0), photNodeUuid, "infra", "ROADM-infra");
     }
 
@@ -620,7 +618,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         checkOtsiNode(
             getNode("ROADM", tapiNodes),
             //otsiNodeUuid,
-            new Uuid(UUID.nameUUIDFromBytes("ROADM-infra".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("ROADM-infra".getBytes(StandardCharsets.UTF_8)).toString()),
             "infra", "ROADM-infra");
         List<Link> links = tapiAbsFactory.getTapiLinks().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
@@ -630,18 +628,18 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         LOG.info("LinksCheck 0 = {} ", links.get(0).getName());
         checkOmsLink(links.get(0),
             //node1Uuid,
-            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+XPONDER".getBytes(StandardCharsets.UTF_8)).toString()),
             //node2Uuid,
-            new Uuid(UUID.nameUUIDFromBytes("ROADM-infra".getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes("ROADM-infra".getBytes(StandardCharsets.UTF_8)).toString()),
             //tp1Uuid,
             new Uuid(
                 UUID.nameUUIDFromBytes(
-                        "SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8")))
+                        "SPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1".getBytes(StandardCharsets.UTF_8))
                     .toString()),
             //tp2Uuid,
-            new Uuid(UUID.nameUUIDFromBytes(("roadm node+nep+1").getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(("roadm node+nep+1").getBytes(StandardCharsets.UTF_8)).toString()),
             //linkUuid,
-            new Uuid(UUID.nameUUIDFromBytes(str1.getBytes(Charset.forName("UTF-8"))).toString()),
+            new Uuid(UUID.nameUUIDFromBytes(str1.getBytes(StandardCharsets.UTF_8)).toString()),
             str1);
     }
 
@@ -678,13 +676,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep1 = nepsC.get(2);
                 Uuid client4NepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR2-CLIENT4")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C",
                     otnSwitch.getNodeId().getValue(), TapiStringConstants.DSR);
                 OwnedNodeEdgePoint nep2 = nepsN.get(3);
                 Uuid networkNepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR2-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "iNodeEdgePoint_N",
                     otnSwitch.getNodeId().getValue(), TapiStringConstants.I_ODU);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
@@ -702,14 +700,14 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep3 = nepsC.get(2);
                 Uuid client3NepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR1-CLIENT3")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C",
                     otnMuxA.getNodeId().getValue(), TapiStringConstants.DSR);
 
                 OwnedNodeEdgePoint nep4 = nepsN.get(0);
                 Uuid networkNepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint_N",
                     otnMuxA.getNodeId().getValue(), TapiStringConstants.I_ODU);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
@@ -727,14 +725,14 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep5 = nepsC.get(0);
                 Uuid client1NepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+DSR+XPDR1-CLIENT1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr",
                     tpdr100G.getNodeId().getValue(), TapiStringConstants.DSR);
 
                 OwnedNodeEdgePoint nep6 = nepsN.get(1);
                 Uuid networkNepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iODU+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint_N",
                     tpdr100G.getNodeId().getValue(), TapiStringConstants.I_ODU);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
@@ -779,13 +777,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep1 = nepsI.get(1);
                 Uuid inepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR2-NETWORK2")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint",
                     otnSwitch.getNodeId().getValue(), TapiStringConstants.I_OTSI);
                 OwnedNodeEdgePoint nep2 = nepsE.get(0);
                 Uuid enepUuid = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint",
                     otnSwitch.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
@@ -799,13 +797,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep3 = nepsE.get(0);
                 Uuid enepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint",
                     otnMuxA.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
                 OwnedNodeEdgePoint nep4 = nepsI.get(0);
                 Uuid inepUuid2 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint",
                     otnMuxA.getNodeId().getValue(), TapiStringConstants.I_OTSI);
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
@@ -819,13 +817,13 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 OwnedNodeEdgePoint nep5 = nepsE.get(0);
                 Uuid enepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep5, enepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint",
                     tpdr100G.getNodeId().getValue(), TapiStringConstants.PHTNC_MEDIA_OTS);
                 OwnedNodeEdgePoint nep6 = nepsI.get(0);
                 Uuid inepUuid3 = new Uuid(
                     UUID.nameUUIDFromBytes((nodeId.split("\\+")[0] + "+iOTSi+XPDR1-NETWORK1")
-                        .getBytes(Charset.forName("UTF-8"))).toString());
+                        .getBytes(StandardCharsets.UTF_8)).toString());
                 checkNepOtsiNode(nep6, inepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint",
                     tpdr100G.getNodeId().getValue(), TapiStringConstants.I_OTSI);
                 List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
@@ -840,7 +838,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                     OwnedNodeEdgePoint nep = nepIterator.next();
                     Uuid nepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((String.join("+", "roadm node", "nep", String.valueOf(count)))
-                            .getBytes(Charset.forName("UTF-8"))).toString());
+                            .getBytes(StandardCharsets.UTF_8)).toString());
                     checkNepOtsiRdmNode(nep, nepUuid, new StringBuilder("NodeEdgePoint_").append(count).toString(),
                         "NodeEdgePoint name");
                     count++;
@@ -1153,7 +1151,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
     private void checkSIP(OwnedNodeEdgePoint nep, String portName, String nodeId, String extension) {
         Uuid sipUuid = new Uuid(
             UUID.nameUUIDFromBytes((String.join("+", "SIP", nodeId, extension, portName))
-                    .getBytes(Charset.forName("UTF-8")))
+                    .getBytes(StandardCharsets.UTF_8))
                 .toString());
         assertEquals(
             sipUuid,

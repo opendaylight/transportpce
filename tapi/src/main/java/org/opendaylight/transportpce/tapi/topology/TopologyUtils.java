@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +141,7 @@ public final class TopologyUtils {
         String topoType = TOPOLOGICAL_MODE.equals("Full") ? TapiStringConstants.T0_FULL_MULTILAYER
             : TapiStringConstants.T0_TAPI_MULTILAYER;
         LOG.info("TOPOUTILS, createOtnTopology, the TOPOLOGICAL_MODE is {} ",topoType);
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(topoType.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(topoType.getBytes(StandardCharsets.UTF_8)).toString());
         Name name = new NameBuilder().setValue(topoType).setValueName("TAPI Topology Name").build();
         var topoBdr = new TopologyBuilder()
                 .setName(Map.of(name.key(), name))

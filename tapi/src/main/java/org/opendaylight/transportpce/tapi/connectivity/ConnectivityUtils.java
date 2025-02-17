@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1892,13 +1891,9 @@ public final class ConnectivityUtils {
             //topoUuid,
             this.tapiTopoUuid,
             //nodeUuid,
-            new Uuid(UUID.nameUUIDFromBytes(
-                    nepNodeId.getBytes(Charset.forName("UTF-8")))
-                .toString()),
+            new Uuid(UUID.nameUUIDFromBytes(nepNodeId.getBytes(StandardCharsets.UTF_8)).toString()),
             //nepUuid,
-            new Uuid(UUID.nameUUIDFromBytes(
-                    nepId.getBytes(Charset.forName("UTF-8")))
-                .toString()),
+            new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()),
             onep);
     }
 

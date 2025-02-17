@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import java.math.RoundingMode;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -351,7 +350,7 @@ public class ORtoTapiTopoConversionTools {
         String nodeIdXpdr = String.join("+", this.ietfNodeId, TapiStringConstants.XPDR);
         this.uuidMap.put(nodeIdXpdr,
                 //nodeUuid
-                new Uuid(UUID.nameUUIDFromBytes(nodeIdXpdr.getBytes(Charset.forName("UTF-8"))).toString()));
+                new Uuid(UUID.nameUUIDFromBytes(nodeIdXpdr.getBytes(StandardCharsets.UTF_8)).toString()));
         Name nameDsr = new NameBuilder().setValueName("dsr/odu node name").setValue(nodeIdXpdr).build();
         Name namePhot = new NameBuilder().setValueName("otsi node name").setValue(nodeIdXpdr).build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type").setValue(this.ietfNodeType.getName()).build();
@@ -405,7 +404,7 @@ public class ORtoTapiTopoConversionTools {
         Name nrgName = new NameBuilder().setValueName("nrg name").setValue(nrgNameValue).build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
             .setName(Map.of(nrgName.key(), nrgName))
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
             .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
             .setNodeEdgePoint(nepMap)
             .build();
@@ -496,7 +495,7 @@ public class ORtoTapiTopoConversionTools {
 
         Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
         InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
-            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
             .setName(Map.of(irgName.key(), irgName))
             .setRule(new HashMap<>(Map.of(rule.key(), rule)))
             .setAssociatedNodeRuleGroup(associatedNrgMap)
@@ -554,7 +553,7 @@ public class ORtoTapiTopoConversionTools {
 
             Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
             InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(Charset.forName("UTF-8"))).toString()))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((irgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
                 .setName(Map.of(irgName.key(), irgName))
                 .setRule(new HashMap<>(Map.of(rule.key(), rule)))
                 .setAssociatedNodeRuleGroup(associatedNrgMap)
@@ -587,7 +586,7 @@ public class ORtoTapiTopoConversionTools {
             String sipName = nb == 1 ? String.join("+", "SIP", nodeid, tpId)
                     : String.join("+", "SIP", nodeid, tpId, "Nber", String.valueOf(i));
             LOG.info("SIP = {}", sipName);
-            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(sipName.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(sipName.getBytes(StandardCharsets.UTF_8)).toString());
             MappedServiceInterfacePoint msip =
                 new MappedServiceInterfacePointBuilder().setServiceInterfacePointUuid(sipUuid).build();
             ServiceInterfacePoint sip =
@@ -1526,7 +1525,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorClientPortList.size(); i++) {
             String nodeIdDsr = String.join("+",
                 this.ietfNodeId, TapiStringConstants.DSR, oorClientPortList.get(i).getTpId().getValue());
-            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdDsr.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdDsr.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdDsr, nepUuid);
             this.uuidMap.put(nodeIdDsr, nepUuid);
             Name name = new NameBuilder()
@@ -1543,7 +1542,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorClientPortList.size(); i++) {
             String nodeIdEodu = String.join("+",
                 this.ietfNodeId, TapiStringConstants.E_ODU, oorClientPortList.get(i).getTpId().getValue());
-            Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdEodu.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdEodu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdEodu, nepUuid1);
             this.uuidMap.put(nodeIdEodu, nepUuid1);
             Name onedName = new NameBuilder()
@@ -1560,7 +1559,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdIodu = String.join("+",
                 this.ietfNodeId, TapiStringConstants.I_ODU, oorNetworkPortList.get(i).getTpId().getValue());
-            Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdIodu.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid1 = new Uuid(UUID.nameUUIDFromBytes(nodeIdIodu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdIodu, nepUuid1);
             this.uuidMap.put(nodeIdIodu, nepUuid1);
             Name onedName = new NameBuilder()
@@ -1577,7 +1576,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdPmOts = String.join("+",
                 this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA_OTS, oorNetworkPortList.get(i).getTpId().getValue());
-            Uuid nepUuid2 = new Uuid(UUID.nameUUIDFromBytes(nodeIdPmOts.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid2 = new Uuid(UUID.nameUUIDFromBytes(nodeIdPmOts.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdPmOts, nepUuid2);
             this.uuidMap.put(nodeIdPmOts, nepUuid2);
             Name onedName = new NameBuilder()
@@ -1593,7 +1592,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdOtMc = String.join("+",
                 this.ietfNodeId, TapiStringConstants.OTSI_MC, oorNetworkPortList.get(i).getTpId().getValue());
-            Uuid nepUuid3 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtMc.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid3 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtMc.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdOtMc, nepUuid3);
             this.uuidMap.put(nodeIdOtMc, nepUuid3);
             Name onedName = new NameBuilder()
@@ -1609,7 +1608,7 @@ public class ORtoTapiTopoConversionTools {
         for (int i = 0; i < oorNetworkPortList.size(); i++) {
             String nodeIdOtu = String.join("+",
                 this.ietfNodeId, TapiStringConstants.I_OTU, oorNetworkPortList.get(i).getTpId().getValue());
-            Uuid nepUuid4 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtu.getBytes(Charset.forName("UTF-8"))).toString());
+            Uuid nepUuid4 = new Uuid(UUID.nameUUIDFromBytes(nodeIdOtu.getBytes(StandardCharsets.UTF_8)).toString());
             LOG.info("NEP = {} has Uuid {} ", nodeIdOtu, nepUuid4);
             this.uuidMap.put(nodeIdOtu, nepUuid4);
             Name onedName = new NameBuilder()

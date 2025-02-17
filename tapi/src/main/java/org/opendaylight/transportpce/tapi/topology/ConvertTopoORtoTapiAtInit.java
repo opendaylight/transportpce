@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -317,7 +317,7 @@ public class ConvertTopoORtoTapiAtInit {
         // create tapi Node
         // UUID
         String nodeIdPhMed = String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA);
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(Charset.forName("UTF-8"))).toString());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeIdPhMed.getBytes(StandardCharsets.UTF_8)).toString());
         LOG.info("Creation of PHOTONIC node for {}, of Uuid {}", this.ietfNodeId, nodeUuid);
         // Names
         Name nodeNames =  new NameBuilder().setValueName("roadm node name").setValue(nodeIdPhMed).build();
@@ -399,7 +399,7 @@ public class ConvertTopoORtoTapiAtInit {
         // create a unique ROADM tapi Node
         LOG.info("abstraction of the ROADM infrastructure towards a photonic node");
         Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(
-            TapiStringConstants.RDM_INFRA.getBytes(Charset.forName("UTF-8"))).toString());
+            TapiStringConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
         Name nodeName =  new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA)
             .build();
         Name nameNodeType = new NameBuilder().setValueName("Node Type")
@@ -540,7 +540,7 @@ public class ConvertTopoORtoTapiAtInit {
                 .build();
             OwnedNodeEdgePointBuilder onepBdd = new OwnedNodeEdgePointBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
-                    .getBytes(Charset.forName("UTF-8"))).toString()))
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifierInstances(
@@ -611,9 +611,9 @@ public class ConvertTopoORtoTapiAtInit {
                 LOG.info("TopoInitialMapping, populateNepsForRdmNode, creating CEP for SRG");
                 var uuidMap = new HashMap<>(Map.of(
                     new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
-                        tpId)).getBytes(Charset.forName("UTF-8"))).toString()).toString(),
+                        tpId)).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
                     new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiStringConstants.PHTNC_MEDIA))
-                        .getBytes(Charset.forName("UTF-8"))).toString()).toString()));
+                        .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
                 this.srgOtsCepMap.put(uuidMap, cep);
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();

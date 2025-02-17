@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import java.math.RoundingMode;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1297,8 +1296,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         Name nodeNames;
         if (orNodeId.equals("ROADMINFRA")) {
             nodeUuid = new Uuid(
-                UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA.getBytes(Charset.forName("UTF-8")))
-                    .toString());
+                UUID.nameUUIDFromBytes(TapiStringConstants.RDM_INFRA.getBytes(StandardCharsets.UTF_8)).toString());
             nodeNames =
                 new NameBuilder().setValueName("roadm node name").setValue(TapiStringConstants.RDM_INFRA).build();
         } else {
@@ -1890,7 +1888,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Name nepName =
                 new NameBuilder().setValueName(nepPhotonicSublayer + "NodeEdgePoint").setValue(nepNameValue).build();
             onepBd
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(nepNameValue.getBytes(Charset.forName("UTF-8"))).toString()))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(nepNameValue.getBytes(StandardCharsets.UTF_8)).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
                 .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
@@ -1916,9 +1914,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.info("TNMSI LIne 1845 TopoInitialMapping, populateNepsForRdmNode, creating CEP for SRG");
                 var uuidMap = new HashMap<>(Map.of(
                     new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", nodeId, nepPhotonicSublayer,
-                        entry.getKey())).getBytes(Charset.forName("UTF-8"))).toString()).toString(),
+                        entry.getKey())).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
                     new Uuid(UUID.nameUUIDFromBytes((String.join("+", nodeId, TapiStringConstants.PHTNC_MEDIA))
-                        .getBytes(Charset.forName("UTF-8"))).toString()).toString()));
+                        .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
                 this.srgOtsCepMap.put(uuidMap, cep);
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();

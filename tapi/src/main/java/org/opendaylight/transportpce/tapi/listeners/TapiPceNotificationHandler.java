@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.tapi.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -163,8 +163,7 @@ public class TapiPceNotificationHandler {
             return;
         }
         LOG.info("PCE cancel resource done OK !");
-        Uuid suuid = new Uuid(UUID.nameUUIDFromBytes(serviceName.getBytes(Charset.forName("UTF-8")))
-            .toString());
+        Uuid suuid = new Uuid(UUID.nameUUIDFromBytes(serviceName.getBytes(StandardCharsets.UTF_8)).toString());
         // get connections of connectivity service and remove them from tapi context and then remove
         //  service from context. The CEPs are maintained as they could be reused by another service
         ConnectivityService connService = getConnectivityService(suuid);
