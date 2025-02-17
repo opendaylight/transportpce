@@ -21,8 +21,9 @@ import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.common.converter.JsonStringConverter;
@@ -47,6 +48,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.notification.rev22112
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 
+@ExtendWith(MockitoExtension.class)
 public class PublisherTest extends AbstractTest {
 
     private static NetworkTransactionService networkTransactionService;
@@ -90,7 +92,6 @@ public class PublisherTest extends AbstractTest {
         publisherService = new Publisher<>("test", mockProducer);
         publisherAlarm = new Publisher<>("test", mockAlarmProducer);
         publisherTapiService = new Publisher<>("test", mockTapiProducer);
-        MockitoAnnotations.openMocks(this);
         networkTransactionService = new NetworkTransactionImpl(getDataBroker());
         topicManager.setTapiConverter(converterTapiService);
         NotificationServiceDataUtils.createTapiContext(networkTransactionService);

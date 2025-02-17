@@ -10,9 +10,10 @@ package org.opendaylight.transportpce.pce.input.valid;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.SlotWidthFrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.spectrum.allocation.FrequencySlot;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.spectrum.allocation.FrequencySlotBuilder;
@@ -23,19 +24,19 @@ public class ValidFormatTest {
     @Test
     public void nullIsValid() {
         Format validFormat = new ValidFormat();
-        assertTrue(validFormat.isValidFormat(null, null, Mockito.mock(Observer.class)));
+        assertTrue(validFormat.isValidFormat(null, null, mock(Observer.class)));
     }
 
     @Test
     public void nullFrequencySlotIsValid() {
         Format validFormat = new ValidFormat();
-        assertTrue(validFormat.isValidFormat("OTU", null, Mockito.mock(Observer.class)));
+        assertTrue(validFormat.isValidFormat("OTU", null, mock(Observer.class)));
     }
 
     @Test
     public void emptyFrequencySlotIsValid() {
         Format validFormat = new ValidFormat();
-        assertTrue(validFormat.isValidFormat("OTU", new FrequencySlotBuilder().build(), Mockito.mock(Observer.class)));
+        assertTrue(validFormat.isValidFormat("OTU", new FrequencySlotBuilder().build(), mock(Observer.class)));
     }
 
     @Test
@@ -44,7 +45,7 @@ public class ValidFormatTest {
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("193.1"))
                 .build();
-        assertFalse(validFormat.isValidFormat("OTU", frequencySlot, Mockito.mock(Observer.class)));
+        assertFalse(validFormat.isValidFormat("OTU", frequencySlot, mock(Observer.class)));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class ValidFormatTest {
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("193.1"))
                 .build();
-        assertFalse(validFormat.isValidFormat(null, frequencySlot, Mockito.mock(Observer.class)));
+        assertFalse(validFormat.isValidFormat(null, frequencySlot, mock(Observer.class)));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class ValidFormatTest {
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-        assertFalse(validFormat.isValidFormat("OTU", frequencySlot, Mockito.mock(Observer.class)));
+        assertFalse(validFormat.isValidFormat("OTU", frequencySlot, mock(Observer.class)));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class ValidFormatTest {
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("193.1"))
                 .build();
-        assertTrue(validFormat.isValidFormat("other", frequencySlot, Mockito.mock(Observer.class)));
+        assertTrue(validFormat.isValidFormat("other", frequencySlot, mock(Observer.class)));
     }
 
     @Test
@@ -80,22 +81,18 @@ public class ValidFormatTest {
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-        assertTrue(validFormat.isValidFormat("other", frequencySlot, Mockito.mock(Observer.class)));
+        assertTrue(validFormat.isValidFormat("other", frequencySlot, mock(Observer.class)));
     }
 
     @Test
     public void errorMessage() {
-
-        Observer observer = Mockito.mock(Observer.class);
-
+        Observer observer = mock(Observer.class);
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-
         Format validFormat = new ValidFormat();
         assertFalse(validFormat.isValidFormat("OTU", frequencySlot, observer));
-
-        Mockito.verify(observer).error("Service format OTU does not support manually setting slot-width.");
+        verify(observer).error("Service format OTU does not support manually setting slot-width.");
 
     }
 }

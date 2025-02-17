@@ -29,7 +29,6 @@ public class PceConstraintsCalcTest extends AbstractTest {
     //TODO: review this test class. May be miss few assert.
     @BeforeEach
     void setup() throws Exception {
-        // networkTransactionService = Mockito.mock(NetworkTransactionService.class);
         PceTestUtils.writeNetworkIntoDataStore(dataBroker, getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
         networkTransactionService = new NetworkTransactionImpl(dataBroker);

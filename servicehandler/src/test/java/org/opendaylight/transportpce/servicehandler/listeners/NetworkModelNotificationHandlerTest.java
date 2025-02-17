@@ -15,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
@@ -294,7 +294,7 @@ public class NetworkModelNotificationHandlerTest {
 
     @Test
     void testOnTopologyUpdateResultWhenNeverWired() {
-        NetworkModelNotificationHandler networkModelListenerMocked = Mockito.mock(
+        NetworkModelNotificationHandler networkModelListenerMocked = mock(
             NetworkModelNotificationHandler.class);
         doCallRealMethod().when(networkModelListenerMocked).onTopologyUpdateResult(any(TopologyUpdateResult.class));
 
@@ -322,7 +322,7 @@ public class NetworkModelNotificationHandlerTest {
 
     @Test
     void testOnTopologyUpdateResultWhenAlreadyWired() {
-        NetworkModelNotificationHandler networkModelListenerMocked = Mockito.mock(
+        NetworkModelNotificationHandler networkModelListenerMocked = mock(
             NetworkModelNotificationHandler.class);
         doCallRealMethod().when(networkModelListenerMocked).onTopologyUpdateResult(any(TopologyUpdateResult.class));
 

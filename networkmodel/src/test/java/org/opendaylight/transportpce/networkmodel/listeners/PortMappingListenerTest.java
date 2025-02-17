@@ -12,6 +12,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
@@ -39,7 +39,7 @@ public class PortMappingListenerTest {
 
     @BeforeEach
     void setUp() {
-        portMappingListenerSpy = Mockito.spy(new PortMappingListener(networkModelService));
+        portMappingListenerSpy = spy(new PortMappingListener(networkModelService));
         lenient().doReturn("NodeID").when(portMappingListenerSpy).getNodeIdFromMappingDataTreeIdentifier(any());
     }
 

@@ -9,12 +9,14 @@
 package org.opendaylight.transportpce.pce.input.valid;
 
 import static org.mockito.AdditionalAnswers.answer;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
@@ -36,13 +38,12 @@ class ValidInputTest {
 
     @Test
     void assertEmptyPCRIisValid() {
-        ValidInput validateInput = new ValidInput(Mockito.mock(Slot.class), Mockito.mock(Format.class));
-        Assertions.assertTrue(validateInput.isValid(Mockito.mock(PathComputationRequestInput.class)));
+        ValidInput validateInput = new ValidInput(mock(Slot.class), mock(Format.class));
+        Assertions.assertTrue(validateInput.isValid(mock(PathComputationRequestInput.class)));
     }
 
     @Test
     void isValidZEndSlot() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
@@ -56,22 +57,18 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Slot mock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
         ValidInput validateInput = new ValidInput(mock, formatMock);
-        Mockito.when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
+        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
                 .thenReturn(true);
 
         Assertions.assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void inValidZEndSlot() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
@@ -85,20 +82,16 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        ValidInput validateInput = new ValidInput(mock, Mockito.mock(Format.class));
-        Mockito.when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
+        Slot mock = mock(Slot.class);
+        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
+        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
         Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void isValidAEndSlot() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
@@ -112,24 +105,18 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
-
+        Slot mock = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
         ValidInput validateInput = new ValidInput(mock, formatMock);
-
-        Mockito.when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
+        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
                 .thenReturn(true);
 
         Assertions.assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void inValidAEndSlot() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
@@ -143,20 +130,16 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        ValidInput validateInput = new ValidInput(mock, Mockito.mock(Format.class));
-        Mockito.when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
+        Slot mock = mock(Slot.class);
+        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
+        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
         Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void inValidAEndCenterFrequency() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .build();
@@ -169,20 +152,16 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        ValidInput validateInput = new ValidInput(mock, Mockito.mock(Format.class));
-        Mockito.when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
+        Slot mock = mock(Slot.class);
+        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
+        when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
                 .thenReturn(false);
 
         Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void inValidZEndCenterFrequency() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .build();
@@ -195,20 +174,16 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        ValidInput validateInput = new ValidInput(mock, Mockito.mock(Format.class));
-        Mockito.when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
+        Slot mock = mock(Slot.class);
+        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
+        when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
         Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     @Test
     void inValidAEndSlotWidth() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
@@ -221,15 +196,12 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
-
-        Slot mock = Mockito.mock(Slot.class);
-
-        ValidInput validateInput = new ValidInput(mock, Mockito.mock(Format.class));
-        Mockito.when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
+        Slot mock = mock(Slot.class);
+        ValidInput validateInput = new ValidInput(mock, mock(Format.class));
+        when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
                 .thenReturn(false);
 
         Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
-
     }
 
     /**
@@ -239,7 +211,6 @@ class ValidInputTest {
      */
     @Test
     void assertSlotErrorMessageIsPassedUpTheCallStack() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
@@ -253,10 +224,9 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot slot = Mockito.mock(Slot.class);
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Slot slot = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
 
         //validateInput is an observer that should receive any error message
         //from the instance of Slot. We'll mock an instance of Slot further down below.
@@ -285,7 +255,6 @@ class ValidInputTest {
      */
     @Test
     void assertCenterFrequencyErrorMessageIsPassedUpTheCallStack() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .build();
@@ -298,10 +267,9 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot slot = Mockito.mock(Slot.class);
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Slot slot = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
 
         //validateInput is an observer that should receive any error message
         //from the instance of Slot. We'll mock an instance of Slot further down below.
@@ -330,7 +298,6 @@ class ValidInputTest {
      */
     @Test
     void assertSlotWidthErrorMessageIsPassedUpTheCallStack() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
@@ -343,10 +310,9 @@ class ValidInputTest {
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
-
-        Slot slot = Mockito.mock(Slot.class);
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Slot slot = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
 
         //validateInput is an observer that should receive any error message
         //from the instance of Slot. We'll mock an instance of Slot further down below.
@@ -370,7 +336,6 @@ class ValidInputTest {
 
     @Test
     void assertFormatErrorMessageIsPassedUpTheCallStack() {
-
         FrequencySlot frequencySlot = new FrequencySlotBuilder()
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
@@ -384,10 +349,9 @@ class ValidInputTest {
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
 
-        Slot slot = Mockito.mock(Slot.class);
-        Mockito.when(slot.isValidSlotWidth(Mockito.any(), Mockito.any())).thenReturn(true);
-
-        Format formatMock = Mockito.mock(Format.class);
+        Slot slot = mock(Slot.class);
+        when(slot.isValidSlotWidth(any(), any())).thenReturn(true);
+        Format formatMock = mock(Format.class);
 
         //validateInput is an observer that should receive any error message
         //from the instance of Slot. We'll mock an instance of Slot further down below.
@@ -417,12 +381,10 @@ class ValidInputTest {
      */
     @Test
     void assertSubsequentValidationsResetLastErrorMessage() {
-
         //Instantiate a Slot mock. We'll wire up slot to respond differently depending on input further down below.
-        Slot slot = Mockito.mock(Slot.class);
-
-        Format formatMock = Mockito.mock(Format.class);
-        Mockito.when(formatMock.isValidFormat(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(true);
+        Slot slot = mock(Slot.class);
+        Format formatMock = mock(Format.class);
+        when(formatMock.isValidFormat(any(), any(), any())).thenReturn(true);
 
         //validateInput is an observer that should receive any error message
         //from the instance of Slot.
@@ -440,21 +402,15 @@ class ValidInputTest {
 
         // This input matches the mocked response above, meaning this input together with the mock is set up to
         // produce an input validation error. Note the value '50'.
-        PathComputationRequestInput pathComputationRequestInput1 =
-                new PathComputationRequestInputBuilder().setServiceZEnd(
-                        new ServiceZEndBuilder()
-                                .addAugmentation(
-                                        new ServiceZEnd1Builder()
-                                                .setFrequencySlot(
-                                                        new FrequencySlotBuilder()
-                                                                .setSlotWidth(SlotWidthFrequencyGHz
-                                                                        .getDefaultInstance("50")
-                                                                ).build()
-                                                )
-                                                .build()
-                                )
-                                .build()
-                ).build();
+        PathComputationRequestInput pathComputationRequestInput1 = new PathComputationRequestInputBuilder()
+                .setServiceZEnd(new ServiceZEndBuilder()
+                        .addAugmentation(new ServiceZEnd1Builder()
+                                .setFrequencySlot(new FrequencySlotBuilder()
+                                        .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
+                                        .build())
+                                .build())
+                        .build())
+                .build();
 
         //This mocked response will simulate a successful validation, i.e. no error message, note the value '191.33125'.
         doAnswer(answer(new Answer2<Boolean, BigDecimal, Observer>() {
@@ -466,22 +422,15 @@ class ValidInputTest {
 
         // Build a second input. Unlike pathComputationRequestInput1, this is set up to pass validation, note the value
         // 191.33125
-        PathComputationRequestInput pathComputationRequestInput2 =
-                new PathComputationRequestInputBuilder().setServiceZEnd(
-                        new ServiceZEndBuilder()
-                                .addAugmentation(
-                                        new ServiceZEnd1Builder()
-                                                .setFrequencySlot(
-                                                        new FrequencySlotBuilder()
-                                                                .setCenterFrequency(
-                                                                        FrequencyTHz.getDefaultInstance("191.33125")
-                                                                )
-                                                                .build()
-                                                )
-                                                .build()
-                                )
-                                .build()
-                ).build();
+        PathComputationRequestInput pathComputationRequestInput2 = new PathComputationRequestInputBuilder()
+                .setServiceZEnd(new ServiceZEndBuilder()
+                        .addAugmentation(new ServiceZEnd1Builder()
+                                .setFrequencySlot(new FrequencySlotBuilder()
+                                        .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
+                                        .build())
+                                .build())
+                        .build())
+                .build();
 
         // Start testing.
         //First validation should fail...

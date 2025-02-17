@@ -9,12 +9,14 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.tapi.frequency.Math;
 import org.opendaylight.transportpce.tapi.frequency.NumericFrequency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1;
@@ -38,9 +40,9 @@ class ORtoTapiTopoConversionToolsTest {
 
     @BeforeEach
     void setUp() {
-        Math math = Mockito.mock(Math.class);
-        Mockito.when(math.getStartFrequencyFromIndex(760)).thenReturn(196.075);
-        Mockito.when(math.getStopFrequencyFromIndex(767)).thenReturn(196.125);
+        Math math = mock(Math.class);
+        when(math.getStartFrequencyFromIndex(760)).thenReturn(196.075);
+        when(math.getStopFrequencyFromIndex(767)).thenReturn(196.125);
 
         convertORToTapiTopology = new ORtoTapiTopoConversionTools(
                 Uuid.getDefaultInstance("123"),

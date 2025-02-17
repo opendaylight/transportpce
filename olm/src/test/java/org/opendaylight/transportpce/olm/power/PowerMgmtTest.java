@@ -9,8 +9,14 @@
 package org.opendaylight.transportpce.olm.power;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -24,7 +30,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
@@ -55,17 +60,17 @@ class PowerMgmtTest {
     @BeforeEach
     void setUp() {
         mock(DataBroker.class);
-        this.openRoadmInterfaces = Mockito.mock(OpenRoadmInterfaces.class);
-        this.crossConnect = Mockito.mock((CrossConnectImpl.class));
-        this.deviceTransactionManager = Mockito.mock(DeviceTransactionManager.class);
-        this.portMapping = Mockito.mock(PortMapping.class);
+        this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
+        this.crossConnect = mock((CrossConnectImpl.class));
+        this.deviceTransactionManager = mock(DeviceTransactionManager.class);
+        this.portMapping = mock(PortMapping.class);
         this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
                 this.deviceTransactionManager, this.portMapping, 1000, 1000);
     }
 
     @Test
     void testSetPowerWhenMappingReturnNull() {
-        when(this.portMapping.getNode(Mockito.anyString())).thenReturn(null);
+        when(this.portMapping.getNode(anyString())).thenReturn(null);
         boolean output = this.powerMgmt.setPower(OlmPowerServiceRpcImplUtil.getServicePowerSetupInput());
         assertEquals(false, output);
     }
@@ -84,8 +89,7 @@ class PowerMgmtTest {
                         .setOch(new OchBuilder().build())
                         .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("xpdr-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOch));
+        when(this.openRoadmInterfaces.getInterface(matches("xpdr-A"), anyString())).thenReturn(Optional.of(interfOch));
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
@@ -96,21 +100,16 @@ class PowerMgmtTest {
                                         .build())
                                 .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("roadm-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOts));
-        MockedStatic<PowerMgmtVersion121> pmv121 = Mockito.mockStatic(PowerMgmtVersion121.class);
-        pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(Mockito.anyString(), Mockito.anyString(),
-                    Mockito.any(), Mockito.any(), Mockito.any()))
+        when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
+        MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class);
+        pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
                 .thenReturn(true);
         Map<String, Double> powerRangeMap = new HashMap<>();
         powerRangeMap.put("MaxTx", 0.1);
         powerRangeMap.put("MinTx", -5.1);
-        pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(Mockito.anyString(), Mockito.anyString(),
-                    Mockito.anyString(), Mockito.any()))
+        pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
                 .thenReturn(powerRangeMap);
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
-            .thenReturn(true);
+        when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
         boolean result = this.powerMgmt.setPower(input);
@@ -134,8 +133,7 @@ class PowerMgmtTest {
         when(this.portMapping.getNode("roadm-A"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
                         List.of("srg1-A", "deg2-A")));
-        when(this.deviceTransactionManager
-                .getDataFromDevice(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.any()))
+        when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
@@ -147,22 +145,19 @@ class PowerMgmtTest {
                             .build())
                     .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.anyString(), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOts));
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
-            .thenReturn(true);
+        when(this.openRoadmInterfaces.getInterface(anyString(), anyString())).thenReturn(Optional.of(interfOts));
+        when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("roadm-A", "srg1-A", "deg2-A");
         boolean result = this.powerMgmt.setPower(input);
         assertEquals(true, result);
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.Power.getName()), eq(Decimal64.valueOf("-3.00")),
-                Mockito.matches("srg1-A-deg2-A-761:768"));
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.GainLoss.getName()), eq(Decimal64.valueOf("-3.00")),
-                Mockito.matches("srg1-A-deg2-A-761:768"));
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
+                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
+                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
     }
 
     @Test
@@ -170,20 +165,17 @@ class PowerMgmtTest {
         when(this.portMapping.getNode("roadm-C"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-C", OpenroadmNodeVersion._121,
                     List.of("deg1-C", "srg1-C")));
-        when(this.deviceTransactionManager
-                .getDataFromDevice(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.any()))
+        when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
-            .thenReturn(true);
+        when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("roadm-C", "deg1-C", "srg1-C");
         boolean result = this.powerMgmt.setPower(input);
         assertEquals(true, result);
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-C"),
-                Mockito.matches(OpticalControlMode.Power.getName()), Mockito.isNull(),
-                Mockito.matches("deg1-C-srg1-C-761:768"));
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-C"), matches(OpticalControlMode.Power.getName()), isNull(),
+                    matches("deg1-C-srg1-C-761:768"));
     }
 
     @Test
@@ -200,8 +192,7 @@ class PowerMgmtTest {
                         .setOch(new OchBuilder().build())
                         .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("xpdr-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOch));
+        when(this.openRoadmInterfaces.getInterface(matches("xpdr-A"), anyString())).thenReturn(Optional.of(interfOch));
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
@@ -212,29 +203,28 @@ class PowerMgmtTest {
                                         .build())
                                 .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("roadm-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOts));
-        try (MockedStatic<PowerMgmtVersion121> pmv121 = Mockito.mockStatic(PowerMgmtVersion121.class)) {
-            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(Mockito.anyString(), Mockito.anyString(),
-                            Mockito.any(), Mockito.any(), Mockito.any()))
+        when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
+        try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
+            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(),
+                            any(), any(), any()))
                     .thenReturn(true);
-            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(Mockito.anyString(), Mockito.anyString(),
-                            Mockito.anyString(), Mockito.any()))
+            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(),
+                            anyString(), any()))
                     .thenReturn(new HashMap<>());
 
             when(this.crossConnect
-                    .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
+                    .setPowerLevel(anyString(), anyString(), any(), anyString()))
                 .thenReturn(true);
 
 
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
             assertEquals(true, result);
-            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(Mockito.matches("xpdr-A"),
-                    Mockito.anyString(), eq(new BigDecimal("-5")), Mockito.any(), Mockito.any()));
-            verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                    Mockito.matches(OpticalControlMode.GainLoss.getName()), eq(Decimal64.valueOf("-3.00")),
-                    Mockito.matches("srg1-A-deg2-A-761:768"));
+            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
+                    anyString(), eq(new BigDecimal("-5")), any(), any()));
+            verify(this.crossConnect, times(1))
+                .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
+                        eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
         }
     }
 
@@ -252,8 +242,7 @@ class PowerMgmtTest {
                         .setOch(new OchBuilder().build())
                         .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("xpdr-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOch));
+        when(this.openRoadmInterfaces.getInterface(matches("xpdr-A"), anyString())).thenReturn(Optional.of(interfOch));
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
                 .addAugmentation(
@@ -264,35 +253,30 @@ class PowerMgmtTest {
                                         .build())
                                 .build())
                 .build();
-        when(this.openRoadmInterfaces.getInterface(Mockito.matches("roadm-A"), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOts));
-        try (MockedStatic<PowerMgmtVersion121> pmv121 = Mockito.mockStatic(PowerMgmtVersion121.class)) {
+        when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
+        try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
 
-            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(Mockito.anyString(), Mockito.anyString(),
-                            Mockito.any(), Mockito.any(), Mockito.any()))
+            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
                     .thenReturn(true);
             Map<String, Double> powerRangeMapTpdrTx = new HashMap<>();
             powerRangeMapTpdrTx.put("MaxTx", 0.1);
             powerRangeMapTpdrTx.put("MinTx", -5.1);
-            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(Mockito.anyString(), Mockito.anyString(),
-                            Mockito.anyString(), Mockito.any()))
+            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
                     .thenReturn(powerRangeMapTpdrTx);
             Map<String, Double> powerRangeMapSrgRx = new HashMap<>();
             powerRangeMapSrgRx.put("MaxRx", -4.2);
             powerRangeMapSrgRx.put("MinRx", -22.2);
-            pmv121.when(() -> PowerMgmtVersion121.getSRGRxPowerRange(Mockito.anyString(), Mockito.anyString(),
-                            Mockito.any(), Mockito.anyString(), Mockito.anyString()))
+            pmv121.when(() -> PowerMgmtVersion121.getSRGRxPowerRange(anyString(), anyString(), any(), anyString(),
+                        anyString()))
                     .thenReturn(powerRangeMapSrgRx);
-            when(this.crossConnect
-                    .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
-                .thenReturn(true);
+            when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
             assertEquals(true, result);
-            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(Mockito.matches("xpdr-A"),
-                    Mockito.anyString(), eq(new BigDecimal("-4.20000000000000017763568394002504646778106689453125")),
-                    Mockito.any(), Mockito.any()));
+            pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
+                    anyString(), eq(new BigDecimal("-4.20000000000000017763568394002504646778106689453125")),
+                    any(), any()));
         }
     }
 
@@ -320,30 +304,28 @@ class PowerMgmtTest {
     @Test
     void testPowerTurnDownWhenSuccess() {
         when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
+                .setPowerLevel(anyString(), anyString(), any(), anyString()))
             .thenReturn(true);
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
         boolean result = this.powerMgmt.powerTurnDown(input);
         assertEquals(true, result);
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-C"),
-                Mockito.matches(OpticalControlMode.Off.getName()), Mockito.isNull(), Mockito.anyString());
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.Power.getName()), eq(Decimal64.valueOf("-60")),
-                Mockito.anyString());
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.Off.getName()), Mockito.isNull(), Mockito.anyString());
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-C"), matches(OpticalControlMode.Off.getName()), isNull(), anyString());
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
+                    eq(Decimal64.valueOf("-60")), anyString());
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Off.getName()), isNull(), anyString());
     }
 
     @Test
     void testPowerTurnDownWhenFailure() {
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyString()))
-            .thenReturn(false);
+        when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(false);
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
         boolean result = this.powerMgmt.powerTurnDown(input);
         assertEquals(false, result);
         verify(this.crossConnect, times(2))
-                .setPowerLevel(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyString());
+                .setPowerLevel(anyString(), any(), any(), anyString());
     }
 
     @Test
@@ -351,8 +333,7 @@ class PowerMgmtTest {
         when(this.portMapping.getNode("roadm-A"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-A", OpenroadmNodeVersion._121,
                         List.of("srg1-A", "deg2-A")));
-        when(this.deviceTransactionManager
-                .getDataFromDevice(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.anyLong(), Mockito.any()))
+        when(this.deviceTransactionManager.getDataFromDevice(anyString(), any(), any(), anyLong(), any()))
             .thenReturn(Optional.empty());
         Interface interfOts = new InterfaceBuilder()
                 .setName("interface name")
@@ -364,25 +345,22 @@ class PowerMgmtTest {
                             .build())
                     .build())
                 .build();
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.matches(OpticalControlMode.Power.getName()),
-                    Mockito.any(), Mockito.anyString()))
+        when(this.crossConnect.setPowerLevel(anyString(), matches(OpticalControlMode.Power.getName()),any(),
+                anyString()))
             .thenReturn(true);
-        when(this.openRoadmInterfaces.getInterface(Mockito.anyString(), Mockito.anyString()))
-            .thenReturn(Optional.of(interfOts));
-        when(this.crossConnect
-                .setPowerLevel(Mockito.anyString(), Mockito.matches(OpticalControlMode.GainLoss.getName()),
-                    Mockito.any(), Mockito.anyString()))
+        when(this.openRoadmInterfaces.getInterface(anyString(), anyString())).thenReturn(Optional.of(interfOts));
+        when(this.crossConnect.setPowerLevel(anyString(), matches(OpticalControlMode.GainLoss.getName()),any(),
+                anyString()))
             .thenReturn(false);
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("roadm-A", "srg1-A", "deg2-A");
         boolean result = this.powerMgmt.setPower(input);
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.Power.getName()), eq(Decimal64.valueOf("-3.00")),
-                Mockito.matches("srg1-A-deg2-A-761:768"));
-        verify(this.crossConnect, times(1)).setPowerLevel(Mockito.matches("roadm-A"),
-                Mockito.matches(OpticalControlMode.GainLoss.getName()), eq(Decimal64.valueOf("-3.00")),
-                Mockito.matches("srg1-A-deg2-A-761:768"));
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
+                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
+        verify(this.crossConnect, times(1))
+            .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
+                    eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
         assertEquals(false, result);
     }
 

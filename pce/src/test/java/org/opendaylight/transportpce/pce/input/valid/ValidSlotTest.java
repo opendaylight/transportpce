@@ -8,16 +8,18 @@
 
 package org.opendaylight.transportpce.pce.input.valid;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class ValidSlotTest {
 
     @Test
     void invalidCenterFrequency() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -32,13 +34,13 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 192.126 (THz) is not evenly dividable by 6.25000 (GHz)");
     }
 
     @Test
     void invalidCenterFrequencyIsTooLow() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -53,13 +55,13 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 190.325 (THz) is outside the range 191.325 - 195.0 (THz)");
     }
 
     @Test
     void invalidCenterFrequencyIsTooHigh() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -74,14 +76,14 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 195.15 (THz) is outside the range 191.325 - 195.0 (THz)");
     }
 
     @Test
     void validCenterFrequency() {
 
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -99,7 +101,7 @@ class ValidSlotTest {
 
     @Test
     void anchorFrequencyIsValidCenterFrequency() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -117,7 +119,7 @@ class ValidSlotTest {
 
     @Test
     void inValidSlotWidth() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -131,13 +133,13 @@ class ValidSlotTest {
                 BigDecimal.valueOf(30.0),
                 observer
         ));
-        Mockito.verify(observer).error("Slot width 30.0 (GHz) is not evenly dividable by 12.5 (GHz)");
+        verify(observer).error("Slot width 30.0 (GHz) is not evenly dividable by 12.5 (GHz)");
     }
 
 
     @Test
     void entireRangeIsValid() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -156,7 +158,7 @@ class ValidSlotTest {
 
     @Test
     void entireRangeIsInValid() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -172,13 +174,13 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 191.33 (THz) is not evenly dividable by 6.25000 (GHz)");
     }
 
     @Test
     void lowerFrequencyInRangeIsTooLow() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -194,14 +196,14 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 191.425 (THz) with slot width 300.0 (GHz) "
                 + "has a lower frequency outside the range 191.325-195.0");
     }
 
     @Test
     void upperFrequencyInRangeIsTooHigh() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -217,14 +219,14 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error(
+        verify(observer).error(
                 "Center frequency 194.975 (THz) with slot width 300.0 (GHz) "
                 + "has a higher frequency outside the range 191.325-195.0");
     }
 
     @Test
     void invalidSlotWidth() {
-        Observer observer = Mockito.mock(Observer.class);
+        Observer observer = mock(Observer.class);
 
         ValidSlot validSlot = new ValidSlot(
                 BigDecimal.valueOf(191.325),
@@ -240,6 +242,6 @@ class ValidSlotTest {
                 observer
         ));
 
-        Mockito.verify(observer).error("Slot width 99.0 (GHz) is not evenly dividable by 12.5 (GHz)");
+        verify(observer).error("Slot width 99.0 (GHz) is not evenly dividable by 12.5 (GHz)");
     }
 }

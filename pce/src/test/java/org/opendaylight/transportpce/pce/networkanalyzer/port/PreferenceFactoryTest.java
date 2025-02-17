@@ -8,12 +8,14 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer.port;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEnd;
@@ -26,7 +28,7 @@ class PreferenceFactoryTest {
     @Test
     void emptyPathComputationRequest_returnEmptyHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
         PreferenceFactory portPreferenceFactory = new PreferenceFactory();
 
         Map<String, Set<String>> expected = new HashMap<>();
@@ -37,13 +39,13 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceAEndRxDirectionWithoutDeviceAndPort_returnEmptyHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceAEnd serviceAEnd = Mockito.mock(ServiceAEnd.class);
-        RxDirection rxDirection = Mockito.mock(RxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceAEnd serviceAEnd = mock(ServiceAEnd.class);
+        RxDirection rxDirection = mock(RxDirection.class);
 
-        Mockito.when(rxDirection.getPort()).thenReturn(new PortBuilder().build());
-        Mockito.when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
-        Mockito.when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
+        when(rxDirection.getPort()).thenReturn(new PortBuilder().build());
+        when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
+        when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
 
         PreferenceFactory portPreferenceFactory = new PreferenceFactory();
 
@@ -55,17 +57,17 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceAEndRxDirectionWithoutPort_returnEmptyHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceAEnd serviceAEnd = Mockito.mock(ServiceAEnd.class);
-        RxDirection rxDirection = Mockito.mock(RxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceAEnd serviceAEnd = mock(ServiceAEnd.class);
+        RxDirection rxDirection = mock(RxDirection.class);
 
-        Mockito.when(rxDirection.getPort()).thenReturn(
+        when(rxDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .build()
         );
-        Mockito.when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
-        Mockito.when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
+        when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
+        when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
 
         PreferenceFactory portPreferenceFactory = new PreferenceFactory();
 
@@ -77,18 +79,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceAEndRxDirectionTxRx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceAEnd serviceAEnd = Mockito.mock(ServiceAEnd.class);
-        RxDirection rxDirection = Mockito.mock(RxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceAEnd serviceAEnd = mock(ServiceAEnd.class);
+        RxDirection rxDirection = mock(RxDirection.class);
 
-        Mockito.when(rxDirection.getPort()).thenReturn(
+        when(rxDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-TXRX")
                 .build()
         );
-        Mockito.when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
-        Mockito.when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
+        when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
+        when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
@@ -101,18 +103,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceAEndRxDirectionTx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceAEnd serviceAEnd = Mockito.mock(ServiceAEnd.class);
-        RxDirection rxDirection = Mockito.mock(RxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceAEnd serviceAEnd = mock(ServiceAEnd.class);
+        RxDirection rxDirection = mock(RxDirection.class);
 
-        Mockito.when(rxDirection.getPort()).thenReturn(
+        when(rxDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-TX")
                 .build()
         );
-        Mockito.when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
-        Mockito.when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
+        when(serviceAEnd.getRxDirection()).thenReturn(rxDirection);
+        when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TX"));
@@ -125,18 +127,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceAEndRxDirectionRx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceAEnd serviceAEnd = Mockito.mock(ServiceAEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceAEnd serviceAEnd = mock(ServiceAEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-RX")
                 .build()
         );
-        Mockito.when(serviceAEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
+        when(serviceAEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceAEnd()).thenReturn(serviceAEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-RX"));
@@ -149,18 +151,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceZEndRx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        RxDirection rxDirection = Mockito.mock(RxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        RxDirection rxDirection = mock(RxDirection.class);
 
-        Mockito.when(rxDirection.getPort()).thenReturn(
+        when(rxDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-TXRX")
                 .build()
         );
-        Mockito.when(serviceZEnd.getRxDirection()).thenReturn(rxDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getRxDirection()).thenReturn(rxDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
@@ -173,18 +175,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceZEndTxDirectionTxRx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-TXRX")
                 .build()
         );
-        Mockito.when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
@@ -197,18 +199,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceZEndTxDirectionTx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-TX")
                 .build()
         );
-        Mockito.when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TX"));
@@ -221,18 +223,18 @@ class PreferenceFactoryTest {
     @Test
     void pathComputationRequestServiceZEndTxDirectionRx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("SRG1-PP1-RX")
                 .build()
         );
-        Mockito.when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("SRG1-PP1-RX"));
@@ -245,18 +247,18 @@ class PreferenceFactoryTest {
     @Test
     void pathEmptyComputationRequestServiceZEndTx_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName(" ")
                 .build()
         );
-        Mockito.when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
 
@@ -268,18 +270,18 @@ class PreferenceFactoryTest {
     @Test
     void pathUnexpectedPortName_returnHashmap() {
 
-        PathComputationRequestInput pathComputationRequestInput = Mockito.mock(PathComputationRequestInput.class);
-        ServiceZEnd serviceZEnd = Mockito.mock(ServiceZEnd.class);
-        TxDirection txDirection = Mockito.mock(TxDirection.class);
+        PathComputationRequestInput pathComputationRequestInput = mock(PathComputationRequestInput.class);
+        ServiceZEnd serviceZEnd = mock(ServiceZEnd.class);
+        TxDirection txDirection = mock(TxDirection.class);
 
-        Mockito.when(txDirection.getPort()).thenReturn(
+        when(txDirection.getPort()).thenReturn(
             new PortBuilder()
                 .setPortDeviceName("ROADM-B-SRG1")
                 .setPortName("FUBAR")
                 .build()
         );
-        Mockito.when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
-        Mockito.when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
+        when(serviceZEnd.getTxDirection()).thenReturn(txDirection);
+        when(pathComputationRequestInput.getServiceZEnd()).thenReturn(serviceZEnd);
 
         Map<String, Set<String>> expected = new HashMap<>();
         expected.put("ROADM-B-SRG1", Set.of("FUBAR"));

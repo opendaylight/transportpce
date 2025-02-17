@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -37,6 +38,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 
+@ExtendWith(MockitoExtension.class)
 public class PcePathDescriptionTests extends AbstractTest {
 
     private PcePathDescription pcePathDescription;
@@ -51,7 +53,6 @@ public class PcePathDescriptionTests extends AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         // Build Link
         link = NodeUtils
             .createRoadmToRoadm("OpenROADM-3-2-DEG1", "OpenROADM-3-1-DEG1", "DEG1-TTP-TX", "DEG1-TTP-RX")

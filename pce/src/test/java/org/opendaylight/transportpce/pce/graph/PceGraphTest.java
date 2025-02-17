@@ -12,6 +12,9 @@ package org.opendaylight.transportpce.pce.graph;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
@@ -26,8 +29,6 @@ import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
@@ -145,10 +146,10 @@ public class PceGraphTest extends AbstractTest {
         this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
-        this.clientInput = Mockito.mock(ClientInput.class);
-        Mockito.when(this.clientInput.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
-        Mockito.when(this.clientInput.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
-        Mockito.when(this.clientInput.slotWidth(Mockito.anyInt())).thenAnswer(i -> i.getArguments()[0]);
+        this.clientInput = mock(ClientInput.class);
+        when(this.clientInput.clientRangeWishListIntersection()).thenReturn(new EntireSpectrum(768));
+        when(this.clientInput.clientRangeWishListSubset()).thenReturn(new EntireSpectrum(768));
+        when(this.clientInput.slotWidth(anyInt())).thenAnswer(i -> i.getArguments()[0]);
 
         //  The catalog of operational mode needs to be loaded so that Ctalog primitives (CatlogUtils)
         // can retrieve physical parameters of the nodes of the path
@@ -197,7 +198,6 @@ public class PceGraphTest extends AbstractTest {
             fail("Cannot load openROADM operational modes ");
         }
 
-        MockitoAnnotations.openMocks(this);
         // The topology (openROADM-Network and openROADM-topology layers) is loaded from a file
         try {
             // load openroadm-network

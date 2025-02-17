@@ -8,17 +8,19 @@
 
 package org.opendaylight.transportpce.pce.frequency.interval;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.BitSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class EntireSpectrumTest {
 
     @Test
     void add() {
         Collection entireSpectrum = new EntireSpectrum(768);
-        Interval interval = Mockito.mock(Interval.class);
+        Interval interval = mock(Interval.class);
         Assertions.assertTrue(entireSpectrum.add(interval));
     }
 
@@ -37,12 +39,12 @@ class EntireSpectrumTest {
 
         Collection entireSpectrum = new EntireSpectrum(768);
 
-        Collection collection = Mockito.mock(Collection.class);
+        Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
         expected.set(16, 24);
 
-        Mockito.when(collection.set()).thenReturn(expected);
+        when(collection.set()).thenReturn(expected);
 
         Assertions.assertEquals(expected, entireSpectrum.subset(collection));
 
@@ -52,12 +54,12 @@ class EntireSpectrumTest {
     void intersection() {
         Collection entireSpectrum = new EntireSpectrum(768);
 
-        Collection collection = Mockito.mock(Collection.class);
+        Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
         expected.set(16, 24);
 
-        Mockito.when(collection.set()).thenReturn(expected);
+        when(collection.set()).thenReturn(expected);
 
         Assertions.assertEquals(expected, entireSpectrum.intersection(expected));
     }
@@ -66,12 +68,12 @@ class EntireSpectrumTest {
     void testIntersection() {
         Collection entireSpectrum = new EntireSpectrum(768);
 
-        Collection collection = Mockito.mock(Collection.class);
+        Collection collection = mock(Collection.class);
 
         BitSet expected = new BitSet();
         expected.set(16, 24);
 
-        Mockito.when(collection.set()).thenReturn(expected);
+        when(collection.set()).thenReturn(expected);
 
         Assertions.assertEquals(expected, entireSpectrum.intersection(collection));
     }

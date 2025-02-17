@@ -8,22 +8,26 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice.transaction;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Delete;
 
 class DeviceInterfaceTest {
 
     @Test
     void rollback() {
-        Delete delete = Mockito.mock(Delete.class);
-        Mockito.when(delete.deleteInterface("ROADM-A", "DEG1")).thenReturn(true);
+        Delete delete = mock(Delete.class);
+        when(delete.deleteInterface("ROADM-A", "DEG1")).thenReturn(true);
 
         DeviceInterface n1 = new DeviceInterface("ROADM-A", "DEG1");
         Assert.assertTrue(n1.rollback(delete));
 
-        Mockito.verify(delete, Mockito.times(1)).deleteInterface("ROADM-A", "DEG1");
+        verify(delete, times(1)).deleteInterface("ROADM-A", "DEG1");
     }
 
     @Test

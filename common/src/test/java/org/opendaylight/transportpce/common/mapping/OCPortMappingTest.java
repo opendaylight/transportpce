@@ -7,11 +7,13 @@
  */
 
 package org.opendaylight.transportpce.common.mapping;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.transportpce.common.StringConstants.CLIENT_TOKEN;
 import static org.opendaylight.transportpce.common.StringConstants.LINECARD;
@@ -36,7 +38,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
@@ -155,7 +156,7 @@ public class OCPortMappingTest {
         Set<String> lcpSet = new HashSet<>();
         lcpSet.add("XPDR1-CLIENT1");
         lcpNamingMap.put("XPDR1-NETWORK1", lcpSet);
-        ocPortMappingVersion190Test = Mockito.spy(ocPortMappingVersion190Test);
+        ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(component, PORT);
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(component, LINECARD);
         doReturn(getTestMetaData()).when(ocMetaDataTransaction).getXPDROpenTerminalMetaData();
@@ -188,7 +189,7 @@ public class OCPortMappingTest {
         componentList.add(componentPort);
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
         supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
-        ocPortMappingVersion190Test = Mockito.spy(ocPortMappingVersion190Test);
+        ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
                 .getTransceiver()).values().stream().toList();
         doReturn(null).when(ocPortMappingVersion190Test).getTransceiversListMetaData();
@@ -225,7 +226,7 @@ public class OCPortMappingTest {
         lcpNamingMap.put("XPDR1-NETWORK1", lcpSet);
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
         supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
-        ocPortMappingVersion190Test = Mockito.spy(ocPortMappingVersion190Test);
+        ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(componentPort, TRANSCEIVER);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
                 .getTransceiver()).values().stream().toList();

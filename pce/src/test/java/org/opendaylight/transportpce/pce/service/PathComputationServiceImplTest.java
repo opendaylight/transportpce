@@ -8,11 +8,11 @@
 package org.opendaylight.transportpce.pce.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -35,7 +35,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     @BeforeEach
     void setUp() {
-        networkTransactionService = Mockito.mock(NetworkTransactionService.class);
+        networkTransactionService = mock(NetworkTransactionService.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
                 this.getNotificationPublishService(), null, null);

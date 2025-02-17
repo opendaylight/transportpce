@@ -18,10 +18,10 @@ import static org.mockito.Mockito.verify;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.nbinotifications.producer.Publisher;
 import org.opendaylight.transportpce.nbinotifications.utils.NotificationServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -37,6 +37,7 @@ import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificat
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationService;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishTapiNotificationServiceBuilder;
 
+@ExtendWith(MockitoExtension.class)
 public class NbiNotificationsHandlerTest extends AbstractTest {
     @Mock
     private Publisher<NotificationProcessService> publisherService;
@@ -45,10 +46,6 @@ public class NbiNotificationsHandlerTest extends AbstractTest {
     @Mock
     private Publisher<NotificationTapiService> publisherTapiService;
 
-    @BeforeEach
-    void setUp() throws ExecutionException, InterruptedException {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void onPublishNotificationServiceTest() {

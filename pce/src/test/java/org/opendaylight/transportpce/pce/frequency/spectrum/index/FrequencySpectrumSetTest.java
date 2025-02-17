@@ -9,6 +9,8 @@
 package org.opendaylight.transportpce.pce.frequency.spectrum.index;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.BitSet;
@@ -16,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.opendaylight.transportpce.pce.frequency.interval.FrequencyInterval;
 import org.opendaylight.transportpce.pce.frequency.interval.Interval;
 import org.opendaylight.transportpce.pce.frequency.spectrum.FrequencySpectrum;
@@ -28,16 +29,12 @@ class FrequencySpectrumSetTest {
     @Test
     void realSubset() {
         Set<Interval> realSubset = new HashSet<>();
-        realSubset.add(
-                new FrequencyInterval(
-                        FrequencyTHz.getDefaultInstance("191.325"),
-                        FrequencyTHz.getDefaultInstance("191.375")
-                )
-        );
+        realSubset.add(new FrequencyInterval(
+                FrequencyTHz.getDefaultInstance("191.325"),
+                FrequencyTHz.getDefaultInstance("191.375")));
 
         BitSet available = new BitSet(768);
         available.set(0, 32);
-
         BitSet expected = new BitSet(768);
         expected.set(0, 8);
 
@@ -52,20 +49,14 @@ class FrequencySpectrumSetTest {
     void notRealSubsetReturnsEmptyBitSet() {
         Index frequencyIndex = new SpectrumIndex(191.325, 6.25, 768);
         FrequencySpectrum spectrum = new FrequencySpectrum(frequencyIndex, 768);
-
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
-
         Set<Interval> realSubset = new HashSet<>();
-        realSubset.add(
-                new FrequencyInterval(
-                        FrequencyTHz.getDefaultInstance("191.325"),
-                        FrequencyTHz.getDefaultInstance("191.375")
-                )
-        );
+        realSubset.add(new FrequencyInterval(
+                FrequencyTHz.getDefaultInstance("191.325"),
+                FrequencyTHz.getDefaultInstance("191.375")));
 
         BitSet available = new BitSet(768);
         available.set(1, 32);
-
         BitSet expected = new BitSet(768);
 
         assertEquals(expected, frequencySpectrumSet.subset(realSubset, available, 768));
@@ -73,7 +64,7 @@ class FrequencySpectrumSetTest {
 
     @Test
     void assertTwoIntervalsAreJoinedUsingIntersection() {
-        Spectrum spectrum = Mockito.mock(FrequencySpectrum.class);
+        Spectrum spectrum = mock(FrequencySpectrum.class);
 
         BitSet oneBitSet = new BitSet(768);
         oneBitSet.set(16, 32);
@@ -85,8 +76,8 @@ class FrequencySpectrumSetTest {
         BigDecimal twoStart = BigDecimal.valueOf(191.365);
         BigDecimal twoEnd = BigDecimal.valueOf(191.425);
 
-        Mockito.when(spectrum.frequencySlots(oneStart, oneEnd)).thenReturn(oneBitSet);
-        Mockito.when(spectrum.frequencySlots(twoStart, twoEnd)).thenReturn(twoBitSet);
+        when(spectrum.frequencySlots(oneStart, oneEnd)).thenReturn(oneBitSet);
+        when(spectrum.frequencySlots(twoStart, twoEnd)).thenReturn(twoBitSet);
 
         Set<Interval> collection = new HashSet<>();
         Interval intervalOne = new FrequencyInterval(oneStart, oneEnd);
@@ -109,7 +100,7 @@ class FrequencySpectrumSetTest {
         BitSet threeBitSet = new BitSet(768);
         threeBitSet.set(8, 28);
 
-        Spectrum spectrum = Mockito.mock(FrequencySpectrum.class);
+        Spectrum spectrum = mock(FrequencySpectrum.class);
 
         BigDecimal oneStart = BigDecimal.valueOf(191.325);
         BigDecimal oneEnd = BigDecimal.valueOf(191.375);
@@ -118,9 +109,9 @@ class FrequencySpectrumSetTest {
         BigDecimal threeStart = BigDecimal.valueOf(191.325);
         BigDecimal threeEnd = BigDecimal.valueOf(191.425);
 
-        Mockito.when(spectrum.frequencySlots(oneStart, oneEnd)).thenReturn(oneBitSet);
-        Mockito.when(spectrum.frequencySlots(twoStart, twoEnd)).thenReturn(twoBitSet);
-        Mockito.when(spectrum.frequencySlots(threeStart, threeEnd)).thenReturn(threeBitSet);
+        when(spectrum.frequencySlots(oneStart, oneEnd)).thenReturn(oneBitSet);
+        when(spectrum.frequencySlots(twoStart, twoEnd)).thenReturn(twoBitSet);
+        when(spectrum.frequencySlots(threeStart, threeEnd)).thenReturn(threeBitSet);
 
         Interval intervalOne = new FrequencyInterval(oneStart, oneEnd);
         Interval intervalTwo = new FrequencyInterval(twoStart, twoEnd);
@@ -139,7 +130,7 @@ class FrequencySpectrumSetTest {
 
     @Test
     void emptySet() {
-        Spectrum spectrum = Mockito.mock(FrequencySpectrum.class);
+        Spectrum spectrum = mock(FrequencySpectrum.class);
         FrequencySpectrumSet frequencySpectrumSet = new FrequencySpectrumSet(spectrum);
         BitSet expected = new BitSet(768);
         Assertions.assertEquals(expected, frequencySpectrumSet.set(new HashSet<>(), 768));
