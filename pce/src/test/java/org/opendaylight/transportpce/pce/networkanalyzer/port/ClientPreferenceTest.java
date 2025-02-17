@@ -9,23 +9,23 @@
 package org.opendaylight.transportpce.pce.networkanalyzer.port;
 
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ClientPreferenceTest {
 
     @Test
     void preferredPort_returnTrue() {
-
         Map<String, Set<String>> nodePortPreference = new HashMap<>();
         nodePortPreference.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
-
         Preference clientPreference = new ClientPreference(nodePortPreference);
 
-        Assertions.assertTrue(clientPreference.isPreferredPort("ROADM-B-SRG1", "SRG1-PP1-TXRX"));
+        assertTrue(clientPreference.isPreferredPort("ROADM-B-SRG1", "SRG1-PP1-TXRX"));
     }
 
     /**
@@ -34,13 +34,11 @@ class ClientPreferenceTest {
      */
     @Test
     void nonPreferredPort_returnFalse() {
-
         Map<String, Set<String>> nodePortPreference = new HashMap<>();
         nodePortPreference.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
-
         Preference clientPreference = new ClientPreference(nodePortPreference);
 
-        Assertions.assertFalse(clientPreference.isPreferredPort("ROADM-B-SRG1", "SRG1-PP2-TXRX"));
+        assertFalse(clientPreference.isPreferredPort("ROADM-B-SRG1", "SRG1-PP2-TXRX"));
     }
 
     /**
@@ -51,13 +49,10 @@ class ClientPreferenceTest {
      */
     @Test
     void nodeMissingInPreferredList_returnTrue() {
-
         Map<String, Set<String>> nodePortPreference = new HashMap<>();
         nodePortPreference.put("ROADM-B-SRG1", Set.of("SRG1-PP1-TXRX"));
-
         Preference clientPreference = new ClientPreference(nodePortPreference);
 
-        Assertions.assertTrue(clientPreference.isPreferredPort("ROADM-A-SRG1", "SRG1-PP2-TXRX"));
-
+        assertTrue(clientPreference.isPreferredPort("ROADM-A-SRG1", "SRG1-PP2-TXRX"));
     }
 }

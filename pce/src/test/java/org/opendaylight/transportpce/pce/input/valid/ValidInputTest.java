@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.pce.input.valid;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -15,7 +18,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
@@ -39,7 +41,7 @@ class ValidInputTest {
     @Test
     void assertEmptyPCRIisValid() {
         ValidInput validateInput = new ValidInput(mock(Slot.class), mock(Format.class));
-        Assertions.assertTrue(validateInput.isValid(mock(PathComputationRequestInput.class)));
+        assertTrue(validateInput.isValid(mock(PathComputationRequestInput.class)));
     }
 
     @Test
@@ -64,7 +66,7 @@ class ValidInputTest {
         when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
                 .thenReturn(true);
 
-        Assertions.assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -87,7 +89,7 @@ class ValidInputTest {
         when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -112,7 +114,7 @@ class ValidInputTest {
         when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput))
                 .thenReturn(true);
 
-        Assertions.assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertTrue(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -135,7 +137,7 @@ class ValidInputTest {
         when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -157,7 +159,7 @@ class ValidInputTest {
         when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
                 .thenReturn(false);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -179,7 +181,7 @@ class ValidInputTest {
         when(mock.isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(12.5), validateInput))
                 .thenReturn(false);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     @Test
@@ -201,7 +203,7 @@ class ValidInputTest {
         when(mock.isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput))
                 .thenReturn(false);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
     }
 
     /**
@@ -242,10 +244,10 @@ class ValidInputTest {
             }
         })).when(slot).isValidSlot(BigDecimal.valueOf(191.33125), BigDecimal.valueOf(50.0), validateInput);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
         //Assert the error message is available in the observer object.
-        Assertions.assertEquals("An error occurred", validateInput.lastErrorMessage());
+        assertEquals("An error occurred", validateInput.lastErrorMessage());
     }
 
     /**
@@ -285,10 +287,10 @@ class ValidInputTest {
             }
         })).when(slot).isValidCenterFrequency(BigDecimal.valueOf(191.33125), validateInput);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
         //Assert the error message is available in the observer object.
-        Assertions.assertEquals("An error occurred", validateInput.lastErrorMessage());
+        assertEquals("An error occurred", validateInput.lastErrorMessage());
     }
 
     /**
@@ -328,10 +330,10 @@ class ValidInputTest {
             }
         })).when(slot).isValidSlotWidth(BigDecimal.valueOf(50.0), validateInput);
 
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
+        assertFalse(validateInput.isValid(pathComputationRequestInputBuilder.build()));
 
         //Assert the error message is available in the observer object.
-        Assertions.assertEquals("An error occurred", validateInput.lastErrorMessage());
+        assertEquals("An error occurred", validateInput.lastErrorMessage());
     }
 
     @Test
@@ -369,10 +371,10 @@ class ValidInputTest {
             }
         })).when(formatMock).isValidFormat(null, frequencySlot, validateInput);
 
-        Assertions.assertFalse(validateInput.isValid(pcri));
+        assertFalse(validateInput.isValid(pcri));
 
         //Assert the error message is available in the observer object.
-        Assertions.assertEquals("An error occurred", validateInput.lastErrorMessage());
+        assertEquals("An error occurred", validateInput.lastErrorMessage());
     }
 
     /**
@@ -434,15 +436,15 @@ class ValidInputTest {
 
         // Start testing.
         //First validation should fail...
-        Assertions.assertFalse(validateInput.isValid(pathComputationRequestInput1));
+        assertFalse(validateInput.isValid(pathComputationRequestInput1));
 
         //... and an error message should be available...
-        Assertions.assertEquals("An error occurred", validateInput.lastErrorMessage());
+        assertEquals("An error occurred", validateInput.lastErrorMessage());
 
         //... the second validation should pass...
-        Assertions.assertTrue(validateInput.isValid(pathComputationRequestInput2));
+        assertTrue(validateInput.isValid(pathComputationRequestInput2));
 
         //... and since the last validation request above didn't produce an error, this error message should be empty.
-        Assertions.assertEquals("", validateInput.lastErrorMessage());
+        assertEquals("", validateInput.lastErrorMessage());
     }
 }

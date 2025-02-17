@@ -8,10 +8,10 @@
 
 package org.opendaylight.transportpce.pce.graph;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import java.util.BitSet;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.input.ClientInput;
@@ -38,7 +38,7 @@ class PostAlgoPathValidatorTest {
 
         SpectrumAssignment fixGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
 
-        Assertions.assertEquals(expectedFixGrid, fixGrid);
+        assertEquals(expectedFixGrid, fixGrid);
     }
 
     @Test
@@ -58,6 +58,6 @@ class PostAlgoPathValidatorTest {
 
         SpectrumAssignment flexGrid = postAlgoPathValidator.computeBestSpectrumAssignment(available, 8, isFlexGrid);
 
-        Assertions.assertEquals(expectedFlexGrid, flexGrid);
+        assertEquals(expectedFlexGrid, flexGrid);
     }
 }

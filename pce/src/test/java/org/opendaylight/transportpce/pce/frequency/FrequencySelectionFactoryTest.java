@@ -8,9 +8,10 @@
 
 package org.opendaylight.transportpce.pce.frequency;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.BitSet;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.interval.Collection;
 import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
@@ -28,21 +29,15 @@ class FrequencySelectionFactoryTest {
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         Collection clientCentralFrequencyWishList = new IntervalCollection(
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         clientRangeWishList.add(new FrequencyInterval(BigDecimal.valueOf(191.4), BigDecimal.valueOf(192.8)));
         clientCentralFrequencyWishList.add(
@@ -57,38 +52,27 @@ class FrequencySelectionFactoryTest {
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
 
-        Assertions.assertEquals(expected, frequencySelectionFactory.availableFrequencies(
-                clientRangeWishList,
-                clientCentralFrequencyWishList,
-                availableFrequencyRange,
-                customerAvailableFrequencyRange)
-        );
-
+        assertEquals(
+                expected,
+                frequencySelectionFactory.availableFrequencies(clientRangeWishList, clientCentralFrequencyWishList,
+                        availableFrequencyRange, customerAvailableFrequencyRange));
     }
-
 
     @Test
     void centralFrequencyRangeIsNotASubsetOfClientRange_noFrequencyRangeIsPossible() {
-
         Collection clientRangeWishList = new IntervalCollection(
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         Collection clientCentralFrequencyWishList = new IntervalCollection(
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         clientRangeWishList.add(new FrequencyInterval(BigDecimal.valueOf(195.4), BigDecimal.valueOf(195.8)));
         clientCentralFrequencyWishList.add(
@@ -104,14 +88,10 @@ class FrequencySelectionFactoryTest {
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
 
-        Assertions.assertEquals(expected, frequencySelectionFactory.availableFrequencies(
-                clientRangeWishList,
-                clientCentralFrequencyWishList,
-                availableFrequencyRange,
-                customerAvailableFrequencyRange
-            )
-        );
-
+        assertEquals(
+                expected,
+                frequencySelectionFactory.availableFrequencies(clientRangeWishList, clientCentralFrequencyWishList,
+                        availableFrequencyRange, customerAvailableFrequencyRange));
     }
 
     @Test
@@ -120,21 +100,15 @@ class FrequencySelectionFactoryTest {
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         Collection clientCentralFrequencyWishList = new IntervalCollection(
                 new FrequencySpectrumSet(
                         new FrequencySpectrum(
                                 new SpectrumIndex(191.325, 6.25, 768),
-                                768
-                        )
-                ),
-                768
-        );
+                                768)),
+                768);
 
         BitSet customerAvailableFrequencyRange = new BitSet(768);
         customerAvailableFrequencyRange.set(0, 32);
@@ -145,18 +119,14 @@ class FrequencySelectionFactoryTest {
         BitSet expected = new BitSet(768);
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
-        BitSet bitSet = frequencySelectionFactory.availableFrequencies(
-                clientRangeWishList,
-                clientCentralFrequencyWishList,
-                availableFrequencyRange,
-                customerAvailableFrequencyRange);
+        BitSet bitSet = frequencySelectionFactory.availableFrequencies(clientRangeWishList,
+                clientCentralFrequencyWishList, availableFrequencyRange, customerAvailableFrequencyRange);
 
-        Assertions.assertEquals(expected, bitSet);
+        assertEquals(expected, bitSet);
     }
 
     @Test
     void availableCustomerRangeLimitsTheAvailableRange() {
-
         BitSet customerAvailableFrequencyRange = new BitSet(768);
         customerAvailableFrequencyRange.set(0, 32);
 
@@ -170,13 +140,9 @@ class FrequencySelectionFactoryTest {
         Collection clientCentralFrequencyWishList = new EntireSpectrum(768);
 
         Select frequencySelectionFactory = new FrequencySelectionFactory();
-        BitSet bitSet = frequencySelectionFactory.availableFrequencies(
-                clientRangeWishList,
-                clientCentralFrequencyWishList,
-                availableFrequencyRange,
-                customerAvailableFrequencyRange);
+        BitSet bitSet = frequencySelectionFactory.availableFrequencies(clientRangeWishList,
+                clientCentralFrequencyWishList, availableFrequencyRange, customerAvailableFrequencyRange);
 
-        Assertions.assertEquals(expected, bitSet);
+        assertEquals(expected, bitSet);
     }
-
 }

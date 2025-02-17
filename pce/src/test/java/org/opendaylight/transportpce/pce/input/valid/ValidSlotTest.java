@@ -8,11 +8,12 @@
 
 package org.opendaylight.transportpce.pce.input.valid;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ValidSlotTest {
@@ -29,10 +30,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidCenterFrequency(
-                BigDecimal.valueOf(192.126),
-                observer
-        ));
+        assertFalse(validSlot.isValidCenterFrequency(BigDecimal.valueOf(192.126), observer));
 
         verify(observer).error(
                 "Center frequency 192.126 (THz) is not evenly dividable by 6.25000 (GHz)");
@@ -50,10 +48,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidCenterFrequency(
-                BigDecimal.valueOf(190.325),
-                observer
-        ));
+        assertFalse(validSlot.isValidCenterFrequency(BigDecimal.valueOf(190.325), observer));
 
         verify(observer).error(
                 "Center frequency 190.325 (THz) is outside the range 191.325 - 195.0 (THz)");
@@ -71,10 +66,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidCenterFrequency(
-                BigDecimal.valueOf(195.15),
-                observer
-        ));
+        assertFalse(validSlot.isValidCenterFrequency(BigDecimal.valueOf(195.15), observer));
 
         verify(observer).error(
                 "Center frequency 195.15 (THz) is outside the range 191.325 - 195.0 (THz)");
@@ -93,10 +85,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertTrue(validSlot.isValidCenterFrequency(
-                BigDecimal.valueOf(192.125),
-                observer
-        ));
+        assertTrue(validSlot.isValidCenterFrequency(BigDecimal.valueOf(192.125), observer));
     }
 
     @Test
@@ -111,10 +100,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertTrue(validSlot.isValidCenterFrequency(
-                BigDecimal.valueOf(193.1),
-                observer
-        ));
+        assertTrue(validSlot.isValidCenterFrequency(BigDecimal.valueOf(193.1), observer));
     }
 
     @Test
@@ -129,10 +115,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidSlotWidth(
-                BigDecimal.valueOf(30.0),
-                observer
-        ));
+        assertFalse(validSlot.isValidSlotWidth(BigDecimal.valueOf(30.0), observer));
         verify(observer).error("Slot width 30.0 (GHz) is not evenly dividable by 12.5 (GHz)");
     }
 
@@ -149,11 +132,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertTrue(validSlot.isValidSlot(
-                BigDecimal.valueOf(193.1),
-                BigDecimal.valueOf(100.0),
-                observer
-        ));
+        assertTrue(validSlot.isValidSlot(BigDecimal.valueOf(193.1), BigDecimal.valueOf(100.0), observer));
     }
 
     @Test
@@ -168,11 +147,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidSlot(
-                BigDecimal.valueOf(191.33),
-                BigDecimal.valueOf(100.0),
-                observer
-        ));
+        assertFalse(validSlot.isValidSlot(BigDecimal.valueOf(191.33), BigDecimal.valueOf(100.0), observer));
 
         verify(observer).error(
                 "Center frequency 191.33 (THz) is not evenly dividable by 6.25000 (GHz)");
@@ -190,11 +165,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidSlot(
-                BigDecimal.valueOf(191.425),
-                BigDecimal.valueOf(300.0),
-                observer
-        ));
+        assertFalse(validSlot.isValidSlot(BigDecimal.valueOf(191.425), BigDecimal.valueOf(300.0), observer));
 
         verify(observer).error(
                 "Center frequency 191.425 (THz) with slot width 300.0 (GHz) "
@@ -213,11 +184,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidSlot(
-                BigDecimal.valueOf(194.975),
-                BigDecimal.valueOf(300.0),
-                observer
-        ));
+        assertFalse(validSlot.isValidSlot(BigDecimal.valueOf(194.975), BigDecimal.valueOf(300.0), observer));
 
         verify(observer).error(
                 "Center frequency 194.975 (THz) with slot width 300.0 (GHz) "
@@ -236,11 +203,7 @@ class ValidSlotTest {
                 BigDecimal.valueOf(12.5)
         );
 
-        Assertions.assertFalse(validSlot.isValidSlot(
-                BigDecimal.valueOf(193.1),
-                BigDecimal.valueOf(99.0),
-                observer
-        ));
+        assertFalse(validSlot.isValidSlot(BigDecimal.valueOf(193.1), BigDecimal.valueOf(99.0), observer));
 
         verify(observer).error("Slot width 99.0 (GHz) is not evenly dividable by 12.5 (GHz)");
     }

@@ -8,9 +8,11 @@
 
 package org.opendaylight.transportpce.pce.frequency;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.math.BigDecimal;
 import java.util.BitSet;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.pce.frequency.interval.Collection;
 import org.opendaylight.transportpce.pce.frequency.interval.FrequencyInterval;
@@ -40,7 +42,6 @@ class FrequencyIntervalFactoryTest {
 
     @Test
     void serviceAEndAndZEndDifferentInputSlots_throwsException() {
-
         // Build a PathComputationRequestInput (i.e. API input)
         // where the client specified 191.33125 as the center frequency
         // and a two slot width (e.g. 2 x 6.5GHz = 12.5GHz)
@@ -48,27 +49,22 @@ class FrequencyIntervalFactoryTest {
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.33125"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-
         FrequencySlot frequencySlots2 = new FrequencySlotBuilder()
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.4"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-
         ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
                 .setFrequencySlot(frequencySlots1)
                 .build();
-
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
                 .addAugmentation(serviceAEnd1)
                 .build();
-
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlots2)
                 .build();
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .addAugmentation(serviceZEnd1)
                 .build();
-
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
@@ -76,31 +72,15 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         // Build a frequency range collection using the PathComputationRequestInput object.
-        Collection frequencyWindow = frequencyIntervalFactory.frequencyRange(
-                pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
-
-        Assertions.assertThrows(InvalidIntervalException.class, () ->
-                        frequencyIntervalFactory.frequencySlot(
-                                pathComputationRequestInputBuilder.build(),
-                                new FrequencySpectrum(
-                                        new SpectrumIndex(191.325, 6.25, 768),
-                                        768
-                                )
-
-                )
-        );
-
+        assertThrows(
+                InvalidIntervalException.class,
+                () -> frequencyIntervalFactory.frequencySlot(
+                        pathComputationRequestInputBuilder.build(),
+                        new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768)));
     }
-
 
     /**
      * This test verifies frequency range and frequency slots
@@ -108,7 +88,6 @@ class FrequencyIntervalFactoryTest {
      */
     @Test
     void serviceAEndInputSlotsAndFrequencyWindow() {
-
         // Build a PathComputationRequestInput (i.e. API input)
         // where the client specified 191.33125 as the center frequency
         // and a two slot width (e.g. 2 x 6.5GHz = 12.5GHz)
@@ -116,12 +95,10 @@ class FrequencyIntervalFactoryTest {
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.35625"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("62.5"))
                 .build();
-
         FrequencyRange frequencyRange1 = new FrequencyRangeBuilder()
                 .setMinFrequency(FrequencyTHz.getDefaultInstance("191.4"))
                 .setMaxFrequency(FrequencyTHz.getDefaultInstance("191.5"))
                 .build();
-
         ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
                 .setFrequencySlot(frequencySlots)
                 .setFrequencyRange(frequencyRange1)
@@ -130,53 +107,41 @@ class FrequencyIntervalFactoryTest {
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
                 .addAugmentation(serviceAEnd1)
                 .build();
-
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         // Build a frequency range collection using the PathComputationRequestInput object.
         Collection frequencyWindow = frequencyIntervalFactory.frequencyRange(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         Collection flexGrid = frequencyIntervalFactory.frequencySlot(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         // The frequency collection should contain one frequency range
-        Assertions.assertEquals(1, frequencyWindow.size());
-        Assertions.assertEquals(1, flexGrid.size());
+        assertEquals(1, frequencyWindow.size());
+        assertEquals(1, flexGrid.size());
 
         // Turning the frequency interval into a BitSet object
         // should result in an object where two bits are true
         // at index locations 0 and 1.
         BitSet expectedFlexGrid = new BitSet(768);
         expectedFlexGrid.set(0, 10);
-        Assertions.assertEquals(expectedFlexGrid, flexGrid.set());
+        assertEquals(expectedFlexGrid, flexGrid.set());
 
         BitSet expectedFrequencyWindow = new BitSet(768);
         expectedFrequencyWindow.set(12, 28);
-        Assertions.assertEquals(expectedFrequencyWindow, frequencyWindow.set());
-
+        assertEquals(expectedFrequencyWindow, frequencyWindow.set());
     }
 
     @Test
     void serviceZEndInputSlotsAndFrequencyWindow() {
-
         // Build a PathComputationRequestInput (i.e. API input)
         // where the client specified 191.33125 as the center frequency
         // and a two slot width (e.g. 2 x 6.5GHz = 12.5GHz)
@@ -184,12 +149,10 @@ class FrequencyIntervalFactoryTest {
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.35625"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-
         FrequencyRange frequencyRange1 = new FrequencyRangeBuilder()
                 .setMinFrequency(FrequencyTHz.getDefaultInstance("191.4"))
                 .setMaxFrequency(FrequencyTHz.getDefaultInstance("191.5"))
                 .build();
-
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlots)
                 .setFrequencyRange(frequencyRange1)
@@ -197,53 +160,41 @@ class FrequencyIntervalFactoryTest {
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                 .addAugmentation(serviceZEnd1)
                 .build();
-
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceZEnd(serviceZEnd);
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         // Build a frequency range collection using the PathComputationRequestInput object.
         Collection frequencyWindow = frequencyIntervalFactory.frequencyRange(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         Collection flexGrid = frequencyIntervalFactory.frequencySlot(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         // The frequency collection should contain one frequency range
-        Assertions.assertEquals(1, frequencyWindow.size());
-        Assertions.assertEquals(1, flexGrid.size());
+        assertEquals(1, frequencyWindow.size());
+        assertEquals(1, flexGrid.size());
 
         // Turning the frequency interval into a BitSet object
         // should result in an object where two bits are true
         // at index locations 0 and 1.
         BitSet expectedFlexGrid = new BitSet(768);
         expectedFlexGrid.set(1, 9);
-        Assertions.assertEquals(expectedFlexGrid, flexGrid.set());
+        assertEquals(expectedFlexGrid, flexGrid.set());
 
         BitSet expectedFrequencyWindow = new BitSet(768);
         expectedFrequencyWindow.set(12, 28);
-        Assertions.assertEquals(expectedFrequencyWindow, frequencyWindow.set());
-
+        assertEquals(expectedFrequencyWindow, frequencyWindow.set());
     }
 
     @Test
     void serviceAEndCentralFrequencyFlexGrid() {
-
         // Build a PathComputationRequestInput (i.e. API input)
         // where the client specified 191.35 as the center frequency
         // and a two slot width (e.g. 8 x 6.5GHz = 50GHz)
@@ -255,41 +206,33 @@ class FrequencyIntervalFactoryTest {
         ServiceAEnd1 serviceAEnd1 = new ServiceAEnd1Builder()
                 .setFrequencySlot(frequencySlots)
                 .build();
-
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
                 .addAugmentation(serviceAEnd1)
                 .build();
-
         PathComputationRequestInputBuilder pathComputationRequestInputBuilder =
                 new PathComputationRequestInputBuilder();
         pathComputationRequestInputBuilder.setServiceAEnd(serviceAEnd);
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         // Build a frequency range collection using the PathComputationRequestInput object.
         Collection interval = frequencyIntervalFactory.frequencySlot(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         // The frequency collection should contain one frequency range
-        Assertions.assertEquals(1, interval.size());
+        assertEquals(1, interval.size());
 
         BitSet expected = new BitSet(768);
         expected.set(0, 8);
 
-        Assertions.assertEquals(expected, interval.set());
+        assertEquals(expected, interval.set());
     }
 
     @Test
     void serviceZEndCentralFrequencyFlexGrid() {
-
         // Build a PathComputationRequestInput (i.e. API input)
         // where the client specified 191.33125 as the center frequency
         // and a two slot width (e.g. 2 x 6.5GHz = 12.5GHz)
@@ -297,7 +240,6 @@ class FrequencyIntervalFactoryTest {
                 .setCenterFrequency(FrequencyTHz.getDefaultInstance("191.35"))
                 .setSlotWidth(SlotWidthFrequencyGHz.getDefaultInstance("50"))
                 .build();
-
         ServiceZEnd1 serviceZEnd1 = new ServiceZEnd1Builder()
                 .setFrequencySlot(frequencySlot)
                 .build();
@@ -310,27 +252,22 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         // Build a frequency range collection using the PathComputationRequestInput object.
         Collection interval = frequencyIntervalFactory.frequencySlot(
                 pathComputationRequestInputBuilder.build(),
-                new FrequencySpectrum(
-                        new SpectrumIndex(191.325, 6.25, 768),
-                        768
-                )
-        );
+                new FrequencySpectrum(new SpectrumIndex(191.325, 6.25, 768), 768));
 
         // The frequency collection should contain one frequency range
-        Assertions.assertEquals(1, interval.size());
+        assertEquals(1, interval.size());
 
         // Turning the frequency interval into a BitSet object
         // should result in an object where two bits are true
         // at index locations 0 and 1.
         BitSet expected = new BitSet();
         expected.set(0, 8);
-        Assertions.assertEquals(expected, interval.set());
+        assertEquals(expected, interval.set());
 
     }
 
@@ -344,12 +281,11 @@ class FrequencyIntervalFactoryTest {
 
         Interval interval = frequencyIntervalFactory.interval(BigDecimal.valueOf(191.6), BigDecimal.valueOf(6.25), 2);
 
-        Assertions.assertEquals(
+        assertEquals(
                 BigDecimal.valueOf(12.5),
                 interval.end().subtract(interval.start())
                         .multiply(BigDecimal.valueOf(1000))
-                        .stripTrailingZeros()
-        );
+                        .stripTrailingZeros());
     }
 
     @Test
@@ -357,25 +293,20 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
         Interval interval = frequencyIntervalFactory.interval(
                 BigDecimal.valueOf(191.33125),
                 BigDecimal.valueOf(6.25),
-                2
-        );
+                2);
 
         Interval expecterInterval = new FrequencyInterval(
                 BigDecimal.valueOf(191.325),
-                BigDecimal.valueOf(191.3375)
-        );
+                BigDecimal.valueOf(191.3375));
 
-        Assertions.assertEquals(
+        assertEquals(
                 expecterInterval,
-                interval
-        );
-
+                interval);
     }
 
     @Test
@@ -383,16 +314,12 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
-
+                6.25);
         BigDecimal expectedLower = BigDecimal.valueOf(191.59375);
 
-        Assertions.assertEquals(
+        assertEquals(
                 expectedLower,
-                frequencyIntervalFactory.lowerFrequency(BigDecimal.valueOf(191.6),6.25, 2)
-        );
-
+                frequencyIntervalFactory.lowerFrequency(BigDecimal.valueOf(191.6),6.25, 2));
     }
 
     @Test
@@ -400,11 +327,11 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
-        Assertions.assertThrows(InvalidIntervalException.class, () ->
-                frequencyIntervalFactory.lowerFrequency(BigDecimal.valueOf(191.6),6.25, 3));
+        assertThrows(
+                InvalidIntervalException.class,
+                () -> frequencyIntervalFactory.lowerFrequency(BigDecimal.valueOf(191.6),6.25, 3));
     }
 
     @Test
@@ -412,16 +339,12 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
-
+                6.25);
         BigDecimal expectedLower = BigDecimal.valueOf(191.60625);
 
-        Assertions.assertEquals(
+        assertEquals(
                 expectedLower,
-                frequencyIntervalFactory.upperFrequency(BigDecimal.valueOf(191.6),6.25, 2)
-        );
-
+                frequencyIntervalFactory.upperFrequency(BigDecimal.valueOf(191.6),6.25, 2));
     }
 
     @Test
@@ -429,11 +352,10 @@ class FrequencyIntervalFactoryTest {
         FrequencyIntervalFactory frequencyIntervalFactory = new FrequencyIntervalFactory(
                 new ServiceFrequency(),
                 768,
-                6.25
-        );
+                6.25);
 
-        Assertions.assertThrows(InvalidIntervalException.class, () ->
-                frequencyIntervalFactory.upperFrequency(BigDecimal.valueOf(191.6),6.25, 3));
-
+        assertThrows(
+                InvalidIntervalException.class,
+                () -> frequencyIntervalFactory.upperFrequency(BigDecimal.valueOf(191.6),6.25, 3));
     }
 }
