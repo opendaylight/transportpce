@@ -50,7 +50,7 @@ public final class ConverterTestUtil {
         Map<InterfaceKey, Interface> interfaceMap = new HashMap<>();
         interfaceMap.put(interfaceList.key(), interfaceList);
         SupportingPortList supPortList = new SupportingPortListBuilder()
-            .setIndex(Uint8.valueOf(1))
+            .setIndex(Uint8.ONE)
             .setCircuitPackName("circuit-pack-name")
             .setPortList(Set.of("port-name"))
             .build();

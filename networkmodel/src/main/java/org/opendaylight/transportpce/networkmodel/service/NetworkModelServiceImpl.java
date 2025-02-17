@@ -999,7 +999,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
         for (Link link : links) {
             if (link.augmentation(Link1.class) != null
-                    && !link.augmentation(Link1.class).getUsedBandwidth().equals(Uint32.valueOf(0))) {
+                    && !link.augmentation(Link1.class).getUsedBandwidth().equals(Uint32.ZERO)) {
                 return false;
             }
         }

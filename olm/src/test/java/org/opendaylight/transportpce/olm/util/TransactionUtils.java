@@ -211,7 +211,7 @@ public final class TransactionUtils {
                 .setFiberType(FiberType.Truewave)
                 .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                 .build())
-            .setSRLGId(Uint32.valueOf(1))
+            .setSRLGId(Uint32.ONE)
             .setSRLGLength(Decimal64.valueOf("1"))
             .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
@@ -219,7 +219,7 @@ public final class TransactionUtils {
                 .setFiberType(FiberType.Truewave)
                 .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                 .build())
-            .setSRLGId(Uint32.valueOf(1))
+            .setSRLGId(Uint32.ONE)
             .setSRLGLength(Decimal64.valueOf("1"))
             .build();
         linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
@@ -242,7 +242,7 @@ public final class TransactionUtils {
                                     .build())
                     .build())
                 .build())
-            .setSectionEltNumber(Uint16.valueOf(1)).build();
+            .setSectionEltNumber(Uint16.ONE).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev230526.amplified.link.attributes.AmplifiedLink al2 = new
             org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev230526.amplified.link.attributes
                     .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
@@ -259,7 +259,7 @@ public final class TransactionUtils {
                                     .build())
                                     .build())
             .build())
-            .setSectionEltNumber(Uint16.valueOf(1)).build();
+            .setSectionEltNumber(Uint16.ONE).build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
         Augmentation<Link> aug1 = new Link1Builder()

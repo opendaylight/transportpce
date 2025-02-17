@@ -53,7 +53,7 @@ public class GnpyUtilitiesImpl {
         this.input = input;
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
-        this.requestId = Uint32.valueOf(0);
+        this.requestId = Uint32.ZERO;
         this.gnpyConsumer = gnpyConsumer;
     }
 

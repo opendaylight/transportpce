@@ -150,7 +150,7 @@ public final class ServiceDataUtils {
     public static ServiceAEndBuilder getServiceAEndBuild(String tpId) {
         return new ServiceAEndBuilder()
             .setClli("clli").setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-1-2-"
+            .setServiceRate(Uint32.ONE).setNodeId("XPONDER-1-2-"
                     + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()
@@ -171,7 +171,7 @@ public final class ServiceDataUtils {
     public static ServiceZEndBuilder getServiceZEndBuild(String tpId) {
         return new ServiceZEndBuilder()
             .setClli("clli").setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-2-3-"
+            .setServiceRate(Uint32.ONE).setNodeId("XPONDER-2-3-"
                     + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()

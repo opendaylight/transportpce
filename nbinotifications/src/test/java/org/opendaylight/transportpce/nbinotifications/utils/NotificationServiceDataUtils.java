@@ -151,7 +151,7 @@ public final class NotificationServiceDataUtils {
         return new ServiceAEndBuilder()
                 .setClli("clli")
                 .setServiceFormat(ServiceFormat.OC)
-                .setServiceRate(Uint32.valueOf(1))
+                .setServiceRate(Uint32.ONE)
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection());
@@ -161,7 +161,7 @@ public final class NotificationServiceDataUtils {
         return new ServiceZEndBuilder()
                 .setClli("clli")
                 .setServiceFormat(ServiceFormat.OC)
-                .setServiceRate(Uint32.valueOf(1))
+                .setServiceRate(Uint32.ONE)
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection());

@@ -341,24 +341,24 @@ public class OCPortMappingTest {
 
     OpenTerminalMetaData getTestMetaData() {
         Set<Uint8> lcpList = new HashSet<>();
-        lcpList.add(Uint8.valueOf(1));
-        lcpList.add(Uint8.valueOf(2));
+        lcpList.add(Uint8.ONE);
+        lcpList.add(Uint8.TWO);
         NonBlockingList nonBlockingList = new NonBlockingListBuilder().setConnectablePort(lcpList)
-                .setNblId(Uint8.valueOf(1))
+                .setNblId(Uint8.ONE)
                 .build();
         Map<NonBlockingListKey, NonBlockingList> nonBlockingListMap = new HashMap<>();
         nonBlockingListMap.put(nonBlockingList.key(), nonBlockingList);
-        SwitchFabric  switchFabric = new SwitchFabricBuilder().setSwitchFabricId(Uint8.valueOf(1))
+        SwitchFabric  switchFabric = new SwitchFabricBuilder().setSwitchFabricId(Uint8.ONE)
                 .setSwitchFabricType(SwitchFabric.SwitchFabricType.Blocking)
                 .setNonBlockingList(nonBlockingListMap)
                 .build();
         Map<SwitchFabricKey, SwitchFabric> switchFabricMap = new HashMap<>();
         switchFabricMap.put(switchFabric.key(), switchFabric);
         SupportedPort supportedPort = new SupportedPortBuilder().setComponentName("cfp2-1")
-                .setId(Uint8.valueOf(1))
+                .setId(Uint8.ONE)
                 .setType(getOpticalPorttype(TERMINALLINE)).build();
         SupportedPort supportedPortClient = new SupportedPortBuilder().setComponentName("qsfp-1")
-                .setId(Uint8.valueOf(2))
+                .setId(Uint8.TWO)
                 .setType(getOpticalPorttype(TERMINALCLIENT)).build();
         Map<SupportedPortKey,SupportedPort> supportedPortMap = new HashMap<>();
         supportedPortMap.put(supportedPort.key(), supportedPort);
@@ -370,7 +370,7 @@ public class OCPortMappingTest {
                 .setSwitchFabric(switchFabricMap).build();
         Map<LineCardKey, LineCard> lineCardMap = new HashMap<>();
         lineCardMap.put(lineCard.key(),lineCard);
-        OperationalMode operationalMode = new OperationalModeBuilder().setModeId(Uint16.valueOf(1))
+        OperationalMode operationalMode = new OperationalModeBuilder().setModeId(Uint16.ONE)
                 .setCatalogId("1").setRate("400").build();
         Map<OperationalModeKey, OperationalMode> operationalModeMap = new HashMap<>();
         operationalModeMap.put(operationalMode.key(), operationalMode);
@@ -378,8 +378,8 @@ public class OCPortMappingTest {
                 .setOperationalMode(operationalModeMap).build();
         InterfaceSequence interfaceSequence = new InterfaceSequenceBuilder()
                 .setInterfaceType(TRIBUTARYPROTOCOLTYPE.VALUE)
-                .setPosition(Uint8.valueOf(1))
-                .setMaxInterfaces(Uint16.valueOf(1)).build();
+                .setPosition(Uint8.ONE)
+                .setMaxInterfaces(Uint16.ONE).build();
         Map<InterfaceSequenceKey, InterfaceSequence> interfaceSequenceMap = new HashMap<>();
         interfaceSequenceMap.put(interfaceSequence.key(), interfaceSequence);
         SupportedInterfaceCapability supportedInterfaceCapability = new SupportedInterfaceCapabilityBuilder()
@@ -411,7 +411,7 @@ public class OCPortMappingTest {
         subcomponentKeySubcomponentMap.put(new SubcomponentKey("qsfp-1"),subcomponent);
         Subcomponents subcomponents = new SubcomponentsBuilder()
                 .setSubcomponent(subcomponentKeySubcomponentMap).build();
-        SupportedPort port = new SupportedPortBuilder().setComponentName("qsfp-1").setId(Uint8.valueOf(1)).build();
+        SupportedPort port = new SupportedPortBuilder().setComponentName("qsfp-1").setId(Uint8.ONE).build();
         supportedClientPorts.add(Optional.of(port));
         Method method = ocPortMappingVersion190.getClass()
                 .getDeclaredMethod("clientPortsExistsOnNELineCard", List.class, Subcomponents.class);

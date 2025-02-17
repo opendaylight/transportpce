@@ -85,7 +85,7 @@ public class CrossConnectImpl121Test {
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         SpectrumInformation spectrumInformation = new SpectrumInformation();
-        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setWaveLength(Uint32.ONE);
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         Optional<String> res = crossConnectImpl121.postCrossConnect("deviceId", "srcTp", "destTp", spectrumInformation);

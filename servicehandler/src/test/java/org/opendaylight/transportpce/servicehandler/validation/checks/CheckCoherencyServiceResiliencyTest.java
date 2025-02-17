@@ -42,13 +42,13 @@ public class CheckCoherencyServiceResiliencyTest {
 
         assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setWaitToRestore(Uint64.valueOf(1)).build())
+            .check(input.setWaitToRestore(Uint64.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setHoldoffTime(Uint64.valueOf(1)).build())
+            .check(input.setHoldoffTime(Uint64.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
             .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
@@ -68,13 +68,13 @@ public class CheckCoherencyServiceResiliencyTest {
 
         assertFalse(ServicehandlerServiceResiliencyCheck.check(input.setRevertive(true).build()).hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setWaitToRestore(Uint64.valueOf(1)).build())
+            .check(input.setWaitToRestore(Uint64.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setHoldoffTime(Uint64.valueOf(1)).build())
+            .check(input.setHoldoffTime(Uint64.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.ONE).build())
             .hasPassed());
     }
 
@@ -93,10 +93,10 @@ public class CheckCoherencyServiceResiliencyTest {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Protected.VALUE);
 
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build())
+            .check(input.setWaitToRestore(Uint64.ONE).setRevertive(false).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setPreCalculatedBackupPathNumber(Uint8.valueOf(1)).build())
+            .check(input.setPreCalculatedBackupPathNumber(Uint8.ONE).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
             .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
@@ -109,8 +109,8 @@ public class CheckCoherencyServiceResiliencyTest {
             .check(new ServiceResiliencyBuilder()
                 .setResiliency(Protected.VALUE)
                 .setRevertive(true)
-                .setWaitToRestore(Uint64.valueOf(1))
-                .setHoldoffTime(Uint64.valueOf(1))
+                .setWaitToRestore(Uint64.ONE)
+                .setHoldoffTime(Uint64.ONE)
                 .build())
             .hasPassed());
     }
@@ -120,7 +120,7 @@ public class CheckCoherencyServiceResiliencyTest {
         ServiceResiliencyBuilder input = new ServiceResiliencyBuilder().setResiliency(Restorable.VALUE);
 
         assertFalse(ServicehandlerServiceResiliencyCheck
-            .check(input.setWaitToRestore(Uint64.valueOf(1)).setRevertive(false).build())
+            .check(input.setWaitToRestore(Uint64.ONE).setRevertive(false).build())
             .hasPassed());
         assertFalse(ServicehandlerServiceResiliencyCheck
             .check(input.setCoupledService(new CoupledServiceBuilder().build()).build())
@@ -133,9 +133,9 @@ public class CheckCoherencyServiceResiliencyTest {
             .check(new ServiceResiliencyBuilder()
                 .setResiliency(Restorable.VALUE)
                 .setRevertive(true)
-                .setWaitToRestore(Uint64.valueOf(1))
-                .setHoldoffTime(Uint64.valueOf(1))
-                .setPreCalculatedBackupPathNumber(Uint8.valueOf(1))
+                .setWaitToRestore(Uint64.ONE)
+                .setHoldoffTime(Uint64.ONE)
+                .setPreCalculatedBackupPathNumber(Uint8.ONE)
                 .build())
             .hasPassed());
     }

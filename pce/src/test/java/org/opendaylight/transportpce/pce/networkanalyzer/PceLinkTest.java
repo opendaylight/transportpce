@@ -252,7 +252,7 @@ public class PceLinkTest extends AbstractTest {
             .addAugmentation(link1Builder.build());
         if (omspresent) {
             LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
-                .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
+                .withKey(new LinkConcatenationKey(Uint32.ONE))
                 .setSRLGLength(Decimal64.valueOf(length, RoundingMode.FLOOR))
                 .addAugmentation(
                     pmdpresent

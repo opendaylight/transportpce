@@ -103,8 +103,8 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_OTHER:
                 spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber);
                 pceResult.setServiceType(serviceType);
-                if (spectrumAssignment.getBeginIndex().equals(Uint16.valueOf(0))
-                        && spectrumAssignment.getStopIndex().equals(Uint16.valueOf(0))) {
+                if (spectrumAssignment.getBeginIndex().equals(Uint16.ZERO)
+                        && spectrumAssignment.getStopIndex().equals(Uint16.ZERO)) {
                     pceResult.error("No frequencies available.");
                     pceResult.setLocalCause(PceResult.LocalCause.NO_PATH_EXISTS);
                     return pceResult;
@@ -1086,8 +1086,8 @@ public class PostAlgoPathValidator {
     public SpectrumAssignment computeBestSpectrumAssignment(
             BitSet spectrumOccupation, int spectralWidthSlotNumber, boolean isFlexGrid) {
         SpectrumAssignmentBuilder spectrumAssignmentBldr = new SpectrumAssignmentBuilder()
-            .setBeginIndex(Uint16.valueOf(0))
-            .setStopIndex(Uint16.valueOf(0))
+            .setBeginIndex(Uint16.ZERO)
+            .setStopIndex(Uint16.ZERO)
             .setFlexGrid(isFlexGrid);
         BitSet referenceBitSet = new BitSet(spectralWidthSlotNumber);
         referenceBitSet.set(0, spectralWidthSlotNumber);

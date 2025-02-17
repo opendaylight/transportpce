@@ -68,8 +68,8 @@ public final class ServiceTypes {
     public static String getOtnServiceType(String serviceFormat, Uint32 serviceRate) {
         Map<String, Map<Uint32, String>> otnMap = Map.of(
             "Ethernet", Map.of(
-                    Uint32.valueOf(1), StringConstants.SERVICE_TYPE_1GE,
-                    Uint32.valueOf(10), StringConstants.SERVICE_TYPE_10GE,
+                    Uint32.ONE, StringConstants.SERVICE_TYPE_1GE,
+                    Uint32.TEN, StringConstants.SERVICE_TYPE_10GE,
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_100GE_M),
             "OTU", Map.of(
                     Uint32.valueOf(100), StringConstants.SERVICE_TYPE_OTU4,

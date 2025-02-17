@@ -109,12 +109,12 @@ public final class OpenRoadmOtnTopology {
         OtnLinkType.OTU4, 100000L,
         OtnLinkType.OTUC4, 400000L);
     private static final Map<Uint32, Long> SERVICERATE_BWINCR_MAP = Map.of(
-        Uint32.valueOf(1), 1000L,
-        Uint32.valueOf(10), 10000L,
+        Uint32.ONE, 1000L,
+        Uint32.TEN, 10000L,
         Uint32.valueOf(100), 100000L);
     private static final Map<Uint32, OdtuTypeIdentity> SERVICERATE_ODTUTYPECLASS_MAP = Map.of(
-        Uint32.valueOf(1), ODTU4TsAllocated.VALUE,
-        Uint32.valueOf(10), ODTU4TsAllocated.VALUE,
+        Uint32.ONE, ODTU4TsAllocated.VALUE,
+        Uint32.TEN, ODTU4TsAllocated.VALUE,
         Uint32.valueOf(100), ODTUCnTs.VALUE);
 
     private OpenRoadmOtnTopology() {
@@ -399,7 +399,7 @@ public final class OpenRoadmOtnTopology {
             = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1Builder()
                 .setOtnLinkType(linkType).build();
         Link1Builder otnLink1Bldr = new Link1Builder()
-            .setUsedBandwidth(Uint32.valueOf(0));
+            .setUsedBandwidth(Uint32.ZERO);
         if (OTNLINKTYPE_OTU_BW_MAP.containsKey(linkType)) {
             otnLink1Bldr.setAvailableBandwidth(Uint32.valueOf(OTNLINKTYPE_OTU_BW_MAP.get(linkType)));
         } else if (OTNLINKTYPE_BW_MAP.containsKey(linkType)) {
@@ -458,11 +458,11 @@ public final class OpenRoadmOtnTopology {
             updatedlinks.add(
                 new LinkBuilder(link)
                     .addAugmentation(new Link1Builder(link.augmentation(Link1.class))
-                        .setAvailableBandwidth(Uint32.valueOf(0))
+                        .setAvailableBandwidth(Uint32.ZERO)
                         .setUsedBandwidth(
                             OTNLINKTYPE_BW_MAP.containsKey(linkType)
                                 ? Uint32.valueOf(OTNLINKTYPE_BW_MAP.get(linkType))
-                                : Uint32.valueOf(0))
+                                : Uint32.ZERO)
                         .build())
                     .build());
         }
@@ -687,7 +687,7 @@ public final class OpenRoadmOtnTopology {
             nbMap.put(nbl.key(),nbl);
         }
         OduSwitchingPools oduSwitchPool = new OduSwitchingPoolsBuilder()
-            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.ONE)
             .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
             .setNonBlockingList(nbMap)
             .build();
@@ -736,12 +736,12 @@ public final class OpenRoadmOtnTopology {
         }
         Map<NonBlockingListKey, NonBlockingList> nbMap = new HashMap<>();
         NonBlockingList nbl = new NonBlockingListBuilder()
-            .setNblNumber(Uint16.valueOf(1))
+            .setNblNumber(Uint16.ONE)
             .setTpList(tpl)
             .build();
         nbMap.put(nbl.key(),nbl);
         OduSwitchingPools oduSwitchPool = new OduSwitchingPoolsBuilder()
-            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.ONE)
             .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
             .setNonBlockingList(nbMap)
             .build();

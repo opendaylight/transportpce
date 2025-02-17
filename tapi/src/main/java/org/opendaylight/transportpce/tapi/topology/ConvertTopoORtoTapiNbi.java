@@ -306,7 +306,7 @@ public class ConvertTopoORtoTapiNbi {
                     new ArrayList<>(List.of(
                         new SupportedCepLayerProtocolQualifierInstancesBuilder()
                             .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
-                            .setNumberOfCepInstances(Uint64.valueOf(1))
+                            .setNumberOfCepInstances(Uint64.ONE)
                             .build())))
                 .setDirection(Direction.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)

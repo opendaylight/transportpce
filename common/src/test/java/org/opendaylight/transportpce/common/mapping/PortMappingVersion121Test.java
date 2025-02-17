@@ -184,7 +184,7 @@ public class PortMappingVersion121Test {
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks circuitPacks =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksBuilder()
                 .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-                        .degree.CircuitPacksKey(Uint32.valueOf(1)))
+                        .degree.CircuitPacksKey(Uint32.ONE))
                         .setCircuitPackName("c1").build();
         Map<
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey,
@@ -192,14 +192,14 @@ public class PortMappingVersion121Test {
                         new HashMap<>();
         circuitPacksMap.put(circuitPacks.key(), circuitPacks);
 
-        final Degree ordmDegreeObject = new DegreeBuilder().setDegreeNumber(Uint16.valueOf(1))
+        final Degree ordmDegreeObject = new DegreeBuilder().setDegreeNumber(Uint16.ONE)
                 .setCircuitPacks(circuitPacksMap).setConnectionPorts(connectionPortsMap).build();
 
         // mock one srg with bidirectional port
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksBuilder()
                 .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-                        .srg.CircuitPacksKey(Uint32.valueOf(2)))
+                        .srg.CircuitPacksKey(Uint32.TWO))
                         .setCircuitPackName("c2").build();
         Map<
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
@@ -207,7 +207,7 @@ public class PortMappingVersion121Test {
                         new HashMap<>();
         srgCircuitPacksList.put(srgCircuitPacks.key(), srgCircuitPacks);
 
-        final SharedRiskGroup ordmSrgObject = new SharedRiskGroupBuilder().setSrgNumber(Uint16.valueOf(1))
+        final SharedRiskGroup ordmSrgObject = new SharedRiskGroupBuilder().setSrgNumber(Uint16.ONE)
                 .setCircuitPacks(srgCircuitPacksList).build();
 
         // mock one degree with 2 unidirectional ports
@@ -227,7 +227,7 @@ public class PortMappingVersion121Test {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey(
                         Uint32.valueOf(3));
         values.put(circuitPackKey, circuitPacks3);
-        final Degree ordmDegreeObject3 = new DegreeBuilder().setDegreeNumber(Uint16.valueOf(2)).setCircuitPacks(values)
+        final Degree ordmDegreeObject3 = new DegreeBuilder().setDegreeNumber(Uint16.TWO).setCircuitPacks(values)
                 .setConnectionPorts(connectionPortsMap3).build();
         // mock one srg with 2 unidirectional ports
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks4 =
@@ -240,7 +240,7 @@ public class PortMappingVersion121Test {
             srgCircuitPacksList4 = new HashMap<>();
         srgCircuitPacksList4.put(srgCircuitPacks4.key(), srgCircuitPacks4);
 
-        final SharedRiskGroup ordmSrgObject4 = new SharedRiskGroupBuilder().setSrgNumber(Uint16.valueOf(2))
+        final SharedRiskGroup ordmSrgObject4 = new SharedRiskGroupBuilder().setSrgNumber(Uint16.TWO)
                 .setCircuitPacks(srgCircuitPacksList4).build();
 
         // mock one degree with unidirectional ports, reverse direction
@@ -286,7 +286,7 @@ public class PortMappingVersion121Test {
         // mock responses for deviceTransactionManager calls
         DataObjectIdentifier<Degree> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Degree.class, new DegreeKey(Uint16.valueOf(1)))
+            .child(Degree.class, new DegreeKey(Uint16.ONE))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -294,7 +294,7 @@ public class PortMappingVersion121Test {
 
         DataObjectIdentifier<Degree> deviceIID3 = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Degree.class, new DegreeKey(Uint16.valueOf(2)))
+            .child(Degree.class, new DegreeKey(Uint16.TWO))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID3,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -426,7 +426,7 @@ public class PortMappingVersion121Test {
 
         DataObjectIdentifier<SharedRiskGroup> srgIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(1)))
+            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.ONE))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -434,7 +434,7 @@ public class PortMappingVersion121Test {
 
         DataObjectIdentifier<SharedRiskGroup> srgIID4 = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(2)))
+            .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.TWO))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID4,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
@@ -661,15 +661,15 @@ public class PortMappingVersion121Test {
         for (Destination destination : destinationList) {
             destinationMap.put(destination.key(), destination);
         }
-        return new ConnectionMapBuilder().setConnectionMapNumber(Uint32.valueOf(1))
+        return new ConnectionMapBuilder().setConnectionMapNumber(Uint32.ONE)
                 .setSource(new SourceBuilder().setCircuitPackName("c1").setPortName("p1").build())
                 .setDestination(destinationMap).build();
     }
 
     private Info getInfo() {
-        return new InfoBuilder().setNodeNumber(Uint32.valueOf(1)).setClli("clli").setNodeType(NodeTypes.Xpdr)
+        return new InfoBuilder().setNodeNumber(Uint32.ONE).setClli("clli").setNodeType(NodeTypes.Xpdr)
                 .setModel("model").setVendor("vendor").setIpAddress(new IpAddress(new Ipv4Address("10.1.1.1")))
-                .setMaxDegrees(Uint16.valueOf(2)).setMaxSrgs(Uint16.valueOf(2)).setNodeId("node").build();
+                .setMaxDegrees(Uint16.TWO).setMaxSrgs(Uint16.TWO).setNodeId("node").build();
     }
 
     private Ports getPorts(String p2, Port.PortQual roadmExternal, String c3, String p3, Direction rx) {
@@ -699,7 +699,7 @@ public class PortMappingVersion121Test {
     }
 
     private Info getInfo2() {
-        return new InfoBuilder().setNodeNumber(Uint32.valueOf(1)).setClli("clli").setNodeType(NodeTypes.Rdm)
+        return new InfoBuilder().setNodeNumber(Uint32.ONE).setClli("clli").setNodeType(NodeTypes.Rdm)
                 .setModel("model").setVendor("vendor").setIpAddress(new IpAddress(new Ipv4Address("10.1.1.1")))
                 .setMaxDegrees(Uint16.valueOf(3)).setMaxSrgs(Uint16.valueOf(3)).build();
     }

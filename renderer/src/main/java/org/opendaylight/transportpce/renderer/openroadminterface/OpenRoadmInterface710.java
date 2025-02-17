@@ -297,13 +297,13 @@ public class OpenRoadmInterface710 {
                     .setOtsiRate(R100GOtsi.VALUE)
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic14.VALUE)
-                        .setIid(new ArrayList<>(Arrays.asList(Uint8.valueOf(1))))
+                        .setIid(new ArrayList<>(Arrays.asList(Uint8.ONE)))
                         .build());
                 break;
             case 200:
                 LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
                 FlexoBuilder flexoBuilder = new FlexoBuilder()
-                    .setIid(new ArrayList<>(List.of(Uint8.valueOf(1), Uint8.valueOf(2))));
+                    .setIid(new ArrayList<>(List.of(Uint8.ONE, Uint8.TWO)));
                 if (modulationFormat == ModulationFormat.DpQam16) {
                     LOG.info("FOIC is 2.8 for 31.6 Gbaud and rate is 200");
                     // FOIC rate is different
@@ -321,7 +321,7 @@ public class OpenRoadmInterface710 {
                 otsiBuilder.setOtsiRate(R300GOtsi.VALUE)
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic36.VALUE)
-                        .setIid(new ArrayList<>(List.of(Uint8.valueOf(1), Uint8.valueOf(2), Uint8.valueOf(3))))
+                        .setIid(new ArrayList<>(List.of(Uint8.ONE, Uint8.TWO, Uint8.valueOf(3))))
                         .build());
                 break;
             case 400:
@@ -333,7 +333,7 @@ public class OpenRoadmInterface710 {
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic48.VALUE)
                         .setIid(new ArrayList<>(
-                            List.of(Uint8.valueOf(1), Uint8.valueOf(2), Uint8.valueOf(3), Uint8.valueOf(4))))
+                            List.of(Uint8.ONE, Uint8.TWO, Uint8.valueOf(3), Uint8.valueOf(4))))
                         .build());
                 break;
             default:
@@ -382,7 +382,7 @@ public class OpenRoadmInterface710 {
         }
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         // Create an OTSI group object
-        OtsiGroupBuilder otsiGroupBuilder = new OtsiGroupBuilder().setGroupId(Uint32.valueOf(1));
+        OtsiGroupBuilder otsiGroupBuilder = new OtsiGroupBuilder().setGroupId(Uint32.ONE);
         switch (serviceRate) {
             case 100:
                 otsiGroupBuilder.setGroupRate(R100GOtsi.VALUE);
@@ -495,7 +495,7 @@ public class OpenRoadmInterface710 {
             .setRate(OTUCn.VALUE)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
-            .setDegmIntervals(Uint8.valueOf(2))
+            .setDegmIntervals(Uint8.TWO)
             .setDegthrPercentage(Uint16.valueOf(100));
         if (apiInfoA != null) {
             otuBuilder.setTxSapi(apiInfoA.getSapi())
@@ -514,11 +514,11 @@ public class OpenRoadmInterface710 {
         String otucnrate = null;
         switch (rate) {
             case "100G":
-                otuBuilder.setOtucnNRate(Uint16.valueOf(1));
+                otuBuilder.setOtucnNRate(Uint16.ONE);
                 otucnrate = "1";
                 break;
             case "200G":
-                otuBuilder.setOtucnNRate(Uint16.valueOf(2));
+                otuBuilder.setOtucnNRate(Uint16.TWO);
                 otucnrate = "2";
                 break;
             case "300G":
@@ -657,7 +657,7 @@ public class OpenRoadmInterface710 {
                     .setTimActEnabled(false)
                     .setOduFunction(ODUTTP.VALUE)
                     .setTimDetectMode(TimDetectMode.Disabled)
-                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegmIntervals(Uint8.TWO)
                     .setDegthrPercentage(Uint16.valueOf(100))
                     .setOducnNRate(Uint16.valueOf(oducnrate))
                     .setOpu(
@@ -726,7 +726,7 @@ public class OpenRoadmInterface710 {
                     .setTimActEnabled(false)
                     .setOduFunction(ODUTTP.VALUE)
                     .setTimDetectMode(TimDetectMode.Disabled)
-                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegmIntervals(Uint8.TWO)
                     .setDegthrPercentage(Uint16.valueOf(100))
                     .setOducnNRate(Uint16.valueOf(oducnrate))
                     .setOpu(
@@ -782,11 +782,11 @@ public class OpenRoadmInterface710 {
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
-            .setDegmIntervals(Uint8.valueOf(2))
+            .setDegmIntervals(Uint8.TWO)
             .setDegthrPercentage(Uint16.valueOf(100))
             .setParentOduAllocation(
                 new ParentOduAllocationBuilder()
-                    .setTribPortNumber(Uint16.valueOf(1))
+                    .setTribPortNumber(Uint16.ONE)
                     .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build())
                     .build());
         // Build the OPU container to the ODU builder
@@ -863,14 +863,14 @@ public class OpenRoadmInterface710 {
             .setMonitoringMode(MonitoringMode.Terminated)
             .setTimActEnabled(false)
             .setTimDetectMode(TimDetectMode.Disabled)
-            .setDegmIntervals(Uint8.valueOf(2))
+            .setDegmIntervals(Uint8.TWO)
             .setDegthrPercentage(Uint16.valueOf(100))
             // TODO the following line seemed to come a bit early
             // so it is now commented out and the code was aligned with previous method
             //.setOpu(opuBuilder.build())
             .setParentOduAllocation(
                 new ParentOduAllocationBuilder()
-                    .setTribPortNumber(Uint16.valueOf(1))
+                    .setTribPortNumber(Uint16.ONE)
                     .setTribSlotsChoice(new OpucnBuilder().setOpucnTribSlots(tribslots).build())
                     .build());
         switch (rate) {
@@ -968,7 +968,7 @@ public class OpenRoadmInterface710 {
                     .setTimActEnabled(false)
                     .setOduFunction(ODUTTP.VALUE)
                     .setTimDetectMode(TimDetectMode.Disabled)
-                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegmIntervals(Uint8.TWO)
                     .setDegthrPercentage(Uint16.valueOf(100))
                     .setOducnNRate(Uint16.valueOf(oducnrate))
                     .setOpu(
@@ -1040,7 +1040,7 @@ public class OpenRoadmInterface710 {
                     .setTimActEnabled(false)
                     .setOduFunction(ODUTTP.VALUE)
                     .setTimDetectMode(TimDetectMode.Disabled)
-                    .setDegmIntervals(Uint8.valueOf(2))
+                    .setDegmIntervals(Uint8.TWO)
                     .setDegthrPercentage(Uint16.valueOf(100))
                     .setOducnNRate(Uint16.valueOf(oducnrate))
                     .setOpu(

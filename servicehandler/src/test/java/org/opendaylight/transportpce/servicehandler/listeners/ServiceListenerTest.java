@@ -257,7 +257,7 @@ public class ServiceListenerTest {
                 .setServiceZEnd(new ServiceZEndBuilder()
                         .setClli("clli")
                         .setServiceFormat(ServiceFormat.Ethernet)
-                        .setServiceRate(Uint32.valueOf(1))
+                        .setServiceRate(Uint32.ONE)
                         .setNodeId(new NodeIdType("XPONDER-3-2"))
                         .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
                         .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -271,7 +271,7 @@ public class ServiceListenerTest {
         return new ServiceAEndBuilder()
                 .setClli("clli")
                 .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(Uint32.valueOf(1))
+                .setServiceRate(Uint32.ONE)
                 .setNodeId(new NodeIdType("XPONDER-1-2"))
                 .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()), getTxDirection()))
                 .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));

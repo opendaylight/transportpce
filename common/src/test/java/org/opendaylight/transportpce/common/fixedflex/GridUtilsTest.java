@@ -134,7 +134,7 @@ public class GridUtilsTest {
     @Test
     void initSpectrumInformationFromServicePathInputTest() {
         ServicePathInput input = new ServicePathInputBuilder()
-                .setWaveNumber(Uint32.valueOf(1))
+                .setWaveNumber(Uint32.ONE)
                 .setCenterFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
                         .FrequencyTHz(Decimal64.valueOf("196.1")))
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
@@ -148,7 +148,7 @@ public class GridUtilsTest {
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");
-        assertEquals(Uint32.valueOf(1), spectrumInformation.getWaveLength(), "Wavelength should be 1");
+        assertEquals(Uint32.ONE, spectrumInformation.getWaveLength(), "Wavelength should be 1");
         assertEquals(BigDecimal.valueOf(196.1).setScale(4), spectrumInformation.getCenterFrequency(),
             "Center freq should be 196.1");
         assertEquals(761, spectrumInformation.getLowerSpectralSlotNumber(), "Lower slot number should be 761");
@@ -162,7 +162,7 @@ public class GridUtilsTest {
     @Test
     void initSpectrumInformationFromServicePathInputNoCenterFreqTest() {
         ServicePathInput input = new ServicePathInputBuilder()
-                .setWaveNumber(Uint32.valueOf(1))
+                .setWaveNumber(Uint32.ONE)
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
                 .setMaxFreq(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
@@ -174,7 +174,7 @@ public class GridUtilsTest {
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");
-        assertEquals(Uint32.valueOf(1), spectrumInformation.getWaveLength(), "Wavelength should be 1");
+        assertEquals(Uint32.ONE, spectrumInformation.getWaveLength(), "Wavelength should be 1");
         assertEquals(BigDecimal.valueOf(196.1).setScale(4), spectrumInformation.getCenterFrequency(),
             "Center freq should be 196.1");
         assertEquals(761, spectrumInformation.getLowerSpectralSlotNumber(), "Lower slot number should be 761");
@@ -188,7 +188,7 @@ public class GridUtilsTest {
     @Test
     void initSpectrumInformationFromServicePathInputNoFreqTest() {
         ServicePathInput input = new ServicePathInputBuilder()
-                .setWaveNumber(Uint32.valueOf(1))
+                .setWaveNumber(Uint32.ONE)
                 .setHigherSpectralSlotNumber(Uint32.valueOf(768))
                 .setLowerSpectralSlotNumber(Uint32.valueOf(761))
                 .setNmcWidth(new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019
@@ -196,7 +196,7 @@ public class GridUtilsTest {
                 .build();
         SpectrumInformation spectrumInformation = GridUtils.initSpectrumInformationFromServicePathInput(input);
         assertEquals(BigDecimal.valueOf(40), spectrumInformation.getWidth(), "Width should be 40");
-        assertEquals(Uint32.valueOf(1), spectrumInformation.getWaveLength(), "Wavelength should be 1");
+        assertEquals(Uint32.ONE, spectrumInformation.getWaveLength(), "Wavelength should be 1");
         assertEquals(BigDecimal.valueOf(196.1).setScale(4), spectrumInformation.getCenterFrequency(),
             "Center freq should be 196.1");
         assertEquals(761, spectrumInformation.getLowerSpectralSlotNumber(), "Lower slot number should be 761");

@@ -230,9 +230,9 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         ResponseParameters responseParameters = new ResponseParametersBuilder()
             .setPathDescription(new PathDescriptionBuilder()
                 .setAToZDirection(new AToZDirectionBuilder()
-                        .setAToZWavelengthNumber(Uint32.valueOf(1)).setRate(Uint32.valueOf(1)).build())
+                        .setAToZWavelengthNumber(Uint32.ONE).setRate(Uint32.ONE).build())
                 .setZToADirection(new ZToADirectionBuilder()
-                        .setZToAWavelengthNumber(Uint32.valueOf(1)).setRate(Uint32.valueOf(1)).build()).build())
+                        .setZToAWavelengthNumber(Uint32.ONE).setRate(Uint32.ONE).build()).build())
             .build();
         PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
             .setConfigurationResponseCommon(configurationResponseCommon).setResponseParameters(responseParameters)
@@ -270,9 +270,9 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         ResponseParameters responseParameters = new ResponseParametersBuilder()
             .setPathDescription(new PathDescriptionBuilder()
                 .setAToZDirection(new AToZDirectionBuilder()
-                        .setAToZWavelengthNumber(Uint32.valueOf(1)).setRate(Uint32.valueOf(1)).build())
+                        .setAToZWavelengthNumber(Uint32.ONE).setRate(Uint32.ONE).build())
                 .setZToADirection(new ZToADirectionBuilder()
-                        .setZToAWavelengthNumber(Uint32.valueOf(1)).setRate(Uint32.valueOf(1)).build()).build())
+                        .setZToAWavelengthNumber(Uint32.ONE).setRate(Uint32.ONE).build()).build())
             .build();
         PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
             .setConfigurationResponseCommon(configurationResponseCommon).setResponseParameters(responseParameters)

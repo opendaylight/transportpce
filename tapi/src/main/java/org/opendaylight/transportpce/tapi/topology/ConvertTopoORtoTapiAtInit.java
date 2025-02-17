@@ -329,7 +329,7 @@ public class ConvertTopoORtoTapiAtInit {
             oneplist.entrySet().stream().filter(e -> e.getValue()
                 .getSupportedCepLayerProtocolQualifierInstances()
                     .contains(new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                        .setNumberOfCepInstances(Uint64.valueOf(1))
+                        .setNumberOfCepInstances(Uint64.ONE)
                         .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
                     .build()))
             .collect(Collectors.toList()).toString());
@@ -514,7 +514,7 @@ public class ConvertTopoORtoTapiAtInit {
             LOG.debug("PHOTO NEP = {}", String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId));
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                    .setNumberOfCepInstances(Uint64.valueOf(1));
+                    .setNumberOfCepInstances(Uint64.ONE);
             switch (nepPhotonicSublayer) {
                 case TapiStringConstants.PHTNC_MEDIA_OMS:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);
@@ -550,7 +550,7 @@ public class ConvertTopoORtoTapiAtInit {
                                 TapiStringConstants.PHTNC_MEDIA_OMS.equals(nepPhotonicSublayer)
                                     ? PHOTONICLAYERQUALIFIEROMS.VALUE
                                     : PHOTONICLAYERQUALIFIEROTS.VALUE)
-                            .setNumberOfCepInstances(Uint64.valueOf(1))
+                            .setNumberOfCepInstances(Uint64.ONE)
                             .build())))
                 .setDirection(Direction.BIDIRECTIONAL)
                 .setLinkPortRole(PortRole.SYMMETRIC)
