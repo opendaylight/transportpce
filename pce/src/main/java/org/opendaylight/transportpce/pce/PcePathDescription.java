@@ -133,7 +133,7 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_ODUC4:
                 if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
                     && rc.getResultTribPortTribSlot().get(1) != null) {
-                    atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
+                    atoZDirectionBldr.setAToZWavelengthNumber(Uint32.ZERO)
                             .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
                             .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {
@@ -197,7 +197,7 @@ public class PcePathDescription {
             case StringConstants.SERVICE_TYPE_ODUC4:
                 if (rc.getResultTribPortTribSlot() != null && rc.getResultTribPortTribSlot().get(0) != null
                     && rc.getResultTribPortTribSlot().get(1) != null) {
-                    ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
+                    ztoADirectionBldr.setZToAWavelengthNumber(Uint32.ZERO)
                             .setMinTribSlot(rc.getResultTribPortTribSlot().get(0))
                             .setMaxTribSlot(rc.getResultTribPortTribSlot().get(1));
                 } else {

@@ -193,7 +193,7 @@ class GnpyUtilitiesImplTest extends AbstractTest {
         return new AToZDirectionBuilder()
                 .setRate(Uint32.valueOf(100))
                 .setAToZ(Map.of(firstResource.key(),firstResource))
-                .setAToZWavelengthNumber(Uint32.valueOf(0));
+                .setAToZWavelengthNumber(Uint32.ZERO);
     }
 
     private ZToADirectionBuilder buildZtoA() {
@@ -206,6 +206,6 @@ class GnpyUtilitiesImplTest extends AbstractTest {
         return new ZToADirectionBuilder()
                 .setRate(Uint32.valueOf(100))
                 .setZToA(Map.of(firstResource.key(),firstResource))
-                .setZToAWavelengthNumber(Uint32.valueOf(0));
+                .setZToAWavelengthNumber(Uint32.ZERO);
     }
 }

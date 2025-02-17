@@ -283,7 +283,7 @@ public class GnpyServiceImpl {
                 if ((this.currentNodeId == null) || (!this.currentNodeId.equals(nodeRef))) {
                     this.currentNodeId = nodeRef;
                     RouteObjectIncludeExclude routeObjectIncludeExclude = addRouteObjectIncludeExclude(nodeRef,
-                            Uint32.valueOf(1), idx);
+                            Uint32.ONE, idx);
                     RouteObjectIncludeExcludeKey key = new RouteObjectIncludeExcludeKey(Uint32.valueOf(idx));
                     routeObjectIncludeExcludes.put(key, routeObjectIncludeExclude);
                     idx += 1;
@@ -310,7 +310,7 @@ public class GnpyServiceImpl {
         }
         for (String subLink : listSubLink) {
             RouteObjectIncludeExclude routeObjectIncludeExclude =
-                addRouteObjectIncludeExclude(subLink, Uint32.valueOf(1),idx);
+                addRouteObjectIncludeExclude(subLink, Uint32.ONE,idx);
             RouteObjectIncludeExcludeKey key = new RouteObjectIncludeExcludeKey(Uint32.valueOf(idx));
             routeObjectIncludeExcludes.put(key, routeObjectIncludeExclude);
             idx += 1;
@@ -381,7 +381,7 @@ public class GnpyServiceImpl {
             .setRequestIdNumber(requestIdNumber).build();
         List<Synchronization> synchro = new ArrayList<>();
         Synchronization synchronization1 = new SynchronizationBuilder()
-                .setSynchronizationId(Uint32.valueOf(0).toString())
+                .setSynchronizationId(Uint32.ZERO.toString())
                 .setSvec(svec).build();
         synchro.add(synchronization1);
         return (synchro);

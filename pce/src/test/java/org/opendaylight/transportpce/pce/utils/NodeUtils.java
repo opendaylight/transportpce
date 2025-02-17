@@ -92,7 +92,7 @@ public final class NodeUtils {
                 .addAugmentation(oppLink1);
         }
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
-            .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
+            .withKey(new LinkConcatenationKey(Uint32.ONE))
             .setSRLGLength(Decimal64.valueOf(50000, RoundingMode.FLOOR))
             .addAugmentation(new LinkConcatenation1Builder().setFiberType(FiberType.Smf).build())
             .build();
@@ -116,7 +116,7 @@ public final class NodeUtils {
     public static LinkBuilder createRoadmToRoadm(String srcNode, String destNode, String srcTp, String destTp) {
         return createLinkBuilder(true, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
-                .setLinkLatency(Uint32.valueOf(2))
+                .setLinkLatency(Uint32.TWO)
                 .setLinkLength(Decimal64.valueOf("50.0"))
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM)
                 .setAdministrativeState(AdminStates.InService)
@@ -126,7 +126,7 @@ public final class NodeUtils {
     public static LinkBuilder createAdd(String srcNode, String destNode, String srcTp, String destTp) {
         return createLinkBuilder(false, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
-               .setLinkLatency(Uint32.valueOf(0))
+               .setLinkLatency(Uint32.ZERO)
                .setLinkLength(Decimal64.valueOf("0.01"))
                .setLinkType(OpenroadmLinkType.ADDLINK)
                .setAdministrativeState(AdminStates.InService)
@@ -136,7 +136,7 @@ public final class NodeUtils {
     public static LinkBuilder createDrop(String srcNode, String destNode, String srcTp, String destTp) {
         return createLinkBuilder(false, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
-                .setLinkLatency(Uint32.valueOf(0))
+                .setLinkLatency(Uint32.ZERO)
                 .setLinkLength(Decimal64.valueOf("0.01"))
                 .setLinkType(OpenroadmLinkType.DROPLINK)
                 .setAdministrativeState(AdminStates.InService)
@@ -146,7 +146,7 @@ public final class NodeUtils {
     public static LinkBuilder createXpdrToSrg(String srcNode, String destNode, String srcTp, String destTp) {
         return createLinkBuilder(false, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
-                .setLinkLatency(Uint32.valueOf(0))
+                .setLinkLatency(Uint32.ZERO)
                 .setLinkLength(Decimal64.valueOf("0.01"))
                 .setLinkType(OpenroadmLinkType.XPONDEROUTPUT)
                 .setAdministrativeState(AdminStates.InService)
@@ -156,7 +156,7 @@ public final class NodeUtils {
     public static LinkBuilder createSrgToXpdr(String srcNode, String destNode, String srcTp, String destTp) {
         return createLinkBuilder(false, srcNode, destNode, srcTp, destTp,
             new Link1Builder()
-                .setLinkLatency(Uint32.valueOf(0))
+                .setLinkLatency(Uint32.ZERO)
                 .setLinkLength(Decimal64.valueOf("0.01"))
                 .setLinkType(OpenroadmLinkType.XPONDERINPUT)
                 .setAdministrativeState(AdminStates.InService)

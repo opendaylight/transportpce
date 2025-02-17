@@ -85,7 +85,7 @@ public final class ServiceDeleteDataUtils {
     public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
             .setClli("clli").setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-1-2")
+            .setServiceRate(Uint32.ONE).setNodeId("XPONDER-1-2")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
@@ -103,7 +103,7 @@ public final class ServiceDeleteDataUtils {
     public static ServiceZEndBuilder getServiceZEndBuild() {
         return new ServiceZEndBuilder()
             .setClli("clli").setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-2-3")
+            .setServiceRate(Uint32.ONE).setNodeId("XPONDER-2-3")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")

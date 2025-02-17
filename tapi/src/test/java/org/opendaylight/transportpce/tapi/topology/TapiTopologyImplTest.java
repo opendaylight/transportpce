@@ -589,7 +589,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             "Available capacity unit should be MBPS");
         String prefix = linkName.split("-")[0];
         if ("OTU4".equals(prefix)) {
-            assertEquals(Uint64.valueOf(0), link.getAvailableCapacity().getTotalSize().getValue(),
+            assertEquals(Uint64.ZERO, link.getAvailableCapacity().getTotalSize().getValue(),
                 "Available capacity -total size value should be 0");
         } else if ("ODTU4".equals(prefix)) {
             assertEquals(Uint64.valueOf(100000), link.getAvailableCapacity().getTotalSize().getValue(),

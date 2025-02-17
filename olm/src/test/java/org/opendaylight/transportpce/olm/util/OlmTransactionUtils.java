@@ -98,23 +98,23 @@ public final class OlmTransactionUtils {
         Map<LinkConcatenationKey,LinkConcatenation> linkConcentationValues = new HashMap<>();
         LinkConcatenation linkConcatenation =
             new LinkConcatenationBuilder()
-                .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
+                .withKey(new LinkConcatenationKey(Uint32.ONE))
                 .addAugmentation(new LinkConcatenation1Builder()
                     .setFiberType(FiberType.Truewave)
                     .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                     .build())
-                .setSRLGId(Uint32.valueOf(1))
+                .setSRLGId(Uint32.ONE)
                 .setSRLGLength(Decimal64.valueOf("1"))
                 .build();
         LinkConcatenation linkConcatenation2 =
             new LinkConcatenationBuilder()
-                .withKey(new LinkConcatenationKey(Uint32.valueOf(2)))
+                .withKey(new LinkConcatenationKey(Uint32.TWO))
                 .addAugmentation(
                     new LinkConcatenation1Builder()
                         .setFiberType(FiberType.Truewave)
                         .setPmd(new FiberPmd(Decimal64.valueOf("1")))
                         .build())
-                .setSRLGId(Uint32.valueOf(1))
+                .setSRLGId(Uint32.ONE)
                 .setSRLGLength(Decimal64.valueOf("1"))
                 .build();
         linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
@@ -168,7 +168,7 @@ public final class OlmTransactionUtils {
                                     .build())
                             .build())
                         .build())
-            .setSectionEltNumber(Uint16.valueOf(1))
+            .setSectionEltNumber(Uint16.ONE)
             .build();
         var al2 = new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev230526
                 .amplified.link.attributes.AmplifiedLinkBuilder()
@@ -191,7 +191,7 @@ public final class OlmTransactionUtils {
                                     .build())
                             .build())
                     .build())
-            .setSectionEltNumber(Uint16.valueOf(1))
+            .setSectionEltNumber(Uint16.ONE)
             .build();
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);

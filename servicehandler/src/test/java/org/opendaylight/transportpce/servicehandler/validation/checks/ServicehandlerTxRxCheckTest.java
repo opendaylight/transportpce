@@ -40,7 +40,7 @@ public class ServicehandlerTxRxCheckTest {
     @Test
     void checkForServiceRateEquals0() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck
-            .check(new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(0)).build(), ServiceEndpointType.SERVICEAEND);
+            .check(new ServiceAEndBuilder().setServiceRate(Uint32.ZERO).build(), ServiceEndpointType.SERVICEAEND);
 
         assertFalse(result.hasPassed());
         assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());

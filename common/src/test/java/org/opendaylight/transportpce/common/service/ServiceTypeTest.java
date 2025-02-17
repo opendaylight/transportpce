@@ -54,9 +54,9 @@ public class ServiceTypeTest {
             .build();
         serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.valueOf(100), mapping);
         assertEquals("100GEm", serviceType, "service-type should be 100GEm");
-        serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.valueOf(10), mapping);
+        serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.TEN, mapping);
         assertEquals("10GE", serviceType, "service-type should be 10GE");
-        serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.valueOf(1), mapping);
+        serviceType = ServiceTypes.getServiceType("Ethernet", Uint32.ONE, mapping);
         assertEquals("1GE", serviceType, "service-type should be 1GE");
 
         mapping = new MappingBuilder()
@@ -74,9 +74,9 @@ public class ServiceTypeTest {
         assertNull(serviceType, "service-type should be null");
         serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.valueOf(123));
         assertNull(serviceType, "service-type should be null");
-        serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.valueOf(1));
+        serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.ONE);
         assertEquals("1GE", serviceType, "service-type should be 1GE");
-        serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.valueOf(10));
+        serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.TEN);
         assertEquals("10GE", serviceType, "service-type should be 10GE");
         serviceType = ServiceTypes.getOtnServiceType("Ethernet", Uint32.valueOf(100));
         assertEquals("100GEm", serviceType, "service-type should be 100GEm");

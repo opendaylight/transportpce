@@ -70,7 +70,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
             .thenReturn(new MappingBuilder().setSupportingCircuitPackName("circit-pack").setSupportingPort("port")
                 .setLogicalConnectionPoint(logicalConnPoint).build());
         SpectrumInformation spectrumInformation = new SpectrumInformation();
-        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setWaveLength(Uint32.ONE);
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         spectrumInformation.setCenterFrequency(BigDecimal.valueOf(195.8));
@@ -87,7 +87,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
             .thenReturn(new MappingBuilder().setSupportingCircuitPackName("circit-pack").setSupportingPort("port")
                 .setLogicalConnectionPoint(logicalConnPoint).build());
         SpectrumInformation spectrumInformation = new SpectrumInformation();
-        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setWaveLength(Uint32.ONE);
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         spectrumInformation.setCenterFrequency(BigDecimal.valueOf(195.8));
@@ -105,7 +105,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
             .thenReturn(new MappingBuilder().setSupportingCircuitPackName("circit-pack").setSupportingPort("port")
                 .setLogicalConnectionPoint(logicalConnPoint).build());
         SpectrumInformation spectrumInformation = new SpectrumInformation();
-        spectrumInformation.setWaveLength(Uint32.valueOf(1));
+        spectrumInformation.setWaveLength(Uint32.ONE);
         spectrumInformation.setLowerSpectralSlotNumber(761);
         spectrumInformation.setHigherSpectralSlotNumber(768);
         spectrumInformation.setCenterFrequency(BigDecimal.valueOf(195.8));

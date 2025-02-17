@@ -68,7 +68,7 @@ public class PceCalculation {
     private String serviceFormatA = "";
     private String serviceFormatZ = "";
     private String serviceType = "";
-    private Uint32 serviceRate = Uint32.valueOf(0);
+    private Uint32 serviceRate = Uint32.ZERO;
 
     private PceConstraints pceHardConstraints;
 

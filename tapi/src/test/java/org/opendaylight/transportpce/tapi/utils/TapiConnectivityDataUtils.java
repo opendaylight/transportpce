@@ -138,7 +138,7 @@ public final class TapiConnectivityDataUtils {
 
     public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
-            .setClli("NodeSA").setServiceFormat(ServiceFormat.Ethernet).setServiceRate(Uint32.valueOf(10))
+            .setClli("NodeSA").setServiceFormat(ServiceFormat.Ethernet).setServiceRate(Uint32.TEN)
             .setNodeId(new NodeIdType("SPDR-SA1"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());
@@ -146,7 +146,7 @@ public final class TapiConnectivityDataUtils {
 
     public static ServiceZEndBuilder getServiceZEndBuild() {
         return new ServiceZEndBuilder()
-            .setClli("NodeSC").setServiceFormat(ServiceFormat.Ethernet).setServiceRate(Uint32.valueOf(10))
+            .setClli("NodeSC").setServiceFormat(ServiceFormat.Ethernet).setServiceRate(Uint32.TEN)
             .setNodeId(new NodeIdType("SPDR-SC1"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());

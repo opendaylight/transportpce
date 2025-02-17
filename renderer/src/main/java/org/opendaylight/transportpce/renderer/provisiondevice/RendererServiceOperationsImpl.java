@@ -298,14 +298,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ServiceFormat.OTU, Map.of(
                     "OTUCn", Uint32.valueOf(400),
                     "OTU4", Uint32.valueOf(100),
-                    "OTU2", Uint32.valueOf(10),
-                    "OTU2e", Uint32.valueOf(10)),
+                    "OTU2", Uint32.TEN,
+                    "OTU2e", Uint32.TEN),
                 ServiceFormat.ODU, Map.of(
                     "ODUCn",Uint32.valueOf(400),
                     "ODU4", Uint32.valueOf(100),
-                    "ODU2", Uint32.valueOf(10),
-                    "ODU2e", Uint32.valueOf(10),
-                    "ODU0", Uint32.valueOf(1)));
+                    "ODU2", Uint32.TEN,
+                    "ODU2e", Uint32.TEN,
+                    "ODU0", Uint32.ONE));
         if (!formatRateMap.containsKey(input.getServiceAEnd().getServiceFormat())) {
             LOG.warn("Unable to get service-rate for service {} - unsupported service format {}",
                 input.getServiceName(), input.getServiceAEnd().getServiceFormat());

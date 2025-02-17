@@ -1441,7 +1441,7 @@ public class ORtoTapiTopoConversionTools {
         }
         return new OduSwitchingPoolsBuilder()
             .setNonBlockingList(nblMap)
-            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.ONE)
             .setSwitchingPoolType(SwitchingPoolTypes.Blocking)
             .build();
     }

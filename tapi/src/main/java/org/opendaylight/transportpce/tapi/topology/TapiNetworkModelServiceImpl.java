@@ -250,7 +250,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
                             .contains(
                                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                                    .setNumberOfCepInstances(Uint64.ONE)
                                     .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
                                     .build()))
                         .collect(Collectors.toList()));
@@ -270,7 +270,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .filter(e -> e.getValue().getSupportedCepLayerProtocolQualifierInstances()
                             .contains(
                                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
-                                    .setNumberOfCepInstances(Uint64.valueOf(1))
+                                    .setNumberOfCepInstances(Uint64.ONE)
                                     .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE)
                                     .build()))
                         .collect(Collectors.toList()));
@@ -1123,7 +1123,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         .filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName().contains("ODU4"))
                         .findFirst().toString().isEmpty()) {
                     Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
-                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(0)));
+                    supInt.putAll(Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO));
                     onepBldr.setSupportedPayloadStructure(this.tapiFactory.createSupportedPayloadStructureForCommonNeps(
                         false, Double.valueOf(100), Integer.valueOf(1), supInt.keySet()));
                     if (mapping.getSupportingOdu4() == null && (operState == null
@@ -1379,7 +1379,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         return new OduSwitchingPoolsBuilder()
             .setNonBlockingList(nblMap)
-            .setSwitchingPoolNumber(Uint16.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.ONE)
             .setSwitchingPoolType(SwitchingPoolTypes.forValue(1))
             .build();
     }
@@ -1826,7 +1826,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, entry.getKey());
             LOG.debug("PHOTO NEP = {}", nepNameValue);
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
-                new SupportedCepLayerProtocolQualifierInstancesBuilder().setNumberOfCepInstances(Uint64.valueOf(1));
+                new SupportedCepLayerProtocolQualifierInstancesBuilder().setNumberOfCepInstances(Uint64.ONE);
             switch (nepPhotonicSublayer) {
                 case TapiStringConstants.PHTNC_MEDIA_OMS:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);

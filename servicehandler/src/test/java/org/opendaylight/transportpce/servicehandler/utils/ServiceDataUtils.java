@@ -87,7 +87,7 @@ public final class ServiceDataUtils {
             .setServiceZEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                         .service.create.input.ServiceZEndBuilder()
-                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -113,7 +113,7 @@ public final class ServiceDataUtils {
                         .service.create.input.ServiceZEndBuilder()
                     .setClli("clli")
                     .setServiceFormat(ServiceFormat.OC)
-                    .setServiceRate(Uint32.valueOf(1))
+                    .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -140,7 +140,7 @@ public final class ServiceDataUtils {
                         .service.create.input.ServiceZEndBuilder()
                     .setClli("clli")
                     .setServiceFormat(ServiceFormat.OC)
-                    .setServiceRate(Uint32.valueOf(1))
+                    .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -186,7 +186,7 @@ public final class ServiceDataUtils {
             .setServiceAEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                         .temp.service.create.input.ServiceAEndBuilder()
-                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -194,7 +194,7 @@ public final class ServiceDataUtils {
             .setServiceZEnd(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
                         .temp.service.create.input.ServiceZEndBuilder()
-                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -215,14 +215,14 @@ public final class ServiceDataUtils {
             .setCustomer("Customer")
             .setServiceAEnd(
                 new ServiceAEndBuilder()
-                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
                     .build())
             .setServiceZEnd(
                 new ServiceZEndBuilder()
-                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.valueOf(1))
+                    .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -242,7 +242,7 @@ public final class ServiceDataUtils {
                 .service.create.input.ServiceAEndBuilder()
             .setClli("clli")
             .setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1))
+            .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
             .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
@@ -254,7 +254,7 @@ public final class ServiceDataUtils {
                 .service.create.input.ServiceZEndBuilder()
             .setClli("clli")
             .setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1))
+            .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
             .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
@@ -359,7 +359,7 @@ public final class ServiceDataUtils {
                         .service.reconfigure.input.ServiceAEndBuilder()
                     .setClli("clli")
                     .setServiceFormat(ServiceFormat.OC)
-                    .setServiceRate(Uint32.valueOf(1))
+                    .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-1-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -369,7 +369,7 @@ public final class ServiceDataUtils {
                         .service.reconfigure.input.ServiceZEndBuilder()
                     .setClli("clli")
                     .setServiceFormat(ServiceFormat.OC)
-                    .setServiceRate(Uint32.valueOf(1))
+                    .setServiceRate(Uint32.ONE)
                     .setNodeId(new NodeIdType("XPONDER-3-2"))
                     .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
                     .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()))
@@ -509,7 +509,7 @@ public final class ServiceDataUtils {
                 .service.reconfigure.input.ServiceAEndBuilder()
             .setClli("clli")
             .setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1))
+            .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
             .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
@@ -521,7 +521,7 @@ public final class ServiceDataUtils {
                 .service.reconfigure.input.ServiceZEndBuilder()
             .setClli("clli")
             .setServiceFormat(ServiceFormat.OC)
-            .setServiceRate(Uint32.valueOf(1))
+            .setServiceRate(Uint32.ONE)
             .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(Map.of(new TxDirectionKey(getTxDirection().key()),getTxDirection()))
             .setRxDirection(Map.of(new RxDirectionKey(getRxDirection().key()), getRxDirection()));
