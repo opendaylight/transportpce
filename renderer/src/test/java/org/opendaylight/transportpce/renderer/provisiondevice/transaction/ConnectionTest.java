@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice.transaction;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,7 +17,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Delete;
 
@@ -27,7 +28,7 @@ class ConnectionTest {
         when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(List.of("Interface1"));
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
-        Assert.assertTrue(n1.rollback(delete));
+        assertTrue(n1.rollback(delete));
         verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 
@@ -36,7 +37,7 @@ class ConnectionTest {
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
         Connection n2 = new Connection("ROADM-A", "DEG1", false);
 
-        Assert.assertTrue(n1.equals(n2));
+        assertTrue(n1.equals(n2));
     }
 
     @Test
@@ -44,7 +45,7 @@ class ConnectionTest {
         Connection n1 = new Connection("ROADM-A", "DEG1", true);
         Connection n2 = new Connection("ROADM-A", "DEG1", false);
 
-        Assert.assertFalse(n1.equals(n2));
+        assertFalse(n1.equals(n2));
     }
 
     @Test
@@ -52,7 +53,7 @@ class ConnectionTest {
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
         Connection n2 = new Connection("ROADM-B", "DEG1", false);
 
-        Assert.assertFalse(n1.equals(n2));
+        assertFalse(n1.equals(n2));
     }
 
 
@@ -62,7 +63,7 @@ class ConnectionTest {
         when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(null);
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
-        Assert.assertFalse(n1.rollback(delete));
+        assertFalse(n1.rollback(delete));
         verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 
@@ -72,7 +73,7 @@ class ConnectionTest {
         when(delete.deleteCrossConnect("ROADM-A", "DEG1", false)).thenReturn(new ArrayList<>());
         Connection n1 = new Connection("ROADM-A", "DEG1", false);
 
-        Assert.assertFalse(n1.rollback(delete));
+        assertFalse(n1.rollback(delete));
         verify(delete, times(1)).deleteCrossConnect("ROADM-A", "DEG1", false);
     }
 }

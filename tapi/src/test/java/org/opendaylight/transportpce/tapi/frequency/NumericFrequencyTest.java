@@ -8,12 +8,12 @@
 
 package org.opendaylight.transportpce.tapi.frequency;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.BitSet;
 import java.util.Map;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 class NumericFrequencyTest {
@@ -33,7 +33,7 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(196.075, 196.125);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.assignedFrequency(used));
+        assertEquals(expected, frequencyService.assignedFrequency(used));
     }
 
     @Test
@@ -53,7 +53,7 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(191.325, 191.375, 196.075, 196.125);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.assignedFrequency(used));
+        assertEquals(expected, frequencyService.assignedFrequency(used));
     }
 
     @Test
@@ -71,7 +71,7 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(191.525, 191.575);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.assignedFrequency(used));
+        assertEquals(expected, frequencyService.assignedFrequency(used));
     }
 
     @Test
@@ -94,7 +94,7 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(191.325, 191.375, 191.525, 191.575, 196.075, 196.125);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.assignedFrequency(used));
+        assertEquals(expected, frequencyService.assignedFrequency(used));
     }
 
     @Test
@@ -111,7 +111,7 @@ class NumericFrequencyTest {
         when(bitMap.availableFrequencies()).thenReturn(available);
 
         Map<Double, Double> expected = Map.of(191.325, 196.075);
-        Assert.assertEquals(expected, frequencyService.availableFrequency(bitMap));
+        assertEquals(expected, frequencyService.availableFrequency(bitMap));
     }
 
     @Test
@@ -131,7 +131,7 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(191.325, 191.525, 191.575, 196.125);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.availableFrequency(used));
+        assertEquals(expected, frequencyService.availableFrequency(used));
     }
 
     @Test
@@ -152,6 +152,6 @@ class NumericFrequencyTest {
         Map<Double, Double> expected = Map.of(191.35625, 191.39374999999998, 191.44375, 196.125);
 
         Numeric frequencyService = new NumericFrequency(191.325, 768, math);
-        Assert.assertEquals(expected, frequencyService.availableFrequency(used));
+        assertEquals(expected, frequencyService.availableFrequency(used));
     }
 }

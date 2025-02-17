@@ -7,6 +7,10 @@
  */
 package org.opendaylight.transportpce.pce.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -20,7 +24,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Assert;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -93,7 +96,7 @@ public final class PceTestUtils {
             saveOpenRoadmNetwork(networkMap.get(0), StringConstants.OPENROADM_NETWORK, dataBroker);
         } catch (IOException | ExecutionException | InterruptedException e) {
             LOG.error("Cannot init test ", e);
-            Assert.fail("Cannot init test ");
+            fail("Cannot init test ");
         }
     }
 
@@ -121,51 +124,51 @@ public final class PceTestUtils {
 
     public static void checkConfigurationResponse(PathComputationRequestOutput output,
                                                   PathComputationRequestOutput expectedOutput) {
-        Assert.assertNotNull(output);
-        Assert.assertEquals(
+        assertNotNull(output);
+        assertEquals(
                 expectedOutput.getConfigurationResponseCommon().getAckFinalIndicator(),
                 output.getConfigurationResponseCommon().getAckFinalIndicator());
-        Assert.assertEquals(
+        assertEquals(
                 expectedOutput.getConfigurationResponseCommon().getResponseMessage(),
                 output.getConfigurationResponseCommon().getResponseMessage());
-        Assert.assertEquals(
+        assertEquals(
                 expectedOutput.getConfigurationResponseCommon().getResponseCode(),
                 output.getConfigurationResponseCommon().getResponseCode());
     }
 
     public static void checkCalculatedPath(PathComputationRequestOutput output,
                                            PathComputationRequestOutput expectedOutput) {
-        Assert.assertNotNull(output.getResponseParameters().getPathDescription());
-        Assert.assertNotNull(output.getResponseParameters().getPathDescription().getAToZDirection());
-        Assert.assertNotNull(output.getResponseParameters().getPathDescription().getZToADirection());
-        Assert.assertNotNull(output.getResponseParameters().getPathDescription().getAToZDirection().getAToZ());
-        Assert.assertNotNull(output.getResponseParameters().getPathDescription().getZToADirection().getZToA());
+        assertNotNull(output.getResponseParameters().getPathDescription());
+        assertNotNull(output.getResponseParameters().getPathDescription().getAToZDirection());
+        assertNotNull(output.getResponseParameters().getPathDescription().getZToADirection());
+        assertNotNull(output.getResponseParameters().getPathDescription().getAToZDirection().getAToZ());
+        assertNotNull(output.getResponseParameters().getPathDescription().getZToADirection().getZToA());
 
         int atozSize = output.getResponseParameters().getPathDescription().getAToZDirection().getAToZ().size();
         int ztoaSize = output.getResponseParameters().getPathDescription().getZToADirection().getZToA().size();
-        Assert.assertEquals(atozSize, ztoaSize);
+        assertEquals(atozSize, ztoaSize);
 
         Long actualAToZWavel = output.getResponseParameters().getPathDescription().getAToZDirection()
                 .getAToZWavelengthNumber().toJava();
         Long expectedAToZWavel = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
                 .getAToZWavelengthNumber().toJava();
-        Assert.assertEquals(actualAToZWavel, expectedAToZWavel);
+        assertEquals(actualAToZWavel, expectedAToZWavel);
 
         Long actualZtoAWavel = output.getResponseParameters().getPathDescription().getZToADirection()
                 .getZToAWavelengthNumber().toJava();
         Long expectedZtoAWavel = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
                 .getZToAWavelengthNumber().toJava();
-        Assert.assertEquals(actualZtoAWavel, expectedZtoAWavel);
+        assertEquals(actualZtoAWavel, expectedZtoAWavel);
 
         Long actualAToZRate = output.getResponseParameters().getPathDescription().getAToZDirection().getRate().toJava();
         Long expectedAToZRate = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
                 .getRate().toJava();
-        Assert.assertEquals(expectedAToZRate, actualAToZRate);
+        assertEquals(expectedAToZRate, actualAToZRate);
 
         Long actualZToARate = output.getResponseParameters().getPathDescription().getZToADirection().getRate().toJava();
         Long expectedZToARate = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
                 .getRate().toJava();
-        Assert.assertEquals(actualZToARate, expectedZToARate);
+        assertEquals(actualZToARate, expectedZToARate);
     }
 
     private static List<String> getNodesFromPath(PathComputationRequestOutput output) {
@@ -202,7 +205,6 @@ public final class PceTestUtils {
 
     public static boolean checkPCECalculationConflicts(PathComputationRequestOutput[] outputs,
                                                        int iterationOrdinal, DataBroker dataBroker) {
-
         return true;
     }
 

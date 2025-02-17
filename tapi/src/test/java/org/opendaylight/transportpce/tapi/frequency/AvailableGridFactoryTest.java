@@ -9,8 +9,10 @@
 package org.opendaylight.transportpce.tapi.frequency;
 
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.BitSet;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 class AvailableGridFactoryTest {
@@ -21,10 +23,9 @@ class AvailableGridFactoryTest {
         byte[] frequency = {0, -1, -1, -1, -1, -1, -1, -1};
         byte[] expected =  {0, -1, -1, -1, -1, -1, -1, -1};
 
-        Assert.assertArrayEquals(
+        assertArrayEquals(
                 expected,
-                availableGridFactory.fromAvailable(frequency).availableFrequencyRanges()
-        );
+                availableGridFactory.fromAvailable(frequency).availableFrequencyRanges());
     }
 
     @Test
@@ -38,20 +39,16 @@ class AvailableGridFactoryTest {
 
         byte[] availableFrequencies = bitMap.availableFrequencyRanges();
 
-        Assert.assertArrayEquals(
+        assertArrayEquals(
                 expectedAvailableFrequencies,
-                availableFrequencies
-        );
+                availableFrequencies);
 
-        Assert.assertArrayEquals(
+        assertArrayEquals(
                 availableFrequencies,
-                bitMap.availableFrequencyRanges()
-        );
+                bitMap.availableFrequencyRanges());
 
-        Assert.assertEquals(
+        assertEquals(
                 BitSet.valueOf(assignedFrequencies),
-                bitMap.assignedFrequencies()
-        );
-
+                bitMap.assignedFrequencies());
     }
 }

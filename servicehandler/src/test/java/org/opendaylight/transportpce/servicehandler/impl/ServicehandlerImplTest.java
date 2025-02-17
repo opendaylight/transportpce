@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -550,7 +549,7 @@ public class ServicehandlerImplTest extends AbstractTest {
         ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>> result =
                 new AddOpenroadmOperationalModesToCatalogImpl(catalogDataStoreOperations)
                     .invoke(new AddOpenroadmOperationalModesToCatalogInputBuilder().build());
-        Assert.assertEquals(
+        assertEquals(
             ResponseCodes.RESPONSE_FAILED,
             result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
@@ -561,7 +560,7 @@ public class ServicehandlerImplTest extends AbstractTest {
         ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>> result =
                 new AddSpecificOperationalModesToCatalogImpl(catalogDataStoreOperations)
                     .invoke(new AddSpecificOperationalModesToCatalogInputBuilder().build());
-        Assert.assertEquals(
+        assertEquals(
             ResponseCodes.RESPONSE_FAILED,
             result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
@@ -572,7 +571,7 @@ public class ServicehandlerImplTest extends AbstractTest {
         ListenableFuture<RpcResult<AddOpenroadmOperationalModesToCatalogOutput>> result =
                 new AddOpenroadmOperationalModesToCatalogImpl(catalogDataStoreOperations)
                     .invoke(CatalogDataUtils.buildAddORToCatalogInput());
-        Assert.assertEquals(
+        assertEquals(
             ResponseCodes.RESPONSE_OK,
             result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
@@ -583,7 +582,7 @@ public class ServicehandlerImplTest extends AbstractTest {
         ListenableFuture<RpcResult<AddSpecificOperationalModesToCatalogOutput>> result =
                 new AddSpecificOperationalModesToCatalogImpl(catalogDataStoreOperations)
                     .invoke(CatalogDataUtils.buildAddSpecificToCatalogInput());
-        Assert.assertEquals(
+        assertEquals(
             ResponseCodes.RESPONSE_OK,
             result.get().getResult().getConfigurationResponseCommon().getResponseCode());
     }
