@@ -1,0 +1,86 @@
+module transportpce-tapi-connectivityutils {
+  yang-version 1.1;
+  namespace "http://org/opendaylight/transportpce/tapi-connectivityutils";
+  prefix org-opendaylight-transportpce-tapi-connectivityUtils;
+
+  import tapi-common {
+    prefix tapi-common;
+    revision-date 2022-11-21;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions to ease connection handling in tapi-connectivity context.
+     Copyright (c) 2025 Orange and others. All rights reserved.
+     authors: Olivier Renais";
+
+
+  revision "2025-02-07" {
+    description
+      "Initial Model dedicated to connection storage for connectivity service management";
+  }
+
+  container connection-vs-service {
+    description
+     "host a list of service with relevant information used to describe service
+     and connections hierarchy";
+    list services {
+      key "service-name";
+      description
+        "unique identifier for the service";
+      leaf service-name {
+        type string;
+        description
+          "Service name which corresponds to OpenROADM service-name";
+      }
+      leaf service-uuid {
+        type tapi-common:uuid;
+        description
+          "The Uuid of the service";
+      }
+      list supporting-services {
+        key "supporting-service-name";
+        description
+          "List of supporting services of lower layer";
+        leaf supporting-service-name {
+          type string;
+          description
+            "Supporting service name which corresponds to an OpenROADM service-name";
+        }
+        leaf supporting-service-uuid {
+          type tapi-common:uuid;
+          description
+            "The supporting service uuid";
+        }
+      }
+      list supporting-connections {
+        key "connection-name";
+        description
+          "List of supporting connections with their names as they appear in Tapi-context";
+        leaf connection-name {
+          type string;
+          description
+            "Connection name which corresponds to Tapi connection-name";
+        }
+        leaf layer-protocol-qualifier {
+          type string;
+          description
+            "The connection layer protocol name";
+        }
+        leaf associated-service-name {
+          type string;
+          description
+            "Service name of the service the connection is associated to";
+        }
+        leaf uuid {
+          type tapi-common:uuid;
+          description
+            "The Uuid of the connection";
+        }
+      }
+    }
+  }
+}
