@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -19,17 +18,6 @@ import org.opendaylight.transportpce.servicehandler.listeners.RendererListener;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.RendererServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalog;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalog;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreate;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceDelete;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceFeasibilityCheck;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReconfigure;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceReroute;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceRestoration;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreate;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceDelete;
-import org.opendaylight.yangtools.binding.Rpc;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -46,15 +34,9 @@ import org.slf4j.LoggerFactory;
 public class ServicehandlerImpl {
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerImpl.class);
 
-    private ServiceDataStoreOperations serviceDataStoreOperations;
-    private PceListener pceListenerImpl;
-    private RendererListener rendererListenerImpl;
-    private NetworkListener networkModelListenerImpl;
-    private CatalogDataStoreOperations catalogDataStoreOperations;
-    private NotificationPublishService notificationPublishService;
     private PCEServiceWrapper pceServiceWrapper;
     private RendererServiceWrapper rendererServiceWrapper;
-    private Registration reg;
+    private Registration rpcRegistration;
 
     @Activate
     public ServicehandlerImpl(@Reference RpcProviderService rpcProviderService,
@@ -66,51 +48,39 @@ public class ServicehandlerImpl {
             @Reference PathComputationService pathComputationService,
             @Reference RendererServiceOperations rendererServiceOperations,
             @Reference NotificationPublishService notificationPublishService) {
-        this.serviceDataStoreOperations = serviceDataStoreOperations;
-        this.pceListenerImpl = pceListenerImpl;
-        this.rendererListenerImpl = rendererListenerImpl;
-        this.networkModelListenerImpl = networkModelListenerImpl;
-        this.catalogDataStoreOperations = catalogDataStoreOperations;
-        this.notificationPublishService =  notificationPublishService;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
-        this.reg = rpcProviderService.registerRpcImplementations(registerRPCs());
+        this.rpcRegistration = rpcProviderService.registerRpcImplementations(
+                new ServiceCreateImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, pceServiceWrapper, notificationPublishService),
+                new ServiceDeleteImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, rendererServiceWrapper, notificationPublishService),
+                new ServiceFeasibilityCheckImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, pceServiceWrapper),
+                new ServiceReconfigureImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, rendererServiceWrapper),
+                new ServiceRestorationImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, rendererServiceWrapper),
+                new ServiceRerouteImpl(serviceDataStoreOperations, pceServiceWrapper),
+                new TempServiceCreateImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        networkModelListenerImpl, pceServiceWrapper),
+                new TempServiceDeleteImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
+                        rendererServiceWrapper),
+                new AddOpenroadmOperationalModesToCatalogImpl(catalogDataStoreOperations),
+                new AddSpecificOperationalModesToCatalogImpl(catalogDataStoreOperations));
         LOG.info("ServicehandlerImpl Initiated");
     }
 
     @Deactivate
     public void close() {
-        this.reg.close();
+        this.rpcRegistration.close();
         LOG.info("ServicehandlerImpl Closed");
     }
 
     public Registration getRegisteredRpc() {
-        return reg;
+        return rpcRegistration;
     }
 
-    private ImmutableClassToInstanceMap<Rpc<?, ?>> registerRPCs() {
-        return ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(ServiceCreate.class, new ServiceCreateImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, networkModelListenerImpl, pceServiceWrapper, notificationPublishService))
-            .put(ServiceDelete.class, new ServiceDeleteImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, networkModelListenerImpl, rendererServiceWrapper, notificationPublishService))
-            .put(ServiceFeasibilityCheck.class, new ServiceFeasibilityCheckImpl(serviceDataStoreOperations,
-                    pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, pceServiceWrapper))
-            .put(ServiceReconfigure.class, new ServiceReconfigureImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, networkModelListenerImpl, rendererServiceWrapper))
-            .put(ServiceRestoration.class, new ServiceRestorationImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, networkModelListenerImpl, rendererServiceWrapper))
-            .put(ServiceReroute.class, new ServiceRerouteImpl(serviceDataStoreOperations, pceServiceWrapper))
-            .put(TempServiceCreate.class, new TempServiceCreateImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, networkModelListenerImpl, pceServiceWrapper))
-            .put(TempServiceDelete.class, new TempServiceDeleteImpl(serviceDataStoreOperations, pceListenerImpl,
-                    rendererListenerImpl, rendererServiceWrapper))
-            .put(AddOpenroadmOperationalModesToCatalog.class,
-                    new AddOpenroadmOperationalModesToCatalogImpl(catalogDataStoreOperations))
-            .put(AddSpecificOperationalModesToCatalog.class,
-                    new AddSpecificOperationalModesToCatalogImpl(catalogDataStoreOperations))
-            .build();
-    }
 
     // This is class is public so that these messages can be accessed from Junit (avoid duplications).
     public static final class LogMessages {

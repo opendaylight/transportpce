@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import com.google.common.collect.ImmutableClassToInstanceMap;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
@@ -20,9 +19,6 @@ import org.opendaylight.transportpce.tapi.impl.rpc.DeleteTapiLinkImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.InitRoadmRoadmTapiLinkImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.InitXpdrRdmTapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.DeleteTapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitRoadmRoadmTapiLink;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLink;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
@@ -32,7 +28,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.to
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
-import org.opendaylight.yangtools.binding.Rpc;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -55,11 +50,10 @@ public class TapiNetworkUtilsImpl {
     public TapiNetworkUtilsImpl(@Reference RpcProviderService rpcProviderService,
             @Reference NetworkTransactionService networkTransactionService, @Reference TapiLink tapiLink) {
         this.networkTransactionService = networkTransactionService;
-        this.reg = rpcProviderService.registerRpcImplementations(ImmutableClassToInstanceMap.<Rpc<?, ?>>builder()
-            .put(InitRoadmRoadmTapiLink.class, new InitRoadmRoadmTapiLinkImpl(tapiLink, this))
-            .put(InitXpdrRdmTapiLink.class, new InitXpdrRdmTapiLinkImpl(tapiLink, null))
-            .put(DeleteTapiLink.class, new DeleteTapiLinkImpl(this, networkTransactionService))
-            .build());
+        this.reg = rpcProviderService.registerRpcImplementations(
+                new InitRoadmRoadmTapiLinkImpl(tapiLink, this),
+                new InitXpdrRdmTapiLinkImpl(tapiLink, null),
+                new DeleteTapiLinkImpl(this, networkTransactionService));
         LOG.info("TapiNetworkUtilsImpl instantiated");
     }
 
