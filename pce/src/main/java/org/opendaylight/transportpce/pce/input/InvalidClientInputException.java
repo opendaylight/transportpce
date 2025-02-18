@@ -10,6 +10,9 @@ package org.opendaylight.transportpce.pce.input;
 
 public class InvalidClientInputException extends RuntimeException {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public InvalidClientInputException(String message) {
         super(message);
     }
