@@ -15,7 +15,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl.LogMessages;
 
-import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -149,7 +148,11 @@ public class ServicehandlerImplTest extends AbstractTest {
         new ServicehandlerImpl(rpcProviderService, serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
                 networkModelListenerImpl, catalogDataStoreOperations, pathComputationService, rendererServiceOperations,
                 notificationPublishService);
-        verify(rpcProviderService, times(1)).registerRpcImplementations(any(ClassToInstanceMap.class));
+        verify(rpcProviderService, times(1)).registerRpcImplementations(any(ServiceCreateImpl.class),
+                any(ServiceDeleteImpl.class), any(ServiceFeasibilityCheckImpl.class), any(ServiceReconfigureImpl.class),
+                any(ServiceRestorationImpl.class), any(ServiceRerouteImpl.class), any(TempServiceCreateImpl.class),
+                any(TempServiceDeleteImpl.class), any(AddOpenroadmOperationalModesToCatalogImpl.class),
+                any(AddSpecificOperationalModesToCatalogImpl.class));
     }
 
     @Test
