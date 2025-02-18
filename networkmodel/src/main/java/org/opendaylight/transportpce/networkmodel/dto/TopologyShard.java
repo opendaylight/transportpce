@@ -23,6 +23,7 @@ public class TopologyShard {
 
     /**
      * Instantiate the TopologyShard object.
+     *
      * @param nodes List of Nodes to store
      * @param links List of Links to store
      */
@@ -34,6 +35,7 @@ public class TopologyShard {
 
     /**
      * Instantiate the TopologyShard object.
+     *
      * @param nodes List of Nodes to store
      * @param links List of Links to store
      * @param tps List of Termination Points to store
@@ -46,6 +48,7 @@ public class TopologyShard {
 
     /**
      * Get the list of Nodes.
+     *
      * @return List of Nodes
      */
     public List<Node> getNodes() {
@@ -54,6 +57,7 @@ public class TopologyShard {
 
     /**
      * Get the list of Links.
+     *
      * @return List of Links
      */
     public List<Link> getLinks() {
@@ -62,6 +66,7 @@ public class TopologyShard {
 
     /**
      * Get the list of Termination Points.
+     *
      * @return List of TerminationPoint
      */
     public List<TerminationPoint> getTps() {

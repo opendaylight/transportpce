@@ -122,6 +122,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Create Nodes and Links in the OTN topology depending on the type of OTN device.
+     *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
      * @return Subset of the topology
      */
@@ -155,6 +156,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     *
      * @param nodeA Node name at one link end
      * @param tpA Terminatin point id on nodeA
      * @param nodeZ Node name at the other link end
@@ -174,6 +176,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     *
      * @param notifLink List of links to create
      * @param linkType To distinguish the ODU link creation from the OTU link creation
      * @return topology with otn links updated
@@ -194,6 +197,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Create OTN links and initialize their bandwidth parameters during the creation of a service.
+     *
      * @param notifLink List of links to create
      * @param supportedOtu4links List of OTU links to update when they exist
      * @param supportedTPs List of termination points to update
@@ -228,6 +232,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Update the available and used bandwidth parameters of OTN links during creation of a service.
+     *
      * @param suppOtuLinks List of OTU links to create
      * @param oldTps List of termination points to update
      * @param linkType To distinguish the ODU link creation from the OTU link creation
@@ -270,6 +275,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Update the available and used bandwidth parameters of an OTN link during creation and deletion of a service.
+     *
      * @param suppOduLinks List of ODU links to update
      * @param oldTps List of ODU termination points to update
      * @param serviceRate Rate of the service
@@ -322,6 +328,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Update the available and used bandwidth parameters of an OTN link during creation and deletion of a service.
+     *
      * @param suppOtuLinks List of OTU links to update
      * @param isDeletion Set when this is a deletion action
      * @return topology with otn links updated
@@ -352,6 +359,7 @@ public final class OpenRoadmOtnTopology {
 
     /**
      * Update the available and used bandwidth parameters of OTN links during deletion of a service.
+     *
      * @param suppOtuLinks List of OTU links to update
      * @param oldTps List of termination points to update
      * @param linkType To distinguish the ODU link deletion from the OTU link deletion

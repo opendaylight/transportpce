@@ -48,6 +48,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * FrequenciesServiceTest class.
+ */
 public class FrequenciesServiceTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceTest.class);
     private static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";

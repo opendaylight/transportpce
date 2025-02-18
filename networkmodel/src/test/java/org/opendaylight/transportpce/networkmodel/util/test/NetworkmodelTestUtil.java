@@ -58,10 +58,23 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * NetworkmodelTestUtil class.
+ */
 public final class NetworkmodelTestUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkmodelTestUtil.class);
 
+    /**
+     * createMappingForRdm.
+     *
+     * @param nodeId a {@link java.lang.String} object
+     * @param clli a {@link java.lang.String} object
+     * @param degNb a int
+     * @param srgNbs a {@link java.util.List} object
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315
+     *      .network.Nodes} object
+     */
     public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, List<Integer> srgNbs) {
         Map<MappingKey,Mapping> mappingList = new HashMap<>();
         createDegreeMappings(mappingList, 1, degNb);
@@ -75,6 +88,18 @@ public final class NetworkmodelTestUtil {
             .build();
     }
 
+    /**
+     * createMappingForXpdr.
+     *
+     * @param nodeId a {@link java.lang.String} object
+     * @param clli a {@link java.lang.String} object
+     * @param networkPortNb a int
+     * @param clientPortNb a int
+     * @param xpdrNodeType a {@link org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
+     *      .XpdrNodeTypes} object
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315
+     *      .network.Nodes} object
+     */
     public static Nodes createMappingForXpdr(
             String nodeId, String clli, int networkPortNb, int clientPortNb, XpdrNodeTypes xpdrNodeType) {
         Map<MappingKey,Mapping> mappingMap = new HashMap<>();
@@ -88,6 +113,14 @@ public final class NetworkmodelTestUtil {
         return mappingNode;
     }
 
+    /**
+     * createSuppOTNLinks.
+     *
+     * @param type a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     *      .OtnLinkType} object
+     * @param availBW a {@link org.opendaylight.yangtools.yang.common.Uint32} object
+     * @return a {@link java.util.List} object
+     */
     public static List<Link> createSuppOTNLinks(OtnLinkType type, Uint32 availBW) {
         return new ArrayList<>(List.of(
             //linkAZ,
@@ -153,6 +186,12 @@ public final class NetworkmodelTestUtil {
             ));
     }
 
+    /**
+     * createTpList.
+     *
+     * @param withTpnTsPool a boolean
+     * @return a {@link java.util.List} object
+     */
     public static List<TerminationPoint> createTpList(boolean withTpnTsPool) {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder()
             .setRate(ODU4.VALUE);

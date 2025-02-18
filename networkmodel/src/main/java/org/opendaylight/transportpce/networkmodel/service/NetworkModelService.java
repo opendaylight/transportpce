@@ -35,7 +35,6 @@ public interface NetworkModelService {
      *
      * @param nodeId
      *     unique node ID of OpenROADM node.
-     *
      * @return result of node deletion from portmapping and topologies
      */
     boolean deleteOpenRoadmnode(String nodeId);
@@ -45,8 +44,8 @@ public interface NetworkModelService {
      *
      * @param nodeId
      *     unique node ID of OpenConfig node.
-     *
      * @return result of node deletion from portmapping
+     * @since 11.0.0
      */
     boolean deleteOpenConfignode(String nodeId);
 
@@ -59,6 +58,7 @@ public interface NetworkModelService {
      *     OpenConfig  version
      * @param ipAddress
      *      ipaddress
+     * @since 11.0.0
      */
     void createOpenConfigNode(String nodeId, String openConfigVersion, IpAddress ipAddress);
 
@@ -155,11 +155,15 @@ public interface NetworkModelService {
 
     /**
      * Create new OpenROADM TAPI-EXT node in all OpenROADM topologies.
+     *
+     * @since 11.0.0
      */
     void createTapiExtNodeAtInit();
 
     /**
      * delete the OpenROADM TAPI-EXT node in all OpenROADM topologies.
+     *
+     * @since 11.0.0
      */
     void deleteTapiExtNode();
 

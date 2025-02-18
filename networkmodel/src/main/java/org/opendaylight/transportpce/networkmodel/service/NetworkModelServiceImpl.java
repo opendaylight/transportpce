@@ -108,6 +108,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     /**
      * Instantiate the NetworkModelServiceImpl.
+     *
      * @param dataBroker Provides access to the conceptual data tree store. Used here to instantiate R2RLinkDiscovery
      * @param deviceTransactionManager Manages data transactions with the netconf devices
      * @param networkTransactionService Service that eases the transaction operations with data-stores
@@ -134,6 +135,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         LOG.debug("NetworkModelServiceImpl instantiated");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void createOpenRoadmNode(String nodeId, String openRoadmVersion) {
         try {
@@ -175,6 +177,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void createOpenConfigNode(String nodeId, String openConfigVersion, IpAddress ipAddress) {
         LOG.info("create openconfig node {}", nodeId);
@@ -201,6 +204,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setOpenRoadmNodeStatus(String nodeId, ConnectionStatus connectionStatus) {
         LOG.info("setOpenROADMNodeStatus: {} {}", nodeId, connectionStatus.name());
@@ -214,10 +218,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     /**
      * This Method is used to delete OpenROADM node from openroadm network layers and portmapping datastores.
-     * @param nodeId
-     *     unique node ID of OpenConfig node.
-     *
-     * @return result of node deletion from network and portmapping datastore
      */
     @Override
     public boolean deleteOpenRoadmnode(String nodeId) {
@@ -245,10 +245,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     /**
      * This Method is used to delete openconfig node from openroadm network layers and portmapping datastores.
-     * @param nodeId
-     *     unique node ID of OpenConfig node.
-     *
-     * @return result of node deletion from network and portmapping datastore
      */
     @Override
     public boolean deleteOpenConfignode(String nodeId) {

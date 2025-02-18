@@ -27,7 +27,8 @@ public interface Notification {
 
     /**
      * Send renderer notification.
-     * @param <T>
+     *
+     * @param notification a {@link org.opendaylight.yangtools.binding.Notification} object
      */
     void send(org.opendaylight.yangtools.binding.Notification<?> notification);
 

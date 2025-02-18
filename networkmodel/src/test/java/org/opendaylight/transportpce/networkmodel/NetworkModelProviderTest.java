@@ -28,6 +28,9 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.FrequenciesService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 
+/**
+ * NetworkModelProviderTest class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class NetworkModelProviderTest {
     @Mock

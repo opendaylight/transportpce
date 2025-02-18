@@ -58,6 +58,14 @@ final class Rdm2XpdrLink {
 
     private static final Logger LOG = LoggerFactory.getLogger(Rdm2XpdrLink.class);
 
+    /**
+     * createXpdrRdmLinks.
+     *
+     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     *      .links.input.grouping.LinksInput} object
+     * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
+     * @return a boolean
+     */
     public static boolean createXpdrRdmLinks(LinksInput linksInput, DataBroker dataBroker) {
         TerminationPoint rdmTp;
         String destNode;
@@ -108,6 +116,14 @@ final class Rdm2XpdrLink {
         }
     }
 
+    /**
+     * createRdmXpdrLinks.
+     *
+     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     *      .links.input.grouping.LinksInput} object
+     * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
+     * @return a boolean
+     */
     public static boolean createRdmXpdrLinks(LinksInput linksInput, DataBroker dataBroker) {
         TerminationPoint rdmTp;
         String srcNode;

@@ -33,7 +33,6 @@ public final class ClliNetwork {
      *
      * @param deviceId device ID
      * @param nodeInfo Some important and general data from device
-     *
      * @return node builder status
      */
     public static Node createNode(String deviceId, NodeInfo nodeInfo) {

@@ -56,6 +56,7 @@ public class R2RLinkDiscovery {
 
     /**
      * Instantiate the R2RLinkDiscovery object.
+     *
      * @param dataBroker Provides access to the conceptual data tree store
      * @param deviceTransactionManager Manages data transactions with the netconf devices
      * @param networkTransactionService Service that eases the transaction operations with data-stores
@@ -70,6 +71,7 @@ public class R2RLinkDiscovery {
     /**
      * Depending on the org-openroadm-device version, get from the device relevant information concerning the node
      * neighbors.
+     *
      * @param nodeId Node name
      * @param nodeVersion org-openroadm-device version
      * @return True if the node has at least one neighbor. False otherwise.
@@ -268,6 +270,7 @@ public class R2RLinkDiscovery {
 
     /**
      * Get the kind of WDM line interface of the node (Bidirectional or Unidirectional).
+     *
      * @param degreeCounter Number of the degree
      * @param nodeId Node name
      * @return Direction
@@ -298,6 +301,7 @@ public class R2RLinkDiscovery {
 
     /**
      * Create a ROADM-to-ROADM link when a ROADM node has a neighbor declared in its configuration.
+     *
      * @param nodeId Node name
      * @param interfaceName Name of the WDM line interface
      * @param remoteSystemName Name of the neighbor node
@@ -387,6 +391,7 @@ public class R2RLinkDiscovery {
 
     /**
      * Delete a ROADM-to-ROADM link when a ROADM node is removed from the openroadm topology.
+     *
      * @param nodeId Node name
      * @param interfaceName Name of the WDM line interface
      * @param remoteSystemName Name of the neighbor node

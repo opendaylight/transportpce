@@ -57,6 +57,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility class that allows to register TransportPCE internal RPC to complement the different topologies.
+ *
+ * @author gaet7295
  */
 @Component
 public class NetworkUtilsImpl {
@@ -67,6 +69,7 @@ public class NetworkUtilsImpl {
 
     /**
      * Instantiate the NetworkUtilsImpl object.
+     *
      * @param dataBroker Provides access to the conceptual data tree store.
      * @param rpcProvider Service that allows registering Remote Procedure Call (RPC) implementations.
      */

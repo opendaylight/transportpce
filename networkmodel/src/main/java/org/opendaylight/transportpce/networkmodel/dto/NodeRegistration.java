@@ -43,6 +43,7 @@ public class NodeRegistration {
 
     /**
      * Instantiate the NodeRegistration object.
+     *
      * @param nodeId Node name
      * @param nodeVersion OpenROADM org-openroadm-device model version
      * @param notificationService Notification broker which allows to subscribe for notifications

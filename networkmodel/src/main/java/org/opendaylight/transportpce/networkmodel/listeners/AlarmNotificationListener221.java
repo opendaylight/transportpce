@@ -50,6 +50,7 @@ public class AlarmNotificationListener221 {
 
     /**
      * Create instance of the listener.
+     *
      * @param dataBroker Provides access to the conceptual data tree store used by the listener implementation.
      */
     public AlarmNotificationListener221(DataBroker dataBroker) {
@@ -58,6 +59,7 @@ public class AlarmNotificationListener221 {
 
     /**
      * Get instances of a CompositeListener that could be used to unregister listeners.
+     *
      * @return a Composite listener containing listener implementations that will receive notifications
      */
     public CompositeListener getCompositeListener() {

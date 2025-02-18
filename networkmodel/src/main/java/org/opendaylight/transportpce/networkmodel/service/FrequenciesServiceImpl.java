@@ -88,12 +88,14 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         this.dataBroker = dataBroker;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
         updateFrequencies(atoZDirection, ztoADirection, true);
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void releaseFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
         updateFrequencies(atoZDirection, ztoADirection, false);

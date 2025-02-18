@@ -26,12 +26,14 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
 
     /**
      * Instantiate the PortMappingListener.
+     *
      * @param networkModelService Service that eases data handling in topology data-stores.
      */
     public PortMappingListener(NetworkModelService networkModelService) {
         this.networkModelService = networkModelService;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Mapping>> changes) {
         for (DataTreeModification<Mapping> change : changes) {
@@ -55,6 +57,7 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
 
     /**
      * Retrieve from the data change the node id that emits the device notification.
+     *
      * @param identifier Instance Identifiers of the mapping change.
      * @return the node ID, parent of the data tree change.
      */

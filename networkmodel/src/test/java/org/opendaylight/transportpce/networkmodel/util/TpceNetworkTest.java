@@ -29,6 +29,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yangtools.binding.Augmentation;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
+/**
+ * TpceNetworkTest class.
+ */
 public class TpceNetworkTest extends AbstractTest {
     TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(getDataBroker()));
 

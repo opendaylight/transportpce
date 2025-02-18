@@ -30,6 +30,9 @@ import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
 
 
+/**
+ * PortMappingListenerTest class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class PortMappingListenerTest {
 
