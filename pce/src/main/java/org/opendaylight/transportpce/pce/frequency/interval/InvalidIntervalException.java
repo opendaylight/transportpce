@@ -11,6 +11,9 @@ package org.opendaylight.transportpce.pce.frequency.interval;
 import org.opendaylight.transportpce.pce.frequency.FrequencySelectionException;
 
 public class InvalidIntervalException extends FrequencySelectionException {
+
+    private static final long serialVersionUID = 1L;
+
     public InvalidIntervalException(String message) {
         super(message);
     }
