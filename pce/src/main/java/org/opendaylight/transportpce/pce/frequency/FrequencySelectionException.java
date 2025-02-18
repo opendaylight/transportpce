@@ -9,6 +9,10 @@
 package org.opendaylight.transportpce.pce.frequency;
 
 public class FrequencySelectionException extends RuntimeException {
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public FrequencySelectionException(String message) {
         super(message);
     }
