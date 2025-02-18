@@ -37,6 +37,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601.EditOperationType;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
+/**
+ * DeviceListener221Test class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DeviceListener221Test {
     @Mock

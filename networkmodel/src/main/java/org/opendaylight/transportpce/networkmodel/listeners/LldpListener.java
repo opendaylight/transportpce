@@ -36,7 +36,6 @@ public class LldpListener implements Listener<LldpNbrInfoChange> {
 
     /**
      * Callback for lldp-nbr-info-change.
-     * @param notification LldpNbrInfoChange object
      */
     @Override
     public void onNotification(@NonNull LldpNbrInfoChange notification) {

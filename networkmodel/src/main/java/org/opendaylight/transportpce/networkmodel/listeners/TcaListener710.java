@@ -24,7 +24,14 @@ public final class TcaListener710 {
     private static final Logger LOG = LoggerFactory.getLogger(TcaListener710.class);
 
     /**
+     * Default constructor for TcaListener710.
+     */
+    public TcaListener710() {
+    }
+
+    /**
      * Get instances of a CompositeListener that could be used to unregister listeners.
+     *
      * @return a Composite listener containing listener implementations that will receive notifications
      */
     public CompositeListener getCompositeListener() {
@@ -39,5 +46,4 @@ public final class TcaListener710 {
     private void onTcaNotification(TcaNotification notification) {
         LOG.info("Notification {} received {}", TcaNotification.QNAME, notification);
     }
-
 }

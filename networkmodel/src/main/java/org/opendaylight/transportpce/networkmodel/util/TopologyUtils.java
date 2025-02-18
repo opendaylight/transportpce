@@ -59,13 +59,16 @@ public final class TopologyUtils {
     }
 
     /**
-     * Create a {@link LinkBuilder} object for a given source and destination.
+     * Create a {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+     *      .networks.network.LinkBuilder} object for a given source and destination.
+     *
      * @param srcNode source node id
      * @param dstNode destination node id
      * @param srcTp source termination point
      * @param destTp destination termination point
      * @param otnPrefix OTN link type prefix
-     * @return {@link LinkBuilder}
+     * @return {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+     *          .network.LinkBuilder}
      */
     public static LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp,
         String otnPrefix) {
@@ -104,6 +107,7 @@ public final class TopologyUtils {
 
     /**
      * Delete a link specified by a given source and destination.
+     *
      * @param srcNode source node id string
      * @param dstNode destination node id
      * @param srcTp source termination point
@@ -126,6 +130,7 @@ public final class TopologyUtils {
 
     /**
      * Delete a link specified by its linkId.
+     *
      * @param linkId The link identifier
      * @param networkTransactionService Service that eases the transaction operations with data-stores
      * @return True if OK, False otherwise.
@@ -160,9 +165,11 @@ public final class TopologyUtils {
     }
 
     /**
-     * Set the {@link AdminStates} according to string representation.
+     * Set the {@link org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates}
+     *      according to string representation.
+     *
      * @param adminState value of the AdminStates
-     * @return {@link AdminStates}
+     * @return {@link org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates}
      */
     public static AdminStates setNetworkAdminState(String adminState) {
         if (adminState == null) {
@@ -177,9 +184,11 @@ public final class TopologyUtils {
     }
 
     /**
-     * Set the {@link State} according to string representation.
+     * Set the {@link org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State} according to
+     *      string representation.
+     *
      * @param operState Value of the operational state
-     * @return {@link State}
+     * @return {@link org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State}
      */
     public static State setNetworkOperState(String operState) {
         if (operState == null) {
@@ -195,6 +204,7 @@ public final class TopologyUtils {
 
     /**
      * Update topology components.
+     *
      * @param abstractNodeid Node name
      * @param mapping mapping
      * @param nodes Map of topology nodes

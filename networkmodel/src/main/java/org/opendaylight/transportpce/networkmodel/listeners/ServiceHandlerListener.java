@@ -28,6 +28,7 @@ public class ServiceHandlerListener {
 
     /**
      * Instantiate the ServiceHandlerListener.
+     *
      * @param service FrequenciesService that eases WDM spectrum handling.
      */
     public ServiceHandlerListener(FrequenciesService service) {
@@ -37,6 +38,7 @@ public class ServiceHandlerListener {
 
     /**
      * Get instances of a CompositeListener that could be used to unregister listeners.
+     *
      * @return a Composite listener containing listener implementations that will receive notifications
      */
     public CompositeListener getCompositeListener() {
@@ -46,6 +48,7 @@ public class ServiceHandlerListener {
 
     /**
      * Callback on a notification reception.
+     *
      * @param notification ServiceRpcResultSh object
      */
     public void onServiceRpcResultSh(ServiceRpcResultSh notification) {

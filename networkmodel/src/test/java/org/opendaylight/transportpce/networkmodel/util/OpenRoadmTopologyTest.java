@@ -71,6 +71,9 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 
+/**
+ * OpenRoadmTopologyTest class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class OpenRoadmTopologyTest {
     @Mock

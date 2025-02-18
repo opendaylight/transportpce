@@ -19,12 +19,19 @@ import org.slf4j.LoggerFactory;
  * notification.
  * This implementation is dedicated to yang model 1.2.1 revision.
  */
-public class TcaListener {
+public final class TcaListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TcaListener.class);
 
     /**
+     * Default constructor for TcaListener.
+     */
+    public TcaListener() {
+    }
+
+    /**
      * Get instances of a CompositeListener that could be used to unregister listeners.
+     *
      * @return a Composite listener containing listener implementations that will receive notifications
      */
     public CompositeListener getCompositeListener() {
@@ -39,5 +46,4 @@ public class TcaListener {
     private void onTcaNotification(TcaNotification notification) {
         LOG.info("Notification {} received {}", TcaNotification.QNAME, notification);
     }
-
 }

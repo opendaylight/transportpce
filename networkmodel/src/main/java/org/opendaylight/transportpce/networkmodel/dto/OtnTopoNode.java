@@ -27,6 +27,7 @@ public class OtnTopoNode {
 
     /**
      * Instantiate the OtnTopoNode.
+     *
      * @param nodeid Node name
      * @param clli CLLI
      * @param xpdrNb XPDR number
@@ -52,6 +53,7 @@ public class OtnTopoNode {
 
     /**
      * Get the Node Id.
+     *
      * @return node ID
      */
     public String getNodeId() {
@@ -60,6 +62,7 @@ public class OtnTopoNode {
 
     /**
      * Get the XPDR type.
+     *
      * @return XpdrNodeTypes
      */
     public XpdrNodeTypes getNodeType() {
@@ -68,6 +71,7 @@ public class OtnTopoNode {
 
     /**
      * Get the number of Network TP of the XPDR device.
+     *
      * @return Number
      */
     public int getNbTpNetwork() {
@@ -76,6 +80,7 @@ public class OtnTopoNode {
 
     /**
      * Get the number for client TP of the XPDR device.
+     *
      * @return Number
      */
     public int getNbTpClient() {
@@ -84,6 +89,7 @@ public class OtnTopoNode {
 
     /**
      * Get the number of XPDR declared in the OpenROADM XPDR device.
+     *
      * @return Number
      */
     public int getXpdrNb() {
@@ -92,6 +98,7 @@ public class OtnTopoNode {
 
     /**
      * Get the CLLI configured on the OpenROADM device.
+     *
      * @return String
      */
     public String getClli() {
@@ -100,6 +107,7 @@ public class OtnTopoNode {
 
     /**
      * Get the connection map of the network ports of the device.
+     *
      * @return a connection map
      */
     public Map<String, String> getXpdrNetConnectionMap() {
@@ -108,6 +116,7 @@ public class OtnTopoNode {
 
     /**
      * Get the connection map of the client ports of the device.
+     *
      * @return a connection map
      */
     public Map<String, String> getXpdrCliConnectionMap() {
@@ -116,6 +125,7 @@ public class OtnTopoNode {
 
     /**
      * Get the list of mappings for the client port of the device.
+     *
      * @return list of mappings
      */
     public List<Mapping> getXpdrClMappings() {
@@ -124,6 +134,7 @@ public class OtnTopoNode {
 
     /**
      * Get the list of mappings for the network port of the device.
+     *
      * @return list of mappings
      */
     public List<Mapping> getXpdrNetMappings() {

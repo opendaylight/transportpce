@@ -99,6 +99,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Create Nodes and Links in the openroadm topology depending on the type of device.
+     *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
      * @return Subset of the topology
      */
@@ -108,6 +109,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Create a Nodes and Links in the openroadm topology depending on the type of device.
+     *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
      * @param firstMount Allow to distinguish if this is a new node creation or a netconf session reinitialization
      * @return Subset of the topology
@@ -126,6 +128,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Create the Node and Link elements of the topology when the node is of ROADM type.
+     *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
      * @param firstMount Allow to distinguish if this is a new node creation or a netconf session reinitialization
      * @return topology with new Node and Links
@@ -181,6 +184,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Create the Node and Link elements of the topology when the node is of XPDR type.
+     *
      * @param mappingNode Abstracted view of the node retrieved from the portmapping data-store
      * @return topology with new Node and Links
      */
@@ -559,6 +563,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Update the status of a link in the openroadm topology when we delete a service.
+     *
      * @param srcNode Node name at one link end
      * @param dstNode Node name at the other link end
      * @param srcTp Terminatin point id on srcNode
@@ -581,6 +586,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Update the status of a link in the openroadm topology when we delete a service.
+     *
      * @param linkId Id of the link to update
      * @param networkTransactionService Service that eases the transaction operations with data-stores
      * @return True if ok, False otherwise
@@ -623,6 +629,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Get a builder for instance identifier related to common network termination point.
+     *
      * @param nodeId String
      * @param tpId String
      * @return InstanceIdentifierBuilder
@@ -647,6 +654,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Get an instance identifier related to network node.
+     *
      * @param nodeId String
      * @return InstanceIdentifier
      */
@@ -662,6 +670,7 @@ public final class OpenRoadmTopology {
 
     /**
      * Get an instance identifier related to common network node.
+     *
      * @param nodeId String
      * @return InstanceIdentifier
      */

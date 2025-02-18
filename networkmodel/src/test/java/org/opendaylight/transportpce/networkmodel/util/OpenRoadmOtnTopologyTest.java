@@ -68,6 +68,9 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * OpenRoadmOtnTopologyTest class.
+ */
 public class OpenRoadmOtnTopologyTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmOtnTopologyTest.class);
@@ -75,6 +78,9 @@ public class OpenRoadmOtnTopologyTest {
     private Nodes portMappingSpdr;
     private Nodes portMappingBad;
 
+    /**
+     * Constructor for OpenRoadmOtnTopologyTest.
+     */
     public OpenRoadmOtnTopologyTest() {
         try (Reader reader = Files.newBufferedReader(
                 Path.of("src/test/resources/portMapping.json"),

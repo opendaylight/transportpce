@@ -70,6 +70,7 @@ public class NetworkModelProvider {
 
     /**
      * Instantiate the NetworkModelProvider.
+     *
      * @param networkTransactionService Service that eases the transaction operations with data-stores
      * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
      * @param networkModelService Service that eases data handling in topology datastores
@@ -98,7 +99,7 @@ public class NetworkModelProvider {
     }
 
     /**
-     * Method called when the blueprint container is created.
+     * Method called when OSGi service is created.
      */
     private void init() {
         LOG.info("NetworkModelProvider Session Initiated");
@@ -114,9 +115,9 @@ public class NetworkModelProvider {
             new ServiceHandlerListener(frequenciesService).getCompositeListener());
     }
 
-        /**
-         * Method called when the blueprint container is destroyed.
-         */
+    /**
+     * Method called when the OSGi service is destroyed.
+     */
     @Deactivate
     public void close() {
         LOG.info("NetworkModelProvider Closed");

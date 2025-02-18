@@ -64,6 +64,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     /**
      * Instantiate the NetConfTopologyListener.
+     *
      * @param networkModelService Service that eases data handling in topology datastores
      * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
      * @param deviceTransactionManager Manages data transactions with the netconf devices
@@ -81,6 +82,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.portMapping = portMapping;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
@@ -219,6 +221,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
     /**
      * Specific constructor dedicated to JUnit tests.
+     *
      * @param networkModelService Service that eases data handling in topology datastores
      * @param dataBroker Provides access to the conceptual data tree store in order to register data change listeners
      * @param deviceTransactionManager Manages data transactions with the netconf devices

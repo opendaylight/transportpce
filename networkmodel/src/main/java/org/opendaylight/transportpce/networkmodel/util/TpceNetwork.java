@@ -40,6 +40,7 @@ public class TpceNetwork {
 
     /**
      * Instantiate the TpceNetwork object.
+     *
      * @param networkTransactionService Service that eases the transaction operations with data-stores
      */
     public TpceNetwork(NetworkTransactionService networkTransactionService) {

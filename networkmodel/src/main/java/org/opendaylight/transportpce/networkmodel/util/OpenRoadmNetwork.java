@@ -40,7 +40,6 @@ public final class OpenRoadmNetwork {
      *
      * @param nodeId node ID
      * @param nodeInfo some important and general data from device
-     *
      * @return node
      */
     public static Node createNode(String nodeId, NodeInfo nodeInfo) {
