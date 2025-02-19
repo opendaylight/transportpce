@@ -9,8 +9,9 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Set;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
-import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
+import org.opendaylight.transportpce.tapi.topology.AbstractTapiNetworkUtil;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitXpdrRdmTapiLinkInput;
@@ -25,15 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class InitXpdrRdmTapiLinkImpl implements InitXpdrRdmTapiLink {
+public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements InitXpdrRdmTapiLink {
+
     private static final Logger LOG = LoggerFactory.getLogger(InitXpdrRdmTapiLinkImpl.class);
-
     private TapiLink tapiLink;
-    private TapiNetworkUtilsImpl tapiNetworkUtilsImpl;
 
-    public InitXpdrRdmTapiLinkImpl(TapiLink tapiLink, TapiNetworkUtilsImpl tapiNetworkUtilsImpl) {
+    public InitXpdrRdmTapiLinkImpl(TapiLink tapiLink, NetworkTransactionService networkTransactionService) {
+        super(networkTransactionService);
         this.tapiLink = tapiLink;
-        this.tapiNetworkUtilsImpl = tapiNetworkUtilsImpl;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class InitXpdrRdmTapiLinkImpl implements InitXpdrRdmTapiLink {
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiNetworkUtilsImpl.getTapiTopoUuid());
+            tapiTopoUuid);
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitXpdrRdmTapiLinkOutput>failed()
@@ -57,7 +57,7 @@ public class InitXpdrRdmTapiLinkImpl implements InitXpdrRdmTapiLink {
                 .buildFuture();
         }
         InitXpdrRdmTapiLinkOutputBuilder output = new InitXpdrRdmTapiLinkOutputBuilder();
-        if (tapiNetworkUtilsImpl.putLinkInTopology(link)) {
+        if (putLinkInTopology(link)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
