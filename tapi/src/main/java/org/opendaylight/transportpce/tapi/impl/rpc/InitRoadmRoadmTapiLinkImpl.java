@@ -9,8 +9,9 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Set;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiStringConstants;
-import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
+import org.opendaylight.transportpce.tapi.topology.AbstractTapiNetworkUtil;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitRoadmRoadmTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.InitRoadmRoadmTapiLinkInput;
@@ -25,15 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class InitRoadmRoadmTapiLinkImpl implements InitRoadmRoadmTapiLink {
+public class InitRoadmRoadmTapiLinkImpl extends AbstractTapiNetworkUtil implements InitRoadmRoadmTapiLink {
+
     private static final Logger LOG = LoggerFactory.getLogger(InitRoadmRoadmTapiLinkImpl.class);
-
     private TapiLink tapiLink;
-    private TapiNetworkUtilsImpl tapiNetworkUtilsImpl;
 
-    public InitRoadmRoadmTapiLinkImpl(TapiLink tapiLink, TapiNetworkUtilsImpl tapiNetworkUtilsImpl) {
+    public InitRoadmRoadmTapiLinkImpl(TapiLink tapiLink, NetworkTransactionService networkTransactionService) {
+        super(networkTransactionService);
         this.tapiLink = tapiLink;
-        this.tapiNetworkUtilsImpl = tapiNetworkUtilsImpl;
     }
 
     @Override
@@ -48,8 +48,9 @@ public class InitRoadmRoadmTapiLinkImpl implements InitRoadmRoadmTapiLink {
             TapiStringConstants.PHTNC_MEDIA_OTS, TapiStringConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
             this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
-            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-            tapiNetworkUtilsImpl.getTapiTopoUuid());
+            Set.of(LayerProtocolName.PHOTONICMEDIA),
+            Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+            tapiTopoUuid);
         if (link == null) {
             LOG.error("Error creating link object");
             return RpcResultBuilder.<InitRoadmRoadmTapiLinkOutput>failed()
@@ -57,7 +58,7 @@ public class InitRoadmRoadmTapiLinkImpl implements InitRoadmRoadmTapiLink {
                 .buildFuture();
         }
         InitRoadmRoadmTapiLinkOutputBuilder output = new InitRoadmRoadmTapiLinkOutputBuilder();
-        if (tapiNetworkUtilsImpl.putLinkInTopology(link)) {
+        if (putLinkInTopology(link)) {
             output.setResult("Link created in tapi topology. Link-uuid = " + link.getUuid());
         }
         return RpcResultBuilder.success(output.build()).buildFuture();
