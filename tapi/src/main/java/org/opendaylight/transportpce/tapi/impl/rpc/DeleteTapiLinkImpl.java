@@ -11,7 +11,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.tapi.topology.TapiNetworkUtilsImpl;
+import org.opendaylight.transportpce.tapi.topology.AbstractTapiNetworkUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.DeleteTapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.DeleteTapiLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728.DeleteTapiLinkOutput;
@@ -31,15 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class DeleteTapiLinkImpl implements DeleteTapiLink {
+public class DeleteTapiLinkImpl extends AbstractTapiNetworkUtil implements DeleteTapiLink {
     private static final Logger LOG = LoggerFactory.getLogger(DeleteTapiLinkImpl.class);
 
-    private TapiNetworkUtilsImpl tapiNetworkUtilsImpl;
     private NetworkTransactionService networkTransactionService;
 
-    public DeleteTapiLinkImpl(TapiNetworkUtilsImpl tapiNetworkUtilsImpl,
-            NetworkTransactionService networkTransactionService) {
-        this.tapiNetworkUtilsImpl = tapiNetworkUtilsImpl;
+    public DeleteTapiLinkImpl(NetworkTransactionService networkTransactionService) {
+        super(networkTransactionService);
         this.networkTransactionService = networkTransactionService;
     }
 
@@ -51,7 +49,7 @@ public class DeleteTapiLinkImpl implements DeleteTapiLink {
             DataObjectIdentifier<Link> linkIID = DataObjectIdentifier.builder(Context.class)
                 .augmentation(Context1.class)
                 .child(TopologyContext.class)
-                .child(Topology.class, new TopologyKey(tapiNetworkUtilsImpl.getTapiTopoUuid()))
+                .child(Topology.class, new TopologyKey(tapiTopoUuid))
                 .child(Link.class, new LinkKey(input.getUuid()))
                 .build();
             this.networkTransactionService.delete(LogicalDatastoreType.OPERATIONAL, linkIID);
