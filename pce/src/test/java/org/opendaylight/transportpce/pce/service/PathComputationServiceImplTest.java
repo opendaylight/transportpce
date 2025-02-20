@@ -38,7 +38,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
         networkTransactionService = mock(NetworkTransactionService.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
-                this.getNotificationPublishService(), null, null);
+                this.getNotificationPublishService(), null, null, null);
     }
 
     @Test

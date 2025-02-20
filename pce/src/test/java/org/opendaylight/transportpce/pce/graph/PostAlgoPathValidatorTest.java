@@ -37,10 +37,12 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.config.PCEConfig;
 import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
 import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
+import org.opendaylight.transportpce.pce.spectrum.assignment.state.SpectrumAssignmentState;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -78,7 +80,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 new BitSet(),
-                mock(ClientInput.class)
+                mock(ClientInput.class),
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         BitSet available = new BitSet(768);
@@ -104,7 +107,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 new BitSet(),
-                mock(ClientInput.class)
+                mock(ClientInput.class),
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         BitSet available = new BitSet(768);
@@ -174,7 +178,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -243,7 +248,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -325,7 +331,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -406,7 +413,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -490,7 +498,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -561,7 +570,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
@@ -632,7 +642,8 @@ class PostAlgoPathValidatorTest {
         PostAlgoPathValidator postAlgoPathValidator = new PostAlgoPathValidator(
                 networkTransactionService,
                 customerAvailableFrequencies,
-                clientInputMock
+                clientInputMock,
+                new PCEConfig(SpectrumAssignmentState.HIGH_TO_LOW_FREQUENCY)
         );
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);

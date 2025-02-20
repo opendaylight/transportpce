@@ -34,6 +34,7 @@ import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.config.Config;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.frequency.FrequencySelectionFactory;
@@ -43,13 +44,12 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.spectrum.assignment.Assign;
-import org.opendaylight.transportpce.pce.spectrum.assignment.AssignSpectrumHighToLow;
 import org.opendaylight.transportpce.pce.spectrum.assignment.Range;
+import org.opendaylight.transportpce.pce.spectrum.assignment.state.SpectrumAssignmentState;
 import org.opendaylight.transportpce.pce.spectrum.centerfrequency.CenterFrequencyGranularityCollection;
 import org.opendaylight.transportpce.pce.spectrum.centerfrequency.Collection;
 import org.opendaylight.transportpce.pce.spectrum.index.Base;
 import org.opendaylight.transportpce.pce.spectrum.index.BaseFrequency;
-import org.opendaylight.transportpce.pce.spectrum.index.SpectrumIndex;
 import org.opendaylight.transportpce.pce.spectrum.slot.CapabilityCollection;
 import org.opendaylight.transportpce.pce.spectrum.slot.InterfaceMcCapability;
 import org.opendaylight.transportpce.pce.spectrum.slot.McCapabilityCollection;
@@ -79,13 +79,16 @@ public class PostAlgoPathValidator {
     private final NetworkTransactionService networkTransactionService;
     private final BitSet spectrumConstraint;
     private final ClientInput clientInput;
+    private final Config pceconfig;
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService,
                                  BitSet spectrumConstraint,
-                                 ClientInput clientInput) {
+                                 ClientInput clientInput,
+                                 Config pceconfig) {
         this.networkTransactionService = networkTransactionService;
         this.spectrumConstraint = spectrumConstraint;
         this.clientInput = clientInput;
+        this.pceconfig = pceconfig;
     }
 
     @SuppressWarnings("fallthrough")
@@ -1161,7 +1164,9 @@ public class PostAlgoPathValidator {
         Subscriber subscriber) {
 
         Base baseFrequency = new BaseFrequency();
-        Assign assignSpectrum = new AssignSpectrumHighToLow(new SpectrumIndex());
+        SpectrumAssignmentState spectrumAssignmentState = new SpectrumAssignmentState();
+        Assign assignSpectrum = spectrumAssignmentState.configuredState(
+                pceconfig.availableSpectrumIterationDirectionStrategy());
         Range range = assignSpectrum.range(
             GridConstant.EFFECTIVE_BITS,
             baseFrequency.referenceFrequencySpectrumIndex(
