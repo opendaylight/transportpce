@@ -84,6 +84,12 @@ class TransportPCE400Gtesting(unittest.TestCase):
                                              "pce_portmapping_71.json")
             with open(PORT_MAPPING_FILE, 'r', encoding='utf-8') as port_mapping:
                 cls.port_mapping_data = port_mapping.read()
+
+            PORT_MAPPING_FILE_CFG = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                 "..", "..", "sample_configs",
+                                                 "pce_portmapping_cfg_71.json")
+            with open(PORT_MAPPING_FILE_CFG, 'r', encoding='utf-8') as port_mapping_cfg:
+                cls.port_mapping_data_cfg = port_mapping_cfg.read()
             sample_files_parsed = True
         except PermissionError as err:
             print("Permission Error when trying to read sample files\n", err)
@@ -128,6 +134,17 @@ class TransportPCE400Gtesting(unittest.TestCase):
         time.sleep(1)
 
     # Path Computation success
+    # Potential center frequencies for center-freq-granularity = 50GHz, for a service
+    # slot width of 87.5GHz (Note: ↓ indicates a potential center frequency).
+    #
+    #              196.0           196.05          196.1
+    #                 ↓               ↓               ↓
+    #     ... |-.-.-.-.-.-.-.-|-.-.-.-.-.-.-.-|-.-.-.-.-.-.-.-|
+    #      195.975         196.025         196.075         196.125
+    #                   .                           .
+    #                    `------------.------------´
+    #                       87.5 GHz Service slot
+    #
     def test_03_path_computation_400G_xpdr_bi(self):
         response = test_utils.transportpce_api_rpc_request('transportpce-pce',
                                                            'path-computation-request',
@@ -136,25 +153,29 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(1, response['output']['response-parameters']['path-description']
+        self.assertEqual(2, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.00625, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-min-frequency']))
-        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-max-frequency']))
+        self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(1, response['output']['response-parameters']['path-description']
+        self.assertEqual(2, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.00625, float(response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-min-frequency']))
-        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-max-frequency']))
+        self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
         time.sleep(2)
@@ -181,25 +202,29 @@ class TransportPCE400Gtesting(unittest.TestCase):
         self.assertIn('Path is calculated',
                       response['output']['configuration-response-common']['response-message'])
 
-        self.assertEqual(1, response['output']['response-parameters']['path-description']
+        self.assertEqual(2, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['rate'])
-        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.00625, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-min-frequency']))
-        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['aToZ-max-frequency']))
+        self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['aToZ-direction']['modulation-format'])
 
-        self.assertEqual(1, response['output']['response-parameters']['path-description']
+        self.assertEqual(2, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-wavelength-number'])
         self.assertEqual(400, response['output']['response-parameters']['path-description']
                          ['zToA-direction']['rate'])
-        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.00625, float(response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-min-frequency']))
-        self.assertEqual(196.12500, float(response['output']['response-parameters']['path-description']
+        self.assertEqual(196.09375, float(response['output']['response-parameters']['path-description']
                          ['zToA-direction']['zToA-max-frequency']))
+        self.assertEqual(196.05, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['central-frequency']))
         self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
         time.sleep(2)
@@ -281,6 +306,97 @@ class TransportPCE400Gtesting(unittest.TestCase):
                          ['zToA-direction']['max-trib-slot'])
         self.assertEqual('dp-qpsk', response['output']['response-parameters']['path-description']
                          ['zToA-direction']['modulation-format'])
+        time.sleep(2)
+
+    #
+    # Up until this point, the tests have been running with "center-freq-granularity": 50.
+    # From this point onwards, "center-freq-granularity": 6.25.
+    #
+
+    # Load port mapping
+    def test_10_load_port_mapping_cfg(self):
+        test_utils.del_portmapping()
+        time.sleep(1)
+        response = test_utils.post_portmapping(self.port_mapping_data_cfg)
+        self.assertIn(response['status_code'], (requests.codes.created, requests.codes.no_content))
+        time.sleep(1)
+
+    # Load openroadm topology
+    def test_11_load_openroadm_topology_bi_cfg(self):
+        response = test_utils.put_ietf_network('openroadm-topology', self.topo_bi_dir_data)
+        self.assertIn(response['status_code'], (requests.codes.ok, requests.codes.created, requests.codes.no_content))
+        time.sleep(1)
+
+    # Path Computation success
+    # Compare this with test_03_path_computation_400G_xpdr_bi where center frequency = 196.05.
+    #
+    # Potential center frequencies for center-freq-granularity = 6.25GHz, for a service
+    # slot width of 87.5GHz (Note: ↓ indicates a potential center frequency).
+    #
+    #                                        196.08125
+    #                196.0         196.05       |  196.1
+    #                 |               |         |     |
+    #         ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+    #     ... |-.-.-.-.-.-.-.-|-.-.-.-.-.-.-.-|-.-.-.-.-.-.-.-|
+    #      195.975         196.025         196.075         196.125
+    #                             .                           .
+    #                              `------------.------------´
+    #                                 87.5 GHz Service slot
+    #
+    def test_12_path_computation_400G_xpdr_bi_cfg(self):
+        path_computation_input_data = {
+            "service-name": "service-1",
+            "resource-reserve": "true",
+            "service-handler-header": {
+                "request-id": "request1"
+            },
+            "service-a-end": {
+                "service-rate": "400",
+                "clli": "nodeA",
+                "service-format": "Ethernet",
+                "node-id": "XPDR-A2"
+            },
+            "service-z-end": {
+                "service-rate": "400",
+                "clli": "nodeC",
+                "service-format": "Ethernet",
+                "node-id": "XPDR-C2"
+            },
+            "pce-routing-metric": "hop-count"
+        }
+        response = test_utils.transportpce_api_rpc_request('transportpce-pce',
+                                                           'path-computation-request',
+                                                           path_computation_input_data)
+
+        self.assertIn('Path is calculated',
+                      response['output']['configuration-response-common']['response-message'])
+
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-wavelength-number'])
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['rate'])
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-min-frequency']))
+        self.assertEqual(196.125, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['aToZ-max-frequency']))
+        self.assertEqual(196.08125, float(response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['central-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
+                         ['aToZ-direction']['modulation-format'])
+
+        self.assertEqual(0, response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-wavelength-number'])
+        self.assertEqual(400, response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['rate'])
+        self.assertEqual(196.0375, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-min-frequency']))
+        self.assertEqual(196.125, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['zToA-max-frequency']))
+        self.assertEqual(196.08125, float(response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['central-frequency']))
+        self.assertEqual('dp-qam16', response['output']['response-parameters']['path-description']
+                         ['zToA-direction']['modulation-format'])
+        self.assertEqual(response['status_code'], requests.codes.ok)
         time.sleep(2)
 
 
