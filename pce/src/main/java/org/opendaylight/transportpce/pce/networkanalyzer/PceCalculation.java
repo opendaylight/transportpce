@@ -289,7 +289,7 @@ public class PceCalculation {
                 LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
+            LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier, e);
             returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }
         return nw;

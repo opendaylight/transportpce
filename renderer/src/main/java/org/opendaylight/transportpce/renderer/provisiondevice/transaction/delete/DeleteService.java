@@ -58,7 +58,7 @@ public class DeleteService implements Delete {
             subscriber.result(true, nodeId, interfaceId);
             return true;
         } catch (OpenRoadmInterfaceException e) {
-            LOG.error("Failed rolling back {} {}", nodeId, interfaceId);
+            LOG.error("Failed rolling back {} {}", nodeId, interfaceId, e);
             subscriber.result(false, nodeId, interfaceId);
             return false;
         }

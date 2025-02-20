@@ -107,7 +107,7 @@ final class OrdLink {
                 linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer ");
+            LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer", e);
             return false;
         }
     }
@@ -211,7 +211,7 @@ final class OrdLink {
                 linkId.getValue(), StringConstants.OPENROADM_TOPOLOGY);
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create Direct Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
-                srcNode, srcTp, destNode, destTp);
+                srcNode, srcTp, destNode, destTp, e);
             return false;
         }
 
@@ -228,7 +228,7 @@ final class OrdLink {
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to create reverse Inter-domain-Link between Node {} tp {} and Node {} tp {} ",
-                destNode, destTp, srcNode, srcTp);
+                destNode, destTp, srcNode, srcTp, e);
             return false;
         }
     }
@@ -284,7 +284,7 @@ final class OrdLink {
             LOG.info("A new tp {} terminating Link {} has been added  to TAPI-SBI-ABS-NODE into {} layer.",
                 tpName, linkId, StringConstants.OPENROADM_TOPOLOGY);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Failed to create new tp {} terminating link {} on TAPI-SBI-ABS-NODE ", tpName, linkId);
+            LOG.error("Failed to create new tp {} terminating link {} on TAPI-SBI-ABS-NODE ", tpName, linkId, e);
             return null;
         }
         return tpBuilder.build();

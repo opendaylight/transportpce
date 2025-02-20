@@ -586,14 +586,11 @@ public class OCPortMappingVersion190 {
                 }
             }
             nbMap.put(key, nonBlockingList);
-        } else if (xpdrType.getName().equalsIgnoreCase(XpdrType.TPDR.getName())) {
-            if (mappingMap.containsKey(network)) {
-                Mapping mapping = mappingMap.get(network);
-                String clientConnectionMapLcp = clientList.stream().findFirst().orElseThrow();
-                mappingMap.put(network, createXpdrMappingObject(null, null, null,
-                        null, null, mapping, clientConnectionMapLcp,
-                        null, null, null, null));
-            }
+        } else if (xpdrType.getName().equalsIgnoreCase(XpdrType.TPDR.getName()) && mappingMap.containsKey(network)) {
+            Mapping mapping = mappingMap.get(network);
+            String clientConnectionMapLcp = clientList.stream().findFirst().orElseThrow();
+            mappingMap.put(network, createXpdrMappingObject(null, null, null, null, null, mapping,
+                    clientConnectionMapLcp, null, null, null, null));
         }
     }
 
@@ -804,7 +801,7 @@ public class OCPortMappingVersion190 {
                 }
             }
         } catch (IllegalArgumentException exception) {
-            LOG.error("state container doesn't exist for component {}", component.getName());
+            LOG.error("state container doesn't exist for component {}", component.getName(), exception);
         }
         return false;
     }

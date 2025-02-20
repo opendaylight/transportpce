@@ -447,7 +447,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             LOG.info("AffectedLinksNb = {} ", nbAffectedLinks);
             this.networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not update TAPI links");
+            LOG.error("Could not update TAPI links", e);
         }
     }
 
@@ -497,7 +497,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
                 this.networkTransactionService.commit().get();
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Could not update TAPI NEP");
+                LOG.error("Could not update TAPI NEP", e);
             }
         }
         return changedOneps;

@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +55,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
 
 
     @BeforeEach
-    void setUp() throws InterruptedException, ExecutionException {
+    void setUp() {
         this.dataBroker = getNewDataBroker();
         networkTransaction = new NetworkTransactionImpl(this.dataBroker);
         gnpyConsumer = new GnpyConsumerImpl(

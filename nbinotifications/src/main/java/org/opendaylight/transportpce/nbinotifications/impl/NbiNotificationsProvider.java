@@ -169,7 +169,7 @@ public class NbiNotificationsProvider {
             this.networkTransactionService.commit().get();
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not update TAPI notification context");
+            LOG.error("Could not update TAPI notification context", e);
         }
         return false;
     }

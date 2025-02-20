@@ -331,11 +331,7 @@ public class OpenRoadmInterface121 {
         }
         RoadmConnections rc = crossconnection.orElseThrow();
         LOG.info("xd {} found", xc);
-        if (rc.getSource().getSrcIf().equals(interfaceName)
-                || rc.getDestination().getDstIf().equals(interfaceName)) {
-            return true;
-        }
-        return false;
+        return rc.getSource().getSrcIf().equals(interfaceName) || rc.getDestination().getDstIf().equals(interfaceName);
     }
 
 }

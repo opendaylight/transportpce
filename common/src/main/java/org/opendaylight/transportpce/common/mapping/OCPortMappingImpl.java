@@ -25,7 +25,6 @@ public class OCPortMappingImpl implements  OCPortMapping {
 
     private static final Logger LOG = LoggerFactory.getLogger(OCPortMappingImpl.class);
 
-    private final DataBroker dataBroker;
     private final OCPortMappingVersion190 ocPortMappingVersion190;
 
     @Activate
@@ -33,19 +32,16 @@ public class OCPortMappingImpl implements  OCPortMapping {
                              @Reference DeviceTransactionManager deviceTransactionManager,
                              @Reference OCMetaDataTransaction ocMetaDataTransaction,
                              @Reference NetworkTransactionService networkTransactionService) {
-        this(dataBroker , new OCPortMappingVersion190(dataBroker,deviceTransactionManager,ocMetaDataTransaction,
+        this(new OCPortMappingVersion190(dataBroker,deviceTransactionManager,ocMetaDataTransaction,
                 networkTransactionService));
     }
 
     /**
      * constructor of OCPortMappingImpl.
-     * @param dataBroker
-     *            data broker
      * @param ocPortMappingVersion190
      *            ocPortMappingVersion190
      */
-    public OCPortMappingImpl(DataBroker dataBroker, OCPortMappingVersion190 ocPortMappingVersion190) {
-        this.dataBroker = dataBroker;
+    public OCPortMappingImpl(OCPortMappingVersion190 ocPortMappingVersion190) {
         this.ocPortMappingVersion190 = ocPortMappingVersion190;
     }
 

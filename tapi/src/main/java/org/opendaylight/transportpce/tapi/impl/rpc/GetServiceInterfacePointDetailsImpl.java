@@ -20,12 +20,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class GetServiceInterfacePointDetailsImpl implements GetServiceInterfacePointDetails {
-    private static final Logger LOG = LoggerFactory.getLogger(GetServiceInterfacePointDetailsImpl.class);
     private final TapiContext tapiContext;
 
     public GetServiceInterfacePointDetailsImpl(TapiContext tapiContext) {

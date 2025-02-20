@@ -17,12 +17,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev21092
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 public class PceResult {
-    private static final Logger LOG = LoggerFactory.getLogger(PceResult.class);
     private String calcMessage = "503 Calculator Unavailable";
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
