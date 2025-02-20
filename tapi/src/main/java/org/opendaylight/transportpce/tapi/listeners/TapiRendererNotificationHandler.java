@@ -177,10 +177,7 @@ public class TapiRendererNotificationHandler {
         if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
             return false;
         }
-        if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
-            return false;
-        }
-        return true;
+        return serviceRpcResultSp.getStatusMessage() == notification.getStatusMessage();
     }
 
     private ConnectivityService getConnectivityService(Uuid suuid) {

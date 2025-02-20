@@ -306,7 +306,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     private OCPortMapping initOCPortMapping(DataBroker dataBroker) {
         OCPortMappingVersion190 ocPortMappingVersion190 = new OCPortMappingVersion190(dataBroker,
             deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
-        return new OCPortMappingImpl(dataBroker, ocPortMappingVersion190);
+        return new OCPortMappingImpl(ocPortMappingVersion190);
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {

@@ -53,7 +53,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     }
 
     @Test
-    void testCreateOpenRoadmEthInterfaceThrowsExcpetion() throws OpenRoadmInterfaceException {
+    void testCreateOpenRoadmEthInterfaceThrowsExcpetion() {
         when(portMapping.getMapping(eq(nodeId), any())).thenReturn(null);
         Exception exception = assertThrows(OpenRoadmInterfaceException.class, () -> {
             openRoadMInterface221.createOpenRoadmEthInterface(nodeId, "logicalConnPoint");

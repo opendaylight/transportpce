@@ -275,7 +275,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceReconfigureShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeFailedWithEmptyInput() throws InterruptedException {
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result =
                 new ServiceReconfigureImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
                         networkModelListenerImpl, rendererServiceWrapper)
@@ -286,7 +286,7 @@ public class ServicehandlerImplTest extends AbstractTest {
 
 
     @Test
-    void serviceReconfigureShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeFailedWithNonExistService() throws InterruptedException {
         //action -> service reconfigure
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result =
                 new ServiceReconfigureImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
@@ -297,7 +297,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceReconfigureShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+    void serviceReconfigureShouldBeSuccessForExistingService() throws InterruptedException {
         // serviceReconfigure is calling service delete method in renderer
         when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to reconfigure
@@ -313,7 +313,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceReRestorationShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+    void serviceReRestorationShouldBeFailedWithEmptyInput() throws InterruptedException {
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result =
                 new ServiceRestorationImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
                         networkModelListenerImpl, rendererServiceWrapper)
@@ -325,7 +325,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceRestorationShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+    void serviceRestorationShouldBeFailedWithNonExistService() throws InterruptedException {
         //action -> service restore
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result =
                 new ServiceRestorationImpl(serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl,
@@ -336,7 +336,7 @@ public class ServicehandlerImplTest extends AbstractTest {
     }
 
     @Test
-    void serviceRestorationShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+    void serviceRestorationShouldBeSuccessForExistingService() throws InterruptedException {
         // serviceRestoration is calling service delete method in renderer
         when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to restore

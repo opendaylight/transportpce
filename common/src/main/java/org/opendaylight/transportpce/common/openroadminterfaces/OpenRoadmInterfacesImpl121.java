@@ -104,7 +104,7 @@ public class OpenRoadmInterfacesImpl121 {
     }
 
 
-    public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+    public Optional<Interface> getInterface(String nodeId, String interfaceName) {
         DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName))
@@ -116,12 +116,7 @@ public class OpenRoadmInterfacesImpl121 {
 
     public synchronized void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         Optional<Interface> intf2DeleteOpt;
-        try {
-            intf2DeleteOpt = getInterface(nodeId, interfaceName);
-        } catch (OpenRoadmInterfaceException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to check if interface %s exists on node %s!",
-                interfaceName, nodeId), e);
-        }
+        intf2DeleteOpt = getInterface(nodeId, interfaceName);
         if (intf2DeleteOpt.isPresent()) {
             Interface intf2Delete = intf2DeleteOpt.orElseThrow();
             // State admin state to out of service
@@ -239,17 +234,8 @@ public class OpenRoadmInterfacesImpl121 {
 
     public String getSupportedInterface(String nodeId, String interf) {
         Optional<Interface> supInterfOpt;
-        try {
-            supInterfOpt = getInterface(nodeId, interf);
-            if (supInterfOpt.isPresent()) {
-                return supInterfOpt.orElseThrow().getSupportingInterface();
-            } else {
-                return null;
-            }
-        } catch (OpenRoadmInterfaceException e) {
-            LOG.error("error getting Supported Interface of {} - {}", interf, nodeId, e);
-            return null;
-        }
+        supInterfOpt = getInterface(nodeId, interf);
+        return supInterfOpt.map(s -> s.getSupportingInterface()).orElse(null);
     }
 
     private boolean checkIfDevicePortIsUpdatedWithInterface(String nodeId, InterfaceBuilder ifBuilder) {

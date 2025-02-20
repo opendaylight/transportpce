@@ -111,7 +111,7 @@ final class Rdm2XpdrLink {
             LOG.info("Post successful");
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to create Xponder to Roadm link in the Topo layer ");
+            LOG.warn("Failed to create Xponder to Roadm link in the Topo layer", e);
             return false;
         }
     }
@@ -167,7 +167,7 @@ final class Rdm2XpdrLink {
             return true;
 
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to create Xponder to Roadm link in the Topo layer ");
+            LOG.warn("Failed to create Xponder to Roadm link in the Topo layer", e);
             return false;
         }
     }

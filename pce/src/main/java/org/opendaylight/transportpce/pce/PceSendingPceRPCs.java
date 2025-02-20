@@ -191,7 +191,7 @@ public class PceSendingPceRPCs {
         }
     }
 
-    public void pathComputation() throws Exception {
+    public void pathComputation() {
 
         PceConstraintsCalc constraints = new PceConstraintsCalc(input, networkTransaction);
         pceHardConstraints = constraints.getPceHardConstraints();

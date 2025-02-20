@@ -35,7 +35,6 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         return (checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()));
     }
 
-    @SuppressWarnings("java:S1541")
     //sonar issue The Cyclomatic Complexity of this method "checkTurn" is 13 which is greater than 10 authorized.
     //here we have clear conditional, so for the moment no need to manage this issue
     private boolean checkTurn(OpenroadmLinkType prevType, OpenroadmLinkType nextType) {

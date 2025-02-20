@@ -145,7 +145,7 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 return false;
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not read TAPI link in DataStore checking that rdm2rdm link is present");
+            LOG.error("Could not read TAPI link in DataStore checking that rdm2rdm link is present", e);
         }
         return true;
     }
