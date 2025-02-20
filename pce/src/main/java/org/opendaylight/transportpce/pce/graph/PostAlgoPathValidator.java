@@ -66,9 +66,8 @@ public class PostAlgoPathValidator {
     private final BitSet spectrumConstraint;
     private final ClientInput clientInput;
 
-    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService,
-                                 BitSet spectrumConstraint,
-                                 ClientInput clientInput) {
+    public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint,
+            ClientInput clientInput) {
         this.networkTransactionService = networkTransactionService;
         this.spectrumConstraint = spectrumConstraint;
         this.clientInput = clientInput;
@@ -215,7 +214,6 @@ public class PostAlgoPathValidator {
 
     // Check the inclusion if it is defined in the hard constraints
     //TODO: remove this checkstyle false positive warning when the checkstyle bug will be fixed
-    @SuppressWarnings("MissingSwitchDefault")
     private boolean checkInclude(GraphPath<String, PceGraphEdge> path, PceConstraints pceHardConstraintsInput,
             PceConstraintMode mode) {
         List<ResourcePair> listToInclude = pceHardConstraintsInput.getListToInclude();
@@ -514,7 +512,7 @@ public class PostAlgoPathValidator {
                         LOG.info("Loop pathElement = {}, DROP, calcOnsrdB= {}", pathElement, calcOnsrdB);
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                            path.getEdgeList().size());
+                            path.getEdgeList().size(), e);
                         return -1.0;
                     }
                     break;
@@ -586,7 +584,7 @@ public class PostAlgoPathValidator {
                     LOG.info("Loop pathElement = {}, DROP, calcOnsrdB= {}", vertices.size() - 1, calcOnsrdB);
                 } catch (ArithmeticException e) {
                     LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                        path.getEdgeList().size());
+                        path.getEdgeList().size(), e);
                     return -1.0;
                 }
                 break;
@@ -715,7 +713,7 @@ public class PostAlgoPathValidator {
                         LOG.info("Loop Path Element = {}, DROP, calcOnsrdB= {}", pathElement, calcOnsrdB);
                     } catch (ArithmeticException e) {
                         LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                            path.getEdgeList().size());
+                            path.getEdgeList().size(), e);
                         return -1.0;
                     }
                     break;
@@ -787,7 +785,7 @@ public class PostAlgoPathValidator {
                     LOG.info("Loop Path Element = 0, DROP, calcOnsrdB= {}", calcOnsrdB);
                 } catch (ArithmeticException e) {
                     LOG.debug("In checkOSNR: OSNR is equal to 0 and the number of links is: {}",
-                        path.getEdgeList().size());
+                        path.getEdgeList().size(), e);
                     return -1.0;
                 }
                 break;
@@ -852,7 +850,7 @@ public class PostAlgoPathValidator {
         } catch (InterruptedException | ExecutionException e1) {
             LOG.error("Issue accessing the XponderNetworkAttributes of {} for Transponder {}"
                 + " corresponding to path Element {} in the path ",
-                nwTpId, currentNode.getNodeId().getValue(), pathElement);
+                nwTpId, currentNode.getNodeId().getValue(), pathElement, e1);
         }
         LOG.info("Did not succeed finding network TP {} in Configuration Datastore. Retrieve"
             + " default Operational Mode {} from serviceType {}", nwTpId, opMode, serviceType);

@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -58,7 +57,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     private static BitSet availableBits = new BitSet(8);
 
     @BeforeAll
-    static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
+    static void setUp() throws InterruptedException, ExecutionException {
         availableBits.set(0, 8, true);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(), OPENROADM_TOPOLOGY_FILE,
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
@@ -76,7 +75,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     @Test
-    void allocateFrequenciesTest() throws IOException {
+    void allocateFrequenciesTest() {
         FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
@@ -101,7 +100,7 @@ public class FrequenciesServiceTest extends AbstractTest {
     }
 
     @Test
-    void releaseFrequenciesTest() throws IOException {
+    void releaseFrequenciesTest() {
         FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         service.releaseFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());

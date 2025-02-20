@@ -396,56 +396,57 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         AtomicBoolean success = new AtomicBoolean(true);
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
-            String nodeId = node.getNodeId();
-            LOG.info("Deleting service setup on node {}", nodeId);
-            if (node.getDestTp() == null) {
-                LOG.error("Destination termination point must not be null.");
-                return;
-            }
-            if (!this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                String result = nodeId + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
-                results.add(result);
-                success.set(false);
-                LOG.warn(result);
-                forkJoinPool.shutdown();
-                return;
-                //TODO should deletion end here?
-            }
-            // if the node is currently mounted then proceed.
-
-            String destTp = node.getDestTp();
-            String srcTp = "";
-            if (node.getSrcTp() == null) {
-                otnLinkTps.add(new LinkTpBuilder()
-                        .setNodeId(nodeId)
-                        .setTpId(destTp)
-                        .build());
-            } else {
-                srcTp = node.getSrcTp();
-            }
-            List<String> interfacesToDelete = new LinkedList<>();
-            interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
-                    input.getLowerSpectralSlotNumber().intValue(),
-                    input.getHigherSpectralSlotNumber().intValue()));
-            for (String interfaceId : interfacesToDelete) {
-                try {
-                    this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
-                } catch (OpenRoadmInterfaceException e) {
-                    String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
-                    success.set(false);
-                    LOG.error(result, e);
-                    results.add(result);
+        try (ForkJoinPool forkJoinPool = new ForkJoinPool()) {
+            ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+                String nodeId = node.getNodeId();
+                LOG.info("Deleting service setup on node {}", nodeId);
+                if (node.getDestTp() == null) {
+                    LOG.error("Destination termination point must not be null.");
+                    return;
                 }
+                if (!this.deviceTransactionManager.isDeviceMounted(nodeId)) {
+                    String result = nodeId + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
+                    results.add(result);
+                    success.set(false);
+                    LOG.warn(result);
+                    forkJoinPool.shutdown();
+                    return;
+                    //TODO should deletion end here?
+                }
+                // if the node is currently mounted then proceed.
+
+                String destTp = node.getDestTp();
+                String srcTp = "";
+                if (node.getSrcTp() == null) {
+                    otnLinkTps.add(new LinkTpBuilder()
+                            .setNodeId(nodeId)
+                            .setTpId(destTp)
+                            .build());
+                } else {
+                    srcTp = node.getSrcTp();
+                }
+                List<String> interfacesToDelete = new LinkedList<>();
+                interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
+                        input.getLowerSpectralSlotNumber().intValue(),
+                        input.getHigherSpectralSlotNumber().intValue()));
+                for (String interfaceId : interfacesToDelete) {
+                    try {
+                        this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
+                    } catch (OpenRoadmInterfaceException e) {
+                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
+                        success.set(false);
+                        LOG.error(result, e);
+                        results.add(result);
+                    }
+                }
+            }));
+            try {
+                forkJoinTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Error while deleting service paths!", e);
             }
-        }));
-        try {
-            forkJoinTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error while deleting service paths!", e);
+            forkJoinPool.shutdown();
         }
-        forkJoinPool.shutdown();
         if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
             LOG.error("Alarm suppresion node removal failed!!!!");
         }
@@ -604,7 +605,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
                     LOG.info("Interface {} on node {} successfully deleted.", interfaceId, nodeId);
                 } catch (OpenRoadmInterfaceException e) {
-                    LOG.error("Failed to delete interface {} on node {}!", interfaceId, nodeId);
+                    LOG.error("Failed to delete interface {} on node {}!", interfaceId, nodeId, e);
                     success = false;
                     failedInterfaces.add(interfaceId);
                 }

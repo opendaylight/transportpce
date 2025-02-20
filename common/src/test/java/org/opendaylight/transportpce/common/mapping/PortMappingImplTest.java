@@ -47,7 +47,7 @@ public class PortMappingImplTest {
     private PortMapping portMapping;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
         portMappingVersion710 = mock(PortMappingVersion710.class);

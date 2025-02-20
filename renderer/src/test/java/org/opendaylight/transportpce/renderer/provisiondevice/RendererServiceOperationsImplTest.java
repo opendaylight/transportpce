@@ -28,7 +28,6 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.notification.NotificationSender;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
@@ -85,7 +84,7 @@ public class RendererServiceOperationsImplTest {
 
 
     @BeforeEach
-    void setUp() throws OpenRoadmInterfaceException {
+    void setUp() {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations = new RendererServiceOperationsImpl(deviceRenderer, otnDeviceRendererService,
                 dataBroker, new NotificationSender(notificationPublishService), portMapping, rpcService);

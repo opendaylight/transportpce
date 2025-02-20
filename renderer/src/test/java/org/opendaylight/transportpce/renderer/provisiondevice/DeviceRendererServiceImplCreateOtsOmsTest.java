@@ -15,7 +15,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,7 +77,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest {
     }
 
     @Test
-    void testCreateOtsOms() throws OpenRoadmInterfaceException, InterruptedException, ExecutionException {
+    void testCreateOtsOms() throws OpenRoadmInterfaceException {
         when(deviceTransactionManager.isDeviceMounted(any())).thenReturn(true);
         when(mappingUtils.getOpenRoadmVersion(any())).thenReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         Mapping mapping = MountPointUtils.createMapping(input.getNodeId(), input.getLogicalConnectionPoint());

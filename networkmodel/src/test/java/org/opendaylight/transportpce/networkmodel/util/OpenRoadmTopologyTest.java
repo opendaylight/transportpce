@@ -208,7 +208,7 @@ public class OpenRoadmTopologyTest {
     }
 
     @Test
-    void deleteLinkOkTest() throws InterruptedException, ExecutionException {
+    void deleteLinkOkTest() {
         String srcNode = "ROADM-A1-DEG1";
         String dstNode = "ROADM-A1-SRG1";
         String srcTp = "DEG1-CTP-TXRX";
@@ -247,7 +247,7 @@ public class OpenRoadmTopologyTest {
     }
 
     @Test
-    void deleteLinkNotOkTest() throws InterruptedException, ExecutionException {
+    void deleteLinkNotOkTest() {
         String srcNode = "ROADM-A1-DEG1";
         String dstNode = "ROADM-A1-SRG1";
         String srcTp = "DEG1-CTP-TXRX";
@@ -267,7 +267,7 @@ public class OpenRoadmTopologyTest {
     }
 
     @Test
-    void deleteLinkExceptionTest() throws InterruptedException, ExecutionException {
+    void deleteLinkExceptionTest() {
         String srcNode = "ROADM-A1-DEG1";
         String dstNode = "ROADM-A1-SRG1";
         String srcTp = "DEG1-CTP-TXRX";

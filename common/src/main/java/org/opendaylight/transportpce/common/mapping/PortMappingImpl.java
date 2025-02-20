@@ -157,7 +157,7 @@ public class PortMappingImpl implements PortMapping {
             rw.commit().get(1, TimeUnit.SECONDS);
             LOG.info("Mapping {} removed for node '{}'", logicalConnectionPoint, nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Error for removing mapping {} for node '{}'", logicalConnectionPoint, nodeId);
+            LOG.error("Error for removing mapping {} for node '{}'", logicalConnectionPoint, nodeId, e);
         }
     }
 

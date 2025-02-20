@@ -17,8 +17,6 @@ import org.slf4j.LoggerFactory;
 public final class OlmUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils.class);
-    private static long DATABROKER_READ_TIMEOUT_SECONDS = 120;
-
 
     /**
      * This method retrieves list of current PMs for given nodeId,

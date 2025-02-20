@@ -139,18 +139,11 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .buildFuture();
         }
         if (input.getTopologyId().equals(TapiStringConstants.T0_TAPI_MULTILAYER_UUID)) {
-            try {
-                LOG.info("Building TAPI Topology abstraction for {}", topoId);
-                topology = createAbsTopologyFromTapiTopo();
-                return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
-                    .setTopology(this.topologyUtils.transformTopology(topology)).build())
-                    .buildFuture();
-            } catch (TapiTopologyException e) {
-                LOG.error("error building TAPI topology");
-                return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
-                    .withError(ErrorType.RPC, "Error building topology")
-                    .buildFuture();
-            }
+            LOG.info("Building TAPI Topology abstraction for {}", topoId);
+            topology = createAbsTopologyFromTapiTopo();
+            return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder()
+                .setTopology(this.topologyUtils.transformTopology(topology)).build())
+                .buildFuture();
         }
         if (topologyUuid100G.equals(topoId)
                 || TapiStringConstants.T0_MULTILAYER_UUID.equals(topoId)) {
@@ -167,7 +160,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                     .setTopology(this.topologyUtils.transformTopology(topology)).build())
                     .buildFuture();
             } catch (TapiTopologyException e) {
-                LOG.error("error building TAPI topology");
+                LOG.error("error building TAPI topology", e);
                 return RpcResultBuilder.<GetTopologyDetailsOutput>failed()
                     .withError(ErrorType.RPC, "Error building topology")
                     .buildFuture();
@@ -291,7 +284,7 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
     }
 
     public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
-            createAbsTopologyFromTapiTopo() throws TapiTopologyException {
+            createAbsTopologyFromTapiTopo() {
         Uuid refTopoUuid = TapiStringConstants.T0_FULL_MULTILAYER_UUID;
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology tapiFullTopo =
             this.tapiContext

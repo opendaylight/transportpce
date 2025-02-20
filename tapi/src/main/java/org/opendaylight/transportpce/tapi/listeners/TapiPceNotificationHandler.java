@@ -193,10 +193,7 @@ public class TapiPceNotificationHandler {
         if (servicePathRpcResult.getStatus() != notification.getStatus()) {
             return false;
         }
-        if (servicePathRpcResult.getStatusMessage() != notification.getStatusMessage()) {
-            return false;
-        }
-        return true;
+        return servicePathRpcResult.getStatusMessage() == notification.getStatusMessage();
     }
 
 

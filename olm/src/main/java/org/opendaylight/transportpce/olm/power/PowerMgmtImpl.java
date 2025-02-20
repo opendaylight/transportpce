@@ -398,7 +398,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             return null;
         } catch (IllegalArgumentException ex) {
             LOG.error("Failed to get non existing interface {} from node {}!",
-                supportingOts, nodeId);
+                supportingOts, nodeId, ex);
             return null;
         }
     }
@@ -518,11 +518,11 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
-                } else if (destTpId.toUpperCase(Locale.getDefault()).contains("SRG")) {
-                    if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null, connectionNumber)) {
-                        LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
+                } else if (destTpId.toUpperCase(Locale.getDefault()).contains("SRG")
+                        &&
+                        !crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null, connectionNumber)) {
+                    LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         // FIXME a return false would allow sync with DEG case but makes current Unit tests fail
-                    }
                 }
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block

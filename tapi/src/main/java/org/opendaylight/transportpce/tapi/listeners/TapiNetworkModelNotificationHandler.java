@@ -240,7 +240,7 @@ public class TapiNetworkModelNotificationHandler {
                     LayerProtocolName.ODU));
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not update TAPI connectivity services");
+            LOG.error("Could not update TAPI connectivity services", e);
         }
     }
 
@@ -354,7 +354,7 @@ public class TapiNetworkModelNotificationHandler {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
         }
     }
 
@@ -394,7 +394,8 @@ public class TapiNetworkModelNotificationHandler {
                     LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
-                Connection newConn = optConn.orElseThrow(); // Current state of connection
+//                Current state of connection
+                Connection newConn = optConn.orElseThrow();
                 if (newConn.getLowerConnection() != null) {
                     // TODO: we can receive disable here because the lower connection haven been yet looped through and
                     //  therefore it is disabled but it has to be changed to enable before returning disable.
@@ -421,7 +422,7 @@ public class TapiNetworkModelNotificationHandler {
             }
             return OperationalState.DISABLED;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
             return topConnectionState;
         }
     }
@@ -494,7 +495,8 @@ public class TapiNetworkModelNotificationHandler {
                     LOG.error(TapiStringConstants.TAPI_CONNECTION_READ_ERROR);
                     continue;
                 }
-                Connection newConn = optConn.orElseThrow(); // Current state of connection
+//                Current state of connection
+                Connection newConn = optConn.orElseThrow();
                 // updated connection state if it contains a nep that has changed
                 if (newConn.getOperationalState().equals(OperationalState.DISABLED)) {
                     LOG.info("LowerConnection state is disable");
@@ -503,7 +505,7 @@ public class TapiNetworkModelNotificationHandler {
             }
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR);
+            LOG.error(TapiStringConstants.TAPI_CONNECTION_UPDATE_ERROR, e);
             return false;
         }
     }
@@ -563,7 +565,7 @@ public class TapiNetworkModelNotificationHandler {
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Could not update TAPI connectivity service");
+            LOG.error("Could not update TAPI connectivity service", e);
         }
         return changedServices;
     }

@@ -325,10 +325,7 @@ public class PceNotificationHandler implements PceListener {
         if (servicePathRpcResult.getStatus() != notification.getStatus()) {
             return false;
         }
-        if (servicePathRpcResult.getStatusMessage() != notification.getStatusMessage()) {
-            return false;
-        }
-        return true;
+        return servicePathRpcResult.getStatusMessage() != notification.getStatusMessage();
     }
 
     @Override

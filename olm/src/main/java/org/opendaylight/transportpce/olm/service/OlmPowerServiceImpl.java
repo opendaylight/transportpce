@@ -326,7 +326,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY);
+            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY, e);
             return Collections.emptyList();
         }
 
@@ -684,7 +684,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 TimeUnit.MILLISECONDS);
             return linkOptional.orElseThrow();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY);
+            LOG.warn("Read of {} topology failed", StringConstants.OPENROADM_TOPOLOGY, e);
             return null;
         }
     }

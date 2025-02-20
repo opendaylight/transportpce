@@ -117,7 +117,7 @@ class PowerMgmtTest {
     }
 
     @Test
-    void testSetPowerForTransponderZEnd() throws OpenRoadmInterfaceException {
+    void testSetPowerForTransponderZEnd() {
         when(this.portMapping.getNode("xpdr-C"))
             .thenReturn(OlmPowerServiceRpcImplUtil
                 .getMappingNodeTpdr("xpdr-C", OpenroadmNodeVersion._121, List.of("client-C")));
@@ -161,7 +161,7 @@ class PowerMgmtTest {
     }
 
     @Test
-    void testSetPowerForRoadmZEnd() throws OpenRoadmInterfaceException {
+    void testSetPowerForRoadmZEnd() {
         when(this.portMapping.getNode("roadm-C"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("roadm-C", OpenroadmNodeVersion._121,
                     List.of("deg1-C", "srg1-C")));
@@ -289,7 +289,7 @@ class PowerMgmtTest {
     }
 
     @Test
-    void testSetPowerForBadNodeType() throws OpenRoadmInterfaceException {
+    void testSetPowerForBadNodeType() {
         when(this.portMapping.getNode("ila node")).thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeIla());
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil

@@ -486,13 +486,10 @@ public class OpenRoadmInterface221 {
             interfaceName.contains("nmc")
                 ? null
                 : interfaceName.replace("mc", "nmc");
-        if (rc.getSource().getSrcIf().equals(interfaceName)
+        return rc.getSource().getSrcIf().equals(interfaceName)
                 || rc.getDestination().getDstIf().equals(interfaceName)
                 || rc.getSource().getSrcIf().equals(supportedinter)
-                || rc.getDestination().getDstIf().equals(supportedinter)) {
-            return true;
-        }
-        return false;
+                || rc.getDestination().getDstIf().equals(supportedinter);
     }
 
     public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
@@ -510,11 +507,8 @@ public class OpenRoadmInterface221 {
         }
         OduConnection oduXc = oduConnectionOpt.orElseThrow();
         LOG.info("xc {} found", xc);
-        if (oduXc.getSource().getSrcIf().equals(interfaceName)
-                || oduXc.getDestination().getDstIf().equals(interfaceName)) {
-            return true;
-        }
-        return false;
+        return oduXc.getSource().getSrcIf().equals(interfaceName)
+                || oduXc.getDestination().getDstIf().equals(interfaceName);
     }
 
     public String createOpenRoadmOtnOdu4Interface(String nodeId, String logicalConnPoint, String supportingOtuInterface)

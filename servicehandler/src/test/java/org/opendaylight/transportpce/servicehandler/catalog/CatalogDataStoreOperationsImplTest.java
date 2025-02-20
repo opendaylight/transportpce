@@ -53,7 +53,7 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void testAddOpenroadmOperationalModesToCatalog() throws Exception {
+    public void testAddOpenroadmOperationalModesToCatalog() {
         OpenroadmOperationalModes operationalModes = mock(OpenroadmOperationalModes.class);
 
         catalogDataStoreOperations.addOpenroadmOperationalModesToCatalog(operationalModes);
@@ -63,7 +63,7 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void testAddSpecificOperationalModesToCatalog() throws Exception {
+    public void testAddSpecificOperationalModesToCatalog() {
         SpecificOperationalModes specificOperationalModes = mock(SpecificOperationalModes.class);
 
         catalogDataStoreOperations.addSpecificOperationalModesToCatalog(specificOperationalModes);

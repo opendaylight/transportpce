@@ -65,11 +65,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
             LOG.debug("DCL Connection Status {}", connectionStatus);
             if (isCreate(device) || isUpdate(device)) {
                 LOG.info("Node {} was modified", nodeId);
-                try {
-                    processModifiedSubtree(nodeId, netconfNode, openROADMversion);
-                } catch (InterruptedException | ExecutionException e) {
-                    LOG.error("something wrong when modifying node {}", nodeId, e);
-                }
+                processModifiedSubtree(nodeId, netconfNode, openROADMversion);
             } else if (isDelete(device)) {
                 LOG.info("Node {} was deleted", nodeId);
             }
@@ -86,8 +82,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
      *                              datastore
      * @throws ExecutionException   may be thrown if there is a problem getting the device from datastore
      */
-    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion)
-            throws InterruptedException, ExecutionException {
+    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion) {
         ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
         /*long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                 .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)).count();
