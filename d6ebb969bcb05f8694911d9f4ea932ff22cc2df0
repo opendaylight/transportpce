@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0421439b_2362d681",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "Thank you for your change. See few comments.",
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f41a96a_32e4ec3d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/InstanceIdentifiers.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "should normally be able to be of type WithKey",
+      "range": {
+        "startLine": 43,
+        "startChar": 24,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "805ed937_4d49a010",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/InstanceIdentifiers.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "It makes sense to put it in this class. As in the Tapi module, there is also a class dedicated to constants (String for now...), it could also have gone there...",
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "749ed66f_8e7eebb3",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "why do you need these two lines?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 30
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426f9afc_217d3293",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "you should put at least one assert in your tests...",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 16
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9248627c_39c20c8d",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "Why not using the predefined constant?",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 0
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c7d3729_f9221703",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/utils/TopologyDataUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "Please keep the existing code style...\nSame thing in the rest of the code...",
+      "range": {
+        "startLine": 43,
+        "startChar": 8,
+        "endLine": 43,
+        "endChar": 28
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c92b7f8_8ca9ca66",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/JsonDataConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "should be on next line",
+      "range": {
+        "startLine": 114,
+        "startChar": 77,
+        "endLine": 114,
+        "endChar": 78
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf54a49a_98c0e3b0",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/JsonDataConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "LF should not be necessary",
+      "range": {
+        "startLine": 127,
+        "startChar": 37,
+        "endLine": 127,
+        "endChar": 38
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a3f261_fc0d113a",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/XmlDataConverterTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-20T08:43:21Z",
+      "side": 1,
+      "message": "should fit in the same line",
+      "range": {
+        "startLine": 133,
+        "startChar": 37,
+        "endLine": 133,
+        "endChar": 38
+      },
+      "revId": "d6ebb969bcb05f8694911d9f4ea932ff22cc2df0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
