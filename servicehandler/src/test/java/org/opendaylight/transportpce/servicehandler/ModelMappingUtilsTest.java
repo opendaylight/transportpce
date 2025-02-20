@@ -395,7 +395,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testCreateRestoreServiceReply() throws ExecutionException, InterruptedException {
+    void testCreateRestoreServiceReply() throws InterruptedException {
         ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestorationOutputF =
             ModelMappingUtils.createRestoreServiceReply("message");
         serviceRestorationOutputF.addListener(new Runnable() {

@@ -100,7 +100,7 @@ public class PortMappingVersion121Test {
     private Random ran = new Random();
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         // test createMappingData for a xpdr node with 3 network + 1 client + bidirectional & unidirectional ports
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();

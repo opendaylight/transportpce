@@ -11,16 +11,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for checking service sdnc-request-header compliance.
  *
  */
 public final class ServicehandlerComplianceCheck {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerComplianceCheck.class);
 
     // This is class is public so that these messages can be accessed from Junit (avoid duplications).
     public static final class LogMessages {

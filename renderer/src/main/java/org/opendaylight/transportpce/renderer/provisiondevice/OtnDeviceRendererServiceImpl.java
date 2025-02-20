@@ -170,129 +170,130 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         AtomicBoolean success = new AtomicBoolean(true);
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
-            String nodeId = node.getNodeId();
-            LOG.info("Deleting service setup on node {}", nodeId);
-            String networkTp = node.getNetworkTp();
-            if (networkTp == null || input.getServiceRate() == null || input.getServiceFormat() == null) {
-                LOG.error("destination ({}) or service-rate ({}) or service-format ({}) is null.",
-                    networkTp, input.getServiceRate(), input.getServiceFormat());
-                return;
-            }
-            if (!this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                String result = nodeId + " is not mounted on the controller";
-                results.add(result);
-                success.set(false);
-                LOG.warn(result);
-                forkJoinPool.shutdown();
-                return;
-                // TODO should deletion end here?
-            }
-            // if the node is currently mounted then proceed.
-            List<String> interfacesToDelete = new LinkedList<>();
-            String connectionNumber = "";
-            switch (serviceType) {
-                case StringConstants.SERVICE_TYPE_100GE_S:
-                    connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
-                    break;
-                case StringConstants.SERVICE_TYPE_100GE_M:
-                    connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
-                    otnLinkTps.add(new LinkTpBuilder()
-                        .setNodeId(nodeId)
-                        .setTpId(networkTp)
-                        .build());
-                    break;
-                case StringConstants.SERVICE_TYPE_ODU4:
-                    if (node.getClientTp() == null && node.getNetwork2Tp() == null) {
-                        interfacesToDelete.add(networkTp + "-ODU4");
-                        otnLinkTps.add(new LinkTpBuilder()
-                            .setNodeId(nodeId)
-                            .setTpId(networkTp)
-                            .build());
-                    }
-                    if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
-                        interfacesToDelete.add(networkTp + "-ODU4");
-                        interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
-                        connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
-                    }
-                    break;
-                case StringConstants.SERVICE_TYPE_ODUC2:
-                case StringConstants.SERVICE_TYPE_ODUC3:
-                case StringConstants.SERVICE_TYPE_ODUC4:
-                    if (node.getClientTp() == null && node.getNetwork2Tp() == null) {
-                        // Service-type can be ODUC2, ODUC3, ODUC4
-                        interfacesToDelete.add(networkTp + "-" + serviceType);
-                        otnLinkTps.add(new LinkTpBuilder()
-                            .setNodeId(nodeId)
-                            .setTpId(networkTp)
-                            .build());
-                    }
-                    if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
-                        interfacesToDelete.add(networkTp + "-" + serviceType);
-                        interfacesToDelete.add(node.getNetwork2Tp() + "-" + serviceType);
-                        connectionNumber = getConnectionNumber(node, networkTp, serviceType);
-                    }
-                    break;
-                case StringConstants.SERVICE_TYPE_10GE:
-                    connectionNumber = getConnectionNumber(node, networkTp, "ODU2e");
-                    otnLinkTps.add(new LinkTpBuilder()
-                        .setNodeId(nodeId)
-                        .setTpId(networkTp)
-                        .build());
-                    break;
-                case StringConstants.SERVICE_TYPE_1GE:
-                    connectionNumber = getConnectionNumber(node, networkTp, "ODU0");
-                    otnLinkTps.add(new LinkTpBuilder()
-                        .setNodeId(nodeId)
-                        .setTpId(networkTp)
-                        .build());
-                    break;
-                default:
-                    LOG.error("service-type {} not managed yet", serviceType);
-                    String result = serviceType + " is not supported";
-                    results.add(result);
-                    success.set(false);
+        try (ForkJoinPool forkJoinPool = new ForkJoinPool()) {
+            ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+                String nodeId = node.getNodeId();
+                LOG.info("Deleting service setup on node {}", nodeId);
+                String networkTp = node.getNetworkTp();
+                if (networkTp == null || input.getServiceRate() == null || input.getServiceFormat() == null) {
+                    LOG.error("destination ({}) or service-rate ({}) or service-format ({}) is null.",
+                        networkTp, input.getServiceRate(), input.getServiceFormat());
                     return;
-            }
-            List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
-            for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
-                if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
-                        this.deviceTransactionManager)) {
-                    interfacesToDelete.add(interf);
-                    String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
-                    if (supportedInterface == null) {
-                        continue;
-                    }
-                    // Here ODUC can be ODUC2, ODUC3, ODUC4
-                    if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC"))
-                        || (input.getServiceRate().intValue() != 100 && !supportedInterface.contains("ODU4"))) {
-                        interfacesToDelete.add(supportedInterface);
-                    }
                 }
-            }
-
-            for (String interfaceId : interfacesToDelete) {
-                try {
-                    this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
-                } catch (OpenRoadmInterfaceException e) {
-                    String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
-                    success.set(false);
-                    LOG.error(result, e);
+                if (!this.deviceTransactionManager.isDeviceMounted(nodeId)) {
+                    String result = nodeId + " is not mounted on the controller";
                     results.add(result);
+                    success.set(false);
+                    LOG.warn(result);
+                    forkJoinPool.shutdown();
+                    return;
+                    // TODO should deletion end here?
                 }
+                // if the node is currently mounted then proceed.
+                List<String> interfacesToDelete = new LinkedList<>();
+                String connectionNumber = "";
+                switch (serviceType) {
+                    case StringConstants.SERVICE_TYPE_100GE_S:
+                        connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
+                        break;
+                    case StringConstants.SERVICE_TYPE_100GE_M:
+                        connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
+                        otnLinkTps.add(new LinkTpBuilder()
+                            .setNodeId(nodeId)
+                            .setTpId(networkTp)
+                            .build());
+                        break;
+                    case StringConstants.SERVICE_TYPE_ODU4:
+                        if (node.getClientTp() == null && node.getNetwork2Tp() == null) {
+                            interfacesToDelete.add(networkTp + "-ODU4");
+                            otnLinkTps.add(new LinkTpBuilder()
+                                .setNodeId(nodeId)
+                                .setTpId(networkTp)
+                                .build());
+                        }
+                        if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
+                            interfacesToDelete.add(networkTp + "-ODU4");
+                            interfacesToDelete.add(node.getNetwork2Tp() + "-ODU4");
+                            connectionNumber = getConnectionNumber(node, networkTp, "ODU4");
+                        }
+                        break;
+                    case StringConstants.SERVICE_TYPE_ODUC2:
+                    case StringConstants.SERVICE_TYPE_ODUC3:
+                    case StringConstants.SERVICE_TYPE_ODUC4:
+                        if (node.getClientTp() == null && node.getNetwork2Tp() == null) {
+                            // Service-type can be ODUC2, ODUC3, ODUC4
+                            interfacesToDelete.add(networkTp + "-" + serviceType);
+                            otnLinkTps.add(new LinkTpBuilder()
+                                .setNodeId(nodeId)
+                                .setTpId(networkTp)
+                                .build());
+                        }
+                        if (node.getClientTp() == null && node.getNetwork2Tp() != null) {
+                            interfacesToDelete.add(networkTp + "-" + serviceType);
+                            interfacesToDelete.add(node.getNetwork2Tp() + "-" + serviceType);
+                            connectionNumber = getConnectionNumber(node, networkTp, serviceType);
+                        }
+                        break;
+                    case StringConstants.SERVICE_TYPE_10GE:
+                        connectionNumber = getConnectionNumber(node, networkTp, "ODU2e");
+                        otnLinkTps.add(new LinkTpBuilder()
+                            .setNodeId(nodeId)
+                            .setTpId(networkTp)
+                            .build());
+                        break;
+                    case StringConstants.SERVICE_TYPE_1GE:
+                        connectionNumber = getConnectionNumber(node, networkTp, "ODU0");
+                        otnLinkTps.add(new LinkTpBuilder()
+                            .setNodeId(nodeId)
+                            .setTpId(networkTp)
+                            .build());
+                        break;
+                    default:
+                        LOG.error("service-type {} not managed yet", serviceType);
+                        String result = serviceType + " is not supported";
+                        results.add(result);
+                        success.set(false);
+                        return;
+                }
+                List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
+                for (String interf : intToDelete == null ? new ArrayList<String>() : intToDelete) {
+                    if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
+                            this.deviceTransactionManager)) {
+                        interfacesToDelete.add(interf);
+                        String supportedInterface = this.openRoadmInterfaces.getSupportedInterface(nodeId, interf);
+                        if (supportedInterface == null) {
+                            continue;
+                        }
+                        // Here ODUC can be ODUC2, ODUC3, ODUC4
+                        if ((input.getServiceRate().intValue() == 100 && !supportedInterface.contains("ODUC"))
+                            || (input.getServiceRate().intValue() != 100 && !supportedInterface.contains("ODU4"))) {
+                            interfacesToDelete.add(supportedInterface);
+                        }
+                    }
+                }
+
+                for (String interfaceId : interfacesToDelete) {
+                    try {
+                        this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
+                    } catch (OpenRoadmInterfaceException e) {
+                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
+                        success.set(false);
+                        LOG.error(result, e);
+                        results.add(result);
+                    }
+                }
+            }));
+            try {
+                forkJoinTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Error while deleting service paths!", e);
+                return new OtnServicePathOutputBuilder()
+                    .setResult("Error while deleting service paths!")
+                    .setSuccess(false)
+                    .build();
             }
-        }));
-        try {
-            forkJoinTask.get();
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error while deleting service paths!", e);
-            return new OtnServicePathOutputBuilder()
-                .setResult("Error while deleting service paths!")
-                .setSuccess(false)
-                .build();
+            forkJoinPool.shutdown();
         }
-        forkJoinPool.shutdown();
         return new OtnServicePathOutputBuilder()
                 .setSuccess(success.get())
                 .setLinkTp(otnLinkTps)

@@ -70,7 +70,6 @@ public final class TopoConstraintCheck {
     }
 
     //Due to number of check to do, cyclomatic complexity cannot be easily improved
-    @java.lang.SuppressWarnings("squid:MethodCyclomaticComplexity")
     private static boolean checkEmpty(TopologyConstraint tc) {
         if (tc == null) {
             return true;

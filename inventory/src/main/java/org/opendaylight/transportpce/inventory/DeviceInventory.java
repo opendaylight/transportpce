@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -39,8 +38,7 @@ public class DeviceInventory {
         LOG.info("Initializing {}", DeviceInventory.class.getName());
     }
 
-    public void initializeDevice(String deviceId, String openRoadmVersion)
-        throws InterruptedException, ExecutionException {
+    public void initializeDevice(String deviceId, String openRoadmVersion) {
 
         LOG.info("Creating Device Inventory for device {} with version {}", deviceId, openRoadmVersion);
         if (!inode.dataExists("inv_dev_info", " node_id = '" + deviceId + "'")) {

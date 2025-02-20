@@ -62,11 +62,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
             String nodeId = device.getRootNode().dataAfter().key().getNodeId().getValue();
             if (isCreate(device)) {
                 LOG.info("Node {} was created", nodeId);
-                try {
-                    processModifiedSubtree(nodeId, netconfNode, openROADMversion);
-                } catch (InterruptedException | ExecutionException e) {
-                    LOG.error("something wrong when creating node {}", nodeId, e);
-                }
+                processModifiedSubtree(nodeId, netconfNode, openROADMversion);
             } else if (isDelete(device)) {
                 LOG.info("Node {} was deleted", nodeId);
             }
@@ -83,8 +79,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      *                              datastore
      * @throws ExecutionException   may be thrown if there is a problem getting the device from datastore
      */
-    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion)
-            throws InterruptedException, ExecutionException {
+    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion) {
         ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
 
         long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()

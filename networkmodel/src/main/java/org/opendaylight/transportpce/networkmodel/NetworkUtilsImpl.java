@@ -115,7 +115,7 @@ public class NetworkUtilsImpl {
                     .buildFuture();
             }
         } catch (ExecutionException | InterruptedException e) {
-            LOG.error("readMdSal: Error reading link {}", input.getLinkId());
+            LOG.error("readMdSal: Error reading link {}", input.getLinkId(), e);
             return RpcResultBuilder
                 .success(new DeleteLinkOutputBuilder().setResult("Fail").build())
                 .buildFuture();
@@ -131,6 +131,7 @@ public class NetworkUtilsImpl {
                 .success(new DeleteLinkOutputBuilder().setResult("Link {} deleted successfully").build())
                 .buildFuture();
         } catch (InterruptedException | ExecutionException e) {
+            LOG.error("readMdSal: Error writing link {}", input.getLinkId(), e);
             return RpcResultBuilder.<DeleteLinkOutput>failed().buildFuture();
         }
     }

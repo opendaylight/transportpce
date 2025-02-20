@@ -60,7 +60,7 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("Warning addOpenroadmOperationalModesToCatalog CatalogDataStoreOperationsImpl");
+            LOG.warn("Warning addOpenroadmOperationalModesToCatalog CatalogDataStoreOperationsImpl", e);
         }
     }
 
@@ -77,7 +77,7 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, instanceIdentifier , objToSave);
             networkTransactionService.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            LOG.warn("Warning addSpecificOperationalModesToCatalog CatalogDataStoreOperationsImpl");
+            LOG.warn("Warning addSpecificOperationalModesToCatalog CatalogDataStoreOperationsImpl", e);
         }
     }
 
@@ -100,14 +100,12 @@ public class CatalogDataStoreOperationsImpl implements CatalogDataStoreOperation
                     LogicalDatastoreType.CONFIGURATION,
                     ii,
                     catalog);
-            try {
-                networkTransactionService.commit().get();
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error stroging openroadm operational mode catalog {} in the datastore", CATALOG_FILE, e);
-            }
+            networkTransactionService.commit().get();
             LOG.info("datastore initialized with the OR catalog");
         } catch (IOException e) {
             LOG.error("Error reading openroadm operational mode catalog {}", CATALOG_FILE, e);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error stroging openroadm operational mode catalog {} in the datastore", CATALOG_FILE, e);
         }
     }
 }

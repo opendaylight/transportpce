@@ -100,6 +100,7 @@ public final class TopologyUtils {
                 "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
                 .getValue(), e);
         } catch (NoSuchElementException e) {
+            LOG.error("Error getting topology from datastore", e);
             return null;
         }
     }
@@ -125,6 +126,7 @@ public final class TopologyUtils {
                 "Unable to get from mdsal topology: " + topoIID.firstKeyOf(Topology.class).getUuid()
                 .getValue(), e);
         } catch (NoSuchElementException e) {
+            LOG.error("Error getting topology from datastore", e);
             return null;
         }
         List<String> nameList = new ArrayList<>();

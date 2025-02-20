@@ -17,7 +17,6 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -111,7 +110,7 @@ public class NbiNotificationsHandlerTest extends AbstractTest {
     }
 
     @Test
-    void onPublishTapiNotificationServiceTest() throws ExecutionException, InterruptedException {
+    void onPublishTapiNotificationServiceTest() {
         NbiNotificationsHandler listener = new NbiNotificationsHandler(Map.of("test", publisherService),
                 Map.of("test", publisherAlarm), Map.of("test", publisherTapiService));
 

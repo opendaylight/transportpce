@@ -200,7 +200,7 @@ public class INode221 {
         return nodeExists != 0;
     }
 
-    public void getRoadmShelves(String nodeId) throws InterruptedException, ExecutionException {
+    public void getRoadmShelves(String nodeId) {
         DataObjectIdentifier<OrgOpenroadmDevice> deviceIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
