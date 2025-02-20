@@ -116,15 +116,15 @@ public class OCPortMappingTest {
     private OCPortMappingVersion190 ocPortMappingVersion190Test;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
         ocPortMappingVersion190 = mock(OCPortMappingVersion190.class);
         ocMetaDataTransaction = mock(OCMetaDataTransaction.class);
-        ocPortMapping = new OCPortMappingImpl(dataBroker, ocPortMappingVersion190);
+        ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
         ocPortMappingVersion190Test = new OCPortMappingVersion190(dataBroker, deviceTransactionManager,
                 ocMetaDataTransaction, networkTransactionService);
-        ocPortMapping = new OCPortMappingImpl(dataBroker, ocPortMappingVersion190);
+        ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
     }
 
     @Test
@@ -416,8 +416,7 @@ public class OCPortMappingTest {
         Method method = ocPortMappingVersion190.getClass()
                 .getDeclaredMethod("clientPortsExistsOnNELineCard", List.class, Subcomponents.class);
         method.setAccessible(true);
-        Set<Uint8> uint8s = (Set<Uint8>) method.invoke(ocPortMappingVersion190,supportedClientPorts,subcomponents);
-        assertNotNull(uint8s);
+        assertNotNull(method.invoke(ocPortMappingVersion190,supportedClientPorts,subcomponents));
     }
 }
 

@@ -27,7 +27,7 @@ public class WeightedResultMessageTest {
     private List<DeviceRenderingResult> deviceRenderingResults;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         deviceRenderingResults = new ArrayList<>();
     }
 

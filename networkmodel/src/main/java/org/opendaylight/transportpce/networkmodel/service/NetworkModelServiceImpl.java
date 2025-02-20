@@ -200,7 +200,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error adding openconfig node in openroadm network layers");
+            LOG.error("Error adding openconfig node in openroadm network layers", e);
         }
     }
 

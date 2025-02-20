@@ -213,7 +213,6 @@ public class PcePathDescription {
         return ztoADirectionBldr;
     }
 
-    @SuppressWarnings("java:S138")
     //sonar issue This method has 77 lines, which is greater than the 75 lines authorized. Split it into smaller
     //ignore as it's not relevant to split it from functional point
     private void buildAtoZ(Map<AToZKey, AToZ> atozMap, List<PceLink> path) {

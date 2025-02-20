@@ -1146,13 +1146,10 @@ public class OpenRoadmInterface710 {
                 interfaceName.contains("nmc")
                         ? null
                         : interfaceName.replace("mc", "nmc");
-        if (rc.getSource().getSrcIf().equals(interfaceName)
+        return rc.getSource().getSrcIf().equals(interfaceName)
                 || rc.getDestination().getDstIf().equals(interfaceName)
                 || rc.getSource().getSrcIf().equals(supportedinter)
-                || rc.getDestination().getDstIf().equals(supportedinter)) {
-            return true;
-        }
-        return false;
+                || rc.getDestination().getDstIf().equals(supportedinter);
     }
 
 

@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -41,7 +40,7 @@ public class MappingUtilsImplTest extends AbstractTest {
     private static MappingUtils mappingUtils;
 
     @BeforeAll
-    static void setUp() throws InterruptedException, ExecutionException, FileNotFoundException {
+    static void setUp() throws InterruptedException, ExecutionException {
         DataObjectConverter dataObjectConverter = JSONDataObjectConverter
                 .createWithDataStoreUtil(getDataStoreContextUtil());
         try (Reader reader = Files.newBufferedReader(
@@ -66,7 +65,7 @@ public class MappingUtilsImplTest extends AbstractTest {
     }
 
     @Test
-    void getOpenRoadmVersionTest() throws ExecutionException, InterruptedException {
+    void getOpenRoadmVersionTest() {
         assertEquals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1, mappingUtils.getOpenRoadmVersion("ROADM-C1"),
             "NodeInfo with ROADM-C1 as id should be 1.2.1 version");
         assertEquals(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, mappingUtils.getOpenRoadmVersion("ROADM-A1"),
