@@ -22,6 +22,30 @@
       },
       "revId": "e9527a9bf4f0e2e0b4094180fda924dc0ca5bfca",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5c89b1e_04c1183c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/FrequencySelectionException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-21T15:23:22Z",
+      "side": 1,
+      "message": "Thank you Robert for your review. I really appreciate having your feedback that helps us improve tpce code.",
+      "parentUuid": "5bcd5df6_ed515380",
+      "range": {
+        "startLine": 13,
+        "startChar": 30,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "e9527a9bf4f0e2e0b4094180fda924dc0ca5bfca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
