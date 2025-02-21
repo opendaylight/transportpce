@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcd5df6_ed515380",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/frequency/FrequencySelectionException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2025-02-21T13:22:14Z",
+      "side": 1,
+      "message": "it is also recommended to tag serialization elements with @java.io.Serial\n(we usually do not import it)",
+      "range": {
+        "startLine": 13,
+        "startChar": 30,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "e9527a9bf4f0e2e0b4094180fda924dc0ca5bfca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
