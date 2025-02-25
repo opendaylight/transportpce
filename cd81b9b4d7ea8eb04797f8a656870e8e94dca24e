@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f150f7_67e9cee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-25T07:09:48Z",
+      "side": 1,
+      "message": "The feature controlling the iteration direction searching for available frequencies has been removed. TransportPCE always iterates from high to low frequencies, as has always been the case.",
+      "revId": "cd81b9b4d7ea8eb04797f8a656870e8e94dca24e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
