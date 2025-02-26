@@ -23,6 +23,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -64,11 +65,13 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             @Reference OpenRoadmInterfaces openRoadmInterfaces,
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference MappingUtils mappingUtils,
-            @Reference PortMapping portMapping) {
+            @Reference PortMapping portMapping,
+            @Reference Config configuration) {
         this.crossConnect = crossConnect;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.deviceTransactionManager = deviceTransactionManager;
-        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces);
+        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, portMapping, openRoadmInterfaces,
+                configuration);
     }
 
 //TODO Align log messages and returned results messages

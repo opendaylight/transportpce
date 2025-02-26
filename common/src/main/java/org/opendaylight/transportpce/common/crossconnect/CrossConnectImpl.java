@@ -14,6 +14,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 
 import java.util.List;
 import java.util.Optional;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -39,11 +40,11 @@ public class CrossConnectImpl implements CrossConnect {
 
     @Activate
     public CrossConnectImpl(@Reference DeviceTransactionManager deviceTransactionManager,
-                            @Reference MappingUtils mappingUtils) {
+                            @Reference MappingUtils mappingUtils, @Reference Config configuration) {
         this(deviceTransactionManager, mappingUtils,
-            new CrossConnectImpl121(deviceTransactionManager),
-            new CrossConnectImpl221(deviceTransactionManager),
-            new CrossConnectImpl710(deviceTransactionManager));
+            new CrossConnectImpl121(deviceTransactionManager, configuration),
+            new CrossConnectImpl221(deviceTransactionManager, configuration),
+            new CrossConnectImpl710(deviceTransactionManager, configuration));
     }
 
     // TODO: DeviceTransactionManager is not used here

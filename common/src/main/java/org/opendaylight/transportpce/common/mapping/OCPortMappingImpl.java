@@ -7,9 +7,11 @@
  */
 
 package org.opendaylight.transportpce.common.mapping;
+
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
 
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -31,9 +33,10 @@ public class OCPortMappingImpl implements  OCPortMapping {
     public OCPortMappingImpl(@Reference DataBroker dataBroker ,
                              @Reference DeviceTransactionManager deviceTransactionManager,
                              @Reference OCMetaDataTransaction ocMetaDataTransaction,
-                             @Reference NetworkTransactionService networkTransactionService) {
+                             @Reference NetworkTransactionService networkTransactionService,
+                             @Reference Config configuration) {
         this(new OCPortMappingVersion190(dataBroker,deviceTransactionManager,ocMetaDataTransaction,
-                networkTransactionService));
+                networkTransactionService, configuration));
     }
 
     /**

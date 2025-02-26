@@ -19,7 +19,7 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -48,15 +48,17 @@ public class CrossConnectImpl121 {
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl121.class);
 
     private final DeviceTransactionManager deviceTransactionManager;
+    private final Config configuration;
 
-    public CrossConnectImpl121(DeviceTransactionManager deviceTransactionManager) {
+    public CrossConnectImpl121(DeviceTransactionManager deviceTransactionManager, Config configuration) {
         this.deviceTransactionManager = deviceTransactionManager;
+        this.configuration = configuration;
     }
 
     public Optional<RoadmConnections> getCrossConnect(String deviceId, String connectionNumber) {
         return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL,
-                generateRdmConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                generateRdmConnectionIID(connectionNumber), configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
     }
 
     public Optional<String> postCrossConnect(
@@ -93,7 +95,7 @@ public class CrossConnectImpl121 {
                 .build(),
             rdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Roadm-connection successfully created: {}-{}-{}-{}", srcTp, destTp,
@@ -129,7 +131,7 @@ public class CrossConnectImpl121 {
         // post the cross connect on the device
         deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateRdmConnectionIID(connectionNumber));
         FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Roadm connection successfully deleted ");
@@ -230,7 +232,7 @@ public class CrossConnectImpl121 {
                 .build(),
             newRdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Roadm connection power level successfully set ");

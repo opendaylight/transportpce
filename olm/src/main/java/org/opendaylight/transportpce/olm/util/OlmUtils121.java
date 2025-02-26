@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
@@ -60,7 +60,8 @@ final class OlmUtils121 {
      *
      * @return Result of the request list of PM readings
      */
-    public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
+    public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager,
+            Config configuration) {
         LOG.info("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
                 input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
@@ -68,7 +69,7 @@ final class OlmUtils121 {
         Optional<CurrentPmlist> currentPmList;
         currentPmList = deviceTransactionManager
                 .getDataFromDevice(input.getNodeId(), LogicalDatastoreType.OPERATIONAL, currentPmsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (currentPmList.isPresent()) {
             String pmExtension = null;
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location location = null;

@@ -25,6 +25,7 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.OCPortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -122,10 +123,12 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             @Reference final NetworkTransactionService networkTransactionService,
             @Reference PortMapping portMapping,
             @Reference OCPortMapping ocPortMapping,
-            @Reference final NotificationPublishService notificationPublishService) {
+            @Reference final NotificationPublishService notificationPublishService,
+            @Reference Config configuration) {
 
         this.networkTransactionService = networkTransactionService;
-        this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
+        this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService,
+                configuration);
         this.portMapping = portMapping;
         this.ocPortMapping = ocPortMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();

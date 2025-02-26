@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -46,11 +46,14 @@ public class OpenRoadmInterfacesImpl710 {
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
     private final PortMappingVersion710 portMapping710;
+    private final Config configuration;
 
-    public OpenRoadmInterfacesImpl710(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
+    public OpenRoadmInterfacesImpl710(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping,
+            Config configuration) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
         this.portMapping710 = portMapping.getPortMappingVersion710();
+        this.configuration = configuration;
     }
 
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
@@ -77,7 +80,7 @@ public class OpenRoadmInterfacesImpl710 {
             ifBuilder.getType().toString());
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         // TODO: instead of using this infinite loop coupled with this timeout,
         // it would be better to use a notification mechanism from the device to be advertised
         // that the new created interface is present in the device circuit-pack/port
@@ -119,7 +122,7 @@ public class OpenRoadmInterfacesImpl710 {
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            interfacesIID, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
     }
 
 
@@ -170,7 +173,7 @@ public class OpenRoadmInterfacesImpl710 {
 
             deviceTx.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
             FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
 
             try {
                 commit.get();
@@ -202,8 +205,8 @@ public class OpenRoadmInterfacesImpl710 {
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .build();
         Optional<CircuitPacks> cpOpt = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, circuitPackIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.CONFIGURATION, circuitPackIID, configuration.deviceReadTimeout().time(),
+            configuration.deviceReadTimeout().unit());
         CircuitPacks cp = null;
         if (cpOpt.isPresent()) {
             cp = cpOpt.orElseThrow();
@@ -242,7 +245,7 @@ public class OpenRoadmInterfacesImpl710 {
             }
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
             FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
             try {
                 txSubmitFuture.get();
                 LOG.info("Successfully posted equipment state change on node {}", nodeId);
@@ -266,7 +269,7 @@ public class OpenRoadmInterfacesImpl710 {
             .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()))
             .build();
         Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-            portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).orElseThrow();
+            portIID, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()).orElseThrow();
         if (port.getInterfaces() == null) {
             return false;
         }
