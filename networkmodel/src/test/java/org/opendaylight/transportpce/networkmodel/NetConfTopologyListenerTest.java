@@ -27,6 +27,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -74,6 +76,7 @@ public class NetConfTopologyListenerTest {
     private Nodes nodes;
     @Mock
     private NodeDatamodelType nodeDatamodelType;
+    private Config configuration = new CommonConfig(240);
 
     @Test
     void testOnDataTreeChangedWhenDeleteNode() {
@@ -146,7 +149,7 @@ public class NetConfTopologyListenerTest {
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
-            deviceTransactionManager, portMapping);
+            deviceTransactionManager, portMapping, configuration);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(node, times(1)).modificationType();
@@ -172,7 +175,7 @@ public class NetConfTopologyListenerTest {
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
-            deviceTransactionManager, portMapping);
+            deviceTransactionManager, portMapping, configuration);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(node, times(1)).modificationType();
@@ -196,7 +199,7 @@ public class NetConfTopologyListenerTest {
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
-            deviceTransactionManager, portMapping);
+            deviceTransactionManager, portMapping, configuration);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
         verify(node, times(2)).modificationType();

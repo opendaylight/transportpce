@@ -39,9 +39,9 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                                    @Reference MappingUtils mappingUtils, @Reference PortMapping portMapping,
                                    @Reference Config configuration) {
         this(deviceTransactionManager, mappingUtils,
-            new OpenRoadmInterfacesImpl121(deviceTransactionManager),
+            new OpenRoadmInterfacesImpl121(deviceTransactionManager, configuration),
             new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping, configuration),
-            new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping));
+            new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping, configuration));
     }
 
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,

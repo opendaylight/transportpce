@@ -31,6 +31,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -56,6 +58,7 @@ class PowerMgmtTest {
     private DeviceTransactionManager deviceTransactionManager;
     private PortMapping portMapping;
     private PowerMgmt powerMgmt;
+    private final Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setUp() {
@@ -65,7 +68,7 @@ class PowerMgmtTest {
         this.deviceTransactionManager = mock(DeviceTransactionManager.class);
         this.portMapping = mock(PortMapping.class);
         this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
-                this.deviceTransactionManager, this.portMapping, 1000, 1000);
+                this.deviceTransactionManager, this.portMapping, 1000, 1000, configuration);
     }
 
     @Test
@@ -102,12 +105,12 @@ class PowerMgmtTest {
                 .build();
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
         MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class);
-        pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
+        pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any(), any()))
                 .thenReturn(true);
         Map<String, Double> powerRangeMap = new HashMap<>();
         powerRangeMap.put("MaxTx", 0.1);
         powerRangeMap.put("MinTx", -5.1);
-        pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
+        pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any(), any()))
                 .thenReturn(powerRangeMap);
         when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
@@ -206,10 +209,10 @@ class PowerMgmtTest {
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
         try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
             pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(),
-                            any(), any(), any()))
+                            any(), any(), any(), any()))
                     .thenReturn(true);
             pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(),
-                            anyString(), any()))
+                            anyString(), any(), any()))
                     .thenReturn(new HashMap<>());
 
             when(this.crossConnect
@@ -221,7 +224,7 @@ class PowerMgmtTest {
             boolean result = this.powerMgmt.setPower(input);
             assertEquals(true, result);
             pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
-                    anyString(), eq(new BigDecimal("-5")), any(), any()));
+                    anyString(), eq(new BigDecimal("-5")), any(), any(), any()));
             verify(this.crossConnect, times(1))
                 .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
                         eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
@@ -256,18 +259,20 @@ class PowerMgmtTest {
         when(this.openRoadmInterfaces.getInterface(matches("roadm-A"), anyString())).thenReturn(Optional.of(interfOts));
         try (MockedStatic<PowerMgmtVersion121> pmv121 = mockStatic(PowerMgmtVersion121.class)) {
 
-            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any()))
+            pmv121.when(() -> PowerMgmtVersion121.setTransponderPower(anyString(), anyString(), any(), any(), any(),
+                            any()))
                     .thenReturn(true);
             Map<String, Double> powerRangeMapTpdrTx = new HashMap<>();
             powerRangeMapTpdrTx.put("MaxTx", 0.1);
             powerRangeMapTpdrTx.put("MinTx", -5.1);
-            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any()))
+            pmv121.when(() -> PowerMgmtVersion121.getXponderPowerRange(anyString(), anyString(), anyString(), any(),
+                            any()))
                     .thenReturn(powerRangeMapTpdrTx);
             Map<String, Double> powerRangeMapSrgRx = new HashMap<>();
             powerRangeMapSrgRx.put("MaxRx", -4.2);
             powerRangeMapSrgRx.put("MinRx", -22.2);
             pmv121.when(() -> PowerMgmtVersion121.getSRGRxPowerRange(anyString(), anyString(), any(), anyString(),
-                        anyString()))
+                        anyString(), any()))
                     .thenReturn(powerRangeMapSrgRx);
             when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(true);
 
@@ -276,7 +281,7 @@ class PowerMgmtTest {
             assertEquals(true, result);
             pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
                     anyString(), eq(new BigDecimal("-4.20000000000000017763568394002504646778106689453125")),
-                    any(), any()));
+                    any(), any(), any()));
         }
     }
 

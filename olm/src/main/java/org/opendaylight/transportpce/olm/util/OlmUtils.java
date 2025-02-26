@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.olm.util;
 
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
@@ -36,19 +37,19 @@ public final class OlmUtils {
      * @return Result of the request list of PM readings
      */
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager,
-                                             OpenroadmNodeVersion openRoadmVersion) {
+                                             OpenroadmNodeVersion openRoadmVersion, Config configuration) {
         LOG.info("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder;
         switch (openRoadmVersion.getIntValue()) {
             case 1:
-                pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
+                pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager, configuration);
                 break;
             case 2:
-                pmOutputBuilder = OlmUtils221.pmFetch(input, deviceTransactionManager);
+                pmOutputBuilder = OlmUtils221.pmFetch(input, deviceTransactionManager, configuration);
                 break;
             case 3:
-                pmOutputBuilder = OlmUtils710.pmFetch(input, deviceTransactionManager);
+                pmOutputBuilder = OlmUtils710.pmFetch(input, deviceTransactionManager, configuration);
                 break;
             default:
                 LOG.error("Unrecognized OpenRoadm version");

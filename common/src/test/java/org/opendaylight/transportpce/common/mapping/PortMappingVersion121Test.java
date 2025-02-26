@@ -30,7 +30,8 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.DataStoreContextImpl;
@@ -98,6 +99,7 @@ public class PortMappingVersion121Test {
     private static DeviceTransactionManager deviceTransactionManager;
     private static PortMappingVersion121 portMappingVersion121;
     private Random ran = new Random();
+    private Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setUp() {
@@ -105,7 +107,7 @@ public class PortMappingVersion121Test {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
         deviceTransactionManager = mock(DeviceTransactionManager.class);
-        portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
+        portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager, configuration);
     }
 
     @Test
@@ -289,7 +291,7 @@ public class PortMappingVersion121Test {
             .child(Degree.class, new DegreeKey(Uint16.ONE))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmDegreeObject));
 
         DataObjectIdentifier<Degree> deviceIID3 = DataObjectIdentifier
@@ -297,7 +299,7 @@ public class PortMappingVersion121Test {
             .child(Degree.class, new DegreeKey(Uint16.TWO))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID3,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmDegreeObject3));
 
         DataObjectIdentifier<Degree> deviceIID5 = DataObjectIdentifier
@@ -305,7 +307,7 @@ public class PortMappingVersion121Test {
             .child(Degree.class, new DegreeKey(Uint16.valueOf(3)))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID5,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmDegreeObject5));
 
         DataObjectIdentifier<Protocols> protocoliid = DataObjectIdentifier
@@ -313,7 +315,8 @@ public class PortMappingVersion121Test {
             .child(Protocols.class)
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, protocoliid,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(protocols));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(protocols));
 
         Interface interfaceObject = new InterfaceBuilder().withKey(new InterfaceKey("itf1"))
                 .setSupportingCircuitPackName("sc1").build();
@@ -322,66 +325,76 @@ public class PortMappingVersion121Test {
             .child(Interface.class, new InterfaceKey(portConfig.getIfName()))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, interfaceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(interfaceObject));
 
         DataObjectIdentifier<Ports> portID = getChild("c1", "p1");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports));
 
         // mock 2 bidirectional port for SRG
         Ports ports1 = getPortsWithInterfaces(interfacesList, "p2");
         DataObjectIdentifier<Ports> portID1 = getChild("c2", "p1");
         when(deviceTransactionManager.getDataFromDevice("node",
             LogicalDatastoreType.OPERATIONAL, portID1,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
             .thenReturn(Optional.of(ports1));
 
         DataObjectIdentifier<Ports> portID2 = getChild("c3", "p2");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID2,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports2));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports2));
 
         DataObjectIdentifier<Ports> portID3 = getChild("c3", "p3");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID3,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports3));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports3));
 
         DataObjectIdentifier<Ports> portID22 = getChild("c5", "p22");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID22,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports22));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports22));
 
         DataObjectIdentifier<Ports> portID33 = getChild("c5", "p33");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID33,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports33));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports33));
 
         DataObjectIdentifier<Ports> portID4 = getChild("c4", "p4");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID4,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports4));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports4));
 
         DataObjectIdentifier<Ports> portID5 = getChild("c4", "p5");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID5,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports5));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports5));
 
         DataObjectIdentifier<Ports> portID44 = getChild("c6", "p44");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID44,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports44));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports44));
 
         DataObjectIdentifier<Ports> portID55 = getChild("c6", "p55");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID55,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports55));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports55));
 
         DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Info.class)
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, infoIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(info));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(info));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey("c1"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID2 = DataObjectIdentifier
@@ -389,7 +402,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c2"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID2,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject2));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID3 = DataObjectIdentifier
@@ -397,7 +410,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c3"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID3,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject3));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID4 = DataObjectIdentifier
@@ -405,7 +418,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c4"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID4,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject4));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID5 = DataObjectIdentifier
@@ -413,7 +426,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c5"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID5,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject5));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID6 = DataObjectIdentifier
@@ -421,7 +434,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c6"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID6,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject6));
 
         DataObjectIdentifier<SharedRiskGroup> srgIID = DataObjectIdentifier
@@ -429,7 +442,7 @@ public class PortMappingVersion121Test {
             .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.ONE))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmSrgObject));
 
         DataObjectIdentifier<SharedRiskGroup> srgIID4 = DataObjectIdentifier
@@ -437,7 +450,7 @@ public class PortMappingVersion121Test {
             .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.TWO))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID4,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmSrgObject4));
 
         DataObjectIdentifier<SharedRiskGroup> srgIID6 = DataObjectIdentifier
@@ -445,7 +458,7 @@ public class PortMappingVersion121Test {
             .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(3)))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, srgIID6,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(ordmSrgObject6));
 
         // test createMappingData with a node with 3 dgree + 3 srg + bidirectional & unidirectional ports
@@ -536,34 +549,41 @@ public class PortMappingVersion121Test {
         // mock reponses for deviceTransactionManager
         DataObjectIdentifier<Ports> portID = getChild("c1", "p1");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports));
 
         DataObjectIdentifier<Ports> portID11 = getChild("c2", "p11");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID11,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports11));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports11));
 
         DataObjectIdentifier<Ports> portID2 = getChild("c3", "p2");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID2,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports2));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports2));
 
         DataObjectIdentifier<Ports> portID3 = getChild("c3", "p3");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID3,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports3));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports3));
 
         DataObjectIdentifier<Ports> portID4 = getChild("c4", "p4");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID4,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports4));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports4));
 
         DataObjectIdentifier<Ports> portID5 = getChild("c4", "p5");
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, portID5,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(ports5));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(ports5));
 
         DataObjectIdentifier<Info> infoIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(Info.class)
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, infoIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(info));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(info));
 
         // mock 4 circuit packs
         CircuitPacks circuitPackObject = getCircuitPacks(portsList, "c1", "pc1");
@@ -576,7 +596,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c1"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID2 = DataObjectIdentifier
@@ -584,7 +604,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c2"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID2,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject2));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID3 = DataObjectIdentifier
@@ -592,7 +612,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c3"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID3,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject3));
 
         DataObjectIdentifier<CircuitPacks> circuitPacksIID4 = DataObjectIdentifier
@@ -600,7 +620,7 @@ public class PortMappingVersion121Test {
             .child(CircuitPacks.class, new CircuitPacksKey("c4"))
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, circuitPacksIID4,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
                         .thenReturn(Optional.of(circuitPackObject4));
 
         Map<CircuitPacksKey, CircuitPacks> circuitPacksMap = new HashMap<>();
@@ -615,7 +635,8 @@ public class PortMappingVersion121Test {
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(deviceObject));
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
+                .thenReturn(Optional.of(deviceObject));
 
         // test createMappingData for xpdr node with 2 network + 1 client + unidirectional & bidirectional ports
         assertTrue(portMappingVersion121.createMappingData("node"), "returns true when create mapping");

@@ -21,6 +21,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -34,11 +36,12 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     private final PortMapping portMapping = mock(PortMapping.class);
     private OpenRoadmInterface221 openRoadMInterface221;
     private final String nodeId = "node1";
+    private final Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setup() {
         OpenRoadmInterfaces openRoadmInterfaces = spy(OpenRoadmInterfaces.class);
-        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
+        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, configuration);
     }
 
     @Test

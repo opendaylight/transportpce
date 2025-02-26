@@ -35,6 +35,8 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
@@ -89,6 +91,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     @Mock
     private ServicePowerTurndown servicePowerTurndown;
     private RendererServiceOperationsImpl rendererServiceOperations;
+    private final Config configuration = new CommonConfig(240);
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
@@ -257,6 +260,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                     .setServiceZEnd(ServiceDeleteDataUtils.getServiceZEndBuild().build())
                     .withKey(new ServicePathsKey("service 1"))
                     .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
-                    .build());
+                    .build(),
+                configuration);
     }
 }

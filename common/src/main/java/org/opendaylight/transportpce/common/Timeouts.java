@@ -49,15 +49,6 @@ public final class Timeouts implements Config {
 
     public static final long SERVICE_ACTIVATION_TEST_RETRY_TIME = 20000;
 
-    /**
-     * Device read timeout in seconds.
-     */
-    public static final long DEVICE_READ_TIMEOUT = 240;
-    public static final TimeUnit DEVICE_READ_TIMEOUT_UNIT = TimeUnit.SECONDS;
-
-    public static final long DEVICE_WRITE_TIMEOUT = 240;
-    public static final TimeUnit DEVICE_WRITE_TIMEOUT_UNIT = TimeUnit.SECONDS;
-
     //TODO add timeouts for device setup (olm power setup etc.)
 
     private final Timeout deviceReadTimeout;

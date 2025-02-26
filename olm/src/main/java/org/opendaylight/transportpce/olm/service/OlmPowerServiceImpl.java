@@ -31,6 +31,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
@@ -109,6 +110,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     private final PowerMgmt powerMgmt;
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
+    private final Config configuration;
 
     @Activate
     public OlmPowerServiceImpl(@Reference DataBroker dataBroker,
@@ -116,13 +118,15 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference PortMapping portMapping,
             @Reference MappingUtils mappingUtils,
-            @Reference OpenRoadmInterfaces openRoadmInterfaces) {
+            @Reference OpenRoadmInterfaces openRoadmInterfaces,
+            @Reference Config configuration) {
         this.dataBroker = dataBroker;
         this.powerMgmt = powerMgmt;
         this.portMapping = portMapping;
         this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfaces = openRoadmInterfaces;
+        this.configuration = configuration;
         LOG.debug("OlmPowerServiceImpl Instantiated");
     }
 
@@ -149,7 +153,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
         LOG.info("Now calling get pm data");
         pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
-            nodeVersion);
+            nodeVersion, configuration);
         return pmOutputBuilder.build();
     }
 

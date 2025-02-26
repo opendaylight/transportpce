@@ -27,7 +27,8 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
@@ -53,11 +54,12 @@ public class CrossConnectImpl221Test {
     private DataBroker dataBrokerMock = mock(DataBroker.class);
     private ReadWriteTransaction rwTransactionMock = mock(ReadWriteTransaction.class);
     private DeviceTransaction deviceTransaction = mock(DeviceTransaction.class);
+    private final Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setup() {
         deviceTransactionManager = mock(DeviceTransactionManager.class);
-        crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
+        crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager, configuration);
 
         //mock responses for deviceTransactionManager calls
         DataObjectIdentifier<RoadmConnections> deviceIID = DataObjectIdentifier
@@ -67,7 +69,7 @@ public class CrossConnectImpl221Test {
 
         when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.CONFIGURATION, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
             .thenReturn(Optional.of(mock(RoadmConnections.class)));
     }
 
@@ -85,7 +87,7 @@ public class CrossConnectImpl221Test {
         when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
         when(rwTransactionMock.commit()).thenReturn(FluentFutures.immediateNullFluentFuture());
         deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
-        crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
+        crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager, configuration);
         SpectrumInformation spectrumInformation = new SpectrumInformation();
         spectrumInformation.setWaveLength(Uint32.ONE);
         spectrumInformation.setLowerSpectralSlotNumber(761);
@@ -102,7 +104,7 @@ public class CrossConnectImpl221Test {
             .build();
         when(deviceTransactionManager.getDataFromDevice("deviceId",
                 LogicalDatastoreType.CONFIGURATION, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
             .thenReturn(Optional.of(new RoadmConnectionsBuilder().setConnectionName("1").build()));
 
         when(deviceTransactionManager.getDeviceTransaction("deviceId"))
