@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "6f5ac16beb7f64c6dd886be70c75c6c3ddae079f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "612a369c_be4b8eac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T14:17:59Z",
+      "side": 1,
+      "message": "Thanks Joakim for all this change relation chain. This a huge work, that greatly complements our implementation. Somewhat difficult to appreciate initially when we did not get the full picture, as you introduce a lot of class associated with spectrum handling.\nAppreciate that you considered our concerns in changing the way we fill the spectrum, and that you have completed the refactoring work till the end.",
+      "revId": "6f5ac16beb7f64c6dd886be70c75c6c3ddae079f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
