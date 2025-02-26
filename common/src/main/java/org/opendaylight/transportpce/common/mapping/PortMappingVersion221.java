@@ -30,7 +30,7 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.NetworkBuilder;
@@ -111,6 +111,7 @@ public class PortMappingVersion221 {
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
+    private final Config configuration;
 
     static {
         SUFFIX =  Map.of(
@@ -119,9 +120,11 @@ public class PortMappingVersion221 {
             Direction.Bidirectional, "TXRX");
     }
 
-    public PortMappingVersion221(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager) {
+    public PortMappingVersion221(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
+            Config configuration) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
+        this.configuration = configuration;
     }
 
     public boolean createMappingData(String nodeId) {
@@ -132,7 +135,7 @@ public class PortMappingVersion221 {
             .build();
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (deviceInfoOptional.isEmpty()) {
             LOG.warn(PortMappingUtils.DEVICE_HAS_LOGMSG, nodeId, "no info", "subtree");
             return false;
@@ -207,7 +210,7 @@ public class PortMappingVersion221 {
                             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
                             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()))
                             .build(),
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit())
                     .orElseThrow(),
                 oldMapping,
                 //otsInterface
@@ -222,8 +225,8 @@ public class PortMappingVersion221 {
                                 .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
                                 .child(Interface.class, new InterfaceKey(oldMapping.getSupportingOts()))
                                 .build(),
-                            Timeouts.DEVICE_READ_TIMEOUT,
-                            Timeouts.DEVICE_READ_TIMEOUT_UNIT)
+                            configuration.deviceReadTimeout().time(),
+                            configuration.deviceReadTimeout().unit())
                         .orElseThrow()
                 );
             LOG.debug(PortMappingUtils.UPDATE_MAPPING_LOGMSG,
@@ -286,7 +289,7 @@ public class PortMappingVersion221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, deviceIID,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (deviceObject.isEmpty()) {
             LOG.error(PortMappingUtils.CANNOT_GET_DEV_CONF_LOGMSG, nodeId);
             return null;
@@ -448,7 +451,7 @@ public class PortMappingVersion221 {
                 .build();
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, srgIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
             if (ordmSrgObject.isPresent()) {
                 srgCps.addAll(ordmSrgObject.orElseThrow().nonnullCircuitPacks().values());
                 cpPerSrg.put(ordmSrgObject.orElseThrow().getSrgNumber().toJava(), srgCps);
@@ -530,7 +533,7 @@ public class PortMappingVersion221 {
             .build();
         Optional<Ports> port2Object = this.deviceTransactionManager
             .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (port2Object.isEmpty()
                 || port2Object.orElseThrow().getPortQual().getIntValue() != PortQual.RoadmExternal.getIntValue()) {
             LOG.error(PortMappingUtils.NOT_CORRECT_PARTNERPORT_LOGMSG + PortMappingUtils.PARTNERPORT_GET_ERROR_LOGMSG,
@@ -557,7 +560,7 @@ public class PortMappingVersion221 {
             .build();
         Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
              LogicalDatastoreType.OPERATIONAL, cpIID,
-             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+             configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (circuitPackObject.isEmpty()) {
             LOG.warn(PortMappingUtils.MISSING_CP_LOGMSG + PortMappingUtils.PORTMAPPING_IGNORE_LOGMSG,
                 nodeId, circuitPackName);
@@ -597,7 +600,7 @@ public class PortMappingVersion221 {
                 .build();
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
             if (ordmDegreeObject.isPresent()) {
                 degrees.put(degreeCounter, ordmDegreeObject.orElseThrow());
             }
@@ -627,7 +630,7 @@ public class PortMappingVersion221 {
                 .build();
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, srgIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
             if (ordmSrgObject.isPresent()) {
                 srgs.add(ordmSrgObject.orElseThrow());
 
@@ -643,8 +646,8 @@ public class PortMappingVersion221 {
             .child(Protocols.class)
             .build();
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, protocoliid, configuration.deviceReadTimeout().time(),
+            configuration.deviceReadTimeout().unit());
         if (protocolObject.isEmpty() || protocolObject.orElseThrow().augmentation(Protocols1.class).getLldp() == null) {
             LOG.warn(PortMappingUtils.PROCESSING_DONE_LOGMSG, nodeId, PortMappingUtils.CANNOT_GET_LLDP_CONF_LOGMSG);
             return new HashMap<>();
@@ -660,8 +663,8 @@ public class PortMappingVersion221 {
                 .child(Interface.class, new InterfaceKey(portConfig.getIfName()))
                 .build();
             Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, interfaceIID, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
             if (interfaceObject.isEmpty() || interfaceObject.orElseThrow().getSupportingCircuitPackName() == null) {
                 continue;
             }
@@ -672,8 +675,8 @@ public class PortMappingVersion221 {
                 .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName))
                 .build();
             Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
-                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
             if (circuitPackObject.isEmpty() || circuitPackObject.orElseThrow().getParentCircuitPack() == null) {
                 continue;
             }
@@ -1180,8 +1183,8 @@ public class PortMappingVersion221 {
             .build();
         LOG.debug(PortMappingUtils.FETCH_CONNECTIONPORT_LOGMSG, nodeId, cp.getPortName(), cpName);
         Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, portID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, portID, configuration.deviceReadTimeout().time(),
+            configuration.deviceReadTimeout().unit());
         if (portObject.isEmpty()) {
             LOG.error(PortMappingUtils.NO_PORT_ON_CP_LOGMSG, nodeId, cp.getPortName(), cpName);
             return null;
@@ -1267,6 +1270,6 @@ public class PortMappingVersion221 {
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            interfacesIID, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
     }
 }

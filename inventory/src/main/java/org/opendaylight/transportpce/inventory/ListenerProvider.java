@@ -14,6 +14,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.inventory.listener.ClliNetworkChangeListener;
 import org.opendaylight.transportpce.inventory.listener.DeviceConfigListener;
@@ -59,7 +60,8 @@ public class ListenerProvider {
     @Activate
     public ListenerProvider(@Reference DataBroker dataBroker,
             @Reference DataSource dataSource,
-            @Reference DeviceTransactionManager deviceTransactionManager) {
+            @Reference DeviceTransactionManager deviceTransactionManager,
+            @Reference Config configuration) {
 
         LOG.debug("Registering listeners...");
         OverlayNetworkChangeListener overlayNetworkListener = new OverlayNetworkChangeListener();
@@ -74,7 +76,7 @@ public class ListenerProvider {
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 InstanceIdentifiers.CLLI_NETWORK_II, clliNetworkChangeListener));
         LOG.info("CLLI network change listener was successfully registered");
-        INode121 inode121 = new INode121(dataSource, deviceTransactionManager);
+        INode121 inode121 = new INode121(dataSource, deviceTransactionManager, configuration);
         INode inode = new INode(dataSource, inode121);
         DeviceInventory deviceInventory = new DeviceInventory(dataSource, inode);
         DeviceListener deviceListener = new DeviceListener(deviceInventory);

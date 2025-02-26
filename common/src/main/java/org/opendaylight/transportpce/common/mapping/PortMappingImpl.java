@@ -21,6 +21,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
@@ -53,11 +54,11 @@ public class PortMappingImpl implements PortMapping {
 
     @Activate
     public PortMappingImpl(@Reference DataBroker dataBroker,
-            @Reference DeviceTransactionManager deviceTransactionManager) {
+            @Reference DeviceTransactionManager deviceTransactionManager, @Reference Config configuration) {
         this(dataBroker,
-            new PortMappingVersion710(dataBroker, deviceTransactionManager),
-            new PortMappingVersion221(dataBroker, deviceTransactionManager),
-            new PortMappingVersion121(dataBroker, deviceTransactionManager));
+            new PortMappingVersion710(dataBroker, deviceTransactionManager, configuration),
+            new PortMappingVersion221(dataBroker, deviceTransactionManager, configuration),
+            new PortMappingVersion121(dataBroker, deviceTransactionManager, configuration));
     }
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,

@@ -20,7 +20,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
@@ -53,6 +53,7 @@ public class R2RLinkDiscovery {
     private final DataBroker dataBroker;
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
+    private final Config configuration;
 
     /**
      * Instantiate the R2RLinkDiscovery object.
@@ -62,10 +63,11 @@ public class R2RLinkDiscovery {
      * @param networkTransactionService Service that eases the transaction operations with data-stores
      */
     public R2RLinkDiscovery(final DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-        NetworkTransactionService networkTransactionService) {
+        NetworkTransactionService networkTransactionService, Config configuration) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.networkTransactionService = networkTransactionService;
+        this.configuration = configuration;
     }
 
     /**
@@ -84,8 +86,9 @@ public class R2RLinkDiscovery {
                     .child(Protocols.class)
                     .build();
                 Optional<Protocols> protocol121Object = this.deviceTransactionManager.getDataFromDevice(
-                    nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID, Timeouts.DEVICE_READ_TIMEOUT,
-                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                    nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID,
+                        configuration.deviceReadTimeout().time(),
+                    configuration.deviceReadTimeout().unit());
                 if (hasNoNeighbor121(protocol121Object)) {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return false;
@@ -109,7 +112,7 @@ public class R2RLinkDiscovery {
                     .build();
                 var protocol221Object = this.deviceTransactionManager
                     .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols221IID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
                 if (hasNoNeighbor221(protocol221Object)) {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return false;
@@ -132,7 +135,7 @@ public class R2RLinkDiscovery {
                     .build();
                 var protocols71Object = this.deviceTransactionManager
                         .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols71IID,
-                                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                                configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
                 if (hasNoNeighbor71(protocols71Object)) {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return false;
