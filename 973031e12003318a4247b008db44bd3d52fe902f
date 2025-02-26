@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87333f99_fe922e48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T14:07:40Z",
+      "side": 1,
+      "message": "Thanks Joakim. Have one comment regarding default setting of max-slot in case mc-capability-profile is not filled in the device.",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d80d14_6251f01b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T14:07:40Z",
+      "side": 1,
+      "message": "I have a concern with your default setting in case McCapabilities is not filled : In the OR device model, all parameters included in McCapability profile are optional. So this case may happen. \nAs higher rates becomes available on transponders on the market , we may have to handle signal-width of 150, 175 GHz...\nThese transponders might be connected to old generation of OpenROADM ROADMs that use a fixgrid. Or on Flexgrid compliant ROADMs that do not advertise McCapability profiles in the way we expect.\nA fixgrid based on 50GHz doesn\u0027t mean that we can not support signals with a bandwidth that is a multiple of 50 GHz (SuperChannels, 800G channels @ 131 Gbauds...). If we apply this, we won\u0027t be able to have more than 1 slot of 50GHz, and won\u0027t be able to have next gen Xponders over old gen ROADM.\nWould prefer we that we stick to OR spec, setting a maximum value corresponding to 4800 GHz (768).",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
