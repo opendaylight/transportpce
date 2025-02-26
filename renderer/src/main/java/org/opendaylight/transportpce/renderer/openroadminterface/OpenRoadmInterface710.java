@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
@@ -115,10 +115,13 @@ public class OpenRoadmInterface710 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface710.class);
+    private final Config configuration;
 
-    public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
+    public OpenRoadmInterface710(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces,
+            Config configuration) {
         this.portMapping = portMapping;
         this.openRoadmInterfaces = openRoadmInterfaces;
+        this.configuration = configuration;
     }
 
     public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
@@ -1135,7 +1138,8 @@ public class OpenRoadmInterface710 {
                 .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.CONFIGURATION, xciid, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
         if (crossconnection.isEmpty()) {
             LOG.info("xd {} not found !", xc);
             return false;

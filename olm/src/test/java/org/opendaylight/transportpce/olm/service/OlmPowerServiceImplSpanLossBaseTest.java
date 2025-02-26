@@ -26,7 +26,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -79,13 +80,15 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     private OpenRoadmInterfaces openRoadmInterfaces;
     private OlmPowerService olmPowerService;
     private DataBroker dataBroker;
+    private Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setUp() throws OpenRoadmInterfaceException {
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
                 this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
         this.olmPowerService = new OlmPowerServiceImpl(getDataBroker(), this.powerMgmt,
-                this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
+                this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces,
+                configuration);
         this.dataBroker = getDataBroker();
         doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1)
             .when(this.mappingUtils).getOpenRoadmVersion(anyString());
@@ -97,10 +100,10 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
                 .builder(CurrentPmList.class)
                 .build();
         when(this.deviceTransactionManager.getDataFromDevice("ROADM-A1", LogicalDatastoreType.OPERATIONAL,
-                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                iidCurrentPmList, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
             .thenReturn(OlmTransactionUtils.getCurrentPmListA());
         when(this.deviceTransactionManager.getDataFromDevice("ROADM-C1", LogicalDatastoreType.OPERATIONAL,
-                iidCurrentPmList, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+                iidCurrentPmList, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()))
             .thenReturn(OlmTransactionUtils.getCurrentPmListC());
 
         Ots otsValue = new OtsBuilder()

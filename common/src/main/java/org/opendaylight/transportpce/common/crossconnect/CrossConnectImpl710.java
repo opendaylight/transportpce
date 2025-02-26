@@ -20,7 +20,7 @@ import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
@@ -56,22 +56,24 @@ public class CrossConnectImpl710 {
     private static final String DEV_TRANSACTION_NOT_FOUND = "Device transaction for device {} was not found!";
     private static final String UNABLE_DEV_TRANSACTION = "Unable to obtain device transaction for device {}!";
     private final DeviceTransactionManager deviceTransactionManager;
+    private final Config configuration;
 
-    public CrossConnectImpl710(DeviceTransactionManager deviceTransactionManager) {
+    public CrossConnectImpl710(DeviceTransactionManager deviceTransactionManager, Config configuration) {
         this.deviceTransactionManager = deviceTransactionManager;
+        this.configuration = configuration;
     }
 
     public Optional<RoadmConnections> getCrossConnect(String deviceId, String connectionNumber) {
         //TODO Change it to Operational later for real device
         return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION,
-                generateRdmConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                generateRdmConnectionIID(connectionNumber), configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
     }
 
     public Optional<OduConnection> getOtnCrossConnect(String deviceId, String connectionNumber) {
         return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL,
-            generateOduConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            generateOduConnectionIID(connectionNumber), configuration.deviceReadTimeout().time(),
+            configuration.deviceReadTimeout().unit());
     }
 
     public Optional<String> postCrossConnect(
@@ -109,7 +111,7 @@ public class CrossConnectImpl710 {
                         .build(),
                 rdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Roadm-connection successfully created: {}-{}-{}-{}", srcTp, destTp,
@@ -159,7 +161,7 @@ public class CrossConnectImpl710 {
                 LogicalDatastoreType.CONFIGURATION,
                 isOtn ? generateOduConnectionIID(connectionName) : generateRdmConnectionIID(connectionName));
         FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);
@@ -251,7 +253,7 @@ public class CrossConnectImpl710 {
                         .build(),
                 newRdmConn);
         FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Roadm connection power level successfully set ");
@@ -327,7 +329,7 @@ public class CrossConnectImpl710 {
         // post the cross connect on the device
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, oduConnectionIID, oduConnectionBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Otn-connection successfully created: {}", oduXConnectionName);
@@ -369,7 +371,7 @@ public class CrossConnectImpl710 {
         // delete the cross connect on the device
         deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateOduConnectionIID(connectionName));
         FluentFuture<? extends @NonNull CommitInfo> commit =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);

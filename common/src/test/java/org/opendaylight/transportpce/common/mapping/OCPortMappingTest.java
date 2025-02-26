@@ -39,6 +39,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -114,6 +116,7 @@ public class OCPortMappingTest {
     NetworkTransactionService networkTransactionService = null;
     private OCMetaDataTransaction ocMetaDataTransaction;
     private OCPortMappingVersion190 ocPortMappingVersion190Test;
+    private final Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setUp() {
@@ -123,7 +126,7 @@ public class OCPortMappingTest {
         ocMetaDataTransaction = mock(OCMetaDataTransaction.class);
         ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
         ocPortMappingVersion190Test = new OCPortMappingVersion190(dataBroker, deviceTransactionManager,
-                ocMetaDataTransaction, networkTransactionService);
+                ocMetaDataTransaction, networkTransactionService, configuration);
         ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
     }
 
