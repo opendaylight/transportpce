@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
@@ -49,12 +49,14 @@ public class R2RTapiLinkDiscovery {
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
     private final TapiLink tapiLink;
+    private final Config configuration;
 
     public R2RTapiLinkDiscovery(NetworkTransactionService networkTransactionService,
-            DeviceTransactionManager deviceTransactionManager, TapiLink tapiLink) {
+            DeviceTransactionManager deviceTransactionManager, TapiLink tapiLink, Config configuration) {
         this.networkTransactionService = networkTransactionService;
         this.deviceTransactionManager = deviceTransactionManager;
         this.tapiLink = tapiLink;
+        this.configuration = configuration;
     }
 
     public Map<LinkKey, Link> readLLDP(NodeId nodeId, int nodeVersion, Uuid tapiTopoUuid) {
@@ -69,8 +71,9 @@ public class R2RTapiLinkDiscovery {
                     .child(Protocols.class)
                     .build();
                 Optional<Protocols> protocol121Object = this.deviceTransactionManager.getDataFromDevice(
-                    nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID, Timeouts.DEVICE_READ_TIMEOUT,
-                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                    nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols121IID,
+                        configuration.deviceReadTimeout().time(),
+                    configuration.deviceReadTimeout().unit());
                 if (hasNoNeighbor121(protocol121Object)) {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return new HashMap<>();
@@ -95,7 +98,7 @@ public class R2RTapiLinkDiscovery {
                     .build();
                 var protocol221Object = this.deviceTransactionManager
                     .getDataFromDevice(nodeId.getValue(), LogicalDatastoreType.OPERATIONAL, protocols221IID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
                 if (hasNoNeighbor221(protocol221Object)) {
                     LOG.warn("LLDP subtree is missing or incomplete: isolated openroadm device");
                     return new HashMap<>();

@@ -40,8 +40,8 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.catalog.CatalogUtils;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -115,6 +115,7 @@ public class OCPortMappingVersion190 {
     private final DeviceTransactionManager deviceTransactionManager;
     private  final OCMetaDataTransaction ocMetaDataTransaction;
     private final NetworkTransactionService networkTransactionService;
+    private final Config configuration;
 
 
     /**
@@ -126,11 +127,13 @@ public class OCPortMappingVersion190 {
      */
     public OCPortMappingVersion190(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
                                    OCMetaDataTransaction ocMetaDataTransaction,
-                                   NetworkTransactionService networkTransactionService) {
+                                   NetworkTransactionService networkTransactionService,
+                                   Config configuration) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.ocMetaDataTransaction = ocMetaDataTransaction;
         this.networkTransactionService = networkTransactionService;
+        this.configuration = configuration;
     }
 
     /**
@@ -150,7 +153,8 @@ public class OCPortMappingVersion190 {
                 DataObjectIdentifier.builderOfInherited(OpenconfigPlatformData.class, Components.class).build();
         var componentOptional =
                 this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-                        componentIId, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        componentIId, configuration.deviceReadTimeout().time(),
+                        configuration.deviceReadTimeout().unit());
         if (componentOptional.isPresent()) {
             Map<ComponentKey, Component> componentMap = componentOptional.orElseThrow().getComponent();
             if (componentMap == null) {

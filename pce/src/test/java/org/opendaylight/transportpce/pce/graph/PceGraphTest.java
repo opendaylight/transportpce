@@ -35,6 +35,8 @@ import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -131,6 +133,7 @@ public class PceGraphTest extends AbstractTest {
     private PortMapping portMapping;
     private NetworkTransactionService netTransServ;
     private ClientInput clientInput;
+    private Config configuration = new CommonConfig(240);
 
     // Test of integration for PceGraph
 
@@ -141,9 +144,9 @@ public class PceGraphTest extends AbstractTest {
         this.mountPoint = new MountPointStub(dataBroker);
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
-        this.portMappingVersion22 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
-        this.portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
-        this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
+        this.portMappingVersion22 = new PortMappingVersion221(dataBroker, deviceTransactionManager, configuration);
+        this.portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager, configuration);
+        this.portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager, configuration);
         this.portMapping = new PortMappingImpl(dataBroker, this.portMappingVersion710,
             this.portMappingVersion22, this.portMappingVersion121);
         this.clientInput = mock(ClientInput.class);

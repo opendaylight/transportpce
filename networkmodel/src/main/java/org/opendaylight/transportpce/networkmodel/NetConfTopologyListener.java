@@ -24,7 +24,8 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -61,6 +62,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     private final DeviceTransactionManager deviceTransactionManager;
     private final Map<String, NodeRegistration> registrations;
     private final PortMapping portMapping;
+    private final Config configuration;
 
     /**
      * Instantiate the NetConfTopologyListener.
@@ -74,12 +76,14 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             final NetworkModelService networkModelService,
             final DataBroker dataBroker,
             DeviceTransactionManager deviceTransactionManager,
-            PortMapping portMapping) {
+            PortMapping portMapping,
+            Config configuration) {
         this.networkModelService = networkModelService;
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.registrations = new ConcurrentHashMap<>();
         this.portMapping = portMapping;
+        this.configuration = configuration;
     }
 
     /** {@inheritDoc} */
@@ -240,6 +244,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
         this.registrations = registrations;
+        this.configuration = new CommonConfig(240);
     }
 
     private boolean checkSupportedStream(
@@ -262,7 +267,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 .build();
         Optional<Streams> ordmInfoObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, streamsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (ordmInfoObject == null || ordmInfoObject.isEmpty() || ordmInfoObject.orElseThrow().getStream().isEmpty()) {
             LOG.error("List of streams supports by device is not present");
             return List.of("OPENROADM","NETCONF");
