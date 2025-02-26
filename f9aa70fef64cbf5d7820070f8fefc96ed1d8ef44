@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5207b020_a89b89e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T13:32:53Z",
+      "side": 1,
+      "message": "Thanks for this huge contribution Joakim. Appreciate that you considered our concerns to modify it, and keep the original way of feeling the spectrum. \nAs you built it in a modular way, I think there will be no issue to define later on additional classes such as \"AssignSpectrumLowToHigh\" that may correspond to different approaches to fill the spectrum. The selection of one or the other approach may be simple to put in place through the setting of an external variable, or relying on controller-customization module, if we decide to enrich the spectrum filling rules.\nIf this is something that might of interest to your company, then Jonas could submit the uses cases you want to implement to the OpenROADM MSA. I would then be happy to help, making controller-customization module evolve to cover such use cases.",
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
