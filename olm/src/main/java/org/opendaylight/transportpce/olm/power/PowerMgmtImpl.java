@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.observer.Ignore;
@@ -68,18 +69,21 @@ public class PowerMgmtImpl implements PowerMgmt {
     private long timer2;
     // openroadm spec value is 20000, functest value is 2000
 
+    private Config config;
+
     @Activate
     public PowerMgmtImpl(@Reference OpenRoadmInterfaces openRoadmInterfaces,
             @Reference CrossConnect crossConnect,
             @Reference DeviceTransactionManager deviceTransactionManager,
-            @Reference PortMapping portMapping, final Configuration configuration) {
+            @Reference PortMapping portMapping, final Configuration configuration,
+            @Reference Config config) {
         this(openRoadmInterfaces, crossConnect, deviceTransactionManager, portMapping, configuration.timer1(),
-                configuration.timer2());
+                configuration.timer2(), config);
     }
 
     public PowerMgmtImpl(OpenRoadmInterfaces openRoadmInterfaces,
                          CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager,
-            PortMapping portMapping, long timer1, long timer2) {
+            PortMapping portMapping, long timer1, long timer2, Config config) {
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.deviceTransactionManager = deviceTransactionManager;
@@ -99,6 +103,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                 this.timer2, e);
         }
         LOG.debug("PowerMgmtImpl instantiated with olm timers = {} - {}", this.timer1, this.timer2);
+        this.config = config;
     }
 
 
@@ -283,13 +288,13 @@ public class PowerMgmtImpl implements PowerMgmt {
         switch (openroadmVersion) {
             case 1:
                 return PowerMgmtVersion121.getXponderPowerRange(circuitPackName, portName,
-                    nodeId, deviceTransactionManager);
+                    nodeId, deviceTransactionManager, config);
             case 2:
                 return PowerMgmtVersion221.getXponderPowerRange(circuitPackName, portName,
-                    nodeId, deviceTransactionManager);
+                    nodeId, deviceTransactionManager, config);
             case 3:
                 return PowerMgmtVersion710.getXponderPowerRange(circuitPackName, portName,
-                    nodeId, deviceTransactionManager);
+                    nodeId, deviceTransactionManager, config);
             default:
                 LOG.error("Unrecognized OpenRoadm version");
                 return new HashMap<>();
@@ -316,13 +321,13 @@ public class PowerMgmtImpl implements PowerMgmt {
         switch (rdmOpenroadmVersion) {
             case 1:
                 return PowerMgmtVersion121.getSRGRxPowerRange(nodeId, srgId,
-                        deviceTransactionManager, circuitPackName, portName);
+                        deviceTransactionManager, circuitPackName, portName, config);
             case 2:
                 return PowerMgmtVersion221.getSRGRxPowerRange(nodeId, srgId,
-                        deviceTransactionManager, circuitPackName, portName);
+                        deviceTransactionManager, circuitPackName, portName, config);
             case 3:
                 return PowerMgmtVersion710.getSRGRxPowerRange(nodeId, srgId,
-                        deviceTransactionManager, circuitPackName, portName);
+                        deviceTransactionManager, circuitPackName, portName, config);
             default:
                 LOG.error("Unrecognized OpenRoadm version");
                 return null;
@@ -561,7 +566,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         return false;
                     }
                     powerSetupResult = PowerMgmtVersion121.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional121.orElseThrow());
+                            txPower, deviceTransactionManager, interfaceOptional121.orElseThrow(), config);
                     break;
                 case 2:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp
@@ -572,7 +577,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         return false;
                     }
                     powerSetupResult = PowerMgmtVersion221.setTransponderPower(nodeId, interfaceName,
-                            txPower, deviceTransactionManager, interfaceOptional221.orElseThrow());
+                            txPower, deviceTransactionManager, interfaceOptional221.orElseThrow(), config);
                     break;
                 case 3:
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp
@@ -594,7 +599,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 OpenRoadmInterfaceException.mapping_msg_err(nodeId, logicalConnectionPoint));
                     }
                     powerSetupResult = PowerMgmtVersion710.setTransponderPower(nodeId, interfaceName,
-                        txPower, deviceTransactionManager, interfaceOptional710.orElseThrow(), portMap);
+                        txPower, deviceTransactionManager, interfaceOptional710.orElseThrow(), portMap, config);
                     break;
                 default:
                     LOG.error("Unrecognized OpenRoadm version");

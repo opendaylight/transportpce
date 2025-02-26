@@ -22,6 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -51,11 +53,12 @@ public class DeviceRendererServiceImplCreateOtsOmsTest {
     private PortMapping portMapping;
     private DeviceRendererService deviceRendererService;
     private CreateOtsOmsInput input;
+    private final Config configuration = new CommonConfig(240);
 
     @BeforeEach
     void setup() {
         deviceRendererService = new DeviceRendererServiceImpl(dataBroker, deviceTransactionManager, openRoadmInterfaces,
-                crossConnect, mappingUtils, portMapping);
+                crossConnect, mappingUtils, portMapping, configuration);
         input = CreateOtsOmsDataUtils.buildCreateOtsOms();
     }
 

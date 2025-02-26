@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.CommonConfig;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -59,7 +60,7 @@ class OlmPowerServiceImplTest  extends AbstractTest {
         this.mappingUtils = mock(MappingUtils.class);
         this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
         this.olmPowerService = new OlmPowerServiceImpl(this.dataBroker, this.powerMgmt, this.deviceTransactionManager,
-                this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
+                this.portMapping, this.mappingUtils, this.openRoadmInterfaces, new CommonConfig(240));
     }
 
     @Test

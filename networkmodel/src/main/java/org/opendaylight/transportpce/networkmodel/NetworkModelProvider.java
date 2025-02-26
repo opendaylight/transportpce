@@ -13,6 +13,7 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -86,13 +87,14 @@ public class NetworkModelProvider {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference PortMapping portMapping,
             @Reference NotificationService notificationService,
-            @Reference FrequenciesService frequenciesService) {
+            @Reference FrequenciesService frequenciesService,
+            @Reference Config configuration) {
         this.dataBroker = dataBroker;
         this.notificationService = notificationService;
         this.frequenciesService = frequenciesService;
         this.listeners = new ArrayList<>();
         this.topologyListener = new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager,
-            portMapping);
+            portMapping, configuration);
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
         this.portMappingListener = new PortMappingListener(networkModelService);
         this.init();

@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.inventory.query.Queries;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceData;
@@ -88,10 +88,13 @@ public class INode221 {
 
     private final DataSource dataSource;
     private final DeviceTransactionManager deviceTransactionManager;
+    private final Config configuration;
 
-    public INode221(DataSource dataSource, DeviceTransactionManager deviceTransactionManager) {
+    public INode221(DataSource dataSource, DeviceTransactionManager deviceTransactionManager,
+            Config configuration) {
         this.dataSource = dataSource;
         this.deviceTransactionManager = deviceTransactionManager;
+        this.configuration = configuration;
     }
 
     public boolean addNode(String deviceId) {
@@ -102,7 +105,7 @@ public class INode221 {
             .build();
         Optional<Info> infoOpt =
                 deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, infoIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         Info deviceInfo;
         if (infoOpt.isPresent()) {
             deviceInfo = infoOpt.orElseThrow();
@@ -205,8 +208,8 @@ public class INode221 {
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .build();
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, deviceIID, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("No device found in operational datastore for nodeId {}", nodeId);
             return;
@@ -241,7 +244,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.warn("Device object {} was not found", nodeId);
             return;
@@ -919,13 +922,13 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
 
         /*InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
            .child(Interface.class);
         Optional<Interface> interfaceOpt =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, interfaceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT); */
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()); */
 
         @NonNull
         Map<InterfaceKey, Interface> interfaceMap = deviceObject.orElseThrow().nonnullInterface();
@@ -963,7 +966,7 @@ public class INode221 {
             .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!protocolObject.isPresent() || protocolObject.orElseThrow().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
@@ -1012,7 +1015,7 @@ public class INode221 {
             .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!protocolObject.isPresent() || protocolObject.orElseThrow().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
@@ -1058,7 +1061,7 @@ public class INode221 {
             .build();
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!protocolObject.isPresent() || protocolObject.orElseThrow().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
@@ -1114,7 +1117,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1163,7 +1166,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1215,7 +1218,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1264,7 +1267,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1398,7 +1401,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1496,7 +1499,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1552,7 +1555,7 @@ public class INode221 {
             .build();
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
@@ -1598,7 +1601,7 @@ public class INode221 {
         InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
 
 
         String startTimestamp = getCurrentTimestamp();

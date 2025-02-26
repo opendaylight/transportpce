@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
@@ -81,11 +81,14 @@ public class OpenRoadmInterface221 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface221.class);
+    private final Config configuration;
 
 
-    public OpenRoadmInterface221(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
+    public OpenRoadmInterface221(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces,
+            Config configuration) {
         this.portMapping = portMapping;
         this.openRoadmInterfaces = openRoadmInterfaces;
+        this.configuration = configuration;
     }
 
     public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
@@ -475,7 +478,8 @@ public class OpenRoadmInterface221 {
             .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.CONFIGURATION, xciid, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
         if (crossconnection.isEmpty()) {
             LOG.info("xd {} not found !", xc);
             return false;
@@ -500,7 +504,8 @@ public class OpenRoadmInterface221 {
             .build();
         LOG.info("reading xc {} in node {}", xc, nodeId);
         Optional<OduConnection> oduConnectionOpt = deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.CONFIGURATION, xciid, configuration.deviceReadTimeout().time(),
+                configuration.deviceReadTimeout().unit());
         if (oduConnectionOpt.isEmpty()) {
             LOG.info("xc {} not found !", xc);
             return false;

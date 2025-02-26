@@ -84,7 +84,7 @@ public final class TransactionUtils {
         DataObject object) {
         ReadWriteTransaction transaction = dataBroker.newReadWriteTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
-        transaction.commit();// submit(Timeouts.DATASTORE_WRITE, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT).get();
+        transaction.commit();// submit(Timeouts.DATASTORE_WRITE, configuration.deviceWriteTimeout().unit()).get();
         return true;
     }
 
