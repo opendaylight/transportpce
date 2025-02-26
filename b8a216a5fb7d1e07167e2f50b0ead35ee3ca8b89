@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9073a036_a39c578e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 43
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T13:43:39Z",
+      "side": 1,
+      "message": "Thanks Joakim. You perfectly got it. Adjusting this part of the PostAlgoValidator allows scanning the complete path resulting Bitset through a window that corresponds to the least common center-frequency-granularity. Perfect!",
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14e77b5f_16e0e341",
+        "filename": "tests/sample_configs/pce_portmapping_cfg_71.json",
+        "patchSetId": 43
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-02-26T13:43:39Z",
+      "side": 1,
+      "message": "Cosmetic and does not affect the testing and the approach you are using, but I am not sure we can define a center-frequency granularity that is lower than the minimum slot-width defined by the IETF slot of 6.25 GHz.",
+      "range": {
+        "startLine": 121,
+        "startChar": 20,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
