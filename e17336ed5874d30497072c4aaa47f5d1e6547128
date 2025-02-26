@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0b7f71d0_d684a445",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b05290ce_5fdb4da9",
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9f48be0a_cd98282e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -31,6 +49,23 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "Thank you Christophe for your change. See my comments.",
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f00f5d47_a45d89f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Thank you very much Gilles for your review. Unless I\u0027m mistaken, I have taken all of your comments into account.",
       "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -48,6 +83,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "While we\u0027re at it, we might as well delete this unnecessary parenthesis",
+      "range": {
+        "startLine": 866,
+        "startChar": 24,
+        "endLine": 866,
+        "endChar": 25
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62c897f9_e9582d6f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ab4aacc_9f5e8c6e",
       "range": {
         "startLine": 866,
         "startChar": 24,
@@ -81,6 +140,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9d471f5_e6015b21",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baf72921_66502247",
+      "range": {
+        "startLine": 893,
+        "startChar": 20,
+        "endLine": 893,
+        "endChar": 41
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f40e6787_ee55d32c",
@@ -94,6 +177,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "LF is no longer needed now\nIdem after...",
+      "range": {
+        "startLine": 895,
+        "startChar": 16,
+        "endLine": 895,
+        "endChar": 84
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c24a5349_0fcaf10b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f40e6787_ee55d32c",
       "range": {
         "startLine": 895,
         "startChar": 16,
@@ -127,6 +234,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4905bb8b_2dc075c6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34363454_e757a84a",
+      "range": {
+        "startLine": 953,
+        "startChar": 20,
+        "endLine": 953,
+        "endChar": 21
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c04fff9_2661e3dd",
@@ -140,6 +271,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "LF would be better here (or could also fit on a single line)",
+      "range": {
+        "startLine": 272,
+        "startChar": 37,
+        "endLine": 272,
+        "endChar": 38
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "510512bf_21a24474",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/GetTopologyDetailsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c04fff9_2661e3dd",
       "range": {
         "startLine": 272,
         "startChar": 37,
@@ -173,6 +328,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3e741a6_eb03e09f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b116c8e_3e11b37c",
+      "range": {
+        "startLine": 288,
+        "startChar": 36,
+        "endLine": 288,
+        "endChar": 37
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa2d61d1_0f4f1309",
@@ -186,6 +365,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "line wrapping is no longer required...\nIdem after...",
+      "range": {
+        "startLine": 564,
+        "startChar": 19,
+        "endLine": 564,
+        "endChar": 20
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d098ffed_62fcd4b2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa2d61d1_0f4f1309",
       "range": {
         "startLine": 564,
         "startChar": 19,
@@ -219,6 +422,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6982c9a_596a02cd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiNbi.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9bd54d8_bb4c0a80",
+      "range": {
+        "startLine": 169,
+        "startChar": 22,
+        "endLine": 169,
+        "endChar": 23
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5262f5b_58e4c2a6",
@@ -232,6 +459,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "review LF...",
+      "range": {
+        "startLine": 85,
+        "startChar": 22,
+        "endLine": 85,
+        "endChar": 23
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76451c2a_f4f3f289",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoTapiToTapiNbi.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5262f5b_58e4c2a6",
       "range": {
         "startLine": 85,
         "startChar": 22,
@@ -265,6 +516,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21eeabe2_181f4be2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1651,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3515b9d_b6d69086",
+      "range": {
+        "startLine": 1649,
+        "startChar": 0,
+        "endLine": 1651,
+        "endChar": 63
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b8e31de_0a5bd6b1",
@@ -278,6 +553,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "Same remark on the parenthesis\nSame think after...",
+      "range": {
+        "startLine": 533,
+        "startChar": 24,
+        "endLine": 533,
+        "endChar": 25
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "318fa4cd_e76afdb6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b8e31de_0a5bd6b1",
       "range": {
         "startLine": 533,
         "startChar": 24,
@@ -311,6 +610,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d22edbea_8ba53f6f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b294e15e_3d015f46",
+      "range": {
+        "startLine": 1300,
+        "startChar": 22,
+        "endLine": 1300,
+        "endChar": 23
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f5cf35c_9b359176",
@@ -324,6 +647,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "This dependency could be removed if you take into acount one of my comment in XmlDataConverterTest.java.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 17
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e2435fc_c11faf3b",
+        "filename": "test-common/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f5cf35c_9b359176",
       "range": {
         "startLine": 207,
         "startChar": 0,
@@ -357,6 +704,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "987d7bb6_f5c550c9",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/JsonDataConverterTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d320d6b2_0acc14c2",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 23
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8db6229e_96c7af42",
@@ -370,6 +741,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "This test was much simpler before. Why not keeping it as it was?",
+      "range": {
+        "startLine": 49,
+        "startChar": 9,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec9a1a9_46157da1",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/XmlDataConverterTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8db6229e_96c7af42",
       "range": {
         "startLine": 49,
         "startChar": 9,
@@ -403,6 +798,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3edeff56_d30a439d",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/XmlDataConverterTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1f5e3f8_6953ac40",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 101
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8ad3d30_4dc93dab",
@@ -426,6 +845,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c39974_76b48ee2",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/util/ConverterTestUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8ad3d30_4dc93dab",
+      "range": {
+        "startLine": 153,
+        "startChar": 7,
+        "endLine": 153,
+        "endChar": 38
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79491763_4fd51abb",
@@ -439,6 +882,30 @@
       "writtenOn": "2025-02-25T14:58:04Z",
       "side": 1,
       "message": "these lines seem useless.",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 155,
+        "endChar": 79
+      },
+      "revId": "e17336ed5874d30497072c4aaa47f5d1e6547128",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1906d3dc_218a17ea",
+        "filename": "test-common/src/test/java/org/opendaylight/transportpce/test/converter/util/ConverterTestUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2025-02-26T10:56:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79491763_4fd51abb",
       "range": {
         "startLine": 154,
         "startChar": 8,
