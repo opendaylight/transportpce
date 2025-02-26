@@ -8,5 +8,8 @@
         <configfile finalname="etc/org.opendaylight.transportpce.cfg" override="true">
             mvn:${project.groupId}/transportpce-olm/${project.version}/cfg/config
         </configfile>
+        <configfile finalname="etc/org.opendaylight.transportpce.common.cfg" override="true">
+            mvn:${project.groupId}/transportpce-common/${project.version}/cfg/config
+        </configfile>
     </feature>
 </features>

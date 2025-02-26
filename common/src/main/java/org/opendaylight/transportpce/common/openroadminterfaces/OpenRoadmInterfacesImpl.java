@@ -13,6 +13,7 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1;
 
 import java.util.Optional;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -35,10 +36,11 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     @Activate
     public OpenRoadmInterfacesImpl(@Reference DeviceTransactionManager deviceTransactionManager,
-                                   @Reference MappingUtils mappingUtils, @Reference PortMapping portMapping) {
+                                   @Reference MappingUtils mappingUtils, @Reference PortMapping portMapping,
+                                   @Reference Config configuration) {
         this(deviceTransactionManager, mappingUtils,
             new OpenRoadmInterfacesImpl121(deviceTransactionManager),
-            new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping),
+            new OpenRoadmInterfacesImpl221(deviceTransactionManager, portMapping, configuration),
             new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping));
     }
 
