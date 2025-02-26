@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -197,9 +198,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference TapiLink tapiLink,
-            @Reference final NotificationPublishService notificationPublishService) {
+            @Reference final NotificationPublishService notificationPublishService,
+            @Reference Config configuration) {
         this.networkTransactionService = networkTransactionService;
-        this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink);
+        this.linkDiscovery = new R2RTapiLinkDiscovery(networkTransactionService, deviceTransactionManager, tapiLink,
+                configuration);
         this.notificationPublishService = notificationPublishService;
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.tapiLink = tapiLink;

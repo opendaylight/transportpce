@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yangtools.binding.DataObject;
@@ -33,7 +33,8 @@ public final class TransactionUtils {
                                     String nodeId,
                                     LogicalDatastoreType logicalDatastoreType,
                                     DataObjectIdentifier instanceIdentifier,
-                                    DataObject object)
+                                    DataObject object,
+                                    Config configuration)
             throws ExecutionException, InterruptedException {
         Future<Optional<DeviceTransaction>> deviceTxFuture =
                 deviceTransactionManager.getDeviceTransaction(nodeId);
@@ -42,7 +43,7 @@ public final class TransactionUtils {
         }
         DeviceTransaction deviceTx = deviceTxFuture.get().orElseThrow();
         deviceTx.merge(logicalDatastoreType, instanceIdentifier, object);
-        deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT).get();
+        deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit()).get();
         return true;
     }
 

@@ -22,6 +22,8 @@ import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.transportpce.common.config.CommonConfig;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -49,6 +51,7 @@ public class NetworkModelProviderTest {
     NotificationService notificationService;
     @Mock
     FrequenciesService frequenciesService;
+    private final Config configuration = new CommonConfig(240);
 
     @Test
     void networkmodelProviderInitTest() {
@@ -63,7 +66,7 @@ public class NetworkModelProviderTest {
         when(networkTransactionService.commit()).then(answer);
 
         new NetworkModelProvider(networkTransactionService, dataBroker, networkModelService, deviceTransactionManager,
-                portMapping, notificationService, frequenciesService);
+                portMapping, notificationService, frequenciesService, configuration);
 
         verify(dataBroker, times(2)).registerTreeChangeListener(any(), any(), any());
     }

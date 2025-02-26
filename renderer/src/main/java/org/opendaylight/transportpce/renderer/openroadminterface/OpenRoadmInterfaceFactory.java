@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.util.List;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
@@ -39,11 +40,11 @@ public class OpenRoadmInterfaceFactory {
     private final OpenRoadmOtnInterface710 openRoadmOtnInterface710;
 
     public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, PortMapping portMapping,
-            OpenRoadmInterfaces openRoadmInterfaces) {
+            OpenRoadmInterfaces openRoadmInterfaces, Config configuration) {
         this.mappingUtils = mappingUtils;
-        this.openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
-        this.openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces);
-        this.openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces);
+        this.openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces, configuration);
+        this.openRoadmInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, configuration);
+        this.openRoadmInterface710 = new OpenRoadmInterface710(portMapping, openRoadmInterfaces, configuration);
         this.openRoadmOtnInterface221 = new OpenRoadmOtnInterface221(portMapping, openRoadmInterfaces);
         this.openRoadmOtnInterface710 = new OpenRoadmOtnInterface710(portMapping, openRoadmInterfaces);
     }

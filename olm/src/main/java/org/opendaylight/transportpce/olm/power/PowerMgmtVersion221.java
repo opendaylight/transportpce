@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -66,7 +66,7 @@ public final class PowerMgmtVersion221 {
      * @return HashMap holding Min and Max transmit power for given port
      */
     public static Map<String, Double> getXponderPowerRange(String circuitPackName, String portName, String deviceId,
-            DeviceTransactionManager deviceTransactionManager) {
+            DeviceTransactionManager deviceTransactionManager, Config configuration) {
         DataObjectIdentifier<Ports> portIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
@@ -76,7 +76,7 @@ public final class PowerMgmtVersion221 {
         LOG.debug("Fetching logical Connection Point value for port {} at circuit pack {}", portName, circuitPackName);
         Optional<Ports> portObject =
                 deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         if (portObject.isPresent()) {
             Ports port = portObject.orElseThrow();
             if (port.getTransponderPort() != null && port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
@@ -108,7 +108,7 @@ public final class PowerMgmtVersion221 {
      */
     public static Map<String, Double> getSRGRxPowerRange(String nodeId, String srgId,
             DeviceTransactionManager deviceTransactionManager,
-            String circuitPackName, String portName) {
+            String circuitPackName, String portName, Config configuration) {
         LOG.debug("Coming inside SRG power range");
         LOG.debug("Mapping object exists.");
         DataObjectIdentifier<Ports> portIID = DataObjectIdentifier
@@ -120,7 +120,7 @@ public final class PowerMgmtVersion221 {
                 circuitPackName, portIID);
         Optional<Ports> portObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
         Map<String, Double> powerRangeMap = new HashMap<>();
         if (portObject.isPresent()) {
             Ports port = portObject.orElseThrow();
@@ -159,7 +159,8 @@ public final class PowerMgmtVersion221 {
      */
     public static boolean setTransponderPower(String nodeId, String interfaceName, BigDecimal txPower,
             DeviceTransactionManager deviceTransactionManager,
-            Interface interfaceObj) {
+            Interface interfaceObj,
+            Config configuration) {
         LOG.debug("Setting target-power for transponder nodeId: {} InterfaceName: {}",
                 nodeId, interfaceName);
         InterfaceBuilder ochInterfaceBuilder =
@@ -190,7 +191,7 @@ public final class PowerMgmtVersion221 {
             .build();
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
         try {
             commit.get();
             LOG.info("Transponder Power update is committed");
@@ -223,7 +224,8 @@ public final class PowerMgmtVersion221 {
      */
     public static boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue,
             String connectionNumber, CrossConnect crossConnect,
-            DeviceTransactionManager deviceTransactionManager) {
+            DeviceTransactionManager deviceTransactionManager,
+            Config configuration) {
         @SuppressWarnings("unchecked") Optional<RoadmConnections> rdmConnOpt =
             (Optional<RoadmConnections>) crossConnect.getCrossConnect(deviceId, connectionNumber);
         if (rdmConnOpt.isPresent()) {
@@ -255,7 +257,7 @@ public final class PowerMgmtVersion221 {
                 .build();
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
             try {
                 commit.get();
                 LOG.info("Roadm connection power level successfully set ");
