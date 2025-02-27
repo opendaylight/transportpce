@@ -16,6 +16,138 @@
       "message": "Thanks for this huge contribution Joakim. Appreciate that you considered our concerns to modify it, and keep the original way of feeling the spectrum. \nAs you built it in a modular way, I think there will be no issue to define later on additional classes such as \"AssignSpectrumLowToHigh\" that may correspond to different approaches to fill the spectrum. The selection of one or the other approach may be simple to put in place through the setting of an external variable, or relying on controller-customization module, if we decide to enrich the spectrum filling rules.\nIf this is something that might of interest to your company, then Jonas could submit the uses cases you want to implement to the OpenROADM MSA. I would then be happy to help, making controller-customization module evolve to cover such use cases.",
       "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7eccd31_4d257f57",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/assignment/Assign.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "2025...\nThe same for probably all new classes...",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a9684f1_38fd20ad",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/index/NoIndexFoundException.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "Please add a serialVersionUID to this serializable class.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb92a5d9_57c08515",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/index/SpectrumIndex.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "Would it be possible to raise a less generic exception here?\nYou could create a custom exception for this specific case, for example...\nIdem after...",
+      "range": {
+        "startLine": 23,
+        "startChar": 22,
+        "endLine": 23,
+        "endChar": 38
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c6b11b_537db20d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/AssignSpectrumHighToLowTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "We favor a more inline-based code style when we can. I think everything can fit on one line here and in the rest of this class while being readable.",
+      "range": {
+        "startLine": 23,
+        "startChar": 43,
+        "endLine": 29,
+        "endChar": 11
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "512bffee_1f99b198",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "I think there are lots of blank lines that we can remove...",
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03c728f0_e47ef8a5",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/index/BaseFrequencyTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:04Z",
+      "side": 1,
+      "message": "same remark on the code style.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
