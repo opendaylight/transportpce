@@ -16,6 +16,52 @@
       "message": "Thanks for this contribution, Joakim. LGTM!",
       "revId": "a61fb7e2e02e174b805648c2a7a0f13077e4de8c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "676a76c1_03d91061",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/node/mccapabilities/McCapability.java",
+        "patchSetId": 49
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:19Z",
+      "side": 1,
+      "message": "2025...",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "a61fb7e2e02e174b805648c2a7a0f13077e4de8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fae0d26_b0302b5c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/observer/ThrowExceptionObserver.java",
+        "patchSetId": 49
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:19Z",
+      "side": 1,
+      "message": "It would be preferable to not throw a too much generic exception.\nCould you use a customized one?",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 34
+      },
+      "revId": "a61fb7e2e02e174b805648c2a7a0f13077e4de8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
