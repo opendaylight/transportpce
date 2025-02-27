@@ -16,6 +16,190 @@
       "message": "That\u0027s what I call testing! ;-) Thanks Joakim for this huge contribution and your efforts in providing relevant testings.",
       "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e51eb4c6_7b7895c0",
+        "filename": "pce/pom.xml",
+        "patchSetId": 55
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "humm...\nIt bothers me that we introduce here an external dependency on ODL to deserialize an xml fragment for Junit tests...\nWouldn\u0027t it be possible to instead use jackson-dataformat-xml for example which is managed by odlparent?\n\nBesides, it should be in \u003cscope\u003etest\u003c/scope\u003e.",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 17
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e589872c_fd808c7c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "please favor the in-line code style for arguments, with indent +4 when line wrappings...",
+      "range": {
+        "startLine": 1141,
+        "startChar": 1,
+        "endLine": 1145,
+        "endChar": 29
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f00b7a_4b122624",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PcePathDescriptionTests.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "same remark...",
+      "range": {
+        "startLine": 67,
+        "startChar": 16,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "533750dd_f95b86b6",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "Could you please keep the previous code style?",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad58c2cc_7a7f00b8",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "are we in Fixgrid (as mentioned in the test title and the previous version of this test) or in Flexgrid context?",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 34
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6293338d_3a22141a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "This method can not throw an IOEXception. Please remove this throw declaration.\nIdem below for other test methods...",
+      "range": {
+        "startLine": 158,
+        "startChar": 72,
+        "endLine": 158,
+        "endChar": 90
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795fcc4c_5a7ad068",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "could fit on a single line?\nIdem after...",
+      "range": {
+        "startLine": 188,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 10
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6cb267_4aba08c8",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:23Z",
+      "side": 1,
+      "message": "could fit on the previous line?\nIdem after...",
+      "range": {
+        "startLine": 105,
+        "startChar": 16,
+        "endLine": 105,
+        "endChar": 40
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
