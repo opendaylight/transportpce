@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a70dd8c2_1f57f0a5",
+        "filename": "tests/transportpce_tests/pce/test04_pce_bug_fix.py",
+        "patchSetId": 45
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:51Z",
+      "side": 0,
+      "message": "why did we have 2 here before?",
+      "range": {
+        "startLine": 116,
+        "startChar": 12,
+        "endLine": 116,
+        "endChar": 13
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
