@@ -152,6 +152,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d53f492e_9235b8d6",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "16?",
+      "range": {
+        "startLine": 68,
+        "startChar": 69,
+        "endLine": 68,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15696eeb_06eb5dac",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "16?",
+      "range": {
+        "startLine": 83,
+        "startChar": 69,
+        "endLine": 83,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e74c51b_b26e075b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "26?",
+      "range": {
+        "startLine": 84,
+        "startChar": 58,
+        "endLine": 84,
+        "endChar": 60
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02cc01c0_06959f58",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "16",
+      "range": {
+        "startLine": 155,
+        "startChar": 69,
+        "endLine": 155,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa7b806c_6082ef2d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "16",
+      "range": {
+        "startLine": 170,
+        "startChar": 69,
+        "endLine": 170,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4c2bef_77c8adab",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T14:28:44Z",
+      "side": 1,
+      "message": "26",
+      "range": {
+        "startLine": 171,
+        "startChar": 57,
+        "endLine": 171,
+        "endChar": 60
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03c728f0_e47ef8a5",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/index/BaseFrequencyTest.java",
         "patchSetId": 36
