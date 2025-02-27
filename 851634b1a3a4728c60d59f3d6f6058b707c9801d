@@ -237,6 +237,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31b8060a_d3a30ccf",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollectionTest.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T13:19:17Z",
+      "side": 1,
+      "message": "not sure to understand the objective of this test. Seems so similar to the previous one!",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 5
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b4911f4_81273b72",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollectionTest.java",
         "patchSetId": 35
