@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05d53cec_14e8d274",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 43
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:37:08Z",
+      "side": 1,
+      "message": "please favor the in-line based code style for arguments with indent + 4 for wrapped lines.",
+      "range": {
+        "startLine": 1097,
+        "startChar": 59,
+        "endLine": 1097,
+        "endChar": 60
+      },
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14e77b5f_16e0e341",
         "filename": "tests/sample_configs/pce_portmapping_cfg_71.json",
         "patchSetId": 43
