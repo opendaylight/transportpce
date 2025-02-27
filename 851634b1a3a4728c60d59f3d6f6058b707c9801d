@@ -33,6 +33,252 @@
       "message": "Thanks Joakim for your contribution. LGTM.",
       "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c529ec8_aa6623dc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "2025?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b016e92_168bf34f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "I think you can remove this blank line. This is already very readable.",
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee813f9_800667ee",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68871feb_147a141d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem...",
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1167830a_7a0ae96f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5226c96f_064d9380",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ec39c5_5930ee44",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/Collection.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abdcbcc9_e9452dc0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/LeastCommonMultipleException.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f361bd65_7970bd63",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/LeastCommonMultipleException.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "This class being serializable, please add a serialVersionUID property as:\n\n    @java.io.Serial\n    private static final long serialVersionUID \u003d 1L;",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "329d249c_8e2e3993",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollectionTest.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4911f4_81273b72",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollectionTest.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "Please add the BigDecimal type to the Set declaration.",
+      "range": {
+        "startLine": 100,
+        "startChar": 8,
+        "endLine": 100,
+        "endChar": 11
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e55d784_d83b848b",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/centerfrequency/CenterFrequencyGranularityCollectionTest.java",
+        "patchSetId": 35
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-02-27T10:36:59Z",
+      "side": 1,
+      "message": "And avoid the raw type.",
+      "range": {
+        "startLine": 100,
+        "startChar": 27,
+        "endLine": 100,
+        "endChar": 41
+      },
+      "revId": "851634b1a3a4728c60d59f3d6f6058b707c9801d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
