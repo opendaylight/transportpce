@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a525734f_6b41f29d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/assignment/Assign.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a7eccd31_4d257f57",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a9684f1_38fd20ad",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-02-27T10:37:04Z",
       "side": 1,
       "message": "Please add a serialVersionUID to this serializable class.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c797c72_00de4f2e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/index/NoIndexFoundException.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1a9684f1_38fd20ad",
       "range": {
         "startLine": 12,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e75235ca_e003b9af",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/index/SpectrumIndex.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb92a5d9_57c08515",
+      "range": {
+        "startLine": 23,
+        "startChar": 22,
+        "endLine": 23,
+        "endChar": 38
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57c6b11b_537db20d",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-02-27T10:37:04Z",
       "side": 1,
       "message": "We favor a more inline-based code style when we can. I think everything can fit on one line here and in the rest of this class while being readable.",
+      "range": {
+        "startLine": 23,
+        "startChar": 43,
+        "endLine": 29,
+        "endChar": 11
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "899dec3a_6cebc821",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/AssignSpectrumHighToLowTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "57c6b11b_537db20d",
       "range": {
         "startLine": 23,
         "startChar": 43,
@@ -133,6 +229,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "278d74b8_3b2b10d2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "No. I\u0027ll correct it.",
+      "parentUuid": "437f5a00_fa8b0e7e",
+      "range": {
+        "startLine": 21,
+        "startChar": 9,
+        "endLine": 21,
+        "endChar": 23
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "512bffee_1f99b198",
@@ -150,6 +270,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c511a3c_6e8da9d9",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "512bffee_1f99b198",
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d53f492e_9235b8d6",
@@ -163,6 +301,30 @@
       "writtenOn": "2025-02-27T14:28:44Z",
       "side": 1,
       "message": "16?",
+      "range": {
+        "startLine": 68,
+        "startChar": 69,
+        "endLine": 68,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ae09f0_18ea2d70",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d53f492e_9235b8d6",
       "range": {
         "startLine": 68,
         "startChar": 69,
@@ -196,6 +358,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cfe8d82_e7bcccb4",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "15696eeb_06eb5dac",
+      "range": {
+        "startLine": 83,
+        "startChar": 69,
+        "endLine": 83,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e74c51b_b26e075b",
@@ -209,6 +395,30 @@
       "writtenOn": "2025-02-27T14:28:44Z",
       "side": 1,
       "message": "26?",
+      "range": {
+        "startLine": 84,
+        "startChar": 58,
+        "endLine": 84,
+        "endChar": 60
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21cc06c_996cd9bf",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e74c51b_b26e075b",
       "range": {
         "startLine": 84,
         "startChar": 58,
@@ -242,6 +452,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a52e126_f72711cf",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "02cc01c0_06959f58",
+      "range": {
+        "startLine": 155,
+        "startChar": 69,
+        "endLine": 155,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa7b806c_6082ef2d",
@@ -255,6 +489,30 @@
       "writtenOn": "2025-02-27T14:28:44Z",
       "side": 1,
       "message": "16",
+      "range": {
+        "startLine": 170,
+        "startChar": 69,
+        "endLine": 170,
+        "endChar": 70
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de1da79a_2d4184a2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa7b806c_6082ef2d",
       "range": {
         "startLine": 170,
         "startChar": 69,
@@ -288,6 +546,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7838a43_b8b790b1",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/assignment/SpectrumIndexTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e4c2bef_77c8adab",
+      "range": {
+        "startLine": 171,
+        "startChar": 57,
+        "endLine": 171,
+        "endChar": 60
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03c728f0_e47ef8a5",
@@ -301,6 +583,30 @@
       "writtenOn": "2025-02-27T10:37:04Z",
       "side": 1,
       "message": "same remark on the code style.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "f9aa70fef64cbf5d7820070f8fefc96ed1d8ef44",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "184d1c78_b06dac3e",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/spectrum/index/BaseFrequencyTest.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T13:40:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "03c728f0_e47ef8a5",
       "range": {
         "startLine": 21,
         "startChar": 1,
