@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb1171cd_beaacec1",
+        "filename": "pce/pom.xml",
+        "patchSetId": 55
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "I understand. Don\u0027t know if it is possible, probably is. This is the first time I resorted to dumping objects into XML-files, so it\u0027s the first time I used XStream. \n\nXStream allowed me to use my existing simulated nodes in my dev environment and without too much code, dump relevant information during runtime into XML. All in all, it saved me from the hassle of manually inventing a topology etc and manually instantiating a GraphPath object.\n\nThe same can probably be accomplished with jackson-dataformat-xml, but I doubt I  can reuse the XML-files.",
+      "parentUuid": "e51eb4c6_7b7895c0",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 17
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e589872c_fd808c7c",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 55
@@ -54,6 +78,30 @@
       "writtenOn": "2025-02-27T10:37:23Z",
       "side": 1,
       "message": "please favor the in-line code style for arguments, with indent +4 when line wrappings...",
+      "range": {
+        "startLine": 1141,
+        "startChar": 1,
+        "endLine": 1145,
+        "endChar": 29
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "119f1e78_79ccd5ac",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e589872c_fd808c7c",
       "range": {
         "startLine": 1141,
         "startChar": 1,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46d85946_502d376d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PcePathDescriptionTests.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "14f00b7a_4b122624",
+      "range": {
+        "startLine": 67,
+        "startChar": 16,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "533750dd_f95b86b6",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-02-27T10:37:23Z",
       "side": 1,
       "message": "Could you please keep the previous code style?",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "763ec36c_4603e1bf",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "533750dd_f95b86b6",
       "range": {
         "startLine": 78,
         "startChar": 8,
@@ -133,6 +229,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a9c4b9c_1e57d2b0",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Right. A case of method and variable names not keeping up with the code as it progressed, I\u0027m afraid. Tried to rename the relevant parts to keep it to date.",
+      "parentUuid": "ad58c2cc_7a7f00b8",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 34
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6293338d_3a22141a",
@@ -146,6 +266,30 @@
       "writtenOn": "2025-02-27T10:37:23Z",
       "side": 1,
       "message": "This method can not throw an IOEXception. Please remove this throw declaration.\nIdem below for other test methods...",
+      "range": {
+        "startLine": 158,
+        "startChar": 72,
+        "endLine": 158,
+        "endChar": 90
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "080d49a3_863b826c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6293338d_3a22141a",
       "range": {
         "startLine": 158,
         "startChar": 72,
@@ -179,6 +323,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7da51cbf_333bab81",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidatorTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "795fcc4c_5a7ad068",
+      "range": {
+        "startLine": 188,
+        "startChar": 8,
+        "endLine": 192,
+        "endChar": 10
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba6cb267_4aba08c8",
@@ -192,6 +360,30 @@
       "writtenOn": "2025-02-27T10:37:23Z",
       "side": 1,
       "message": "could fit on the previous line?\nIdem after...",
+      "range": {
+        "startLine": 105,
+        "startChar": 16,
+        "endLine": 105,
+        "endChar": 40
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4d2f47_728df028",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T16:34:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba6cb267_4aba08c8",
       "range": {
         "startLine": 105,
         "startChar": 16,
