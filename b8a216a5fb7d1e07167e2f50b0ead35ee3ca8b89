@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01fe5671_30586716",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 43
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T14:35:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "05d53cec_14e8d274",
+      "range": {
+        "startLine": 1097,
+        "startChar": 59,
+        "endLine": 1097,
+        "endChar": 60
+      },
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14e77b5f_16e0e341",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-02-26T13:43:39Z",
       "side": 1,
       "message": "Cosmetic and does not affect the testing and the approach you are using, but I am not sure we can define a center-frequency granularity that is lower than the minimum slot-width defined by the IETF slot of 6.25 GHz.",
+      "range": {
+        "startLine": 121,
+        "startChar": 20,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d548d6d_003186e4",
+        "filename": "tests/sample_configs/pce_portmapping_cfg_71.json",
+        "patchSetId": 43
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-02-28T14:35:51Z",
+      "side": 1,
+      "message": "Well, it\u0027s not my invention. I used `pce_portmapping_71.json` as a base for this file and the value is present in there. When I first saw this though, I thought it was an error and TPCE can\u0027t possibly support it. \n\nThen I realized, after a brief discussion with my colleagues, that it shouldn\u0027t be a problem supporting such a value. A node specifying 3.125GHz granularity should also be able to support center frequency granularity 6.25GHz. After all, the node tells us it supports twice as many center frequencies than TPCE. But TPCE only need to work with the ones it can support. Hence only half of the center frequencies the node supports are actually available and supported in TPCE.\n\nTherefore, in practice, a value like 3.125 will, like you alluded to, effectively mean TPCE uses center frequency granularity 6.25GHz when searching for an available frequency slot and setting up a service.\n\nAnother example, if I may go so far as to think way outside the box:\n\n`\"center-freq-granularity\": 4.6875`\n\nAgain a value that at first glance can\u0027t possibly work with TPCE. However, 4.6875 should result in TPCE using center frequency granularity 18.75:\n`4 x 4.6875 \u003d 3 x 6.25 \u003d 18.75`\n\nAgain, the node supports more center frequencies than TPCE can handle. But it makes no real practical difference, since TPCE will only and can only work with the ones it can support. So as far as TPCE is concerned, these settings are interchangable and provide the same practical result:\n\n`\"center-freq-granularity\": 4.6875 \u003d\u003d \"center-freq-granularity\": 18.75`\n\nPerhaps a silly example that I\u0027m sure will never happen in \"real life\" and there might be all kinds of reasons why. I\u0027m just trying to look at it from a mathematical perspective.\n\nTechnically though, the OpenROADM model doesn\u0027t seem to specifically prohibit a value like 4.6875. Perhaps the lowest possible value is implied (i.e. 6.25), although it is never spelled out:\n\n```\n  org-openroadm-device.yang\n    ...\n    leaf center-freq-granularity {\n      type org-openroadm-common-optical-channel-types:frequency-GHz;\n      default \"50\";\n      config false;\n      description\n        \"Granularity of allowed center frequencies.  The base frequency for this computation is 193.1 THz (G.694.1)\";\n    }\n\n  org-openroadm-common-optical-channel-types.yang\n    ...\n    typedef frequency-GHz {\n      type decimal64 {\n        fraction-digits 5;\n      }\n      units \"GHz\";\n      description\n        \"Frequency value in GHz.\";\n    }\n```",
+      "parentUuid": "14e77b5f_16e0e341",
       "range": {
         "startLine": 121,
         "startChar": 20,
