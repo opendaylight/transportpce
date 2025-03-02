@@ -33,6 +33,24 @@
       "message": "I have a concern with your default setting in case McCapabilities is not filled : In the OR device model, all parameters included in McCapability profile are optional. So this case may happen. \nAs higher rates becomes available on transponders on the market , we may have to handle signal-width of 150, 175 GHz...\nThese transponders might be connected to old generation of OpenROADM ROADMs that use a fixgrid. Or on Flexgrid compliant ROADMs that do not advertise McCapability profiles in the way we expect.\nA fixgrid based on 50GHz doesn\u0027t mean that we can not support signals with a bandwidth that is a multiple of 50 GHz (SuperChannels, 800G channels @ 131 Gbauds...). If we apply this, we won\u0027t be able to have more than 1 slot of 50GHz, and won\u0027t be able to have next gen Xponders over old gen ROADM.\nWould prefer we that we stick to OR spec, setting a maximum value corresponding to 4800 GHz (768).",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe68024_7b8daf97",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-03-02T22:23:14Z",
+      "side": 1,
+      "message": "This sounds strange to me. Are you saying that there are old generations of ROADMs not supporting flexgrid but still supporting superchannels?\nAlso, note that the default max-slots specified in the openroadm device yang is \"1\" so I think it makes sense to use that here.",
+      "parentUuid": "51d80d14_6251f01b",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
