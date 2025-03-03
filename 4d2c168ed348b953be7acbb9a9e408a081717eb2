@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47030239_acd1f4c3",
+        "filename": "pce/pom.xml",
+        "patchSetId": 55
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-03T12:06:39Z",
+      "side": 1,
+      "message": "Anyway, added `\u003cscope\u003etest\u003c/scope\u003e`.",
+      "parentUuid": "eb1171cd_beaacec1",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 17
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e589872c_fd808c7c",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 55
