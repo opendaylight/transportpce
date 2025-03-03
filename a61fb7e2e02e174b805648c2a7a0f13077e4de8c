@@ -110,6 +110,30 @@
       },
       "revId": "a61fb7e2e02e174b805648c2a7a0f13077e4de8c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc25d3e7_3df4a80f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/spectrum/observer/ThrowExceptionObserver.java",
+        "patchSetId": 49
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-03T14:22:07Z",
+      "side": 1,
+      "message": "I decided to remove the class.",
+      "parentUuid": "c89a24d5_bfe63709",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 34
+      },
+      "revId": "a61fb7e2e02e174b805648c2a7a0f13077e4de8c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
