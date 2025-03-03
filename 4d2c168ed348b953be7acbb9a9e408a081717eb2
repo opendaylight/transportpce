@@ -22,6 +22,30 @@
       },
       "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71450135_deba2fc9",
+        "filename": "tests/transportpce_tests/pce/test04_pce_bug_fix.py",
+        "patchSetId": 45
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-03T07:52:02Z",
+      "side": 0,
+      "message": "The code previously determined the nodes where fixed grid. The code, apart from treating version 1.2.1 as fixed grid, also treated nodes with center frequency granularity of 50GHz as fixed grid.\n\nThis update however, only treats version `(http://org/openroadm/device?revision\u003d2017-02-06)org-openroadm-device` as fixed grid.\n\nIt appears the nodes `ROADM-A1` and `ROADM-B1` are setup as version 2.2.1 in `portmapping-3-RDM-221.json`, causing this commit to treat them as flex grid:\n\n```\n...\n        {\n            \"node-id\": \"ROADM-A1\",\n            \"node-info\": {\n                \"node-type\": \"rdm\",\n                \"node-model\": \"model2\",\n                \"openroadm-version\": \"2.2.1\",\n                \"node-clli\": \"NodeA\",\n...\n        {\n            \"node-id\": \"ROADM-B1\",\n            \"node-info\": {\n                \"node-type\": \"rdm\",\n                \"node-model\": \"model2\",\n                \"openroadm-version\": \"2.2.1\",\n                \"node-clli\": \"NodeB\",\n...\n\n```\n\nRunning TPCE using a previous commit confirms the code treated the nodes as fixed grid due to center frequency granularity being equal to 50GHz:\n\n```\nNode Uri{value\u003dROADM-A1-SRG1}: version is (http://org/openroadm/device?revision\u003d2018-10-19)org-openroadm-device with slot width and central frequency granularities 50.00000 50.00000 - fixed grid mode\nNode Uri{value\u003dROADM-A1-DEG1}: version is (http://org/openroadm/device?revision\u003d2018-10-19)org-openroadm-device with slot width and central frequency granularities 50.00000 50.00000 - fixed grid mode\nNode Uri{value\u003dROADM-B1-DEG1}: version is (http://org/openroadm/device?revision\u003d2018-10-19)org-openroadm-device with slot width and central frequency granularities 50.00000 50.00000 - fixed grid mode\nNode Uri{value\u003dROADM-B1-SRG1}: version is (http://org/openroadm/device?revision\u003d2018-10-19)org-openroadm-device with slot width and central frequency granularities 50.00000 50.00000 - fixed grid mode\n```",
+      "parentUuid": "a70dd8c2_1f57f0a5",
+      "range": {
+        "startLine": 116,
+        "startChar": 12,
+        "endLine": 116,
+        "endChar": 13
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
