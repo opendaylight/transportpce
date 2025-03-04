@@ -69,6 +69,24 @@
       "parentUuid": "ffe68024_7b8daf97",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352332b6_4f18ac79",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-04T13:48:08Z",
+      "side": 1,
+      "message": "After the explanations and discussions at the last TPCE public meeting, I understood that we should set 96 for MaxSlots (for a 50GHz fixed grid), and 768 (for flexgrid of 6.25GHz unitary slots)",
+      "parentUuid": "fb454c55_c1dcbfe6",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
