@@ -51,6 +51,24 @@
       "parentUuid": "51d80d14_6251f01b",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb454c55_c1dcbfe6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-04T13:40:14Z",
+      "side": 1,
+      "message": "What I am saying is that it is not because you have in Fixgrid a modularity defined on a 50GHz grid that you should not support MC that exceeds this granularity.\nWhen Fixgrid ROADMs were introduced, super-channels were supposed to be supported.\nThis being said, if you set the max-slot to 1 what do you propose to support anything that exceeds 50GHz width (basically anything but 100G \u0026 200G 31 Gbauds)?",
+      "parentUuid": "ffe68024_7b8daf97",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
