@@ -141,6 +141,24 @@
       "parentUuid": "b2ffecf6_a1871b59",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb2c765_e5834fd0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-03-04T17:38:54Z",
+      "side": 1,
+      "message": "BTW, I\u0027m wondering whether this discussion is not irrelevant anyway. Like you said, all mc-capabilities parameters are optional, but the openroadm device yang model defines default values for all of them so basically the \"mcCapabilities \u003d\u003d null\" case should never happen.",
+      "parentUuid": "d4fe9b0f_0f020a43",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
