@@ -123,6 +123,24 @@
       "parentUuid": "36ad7a70_5c5901af",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4fe9b0f_0f020a43",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-03-04T17:20:05Z",
+      "side": 1,
+      "message": "\u003eFor Flexgrid, the max-slot number shall not be set to 1, but basically to a value that allows covering the whole spectrum to be consistent with OR optical spec (maximum MC width 4.8 Thz).\n\nWhich case are you talking about? For flexgrid, the device should report the min and max slot number. If the device does not report this, the default is 1.",
+      "parentUuid": "b2ffecf6_a1871b59",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
