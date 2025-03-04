@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4476f23f_19e54c55",
+        "filename": "pce/pom.xml",
+        "patchSetId": 55
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-04T14:02:38Z",
+      "side": 1,
+      "message": "I was wondering why you have all your PceNode and PceLink XML fragments in separate files, but I understand now that it is for convenient exchange with your own tool. \nOf course, it is not so simple and fast-forward to serialize/deserialize a PceOpticalNode or build it by program in a utility test class.\nThis class could do with some refreshing and simplifying, but there are too many work in progress that affect this class to start that now.\nSo, let\u0027s leave it as it is for now, and we\u0027ll see later if we can improve this and do away with Xstream.",
+      "parentUuid": "47030239_acd1f4c3",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 17
+      },
+      "revId": "4d2c168ed348b953be7acbb9a9e408a081717eb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e589872c_fd808c7c",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 55
