@@ -105,6 +105,24 @@
       "parentUuid": "fb454c55_c1dcbfe6",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ffecf6_a1871b59",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-04T14:56:18Z",
+      "side": 1,
+      "message": "Ok. Thanks for your explanation Jonas. My mistake. Esther educated me in the meanwhile! I thought the granularity was defined by the \"resolution\" of the WSS and did not realize that most fix grid ROADM includes filtering elements that do not allow providing a continuum between several slots. Also made a confusion between first routing concept introduced to support superchannels and real superchannels that can be supported only over a continuum of slots. \n\nSo as you mention it, Jonas, for fixed grid we should effectively not set the max slot-width to something more than 1 slot of 50GHz.\n\nTo Joakim (Jonas, please confirm if this is correct) : please pay attention. As said during last tpce meeting answering to one of your questions, the comment was made one time, here (fixgrid section), but also applies to other parts of the code. For Flexgrid, the max-slot number shall not be set to 1, but basically to a value that allows covering the whole spectrum to be consistent with OR optical spec (maximum MC width 4.8 Thz). This is the comment of Gilles. Setting it to 1 for slots of 12.5GHz as an example, would prevent supporting any channels in the scope of OR. Thanks!",
+      "parentUuid": "36ad7a70_5c5901af",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

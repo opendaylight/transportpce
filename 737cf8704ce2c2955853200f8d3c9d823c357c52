@@ -16,6 +16,23 @@
       "message": "Hi. Replied to Jonas comment. Thanks!",
       "revId": "737cf8704ce2c2955853200f8d3c9d823c357c52",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ccdd23b_e79be5f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-04T14:56:18Z",
+      "side": 1,
+      "message": "Hi. Thanks for your answer, Jonas. My confusion. Please look at the reply for details. In short, modification shall not be applied to FixGrid, but the max number of slot shall not be set to one for flexgrid. Thanks, and sorry for the confusion.",
+      "revId": "737cf8704ce2c2955853200f8d3c9d823c357c52",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
