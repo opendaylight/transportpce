@@ -87,6 +87,24 @@
       "parentUuid": "fb454c55_c1dcbfe6",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ad7a70_5c5901af",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-03-04T13:49:35Z",
+      "side": 1,
+      "message": "You can\u0027t support those higher baudrates (exceeding about 50 Gbauds) with fixgrid ROADMs. That\u0027s what 50 GHz fixgrid means. You can use a super-channel to logically combine e.g. two 31 Gbaud channels to support higher bitrate but that doesn\u0027t mean supporting higher than 31 Gbaud.",
+      "parentUuid": "fb454c55_c1dcbfe6",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
