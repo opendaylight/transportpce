@@ -58,7 +58,6 @@ public class NetworkModelProvider {
             .child(Mapping.class)
             .build();
 
-
     private final DataBroker dataBroker;
     private final NetConfTopologyListener topologyListener;
     private List<Registration> listeners;

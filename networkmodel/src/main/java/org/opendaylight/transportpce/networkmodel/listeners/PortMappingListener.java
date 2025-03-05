@@ -41,6 +41,19 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
             if (oldMapping == null) {
                 continue;
             }
+            if (change.getRootNode().dataBefore() != null && change.getRootNode().dataAfter() != null) {
+                //Mapping oldMapping = change.getRootNode().getDataBefore();
+                Mapping newMapping = change.getRootNode().dataAfter();
+                if (oldMapping.getPortAdminState() != null && newMapping.getPortAdminState() != null && oldMapping
+                        .getPortAdminState().equals(newMapping.getPortAdminState()) && oldMapping.getPortOperState()
+                        != null && newMapping.getPortOperState() != null && oldMapping.getPortOperState().equals(
+                                newMapping.getPortOperState())) {
+                    return;
+                } else {
+                    networkModelService.updateOpenRoadmTopologies(
+                            getNodeIdFromMappingDataTreeIdentifier(change.path()), newMapping);
+                }
+            }
             Mapping newMapping = change.getRootNode().dataAfter();
             if (newMapping == null) {
                 continue;

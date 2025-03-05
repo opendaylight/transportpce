@@ -154,7 +154,6 @@ public final class GridUtils {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
                 Decimal64.valueOf(computeCentralFrequency(minFrequency, maxFrequency)
                     .setScale(precision, RoundingMode.HALF_EVEN)));
-
     }
 
     /**
@@ -165,6 +164,31 @@ public final class GridUtils {
      */
     private static BigDecimal computeCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
         return minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2));
+    }
+
+    /**
+     * Get central frequency of spectrum with precision for open config models.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @param precision int
+     * @return central frequency in THz with precision
+     */
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz
+        getCentralFrequencyWithPrecisionForOpenConfig(BigDecimal minFrequency, BigDecimal maxFrequency,
+                                                      int precision) {
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz(
+                Decimal64.valueOf(computeCentralFrequencyForOpenConfig(minFrequency, maxFrequency)
+                        .setScale(precision, RoundingMode.HALF_EVEN)));
+    }
+
+    /**
+     * Compute central frequency from min and max frequency for open config models.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @return central frequency
+     */
+    public static BigDecimal computeCentralFrequencyForOpenConfig(BigDecimal minFrequency, BigDecimal maxFrequency) {
+        return minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2)).movePointRight(6);
     }
 
     /**

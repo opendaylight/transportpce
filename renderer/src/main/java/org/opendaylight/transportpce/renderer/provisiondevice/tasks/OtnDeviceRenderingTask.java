@@ -49,7 +49,8 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} otn service path failed.", operation);
-            return OtnDeviceRenderingResult.failed("Operation Failed");
+            return OtnDeviceRenderingResult.failed("Operation Failed",
+                    new ArrayList<>(output.nonnullNodeInterface().values()));
         }
         LOG.info("Device rendering {} otn service path finished successfully.", operation);
         return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()),

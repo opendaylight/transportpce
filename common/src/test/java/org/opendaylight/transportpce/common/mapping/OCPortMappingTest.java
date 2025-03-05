@@ -21,6 +21,7 @@ import static org.opendaylight.transportpce.common.StringConstants.LINECARD;
 import static org.opendaylight.transportpce.common.StringConstants.NETWORK_TOKEN;
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
 import static org.opendaylight.transportpce.common.StringConstants.PORT;
+import static org.opendaylight.transportpce.common.StringConstants.PROT_100GE;
 import static org.opendaylight.transportpce.common.StringConstants.TERMINALCLIENT;
 import static org.opendaylight.transportpce.common.StringConstants.TERMINALLINE;
 import static org.opendaylight.transportpce.common.StringConstants.TRANSCEIVER;
@@ -39,6 +40,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -57,6 +60,21 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.OPENCONFIGHARDWARECOMPONENT;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.OpenconfigTerminalDeviceData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDevice;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignments;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignmentsBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.Assignment;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.ingress.top.Ingress;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.ingress.top.IngressBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.LogicalChannels;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.LogicalChannelsBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.Channel;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.ChannelBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.ChannelKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1Builder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPort;
@@ -103,17 +121,22 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 
 public class OCPortMappingTest {
     DataBroker dataBroker = null;
     private OCPortMappingVersion190 ocPortMappingVersion190;
-    private OCPortMapping ocPortMapping;
+    private PortMapping portMapping;
     DeviceTransactionManager deviceTransactionManager = null;
     NetworkTransactionService networkTransactionService = null;
     private OCMetaDataTransaction ocMetaDataTransaction;
     private OCPortMappingVersion190 ocPortMappingVersion190Test;
+    private PortMappingVersion710 portMappingVersion710;
+    private PortMappingVersion221 portMappingVersion22;
+    private PortMappingVersion121 portMappingVersion121;
 
     @BeforeEach
     void setUp() {
@@ -121,10 +144,11 @@ public class OCPortMappingTest {
         dataBroker = dataStoreContext.getDataBroker();
         ocPortMappingVersion190 = mock(OCPortMappingVersion190.class);
         ocMetaDataTransaction = mock(OCMetaDataTransaction.class);
-        ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
+        deviceTransactionManager = mock(DeviceTransactionManager.class);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion22,
+                portMappingVersion121, ocPortMappingVersion190);
         ocPortMappingVersion190Test = new OCPortMappingVersion190(dataBroker, deviceTransactionManager,
                 ocMetaDataTransaction, networkTransactionService);
-        ocPortMapping = new OCPortMappingImpl(ocPortMappingVersion190);
     }
 
     @Test
@@ -132,9 +156,9 @@ public class OCPortMappingTest {
         Ipv4Address ipv4Address = new Ipv4Address("127.0.0.1");
         IpAddress ipAddress = new IpAddress(ipv4Address);
         when(ocPortMappingVersion190.createMappingData("node",ipAddress)).thenReturn(true);
-        assertTrue(ocPortMapping.createMappingData("node", OPENCONFIG_DEVICE_VERSION_1_9_0, ipAddress));
+        assertTrue(portMapping.createMappingData("node", OPENCONFIG_DEVICE_VERSION_1_9_0, ipAddress));
 
-        assertFalse(ocPortMapping.createMappingData("node", "test",ipAddress));
+        assertFalse(portMapping.createMappingData("node", "test",ipAddress));
     }
 
     @Test
@@ -160,6 +184,14 @@ public class OCPortMappingTest {
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(component, PORT);
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(component, LINECARD);
         doReturn(getTestMetaData()).when(ocMetaDataTransaction).getXPDROpenTerminalMetaData();
+        DataObjectIdentifier<TerminalDevice> terminalDeviceIid =
+                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
+                        .build();
+        LogicalChannels logicalChannels = getLogicalChannelTestData();
+        TerminalDevice terminalDevice = new TerminalDeviceBuilder().setLogicalChannels(logicalChannels).build();
+        when(deviceTransactionManager.getDataFromDevice("node1",
+                LogicalDatastoreType.OPERATIONAL, terminalDeviceIid, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(terminalDevice));
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         Map<String, String> lcpMap = new HashMap<>();
@@ -206,7 +238,7 @@ public class OCPortMappingTest {
         Port1 augmentationPort = componentPort.getPort().augmentation(Port1.class);
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentPort, augmentationPort,
                 NETWORK_TOKEN, 1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, rate);
+                componentList, supportedIntf, null, rate);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         Map<String, Set<String>> lcpNamingMap = ocPortMappingVersion190Test.createNetworkLcpMapping("node1",
@@ -227,6 +259,14 @@ public class OCPortMappingTest {
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
         supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
         ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
+        LogicalChannels logicalChannels = getLogicalChannelTestData();
+        DataObjectIdentifier<TerminalDevice> terminalDeviceIid =
+                DataObjectIdentifier.builderOfInherited(OpenconfigTerminalDeviceData.class, TerminalDevice.class)
+                        .build();
+        TerminalDevice terminalDevice = new TerminalDeviceBuilder().setLogicalChannels(logicalChannels).build();
+        when(deviceTransactionManager.getDataFromDevice("node1",
+                LogicalDatastoreType.OPERATIONAL, terminalDeviceIid, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(terminalDevice));
         doReturn(true).when(ocPortMappingVersion190Test).checkComponentType(componentPort, TRANSCEIVER);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
                 .getTransceiver()).values().stream().toList();
@@ -244,12 +284,74 @@ public class OCPortMappingTest {
         Map<String, Mapping> mappingMap = new HashMap<>();
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentPort, augmentationPort,
                 CLIENT_TOKEN,1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, rate);
+                componentList, supportedIntf, null, rate);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         ocPortMappingVersion190Test.createClientLcpMapping("node1", componentList, lcpMap, mappingMap,
                 lineCardInfo.get(0), 1,lcpNamingMap, componentList, frequencyGHzSet);
         assertTrue(mappingMap.containsKey("XPDR1-CLIENT2"));
+        assertTrue(mappingMap.get("XPDR1-CLIENT2").getOpenconfigInfo()
+                .getSupportedInterfaces().contains("logical-channel-11001"));
+        assertTrue(mappingMap.get("XPDR1-CLIENT2").getOpenconfigInfo().getSupportedOpticalChannels()
+                .contains("qsfp-1"));
+    }
+
+    LogicalChannels getLogicalChannelTestData() {
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                .channel.ingress.top.ingress.State state =
+                new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729
+                        .terminal.logical.channel.ingress.top.ingress.StateBuilder().setTransceiver("qsfp-1").build();
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                .channel.top.logical.channels.channel.State channelState = new org.opendaylight.yang.gen.v1
+                .http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical
+                .channels.channel.StateBuilder().setTribProtocol(getTributaryProtocol()).build();
+        Ingress ingress = new IngressBuilder().setState(state).build();
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                .chan.assignment.top.logical.channel.assignments.assignment.State assignmentState =
+                new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                        .chan.assignment.top.logical.channel.assignments.assignment.StateBuilder()
+                        .setLogicalChannel(Uint32.valueOf("10001")).build();
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                .chan.assignment.top.logical.channel.assignments.assignment.State assignmentState2 =
+                new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical
+                        .chan.assignment.top.logical.channel.assignments.assignment.StateBuilder()
+                        .build();
+        Assignment assignment = new AssignmentBuilder().setState(assignmentState)
+                .setIndex(Uint32.valueOf("10001")).build();
+        Assignment assignment2 = new AssignmentBuilder().setState(assignmentState2)
+                .setIndex(Uint32.valueOf("1000")).build();
+        Map<AssignmentKey, Assignment> assignmentMap = new HashMap<>();
+        Map<AssignmentKey, Assignment> assignmentMap2 = new HashMap<>();
+        assignmentMap.put(assignment.key(), assignment);
+        assignmentMap2.put(assignment2.key(), assignment2);
+        LogicalChannelAssignments logicalChannelAssignments = new LogicalChannelAssignmentsBuilder()
+                .setAssignment(assignmentMap).build();
+        LogicalChannelAssignments logicalChannelAssignments2 = new LogicalChannelAssignmentsBuilder()
+                .setAssignment(assignmentMap2).build();
+        Channel channel = new ChannelBuilder().setIndex(Uint32.valueOf("11001")).setIngress(ingress)
+                .setLogicalChannelAssignments(logicalChannelAssignments)
+                .setState(channelState).build();
+        Channel channel2 = new ChannelBuilder().setIndex(Uint32.valueOf("10001"))
+                .setLogicalChannelAssignments(logicalChannelAssignments2)
+                .setState(channelState).build();
+        Map<ChannelKey, Channel> channelMap = new HashMap<>();
+        channelMap.put(channel.key(), channel);
+        channelMap.put(channel2.key(), channel2);
+        return new LogicalChannelsBuilder().setChannel(channelMap).build();
+    }
+
+    TRIBUTARYPROTOCOLTYPE getTributaryProtocol() {
+        return new TRIBUTARYPROTOCOLTYPE() {
+            @Override
+            public Class<? extends TRIBUTARYPROTOCOLTYPE> implementedInterface() {
+                return TRIBUTARYPROTOCOLTYPE.class;
+            }
+
+            @Override
+            public String toString() {
+                return PROT_100GE;
+            }
+        };
     }
 
     Component getLinePortComponentTestData() {

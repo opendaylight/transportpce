@@ -86,6 +86,9 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
                 'port-oper-state': 'ACTIVE',
                 "rate": "400",
                 'xpdr-type': 'mpdr',
+                'openconfig-info': {
+                    'supported-optical-channels': ['cfp2-opt-1-1']
+                },
                 'supporting-circuit-pack-name': 'cfp2-transceiver-1',
                 'lcp-hash-val': 'AOVxBCXPOzbw',
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
@@ -104,6 +107,10 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
              'port-oper-state': 'ACTIVE',
              'rate': '100',
              'xpdr-type': 'mpdr',
+             'openconfig-info': {
+                 'supported-optical-channels': ['qsfp-opt-1-1', 'qsfp-opt-1-2', 'qsfp-opt-1-3', 'qsfp-opt-1-4'],
+                 'supported-interfaces': ['logical-channel-23300101', 'logical-channel-24300101']
+             },
              'supporting-circuit-pack-name': 'qsfp-transceiver-1',
              'lcp-hash-val': 'ALoMFfw9DapP',
              'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
