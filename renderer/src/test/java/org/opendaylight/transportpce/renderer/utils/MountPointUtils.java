@@ -48,14 +48,14 @@ public final class MountPointUtils {
 
     public static Mapping createMapping(String nodeId, String logicalConnPoint) {
         return new MappingBuilder()
-            .withKey(new MappingKey(logicalConnPoint))
-            .setLogicalConnectionPoint(logicalConnPoint)
-            .setSupportingOts("supporting-OTS")
-            .setSupportingCircuitPackName("2/0")
-            .setSupportingOms("supporting-OMS")
-            .setSupportingPort("port")
-            .setSupportingCircuitPackName("circuit-pack")
-            .build();
+                .withKey(new MappingKey(logicalConnPoint))
+                .setLogicalConnectionPoint(logicalConnPoint)
+                .setSupportingOts("supporting-OTS")
+                .setSupportingCircuitPackName("2/0")
+                .setSupportingOms("supporting-OMS")
+                .setSupportingPort("port")
+                .setSupportingCircuitPackName("circuit-pack")
+                .build();
     }
 
     private MountPointUtils() {

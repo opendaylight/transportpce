@@ -55,7 +55,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest {
     @BeforeEach
     void setup() {
         deviceRendererService = new DeviceRendererServiceImpl(dataBroker, deviceTransactionManager, openRoadmInterfaces,
-                crossConnect, mappingUtils, portMapping);
+                crossConnect, mappingUtils, portMapping, null);
         input = CreateOtsOmsDataUtils.buildCreateOtsOms();
     }
 

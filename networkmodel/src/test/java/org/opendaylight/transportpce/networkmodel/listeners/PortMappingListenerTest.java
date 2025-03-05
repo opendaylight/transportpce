@@ -85,7 +85,7 @@ public class PortMappingListenerTest {
         when(newMapping.getPortAdminState()).thenReturn("OutOfService");
 
         portMappingListenerSpy.onDataTreeChanged(changes);
-        verify(networkModelService, times(1)).updateOpenRoadmTopologies(anyString(), any(Mapping.class));
+        verify(networkModelService, times(2)).updateOpenRoadmTopologies(anyString(), any(Mapping.class));
     }
 
     @Test
@@ -107,6 +107,6 @@ public class PortMappingListenerTest {
         when(newMapping.getPortOperState()).thenReturn("OutOfService");
 
         portMappingListenerSpy.onDataTreeChanged(changes);
-        verify(networkModelService, times(1)).updateOpenRoadmTopologies(anyString(), any(Mapping.class));
+        verify(networkModelService, times(2)).updateOpenRoadmTopologies(anyString(), any(Mapping.class));
     }
 }
