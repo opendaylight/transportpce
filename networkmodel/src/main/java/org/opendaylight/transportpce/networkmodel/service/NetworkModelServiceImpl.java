@@ -26,7 +26,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.mapping.OCPortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
@@ -98,7 +97,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private NetworkTransactionService networkTransactionService;
     private final R2RLinkDiscovery linkDiscovery;
     private final PortMapping portMapping;
-    private final OCPortMapping ocPortMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
     // Variables for creating and sending topology update notification
@@ -112,8 +110,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
      * @param dataBroker Provides access to the conceptual data tree store. Used here to instantiate R2RLinkDiscovery
      * @param deviceTransactionManager Manages data transactions with the netconf devices
      * @param networkTransactionService Service that eases the transaction operations with data-stores
-     * @param portMapping Store the abstraction view of the netconf OpenROADM-device
-     * @param ocPortMapping Store the abstraction view of the netconf OpenConfig device
+     * @param portMapping Store the abstraction view of the netconf OpenROADM-device/OpenConfig-device
      * @param notificationPublishService Notification broker which allows to submit a notifications
      */
     @Activate
@@ -121,13 +118,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             @Reference DeviceTransactionManager deviceTransactionManager,
             @Reference final NetworkTransactionService networkTransactionService,
             @Reference PortMapping portMapping,
-            @Reference OCPortMapping ocPortMapping,
             @Reference final NotificationPublishService notificationPublishService) {
 
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = new R2RLinkDiscovery(dataBroker, deviceTransactionManager, networkTransactionService);
         this.portMapping = portMapping;
-        this.ocPortMapping = ocPortMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.notificationPublishService = notificationPublishService;
@@ -181,7 +176,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     @Override
     public void createOpenConfigNode(String nodeId, String openConfigVersion, IpAddress ipAddress) {
         LOG.info("create openconfig node {}", nodeId);
-        if (!ocPortMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
+        if (!portMapping.createMappingData(nodeId, openConfigVersion, ipAddress)) {
             LOG.error("could not generate portmapping {}", nodeId);
         }
         Nodes mappingNode = portMapping.getNode(nodeId);

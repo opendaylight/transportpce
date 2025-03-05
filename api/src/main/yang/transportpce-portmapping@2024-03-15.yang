@@ -331,6 +331,18 @@ module transportpce-portmapping {
           "Hash value generated from node-id and lcp. This value will be used to map-
            back SAPI and DAPI resource";
       }
+      container openconfig-info {
+        leaf-list supported-optical-channels {
+          type string;
+          description
+            "List of optical-channels supported by the port (subcomponents of transceiver)";
+        }
+        leaf-list supported-interfaces {
+          type string;
+          description
+            "List of interfaces corresponding to the logical-channels supported by the port";
+        }
+      }
     }
   }
 

@@ -44,6 +44,10 @@ public final class OtnDeviceRenderingResult extends OperationResult {
         return new OtnDeviceRenderingResult(false, message, null, null);
     }
 
+    public static OtnDeviceRenderingResult failed(String message, List<NodeInterface> renderedNodeInterfaces) {
+        return new OtnDeviceRenderingResult(false, message, renderedNodeInterfaces, null);
+    }
+
     public static OtnDeviceRenderingResult ok(List<NodeInterface> renderedNodeInterfaces,
             List<LinkTp> otnLinkTps) {
         return new OtnDeviceRenderingResult(true, "", renderedNodeInterfaces, otnLinkTps);
