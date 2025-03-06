@@ -134,6 +134,30 @@
       },
       "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5593e549_9459e619",
+        "filename": "tests/sample_configs/pce_portmapping_cfg_71.json",
+        "patchSetId": 43
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-06T15:22:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d548d6d_003186e4",
+      "range": {
+        "startLine": 121,
+        "startChar": 20,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "b8a216a5fb7d1e07167e2f50b0ead35ee3ca8b89",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
