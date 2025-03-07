@@ -12,15 +12,17 @@ import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.config.Config;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
+import org.opendaylight.transportpce.common.time.Timeout;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
@@ -46,13 +48,17 @@ public class OpenRoadmInterfacesImpl221 {
     private final DeviceTransactionManager deviceTransactionManager;
     private final PortMapping portMapping;
     private final PortMappingVersion221 portMapping221;
+    private final Config configuration;
 
-    public OpenRoadmInterfacesImpl221(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
+    public OpenRoadmInterfacesImpl221(DeviceTransactionManager deviceTransactionManager, PortMapping portMapping,
+            Config configuration) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.portMapping = portMapping;
         this.portMapping221 = portMapping.getPortMappingVersion221();
+        this.configuration = configuration;
     }
 
+    @SuppressWarnings({"checkstyle:EmptyBlock", "checkstyle:VariableDeclarationUsageDistance"})
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
@@ -69,47 +75,101 @@ public class OpenRoadmInterfacesImpl221 {
                 nodeId), e);
         }
 
+        String interfaceName = ifBuilder.getName();
         DataObjectIdentifier<Interface> interfacesIID = DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
-            .child(Interface.class, new InterfaceKey(ifBuilder.getName()))
+            .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
-        LOG.info("POST INTERF for {} : InterfaceBuilder : name = {} \t type = {}", nodeId, ifBuilder.getName(),
+        LOG.info("POST INTERF for {} : InterfaceBuilder : name = {} \t type = {}", nodeId, interfaceName,
             ifBuilder.getType().toString());
         deviceTx.merge(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
+        Timeout timeout = configuration.deviceReadTimeout();
         FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
-            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-        // TODO: instead of using this infinite loop coupled with this timeout,
-        // it would be better to use a notification mechanism from the device to be advertised
-        // that the new created interface is present in the device circuit-pack/port
-        final Thread current = Thread.currentThread();
-        Thread timer = new Thread() {
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                    current.interrupt();
-                } catch (InterruptedException e) {
-                    LOG.error("Timeout before the new created interface appears on the deivce circuit-pack port", e);
-                }
-            }
-        };
+                deviceTx.commit(timeout.time(), timeout.unit());
         try {
             txSubmitFuture.get();
-            LOG.info("Successfully posted/deleted interface {} on node {}", ifBuilder.getName(), nodeId);
+            long timeoutMilliseconds = timeout.unit().toMillis(
+                    configuration.deviceReadTimeout().time());
+
+            Thread timer = new Thread() {
+                public void run() {
+                    try {
+                        LOG.info("Waiting {} ms for the node {} to respond with the newly created interface {}...",
+                                timeoutMilliseconds, nodeId, interfaceName);
+                        Thread.sleep(timeoutMilliseconds);
+                        this.interrupt();
+                    } catch (InterruptedException e) {
+                        LOG.error("Confirmation interrupted while reading from node {} searching for interface {}",
+                                nodeId, interfaceName, e);
+                    }
+                }
+            };
+            String supportingCircuitPackName = ifBuilder.getSupportingCircuitPackName();
+            String supportingPort = ifBuilder.getSupportingPort();
             // this check is not needed during the delete operation
             // during the delete operation, ifBuilder does not contain supporting-cp and supporting-port
-            if (ifBuilder.getSupportingCircuitPackName() != null && ifBuilder.getSupportingPort() != null) {
-                boolean devicePortIsUptodated = false;
-                while (!devicePortIsUptodated) {
-                    devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+            if (supportingCircuitPackName != null && supportingPort != null) {
+                LOG.info("Successfully posted interface {} on node {}, awaiting confirmation from node...",
+                        interfaceName, nodeId);
+
+                timer.start();
+                LOG.info("Reading from node {}...", nodeId);
+                boolean devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+
+                Timeout periodicTimeout = getPeriodicPollTimeout(timeout);
+                while (!devicePortIsUptodated && !timer.isInterrupted()) {
+                    try {
+                        LOG.debug("Interface {} not found on node {}, waiting {} {} before retrying, "
+                                        + "unless aborted since the overall timeout {} {} has passed...",
+                                interfaceName, nodeId, periodicTimeout.time(), periodicTimeout.unit(),
+                                timeout.time(), timeout.unit());
+                        // TODO: Replace this timer with a notification from the node
+                        Thread.sleep(periodicTimeout.unit().toMillis(periodicTimeout.time()));
+                        LOG.debug("Reading from node {}...", nodeId);
+                        devicePortIsUptodated = checkIfDevicePortIsUpdatedWithInterface(nodeId, ifBuilder);
+                    } catch (InterruptedException ignored) {
+                    }
                 }
-                LOG.info("{} - {} - interface {} updated on port {}", nodeId, ifBuilder.getSupportingCircuitPackName(),
-                    ifBuilder.getName(), ifBuilder.getSupportingPort());
+
+                if (devicePortIsUptodated) {
+                    LOG.info("Confirmed, {} - {} - interface {} updated on port {}", nodeId,
+                            supportingCircuitPackName, interfaceName, supportingPort);
+                } else {
+                    LOG.warn("Unable to confirm, {} - {} - interface {} updated on port {}", nodeId,
+                            supportingCircuitPackName, interfaceName, supportingPort);
+                }
+            } else {
+                LOG.info("Deleted interface {} on node {}, not waiting for confirmation from node", interfaceName,
+                        nodeId);
             }
-            timer.interrupt();
         } catch (InterruptedException | ExecutionException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
-                .getName(), nodeId), e);
+            throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!",
+                    interfaceName, nodeId), e);
         }
+    }
+
+    /**
+     * The goal is to poll the node periodically to check if the interface has been updated.
+     * This method also makes sure that the timeout is not too long or too short.
+     */
+    public Timeout getPeriodicPollTimeout(Timeout timeout) {
+        if (timeout.time() <= 0) {
+            return new Timeout(3, TimeUnit.SECONDS);
+        }
+
+        long millis = timeout.unit().toMillis(timeout.time());
+        long t1 = (millis - millis % 2) / 2;
+
+        if (t1 < 1000) {
+            return new Timeout(1, TimeUnit.SECONDS);
+        }
+
+        //Let's make sure we don't wait forever retrying
+        if (t1 > 3000) {
+            return new Timeout(3, TimeUnit.SECONDS);
+        }
+
+        return new Timeout(t1, TimeUnit.MILLISECONDS);
     }
 
 
@@ -119,7 +179,7 @@ public class OpenRoadmInterfacesImpl221 {
             .child(Interface.class, new InterfaceKey(interfaceName))
             .build();
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            interfacesIID, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit());
     }
 
 
@@ -164,7 +224,7 @@ public class OpenRoadmInterfacesImpl221 {
 
             deviceTx.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
             FluentFuture<? extends @NonNull CommitInfo> commit =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
 
             try {
                 commit.get();
@@ -195,8 +255,8 @@ public class OpenRoadmInterfacesImpl221 {
             .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
             .build();
         Optional<CircuitPacks> cpOpt = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, circuitPackIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.CONFIGURATION, circuitPackIID, configuration.deviceReadTimeout().time(),
+            configuration.deviceReadTimeout().unit());
         CircuitPacks cp = null;
         if (cpOpt.isPresent()) {
             cp = cpOpt.orElseThrow();
@@ -235,7 +295,7 @@ public class OpenRoadmInterfacesImpl221 {
             }
             deviceTx.merge(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
             FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
-                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+                deviceTx.commit(configuration.deviceWriteTimeout().time(), configuration.deviceWriteTimeout().unit());
             try {
                 txSubmitFuture.get();
                 LOG.info("Successfully posted equipment state change on node {}", nodeId);
@@ -259,7 +319,7 @@ public class OpenRoadmInterfacesImpl221 {
             .child(Ports.class, new PortsKey(ifBuilder.getSupportingPort()))
             .build();
         Ports port = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
-            portIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT).orElseThrow();
+            portIID, configuration.deviceReadTimeout().time(), configuration.deviceReadTimeout().unit()).orElseThrow();
         if (port.getInterfaces() == null) {
             return false;
         }
