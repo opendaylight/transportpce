@@ -9,8 +9,37 @@
 package org.opendaylight.transportpce.common;
 
 import java.util.concurrent.TimeUnit;
+import org.opendaylight.transportpce.common.config.Config;
+import org.opendaylight.transportpce.common.time.Time;
+import org.opendaylight.transportpce.common.time.Timeout;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public final class Timeouts {
+@Component(configurationPid = "org.opendaylight.transportpce.common")
+public final class Timeouts implements Config {
+
+    @ObjectClassDefinition
+    public @interface Configuration {
+        @AttributeDefinition
+        long devicereadtimeout() default 240;
+
+        @AttributeDefinition
+        TimeUnit devicereadtimeunit() default TimeUnit.SECONDS;
+
+        @AttributeDefinition
+        long devicewritetimeout() default 240;
+
+        @AttributeDefinition
+        TimeUnit devicewritetimeunit() default TimeUnit.SECONDS;
+    }
+
+    private static final Logger LOG = LoggerFactory.getLogger(Timeouts.class);
+
     public static final long DATASTORE_READ = 1000;
     public static final long DATASTORE_WRITE = 1000;
     public static final long DATASTORE_DELETE = 1000;
@@ -32,6 +61,31 @@ public final class Timeouts {
 
     //TODO add timeouts for device setup (olm power setup etc.)
 
-    private Timeouts() {
+    private final Time deviceReadTimeout;
+
+    private final Time deviceWriteTimeout;
+
+    @Activate
+    public Timeouts(final Configuration configuration) {
+        deviceReadTimeout = new Timeout(configuration.devicereadtimeout(), configuration.devicereadtimeunit());
+        deviceWriteTimeout = new Timeout(configuration.devicewritetimeout(), configuration.devicewritetimeunit());
+
+        LOG.info("Device read timeout {}", deviceReadTimeout);
+        LOG.info("Device write timeout {}", deviceWriteTimeout);
+    }
+
+    @Deactivate
+    public void close() {
+        LOG.info("Closing component Timeouts config");
+    }
+
+    @Override
+    public Time deviceReadTimeout() {
+        return deviceReadTimeout;
+    }
+
+    @Override
+    public Time deviceWriteTimeout() {
+        return deviceWriteTimeout;
     }
 }
