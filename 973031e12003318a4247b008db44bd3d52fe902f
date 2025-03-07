@@ -159,6 +159,24 @@
       "parentUuid": "d4fe9b0f_0f020a43",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "773b7ede_3600fa32",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-07T13:45:11Z",
+      "side": 1,
+      "message": "I\u0027ve added a warning log in case the mc profile is not useful for version 2.2.1 and 7.1.\n\ne.g.\n\n`ROADM-C : no practically usable MC profile found on SRG 18 (slot-width-granularity: 12.5GHz, max-slots: 1)`",
+      "parentUuid": "eeb2c765_e5834fd0",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
