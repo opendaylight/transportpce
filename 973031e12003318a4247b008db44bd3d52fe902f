@@ -177,6 +177,24 @@
       "parentUuid": "eeb2c765_e5834fd0",
       "revId": "973031e12003318a4247b008db44bd3d52fe902f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "652ffd38_4e172a76",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-10T09:14:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "773b7ede_3600fa32",
+      "revId": "973031e12003318a4247b008db44bd3d52fe902f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
