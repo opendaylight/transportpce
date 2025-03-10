@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,29 +33,29 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.cp.to.degree.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.cp.to.degree.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.cp.to.degree.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mc.capabilities.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mc.capabilities.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.mc.capabilities.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.SwitchingPoolLcpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.SwitchingPoolLcpKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.switching.pool.lcp.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev240315.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.cp.to.degree.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.cp.to.degree.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.cp.to.degree.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mc.capabilities.McCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mc.capabilities.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.switching.pool.lcp.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.switching.pool.lcp.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.switching.pool.lcp.switching.pool.lcp.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
@@ -775,19 +776,35 @@ public class PortMappingVersion221 {
         McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
-        if (degree.getMcCapabilities() == null) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device
+            .rev181019.mc.capabilities.g.McCapabilities mcCapabilities = degree.getMcCapabilities();
+        if (mcCapabilities == null) {
             LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "degree", degree.getDegreeNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                .setMinSlots(Uint32.valueOf(1))
+                .setMaxSlots(Uint32.valueOf(1));
         } else {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
                     .getCenterFreqGranularity().getValue().toString()))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
-                    .getSlotWidthGranularity().getValue().toString()));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
+                    .getSlotWidthGranularity().getValue().toString()))
+                .setMinSlots(mcCapabilities.getMinSlots())
+                .setMaxSlots(mcCapabilities.getMaxSlots());
+        }
+        if (!usableMc(mcCapabilitiesBuilder)) {
+            LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "degree", degree.getDegreeNumber(),
+                    mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
+                    mcCapabilitiesBuilder.getMaxSlots().intValue());
         }
         return mcCapabilitiesBuilder.build();
+    }
+
+    private boolean usableMc(McCapabilitiesBuilder mcCapabilitiesBuilder) {
+        return BigDecimal.valueOf(mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue())
+                .multiply(BigDecimal.valueOf(mcCapabilitiesBuilder.getMaxSlots().intValue())).doubleValue() >= 37.5;
     }
 
     private McCapabilities createMcCapSrgObject(SharedRiskGroup srg, String nodeId) {
@@ -795,17 +812,28 @@ public class PortMappingVersion221 {
         McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
             .withKey(new McCapabilitiesKey(mcNodeName))
             .setMcNodeName(mcNodeName);
-        if (srg.getMcCapabilities() == null) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device
+            .rev181019.mc.capabilities.g.McCapabilities mcCapabilities = srg.getMcCapabilities();
+        if (mcCapabilities == null) {
             LOG.warn(PortMappingUtils.NO_MC_LOGMSG, nodeId, "SRG", srg.getSrgNumber());
             mcCapabilitiesBuilder
                 .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                .setMinSlots(Uint32.valueOf(1))
+                .setMaxSlots(Uint32.valueOf(1));
         } else {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
                     .getCenterFreqGranularity().getValue().toString()))
-                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
-                    .getSlotWidthGranularity().getValue().toString()));
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(mcCapabilities
+                    .getSlotWidthGranularity().getValue().toString()))
+                .setMinSlots(mcCapabilities.getMinSlots())
+                .setMaxSlots(mcCapabilities.getMaxSlots());
+        }
+        if (!usableMc(mcCapabilitiesBuilder)) {
+            LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "SRG", srg.getSrgNumber(),
+                    mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
+                    mcCapabilitiesBuilder.getMaxSlots().intValue());
         }
         return mcCapabilitiesBuilder.build();
     }

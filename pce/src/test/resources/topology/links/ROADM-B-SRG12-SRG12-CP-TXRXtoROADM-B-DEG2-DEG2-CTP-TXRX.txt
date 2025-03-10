@@ -1,0 +1,49 @@
+<edge>
+  <graphLink>
+    <source class="string">ROADM-B-SRG12</source>
+    <target class="string">ROADM-B-DEG2</target>
+    <weight>1.0</weight>
+    <link>
+      <weight>0.0</weight>
+      <isValid>true</isValid>
+      <clientA>SRG12-PP2-TXRX</clientA>
+      <clientZ></clientZ>
+      <linkId>
+        <__value>ROADM-B-SRG12-SRG12-CP-TXRXtoROADM-B-DEG2-DEG2-CTP-TXRX</__value>
+      </linkId>
+      <linkType>ADDLINK</linkType>
+      <sourceId>
+        <__value>ROADM-B-SRG12</__value>
+      </sourceId>
+      <destId>
+        <__value>ROADM-B-DEG2</__value>
+      </destId>
+      <sourceTP>
+        <__value>SRG12-CP-TXRX</__value>
+      </sourceTP>
+      <destTP>
+        <__value>DEG2-CTP-TXRX</__value>
+      </destTP>
+      <sourceNetworkSupNodeId>ROADM-B</sourceNetworkSupNodeId>
+      <destNetworkSupNodeId>ROADM-B</destNetworkSupNodeId>
+      <sourceCLLI>NodeB</sourceCLLI>
+      <destCLLI>NodeB</destCLLI>
+      <oppositeLink>
+        <__value>ROADM-B-DEG2-DEG2-CTP-TXRXtoROADM-B-SRG12-SRG12-CP-TXRX</__value>
+      </oppositeLink>
+      <adminStates>InService</adminStates>
+      <state>InService</state>
+      <latency>0</latency>
+      <availableBandwidth>0</availableBandwidth>
+      <usedBandwidth>0</usedBandwidth>
+      <length>0.0</length>
+      <cd>0.0</cd>
+      <pmd2>0.0</pmd2>
+      <spanLoss>0.0</spanLoss>
+      <powerCorrection>0.0</powerCorrection>
+    </link>
+  </graphLink>
+  <source>ROADM-B-SRG12</source>
+  <destination>ROADM-B-DEG2</destination>
+  <weight>1.0</weight>
+</edge>

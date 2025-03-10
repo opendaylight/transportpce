@@ -39,6 +39,10 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2025-01-15 {
+    description
+      "Add min/max-slots to mc-capabilities";
+  }
   revision 2024-03-15 {
     description
       "Add support to open config in mapping";
@@ -387,7 +391,19 @@ module transportpce-portmapping {
         default "50";
         description
           "Width of a slot measured in GHz.";
-     }
+      }
+      leaf min-slots {
+        type uint32;
+        default "1";
+        description
+          "Minimum number of slots permitted to be joined together to form a media channel.  Must be less than or equal to the max-slots";
+      }
+      leaf max-slots {
+        type uint32;
+        default "1";
+        description
+          "Maximum number of slots permitted to be joined together to form a media channel.  Must be greater than or equal to the min-slots";
+      }
       leaf center-freq-granularity {
         type org-openroadm-common-optical-channel-types:frequency-GHz;
         default "50";
