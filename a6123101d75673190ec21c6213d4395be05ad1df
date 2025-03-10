@@ -16,6 +16,24 @@
       "message": "I have some questions about the temp-service feature in general:\n\nThe way it\u0027s implemented now, for a temp-service-create RPC, spectrum is allocated and ROADM connections configured on all nodes, but the last step of power setup is skipped, is that correct?\n\nAccording to the openroadm service whitepaper, a temp-service can be converted to a normal service using the service-create RPC. The way that is implemented in TPCE now, everything including path computation is performed again, is that correct? That means 1) ROADM connections are configured again, which seems unnecessary, and 2) it\u0027s not even guaranteed that the new path computation will result in the same path as used by the temp-service, is that correct?\n\nIs the intention with adding common-id to the path-computation-request to make sure that the new service use the same path and resources as the allocated temp-service? But isn\u0027t it unnecessary to even perform a new path computation when the resources for the temp-service are already reserved? Why not go directly to power setup in this case?\n\nI\u0027m also wondering about the optical-tunnel-create RPC in the openroadm service yang, which seems closely related to the IPoDWDM use case. Do you plan to implement this RPC as well?",
       "revId": "a6123101d75673190ec21c6213d4395be05ad1df",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17c16f2_ceca18bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2025-03-10T17:57:02Z",
+      "side": 1,
+      "message": "Sorry for the belated reply:\n\nThe way it\u0027s implemented now, for a temp-service-create RPC, spectrum is allocated and ROADM connections configured on all nodes, but the last step of power setup is skipped, is that correct?\n\n\u003e\u003e In TPCE the implementation for temp-service-create is as follows:\na) After PCE calculation is done, the central-frequency (or wavelength) is selected. However the bit map in network-topology is not updated. Meaning the slots used by the SRG/DEG are not marked as unavailable.\nb) All the rendering of the interfaces is done based on the allocated central-frequency. Implying, all the NMC, MC, ROADM-connections, OCH (OTSi) all interfaces are provisioned. However the ROADM-connections stay in OFF mode.\nc) This temp-service would appear in the temp-service-list with the key as \"common-id\"\n\nThere are certainly drawbacks with the above approach, which needs to be addressed. For example, you need to issue service-create (with the same common-id) right after temp-service-create is issued. If not done, or if there is another service-create (with different) common-id, then the frequency-slots picked by the service-create would use the one\u0027s that are assigned for the previous temp-service. This is be because the network-topology has not marked the unavailable.\n\nI think we need to revisit the flow for temp-service-create in TPCE and modify it.\n\n1) When a temp-service-create is issued, the TPCE should compute the path, find the frequency to be allocated and marked the bit-map in the topology as unavailable.\n\n2) Provision the interfaces on the network elements\n\n3) Update the temp-service-list.\n\n4) When the service-create is issued for the same temp-service (same common-id), TPCE should skip all the PCE and frequency/wavelength assignment and go directly to the optical-power control stage, turning the roadm-connections to power/gain-loss.\n\nWe can talk more about it in the weekly meetings",
+      "parentUuid": "083f8d2b_49cfb386",
+      "revId": "a6123101d75673190ec21c6213d4395be05ad1df",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
