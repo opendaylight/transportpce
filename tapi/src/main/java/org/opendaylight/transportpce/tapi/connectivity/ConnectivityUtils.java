@@ -6,7 +6,6 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 package org.opendaylight.transportpce.tapi.connectivity;
-
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -582,9 +581,15 @@ public final class ConnectivityUtils {
     }
 
     private void populateServiceInConnectionVsServiceAtInit(String servName, Uuid servUuid) {
-        List<String> supServiceList = getServiceFromServiceName(servName).orElseThrow()
-            .getSupportingServiceName().stream().sorted().collect(Collectors.toList());
-        if (supServiceList == null) {
+        Set<String> supportingServiceName = getServiceFromServiceName(servName).orElseThrow()
+                .getSupportingServiceName();
+        if (supportingServiceName == null) {
+            LOG.info("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
+                this.servicesMap);
+            return;
+        }
+        List<String> supServiceList = supportingServiceName.stream().sorted().toList();
+        if (supServiceList.isEmpty()) {
             LOG.info("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
                 this.servicesMap);
             return;
