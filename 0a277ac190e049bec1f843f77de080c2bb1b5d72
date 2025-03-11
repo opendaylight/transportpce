@@ -1,0 +1,733 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420188d1_1bba2433",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You can add in this commit footer the following JIRA ticket reference to identify this new feature:\n\nJIRA: TRNSPRTPCE-859",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81e98ddd_136c3215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Thank you very much, Roshan, for this great new feature of high importance that you are proposing.\nPlease find some initial feedback from me on your change.\nDo not hesitate to come back to us if you have any questions. Thanks again.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf4a6031_cbc4cd88",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2023-05-01.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "If we change the model, we should change the revision of the model. It is better to do this in a separate change, before this current change that implements the modification brought by the model.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce372c3c_a92b44f3",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Same remark: we need to make evolve the revision. Preferable to do that in a previous separate change.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ca0a1fb_0ef88380",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-01-15.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Same remark.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5525f406_d470c69e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Not sure to understand why you need to multiply per 10^6?\nWe could not reuse the existing one used in OpenROADM context?",
+      "range": {
+        "startLine": 191,
+        "startChar": 75,
+        "endLine": 191,
+        "endChar": 93
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735ef695_514f7cea",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "May be we should merge this createMappingData method with the previous one, keeping this signature, with ipAddress managed as a Nullable argument?",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 29
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93e09edb_34808c5c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "you can write it more simply: \ndatamodelType.equals(NodeDatamodelType.OPENCONFIG)",
+      "range": {
+        "startLine": 246,
+        "startChar": 37,
+        "endLine": 246,
+        "endChar": 81
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c60fef7b_cd1d6d23",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "and a more modern way for the else structure:\n\n            return switch (openROADMversion) {\n                case _121 -\u003e portMappingVersion121.updateMapping(nodeId, oldMapping);\n                case _221 -\u003e portMappingVersion22.updateMapping(nodeId, oldMapping);\n                case _71 -\u003e portMappingVersion710.updateMapping(nodeId, oldMapping);\n            };",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77710f2a_1a152b17",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesException.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You should remove this Findbugs SuppresWarnings, and instead, add the following property:\n    @java.io.Serial\n    private static final long serialVersionUID \u003d 1L;\n\nI will homogenize the rest of the tpce code later...",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 141
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb4e7c49_51c3d286",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You could have simply done: new ComponentBuilder().\n\nI suppose you have already anticipated the case where, later, it will be necessary to manage different versions of Openconfig devices, as is currently the case for OpenROADM?",
+      "range": {
+        "startLine": 39,
+        "startChar": 64,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf688ebc_db226040",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "The original exception is lost. It should at least be logged, which will allow consuming the const LOG that is never used.",
+      "range": {
+        "startLine": 52,
+        "startChar": 36,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fcea660_f92f4519",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You can use inferred type \u0027var\u0027 here to improve the readability.",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 301,
+        "endChar": 50
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "915abcaf_87038a56",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "idem\nand so on...",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 305,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9eb6071_552f4567",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You should rather set:\nTRIBUTARYPROTOCOLTYPE.VALUE\nand remove the local implementation made in getTributaryProtocol().",
+      "range": {
+        "startLine": 307,
+        "startChar": 65,
+        "endLine": 307,
+        "endChar": 87
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6d83b16_ed846bee",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "On the same manner, we can simplify this method this way:\n\nOPTICALPORTTYPE getOpticalPorttype(String portType) {\n    return portType.equalsIgnoreCase(TERMINALLINE)\n            ? org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALLINE.VALUE\n            : org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALCLIENT.VALUE;\n}",
+      "range": {
+        "startLine": 410,
+        "startChar": 20,
+        "endLine": 410,
+        "endChar": 38
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f081d5_a357f93f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "There is duplication of tests, and also the call of updateOpenRoadmTopologies(), and the business logic is hard to read. I propose to refactor this method, for example as follows:\n\nfor (DataTreeModification\u003cMapping\u003e change : changes) {\n  Mapping oldMapping \u003d change.getRootNode().dataBefore();\n  Mapping newMapping \u003d change.getRootNode().dataAfter();\n\n  if (oldMapping \u003d\u003d null || newMapping \u003d\u003d null) {\n      continue;\n  }\n\n  if (oldMapping.getPortAdminState() !\u003d null \u0026\u0026 oldMapping.getPortOperState() !\u003d null \u0026\u0026\n      newMapping.getPortAdminState() !\u003d null \u0026\u0026 newMapping.getPortOperState() !\u003d null \u0026\u0026\n      oldMapping.getPortAdminState().equals(newMapping.getPortAdminState()) \u0026\u0026\n      oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {\n      return;\n  }\n\n  networkModelService.updateOpenRoadmTopologies(\n      getNodeIdFromMappingDataTreeIdentifier(change.path()), newMapping);\n}",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84ff5efb_20cda2ff",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "It is not normal to have 2 calls of updateOpenRoadmTopologies() since the test conditions have not changed. So this means that the implementation has changed.\nWith my proposal to refactor the onDataTreeChanged() method in PortMappingListener, we will not need to touch this test.",
+      "range": {
+        "startLine": 88,
+        "startChar": 42,
+        "endLine": 88,
+        "endChar": 43
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6dee472_a7143f1b",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 110,
+        "startChar": 42,
+        "endLine": 110,
+        "endChar": 43
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6badac69_90965ee0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Since this property seems never used, please remove it.",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6ba3e0_c67c414a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "what about using a ternary operator here?\nString message \u003d isOpenConfig.get()\n    ? \"Components configured successfully for nodes: \"\n    : \"Interfaces created successfully for nodes: \";\nresults.add(message + String.join(\", \", nodesProvisioned));",
+      "range": {
+        "startLine": 406,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e368180_9e9447db",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "Use inferred type here to ease readabiity.",
+      "range": {
+        "startLine": 666,
+        "startChar": 12,
+        "endLine": 666,
+        "endChar": 111
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de9adf54_d87fae67",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "use inferred type here",
+      "range": {
+        "startLine": 784,
+        "startChar": 16,
+        "endLine": 785,
+        "endChar": 56
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "148c533a_463af126",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "This property seems being never used, so please remove it.",
+      "range": {
+        "startLine": 68,
+        "startChar": 39,
+        "endLine": 68,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff60c6c8_01ae7928",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "The main code style in TPCE is to favor inline arguments first, then wrap the others on a new line with indent + 4.\nPlease do not introduce any new code style.",
+      "range": {
+        "startLine": 71,
+        "startChar": 40,
+        "endLine": 76,
+        "endChar": 92
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f3fb96_ba8e5b1a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "We have nested try-catch structures here that make the code hard to read. Couldn\u0027t we extract the configuration logic into a separate method?",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1bb525_5185d663",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "indent -4 to better identify this line",
+      "range": {
+        "startLine": 172,
+        "startChar": 36,
+        "endLine": 172,
+        "endChar": 96
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f580b19_07e55580",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 174,
+        "startChar": 38,
+        "endLine": 174,
+        "endChar": 42
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ca00ccd_5b1ef1c9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/transaction/delete/DeleteService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "please LOG this exception.",
+      "range": {
+        "startLine": 87,
+        "startChar": 47,
+        "endLine": 87,
+        "endChar": 48
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360a21dc_637bf3e5",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "All JUnit tests of TPCE use now Junit 5.\nUse static import of org.junit.jupiter.api.Assertions instead.",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395665ad_f0d5a984",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "this property is never used. Can be removed.",
+      "range": {
+        "startLine": 41,
+        "startChar": 39,
+        "endLine": 41,
+        "endChar": 64
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6889251b_6bfe3ed3",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "can be removed",
+      "range": {
+        "startLine": 46,
+        "startChar": 40,
+        "endLine": 46,
+        "endChar": 66
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97916dc3_119ddde6",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-11T15:13:19Z",
+      "side": 1,
+      "message": "You can also use static import for Mockito, and the @Mock annotation to mock objects that is available in Junit5 with the @ExtendWith(MockitoExtension.class) extension.",
+      "range": {
+        "startLine": 46,
+        "startChar": 69,
+        "endLine": 46,
+        "endChar": 76
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
