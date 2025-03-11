@@ -34,6 +34,24 @@
       "parentUuid": "083f8d2b_49cfb386",
       "revId": "a6123101d75673190ec21c6213d4395be05ad1df",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1665eafb_46bf05c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-03-11T18:28:01Z",
+      "side": 1,
+      "message": "How you describe the proposed modification is close to how we have implemented it in our version, but we skip step 2 and instead provision devices (and do power control) using optical-tunnel-create. What is the advantage of provisioning devices for temp-service-create?",
+      "parentUuid": "b17c16f2_ceca18bd",
+      "revId": "a6123101d75673190ec21c6213d4395be05ad1df",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
