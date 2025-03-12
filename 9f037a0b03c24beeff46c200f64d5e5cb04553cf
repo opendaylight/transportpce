@@ -16,6 +16,24 @@
       "message": "Move the details of this commit message body in the referenced JIRA ticket description.",
       "revId": "9f037a0b03c24beeff46c200f64d5e5cb04553cf",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afae0156_26b42095",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-12T20:23:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "28d1c9b4_f7b84951",
+      "revId": "9f037a0b03c24beeff46c200f64d5e5cb04553cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
