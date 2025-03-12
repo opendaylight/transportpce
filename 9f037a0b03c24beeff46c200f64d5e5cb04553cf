@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d1c9b4_f7b84951",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-12T14:28:44Z",
+      "side": 1,
+      "message": "Move the details of this commit message body in the referenced JIRA ticket description.",
+      "revId": "9f037a0b03c24beeff46c200f64d5e5cb04553cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
