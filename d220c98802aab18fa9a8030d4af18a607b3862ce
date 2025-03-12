@@ -16,6 +16,24 @@
       "message": "same thing: please move the very detailed explanations on the referenced JIRA ticket.",
       "revId": "d220c98802aab18fa9a8030d4af18a607b3862ce",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c7c9e7_a066a49a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-12T20:23:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc22c47c_47af9b30",
+      "revId": "d220c98802aab18fa9a8030d4af18a607b3862ce",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
