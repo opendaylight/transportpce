@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb7f0a8_533a1e62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-12T17:11:32Z",
+      "side": 1,
+      "message": "Thank you Bala.\nI\u0027ve rebased your change and reformatted your commit message a bit.\nPlease see my comment.",
+      "revId": "b7cca24fa8e16e35478d6baa4c42fe3d928dbe46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2cb396d_5bf1dcb8",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMD.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-12T17:11:32Z",
+      "side": 1,
+      "message": "Actually, the existing ROADM 7.1 configuration files are not used and I don\u0027t think they are really compliant. At the time, I simply converted the 2.2.1 files to 7.1, but without adding all the new configurations that are important. Thus, you could have simply replaced them with a compliant 7.1 configuration instead of introducing a new node...",
+      "revId": "b7cca24fa8e16e35478d6baa4c42fe3d928dbe46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
