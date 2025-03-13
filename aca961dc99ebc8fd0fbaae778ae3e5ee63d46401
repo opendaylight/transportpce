@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e0fea0_ccdfdcfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-13T13:51:52Z",
+      "side": 1,
+      "message": "Thanks Olivier. Please see few comments.",
+      "revId": "aca961dc99ebc8fd0fbaae778ae3e5ee63d46401",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}

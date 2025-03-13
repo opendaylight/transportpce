@@ -16,6 +16,52 @@
       "message": "recheck",
       "revId": "cb571ccdac1cdf11efde6cb2806c105b052aed3d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d46029b0_5525db63",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-13T13:51:52Z",
+      "side": 1,
+      "message": "please remove this intermediate variable which is not necessary",
+      "range": {
+        "startLine": 799,
+        "startChar": 8,
+        "endLine": 799,
+        "endChar": 32
+      },
+      "revId": "cb571ccdac1cdf11efde6cb2806c105b052aed3d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17cd91d_34b3d5b8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-13T13:51:52Z",
+      "side": 1,
+      "message": "could be integrated in the previous predicate?",
+      "range": {
+        "startLine": 1044,
+        "startChar": 14,
+        "endLine": 1044,
+        "endChar": 97
+      },
+      "revId": "cb571ccdac1cdf11efde6cb2806c105b052aed3d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
