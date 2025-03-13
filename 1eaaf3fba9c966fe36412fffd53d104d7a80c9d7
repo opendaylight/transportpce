@@ -89,6 +89,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "980502f3_fdd68b58",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-13T14:43:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a688efd0_2216aa85",
+      "range": {
+        "startLine": 587,
+        "startChar": 40,
+        "endLine": 587,
+        "endChar": 48
+      },
+      "revId": "1eaaf3fba9c966fe36412fffd53d104d7a80c9d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe518ac9_ba5b03ed",
