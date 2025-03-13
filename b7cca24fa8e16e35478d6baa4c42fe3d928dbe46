@@ -51,6 +51,24 @@
       "parentUuid": "e2cb396d_5bf1dcb8",
       "revId": "b7cca24fa8e16e35478d6baa4c42fe3d928dbe46",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a95a0044_2361c27c",
+        "filename": "tests/sample_configs/openroadm/7.1/oper-ROADMD.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-13T13:26:40Z",
+      "side": 1,
+      "message": "It was a good idea to reuse an already existing functional test to test this feature. However, since we\u0027re in the hybrid context, we have roadma still at version 2.2.1 and here, roadmd at version 7.1.\nSince, in the xml configuratin file of roadmA, this is roadmc which is declared as \u003cremoteSysName\u003e -by the way, you have modified the wrong xml configuration file because it should be sample_configs/openroadm/2.2.1/oper-ROADMA.xml and not sample_configs/openroadm/7.1/oper-ROADMA.xml-, and since the roadm xml configurations files in sample_configs/openroadm/7.1/ are never used, you could have simply override the roadm xml configuration files with you new 7.1 configurations.\nWe can review all of this later during the TPCE meeting.",
+      "parentUuid": "3c3481da_d0a350de",
+      "revId": "b7cca24fa8e16e35478d6baa4c42fe3d928dbe46",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
