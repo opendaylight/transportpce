@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a688efd0_2216aa85",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-03-13T14:33:43Z",
+      "side": 1,
+      "message": "I completely agree with you. Let\u0027s just delete that reference to the line!\nIt\u0027s probably something that\u0027s been hanging around since a personal debug...",
+      "parentUuid": "d030fb7d_37dfb5d3",
+      "range": {
+        "startLine": 587,
+        "startChar": 40,
+        "endLine": 587,
+        "endChar": 48
+      },
+      "revId": "1eaaf3fba9c966fe36412fffd53d104d7a80c9d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe518ac9_ba5b03ed",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 2
