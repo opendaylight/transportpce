@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d030fb7d_37dfb5d3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-13T13:58:20Z",
+      "side": 1,
+      "message": "This line nr reference kind of puzzled me. I copied this line from the line that is now on 593 (593 was on 588, btw). I don\u0027t know the purpose of the string \"Line 572\", since it wasn\u0027t on 572 to begin with. Was it referring to the log line itself and the line has since been moved, or was it something interesting on line 572 that somehow was associated with this log?\n\nAnyway, maybe just remove the line nr reference altogether? I mean, every time someone adds or removes a line in this file, this log string might need to be updated as well. A slippery slope adding line nr to strings, if you ask me.",
+      "parentUuid": "6fd20dda_c635d763",
+      "range": {
+        "startLine": 587,
+        "startChar": 40,
+        "endLine": 587,
+        "endChar": 48
+      },
+      "revId": "1eaaf3fba9c966fe36412fffd53d104d7a80c9d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe518ac9_ba5b03ed",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2025-03-13T13:39:59Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 593,
+        "startChar": 40,
+        "endLine": 593,
+        "endChar": 48
+      },
+      "revId": "1eaaf3fba9c966fe36412fffd53d104d7a80c9d7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78654bef_29fb38e0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-03-13T13:58:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fe518ac9_ba5b03ed",
       "range": {
         "startLine": 593,
         "startChar": 40,
