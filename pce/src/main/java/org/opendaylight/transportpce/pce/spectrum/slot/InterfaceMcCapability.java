@@ -67,13 +67,15 @@ public class InterfaceMcCapability implements McCapability {
             return true;
         }
 
-        observer.error(String.format("Cannot fit a service with %sGHz on node %s, "
-                        + "with slot width granularity %s min slots %s and max slots %s",
-                requiredFrequencyWidthGHz,
+        observer.error(String.format("%s does not support a service slot width of %sGHz (%s supports "
+                        + "slot-width-granularity: %sGHz, and min-slots: %s, and max-slots %s, i.e. slot width: %s).",
                 node,
-                slotWidthGranularity,
+                requiredFrequencyWidthGHz.stripTrailingZeros().toPlainString(),
+                node,
+                slotWidthGranularity.stripTrailingZeros().toPlainString(),
                 minSlots,
-                maxSlots));
+                maxSlots,
+                slotWidthRange(minSlots, maxSlots, slotWidthGranularity)));
 
         return false;
     }
@@ -102,5 +104,17 @@ public class InterfaceMcCapability implements McCapability {
     @Override
     public int hashCode() {
         return Objects.hash(slotWidthGranularity, minSlots, maxSlots);
+    }
+
+    private String slotWidthRange(long minslots, long maxslots, BigDecimal slotWidthGran) {
+        BigDecimal minSlotWidth = slotWidthGran.multiply(BigDecimal.valueOf(minslots))
+                .stripTrailingZeros();
+
+        if (minslots == maxslots) {
+            return String.format("%sGHz", minSlotWidth.toPlainString());
+        }
+
+        return String.format("%sGHz to %sGHz", minSlotWidth.toPlainString(),
+                this.slotWidthGranularity.multiply(BigDecimal.valueOf(maxslots)).stripTrailingZeros().toPlainString());
     }
 }
