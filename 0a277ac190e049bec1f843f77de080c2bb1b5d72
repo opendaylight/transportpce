@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4148b17_5239a02d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Hi Roshan. THANK YOU SO MUCH for this huge and high value contribution. I finished my review, mainly focusing on functional aspects.\nHope my comments make sense, since it is sometime difficult to make a review directly on Gerrit, and I may have missed some things, especially as I am not that familiar with OpenConfig models.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf4a6031_cbc4cd88",
@@ -104,6 +121,52 @@
         "startChar": 75,
         "endLine": 191,
         "endChar": 93
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fc8d3da_82ca096f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Here looks like that the only subcomponent type we can have is optical-channel. Is that the case? Or, to be more generic in case of future evolution where we would handle additional features, shall we add a filter to make sure that opticalChannels will only incudes optical channels Ids and not other potential subcomponents Ids?",
+      "range": {
+        "startLine": 772,
+        "startChar": 12,
+        "endLine": 774,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e844a454_6557d5fe",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Looks very limiting to me. If my understanding is correct it means we may not support 1GE/10GE/400GE... trib port. Did I miss something? What about ODU logical channel that supports Ethernet (ODU0/2/2e/4)?",
+      "range": {
+        "startLine": 829,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 51
       },
       "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
@@ -456,6 +519,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c9ba421_5559556d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "If I understand correctly, the SeviceListTpopology will not be updated after the service has been rendered for OC implementation (unless I missed something in a other place of the code). \nWhat prevents in OpenConfig implementation the update of the serviceTopology in the DataStore, and why do you avoid this update?\nOr Maybe you consider that in the openConfig case there is nothing nothing to update, since a lot of things are preconfigured and do not really change, except the admin state of network ports? (Sorry, I am definitely not confortable with OC... :-()",
+      "range": {
+        "startLine": 415,
+        "startChar": 6,
+        "endLine": 415,
+        "endChar": 34
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23c99c42_e3782a34",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Shall we consider that the concept of Otnlink is not valid for OC Xponders ?",
+      "range": {
+        "startLine": 430,
+        "startChar": 2,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb5f443_5011e96d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Just wondering if this is enough. My understanding is that logical channel and optical channel a predefined in the device and that only some parameters need to be set. But if I am correct, at the service creation you set a configBuilder with target-power, operational mode and center-freq. My feeling is that just changing the status of the port might not be enough. We may need to erase these parameters in the config container. Because we have to handle a lot of use cases (OR, TAPI, OC) the PCE is for some device checking that no wavelength is provisioned to define whether a port is available or not.",
+      "range": {
+        "startLine": 493,
+        "startChar": 31,
+        "endLine": 493,
+        "endChar": 98
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e368180_9e9447db",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -472,6 +604,29 @@
         "startChar": 12,
         "endLine": 666,
         "endChar": 111
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acef095a_f7605aa6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Same comment as for service delete : do we need to erase on NW optical channel the config container with the wavelength and target-output power?",
+      "range": {
+        "startLine": 691,
+        "startChar": 5,
+        "endLine": 701,
+        "endChar": 21
       },
       "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
@@ -571,6 +726,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aea0708f_93cec783",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Would it be difficult/feasible to make something more generic that allows handling OpenConfig Case such as any other cases?\nSo basically having the same code, for both OpenConfig and other node, processing serviceType in the same way and then reject any request that currently does not comply with 100GE_M if A/Z end node are Openconfig(which is, as I understand it the only supported service for OpenConfig at that time).\nThis would make it easier to evolve if we enrich the code to support additional service format at a later step",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f1bb525_5185d663",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -610,6 +788,75 @@
         "startChar": 38,
         "endLine": 174,
         "endChar": 42
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7588bbe5_8724bf61",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3049e411_385dcf8a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "OpenConfig is not supposed to be supported only in an Alien Wavelength context. This means that we shall support a use case where we support OpenConfig Transponder over an OpenROADM ROADM infra and where the OpenConfig transponder is used and configured as any other transponder.\nIn this case, the WDM channel is created one shot : creation of relevant interfaces \u0026 optical channel on transponders, and creation of end2end path on the ROADM infrastructure. \nFor the creation of the wavelength path over the ROADM infra, olmPower setup will be triggered whatever is the end terminal type.\nHave you envisaged this case or is OpenConfig supported only as the context of an alien wavelength use case ?",
+      "range": {
+        "startLine": 674,
+        "startChar": 8,
+        "endLine": 675,
+        "endChar": 26
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa86d823_b213d3b4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-03-19T14:38:13Z",
+      "side": 1,
+      "message": "Why is this not supported in the case of OpenConfig? What is the element missing to have the same behavior?",
+      "range": {
+        "startLine": 903,
+        "startChar": 4,
+        "endLine": 918,
+        "endChar": 9
       },
       "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
