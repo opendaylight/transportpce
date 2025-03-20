@@ -853,7 +853,7 @@ public class PortMappingVersion710 {
             .setInterfaceName(interfaceList.get(circuitPackName)).build();
     }
 
-    private Map<McCapabilitiesKey, McCapabilities> createMcCapDegreeObject(Map<Integer, Degree> degrees,
+    public Map<McCapabilitiesKey, McCapabilities> createMcCapDegreeObject(Map<Integer, Degree> degrees,
             Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
         //TODO some divergences here with 2.2.1
         Map<McCapabilitiesKey, McCapabilities> mcCapabilitiesMap = new HashMap<>();
@@ -869,7 +869,9 @@ public class PortMappingVersion710 {
                     .setMcNodeName(mcNodeName);
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                    .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                    .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                    .setMinSlots(Uint32.valueOf(1))
+                    .setMaxSlots(Uint32.valueOf(1));
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 continue;
             }
@@ -884,7 +886,14 @@ public class PortMappingVersion710 {
                     .setMcNodeName(mcNodeName);
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity())
+                    .setMinSlots(mcCapabilityProfile.getMinSlots())
+                    .setMaxSlots(mcCapabilityProfile.getMaxSlots());
+                if (!usableMc(mcCapabilitiesBuilder)) {
+                    LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "degree", degree.getDegreeNumber(),
+                            mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
+                            mcCapabilitiesBuilder.getMaxSlots().intValue());
+                }
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
             }
 
@@ -907,7 +916,9 @@ public class PortMappingVersion710 {
                     .setMcNodeName(mcNodeName);
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
-                    .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                    .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"))
+                    .setMinSlots(Uint32.valueOf(1))
+                    .setMaxSlots(Uint32.valueOf(1));
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
                 continue;
             }
@@ -921,7 +932,14 @@ public class PortMappingVersion710 {
                     .setMcNodeName(mcNodeName);
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity())
+                    .setMinSlots(mcCapabilityProfile.getMinSlots())
+                    .setMaxSlots(mcCapabilityProfile.getMaxSlots());
+                if (!usableMc(mcCapabilitiesBuilder)) {
+                    LOG.warn(PortMappingUtils.NO_USABLE_MC, nodeId, "SRG", srg.getSrgNumber(),
+                            mcCapabilitiesBuilder.getSlotWidthGranularity().getValue().doubleValue(),
+                            mcCapabilitiesBuilder.getMaxSlots().intValue());
+                }
                 mcCapabilitiesMap.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
             }
         }
