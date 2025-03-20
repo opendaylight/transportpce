@@ -107,11 +107,19 @@ public class TapiOpticalNode {
     private Map<Uuid, Uuid> dsrNepWithParentOdu = new HashMap<>();
     private Map<Uuid,IntLinkObj> internalLinkMap = new HashMap<>();
     private Map<Uuid, PceTapiOpticalNode> pceNodeMap = new HashMap<>();
+    private PceTapiOpticalNode pceTapiOptNodeXpdr;
+    private PceTapiOtnNode pceTapiOtnNodeXpdr;
     private Map<Uuid, PceTapiLink> pceInternalLinkMap = new HashMap<>();
     private static final String ROADMNODENAME = "roadm node name";
     private static final String ROADMNODETYPE = "ROADM";
     private static final String XPDRNODENAME = "otsi node name";
     private static final String NODETYPE = "Node Type";
+    private static final List<String> SERVICE_TYPE_PHT_LIST = List.of(
+        StringConstants.SERVICE_TYPE_OTU4,
+        StringConstants.SERVICE_TYPE_OTUC4,
+        StringConstants.SERVICE_TYPE_OTUC3,
+        StringConstants.SERVICE_TYPE_OTUC2,
+        StringConstants.SERVICE_TYPE_100GE_M);
 
 
     public enum DirectionType { SINK, SOURCE, BIDIRECTIONAL, UNIDIRECTIONAL, UNDEFINED }
@@ -304,6 +312,8 @@ public class TapiOpticalNode {
                         otsNep.setOperationalState(OperationalState.ENABLED);
                         otsNep.setAdminState(AdministrativeState.UNLOCKED);
                         otsNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
+                        otsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                        otsNep.setLpq(PHOTONICLAYERQUALIFIEROTS.VALUE);
                         allOtsNep.add(otsNep);
                     } else {
                         for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep.getValue()
@@ -323,6 +333,8 @@ public class TapiOpticalNode {
                             otsNep.setOperationalState(OperationalState.ENABLED);
                             otsNep.setAdminState(AdministrativeState.UNLOCKED);
                             otsNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
+                            otsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                            otsNep.setLpq(PHOTONICLAYERQUALIFIEROTS.VALUE);
                             if (cep.getValue().augmentation(ConnectionEndPoint2.class) != null
                                     && cep.getValue().augmentation(ConnectionEndPoint2.class)
                                     .getOtsMediaConnectionEndPointSpec() != null) {
@@ -353,6 +365,8 @@ public class TapiOpticalNode {
                         omsNep.setAdminState(AdministrativeState.UNLOCKED);
                         omsNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
                         omsNep.setTpType(OpenroadmTpType.DEGREETXRXTTP);
+                        omsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                        omsNep.setLpq(PHOTONICLAYERQUALIFIEROMS.VALUE);
                         direction = calculateDirection(ownedNep.getValue(), null, TpType.TTP);
                         omsNep.setDirection(direction.keySet().iterator().next());
                         omsNep.setTpType(direction.values().iterator().next());
@@ -379,6 +393,8 @@ public class TapiOpticalNode {
                             omsNep.setAdminState(AdministrativeState.UNLOCKED);
                             omsNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
                             omsNep.setTpType(OpenroadmTpType.DEGREETXRXTTP);
+                            omsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                            omsNep.setLpq(PHOTONICLAYERQUALIFIEROMS.VALUE);
                             direction = calculateDirection(ownedNep.getValue(), null, TpType.TTP);
                             omsNep.setDirection(direction.keySet().iterator().next());
                             omsNep.setTpType(direction.values().iterator().next());
@@ -521,6 +537,8 @@ public class TapiOpticalNode {
                                 .getNodeEdgePointUuid());
                             otsNep.setOperationalState(OperationalState.ENABLED);
                             otsNep.setAdminState(AdministrativeState.UNLOCKED);
+                            otsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                            otsNep.setLpq(PHOTONICLAYERQUALIFIEROTS.VALUE);
                             otsNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
                             otsNep.setCepOtsSpec(cep.getValue().augmentation(ConnectionEndPoint2.class)
                                 .getOtsMediaConnectionEndPointSpec());
@@ -1020,18 +1038,40 @@ public class TapiOpticalNode {
         if (bpn.getSipUuid() == null) {
             LOG.debug("TONLine1021, null SIP for BPN {}", bpn.getName());
         }
-        // Allows to qualify node validity whatever is the portId used : NEP Uuid or SIP Uuid. If SIP uuid
-        // is used, Bpn that has SIP corresponding to the PortId provided in the request will be validated
-        // and PCE can later rely on NEP rather than SIP (Easier to handle since SIP model in the context
-        // does not include any reference to the NEP it is attached to!
+        // Allows to qualify node validity whatever is the portId used : NEP Uuid, CEP Uuid or SIP Uuid. If CEP Uuid
+        // or SIP Uuid is used, Bpn that has CEP/SIP corresponding to the PortId provided in the request will be
+        // validated and PCE can later rely on NEP rather than CEP/SIP (Easier to handle notably since SIP model in
+        //  the context does not include any reference to the NEP it is attached to!
         if ((aaPortId != null && bpn.getNepCepUuid().equals(aaPortId))
                 || (zzPortId != null && bpn.getNepCepUuid().equals(zzPortId))
                 || (aaPortId != null && bpn.getSipUuid() != null && bpn.getSipUuid().equals(aaPortId))
-                || (zzPortId != null && bpn.getSipUuid() != null && bpn.getSipUuid().equals(zzPortId))) {
+                || (zzPortId != null && bpn.getSipUuid() != null && bpn.getSipUuid().equals(zzPortId))
+                || (aaPortId != null && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()) != null
+                    && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()).equals(aaPortId))
+                || (zzPortId != null && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()) != null
+                    && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()).equals(zzPortId))) {
             return true;
         } else {
             return false;
         }
+    }
+
+    private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
+        OwnedNodeEdgePoint ownedNep = node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).findFirst().orElseThrow().getValue();
+        if (ownedNep.augmentation(OwnedNodeEdgePoint1.class) != null
+                && ownedNep.augmentation(OwnedNodeEdgePoint1.class).getCepList() != null
+                && !ownedNep.augmentation(OwnedNodeEdgePoint1.class).getCepList()
+                .getConnectionEndPoint().isEmpty()) {
+            for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep
+                .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                .entrySet()) {
+                if (cep.getValue().getParentNodeEdgePoint() != null) {
+                    return cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid();
+                }
+            }
+        }
+        return null;
     }
 
     private boolean isValidNep(OwnedNodeEdgePoint onep) {
@@ -1301,24 +1341,39 @@ public class TapiOpticalNode {
             initTapiXndrTps();
             LOG.info("TONLine1302: ValidateAZxponder for node : {}, nwOtsNep : {}", this.nodeName,
                 nwOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-            allOtsNep.clear();
-            allOtsNep.addAll(nwOtsNep);
-            allOtsNep.addAll(clientDsrNep);
-            allOtsNep.stream().distinct().collect(Collectors.toList());
-            LOG.info("TONLine1308: ValidateAZxponder for node : {}, allOtsNep : {}", this.nodeName,
-                allOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-            Map<Uuid, Name> nodeId = new HashMap<>();
-            nodeId.put(nodeUuid, node.getName().entrySet().iterator().next().getValue());
-            // Map<Uuid, String> xpdrKey = new HashMap<>();
-            // xpdrKey.put(nodeId.keySet().iterator().next(), deviceNodeId);
-            PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
-                OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability);
-            xpdr.initXndrTps(servFormat);
-            xpdr.initFrequenciesBitSet();
-            LOG.info("TONLine1273 validateAZxponder: XPONDER == Id: {}, Name : {} is validated",
-                node.getUuid().toString(), node.getName().toString());
-            this.pceNodeMap.put(nodeId.keySet().iterator().next(), xpdr);
-            return;
+
+            if (SERVICE_TYPE_PHT_LIST.contains(serviceType)) {
+                allOtsNep.clear();
+                allOtsNep.addAll(nwOtsNep);
+                allOtsNep.addAll(clientDsrNep);
+                allOtsNep.stream().distinct().collect(Collectors.toList());
+                LOG.info("TONLine1308: ValidateAZxponder for node : {}, allOtsNep : {}", this.nodeName,
+                    allOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
+                Map<Uuid, Name> nodeId = new HashMap<>();
+                nodeId.put(nodeUuid, node.getName().entrySet().iterator().next().getValue());
+                // Map<Uuid, String> xpdrKey = new HashMap<>();
+                // xpdrKey.put(nodeId.keySet().iterator().next(), deviceNodeId);
+                PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
+                    OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability);
+                xpdr.initXndrTps(servFormat);
+                xpdr.initFrequenciesBitSet();
+                LOG.info("TONLine1273 validateAZxponder: XPONDER == Id: {}, Name : {} is validated",
+                    node.getUuid().toString(), node.getName().toString());
+                this.pceTapiOptNodeXpdr = xpdr;
+                LOG.debug("pceTapiOpticalNodecreated  {}", this.pceTapiOptNodeXpdr.getNodeId());
+                return;
+            } else {
+                PceTapiOtnNode otnXpdr = new PceTapiOtnNode(this.node, OpenroadmNodeType.XPONDER,
+                    (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue(),
+                    serviceType,
+                    (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaPortId : zzPortId),
+                    this);
+                otnXpdr.validateXponder(
+                    (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue());
+                this.pceTapiOtnNodeXpdr = otnXpdr;
+                LOG.debug("pceTapiOtnNodecreated  {}", this.pceTapiOtnNodeXpdr.getNodeId());
+            }
+
         }
         LOG.info("TONLine1278 validateAZxponder: XPONDER == Id: {}, Name : {} is ignored", node.getUuid().toString(),
             node.getName().toString());
@@ -1372,6 +1427,7 @@ public class TapiOpticalNode {
                     direction = calculateDirection(ownedNep.getValue(), null, TpType.NW);
                     otsNep.setDirection(direction.keySet().iterator().next());
                     otsNep.setTpType(direction.values().iterator().next());
+                    otsNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
                     otsNep.setLpq(PHOTONICLAYERQUALIFIEROTS.VALUE);
                     direction.clear();
                     otsNep.setAdminState(ownedNep.getValue().getAdministrativeState());
@@ -1433,6 +1489,7 @@ public class TapiOpticalNode {
                 && OperationalState.ENABLED.equals(ownedNep.getValue().getOperationalState())) {
                 // TODO : activate following 6 lines of the code after capacity is correctly populated in the topology
                 if (ownedNep.getValue().getAvailableCapacity() == null
+                        || ownedNep.getValue().getAvailableCapacity().getTotalSize() == null
                         || ownedNep.getValue().getAvailableCapacity().getTotalSize().getValue() == null
                         || !(ownedNep.getValue().getAvailableCapacity().getTotalSize().getValue().doubleValue() > 0)) {
                     // The DSR Nep is not eligible since it has already a service mapped on it with no available capa
@@ -1442,6 +1499,9 @@ public class TapiOpticalNode {
                 direction = calculateDirection(ownedNep.getValue(), null, TpType.CLIENT);
                 clientNep.setDirection(direction.keySet().iterator().next());
                 clientNep.setTpType(direction.values().iterator().next());
+                clientNep.setLpn(LayerProtocolName.DSR);
+                clientNep.setLpq(ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
+                    .findFirst().orElseThrow().getLayerProtocolQualifier());
                 direction.clear();
                 clientNep.setOperationalState(ownedNep.getValue().getOperationalState());
                 clientNep.setAdminState(ownedNep.getValue().getAdministrativeState());
@@ -1506,6 +1566,9 @@ public class TapiOpticalNode {
                     direction = calculateDirection(ownedNep.getValue(), null,
                         nepType.equals("eODU") ? TpType.CLIENT : TpType.NW);
                     otnNep.setDirection(direction.keySet().iterator().next());
+                    otnNep.setLpn(LayerProtocolName.DIGITALOTN);
+                    otnNep.setLpq(ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
+                        .findFirst().orElseThrow().getLayerProtocolQualifier());
                     otnNep.setTpType(direction.values().iterator().next());
                     direction.clear();
                     otnNep.setOperationalState(ownedNep.getValue().getOperationalState());
@@ -1515,6 +1578,9 @@ public class TapiOpticalNode {
                         otuLcpList.add(otnNep);
                     } else {
                         oduLcpList.add(otnNep);
+                        if (nepType.equals("eODU")) {
+                            clientDsrNep.add(otnNep);
+                        }
                     }
                 }
             }
@@ -1975,7 +2041,7 @@ public class TapiOpticalNode {
             List<Uuid> nepUuidList = new ArrayList<>();
             nepUuidList.add(bpn.getNepCepUuid());
             LOG.info("TONLine 1801 : populateBpnVerticalNep");
-            bpn.setVerticallyConnectedNep(getVirtuallyConnectedNep(bpn.getNepCepUuid(), nepUuidList));
+            bpn.setVerticallyConnectedNep(getVerticallyConnectedNep(bpn.getNepCepUuid(), nepUuidList));
             LOG.info("TONline1841: List of vertical Neps for bpn {} includes {} elements", bpn.getName(),
                 nepUuidList.size());
             LOG.info("TONline1843: List of vertical Neps for bpn {} includes {} elements", bpn.getName(),
@@ -1985,12 +2051,22 @@ public class TapiOpticalNode {
         LOG.info("TONLine 1806 : populateBpnVerticalNep");
         for (BasePceNep bpn : clientDsrNep) {
             List<Uuid> nepUuidList = new ArrayList<>();
+            // client DRS MAp may contain both DSR and eODU NEPs
+            // Add to VerticallyConnectedNeps of DSR bpns the eODU associated NEP
             if (this.dsrNepWithParentOdu.containsKey(bpn.getNepCepUuid())) {
                 nepUuidList.add(this.dsrNepWithParentOdu.entrySet().stream()
                     .filter(uuidCouple -> uuidCouple.getKey().equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
                     .getValue());
+                bpn.setVerticallyConnectedNep(nepUuidList);
             }
-            bpn.setVerticallyConnectedNep(nepUuidList);
+         // Add to VerticallyConnectedNeps of eODU bpns the DSR associated NEP
+            if (this.dsrNepWithParentOdu.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList())
+                    .contains(bpn.getNepCepUuid())) {
+                nepUuidList.add(this.dsrNepWithParentOdu.entrySet().stream()
+                    .filter(uuidCouple -> uuidCouple.getValue().equals(bpn.getNepCepUuid())).findFirst().orElseThrow()
+                    .getKey());
+                bpn.setVerticallyConnectedNep(nepUuidList);
+            }
             LOG.info("TONline1803: List of vertical Neps for bpn {} includes {} elements", bpn.getName(),
                 nepUuidList.size());
         }
@@ -2019,6 +2095,16 @@ public class TapiOpticalNode {
             for (BasePceNep bpn : clientDsrNep) {
                 List<Uuid> vertNepsUuidList = bpn.getVerticallyConnectedNep();
                 vertNepsUuidList.add(bpn.getNepCepUuid());
+                for (Uuid nepUuid : vertNepsUuidList) {
+                    if (mapentry.getValue().contains(nepUuid)) {
+                        bpn.setNodeRuleGroupUuid(mapentry.getKey());
+                        break;
+                    }
+                }
+            }
+            for (BasePceNep bpn : oduLcpList) {
+                List<Uuid> vertNepsUuidList = new ArrayList<>(List.of(bpn.getNepCepUuid()));
+                vertNepsUuidList.addAll(bpn.getVerticallyConnectedNep());
                 for (Uuid nepUuid : vertNepsUuidList) {
                     if (mapentry.getValue().contains(nepUuid)) {
                         bpn.setNodeRuleGroupUuid(mapentry.getKey());
@@ -2064,15 +2150,22 @@ public class TapiOpticalNode {
                     }
                 }
             }
+            for (BasePceNep bpn : oduLcpList) {
+                List<Uuid> bpnNrgUuid = bpn.getNodeRuleGroupUuid();
+                if (bpnNrgUuid == null || bpnNrgUuid.isEmpty()) {
+                    break;
+                }
+                for (Uuid nrgUuid : bpnNrgUuid) {
+                    if (mapentry.getValue().contains(nrgUuid)) {
+                        bpn.setIndirectNRGUuid(mapentry.getValue());
+                    }
+                }
+            }
         }
     }
 
-    private List<Uuid> getVirtuallyConnectedNep(Uuid nepUuid, List<Uuid> connectedNepUuidList) {
+    private List<Uuid> getVerticallyConnectedNep(Uuid nepUuid, List<Uuid> connectedNepUuidList) {
         LOG.info("TONLine 1887 : populateBpnVerticalNep");
-        // isDSR does not have a local significance : it remains the same during recursive calls and does not evolve.
-        // It is used to fix the way of searching for connected NEP :
-        // - if original NEP is DSR we search for parents
-        // - if original NEP is not DSR we search for clients.
         OwnedNodeEdgePoint onep = this.node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).findAny().orElseThrow().getValue();
         if (onep.augmentation(OwnedNodeEdgePoint1.class) == null
@@ -2104,7 +2197,7 @@ public class TapiOpticalNode {
                 if (clientNepUuid != null) {
                     connectedNepUuidList.add(clientNepUuid);
                     connectedNepUuidList.stream().distinct().collect(Collectors.toList());
-                    getVirtuallyConnectedNep(clientNepUuid, connectedNepUuidList);
+                    getVerticallyConnectedNep(clientNepUuid, connectedNepUuidList);
                 } else {
                     return connectedNepUuidList;
                 }
