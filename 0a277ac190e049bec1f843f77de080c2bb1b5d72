@@ -1093,6 +1093,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85fc554b_0efed44a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:58:28Z",
+      "side": 1,
+      "message": "We are looking into this",
+      "parentUuid": "23c99c42_e3782a34",
+      "range": {
+        "startLine": 430,
+        "startChar": 2,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5eb5f443_5011e96d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -1668,6 +1692,30 @@
       "writtenOn": "2025-03-19T14:38:13Z",
       "side": 1,
       "message": "Why is this not supported in the case of OpenConfig? What is the element missing to have the same behavior?",
+      "range": {
+        "startLine": 903,
+        "startChar": 4,
+        "endLine": 918,
+        "endChar": 9
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07b07a4d_fa1e3a95",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:58:28Z",
+      "side": 1,
+      "message": "We are looking into this",
+      "parentUuid": "aa86d823_b213d3b4",
       "range": {
         "startLine": 903,
         "startChar": 4,
