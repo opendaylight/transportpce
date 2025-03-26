@@ -24,6 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GEODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -74,6 +76,11 @@ public class PceTapiOtnNode implements PceNode {
         OpenroadmNodeType.MUXPDR,
         OpenroadmNodeType.SWITCH,
         OpenroadmNodeType.TPDR);
+    private static final Map<String, SupportedIfCapability> SERVICE_TYPE_ODU_CLASS_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_ODU4, IfOCH.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC4, IfOTUCnODUCn.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC3, IfOTUCnODUCn.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC2, IfOTUCnODUCn.VALUE);
     private static final Map<String, SupportedIfCapability> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, If1GEODU0.VALUE,
         StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.VALUE,
@@ -93,44 +100,44 @@ public class PceTapiOtnNode implements PceNode {
         LPN_MAP = new HashMap<>(Map.of(
             "ETH", new HashMap<>(Map.of(
                 "If1GEODU0", Map.of(
-                    ODUTYPEODU0.VALUE, Uint64.ZERO, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ZERO),
+                    ODUTYPEODU0.VALUE, Uint64.ONE, DIGITALSIGNALTYPEGigE.VALUE, Uint64.ONE),
                 "If10GEODU2e", Map.of(
-                    ODUTYPEODU2E.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2E.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If10GEODU2", Map.of(
-                    ODUTYPEODU2.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
-                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ZERO),
+                    ODUTYPEODU2.VALUE, Uint64.ONE, DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
+                "If10GE", Map.of(DIGITALSIGNALTYPE10GigELAN.VALUE, Uint64.ONE),
                 "If100GEODU4", Map.of(
-                    ODUTYPEODU4.VALUE, Uint64.ZERO, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ZERO),
-                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
-                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    ODUTYPEODU4.VALUE, Uint64.ONE, DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                "If100GE", Map.of(DIGITALSIGNALTYPE100GigE.VALUE, Uint64.ONE),
+                //"IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
+                "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "OTU", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "ODU", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE),
                 "IfOCH", Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
-                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO))),
+                "IfOCHOTU4ODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE))),
             "DIGITAL_OTN", new HashMap<>(Map.of(
-                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ZERO),
-                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ZERO),
-                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ZERO),
-                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO),
+                "If1GEODU0", Map.of(ODUTYPEODU0.VALUE, Uint64.ONE),
+                "If10GEODU2e", Map.of(ODUTYPEODU2E.VALUE, Uint64.ONE),
+                "If10GEODU2", Map.of(ODUTYPEODU2.VALUE, Uint64.ONE),
+                "If100GEODU4", Map.of(ODUTYPEODU4.VALUE, Uint64.ONE),
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
                         OTUTYPEOTUCN.VALUE, Uint64.ONE),
                 "IfOCH",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4)),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO))),
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE))),
             "PHOTONIC_MEDIA", new HashMap<>(Map.of(
                 "IfOCHOTUCnODUCn",
                     Map.of(ODUTYPEODU4.VALUE, Uint64.valueOf(4), ODUTYPEODUCN.VALUE, Uint64.ONE,
@@ -142,7 +149,7 @@ public class PceTapiOtnNode implements PceNode {
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE),
                 "IfOCHOTU4ODU4",
-                    Map.of(ODUTYPEODU4.VALUE, Uint64.ZERO, OTUTYPEOTU4.VALUE, Uint64.ZERO,
+                    Map.of(ODUTYPEODU4.VALUE, Uint64.ONE, OTUTYPEOTU4.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTSiMC.VALUE, Uint64.ONE,
                         PHOTONICLAYERQUALIFIEROTS.VALUE, Uint64.ONE)
              ))
@@ -170,7 +177,6 @@ public class PceTapiOtnNode implements PceNode {
     private final Node node;
     private final String nodeId;
     private final OpenroadmNodeType nodeType;
-//    private final String pceNodeType;
     private final String otnServiceType;
     private String modeType;
     private AdministrativeState adminState;
@@ -187,10 +193,10 @@ public class PceTapiOtnNode implements PceNode {
     private List<BasePceNep> usableXpdrClientTps;
 
     private List<PceLink> outgoingLinks = new ArrayList<>();
-    private Map<String, String> clientPerNwTp = new HashMap<>();
     private Uuid clientPortId;
     private String supConLayer;
     private TapiOpticalNode tapiON;
+    private final String pceNodeType;
 
     public PceTapiOtnNode(Node node, OpenroadmNodeType nodeType, String deviceNodeId, String serviceType,
         Uuid clientPort, TapiOpticalNode ton) {
@@ -198,7 +204,7 @@ public class PceTapiOtnNode implements PceNode {
         this.tapiON = ton;
         this.nodeId = deviceNodeId;
         this.nodeType = nodeType;
-//        this.pceNodeType = pceNodeType;
+        this.pceNodeType = "otn";
         this.otnServiceType = serviceType;
         this.tpAvailableTribSlot.clear();
         this.usedXpdrNWTps.clear();
@@ -222,10 +228,16 @@ public class PceTapiOtnNode implements PceNode {
             LOG.error("PceTapiOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
+        if (valid) {
+            LOG.info("PceTapiOtnNodeLine233: Node {} passed first step of validation", node.getName());
+        }
         if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
                 && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
             LOG.error("PceOtnNode: unsupported OTN Service Type {}", serviceType);
             this.valid = false;
+        }
+        if (valid) {
+            LOG.info("PceTapiOtnNodeLine242: Node {} passed 2nd step of validation", node.getName());
         }
     }
 
@@ -238,14 +250,16 @@ public class PceTapiOtnNode implements PceNode {
         this.valid = false;
 
         if (SERVICE_TYPE_ODU_LIST.contains(otnServiceType)) {
-            // We put OtuNep in clientDsr Nep the connection will between iOTU NEP. It is an NW NEP but doesn't need
+            // We put OduNep in clientDsr Nep the connection will between iODU NEP. It is an NW NEP but doesn't need
             // to be identified as such (no pair of client-NW NEPs)
-            availableXpdrClientTps = tapiON.getOtuNep();
+            availableXpdrClientTps = tapiON.getOduNep().stream()
+                .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
+                .collect(Collectors.toList());
             if (availableXpdrClientTps.isEmpty()) {
                 return;
             }
             supConLayer = SCL_OTU;
-            LOG.debug("Supporting connection layer is {}", supConLayer);
+            LOG.info("Supporting connection layer is {}", supConLayer);
         } else if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             availableXpdrClientTps = tapiON.getOduNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERCLIENT))
@@ -253,6 +267,12 @@ public class PceTapiOtnNode implements PceNode {
             availableXpdrNWTps = tapiON.getOduNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList());
+            LOG.info("PTOtnN Line272 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+                .map(BasePceNep::getName).collect(Collectors.toList()));
+            LOG.info("PTOtnN Line273 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+                .map(BasePceNep::getName).collect(Collectors.toList()));
+            LOG.info("PTOtnN Line275 : availableXpdrClientTps vertConnectedNep {}", availableXpdrClientTps.stream()
+                .map(BasePceNep::getVerticallyConnectedNep).collect(Collectors.toList()));
             int clientListSize = availableXpdrClientTps.size();
             if (availableXpdrClientTps.isEmpty()) {
                 LOG.error("PceOtnNode: initXndrTps: XPONDER {} has no available eODU TP", nodeId);
@@ -273,45 +293,86 @@ public class PceTapiOtnNode implements PceNode {
             LOG.error("PceOtnNode: initXndrTps: Unidentified Service Type {}", otnServiceType);
         }
         // Purge availableXpder-NW/Client-Tps from ports that are not directly or undirectly connected to clientPort
+        LOG.info("PTOtnN Line298 : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
+            .filter(bpn -> isValidBpn(bpn)).collect(Collectors.toList())
+            .stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTOtnN Line299 : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
+            .filter(bpn -> bpn.getVerticallyConnectedNep().contains(clientPortId)).collect(Collectors.toList())
+            .stream().map(BasePceNep::getName).collect(Collectors.toList()));
         availableXpdrClientTps.removeAll(availableXpdrClientTps.stream()
-            .filter(bpn -> (!isValidBpn(bpn) || (!bpn.getVerticallyConnectedNep().contains(clientPortId))))
+            .filter(bpn -> (!(isValidBpn(bpn) || (bpn.getVerticallyConnectedNep().contains(clientPortId)))))
             .collect(Collectors.toList()));
+        LOG.info("PTOtnN Line301 : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
         if (!availableXpdrClientTps.isEmpty()) {
+            List<BasePceNep> bpnToRemove = new ArrayList<>();
             for (BasePceNep bpn : availableXpdrClientTps) {
-                if (!isValidTp(bpn)) {
-                    availableXpdrClientTps.remove(bpn);
+                // In the case of an ODU4 service, the iODU (HighOrder) on the network side will be added to the
+                // Client TPs. We need to avoid it is removed from the list
+                if (!isValidTp(bpn, false) && (bpn.getLpq() != null && !bpn.getLpq().equals(ODUTYPEODU4.VALUE))
+                        || !isValidTp(bpn, true) && (bpn.getLpq() != null && bpn.getLpq().equals(ODUTYPEODU4.VALUE))) {
+                    bpnToRemove.add(bpn);
                 }
             }
+            availableXpdrClientTps.removeAll(bpnToRemove);
         }
+        LOG.info("PTOtnN Line309 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
         if (availableXpdrNWTps != null && !availableXpdrNWTps.isEmpty()) {
+            LOG.info("PTOtnN Line312 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+                .map(BasePceNep::getName).collect(Collectors.toList()));
             availableXpdrNWTps.removeAll(availableXpdrNWTps.stream()
-                .filter(bpn -> !bpn.getVerticallyConnectedNep().contains(clientPortId) || isValidTp(bpn))
+                // We shall not remove tp that are not vertically connected to NW nep (more NRG aspects checked through
+                // checkSwPool -> only remove tp that are not valid
+                //.filter(bpn -> !bpn.getVerticallyConnectedNep().contains(clientPortId) || !isValidTp(bpn))
+                .filter(bpn -> !isValidTp(bpn, true))
                 .collect(Collectors.toList()));
+            LOG.info("PTOtnN Line315 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+                .map(BasePceNep::getName).collect(Collectors.toList()));
         }
-
+        LOG.info("PceOtnNode Line 323 InitXndrTp, before checking SW pool Valid is  {}", valid);
         if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             this.valid = checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
+        } else if (availableXpdrClientTps != null && !availableXpdrClientTps.isEmpty()) {
+            //This is a NW to NW case for ODU4 or ODUCN services, and Node is valid if NW ports are available
+            // but in this case the NW port is in the Client MAp
+            this.valid = true;
         }
+        LOG.info("PceOtnNode Line 330 InitXndrTp, after checking SW pool Valid is  {}", valid);
 
     }
 
-    private boolean isValidTp(BasePceNep bpn) {
+    private boolean isValidTp(BasePceNep bpn, boolean isHighOrder) {
         OwnedNodeEdgePoint onep = node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(bpn.getNepCepUuid()))
             .findFirst().orElseThrow().getValue();
         if (SERVICE_TYPE_ODU_LIST.contains(otnServiceType)) {
-            LAYERPROTOCOLQUALIFIER expectedLpn = LPN_MAP.get("DIGITAL_OTN")
-                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).toString()).entrySet().stream()
-                .filter(entry -> entry.getKey().toString().contains("ODU"))
-                .findFirst().orElseThrow().getKey();
+            //Service type = ODU4 or ODUC2/3/4...
+            LAYERPROTOCOLQUALIFIER expectedLpn;
+            if (otnServiceType.contains("ODUCN")) {
+                expectedLpn = ODUTYPEODUCN.VALUE;
+            } else {
+                expectedLpn = ODUTYPEODU4.VALUE;
+            }
+            if (onep.getAvailablePayloadStructure() == null || onep.getAvailablePayloadStructure().isEmpty()) {
+                // For ODU4/ODUCN, as far as the ODU4 service has not been created, the NEP is there but the
+                // available payload structure is not created
+                return true;
+            }
             return onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
         } else if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             LAYERPROTOCOLQUALIFIER expectedLpn = LPN_MAP.get("ETH")
-                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).toString()).entrySet().stream()
-                .filter(entry -> !entry.getKey().toString().contains("ODU"))
-                .findFirst().orElseThrow().getKey();
-            return onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
+                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).implementedInterface().getSimpleName())
+                    .entrySet().stream()
+                        .filter(entry -> entry.getKey().toString().contains("ODU"))
+                        .findFirst().orElseThrow().getKey();
+            LOG.info("PceOtnNode Line 344 InitXndrTp, isValidBpn ExpectedLPN is {}", expectedLpn);
+            // If checked TP is a Nw TP of higher order that expected LPN (Multiplexing function
+            // We don't check that the multiplexing sequence of the bpn includes expected lpn
+            // since the bpn is not of the same order
+            return isHighOrder ? true
+                : onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
         } else {
             LOG.warn("in checkTp of TapiOTNNode, Unidentified service type {}", otnServiceType);
@@ -396,18 +457,31 @@ public class PceTapiOtnNode implements PceNode {
     private boolean checkAZSwPool(List<BasePceNep> netwTps, List<BasePceNep> clientTps) {
         // Check first if client Tps and Network tps have some common nrg with a Forwarding rule MAY/MUST
         // meaning client are connected to Nw port
+        LOG.info("PTONLine430, checkAZSwPool");
+        LOG.info("PTONLine431, clientNRGUuid before filtering {}", clientTps.stream()
+            .map(BasePceNep::getNodeRuleGroupUuid).collect(Collectors.toList()));
+        LOG.info("PTONLine433, nwNRGUuid before filtering {}", netwTps.stream()
+            .map(BasePceNep::getNodeRuleGroupUuid).collect(Collectors.toList()));
+        LOG.info("PTONLine435, nwBpn before filtering {}", netwTps.stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTONLine449, clientBpn before filtering {}", clientTps.stream()
+            .map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("PTONLine451, clientBpn before filtering {}", clientTps.stream()
+            .map(BasePceNep::getLpn).collect(Collectors.toList()));
         List<BasePceNep> eoduBpnList = clientTps.stream()
             .filter(bpn -> !bpn.getLpn().equals(LayerProtocolName.DSR)).collect(Collectors.toList());
         List<Uuid> clientNrgList = new ArrayList<>();
         for (BasePceNep bpn : eoduBpnList) {
             clientNrgList.addAll(bpn.getNodeRuleGroupUuid());
         }
+        LOG.info("PTONLine459, clientNRGUuid are {}", clientNrgList);
         clientNrgList = clientNrgList.stream().distinct().collect(Collectors.toList());
         List<Uuid> nwNrgList = new ArrayList<>();
         for (BasePceNep bpn : netwTps) {
             nwNrgList.addAll(bpn.getNodeRuleGroupUuid());
         }
         nwNrgList = nwNrgList.stream().distinct().collect(Collectors.toList());
+        LOG.info("PTONLine444, networkNRGUuid are {}", nwNrgList);
         for (Uuid clientNrg : clientNrgList) {
             if (nwNrgList.contains(clientNrg) && !node.getNodeRuleGroup().entrySet().stream()
                     .filter(nrg -> nrg.getKey().getUuid().equals(clientNrg)).findFirst().orElseThrow().getValue()
@@ -419,9 +493,11 @@ public class PceTapiOtnNode implements PceNode {
                                     .equals(FORWARDINGRULEMUSTFORWARDACROSSGROUP.VALUE)))
                             .collect(Collectors.toList())
                             .isEmpty()) {
+                //TODO: adjust following condition as soon as we can set correctly bandwidth of Nrgs for switchponders
+                // Condition from >=0 to >0
                 if (node.getNodeRuleGroup().entrySet().stream()
                         .filter(nrg -> nrg.getKey().getUuid().equals(clientNrg)).findFirst().orElseThrow().getValue()
-                        .getAvailableCapacity().getTotalSize().getValue().doubleValue() > 0.0) {
+                        .getAvailableCapacity().getTotalSize().getValue().doubleValue() >= 0.0) {
                     // We found in NwNrgList a NRG that is shared with the client Tps, with Forwarding True, and a
                     // a bandwidth that allows for further connections
                     // We remove form availableXpdrNwTps any of the bpn that do not contain this SRG
@@ -436,7 +512,7 @@ public class PceTapiOtnNode implements PceNode {
                 }
             }
         }
-
+        LOG.info("PTONLine471, did not find commonNRG to both Cl and NW with Rule can/must forward");
         // Being there means we did not find a common nrg with both one of the eODU and one iODU
         // Check if client Tps and Network tps have some nrgs that are interconnected through an IRG
         // with a Forwarding rule MAY/MUST meaning client are connected to Nw port
@@ -626,6 +702,17 @@ public class PceTapiOtnNode implements PceNode {
         return valid;
     }
 
+    public List<BasePceNep> getTotalListOfNep() {
+        List<BasePceNep> listOfNep = new ArrayList<>();
+        this.tapiON.getClientDsrNep();
+        listOfNep.addAll(this.tapiON.getClientDsrNep());
+        listOfNep.addAll(this.tapiON.getOduNep());
+        listOfNep.addAll(this.tapiON.getOtuNep());
+        listOfNep.addAll(this.tapiON.getnetOtsNep());
+        listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
+        return listOfNep;
+    }
+
     @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
@@ -648,7 +735,7 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public String getXpdrNWfromClient(String tp) {
-        return this.clientPerNwTp.get(tp);
+        return null;
     }
 
     @Override
@@ -680,8 +767,8 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public String getPceNodeType() {
-//        return this.pceNodeType;
-        return null;
+        return this.pceNodeType;
+
     }
 
     @Override
@@ -793,6 +880,10 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public List<BasePceNep> getListOfNep() {
-        return null;
+        List<BasePceNep> listOfNep = new ArrayList<>();
+        listOfNep.addAll(availableXpdrClientTps);
+        listOfNep.addAll(availableXpdrNWTps);
+        listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
+        return listOfNep;
     }
 }
