@@ -582,6 +582,8 @@ public class PceOtnNode implements PceNode {
 
     @Override
     public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
+        // For OTN node, no direct relation between 1 NW and 1 client. All calculation based on NRG and IRG
+        // No significance -> return null
         return null;
     }
 
