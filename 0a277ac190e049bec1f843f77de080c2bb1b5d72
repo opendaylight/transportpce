@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb84c96_468ffd49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "420188d1_1bba2433",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "81e98ddd_136c3215",
@@ -71,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e55a70e4_58f37e43",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2023-05-01.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "bf4a6031_cbc4cd88",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce372c3c_a92b44f3",
         "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
         "patchSetId": 3
@@ -82,6 +118,24 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "Same remark: we need to make evolve the revision. Preferable to do that in a previous separate change.",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5eb24ae_da82e225",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2021-10-04.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "ce372c3c_a92b44f3",
       "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -105,6 +159,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb43f04f_08aadf25",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-01-15.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "5ca0a1fb_0ef88380",
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5525f406_d470c69e",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
         "patchSetId": 3
@@ -116,6 +188,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "Not sure to understand why you need to multiply per 10^6?\nWe could not reuse the existing one used in OpenROADM context?",
+      "range": {
+        "startLine": 191,
+        "startChar": 75,
+        "endLine": 191,
+        "endChar": 93
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa97eb5_d11d3d08",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "OpenConfig NEC NE is expecting the central frequency in Mhz range whereas it is in THz for OpenRoadm.\nexcepted range:191150000~196100000\nHence doing this conversion.",
+      "parentUuid": "5525f406_d470c69e",
       "range": {
         "startLine": 191,
         "startChar": 75,
@@ -151,6 +247,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3748b4b8_a8651ef1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "Currently in NEC and in Lighty sim NE, we have only optical channel as subcomponents.\nIt\u0027s a good point. We can try to improve this behavior in future update.",
+      "parentUuid": "6fc8d3da_82ca096f",
+      "range": {
+        "startLine": 772,
+        "startChar": 12,
+        "endLine": 774,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e844a454_6557d5fe",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
         "patchSetId": 3
@@ -162,6 +282,30 @@
       "writtenOn": "2025-03-19T14:38:13Z",
       "side": 1,
       "message": "Looks very limiting to me. If my understanding is correct it means we may not support 1GE/10GE/400GE... trib port. Did I miss something? What about ODU logical channel that supports Ethernet (ODU0/2/2e/4)?",
+      "range": {
+        "startLine": 829,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 51
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6862e81_1ca39a39",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "NEC manual requires interface configuration only for the client ethernet. Here client ethernet does not have a mapper ODU. May be we can try to make it generic for all types of ethernet but enabling it for OTU/ODU will also add network entities like ODU4/ODUCn and currently we do not have a way to differentiate client logical channels from network. We could look at improving this in the future.",
+      "parentUuid": "e844a454_6557d5fe",
       "range": {
         "startLine": 829,
         "startChar": 1,
@@ -197,6 +341,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a986a9f_fe250227",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "735ef695_514f7cea",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 29
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93e09edb_34808c5c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 3
@@ -208,6 +376,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "you can write it more simply: \ndatamodelType.equals(NodeDatamodelType.OPENCONFIG)",
+      "range": {
+        "startLine": 246,
+        "startChar": 37,
+        "endLine": 246,
+        "endChar": 81
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c81adc_812a0b12",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "93e09edb_34808c5c",
       "range": {
         "startLine": 246,
         "startChar": 37,
@@ -243,6 +435,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e060fd3f_5d684c6c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "c60fef7b_cd1d6d23",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "77710f2a_1a152b17",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesException.java",
         "patchSetId": 3
@@ -254,6 +470,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "You should remove this Findbugs SuppresWarnings, and instead, add the following property:\n    @java.io.Serial\n    private static final long serialVersionUID \u003d 1L;\n\nI will homogenize the rest of the tpce code later...",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 141
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0360c1f0_887a928b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesException.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "77710f2a_1a152b17",
       "range": {
         "startLine": 15,
         "startChar": 0,
@@ -289,6 +529,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a63a5ef0_d6d48361",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "componentBuilder will contain the name and augmentation details. This augmentation will contain the frequency, target-output-power, operational-mode.",
+      "parentUuid": "bb4e7c49_51c3d286",
+      "range": {
+        "startLine": 39,
+        "startChar": 64,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf688ebc_db226040",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
         "patchSetId": 3
@@ -300,6 +564,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "The original exception is lost. It should at least be logged, which will allow consuming the const LOG that is never used.",
+      "range": {
+        "startLine": 52,
+        "startChar": 36,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85ff366_d4553222",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "bf688ebc_db226040",
       "range": {
         "startLine": 52,
         "startChar": 36,
@@ -335,6 +623,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb271b86_6b1b3cc9",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "5fcea660_f92f4519",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 301,
+        "endChar": 50
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "915abcaf_87038a56",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
         "patchSetId": 3
@@ -346,6 +658,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "idem\nand so on...",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 305,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e69b84_27fb0964",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "Ack. We will fix this.",
+      "parentUuid": "915abcaf_87038a56",
       "range": {
         "startLine": 304,
         "startChar": 8,
@@ -381,6 +717,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e500825_39b5ecf3",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "a9eb6071_552f4567",
+      "range": {
+        "startLine": 307,
+        "startChar": 65,
+        "endLine": 307,
+        "endChar": 87
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6d83b16_ed846bee",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
         "patchSetId": 3
@@ -392,6 +752,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "On the same manner, we can simplify this method this way:\n\nOPTICALPORTTYPE getOpticalPorttype(String portType) {\n    return portType.equalsIgnoreCase(TERMINALLINE)\n            ? org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALLINE.VALUE\n            : org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALCLIENT.VALUE;\n}",
+      "range": {
+        "startLine": 410,
+        "startChar": 20,
+        "endLine": 410,
+        "endChar": 38
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2b5759f_e958dca8",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/OCPortMappingTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "f6d83b16_ed846bee",
       "range": {
         "startLine": 410,
         "startChar": 20,
@@ -427,6 +811,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b34bac22_94b71bd1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListener.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "16f081d5_a357f93f",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "84ff5efb_20cda2ff",
         "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListenerTest.java",
         "patchSetId": 3
@@ -438,6 +846,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "It is not normal to have 2 calls of updateOpenRoadmTopologies() since the test conditions have not changed. So this means that the implementation has changed.\nWith my proposal to refactor the onDataTreeChanged() method in PortMappingListener, we will not need to touch this test.",
+      "range": {
+        "startLine": 88,
+        "startChar": 42,
+        "endLine": 88,
+        "endChar": 43
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cd1424e_69b5a751",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "84ff5efb_20cda2ff",
       "range": {
         "startLine": 88,
         "startChar": 42,
@@ -473,6 +905,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97ca7f2a_e52098ea",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/listeners/PortMappingListenerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6dee472_a7143f1b",
+      "range": {
+        "startLine": 110,
+        "startChar": 42,
+        "endLine": 110,
+        "endChar": 43
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6badac69_90965ee0",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -484,6 +940,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "Since this property seems never used, please remove it.",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "680a0ab5_ae4239ca",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "6badac69_90965ee0",
       "range": {
         "startLine": 115,
         "startChar": 39,
@@ -519,6 +999,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0542bc11_b1bc3460",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "ad6ba3e0_c67c414a",
+      "range": {
+        "startLine": 406,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c9ba421_5559556d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -530,6 +1034,30 @@
       "writtenOn": "2025-03-19T14:38:13Z",
       "side": 1,
       "message": "If I understand correctly, the SeviceListTpopology will not be updated after the service has been rendered for OC implementation (unless I missed something in a other place of the code). \nWhat prevents in OpenConfig implementation the update of the serviceTopology in the DataStore, and why do you avoid this update?\nOr Maybe you consider that in the openConfig case there is nothing nothing to update, since a lot of things are preconfigured and do not really change, except the admin state of network ports? (Sorry, I am definitely not confortable with OC... :-()",
+      "range": {
+        "startLine": 415,
+        "startChar": 6,
+        "endLine": 415,
+        "endChar": 34
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b328c140_f226de14",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We are looking into this.",
+      "parentUuid": "0c9ba421_5559556d",
       "range": {
         "startLine": 415,
         "startChar": 6,
@@ -588,6 +1116,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b822647b_ebb669da",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "The NEC NE already had some previous values for target-output-power and frequency even before the renderer operation. So as per our previous design discussion we decided not to reset these values or remove these attributes.\nAlso as per the NEC documentation, as part of disable datapath for network, only the port admin-state update was recommended.",
+      "parentUuid": "5eb5f443_5011e96d",
+      "range": {
+        "startLine": 493,
+        "startChar": 31,
+        "endLine": 493,
+        "endChar": 98
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e368180_9e9447db",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -599,6 +1151,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "Use inferred type here to ease readabiity.",
+      "range": {
+        "startLine": 666,
+        "startChar": 12,
+        "endLine": 666,
+        "endChar": 111
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0b0767c_db37a633",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "7e368180_9e9447db",
       "range": {
         "startLine": 666,
         "startChar": 12,
@@ -634,6 +1210,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62830369_908a9420",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "The NEC NE already had some previous values for target-output-power and frequency even before the renderer operation. So as per our previous design discussion we decided not to reset these values or remove these attributes.\nAlso as per the NEC documentation, as part of disable datapath for network, only the port admin-state update was recommended.",
+      "parentUuid": "acef095a_f7605aa6",
+      "range": {
+        "startLine": 691,
+        "startChar": 5,
+        "endLine": 701,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de9adf54_d87fae67",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -645,6 +1245,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "use inferred type here",
+      "range": {
+        "startLine": 784,
+        "startChar": 16,
+        "endLine": 785,
+        "endChar": 56
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95aff766_d1cabd0d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "de9adf54_d87fae67",
       "range": {
         "startLine": 784,
         "startChar": 16,
@@ -680,6 +1304,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62205b52_8fb1ccb1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "148c533a_463af126",
+      "range": {
+        "startLine": 68,
+        "startChar": 39,
+        "endLine": 68,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff60c6c8_01ae7928",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -691,6 +1339,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "The main code style in TPCE is to favor inline arguments first, then wrap the others on a new line with indent + 4.\nPlease do not introduce any new code style.",
+      "range": {
+        "startLine": 71,
+        "startChar": 40,
+        "endLine": 76,
+        "endChar": 92
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f1e3f8_9f45b145",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "ff60c6c8_01ae7928",
       "range": {
         "startLine": 71,
         "startChar": 40,
@@ -726,6 +1398,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23abb53b_a997abad",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "46f3fb96_ba8e5b1a",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aea0708f_93cec783",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -737,6 +1433,30 @@
       "writtenOn": "2025-03-19T14:38:13Z",
       "side": 1,
       "message": "Would it be difficult/feasible to make something more generic that allows handling OpenConfig Case such as any other cases?\nSo basically having the same code, for both OpenConfig and other node, processing serviceType in the same way and then reject any request that currently does not comply with 100GE_M if A/Z end node are Openconfig(which is, as I understand it the only supported service for OpenConfig at that time).\nThis would make it easier to evolve if we enrich the code to support additional service format at a later step",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf6e659_ea1269fe",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We are looking into this",
+      "parentUuid": "aea0708f_93cec783",
       "range": {
         "startLine": 160,
         "startChar": 1,
@@ -772,6 +1492,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f889340b_dcfac539",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "2f1bb525_5185d663",
+      "range": {
+        "startLine": 172,
+        "startChar": 36,
+        "endLine": 172,
+        "endChar": 96
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f580b19_07e55580",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -783,6 +1527,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 174,
+        "startChar": 38,
+        "endLine": 174,
+        "endChar": 42
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28f297c5_a0942c3e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1f580b19_07e55580",
       "range": {
         "startLine": 174,
         "startChar": 38,
@@ -818,6 +1586,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ff46c40_6953afc1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We are looking into this",
+      "parentUuid": "7588bbe5_8724bf61",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3049e411_385dcf8a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -829,6 +1621,30 @@
       "writtenOn": "2025-03-19T14:38:13Z",
       "side": 1,
       "message": "OpenConfig is not supposed to be supported only in an Alien Wavelength context. This means that we shall support a use case where we support OpenConfig Transponder over an OpenROADM ROADM infra and where the OpenConfig transponder is used and configured as any other transponder.\nIn this case, the WDM channel is created one shot : creation of relevant interfaces \u0026 optical channel on transponders, and creation of end2end path on the ROADM infrastructure. \nFor the creation of the wavelength path over the ROADM infra, olmPower setup will be triggered whatever is the end terminal type.\nHave you envisaged this case or is OpenConfig supported only as the context of an alien wavelength use case ?",
+      "range": {
+        "startLine": 674,
+        "startChar": 8,
+        "endLine": 675,
+        "endChar": 26
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d6d86a5_b10688b1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "The existing renderer support is for a back to back XPDR usecase and there were no specific power up/down sequence recommended by NEC documentation for enable/disable datapath for XPDRs. So as per previous design discussion this was not supported for OpenConfig. We can look at enhancing this in a future update.",
+      "parentUuid": "3049e411_385dcf8a",
       "range": {
         "startLine": 674,
         "startChar": 8,
@@ -887,6 +1703,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b1fc260e_2e320b5e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/transaction/delete/DeleteService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "1ca00ccd_5b1ef1c9",
+      "range": {
+        "startLine": 87,
+        "startChar": 47,
+        "endLine": 87,
+        "endChar": 48
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "360a21dc_637bf3e5",
         "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
         "patchSetId": 3
@@ -910,6 +1750,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9586efe9_30f6b796",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "360a21dc_637bf3e5",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "395665ad_f0d5a984",
         "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
         "patchSetId": 3
@@ -921,6 +1785,30 @@
       "writtenOn": "2025-03-11T15:13:19Z",
       "side": 1,
       "message": "this property is never used. Can be removed.",
+      "range": {
+        "startLine": 41,
+        "startChar": 39,
+        "endLine": 41,
+        "endChar": 64
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecf54c76_a3cce7fb",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "395665ad_f0d5a984",
       "range": {
         "startLine": 41,
         "startChar": 39,
@@ -972,6 +1860,54 @@
         "startChar": 69,
         "endLine": 46,
         "endChar": 76
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf8e9e2c_f6933925",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "97916dc3_119ddde6",
+      "range": {
+        "startLine": 46,
+        "startChar": 69,
+        "endLine": 46,
+        "endChar": 76
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5511062_18fd7a60",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-03-26T07:19:36Z",
+      "side": 1,
+      "message": "We will fix this.",
+      "parentUuid": "6889251b_6bfe3ed3",
+      "range": {
+        "startLine": 46,
+        "startChar": 40,
+        "endLine": 46,
+        "endChar": 66
       },
       "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
