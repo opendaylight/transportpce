@@ -119,7 +119,7 @@ public class TapiOpticalNode {
         StringConstants.SERVICE_TYPE_OTUC4,
         StringConstants.SERVICE_TYPE_OTUC3,
         StringConstants.SERVICE_TYPE_OTUC2,
-        StringConstants.SERVICE_TYPE_100GE_M);
+        StringConstants.SERVICE_TYPE_100GE_T);
 
 
     public enum DirectionType { SINK, SOURCE, BIDIRECTIONAL, UNIDIRECTIONAL, UNDEFINED }
@@ -167,6 +167,7 @@ public class TapiOpticalNode {
         } else if (!(OperationalState.ENABLED.equals(node.getOperationalState()))) {
             LOG.error("TapiOpticalNode: Node {} ignored since its operational state {} differs from ENABLED",
                 node.getName().toString(), node.getOperationalState().toString());
+            LOG.error("TapiOpticalNode Line 170: Operational state no set to ENABLED for {}", node.getName());
             this.valid = false;
         } else {
             this.valid = true;
@@ -196,8 +197,8 @@ public class TapiOpticalNode {
             this.servFormat = serviceFormat;
             this.mcCapability = mcCapability;
             // First step is to qualify the node, determining its type
-            LOG.debug("Node {} admin state is {}, operational state is {}",
-                node.getName(), adminState, operationalState);
+            LOG.info("TONLine200 : Node {} admin state is {}, operational state is {}, Valid = {}",
+                node.getName(), adminState, operationalState, valid);
         }
     }
 
@@ -1057,6 +1058,10 @@ public class TapiOpticalNode {
     }
 
     private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
+        if (node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).collect(Collectors.toList()).isEmpty()) {
+            return null;
+        }
         OwnedNodeEdgePoint ownedNep = node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).findFirst().orElseThrow().getValue();
         if (ownedNep.augmentation(OwnedNodeEdgePoint1.class) != null
@@ -1338,6 +1343,7 @@ public class TapiOpticalNode {
             || zzNodeId.getValue().equals(node.getUuid().getValue())) {
             LOG.debug("validateAZxponder TAPI: A or Z node detected == {}, {}", node.getUuid().toString(),
                 node.getName().toString());
+            LOG.info("TONLine1346: ValidateAZxponder for node : {}, is not ignored", this.nodeName);
             initTapiXndrTps();
             LOG.info("TONLine1302: ValidateAZxponder for node : {}, nwOtsNep : {}", this.nodeName,
                 nwOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
@@ -1372,6 +1378,7 @@ public class TapiOpticalNode {
                     (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue());
                 this.pceTapiOtnNodeXpdr = otnXpdr;
                 LOG.debug("pceTapiOtnNodecreated  {}", this.pceTapiOtnNodeXpdr.getNodeId());
+                return;
             }
 
         }
@@ -2084,6 +2091,8 @@ public class TapiOpticalNode {
         for (Map.Entry<Uuid, List<Uuid>> mapentry : nrgNepMap.entrySet()) {
             for (BasePceNep bpn : nwOtsNep) {
                 List<Uuid> vertNepsUuidList = bpn.getVerticallyConnectedNep();
+                LOG.info("TONLine 2094 : populateBpnNrgForXpdr List of Vert Nep for {} = {}", bpn.getName(),
+                    vertNepsUuidList);
                 vertNepsUuidList.add(bpn.getNepCepUuid());
                 for (Uuid nepUuid : vertNepsUuidList) {
                     if (mapentry.getValue().contains(nepUuid)) {
@@ -2303,6 +2312,14 @@ public class TapiOpticalNode {
 
     public NodeTypes getCommonNodeType() {
         return this.commonNodeType;
+    }
+
+    public PceTapiOpticalNode getXpdrOpticalNode() {
+        return this.pceTapiOptNodeXpdr;
+    }
+
+    public PceTapiOtnNode getXpdrOtnNode() {
+        return this.pceTapiOtnNodeXpdr;
     }
 
     public List<BasePceNep> getDegOtsNep() {

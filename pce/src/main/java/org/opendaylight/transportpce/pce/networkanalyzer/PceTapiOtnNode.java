@@ -24,6 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If100GEODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If10GEODU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOTUCnODUCn;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -74,6 +76,11 @@ public class PceTapiOtnNode implements PceNode {
         OpenroadmNodeType.MUXPDR,
         OpenroadmNodeType.SWITCH,
         OpenroadmNodeType.TPDR);
+    private static final Map<String, SupportedIfCapability> SERVICE_TYPE_ODU_CLASS_MAP = Map.of(
+        StringConstants.SERVICE_TYPE_ODU4, IfOCH.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC4, IfOTUCnODUCn.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC3, IfOTUCnODUCn.VALUE,
+        StringConstants.SERVICE_TYPE_ODUC2, IfOTUCnODUCn.VALUE);
     private static final Map<String, SupportedIfCapability> SERVICE_TYPE_ETH_CLASS_MAP = Map.of(
         StringConstants.SERVICE_TYPE_1GE, If1GEODU0.VALUE,
         StringConstants.SERVICE_TYPE_10GE, If10GEODU2e.VALUE,
@@ -300,17 +307,21 @@ public class PceTapiOtnNode implements PceNode {
             .filter(nep -> nep.getKey().getUuid().equals(bpn.getNepCepUuid()))
             .findFirst().orElseThrow().getValue();
         if (SERVICE_TYPE_ODU_LIST.contains(otnServiceType)) {
-            LAYERPROTOCOLQUALIFIER expectedLpn = LPN_MAP.get("DIGITAL_OTN")
-                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).toString()).entrySet().stream()
-                .filter(entry -> entry.getKey().toString().contains("ODU"))
-                .findFirst().orElseThrow().getKey();
+            //Service type = ODU4 or ODUC2/3/4...
+            LAYERPROTOCOLQUALIFIER expectedLpn;
+            if (otnServiceType.contains("ODUCN")) {
+                expectedLpn = ODUTYPEODUCN.VALUE;
+            } else {
+                expectedLpn = ODUTYPEODU4.VALUE;
+            }
             return onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
         } else if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             LAYERPROTOCOLQUALIFIER expectedLpn = LPN_MAP.get("ETH")
-                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).toString()).entrySet().stream()
-                .filter(entry -> !entry.getKey().toString().contains("ODU"))
-                .findFirst().orElseThrow().getKey();
+                .get(SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).implementedInterface().getSimpleName())
+                    .entrySet().stream()
+                        .filter(entry -> !entry.getKey().toString().contains("ODU"))
+                        .findFirst().orElseThrow().getKey();
             return onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
         } else {
