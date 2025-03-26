@@ -233,7 +233,7 @@ public class PceTapiOpticalNode implements PceNode {
         }
         for (BasePceNep cbpn : clientOtsNep) {
             List<Uuid> clientNrgUuidList = cbpn.getNodeRuleGroupUuid();
-            LOG.info("PTONLine 235: clientNrgUuidList : {}", clientNrgUuidList);
+            LOG.info("PTONLine 235: clientNrgUuidList for bpn {} is : {}", cbpn.getName(), clientNrgUuidList);
             if (clientNrgUuidList == null || clientNrgUuidList.isEmpty()) {
                 continue;
             }
