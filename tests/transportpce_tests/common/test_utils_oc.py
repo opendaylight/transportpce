@@ -286,3 +286,18 @@ def del_metadata():
            'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
     response = test_utils.delete_request(url[test_utils.RESTCONF_VERSION].format('{}'))
     return {'status_code': response.status_code}
+
+###
+# Recursively sorts the keys of dictionaries at all levels, including sorting lists.
+###
+
+
+def recursive_sort(d):
+    if isinstance(d, dict):
+        # Sort the dictionary keys at this level and recursively sort the values
+        return {k: recursive_sort(v) for k, v in sorted(d.items())}
+    if isinstance(d, list):
+        # If it's a list, sort each item in the list, ensuring that nested lists and dictionaries are also sorted
+        return sorted(recursive_sort(item) for item in d)
+    return d
+

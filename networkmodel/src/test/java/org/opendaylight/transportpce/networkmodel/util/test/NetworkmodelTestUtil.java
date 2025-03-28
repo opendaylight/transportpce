@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -72,7 +72,7 @@ public final class NetworkmodelTestUtil {
      * @param clli a {@link java.lang.String} object
      * @param degNb a int
      * @param srgNbs a {@link java.util.List} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
      *      .network.Nodes} object
      */
     public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, List<Integer> srgNbs) {
@@ -97,7 +97,7 @@ public final class NetworkmodelTestUtil {
      * @param clientPortNb a int
      * @param xpdrNodeType a {@link org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
      *      .XpdrNodeTypes} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
      *      .network.Nodes} object
      */
     public static Nodes createMappingForXpdr(

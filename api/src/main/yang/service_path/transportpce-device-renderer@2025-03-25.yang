@@ -19,6 +19,10 @@ module transportpce-device-renderer {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2025-03-25 {
+    description
+      "Add operational-mode and target-output-power in service-path";
+  }
   revision 2021-10-04 {
     description
       "Add source and destinatin API info in service-path";
@@ -74,6 +78,15 @@ module transportpce-device-renderer {
       }
       leaf operation {
         type action;
+      }
+      leaf operational-mode {
+        type uint16;
+      }
+      leaf target-output-power {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        units "dBm";
       }
       uses az-api-info;
       uses org-transportpce-common-types:optical-renderer-input;

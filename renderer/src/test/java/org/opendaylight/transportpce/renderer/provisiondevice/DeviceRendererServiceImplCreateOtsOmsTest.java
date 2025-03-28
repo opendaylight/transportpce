@@ -30,9 +30,9 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.renderer.utils.CreateOtsOmsDataUtils;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.CreateOtsOmsOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.CreateOtsOmsOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
 
 @ExtendWith(MockitoExtension.class)
 public class DeviceRendererServiceImplCreateOtsOmsTest {
@@ -55,7 +55,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest {
     @BeforeEach
     void setup() {
         deviceRendererService = new DeviceRendererServiceImpl(dataBroker, deviceTransactionManager, openRoadmInterfaces,
-                crossConnect, mappingUtils, portMapping);
+                crossConnect, mappingUtils, portMapping, null);
         input = CreateOtsOmsDataUtils.buildCreateOtsOms();
     }
 

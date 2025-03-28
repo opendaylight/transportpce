@@ -73,6 +73,9 @@ public final class StringConstants {
     public static final String BIDIRECTIONAL = "bidirectional";
     public static final String XPDR_MCPROFILE = "XPDR-mcprofile";
     public static final String SWITCH = "switch";
+    public static final String PROT_100GE = "PROT_100GE";
+    public static final String LOGICAL_CHANNEL = "logical-channel-";
+    public static final String OPTICALCHANNEL = "OPTICAL_CHANNEL";
 
     public static final Map<String, Uint32> SERVICE_TYPE_RATE = Map.of(
         SERVICE_TYPE_100GE_T, ServiceRateConstant.RATE_100,
