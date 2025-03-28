@@ -18,9 +18,9 @@ import java.util.List;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.test.stub.MountPointStub;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrail;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.GetConnectionPortTrailOutputBuilder;
@@ -48,14 +48,14 @@ public final class MountPointUtils {
 
     public static Mapping createMapping(String nodeId, String logicalConnPoint) {
         return new MappingBuilder()
-            .withKey(new MappingKey(logicalConnPoint))
-            .setLogicalConnectionPoint(logicalConnPoint)
-            .setSupportingOts("supporting-OTS")
-            .setSupportingCircuitPackName("2/0")
-            .setSupportingOms("supporting-OMS")
-            .setSupportingPort("port")
-            .setSupportingCircuitPackName("circuit-pack")
-            .build();
+                .withKey(new MappingKey(logicalConnPoint))
+                .setLogicalConnectionPoint(logicalConnPoint)
+                .setSupportingOts("supporting-OTS")
+                .setSupportingCircuitPackName("2/0")
+                .setSupportingOms("supporting-OMS")
+                .setSupportingPort("port")
+                .setSupportingCircuitPackName("circuit-pack")
+                .build();
     }
 
     private MountPointUtils() {
