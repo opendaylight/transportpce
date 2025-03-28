@@ -11,8 +11,8 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.Collections;
 import java.util.List;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.node.interfaces.NodeInterface;
 
 public final class OtnDeviceRenderingResult extends OperationResult {
     private final List<NodeInterface> renderedNodeInterfaces;
@@ -42,6 +42,10 @@ public final class OtnDeviceRenderingResult extends OperationResult {
 
     public static OtnDeviceRenderingResult failed(String message) {
         return new OtnDeviceRenderingResult(false, message, null, null);
+    }
+
+    public static OtnDeviceRenderingResult failed(String message, List<NodeInterface> renderedNodeInterfaces) {
+        return new OtnDeviceRenderingResult(false, message, renderedNodeInterfaces, null);
     }
 
     public static OtnDeviceRenderingResult ok(List<NodeInterface> renderedNodeInterfaces,

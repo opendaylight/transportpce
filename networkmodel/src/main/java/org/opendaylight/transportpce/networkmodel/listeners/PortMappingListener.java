@@ -8,17 +8,18 @@
 package org.opendaylight.transportpce.networkmodel.listeners;
 
 import java.util.List;
+import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 /**
  * Implementation that listens to any data change on
- * org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping object.
+ * org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping object.
  */
 public class PortMappingListener implements DataTreeChangeListener<Mapping> {
 
@@ -38,21 +39,20 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Mapping>> changes) {
         for (DataTreeModification<Mapping> change : changes) {
             Mapping oldMapping = change.getRootNode().dataBefore();
-            if (oldMapping == null) {
-                continue;
-            }
             Mapping newMapping = change.getRootNode().dataAfter();
-            if (newMapping == null) {
-                continue;
+            if (oldMapping != null && newMapping != null) {
+                if (isMappingChanged(oldMapping, newMapping)) {
+                    networkModelService.updateOpenRoadmTopologies(
+                            getNodeIdFromMappingDataTreeIdentifier(change.path()), newMapping);
+                }
             }
-            if (oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
-                    && oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
-                return;
-            }
-            networkModelService.updateOpenRoadmTopologies(
-                getNodeIdFromMappingDataTreeIdentifier(change.path()),
-                newMapping);
         }
+    }
+
+    private boolean isMappingChanged(Mapping oldMapping, Mapping newMapping) {
+        boolean adminStateChanged = !Objects.equals(oldMapping.getPortAdminState(), newMapping.getPortAdminState());
+        boolean operStateChanged = !Objects.equals(oldMapping.getPortOperState(), newMapping.getPortOperState());
+        return adminStateChanged || operStateChanged;
     }
 
     /**

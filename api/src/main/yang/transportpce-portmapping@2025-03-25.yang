@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2025-03-25 {
+    description
+      "Added openconfig-info container,
+       move supported-optical-channels and supported-interfaces in it";
+  }
   revision 2025-01-15 {
     description
       "Add min/max-slots to mc-capabilities";
@@ -334,6 +339,18 @@ module transportpce-portmapping {
         description
           "Hash value generated from node-id and lcp. This value will be used to map-
            back SAPI and DAPI resource";
+      }
+      container openconfig-info {
+        leaf-list supported-optical-channels {
+          type string;
+          description
+            "List of optical-channels supported by the port (subcomponents of transceiver)";
+        }
+        leaf-list supported-interfaces {
+          type string;
+          description
+            "List of interfaces corresponding to the logical-channels supported by the port";
+        }
       }
     }
   }
