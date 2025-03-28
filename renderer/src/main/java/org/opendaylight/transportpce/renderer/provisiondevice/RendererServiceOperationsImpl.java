@@ -48,8 +48,8 @@ import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProc
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackResultMessage;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.TransactionHistory;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.Action;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPm;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInputBuilder;
@@ -76,10 +76,10 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.Nodes;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.osgi.service.component.annotations.Activate;
@@ -146,22 +146,36 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     "Service compliant, submitting service implementation Request ...");
                 Uint32 serviceRate = getServiceRate(input);
                 LOG.info("Using {}G rate", serviceRate);
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
                         .network.Nodes mappingNode =
                     portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
                         ? portMapping.getNode(input.getServiceAEnd().getNodeId())
                         : null;
-                String serviceType = ServiceTypes.getServiceType(
-                    input.getServiceAEnd().getServiceFormat().getName(),
-                    serviceRate,
-                    mappingNode != null
-                        && NodeTypes.Xpdr.equals(mappingNode.getNodeInfo().getNodeType())
+                boolean isOpenConfig = false;
+                if (mappingNode != null && mappingNode.getDatamodelType() != null
+                        && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
+                    isOpenConfig = true;
+                }
+                String serviceType = "";
+                //TODO: OpenConfig check can be removed if additional info is added in the OC
+                //      service-implementation-request input(port-name under service a/z-end's rx/tx-direction) and
+                //      getServiceType() is updated to handle appropriate service format.
+                if (isOpenConfig) {
+                    serviceType = ServiceTypes.getOtnServiceType(
+                            input.getServiceAEnd().getServiceFormat().getName(), serviceRate);
+                } else {
+                    serviceType = ServiceTypes.getServiceType(
+                        input.getServiceAEnd().getServiceFormat().getName(),
+                        serviceRate,
+                        mappingNode != null && NodeTypes.Xpdr.equals(mappingNode.getNodeInfo().getNodeType())
                             && input.getServiceAEnd().getTxDirection() != null
                             && input.getServiceAEnd().getTxDirection().getPort() != null
                             && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null
                         ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
-                                input.getServiceAEnd().getTxDirection().getPort().getPortName())
-                        : null);
+                            input.getServiceAEnd().getTxDirection().getPort().getPortName())
+                        : null
+                    );
+                }
                 //TODO a Map might be more indicated here
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
@@ -210,40 +224,56 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             @Override
             public ServiceDeleteOutput call() throws Exception {
                 sendNotifications(
-                    ServicePathNotificationTypes.ServiceDelete,
-                    serviceName,
-                    RpcStatusEx.Pending,
-                    "Service compliant, submitting service delete Request ...");
+                        ServicePathNotificationTypes.ServiceDelete,
+                        serviceName,
+                        RpcStatusEx.Pending,
+                        "Service compliant, submitting service delete Request ...");
                 // Obtain path description
                 Optional<
-                    org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
-                        .service.path.PathDescription> pathDescriptionOpt =
-                    getPathDescriptionFromDatastore(serviceName);
+                        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118
+                                .service.path.PathDescription> pathDescriptionOpt =
+                        getPathDescriptionFromDatastore(serviceName);
                 if (pathDescriptionOpt.isEmpty()) {
                     LOG.error("Unable to get path description for service {}!", serviceName);
                     sendNotifications(
-                        ServicePathNotificationTypes.ServiceDelete,
-                        serviceName,
-                        RpcStatusEx.Failed,
-                        "Unable to get path description for service");
+                            ServicePathNotificationTypes.ServiceDelete,
+                            serviceName,
+                            RpcStatusEx.Failed,
+                            "Unable to get path description for service");
                     return ModelMappingUtils
-                        .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+                            .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                 }
                 PathDescription pathDescription = pathDescriptionOpt.orElseThrow();
-                String serviceType =
-                    ServiceTypes.getServiceType(
-                        service.getServiceAEnd().getServiceFormat().getName(),
-                        service.getServiceAEnd().getServiceRate(),
-                        service.getServiceAEnd().getTxDirection() == null
-                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
-                                    .getPort() == null
-                                || service.getServiceAEnd().getTxDirection().values().stream().findFirst().orElseThrow()
-                                    .getPort().getPortName() == null
-                            ? null
-                            : portMapping.getMapping(
-                                    service.getServiceAEnd().getNodeId().getValue(),
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
+                        .network.Nodes mappingNode =
+                        portMapping.isNodeExist(service.getServiceAEnd().getNodeId().getValue())
+                                ? portMapping.getNode(service.getServiceAEnd().getNodeId().getValue())
+                                : null;
+                boolean isOpenConfig = false;
+                if (mappingNode != null && mappingNode.getDatamodelType() != null
+                        && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
+                    isOpenConfig = true;
+                }
+                String serviceType = "";
+                //TODO: OpenConfig check can be removed if additional info is added in the OC
+                //      service-implementation-request input(port-name under service a/z-end's rx/tx-direction) and
+                //      getServiceType() is updated to handle appropriate service format.
+                if (isOpenConfig) {
+                    serviceType = ServiceTypes.getOtnServiceType(service.getServiceAEnd().getServiceFormat().getName(),
+                            service.getServiceAEnd().getServiceRate());
+                } else {
+                    serviceType = ServiceTypes.getServiceType(
+                            service.getServiceAEnd().getServiceFormat().getName(),
+                            service.getServiceAEnd().getServiceRate(),
+                            service.getServiceAEnd().getTxDirection() == null
+                                    || service.getServiceAEnd().getTxDirection().values().stream().findFirst()
+                                    .orElseThrow().getPort() == null
+                                    || service.getServiceAEnd().getTxDirection().values().stream().findFirst()
+                                    .orElseThrow().getPort().getPortName() == null
+                                    ? null : portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
                                     service.getServiceAEnd().getTxDirection().values().stream().findFirst()
-                                        .orElseThrow().getPort().getPortName()));
+                                            .orElseThrow().getPort().getPortName()));
+                }
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
                     case StringConstants.SERVICE_TYPE_400GE:
@@ -252,9 +282,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_OTUC3:
                     case StringConstants.SERVICE_TYPE_OTUC4:
                     case StringConstants.SERVICE_TYPE_OTHER:
-                        if (!manageServicePathDeletion(serviceName, pathDescription, serviceType)) {
+                        if (!manageServicePathDeletion(serviceName, pathDescription, serviceType, isOpenConfig)) {
                             return ModelMappingUtils
-                                .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+                                    .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                         }
                         break;
                     case StringConstants.SERVICE_TYPE_1GE:
@@ -265,18 +295,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     case StringConstants.SERVICE_TYPE_ODUC2:
                     case StringConstants.SERVICE_TYPE_ODUC3:
                     case StringConstants.SERVICE_TYPE_ODUC4:
-                        if (!manageOtnServicePathDeletion(serviceName, pathDescription, service, serviceType)) {
+                        if (!manageOtnServicePathDeletion(serviceName, pathDescription, service,
+                                serviceType, isOpenConfig)) {
                             return ModelMappingUtils
-                                .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+                                    .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                         }
                         break;
                     default:
                         LOG.error("unsupported service-type");
                         return ModelMappingUtils
-                            .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+                                .createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
                 }
                 return ModelMappingUtils
-                    .createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
+                        .createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
             }
         });
     }
@@ -629,31 +660,43 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         justification = "call in call() method")
     private boolean manageServicePathCreation(ServiceImplementationRequestInput input, String serviceType,
                                               boolean isTempService) {
-        ServicePathInputData servicePathInputDataAtoZ =
-            ModelMappingUtils
-                .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription(), Action.Create);
-        ServicePathInputData servicePathInputDataZtoA =
-            ModelMappingUtils
-                .rendererCreateServiceInputZToA(input.getServiceName(), input.getPathDescription(), Action.Create);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes
+                mappingNode = portMapping.isNodeExist(input.getServiceAEnd().getNodeId())
+                ? portMapping.getNode(input.getServiceAEnd().getNodeId())
+                : null;
+        boolean isOpenConfig = mappingNode != null && mappingNode.getDatamodelType() != null
+                && mappingNode.getDatamodelType().getName().equals("OPENCONFIG");
+        ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
+                .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription(),
+                        Action.Create, isOpenConfig);
+        ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
+                .rendererCreateServiceInputZToA(input.getServiceName(), input.getPathDescription(),
+                        Action.Create, isOpenConfig);
         // Rollback should be same for all conditions, so creating a new one
         RollbackProcessor rollbackProcessor = new RollbackProcessor();
         List<DeviceRenderingResult> renderingResults =
             deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
-        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceImplementationRequest,
-                input.getServiceName(),
-                RpcStatusEx.Failed,
-                resultMessage(renderingResults));
-            return false;
+        // TODO:The existing openconfig renderer support is for a back to back XPDR usecase and there were no specific
+        //      power up/down sequence recommended by NEC documentation for enabling/disabling datapath for XPDRs.
+        //      We can look at enhancing this in a future update.
+        if (!isOpenConfig) {
+            olmPowerSetup(
+                    rollbackProcessor,
+                    //olmPowerSetupInputAtoZ,
+                    ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
+                    //olmPowerSetupInputZtoA
+                    ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input),
+                    isTempService);
+            if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
+                sendNotifications(
+                        ServicePathNotificationTypes.ServiceImplementationRequest,
+                        input.getServiceName(),
+                        RpcStatusEx.Failed,
+                        OLM_ROLL_BACK_MSG);
+                return false;
+            }
         }
-        olmPowerSetup(
-            rollbackProcessor,
-            //olmPowerSetupInputAtoZ,
-            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
-            //olmPowerSetupInputZtoA
-            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input), isTempService);
-        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
             sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 input.getServiceName(),
@@ -679,15 +722,18 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 ? destNode.getDestTp()
                 : destNode.getSrcTp();
 
-        if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
-                || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
-            rollbackProcessor.rollbackAll();
-            sendNotifications(
-                ServicePathNotificationTypes.ServiceImplementationRequest,
-                input.getServiceName(),
-                RpcStatusEx.Failed,
-                "Service activation test failed.");
-            return false;
+
+        if (!isOpenConfig) {
+            if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
+                    || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
+                rollbackProcessor.rollbackAll();
+                sendNotifications(
+                        ServicePathNotificationTypes.ServiceImplementationRequest,
+                        input.getServiceName(),
+                        RpcStatusEx.Failed,
+                        "Service activation test failed.");
+                return false;
+            }
         }
         sendNotificationsWithPathDescription(
             ServicePathNotificationTypes.ServiceImplementationRequest,
@@ -705,63 +751,67 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     @SuppressFBWarnings(
-        value = "UPM_UNCALLED_PRIVATE_METHOD",
-        justification = "call in call() method")
-    private boolean manageServicePathDeletion(String serviceName, PathDescription pathDescription, String serviceType)
+            value = "UPM_UNCALLED_PRIVATE_METHOD",
+            justification = "call in call() method")
+    private boolean manageServicePathDeletion(String serviceName, PathDescription pathDescription, String serviceType,
+                                              boolean isOpenConfig)
             throws InterruptedException {
-        ServicePathInputData servicePathInputDataAtoZ =
-            ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName, pathDescription, Action.Delete);
-        ServicePathInputData servicePathInputDataZtoA =
-            ModelMappingUtils.rendererCreateServiceInputZToA(serviceName, pathDescription, Action.Delete);
+        ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName,
+                pathDescription, Action.Delete, isOpenConfig);
+        ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils.rendererCreateServiceInputZToA(serviceName,
+                pathDescription, Action.Delete, isOpenConfig);
+        if (!isOpenConfig) {
+            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ = this.executor.submit(
+                    new OlmPowerTurnDownTask(serviceName, ATOZPATH, servicePathInputDataAtoZ, notification,
+                            rpcService));
 
-        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureAtoZ = this.executor.submit(
-                new OlmPowerTurnDownTask(serviceName, ATOZPATH, servicePathInputDataAtoZ, notification, rpcService));
+            ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA = this.executor.submit(
+                    new OlmPowerTurnDownTask(serviceName, ZTOAPATH, servicePathInputDataZtoA, notification,
+                            rpcService));
 
-        ListenableFuture<OLMRenderingResult> olmPowerTurnDownFutureZtoA = this.executor.submit(
-                new OlmPowerTurnDownTask(serviceName, ZTOAPATH, servicePathInputDataZtoA, notification, rpcService));
+            ListenableFuture<List<OLMRenderingResult>> olmPowerTurnDownFutures =
+                    Futures.allAsList(olmPowerTurnDownFutureAtoZ, olmPowerTurnDownFutureZtoA);
 
-        ListenableFuture<List<OLMRenderingResult>> olmPowerTurnDownFutures =
-            Futures.allAsList(olmPowerTurnDownFutureAtoZ, olmPowerTurnDownFutureZtoA);
-
-        List<OLMRenderingResult> olmRenderingResults;
-        // OLM turn down power
-        try {
-            LOG.info("Waiting for A-Z and Z-A OLM power turn down ...");
-            olmRenderingResults = olmPowerTurnDownFutures.get(
-                Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS
-            );
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Error while turning down power!", e);
-            return false;
-        }
-        if (!olmRenderingResults.get(0).isSuccess() || !olmRenderingResults.get(1).isSuccess()) {
-            LOG.error("Error while turning down power!");
-            return false;
+            List<OLMRenderingResult> olmRenderingResults;
+            // OLM turn down power
+            try {
+                LOG.info("Waiting for A-Z and Z-A OLM power turn down ...");
+                olmRenderingResults = olmPowerTurnDownFutures.get(
+                        Timeouts.OLM_TIMEOUT, TimeUnit.MILLISECONDS
+                );
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                LOG.error("Error while turning down power!", e);
+                return false;
+            }
+            if (!olmRenderingResults.get(0).isSuccess() || !olmRenderingResults.get(1).isSuccess()) {
+                LOG.error("Error while turning down power!");
+                return false;
+            }
         }
         LOG.info("OLM power successfully turned down!");
         // delete service path with renderer
         LOG.info("Deleting service path via renderer");
         sendNotifications(
-            ServicePathNotificationTypes.ServiceDelete,
-            serviceName,
-            RpcStatusEx.Pending,
-            "Deleting service path via renderer");
+                ServicePathNotificationTypes.ServiceDelete,
+                serviceName,
+                RpcStatusEx.Pending,
+                "Deleting service path via renderer");
         sendNotificationsWithPathDescription(
-            ServicePathNotificationTypes.ServiceDelete,
-            serviceName,
-            RpcStatusEx.Successful,
-            OPERATION_SUCCESSFUL,
-            pathDescription,
-            createLinkForNotif(
-                deviceRendering(
-                        new RollbackProcessor(),
-                        servicePathInputDataAtoZ,
-                        servicePathInputDataZtoA)
-                    .stream()
-                    .flatMap(rr -> rr.getOtnLinkTps().stream())
-                    .collect(Collectors.toList())),
-            null,
-            serviceType);
+                ServicePathNotificationTypes.ServiceDelete,
+                serviceName,
+                RpcStatusEx.Successful,
+                OPERATION_SUCCESSFUL,
+                pathDescription,
+                createLinkForNotif(
+                        deviceRendering(
+                                new RollbackProcessor(),
+                                servicePathInputDataAtoZ,
+                                servicePathInputDataZtoA)
+                                .stream()
+                                .flatMap(rr -> rr.getOtnLinkTps().stream())
+                                .collect(Collectors.toList())),
+                null,
+                serviceType);
         return true;
     }
 
@@ -822,13 +872,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     @SuppressFBWarnings(
-        value = "UPM_UNCALLED_PRIVATE_METHOD",
-        justification = "call in call() method")
+            value = "UPM_UNCALLED_PRIVATE_METHOD",
+            justification = "call in call() method")
     private boolean manageOtnServicePathDeletion(
             String serviceName,
             PathDescription pathDescription,
             Services service,
-            String serviceType) {
+            String serviceType,
+            boolean isOpenConfig) {
         LOG.info("Deleting otn-service path {} via renderer", serviceName);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceDelete,
@@ -836,41 +887,41 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 RpcStatusEx.Pending,
                 "Deleting otn-service path via renderer");
         List<OtnDeviceRenderingResult> renderingResults =
-            otnDeviceRendering(
-                new RollbackProcessor(),
-                // This is A-Z side
-                ModelMappingUtils
-                    .rendererCreateOtnServiceInput(
-                        serviceName,
-                        Action.Delete,
-                        service.getServiceAEnd().getServiceFormat().getName(),
-                        service.getServiceAEnd().getServiceRate(),
-                        pathDescription,
-                        true),
-                // This is Z-A side
-                ModelMappingUtils
-                    .rendererCreateOtnServiceInput(
-                        serviceName,
-                        Action.Delete,
-                        service.getServiceZEnd().getServiceFormat().getName(),
-                        service.getServiceAEnd().getServiceRate(),
-                        pathDescription,
-                        false),
-                serviceType);
+                otnDeviceRendering(
+                        new RollbackProcessor(),
+                        // This is A-Z side
+                        ModelMappingUtils
+                                .rendererCreateOtnServiceInput(
+                                        serviceName,
+                                        Action.Delete,
+                                        service.getServiceAEnd().getServiceFormat().getName(),
+                                        service.getServiceAEnd().getServiceRate(),
+                                        pathDescription,
+                                        true),
+                        // This is Z-A side
+                        ModelMappingUtils
+                                .rendererCreateOtnServiceInput(
+                                        serviceName,
+                                        Action.Delete,
+                                        service.getServiceZEnd().getServiceFormat().getName(),
+                                        service.getServiceAEnd().getServiceRate(),
+                                        pathDescription,
+                                        false),
+                        serviceType);
         sendNotificationsWithPathDescription(
-            ServicePathNotificationTypes.ServiceDelete,
-            serviceName,
-            RpcStatusEx.Successful,
-            OPERATION_SUCCESSFUL,
-            pathDescription,
-            createLinkForNotif(
-                renderingResults.stream()
-                    .flatMap(rr -> rr.getOtnLinkTps().stream())
-                    .collect(Collectors.toList())),
-            getSupportedLinks(
-                ModelMappingUtils.getLinksFromServicePathDescription(pathDescription),
-                serviceType),
-            serviceType);
+                ServicePathNotificationTypes.ServiceDelete,
+                serviceName,
+                RpcStatusEx.Successful,
+                OPERATION_SUCCESSFUL,
+                pathDescription,
+                createLinkForNotif(
+                        renderingResults.stream()
+                                .flatMap(rr -> rr.getOtnLinkTps().stream())
+                                .collect(Collectors.toList())),
+                getSupportedLinks(
+                        ModelMappingUtils.getLinksFromServicePathDescription(pathDescription),
+                        serviceType),
+                serviceType);
         return true;
     }
 
