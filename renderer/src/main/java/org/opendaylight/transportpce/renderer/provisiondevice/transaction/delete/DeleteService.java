@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ public class DeleteService implements Delete {
 
     private final CrossConnect crossConnect;
     private final OpenRoadmInterfaces openRoadmInterfaces;
+    private final OpenConfigInterfaceFactory openConfigInterfaceFactory;
 
     private final Subscriber subscriber;
 
@@ -29,9 +32,11 @@ public class DeleteService implements Delete {
     public DeleteService(
             CrossConnect crossConnect,
             OpenRoadmInterfaces openRoadmInterfaces,
+            OpenConfigInterfaceFactory openConfigInterfaceFactory,
             Subscriber subscriber) {
         this.crossConnect = crossConnect;
         this.openRoadmInterfaces = openRoadmInterfaces;
+        this.openConfigInterfaceFactory = openConfigInterfaceFactory;
         this.subscriber = subscriber;
     }
 
@@ -63,4 +68,27 @@ public class DeleteService implements Delete {
             return false;
         }
     }
+
+    /**
+     * Disable the admin-state of a network/client component during rollback operation.
+     *
+     * @param nodeId nodeId in which port is to be disabled.
+     * @param portId portId to be disabled
+     * @return true/false
+     */
+
+    @Override
+    public boolean disablePort(String nodeId, String portId) {
+        try {
+            openConfigInterfaceFactory.disablePortAdminState(nodeId, portId);
+            LOG.info("Successfully disabled port {} on node {}", portId, nodeId);
+            subscriber.result(true, nodeId, portId);
+            return true;
+        } catch (OpenConfigInterfacesException e) {
+            LOG.error("Failed rolling back {} on node {}", portId, nodeId, e);
+            subscriber.result(false, nodeId, portId);
+            return false;
+        }
+    }
+
 }

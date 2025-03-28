@@ -37,7 +37,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
                            'port-qual': 'switch-network',
                            'port-admin-state': 'InService',
                            'supported-operational-mode': [
-                               'OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'
+                               'OR-W-100G-oFEC-31.6Gbd', 'OR-W-200G-oFEC-31.6Gbd'
                            ],
                            'xpdr-type': 'mpdr',
                            'lcp-hash-val': 'LY9PxYJqUbw='}
