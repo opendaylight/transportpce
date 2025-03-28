@@ -26,6 +26,7 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '7.1'
+    expected_supopermodelist = ['OR-W-100G-oFEC-31.6Gbd', 'OR-W-200G-oFEC-31.6Gbd']
 
     @classmethod
     def setUpClass(cls):
@@ -73,23 +74,23 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_04_tpdr_portmapping_NETWORK1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR1-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn(
-            {
-                'logical-connection-point': 'XPDR1-NETWORK1',
-                'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
-                'rate': '200',
-                'supporting-port': 'L1',
-                'port-oper-state': 'InService',
-                'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
-                'port-direction': 'bidirectional',
-                'port-qual': 'xpdr-network',
-                'port-admin-state': 'InService',
-                'connection-map-lcp': 'XPDR1-CLIENT1',
-                'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
-                'xpdr-type': 'tpdr',
-                'lcp-hash-val': 'AIGiVAQ4gDil'
-            },
-            response['mapping'])
+        expected_subset_response = {
+            'logical-connection-point': 'XPDR1-NETWORK1',
+            'supporting-circuit-pack-name': '1/1/2-PLUG-NET',
+            'rate': '200',
+            'supporting-port': 'L1',
+            'port-oper-state': 'InService',
+            'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
+            'port-direction': 'bidirectional',
+            'port-qual': 'xpdr-network',
+            'port-admin-state': 'InService',
+            'connection-map-lcp': 'XPDR1-CLIENT1',
+            'xpdr-type': 'tpdr',
+            'lcp-hash-val': 'AIGiVAQ4gDil'}
+        subset = {k: v for k, v in response['mapping'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['mapping'][0]['supported-operational-mode']),
+                         self.expected_supopermodelist)
 
     def test_05_tpdr_portmapping_CLIENT1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR1-CLIENT1")
@@ -114,21 +115,22 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
     def test_06_mpdr_portmapping_NETWORK1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn(
-            {'logical-connection-point': 'XPDR2-NETWORK1',
-             'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
-             'rate': '200',
-             'supporting-port': 'L1',
-             'port-oper-state': 'InService',
-             'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
-             'port-direction': 'bidirectional',
-             'port-qual': 'switch-network',
-             'port-admin-state': 'InService',
-             'supported-operational-mode': ['OR-W-200G-oFEC-31.6Gbd', 'OR-W-100G-oFEC-31.6Gbd'],
-             'xpdr-type': 'mpdr',
-             'lcp-hash-val': 'LY9PxYJqUbw='
-             },
-            response['mapping'])
+        expected_subset_response = {
+            'logical-connection-point': 'XPDR2-NETWORK1',
+            'supporting-circuit-pack-name': '1/2/2-PLUG-NET',
+            'rate': '200',
+            'supporting-port': 'L1',
+            'port-oper-state': 'InService',
+            'supported-interface-capability': ['org-openroadm-port-types:if-otsi-otsigroup'],
+            'port-direction': 'bidirectional',
+            'port-qual': 'switch-network',
+            'port-admin-state': 'InService',
+            'xpdr-type': 'mpdr',
+            'lcp-hash-val': 'LY9PxYJqUbw='}
+        subset = {k: v for k, v in response['mapping'][0].items() if k in expected_subset_response}
+        self.assertDictEqual(subset, expected_subset_response)
+        self.assertEqual(sorted(response['mapping'][0]['supported-operational-mode']),
+                         self.expected_supopermodelist)
 
     def test_07_mpdr_portmapping_CLIENT1(self):
         res = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-CLIENT1")

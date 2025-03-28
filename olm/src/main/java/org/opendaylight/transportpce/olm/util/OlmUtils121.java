@@ -36,7 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Shelf;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Srg;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifier;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +71,8 @@ final class OlmUtils121 {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (currentPmList.isPresent()) {
             String pmExtension = null;
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location location = null;
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction direction = null;
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location location = null;
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction direction = null;
             if (input.getPmExtension() != null) {
                 pmExtension = input.getPmExtension();
             }
@@ -127,8 +127,8 @@ final class OlmUtils121 {
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
             extractWantedMeasurements(CurrentPmlist currentPmList, ResourceTypeEnum resourceTypeEnum,
             ResourceIdentifier wantedResourceIdentifier,PmGranularity pmGranularity, PmNamesEnum pmNamesEnum,
-            String extension, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location
-            location, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction direction) {
+            String extension, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location
+            location, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction direction) {
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
             measurements = new ArrayList<>();
         for (CurrentPm pm : currentPmList.nonnullCurrentPm().values()) {
@@ -150,8 +150,8 @@ final class OlmUtils121 {
     private static
          List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
             extractMeasurements(List<Measurements> measurementsFromDevice, PmNamesEnum pmNamesEnum, String extension,
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Location location,
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.Direction direction) {
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location location,
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction direction) {
         List<Measurements> pmMeasurements = measurementsFromDevice;
         Stream<Measurements> measurementStream = pmMeasurements.stream();
         if (pmNamesEnum != null) {

@@ -27,4 +27,9 @@ public interface Delete {
      * Typically, deleted after the cross connection.
      */
     boolean deleteInterface(String nodeId, String interfaceId);
+
+    /**
+     * Disable admin-state of line-port component.
+     */
+    boolean disablePort(String nodeId, String portId);
 }

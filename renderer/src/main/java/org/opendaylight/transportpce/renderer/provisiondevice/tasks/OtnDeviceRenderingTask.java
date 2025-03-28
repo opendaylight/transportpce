@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRenderingResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.OtnServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,8 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
         }
         if (!output.getSuccess()) {
             LOG.error("Device rendering {} otn service path failed.", operation);
-            return OtnDeviceRenderingResult.failed("Operation Failed");
+            return OtnDeviceRenderingResult.failed("Operation Failed",
+                    new ArrayList<>(output.nonnullNodeInterface().values()));
         }
         LOG.info("Device rendering {} otn service path finished successfully.", operation);
         return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()),
