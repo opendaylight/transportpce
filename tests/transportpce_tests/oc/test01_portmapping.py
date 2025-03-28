@@ -86,6 +86,9 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
                 'port-oper-state': 'ACTIVE',
                 "rate": "400",
                 'xpdr-type': 'mpdr',
+                'openconfig-info': {
+                    'supported-optical-channels': ['cfp2-opt-1-1']
+                },
                 'supporting-circuit-pack-name': 'cfp2-transceiver-1',
                 'lcp-hash-val': 'AOVxBCXPOzbw',
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
@@ -98,21 +101,28 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
     def test_07_mpdr_portmapping_CLIENT1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-OC", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn(
-            {'logical-connection-point': 'XPDR1-CLIENT1',
-             'port-qual': 'switch-client',
-             'port-oper-state': 'ACTIVE',
-             'rate': '100',
-             'xpdr-type': 'mpdr',
-             'supporting-circuit-pack-name': 'qsfp-transceiver-1',
-             'lcp-hash-val': 'ALoMFfw9DapP',
-             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
-             'port-direction': 'bidirectional',
-             'port-admin-state': 'ENABLED',
-             'supporting-port': 'client-qsfp-1'
-             },
-            response['mapping']
-        )
+        expected = {
+            'logical-connection-point': 'XPDR1-CLIENT1',
+            'port-qual': 'switch-client',
+            'port-oper-state': 'ACTIVE',
+            'rate': '100',
+            'xpdr-type': 'mpdr',
+            'openconfig-info': {
+                'supported-optical-channels': ['qsfp-opt-1-1', 'qsfp-opt-1-2', 'qsfp-opt-1-3', 'qsfp-opt-1-4'],
+                'supported-interfaces': ['logical-channel-23300101', 'logical-channel-24300101']
+            },
+            'supporting-circuit-pack-name': 'qsfp-transceiver-1',
+            'lcp-hash-val': 'ALoMFfw9DapP',
+            'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
+            'port-direction': 'bidirectional',
+            'port-admin-state': 'ENABLED',
+            'supporting-port': 'client-qsfp-1'
+        }
+        expected_sorted = test_utils.recursive_sort(expected)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_08_mpdr_switching_pool(self):
         response = test_utils.get_portmapping_node_attr("XPDR-OC", "switching-pool-lcp", "1")
@@ -123,7 +133,7 @@ class TransportpceOCPortMappingTesting(unittest.TestCase):
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
         actual_lcp_list = response['switching-pool-lcp'][0]['non-blocking-list'][0]['lcp-list']
         sorted_actual_lcp_list = sorted(actual_lcp_list)
-        expected_lcp_list = sorted(['XPDR1-CLIENT4', 'XPDR1-NETWORK5'])
+        expected_lcp_list = sorted(['XPDR1-CLIENT2', 'XPDR1-NETWORK5'])
         self.assertEqual(sorted_actual_lcp_list, expected_lcp_list)
 
     def test_09_check_mccapprofile(self):
