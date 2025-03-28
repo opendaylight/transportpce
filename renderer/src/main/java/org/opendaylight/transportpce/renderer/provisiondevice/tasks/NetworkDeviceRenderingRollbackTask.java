@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.RendererRollbackOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

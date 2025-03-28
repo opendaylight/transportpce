@@ -22,11 +22,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlistBuilder;
@@ -42,10 +42,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.pm.mea
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceTypeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.PmGranularity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.olm.get.pm.input.ResourceIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev220926.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.NodesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -131,7 +131,7 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
             .Nodes getMappingNodeTpdr(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
         Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
@@ -142,7 +142,7 @@ public final class OlmPowerServiceRpcImplUtil {
                     .build();
             mappings.put(mapping.key(), mapping);
         }
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
                 .NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
@@ -153,7 +153,7 @@ public final class OlmPowerServiceRpcImplUtil {
             .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
             .Nodes getMappingNodeRdm(String nodeId, OpenroadmNodeVersion nodeVersion, List<String> lcps) {
         Map<MappingKey, Mapping> mappings = new HashMap<>();
         for (String lcp:lcps) {
@@ -167,7 +167,7 @@ public final class OlmPowerServiceRpcImplUtil {
             }
             mappings.put(mappingBldr.build().key(), mappingBldr.build());
         }
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
                     .NodesBuilder()
                 .setNodeId(nodeId)
                 .setNodeInfo(new NodeInfoBuilder()
@@ -178,9 +178,9 @@ public final class OlmPowerServiceRpcImplUtil {
                 .build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
             .Nodes getMappingNodeIla() {
-        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network
                     .NodesBuilder()
                 .setNodeId("ila node")
                 .setNodeInfo(new NodeInfoBuilder()

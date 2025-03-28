@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev211004.RendererRollbackOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.RendererRollbackOutput;
 
 public interface Result {
 

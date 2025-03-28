@@ -24,8 +24,6 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
-import org.opendaylight.transportpce.common.mapping.OCPortMapping;
-import org.opendaylight.transportpce.common.mapping.OCPortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion190;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
@@ -120,10 +118,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
         LOG.info("Creating network-model beans ...");
         PortMapping portMapping = initPortMapping(dataBroker);
-        OCPortMapping ocPortMapping = initOCPortMapping(dataBroker);
         NotificationPublishService notificationPublishService = lightyServices.getBindingNotificationPublishService();
         NetworkModelService networkModelService = new NetworkModelServiceImpl(dataBroker, deviceTransactionManager,
-                networkTransaction, portMapping, ocPortMapping, notificationPublishService);
+                networkTransaction, portMapping, notificationPublishService);
         new NetConfTopologyListener(networkModelService, dataBroker, deviceTransactionManager, portMapping);
         new PortMappingListener(networkModelService);
 
@@ -172,13 +169,15 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 openRoadmInterfaces,
                 crossConnect,
                 mappingUtils,
-                portMapping);
+                portMapping,
+                null);
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(
                 crossConnect,
                 openRoadmInterfaces,
                 deviceTransactionManager,
                 mappingUtils,
-                portMapping);
+                portMapping,
+                null);
         //FIXME: need mdsal.binding;api.RpcService from LightyServices
         RpcService rpcService = lightyServices.getRpcConsumerRegistry();
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(
@@ -300,13 +299,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
         PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
-        return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, portMappingVersion121);
-    }
-
-    private OCPortMapping initOCPortMapping(DataBroker dataBroker) {
         OCPortMappingVersion190 ocPortMappingVersion190 = new OCPortMappingVersion190(dataBroker,
-            deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
-        return new OCPortMappingImpl(ocPortMappingVersion190);
+                deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
+        return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, portMappingVersion121,
+                ocPortMappingVersion190);
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {

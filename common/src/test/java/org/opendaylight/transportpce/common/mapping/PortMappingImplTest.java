@@ -26,16 +26,16 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.DataStoreContextImpl;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250115.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 public class PortMappingImplTest {
@@ -45,6 +45,7 @@ public class PortMappingImplTest {
     private PortMappingVersion221 portMappingVersion221;
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
+    private OCPortMappingVersion190 ocPortMappingVersion190;
 
     @BeforeEach
     void setUp() {
@@ -53,22 +54,23 @@ public class PortMappingImplTest {
         portMappingVersion710 = mock(PortMappingVersion710.class);
         portMappingVersion221 = mock(PortMappingVersion221.class);
         portMappingVersion121 = mock(PortMappingVersion121.class);
+        ocPortMappingVersion190 = mock(OCPortMappingVersion190.class);
         portMapping = new PortMappingImpl(dataBroker, portMappingVersion710,
-            portMappingVersion221, portMappingVersion121);
+            portMappingVersion221, portMappingVersion121, ocPortMappingVersion190);
     }
 
     @Test
     void createMappingDataTest() {
         //test create mapping version 1
         when(portMappingVersion121.createMappingData("node")).thenReturn(true);
-        assertTrue(portMapping.createMappingData("node", OPENROADM_DEVICE_VERSION_1_2_1));
+        assertTrue(portMapping.createMappingData("node", OPENROADM_DEVICE_VERSION_1_2_1, null));
 
         //test create mapping version 2
         when(portMappingVersion221.createMappingData("node")).thenReturn(true);
-        assertTrue(portMapping.createMappingData("node", OPENROADM_DEVICE_VERSION_2_2_1));
+        assertTrue(portMapping.createMappingData("node", OPENROADM_DEVICE_VERSION_2_2_1, null));
 
         //test create mapping version with wrong value
-        assertFalse(portMapping.createMappingData("node", "test"));
+        assertFalse(portMapping.createMappingData("node", "test", null));
     }
 
     @Test
