@@ -8,6 +8,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import unittest
 import time
 import requests
@@ -23,9 +26,13 @@ import test_utils_oc  # nopep8
 class TransportpceOCRendererTesting(unittest.TestCase):
     processes = None
     NODE_VERSION = 'oc'
+    optical_channel_id = []
+    interface_id = []
+    port_id = []
 
     @classmethod
     def setUpClass(cls):
+        cls.PATH_CREATE_CLIENT = None
         cls.processes = test_utils.start_tpce()
         cls.processes = test_utils.start_sims([('oc-mpdr', cls.NODE_VERSION)])
 
@@ -52,13 +59,13 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
-    def test_03_xpdr_device_connection(self):
+    def test_03_mpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-OC",
                                            ('oc-mpdr', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
-    def test_04_xpdr_device_connected(self):
+    def test_04_mpdr_device_connected(self):
         response = test_utils.check_device_connection("XPDR-OC")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
@@ -103,7 +110,30 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         self.assertIn({'node-id': 'XPDR-OC', 'port-id': ['line-cfp2-1']},
                       response['output']['node-interface'])
 
-    def test_07_service_path_delete_network(self):
+    def test_07_service_path_create_network_check_optical_channel(self):
+        response = test_utils_oc.check_node_attribute2_request("XPDR-OC", "component", "cfp2-opt-1-1",
+                                                               "openconfig-terminal-device:optical-channel")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        optchannel = response['openconfig-terminal-device:optical-channel']
+        expected_optchannel = {'frequency': '194100000',
+                               'target-output-power': '0.0',
+                               'operational-mode': 4308
+                               }
+        self.assertDictEqual(
+            dict(expected_optchannel, **optchannel['config']), optchannel['config'])
+        for key, value in expected_optchannel.items():
+            self.assertIn(key, optchannel['state'])
+            self.assertEqual(optchannel['state'][key], value)
+
+    def test_08_service_path_create_network_check_optical_port(self):
+        response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component", "line-cfp2-1", "port",
+                                                               "openconfig-transport-line-common:optical-port")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['port']['config']['admin-state'], 'ENABLED')
+        self.assertEqual(response['port']['state']['admin-state'], 'ENABLED')
+        self.assertEqual(response['port']['state']['optical-port-type'], 'openconfig-transport-types:TERMINAL_LINE')
+
+    def test_09_service_path_delete_network(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'service-path',
             {
@@ -115,7 +145,15 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         self.assertIn('Request processed', response['output']['result'])
         self.assertTrue(response['output']['success'])
 
-    def test_08_get_portmapping_CLIENT1(self):
+    def test_10_service_path_delete_network_check_optical_port(self):
+        response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component", "line-cfp2-1", "port",
+                                                               "openconfig-transport-line-common:optical-port")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['port']['config']['admin-state'], 'DISABLED')
+        self.assertEqual(response['port']['state']['admin-state'], 'DISABLED')
+        self.assertEqual(response['port']['state']['optical-port-type'], 'openconfig-transport-types:TERMINAL_LINE')
+
+    def test_11_get_portmapping_CLIENT1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-OC", "mapping", "XPDR1-CLIENT1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         expected = {
@@ -141,7 +179,7 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         ]
         self.assertIn(expected_sorted, response_sorted)
 
-    def test_09_service_path_create_client(self):
+    def test_12_service_path_create_client(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'otn-service-path',
             {
@@ -151,8 +189,12 @@ class TransportpceOCRendererTesting(unittest.TestCase):
                 'service-format': 'Ethernet',
                 'nodes': [{'node-id': 'XPDR-OC', 'client-tp': 'XPDR1-CLIENT1'}]
             })
+        TransportpceOCRendererTesting.optical_channel_id = response['output']['node-interface'][0]['optical-channel-id']
+        TransportpceOCRendererTesting.interface_id = response['output']['node-interface'][0]['interface-id']
+        TransportpceOCRendererTesting.port_id = response['output']['node-interface'][0]['port-id']
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Otn Service path was set up successfully for node :XPDR-OC', response['output']['result'])
+        self.assertIn('Otn Service path was set up successfully for node :XPDR-OC',
+                      response['output']['result'])
         self.assertTrue(response['output']['success'])
         expected = {
             'node-id': 'XPDR-OC',
@@ -176,7 +218,39 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         ]
         self.assertIn(expected_sorted, response_sorted)
 
-    def test_10_service_path_delete_client(self):
+    def test_13_service_path_create_client_check_optical_port(self):
+        response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component",
+                                                               TransportpceOCRendererTesting.port_id[0], "port",
+                                                               "openconfig-transport-line-common:optical-port")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['port']['config']['admin-state'], 'ENABLED')
+        self.assertEqual(response['port']['state']['admin-state'], 'ENABLED')
+        self.assertEqual(response['port']['state']['optical-port-type'], 'openconfig-transport-types:TERMINAL_CLIENT')
+
+    def test_14_service_path_create_client_check_properties(self):
+        for optchannelid in TransportpceOCRendererTesting.optical_channel_id:
+            response = test_utils_oc.check_node_attribute2_request("XPDR-OC", "component", optchannelid,
+                                                                   "openconfig-platform:properties")
+            self.assertEqual(response['status_code'], requests.codes.ok)
+            for prop in response['openconfig-platform:properties']['property']:
+                self.assertEqual(prop['name'], 'tx-dis')
+                self.assertEqual(prop['config'], {'name': 'tx-dis', 'value': 'FALSE'})
+                self.assertEqual(prop['state'], {'name': 'tx-dis', 'value': 'FALSE', 'configurable': True})
+
+    def test_15_service_path_create_client_check_interfaces(self):
+        for interfaceid in TransportpceOCRendererTesting.interface_id:
+            response = test_utils_oc.check_interface_attribute_request("XPDR-OC", "interface", interfaceid)
+            self.assertEqual(response['interface'][0]['name'], interfaceid)
+            self.assertEqual(response['interface'][0]['config'], {'description': 'description',
+                                                                  'name': interfaceid, 'loopback-mode': False,
+                                                                  'type': 'iana-if-type:ethernetCsmacd',
+                                                                  'enabled': True})
+            self.assertEqual(response['interface'][0]['state'], {'name': interfaceid, 'loopback-mode': False,
+                                                                 'type': 'iana-if-type:ethernetCsmacd',
+                                                                 'enabled': True, 'oper-status': 'UP',
+                                                                 'admin-status': 'UP'})
+
+    def test_16_service_path_delete_client(self):
         response = test_utils.transportpce_api_rpc_request(
             'transportpce-device-renderer', 'otn-service-path',
             {
@@ -190,7 +264,25 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         self.assertIn('successfully disabled entities on node XPDR-OC!', response['output']['result'])
         self.assertTrue(response['output']['success'])
 
-    def test_11_disconnect(self):
+    def test_17_service_path_delete_client_check_optical_port(self):
+        response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component",
+                                                               TransportpceOCRendererTesting.port_id[0], "port",
+                                                               "openconfig-transport-line-common:optical-port")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['port']['config']['admin-state'], 'DISABLED')
+        self.assertEqual(response['port']['state']['admin-state'], 'DISABLED')
+        self.assertEqual(response['port']['state']['optical-port-type'], 'openconfig-transport-types:TERMINAL_CLIENT')
+
+    def test_18_service_path_delete_client_check_properties(self):
+        response = test_utils_oc.check_node_attribute2_request("XPDR-OC", "component", "qsfp-opt-1-4",
+                                                               "openconfig-platform:properties")
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        for prop in response['openconfig-platform:properties']['property']:
+            self.assertEqual(prop['name'], 'tx-dis')
+            self.assertEqual(prop['config'], {'name': 'tx-dis', 'value': 'TRUE'})
+            self.assertEqual(prop['state'], {'name': 'tx-dis', 'value': 'TRUE', 'configurable': True})
+
+    def test_19_disconnect(self):
         response = test_utils.unmount_device("XPDR-OC")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
