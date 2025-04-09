@@ -286,3 +286,54 @@ def del_metadata():
            'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
     response = test_utils.delete_request(url[test_utils.RESTCONF_VERSION].format('{}'))
     return {'status_code': response.status_code}
+
+
+def check_node_attribute2_request(node: str, attribute: str, attribute_value: str, attribute2: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/openconfig-platform:components/{}={}/{}?content=nonconfig',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/openconfig-platform:components/{}/{}/{}'}  # nopep8
+    response = test_utils.get_request(url[test_utils.RESTCONF_VERSION].format(
+        '{}', node, attribute, attribute_value, attribute2))
+    res = response.json()
+    if attribute2 in res.keys():
+        response_attribute = res[attribute2]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute2: response_attribute}
+
+
+def check_node_attribute3_request(node: str, attribute: str, attribute_value: str,
+                                  attribute2: str, attribute3: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/openconfig-platform:components/{}={}/{}/{}?content=nonconfig',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/openconfig-platform:components/{}/{}/{}/{}'}  # nopep8
+    response = test_utils.get_request(url[test_utils.RESTCONF_VERSION].format(
+        '{}', node, attribute, attribute_value, attribute2, attribute3))
+    res = response.json()
+    if attribute3 in res.keys():
+        response_attribute = res[attribute3]
+    else:
+        response_attribute = res['errors']['error'][0]
+    return {'status_code': response.status_code,
+            attribute2: response_attribute}
+
+
+def check_interface_attribute_request(node: str, attribute: str, attribute_value: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/openconfig-interfaces:interfaces/{}={}?content=nonconfig',  # nopep8
+           'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/openconfig-interfaces:interfaces/{}/{}'}  # nopep8
+    response = test_utils.get_request(url[test_utils.RESTCONF_VERSION].format('{}', node, attribute, attribute_value))
+    res = response.json()
+    return_key = {'rfc8040': 'openconfig-interfaces:' + attribute,
+                  'draft-bierman02': attribute}
+    if return_key[test_utils.RESTCONF_VERSION] in res.keys():
+        response_attribute = res[return_key[test_utils.RESTCONF_VERSION]]
+    elif 'errors' in res.keys():
+        response_attribute = res['errors']['error'][0]
+    else:
+        # status code 400 invalid request
+        response_attribute = res['message'] + ' ' + res['url']
+        print(response_attribute)
+    return {'status_code': response.status_code,
+            attribute: response_attribute}
