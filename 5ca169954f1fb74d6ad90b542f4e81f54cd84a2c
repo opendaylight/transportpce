@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65a3bbb3_da8705d2",
+        "filename": "tests/transportpce_tests/oc/test03_renderer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-04-10T14:21:14Z",
+      "side": 1,
+      "message": "necessary?",
+      "range": {
+        "startLine": 189,
+        "startChar": 8,
+        "endLine": 189,
+        "endChar": 37
+      },
+      "revId": "5ca169954f1fb74d6ad90b542f4e81f54cd84a2c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
