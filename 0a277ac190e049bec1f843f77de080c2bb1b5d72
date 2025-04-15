@@ -2069,6 +2069,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a7344ac_f88aca58",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-04-15T07:38:32Z",
+      "side": 1,
+      "message": "getServiceType method uses port-mapping information to find the serviceType which depends on the port-name under service-a/z-end\u0027s rx/tx-direction. In order to have a common flow, additional info is to be added in the OpenConfig service-implementation-request input(port-name under service a/z-end\u0027s rx/tx-direction)",
+      "parentUuid": "3bf6e659_ea1269fe",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f1bb525_5185d663",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -2246,6 +2270,30 @@
       "side": 1,
       "message": "We are looking into this",
       "parentUuid": "7588bbe5_8724bf61",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d50dea20_d0b1fd12",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-04-15T07:38:32Z",
+      "side": 1,
+      "message": "getServiceType method uses port-mapping information to find the serviceType which depends on the port-name under service-a/z-end\u0027s rx/tx-direction. In order to have a common flow, additional info is to be added in the OpenConfig service-implementation-request input(port-name under service a/z-end\u0027s rx/tx-direction)",
+      "parentUuid": "3ff46c40_6953afc1",
       "range": {
         "startLine": 256,
         "startChar": 20,
