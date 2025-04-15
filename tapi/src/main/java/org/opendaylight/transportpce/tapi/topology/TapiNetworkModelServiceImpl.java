@@ -841,9 +841,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl =
             new HashMap<>(createXpdrDsrOduNeps(nodeId, xpdrClMaps, xpdrNetMaps, xponderType));
+        onepl.putAll(createXpdrPhtnMdNeps(nodeId, xpdrNetMaps));
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList =
             createNodeRuleGroupForXpdrNode(node,nodeId, oorOduSwPoolMap,onepl);
-        onepl.putAll(createXpdrPhtnMdNeps(nodeId, xpdrNetMaps));
         LOG.debug("TapiNetworkModelServiceImpl line 842, total NEP map = {}", onepl);
 
         // Empty random creation of mandatory fields for avoiding errors....
@@ -1483,19 +1483,16 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             Map<OduSwitchingPoolsKey, OduSwitchingPools> oorOduSwitchingPool,
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl) {
         // create NodeRuleGroup
+        Uuid nodeUuid = new Uuid(
+            UUID.nameUUIDFromBytes(
+                String.join("+", nodeId, TapiConstants.XPDR).getBytes(StandardCharsets.UTF_8)).toString());
+        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
         if (oorOduSwitchingPool == null) {
             LOG.info("No switching pool created for node = {}", node.getNodeId());
             return new HashMap<>();
         }
-        LOG.debug("TNMSIline 1372 CreateNodeRuleGroupForXpdrNode, ONEPL = {}", onepl.values());
-        Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupMap = new HashMap<>();
-        Uuid nodeUuid = new Uuid(
-            UUID.nameUUIDFromBytes(
-                String.join("+", nodeId, TapiConstants.XPDR).getBytes(StandardCharsets.UTF_8)).toString());
+        LOG.debug("TNMSIline 1494 CreateNodeRuleGroupForXpdrNode, ONEPL = {}", onepl.values());
         int count = 0;
-        RuleBuilder nblRuleBd = new RuleBuilder()
-            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
-            .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)));
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.Rule rule;
         for (Map.Entry<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPool : oorOduSwitchingPool.entrySet()) {
             List<NodeRuleGroupKey> nrgKeyList = new ArrayList<>();
@@ -1521,6 +1518,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 LOG.debug("TNMSIline 1396 CreateNodeRuleGroupForXpdrNode, Non blocking list = {}", nblEntry.getValue());
                 Map<NodeEdgePointKey, NodeEdgePoint> nepList = new HashMap<>();
                 Map<NodeEdgePointKey, NodeEdgePoint> dsrNepList = new HashMap<>();
+                Map<NodeEdgePointKey, NodeEdgePoint> tspNepList = new HashMap<>();
                 for (TpId tp : nblEntry.getValue().getTpList()) {
                     String tpUuidSd;
                     String tpUuidSdDsr;
@@ -1533,6 +1531,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             .filter(lcp -> lcp.getKey().equals(new MappingKey(tp.getValue())))
                             .collect(Collectors.toList()).iterator().next().getValue().getPortQual()) {
                         case "xpdr-client":
+                            tpUuidSdDsr = String.join("+", nodeId, TapiConstants.DSR, tp.getValue());
+                            tpUuidDsr = new Uuid(UUID.nameUUIDFromBytes(tpUuidSdDsr.getBytes(StandardCharsets.UTF_8))
+                                .toString());
+                            LOG.debug("TNMSIline 1500 CreateNodeRuleGroupForXpdrNode, DSR TP {} added with Uuid {}",
+                                tp, tpUuidSdDsr);
+                            if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuidDsr))) {
+                                NodeEdgePoint nep = new NodeEdgePointBuilder()
+                                    .setTopologyUuid(this.tapiTopoUuid)
+                                    .setNodeUuid(nodeUuid)
+                                    .setNodeEdgePointUuid(tpUuidDsr)
+                                    .build();
+                                tspNepList.put(nep.key(), nep);
+                            }
+                            break;
                         case "switch-client":
                             tpUuidSd = String.join("+", nodeId, TapiConstants.E_ODU, tp.getValue());
                             LOG.debug("TNMSIline 1410 CreateNodeRuleGroupForXpdrNode, EDOU TP {} added with Uuid {}",
@@ -1550,7 +1562,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             tpUuidSdDsr = String.join("+", nodeId, TapiConstants.DSR, tp.getValue());
                             tpUuidDsr = new Uuid(UUID.nameUUIDFromBytes(tpUuidSdDsr.getBytes(StandardCharsets.UTF_8))
                                 .toString());
-                            LOG.debug("TNMSIline 1410 CreateNodeRuleGroupForXpdrNode, EDOU TP {} added with Uuid {}",
+                            LOG.debug("TNMSIline 1630 CreateNodeRuleGroupForXpdrNode, EDOU TP {} added with Uuid {}",
                                 tp, tpUuidSdDsr);
                             if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuidDsr))) {
                                 NodeEdgePoint nep = new NodeEdgePointBuilder()
@@ -1562,6 +1574,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             }
                             break;
                         case "xpdr-network":
+                            tpUuidSd = String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS, tp.getValue());
+                            LOG.info("TNMSIline 1500 CreateNodeRuleGroupForXpdrNode, OTS TP {} added with Uuid {}",
+                                tp, tpUuidSd);
+                            tpUuid = new Uuid(UUID.nameUUIDFromBytes(tpUuidSd.getBytes(StandardCharsets.UTF_8))
+                                .toString());
+                            if (onepl.containsKey(new OwnedNodeEdgePointKey(tpUuid))) {
+                                NodeEdgePoint nep = new NodeEdgePointBuilder()
+                                    .setTopologyUuid(this.tapiTopoUuid)
+                                    .setNodeUuid(nodeUuid)
+                                    .setNodeEdgePointUuid(tpUuid)
+                                    .build();
+                                tspNepList.put(nep.key(), nep);
+                            }
+                            break;
                         case "switch-network":
                             tpUuidSd = String.join("+", nodeId, TapiConstants.I_ODU, tp.getValue());
                             LOG.debug("TNMSIline 1426 CreateNodeRuleGroupForXpdrNode, IDOU TP {} added with Uuid {}",
@@ -1585,7 +1611,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     }
 
                 }
-                // Empty random creation of mandatory fields for avoiding errors....
+                // Creation of available Capacity....
                 TotalSize potentialTs = new TotalSizeBuilder()
                     .setValue(Decimal64.valueOf((nblEntry.getValue().getCapableInterconnectBandwidth().doubleValue()
                         * nblEntry.getValue().getInterconnectBandwidthUnit().doubleValue() / 1000000000),
@@ -1594,9 +1620,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .build();
                 TotalPotentialCapacity tpc = new TotalPotentialCapacityBuilder()
                     .setTotalSize(potentialTs).build();
+                LOG.debug("TNMSIline1623 CreateNodeRuleGroupForXpdrNode, totalPotentialCapacityBuilder = {}", tpc);
                 Uint32 availBW = nblEntry.getValue().getAvailableInterconnectBandwidth();
                 // TODO: Right now available BW is not in Device OR model. Correct next line when it will be
                 availBW = availBW == null ? nblEntry.getValue().getCapableInterconnectBandwidth() : availBW;
+                LOG.debug("TNMSIline1627 CreateNodeRuleGroupForXpdrNode, AvailableBw from OR nbl = {}", availBW);
+                LOG.debug("TNMSIline1628 CreateNodeRuleGroupForXpdrNode, Setting AvailableBw to = {}",
+                    Decimal64.valueOf((availBW.doubleValue()
+                        * nblEntry.getValue().getInterconnectBandwidthUnit().doubleValue() / 1000000000),
+                        RoundingMode.DOWN));
                 TotalSize availableTs = new TotalSizeBuilder()
                     .setValue(Decimal64.valueOf((availBW.doubleValue()
                         * nblEntry.getValue().getInterconnectBandwidthUnit().doubleValue() / 1000000000),
@@ -1606,63 +1638,23 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 AvailableCapacity avc = new AvailableCapacityBuilder()
                     .setTotalSize(availableTs).build();
 
-                CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
-                    .setCostAlgorithm("Restricted Shortest Path - RSP")
-                    .setCostName("HOP_COUNT")
-                    .setCostValue(TapiConstants.COST_HOP_VALUE)
-                    .build();
-                LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
-                    .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
-                    .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
-                    .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
-                    .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
-                    .setTrafficPropertyName("FIXED_LATENCY")
-                    .build();
-                RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
-                    .setRiskCharacteristicName("risk characteristic")
-                    .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
-                    .build();
-
                 if (dsrNepList != null && !dsrNepList.isEmpty()) {
-                    Name nrgName1 = new NameBuilder().setValueName("nrg name")
-                        .setValue("dsr node rule group-" + count + "." + nblCount).build();
-                    NodeRuleGroup nodeRuleGroup1 = new NodeRuleGroupBuilder()
-                        .setName(Map.of(nrgName1.key(), nrgName1))
-                        .setUuid(new Uuid(
-                            UUID.nameUUIDFromBytes(("dsr node rule group-" + count + "." + nblCount)
-                                .getBytes(StandardCharsets.UTF_8)).toString()))
-                        .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
-                            nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
-                        .setNodeEdgePoint(dsrNepList)
-                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-                        .setAvailableCapacity(avc)
-                        .setTotalPotentialCapacity(tpc)
-                        .build();
-                    nodeRuleGroupMap.put(nodeRuleGroup1.key(), nodeRuleGroup1);
-                    nrgKeyList.add(nodeRuleGroup1.key());
+                    NodeRuleGroup nrg1 = buildNrgForXpder(count, nblCount, dsrNepList, avc, tpc);
+                    nodeRuleGroupMap.put(nrg1.key(), nrg1);
+                    nrgKeyList.add(nrg1.key());
                 }
 
                 if (nepList != null && !nepList.isEmpty()) {
-                    Name nrgName2 = new NameBuilder().setValueName("nrg name")
-                        .setValue("odu node rule group-" + count + "." + nblCount).build();
-                    NodeRuleGroup nodeRuleGroup2 = new NodeRuleGroupBuilder()
-                        .setName(Map.of(nrgName2.key(), nrgName2))
-                        .setUuid(new Uuid(
-                            UUID.nameUUIDFromBytes(("odu node rule group-" + count + "." + nblCount)
-                                .getBytes(StandardCharsets.UTF_8)).toString()))
-                        .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
-                            nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
-                        .setNodeEdgePoint(nepList)
-                        .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
-                        .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
-                        .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-                        .setAvailableCapacity(avc)
-                        .setTotalPotentialCapacity(tpc)
-                        .build();
-                    nodeRuleGroupMap.put(nodeRuleGroup2.key(), nodeRuleGroup2);
-                    nrgKeyList.add(nodeRuleGroup2.key());
+                    NodeRuleGroup nrg2 = buildNrgForXpder(count, nblCount, nepList, avc, tpc);
+                    nodeRuleGroupMap.put(nrg2.key(), nrg2);
+                    nrgKeyList.add(nrg2.key());
+                }
+
+                if (tspNepList != null && !tspNepList.isEmpty()) {
+                    NodeRuleGroup nrg3 = buildNrgForXpder(count, nblCount, tspNepList, avc, tpc);
+                    nodeRuleGroupMap.put(nrg3.key(), nrg3);
+                    // For Transponders we don't add nrg Key to the nrg key list since nrg are independent and no irg
+                    // shall be built to bridge independent transponders.
                 }
             }
             count++;
@@ -1671,6 +1663,48 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             }
         }
         return nodeRuleGroupMap;
+    }
+
+    private NodeRuleGroup buildNrgForXpder(int count, int nblCount, Map<NodeEdgePointKey, NodeEdgePoint> nepMap,
+        AvailableCapacity avc, TotalPotentialCapacity tpc) {
+        RuleBuilder nblRuleBd = new RuleBuilder()
+            .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
+            .setRuleType(new HashSet<>(Set.of(RuleType.FORWARDING)));
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+            .setCostAlgorithm("Restricted Shortest Path - RSP")
+            .setCostName("HOP_COUNT")
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
+            .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
+
+        Name nrgName = new NameBuilder().setValueName("nrg name")
+            .setValue("dsr node rule group-" + count + "." + nblCount).build();
+        NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
+            .setName(Map.of(nrgName.key(), nrgName))
+            .setUuid(new Uuid(
+                UUID.nameUUIDFromBytes(("dsr node rule group-" + count + "." + nblCount)
+                    .getBytes(StandardCharsets.UTF_8)).toString()))
+            .setRule(new HashMap<>(Map.of(new RuleKey("forward" + nblCount),
+                nblRuleBd.setLocalId("forward" + count + "." + nblCount).build())))
+            .setNodeEdgePoint(nepMap)
+            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setAvailableCapacity(avc)
+            .setTotalPotentialCapacity(tpc)
+            .build();
+
+        return nodeRuleGroup;
     }
 
     private String getNodeType(XpdrNodeTypes xponderType) {
