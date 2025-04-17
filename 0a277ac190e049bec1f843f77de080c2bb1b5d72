@@ -343,6 +343,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aacf0309_5d3406ca",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "Understand that this is not a problem with current NEC and lighty, but I am just asking to add a filter adding to opticalChannels the subcomponents that are identified as being such. This would avoid having one more TODO that we can potentially miss later on ;-)",
+      "parentUuid": "3748b4b8_a8651ef1",
+      "range": {
+        "startLine": 772,
+        "startChar": 12,
+        "endLine": 774,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e844a454_6557d5fe",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
         "patchSetId": 3
@@ -378,6 +402,30 @@
       "side": 1,
       "message": "NEC manual requires interface configuration only for the client ethernet. Here client ethernet does not have a mapper ODU. May be we can try to make it generic for all types of ethernet but enabling it for OTU/ODU will also add network entities like ODU4/ODUCn and currently we do not have a way to differentiate client logical channels from network. We could look at improving this in the future.",
       "parentUuid": "e844a454_6557d5fe",
+      "range": {
+        "startLine": 829,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 51
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa2f124_348c7235",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "OK. Can you add a TODO comment so that we do not forget it? Thanks",
+      "parentUuid": "f6862e81_1ca39a39",
       "range": {
         "startLine": 829,
         "startChar": 1,
@@ -1502,6 +1550,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5dda63b_b2429981",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "Sorry, I am still a bit confused. As soon as something is configured in a device, a trace shall remain in the controller. So configuring an OpenConfig transponder shall correspond to a service, which we trace in the service list of the Datastore.\nBut I may miss something since I am not familiar with renderer \u0026 SH...\n@gilles.thouenon@orange.com @christophe.betoule@orange.com: Gilles, Christophe, can you provide guidance on this topic?\nI do not ask to solve this right now but at least we should trace this as further work needed through a TODO statement.",
+      "parentUuid": "7ab57776_d6bd7155",
+      "range": {
+        "startLine": 415,
+        "startChar": 6,
+        "endLine": 415,
+        "endChar": 34
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23c99c42_e3782a34",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -1573,6 +1645,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8419938_5a63b4bb",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "Also confused for this one. I think here we are refreshing the path with OTN link so that it can be maintained in the topology. This means we are not considering Cross-connections in the device itself, which may not exist in an openconfig device, but more top connections (if I use T-API terminology) that shall be used in the topology description. So as soon as you configure an OpenConfig Muxponder, an existing service and its path shall be maintained in the Datastore (Service + Network topology with existing OTN link between the relevant ports).\n\nAgain, I may miss something since I am not familiar with renderer \u0026 SH...\n@gilles.thouenon@orange.com @christophe.betoule@orange.com: Gilles, Christophe, can you provide guidance on this topic?\nI do not ask to solve this right now but at least we should trace this as further work needed through a TODO statement.",
+      "parentUuid": "182b18f5_df06c848",
+      "range": {
+        "startLine": 430,
+        "startChar": 2,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5eb5f443_5011e96d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -1608,6 +1704,30 @@
       "side": 1,
       "message": "The NEC NE already had some previous values for target-output-power and frequency even before the renderer operation. So as per our previous design discussion we decided not to reset these values or remove these attributes.\nAlso as per the NEC documentation, as part of disable datapath for network, only the port admin-state update was recommended.",
       "parentUuid": "5eb5f443_5011e96d",
+      "range": {
+        "startLine": 493,
+        "startChar": 31,
+        "endLine": 493,
+        "endChar": 98
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46937c73_b42cf981",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "OK, lets keep it as is, but add a TODO comment. When we will fully handle Alien (meaning the RPCs dedicated to power adjustement loop) we may need later-on to adjust power to make sure it complies with the configuration we have (other adjacent channels on the same SRG)",
+      "parentUuid": "b822647b_ebb669da",
       "range": {
         "startLine": 493,
         "startChar": 31,
@@ -1726,6 +1846,30 @@
       "side": 1,
       "message": "The NEC NE already had some previous values for target-output-power and frequency even before the renderer operation. So as per our previous design discussion we decided not to reset these values or remove these attributes.\nAlso as per the NEC documentation, as part of disable datapath for network, only the port admin-state update was recommended.",
       "parentUuid": "acef095a_f7605aa6",
+      "range": {
+        "startLine": 691,
+        "startChar": 5,
+        "endLine": 701,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073bd31f_45413fd2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "That makes sense to me for power, but I find it a bit dangerous for frequency.... We should avoid any potential conflict during further configuration (wavelength collide on same SRG)",
+      "parentUuid": "62830369_908a9420",
       "range": {
         "startLine": 691,
         "startChar": 5,
@@ -2093,6 +2237,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d1caac50_482ab6da",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "OK! Is it possible, considering it might be done in the next phase to at least put a TODO:Comment, with a summary of what we may do just to remind we need to handle this?",
+      "parentUuid": "1a7344ac_f88aca58",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f1bb525_5185d663",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -2306,6 +2474,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30e19a7e_99a78f67",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "Idem. Is it possible, considering it might be done in the next phase to at least put a TODO:Comment, with a summary of what we may do just to remind we need to handle this?",
+      "parentUuid": "d50dea20_d0b1fd12",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3049e411_385dcf8a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -2341,6 +2533,30 @@
       "side": 1,
       "message": "The existing renderer support is for a back to back XPDR usecase and there were no specific power up/down sequence recommended by NEC documentation for enable/disable datapath for XPDRs. So as per previous design discussion this was not supported for OpenConfig. We can look at enhancing this in a future update.",
       "parentUuid": "3049e411_385dcf8a",
+      "range": {
+        "startLine": 674,
+        "startChar": 8,
+        "endLine": 675,
+        "endChar": 26
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d7f2a3_9ad87dc9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "OK, same as before : if you don\u0027t mind, please put a TODO comment with what may need to be adjusted through future work.Thanks.",
+      "parentUuid": "0d6d86a5_b10688b1",
       "range": {
         "startLine": 674,
         "startChar": 8,

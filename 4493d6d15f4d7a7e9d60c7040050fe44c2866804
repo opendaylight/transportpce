@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c609b94_f0ca0419",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-04-17T15:41:28Z",
+      "side": 1,
+      "message": "Hi Roshan,\nThanks for your replies and sorry for late review.\nAgree on the fact that most of my comments maybe addressed at a later time. Just ask whether you could put some TODO: comment which briefly describe the issue to be solved so that we keep trace.\nThanks so much!",
+      "revId": "4493d6d15f4d7a7e9d60c7040050fe44c2866804",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
