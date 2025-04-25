@@ -99,6 +99,7 @@ public class PceCalculation {
     }
 
     private MappingUtils mappingUtils;
+    public TapiMapUtils tapiMappingUtils;
 
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
                           PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
@@ -108,6 +109,8 @@ public class PceCalculation {
         this.returnStructure = rc;
         this.pceHardConstraints = pceHardConstraints;
         this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
+        this.tapiMappingUtils = new TapiMapUtils(networkTransactionService.getDataBroker());
+        LOG.debug("instancing TapiMapUtils {}", tapiMappingUtils.getClass());
         this.portMapping = portMapping;
         this.endpoints = null;
         parseInput();
@@ -121,6 +124,8 @@ public class PceCalculation {
         this.returnStructure = rc;
         this.pceHardConstraints = pceHardConstraints;
         this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
+        this.tapiMappingUtils = new TapiMapUtils(networkTransactionService.getDataBroker());
+        LOG.debug("instancing TapiMapUtils {}", tapiMappingUtils.getClass());
         this.portMapping = portMapping;
         this.endpoints = endpoints;
         parseInput();
