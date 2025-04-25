@@ -57,7 +57,6 @@ public class PceTapiOpticalNode implements PceNode {
     private Uuid nodeUuid;
     //deviceNodeId is used to keep trace of original node before disaggregation
     private String deviceNodeId;
-    // see if Need global or local class for Name
     private Name nodeName;
     private OpenroadmNodeType nodeType;
     private AdministrativeState adminState;
@@ -69,19 +68,10 @@ public class PceTapiOpticalNode implements PceNode {
     private List<String> usedXpndrNWTps = new ArrayList<>();
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
-//    private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
     private BitSet frequenciesBitSet;
     private String version;
-//    private Endpoints endpoints;
 
-//    private Map<Name, Uuid> availableAddDropNep = new TreeMap<>();
-//    private Map<Name, Uuid> availableAddDropNepPp = new TreeMap<>();
-//    private Map<Uuid, Uuid> availableDegreeNepTtp = new TreeMap<>();
-//    private Map<Name, Uuid> usedXpndrNWTps = new TreeMap<>();
     private List<String> availableXpndrNWTps = new ArrayList<>();
-//    private List<String> outgoingInternalLinks = new ArrayList<>();
-
-
     private List<BasePceNep> listOfNep = new ArrayList<>();
     /*
      * Complete description
@@ -254,18 +244,6 @@ public class PceTapiOpticalNode implements PceNode {
                     //clientNrgUuidList
                     break;
                 }
-//                for (Uuid nrgUuid : clientNrgUuidList) {
-//                    if (nwNrgUuidList.contains(nrgUuid)) {
-//                        nwConnectedNepUuid = nwbpn.getNepCepUuid();
-//                        //As soon we have found a NW NEP sharing an NRG with the client NEP we stop scanning
-//                        //clientNrgUuidList
-//                        break;
-//                    }
-//                }
-                //NW connected NEP found means we can stop searching for such NW Nep
-//                if (nwConnectedNepUuid != null) {
-//                    break;
-//                }
             }
             //If at the end of the scan of potential NW NEP candidate we identified one (Muxponder case)
             if (nwConnectedNepUuid != null) {
@@ -274,37 +252,6 @@ public class PceTapiOpticalNode implements PceNode {
             //Otherwise we may have a different option such as for a switch and we need to find a IRG that interconnects
             //NRGs of Client to NRGs of Network ports
             } else {
-//                for (BasePceNep nwbpn : nwOtsNep) {
-//                    List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
-//                    if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
-//                        continue;
-//                    }
-//                    List<Uuid> commonNrgUuidList = clientNrgUuidList.stream()
-//                        .filter(uuid -> nwNrgUuidList.contains(uuid))
-//                        .collect(Collectors.toList());
-//                    if (commonNrgUuidList == null || commonNrgUuidList.isEmpty()) {
-//                        continue;
-//                    }
-//                    for (Uuid comUuid : commonNrgUuidList) {
-//                        if(!node.getInterRuleGroup().entrySet().stream()
-//                                .filter(irg -> !irg.getValue().getAssociatedNodeRuleGroup().entrySet().stream()
-//                                    .map(Map.Entry::getKey)
-//                                    .filter(key -> key.getNodeRuleGroupUuid().equals(comUuid))
-//                                    .collect(Collectors.toList()).isEmpty())
-//                                .collect(Collectors.toList()).isEmpty()) {
-//                            nwConnectedNepUuid = nwbpn.getNepCepUuid();
-//                            this.clientPerNwTp.put(cbpn.getNepCepUuid().getValue(), nwConnectedNepUuid.getValue());
-//                            break;
-//                        }
-//
-//                    }
-//                    if (nwConnectedNepUuid != null) {
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-
                 for (Uuid nrgUuid : clientNrgUuidList) {
                 //  for each NRG we build a list of IRG key, that corresponds to IRG that includes the client NRG
                     List<InterRuleGroupKey> irgKeyList = node.getInterRuleGroup().entrySet().stream()
@@ -315,15 +262,10 @@ public class PceTapiOpticalNode implements PceNode {
                           .collect(Collectors.toList())
                           .stream().map(Entry::getKey).collect(Collectors.toList());
 
-//                    List<InterRuleGroupKey> irgKeyList = node.getInterRuleGroup().entrySet().stream()
-//                        .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(nrgUuid))
-//                        .collect(Collectors.toList())
-//                        .stream().map(Entry::getKey).collect(Collectors.toList());
                     if (irgKeyList != null && !irgKeyList.isEmpty()) {
                         //For each of IRG key, we check if corresponding IRG would include an NRG that corresponds
                         //to one of the NW NEP, meaning it would be interconnected to the client NEP via the IRG that
                         //interconnects their respective NRGs
-//                        for (InterRuleGroupKey irgKey : irgKeyList) {
                         for (BasePceNep nwbpn : nwOtsNep) {
                             List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
                             LOG.info("PTONLine 328: nwNrgUuidList : {}", nwNrgUuidList);
@@ -333,12 +275,6 @@ public class PceTapiOpticalNode implements PceNode {
                             for (Uuid nwNrgUuid : nwNrgUuidList) {
                                     //For each NRG of the NW NEP under analysis we build a list of IRG key,
                                     //that corresponds to IRG that includes the NW Nep's NRG
-
-//                              List<InterRuleGroupKey> nwIrgKeyList = node.getInterRuleGroup().entrySet().stream()
-//                                  .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(nwNrgUuid))
-//                                        .collect(Collectors.toList())
-//                                        .stream().map(Entry::getKey).collect(Collectors.toList());
-
                                 List<InterRuleGroupKey> nwIrgKeyList = node.getInterRuleGroup().entrySet().stream()
                                     .filter(irg -> !irg.getValue().getAssociatedNodeRuleGroup().entrySet().stream()
                                         .map(Map.Entry::getKey)
@@ -360,10 +296,6 @@ public class PceTapiOpticalNode implements PceNode {
                                 break;
                             }
                         }
-//                            if (nwConnectedNepUuid != null) {
-//                                break;
-//                            }
-//                        }
                     }
                     if (nwConnectedNepUuid != null) {
                         break;
@@ -375,36 +307,8 @@ public class PceTapiOpticalNode implements PceNode {
                 } else {
                     LOG.info("Did not succed finding a NW Nep connected to Client NEP {}", cbpn.getNepCepUuid());
                 }
-
-//                node.getInterRuleGroup().entrySet().stream()
-//                    .filter(irg -> irg.getValue().getAssociatedNodeRuleGroup().containsKey(irg))
-//                for (BasePceNep nwbpn : nwOtsNep) {
-//                    List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
-//                    if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
-//                        continue;
-//                    }
-//                    for (Uuid nrgUuid : clientNrgUuidList) {
-//                        if (nwNrgUuidList.contains(nrgUuid)) {
-//                            nwConnectedNepUuid = nwbpn.getNepCepUuid();
-//                            break;
-//                        }
-//                    }
-//                    if (nwConnectedNepUuid != null) {
-//                        break;
-//                    }
-//                }
             }
         }
-//                for (Uuid nrgUuid : nrgUuidList) {
-//                    nwNepUuid = node.getNodeRuleGroup().entrySet().stream()
-//                        .filter(nrg -> nrg.getKey().getUuid().equals(nrgUuid))
-//                        .findFirst().orElseThrow().getValue().getNodeEdgePoint().entrySet().stream()
-//                            .filter(nrgnep -> nrgnep.getKey().getNodeEdgePointUuid().equals(bpn.getNepCepUuid()))
-//                            .findAny().orElseThrow().getKey().getNodeEdgePointUuid();
-//                    if (nwNepUuid != null) {
-//                        continue;
-//                    }
-//                }
         LOG.info("PTONLine230/initXndrTps: ListOfNep {}",
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
         LOG.info("PTONLine232/initXndrTps: clientOtsNep {}",
@@ -462,18 +366,7 @@ public class PceTapiOpticalNode implements PceNode {
                 break;
         }
         final OpenroadmTpType openType = srgType;
-//        Map<String, Map<NameKey, Name>> cpAssociatedSrgPp = new HashMap<>();
-//        for (BasePceNep bpn : ppList.stream()
-//                .filter(bpn -> bpn.getTpType().equals(openType))
-//                .collect(Collectors.toList())) {
-//            cpAssociatedSrgPp.put(bpn.getUuid().toString(), bpn.getName());
-//        }
-        // Map<String, OpenroadmTpType> cpAssociatedSrgPp = new HashMap<>();
-        // for (BasePceNep bpn : ppList.stream()
-        //      .filter(bpn -> bpn.getTpType().equals(openType))
-        //      .collect(Collectors.toList())) {
-        //    cpAssociatedSrgPp.put(bpn.getUuid().toString(), bpn.getTpType());
-        // }
+
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         //TODO: Adapt function since sorting port on Uuid (this is the Key used in TAPI may not be the best option
         // Also with T-API we try to use as much as possible port of transponder :
@@ -690,7 +583,4 @@ public class PceTapiOpticalNode implements PceNode {
         return this.listOfNep;
     }
 
-//    public void setEndpoints(Endpoints endpoints) {
-//        this.endpoints = endpoints;
-//    }
 }
