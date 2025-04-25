@@ -764,7 +764,8 @@ public class ORtoTapiTopoConversionTools {
             .setCapacity(
                 new CapacityBuilder()
                     .setUnit(CAPACITYUNITGBPS.VALUE)
-                    .setValue(Decimal64.valueOf((rate * (isProvisioned ? 0 : 1)), RoundingMode.DOWN))
+                    //.setValue(Decimal64.valueOf((rate * (isProvisioned ? 0 : 1)), RoundingMode.DOWN))
+                    .setValue(Decimal64.valueOf(rate, RoundingMode.DOWN))
                     .build())
             .build());
 
@@ -1016,7 +1017,8 @@ public class ORtoTapiTopoConversionTools {
             .setDirection(Direction.BIDIRECTIONAL)
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
-            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA);
+            .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+            .setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
         return cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
     }
 
