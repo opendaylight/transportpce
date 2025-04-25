@@ -13,6 +13,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -56,6 +57,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.in
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroup;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
@@ -215,10 +217,6 @@ public class PceTapiOtnNode implements PceNode {
         this.usableXpdrClientTps = new ArrayList<>();
         this.adminState = node.getAdministrativeState();
         this.operState = node.getOperationalState();
-//        this.tpAvailableTribPort.clear();
-//        initializeAvailableTribPort();
-//        this.tpAvailableTribSlot.clear();
-//        initializeAvailableTribSlot();
         this.modeType = null;
         this.clientPortId = clientPort;
         if (node == null
@@ -252,7 +250,7 @@ public class PceTapiOtnNode implements PceNode {
         if (SERVICE_TYPE_ODU_LIST.contains(otnServiceType)) {
             // We put OduNep in clientDsr Nep the connection will between iODU NEP. It is an NW NEP but doesn't need
             // to be identified as such (no pair of client-NW NEPs)
-            availableXpdrClientTps = tapiON.getOduNep().stream()
+            availableXpdrClientTps = tapiON.getOduCepAndNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList());
             if (availableXpdrClientTps.isEmpty()) {
@@ -261,10 +259,10 @@ public class PceTapiOtnNode implements PceNode {
             supConLayer = SCL_OTU;
             LOG.info("Supporting connection layer is {}", supConLayer);
         } else if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
-            availableXpdrClientTps = tapiON.getOduNep().stream()
+            availableXpdrClientTps = tapiON.getOduCepAndNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERCLIENT))
                 .collect(Collectors.toList());
-            availableXpdrNWTps = tapiON.getOduNep().stream()
+            availableXpdrNWTps = tapiON.getOduCepAndNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList());
             LOG.info("PTOtnN Line272 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
@@ -347,8 +345,17 @@ public class PceTapiOtnNode implements PceNode {
     }
 
     private boolean isValidTp(BasePceNep bpn, boolean isHighOrder, boolean isDSR) {
+        // We find the Onep that either correspond to the bpn, or if the bpn is a cep, the Onep that contains in its
+        // cepList the Cep, and check that the Onep is valid. If the Onep is valid the associated CEP is also considered
+        // valid
         OwnedNodeEdgePoint onep = node.getOwnedNodeEdgePoint().entrySet().stream()
-            .filter(nep -> nep.getKey().getUuid().equals(bpn.getNepCepUuid()))
+            .filter(nep -> nep.getKey().getUuid().equals(bpn.getNepCepUuid())
+                || (nep.getValue().augmentation(OwnedNodeEdgePoint1.class) != null
+                    && nep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() != null
+                    && nep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                        != null
+                    && nep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                        .containsKey(new ConnectionEndPointKey(bpn.getNepCepUuid()))))
             .findFirst().orElseThrow().getValue();
         if (SERVICE_TYPE_ODU_LIST.contains(otnServiceType)) {
             //Service type = ODU4 or ODUC2/3/4...
@@ -423,6 +430,10 @@ public class PceTapiOtnNode implements PceNode {
     }
 
     private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
+        if (node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).collect(Collectors.toList()).isEmpty()) {
+            return null;
+        }
         OwnedNodeEdgePoint ownedNep = node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).findFirst().orElseThrow().getValue();
         if (ownedNep.augmentation(OwnedNodeEdgePoint1.class) != null
@@ -440,25 +451,29 @@ public class PceTapiOtnNode implements PceNode {
         return null;
     }
 
-//    private Uuid getNepUuidFromCepUuid(Uuid cepUuid) {
-//        for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
-//            if (entry.getValue().augmentation(OwnedNodeEdgePoint1.class) != null
-//                    && entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() != null
-//                    && !entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList()
-//                    .getConnectionEndPoint().isEmpty()) {
-//                if (!entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
-//                    .entrySet().stream()
-//                    .filter(cep -> cep.getKey().getUuid().equals(cepUuid)
-//                            && cep.getValue().getParentNodeEdgePoint() != null
-//                            && cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid()
-//                                .equals(entry.getKey().getUuid()))
-//                    .collect(Collectors.toList()).isEmpty()) {
-//                    return entry.getKey().getUuid();
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    private Uuid getNepUuidFromNepCepUuid(Uuid nepCepUuid) {
+        if (!node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(nep -> nep.getKey().getUuid().equals(nepCepUuid)).collect(Collectors.toList()).isEmpty()) {
+            return nepCepUuid;
+        }
+        for (Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> entry : node.getOwnedNodeEdgePoint().entrySet()) {
+            if (entry.getValue().augmentation(OwnedNodeEdgePoint1.class) != null
+                    && entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() != null
+                    && !entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList()
+                    .getConnectionEndPoint().isEmpty()) {
+                if (!entry.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
+                    .entrySet().stream()
+                    .filter(cep -> cep.getKey().getUuid().equals(nepCepUuid)
+                            && cep.getValue().getParentNodeEdgePoint() != null
+                            && cep.getValue().getParentNodeEdgePoint().getNodeEdgePointUuid()
+                                .equals(entry.getKey().getUuid()))
+                    .collect(Collectors.toList()).isEmpty()) {
+                    return entry.getKey().getUuid();
+                }
+            }
+        }
+        return null;
+    }
 
     private boolean checkAZSwPool(List<BasePceNep> netwTps, List<BasePceNep> clientTps) {
         // Check first if client Tps and Network tps have some common nrg with a Forwarding rule MAY/MUST
@@ -518,10 +533,16 @@ public class PceTapiOtnNode implements PceNode {
                 }
             }
         }
-        LOG.info("PTONLine471, did not find commonNRG to both Cl and NW with Rule can/must forward");
+        LOG.info("PTONLine513, did not find commonNRG to both Cl and NW with Rule can/must forward");
         // Being there means we did not find a common nrg with both one of the eODU and one iODU
         // Check if client Tps and Network tps have some nrgs that are interconnected through an IRG
         // with a Forwarding rule MAY/MUST meaning client are connected to Nw port
+        if (node.getInterRuleGroup() == null || node.getInterRuleGroup().isEmpty()
+                || node.getInterRuleGroup().entrySet().size() < 2) {
+            LOG.info("PTONLine519, did not find commonNRG to both Cl and NW with Rule can/must forward, "
+                + "and no usable IRG detected");
+            return false;
+        }
         for (Map.Entry<InterRuleGroupKey, InterRuleGroup> irg :node.getInterRuleGroup().entrySet()) {
             boolean nrgPresentInClient = false;
             boolean nrgPresentInNw = false;
@@ -681,6 +702,30 @@ public class PceTapiOtnNode implements PceNode {
         return false;
     }
 
+    public Double getAvailableCapacityFromUuid(Uuid nepCepUuid) {
+        Uuid nepUuid = getNepUuidFromNepCepUuid(nepCepUuid);
+        List<Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint>> onepList = this.node.getOwnedNodeEdgePoint().entrySet()
+            .stream().filter(oonep -> oonep.getKey().getUuid().equals(nepUuid)).collect(Collectors.toList());
+        if (nepUuid == null) {
+            return null;
+        }
+        Double availableBandwidth = 0.0;
+        if (onepList != null && !onepList.isEmpty()) {
+            if (onepList.stream().findFirst().orElseThrow().getValue().getAvailablePayloadStructure() != null
+                    && !onepList.stream().findFirst().orElseThrow().getValue().getAvailablePayloadStructure()
+                    .isEmpty()) {
+                availableBandwidth = onepList.stream().findFirst().orElseThrow().getValue()
+                    .getAvailablePayloadStructure().stream().findFirst().orElseThrow()
+                    .getCapacity().getValue().doubleValue();
+            } else if (onepList.stream().findFirst().orElseThrow().getValue().getAvailableCapacity() != null) {
+                availableBandwidth = onepList.stream().findFirst().orElseThrow().getValue()
+                    .getAvailableCapacity().getTotalSize().getValue().doubleValue();
+            }
+            return availableBandwidth;
+        }
+        return 0.0;
+    }
+
     public void validateIntermediateSwitch() {
         if (!isValid()) {
             return;
@@ -710,10 +755,9 @@ public class PceTapiOtnNode implements PceNode {
 
     public List<BasePceNep> getTotalListOfNep() {
         List<BasePceNep> listOfNep = new ArrayList<>();
-        this.tapiON.getClientDsrNep();
         listOfNep.addAll(this.tapiON.getClientDsrNep());
-        listOfNep.addAll(this.tapiON.getOduNep());
-        listOfNep.addAll(this.tapiON.getOtuNep());
+        listOfNep.addAll(this.tapiON.getOduCepAndNep());
+        listOfNep.addAll(this.tapiON.getOtuCepAndNep());
         listOfNep.addAll(this.tapiON.getnetOtsNep());
         listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
         return listOfNep;
@@ -886,10 +930,10 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public List<BasePceNep> getListOfNep() {
-        List<BasePceNep> listOfNep = new ArrayList<>();
-        listOfNep.addAll(availableXpdrClientTps);
-        listOfNep.addAll(availableXpdrNWTps);
-        listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
-        return listOfNep;
+        List<BasePceNep> listOfCepAndNep = new ArrayList<>();
+        listOfCepAndNep.addAll(this.tapiON.getOduCepAndNep());
+        listOfCepAndNep.addAll(this.tapiON.getOtuCepAndNep());
+        listOfCepAndNep = listOfCepAndNep.stream().distinct().collect(Collectors.toList());
+        return listOfCepAndNep;
     }
 }

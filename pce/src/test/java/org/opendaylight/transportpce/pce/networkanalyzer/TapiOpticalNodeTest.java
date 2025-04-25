@@ -406,13 +406,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
         for (BasePceNep clientbpnNep : spdrAclientDsrNep) {
             testTransponderBpn(clientbpnNep, false);
         }
-        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx1.getOduNep());
-        assertEquals(4, spdrAoduNep.size(),
-            "SPDRAX1 shall have 4 ODU port : 3 eODU (1 being used) + 1 iODU port");
+        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx1.getOduCepAndNep());
+        assertEquals(8, spdrAoduNep.size(),
+            "SPDRAX1 shall have Nep and Cep for 4 ODU port : 3 eODU (1 being used) + 1 iODU port");
         for (BasePceNep oduBpnNep : spdrAoduNep) {
             testTransponderBpn(oduBpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx1.getOtuNep());
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx1.getOtuCepAndNep());
         assertEquals(0, spdrAotuNep.size(),
             "SPDRAX1 shall have 0 iOTU port available since an iODU connection is already provisioned over the iOTU");
         LOG.info("TESTPERFORMED:5");
@@ -446,13 +446,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
         for (BasePceNep clientbpnNep : spdrAclientDsrNep) {
             testTransponderBpn(clientbpnNep, false);
         }
-        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx1.getOduNep());
-        assertEquals(4, spdrAoduNep.size(),
-            "SPDRAX1 shall have 4 ODU port : 3 eODU (1 being used) + 1 iODU port");
+        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx1.getOduCepAndNep());
+        assertEquals(8, spdrAoduNep.size(),
+            "SPDRAX1 shall have Nep and Cep corresponding to 4 ODU port : 3 eODU (1 being used) + 1 iODU port");
         for (BasePceNep oduBpnNep : spdrAoduNep) {
             testTransponderBpn(oduBpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx1.getOtuNep());
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx1.getOtuCepAndNep());
         assertEquals(0, spdrAotuNep.size(),
             "SPDRAX1 shall have 0 iOTU port available since an iODU connection is already provisioned over the iOTU");
         LOG.info("TESTPERFORMED:6");
@@ -619,13 +619,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
             "SPDRAX2 shall have 1 NW port available  : a wavelength is provisionned on the network port, but the port"
             + "is considered as valid as it is part of the intermediate path");
         assertFalse(tapiONspdrCx3.isValid());
-        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduNep());
+        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
         assertEquals(4, spdrAoduNep.size(),
             "SPDRAX2 shall have 4 ODU ports and Neps (4 iODU network ports) available");
         for (BasePceNep bpnNep : spdrAoduNep) {
             testTransponderBpn(bpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduNep());
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
         assertEquals(4, spdrAotuNep.size(),
             "SPDRAX2 shall have 4 iOTU port/Nep provisioned");
         for (BasePceNep bpnNep : spdrAotuNep) {
@@ -667,13 +667,13 @@ public class TapiOpticalNodeTest extends AbstractTest {
         assertEquals(0, spdrAnwOTSNep.size(),
             "SPDRAX2 shall have 0 OTS NW ports and Neps available for an ODU service");
         assertFalse(tapiONspdrCx3.isValid());
-        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduNep());
+        List<BasePceNep> spdrAoduNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
         assertEquals(4, spdrAoduNep.size(),
             "SPDRAX2 shall have 4 ODU ports and Neps (4 iODU network ports) available");
         for (BasePceNep clientbpnNep : spdrAoduNep) {
             testTransponderBpn(clientbpnNep, false);
         }
-        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduNep());
+        List<BasePceNep> spdrAotuNep = new ArrayList<>(tapiONspdrAx2.getOduCepAndNep());
         assertEquals(4, spdrAotuNep.size(),
             "SPDRAX2 shall have 4 iOTU port/Nep provisioned");
         for (BasePceNep clientbpnNep : spdrAotuNep) {
