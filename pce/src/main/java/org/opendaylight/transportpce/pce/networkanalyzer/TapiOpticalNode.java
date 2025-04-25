@@ -44,6 +44,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.OTUTYPEOTUCN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint3;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
@@ -594,6 +595,8 @@ public class TapiOpticalNode {
                 virtualNep.setOperationalState(OperationalState.ENABLED);
                 virtualNep.setAdminState(AdministrativeState.UNLOCKED);
                 virtualNep.setTpType(OpenroadmTpType.DEGREETXRXCTP);
+                virtualNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                virtualNep.setLpq(PHOTONICLAYERQUALIFIERMC.VALUE);
                 virtualNep.setParentNep(otsNep.getKey());
                 mmDegOtsNep.put(virtualNep.getNepCepUuid(), virtualNep);
                 //degOtsNep.add(virtualNep);
@@ -681,6 +684,8 @@ public class TapiOpticalNode {
                         virtualNep.setOperationalState(OperationalState.ENABLED);
                         virtualNep.setAdminState(AdministrativeState.UNLOCKED);
                         virtualNep.setTpType(OpenroadmTpType.SRGTXRXCP);
+                        virtualNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                        virtualNep.setLpq(PHOTONICLAYERQUALIFIERMC.VALUE);
                         virtualNep.setFrequencyBitset(mmSrgOtsNep.entrySet().stream()
                             .filter(bpn -> otsSrgNepKeyList.stream()
                                 .map(NodeEdgePointKey::getNodeEdgePointUuid).collect(Collectors.toList())
@@ -747,6 +752,8 @@ public class TapiOpticalNode {
                                 virtualNep.setOperationalState(OperationalState.ENABLED);
                                 virtualNep.setAdminState(AdministrativeState.UNLOCKED);
                                 virtualNep.setTpType(OpenroadmTpType.DEGREETXRXCTP);
+                                virtualNep.setLpn(LayerProtocolName.PHOTONICMEDIA);
+                                virtualNep.setLpq(PHOTONICLAYERQUALIFIERMC.VALUE);
                                 virtualNep.setParentNep(otsNep.getKey());
                                 virtualNep.setFrequencyBitset(otsNep.getValue().getFrequenciesBitSet());
                                 tempVirtualBpnMap.put(vnepId2.entrySet().iterator().next().getKey(), virtualNep);
