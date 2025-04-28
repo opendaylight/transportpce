@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>14.0.8</version>
+    <version>14.1.0</version>
     <relativePath/>
   </parent>
 
@@ -23,7 +23,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce :: tapi</name>
 
   <properties>
-    <transportpce.models.version>21.2.2</transportpce.models.version>
+    <mdsal.version>14.0.13</mdsal.version>
+    <netconf.version>9.0.0</netconf.version>
+    <transportpce.models.version>22.0.0-SNAPSHOT</transportpce.models.version>
     <sft.skip>false</sft.skip>
   </properties>
 
@@ -33,6 +35,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <groupId>org.opendaylight.transportpce.models</groupId>
         <artifactId>transportpce-models-artifacts</artifactId>
         <version>${transportpce.models.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>14.0.13</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.netconf</groupId>
+        <artifactId>netconf-artifacts</artifactId>
+        <version>${netconf.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
