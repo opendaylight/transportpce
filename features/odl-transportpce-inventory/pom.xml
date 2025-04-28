@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>14.0.8</version>
+    <version>14.1.0</version>
     <relativePath/>
   </parent>
 
@@ -20,9 +20,9 @@
   <name>OpenDaylight :: transportpce :: Inventory</name>
 
   <properties>
-    <mdsal.version>14.0.11</mdsal.version>
-    <netconf.version>8.0.7</netconf.version>
-    <transportpce.models.version>21.2.2</transportpce.models.version>
+    <mdsal.version>14.0.13</mdsal.version>
+    <netconf.version>9.0.0</netconf.version>
+    <transportpce.models.version>22.0.0</transportpce.models.version>
     <transportpce.db.host>localhost:3306</transportpce.db.host>
     <transportpce.db.database>transportpce</transportpce.db.database>
     <transportpce.db.username>root</transportpce.db.username>
@@ -67,12 +67,12 @@
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-util</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
-    </dependency>
+    </dependency-->
     <!--dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-mapping-api</artifactId>
