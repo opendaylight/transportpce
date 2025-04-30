@@ -522,11 +522,22 @@ class TransportPCEtesting(unittest.TestCase):
         print("Tapi Feature uninstalled")
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
+
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
+        links = response['network'][0]['ietf-network-topology:link']
+        self.assertEqual(len(links), 6)
+
+        for link in links:
+            if link["org-openroadm-common-network:link-type"] in ('ROADM-TO-ROADM', 'XPONDER-OUTPUT', 'XPONDER-INPUT'):
+                response = test_utils.del_ietf_network_link_request('openroadm-topology', link['link-id'], 'config')
+                self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
+
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
         print("Confirm Tapi Feature correctly uninstalled")
+
 
 
 if __name__ == "__main__":
