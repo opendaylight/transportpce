@@ -11,10 +11,12 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -582,8 +584,10 @@ public final class ConnectivityUtils {
     }
 
     private void populateServiceInConnectionVsServiceAtInit(String servName, Uuid servUuid) {
-        List<String> supServiceList = getServiceFromServiceName(servName).orElseThrow()
-            .getSupportingServiceName().stream().sorted().collect(Collectors.toList());
+        List<String> supServiceList = Optional.ofNullable(getServiceFromServiceName(servName)
+                .orElseThrow().getSupportingServiceName())
+                .map(set -> set.stream().sorted().collect(Collectors.toList()))
+                .orElseGet(Collections::emptyList);
         if (supServiceList == null) {
             LOG.info("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
                 this.servicesMap);
@@ -632,13 +636,16 @@ public final class ConnectivityUtils {
         //  supporting service meaning we are at the lowest service layer
         LOG.info("CU Line 622 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
-        populateServiceInConnectionVsServiceAtInit(supServiceMap.entrySet().stream()
-            .sorted((ssm1, ssm2) -> ssm2.getValue().compareTo(ssm2.getValue()))
-            .map(Map.Entry::getKey)
-            .findFirst()
-            .orElseThrow(),
-            servUuid);
-
+        try {
+            String serviName = supServiceMap.entrySet().stream()
+                    .sorted((ssm1, ssm2) -> ssm2.getValue().compareTo(ssm1.getValue()))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElseThrow();
+            populateServiceInConnectionVsServiceAtInit(serviName, servUuid);
+        } catch (NoSuchElementException e) {
+            LOG.error("Error getting the service {} from the service list", servName);
+        }
     }
 
     private void populateServiceInConnectionVsService(String servName, Uuid servUuid) {
