@@ -77,12 +77,18 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.no
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.rule.group.RuleKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.risk.parameter.pac.RiskCharacteristicBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.cost.pac.CostCharacteristicBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristic;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.transfer.timing.pac.LatencyCharacteristicBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -429,11 +435,30 @@ public class GetTopologyDetailsImpl implements GetTopologyDetails {
                 .setForwardingRule(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE)
                 .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
                 .build();
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                .setCostAlgorithm("Restricted Shortest Path - RSP")
+                .setCostName("HOP_COUNT")
+                .setCostValue(TapiConstants.COST_HOP_VALUE)
+                .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(UUID.nameUUIDFromBytes(("rdm infra node rule group").getBytes(StandardCharsets.UTF_8))
                     .toString()))
                 .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
                 .setNodeEdgePoint(nepMap)
+                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
                 .build();
         return new HashMap<NodeRuleGroupKey, NodeRuleGroup>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
