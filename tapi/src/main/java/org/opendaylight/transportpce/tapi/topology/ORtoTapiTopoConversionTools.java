@@ -402,11 +402,31 @@ public class ORtoTapiTopoConversionTools {
             .setRuleType(new HashSet<RuleType>(Set.of(RuleType.FORWARDING)))
             .build();
         Name nrgName = new NameBuilder().setValueName("nrg name").setValue(nrgNameValue).build();
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                .setCostAlgorithm("Restricted Shortest Path - RSP")
+                .setCostName("HOP_COUNT")
+                .setCostValue(TapiConstants.COST_HOP_VALUE)
+                .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
         NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
             .setName(Map.of(nrgName.key(), nrgName))
             .setUuid(new Uuid(UUID.nameUUIDFromBytes((nrgNameValue).getBytes(StandardCharsets.UTF_8)).toString()))
             .setRule(new HashMap<RuleKey, Rule>(Map.of(rule.key(), rule)))
             .setNodeEdgePoint(nepMap)
+            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setCostCharacteristic(null)
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
@@ -492,6 +512,22 @@ public class ORtoTapiTopoConversionTools {
 
         Map<InterRuleGroupKey, InterRuleGroup> irgMapp = new HashMap<>();
         String irgNameValue = " irg-" + index;
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                .setCostAlgorithm("Restricted Shortest Path - RSP")
+                .setCostName("HOP_COUNT")
+                .setCostValue(TapiConstants.COST_HOP_VALUE)
+                .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
 
         Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
         InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
@@ -499,6 +535,9 @@ public class ORtoTapiTopoConversionTools {
             .setName(Map.of(irgName.key(), irgName))
             .setRule(new HashMap<>(Map.of(rule.key(), rule)))
             .setAssociatedNodeRuleGroup(associatedNrgMap)
+            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
             .build();
         irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
 
@@ -550,6 +589,22 @@ public class ORtoTapiTopoConversionTools {
                 anrg.getKey(), anrg.getValue(),
                 associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getKey(),
                 associatedNrgDegMap.entrySet().stream().findFirst().orElseThrow().getValue()));
+            CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+                    .setCostAlgorithm("Restricted Shortest Path - RSP")
+                    .setCostName("HOP_COUNT")
+                    .setCostValue(TapiConstants.COST_HOP_VALUE)
+                    .build();
+            LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+                .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+                .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+                .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+                .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+                .setTrafficPropertyName("FIXED_LATENCY")
+                .build();
+            RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+                .setRiskCharacteristicName("risk characteristic")
+                .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+                .build();
 
             Name irgName = new NameBuilder().setValueName("irg name").setValue(irgNameValue).build();
             InterRuleGroup interRuleGroup = new InterRuleGroupBuilder()
@@ -557,6 +612,9 @@ public class ORtoTapiTopoConversionTools {
                 .setName(Map.of(irgName.key(), irgName))
                 .setRule(new HashMap<>(Map.of(rule.key(), rule)))
                 .setAssociatedNodeRuleGroup(associatedNrgMap)
+                .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+                .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+                .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
                 .build();
             irgMapp.put(new InterRuleGroupKey(interRuleGroup.getUuid()), interRuleGroup);
             srgCounter++;
