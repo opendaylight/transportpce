@@ -685,7 +685,7 @@ class TransportTapitesting(unittest.TestCase):
 
     def test_51_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
-        time.sleep(2)
+        time.sleep(6)
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         print("Tapi Feature uninstalled")
