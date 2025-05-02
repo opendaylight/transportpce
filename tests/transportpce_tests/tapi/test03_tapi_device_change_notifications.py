@@ -135,12 +135,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             result = test_utils.install_karaf_feature("odl-transportpce-tapi")
             if result.returncode != 0:
                 cls.init_failed = True
-            print("Restarting OpenDaylight...")
-            test_utils.shutdown_process(cls.processes[0])
-            cls.processes[0] = test_utils.start_karaf()
-            test_utils.process_list[0] = cls.processes[0]
-            cls.init_failed = not test_utils.wait_until_log_contains(
-                test_utils.KARAF_LOG, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
         if cls.init_failed:
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
@@ -973,12 +967,14 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_71_check_uninstall_Tapi_Feature(self):
         test_utils.uninstall_karaf_feature("odl-transportpce-tapi")
-        time.sleep(2)
+        time.sleep(16)
+        print("Tapi Feature uninstalled")
+
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
-        print("Tapi Feature uninstalled")
         self.assertNotIn('node', response['network'][0])
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
+
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
