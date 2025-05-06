@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29d1e6e_369ed0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-06T05:43:35Z",
+      "side": 1,
+      "message": "Just realized I\u0027m not in the reviewers list (it appears I clicked on the wrong link). Anyway, I\u0027ll submit my thoughts anyway now that I\u0027ve written them. I\u0027ll pay closer attention to the review list in the future.",
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc10dd1_7e9da307",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-06T05:43:35Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure I understand the logic, but it looks like the intent is to use the lowest value for either spcXpdr1 or spcXpdr2. \n\n1. It appears we call `getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU)` twice, if I\u0027m not mistaken. Seems redundant to me.\n2. We only execute `getClientRateFromNep(spcXpdr2, TapiConstants.E_ODU);` if `spcXpdr1 \u003e\u003d 100.0`. Why? What about `spcXpdr2 \u003c spcXpdr1`? Can\u0027t tell if it\u0027s a mistake or intentional.\n3. If nothing is found, the method uses 100.0 by default. I think we can do away with the if-statement, to be honest.\n\nHow about we \"tell\" `getClientRateFromNep` what value to use by default, i.e. 100.0 and use the lowest value returned. Something like:\n\n    // Identify rate of the client port\n    List\u003cDouble\u003e rateList \u003d Arrays.asList(\n            getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU, 100.0),\n            getClientRateFromNep(spcXpdr2, TapiConstants.E_ODU, 100.0)\n    );\n\n    LOG.debug(\"CU Line 1026 : get rate from E_ODU Nep of {} \u003d {} for decrementation on IODU Nep\",\n            spcXpdr1, rateList);\n    rateList.sort(Double::compare);\n    Double rate \u003d rateList.stream().findFirst();\n    ...",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1028,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44f0502_64f403c2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-06T05:43:35Z",
+      "side": 1,
+      "message": "This method uses two hard coded double values: 100.0 and 999999.9. Adding another parameter to the method: `Double defaultRate`, should remove the need for both of them, imho.\n\nAll found rates are added to an `ArrayList` (including the default value). The array list is then sorted in ascending order and finally the first item in the list is returned. Something like:\n\n    /**\n     * Get the client rate from NEP.\n     *\n     * \u003cp\u003eFinds the lowest client rate lower than defaultRate.\n     * If no client rate is found, the default rate is returned.\u003c/p\u003e\n     *\n     * @param id the id\n     * @param qualifier the qualifier\n     * @param defaultRate the default rate\n     * @return the client rate from nep\n     */\n    private double getLowestClientRateFromNep(String id, String qualifier, Double defaultRate) {\n        ...\n        var onep \u003d getNepFromDS(this.tapiTopoUuid, nodeUuid, nepUuid);\n\n        if (onep \u003d\u003d null) {\n            ...\n            return defaultRate;\n        }\n\n        List\u003cSupportedPayloadStructure\u003e splList \u003d onep.getSupportedPayloadStructure();\n        if (splList \u003d\u003d null || splList.isEmpty()) {\n            ...\n            return defaultRate;\n        }\n        List\u003cDouble\u003e rateList \u003d new ArrayList\u003c\u003e();\n        rateList.add(defaultRate);\n\n        for (SupportedPayloadStructure spl : splList) {\n        ...\n        }\n\n        rateList.sort(Double::compare);\n\n        return rateList.stream().findFirst().get();\n    }",
+      "range": {
+        "startLine": 1659,
+        "startChar": 0,
+        "endLine": 1694,
+        "endChar": 5
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9334344d_7679d9de",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-06T05:43:35Z",
+      "side": 1,
+      "message": "Quite a few tiny things that may go wrong on these 4 four lines alone, if you ask me. Reading the code I\u0027m getting the impression a NEPid is both a \"clear text string\" and a Uuid where `clear_text_string !\u003d Uuid`. \n\nWouldn\u0027t it be helpful to keep these two values together as an object? Meaning creating a class from which both may be retrieved? Perhaps also creating a factory simplifying creating an \"ID object\". \n\nThe same goes for xpdr id (I\u0027m guessing it\u0027s a XPDR id in the parameter list based on the name of the method). \n\nSometimes, when a piece of information may be expressed in different ways (in this case as a plain text string and an UUID), I find it helpful to keep the original value and its converted counterpart together and thereby simplifying debugging/troubleshooting etc. Another approach is to keep them separate but allow easy conversion back and forth. As it is right now, the original value is somewhat \"lost in translation\". As useful as an Uuid is, it says nothing about its origin.\n\ne.g. (very simplified)\n\n    XPDRid xpdr \u003d new XPDRid(\"...\");\n    NEPid nep \u003d new IdFactory().nepFromXpdr(xpdr);\n\n    or\n\n    //Create a NEPid from an XPDR id by wrapping the XPDR id with an adapter\n    NEPid nep \u003d new XpdrNEPidAdapter(xpdr);\n\n    System.out.println(NEPid);\n    //echo out plain text string\n    \n    System.out.println(nep.uuid());\n    //echo out uuid\n    \nJust a thought.",
+      "range": {
+        "startLine": 1740,
+        "startChar": 0,
+        "endLine": 1743,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
