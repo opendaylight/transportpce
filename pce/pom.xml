@@ -25,6 +25,8 @@
 
   <properties>
     <transportpce.models.version>21.2.2</transportpce.models.version>
+    <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+    <mockito-core.version>5.16.0</mockito-core.version>
   </properties>
 
   <dependencyManagement>
@@ -207,11 +209,7 @@
       <artifactId>rfc6991-ietf-yang-types</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
+
     <!-- Wiremock is used to mock the HTTP server for gnpy consumer unit tests
     we have to use a very old version because opendaylight uses an old version of Jetty server.
     When opendaylight will upgrade to a newer version of Jetty, we will be able to upgrade wiremock
@@ -236,16 +234,29 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
+
+    <!-- specifying dependency explicity so we can add the java agent explicitly in the surefire plugin -->
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId>
-      <version>1.4.21</version>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito-core.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <argLine>
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito-core.version}/mockito-core-${mockito-core.version}.jar
+            -Xshare:off
+          </argLine>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
