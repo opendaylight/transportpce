@@ -267,8 +267,13 @@ public class TapiLinkImpl implements TapiLink {
         //Retrieve OMS from OR link for both end
         //Build OTS media connection End Point spec
         //Build Cep and put them in DataStore
-        LOG.info("In TapiLinkImpl, creating CEP");
+        LOG.debug("In TapiLinkImpl, creating CEP");
+        var omsAttributesSpan = NetworkUtils.getOmsAttributesSpan(link);
+        LOG.debug("In TapiLinkImpl, omsAttributes of the span for link {} equals {}",
+            link.getLinkId(), omsAttributesSpan);
         Map<String,Double> lossPoutcorrect = NetworkUtils.calcSpanLoss(link);
+        LOG.debug("In TapiLinkImpl, for link {} lossPoutcorrect equals {}",
+            link.getLinkId(), lossPoutcorrect);
         Decimal64 linkLoss = Decimal64.valueOf("9999");
         if (lossPoutcorrect != null && lossPoutcorrect.containsKey("SpanLoss")) {
             linkLoss = Decimal64.valueOf(lossPoutcorrect.entrySet().stream()
@@ -276,6 +281,7 @@ public class TapiLinkImpl implements TapiLink {
                 RoundingMode.UP);
         }
         Map<String, Double> pmd = NetworkUtils.calcCDandPMD(link);
+        LOG.debug("In TapiLinkImpl, for link {} pmd equals {}", link.getLinkId(), pmd);
         Decimal64 pmdValue = Decimal64.valueOf("0");
         if (pmd != null && pmd.containsKey("PMD")) {
             pmdValue = Decimal64.valueOf(pmd.entrySet().stream().filter(res -> res.getKey()
@@ -303,6 +309,8 @@ public class TapiLinkImpl implements TapiLink {
                     link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
                     .Link1.class).getOppositeLink());
             Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
+            LOG.debug("In TapiLinkImpl, for link {} opposite lossPoutcorrect equals {}",
+                link.getLinkId(), opplossPoutcorrect);
             oppLinkLoss = Decimal64.valueOf("9999");
             if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
                 oppLinkLoss = Decimal64.valueOf(opplossPoutcorrect.entrySet().stream()
@@ -358,8 +366,10 @@ public class TapiLinkImpl implements TapiLink {
             .setOtsImpairments(otsImpairmentListA).build();
         OtsMediaConnectionEndPointSpec otsMCCepSpecZ = new OtsMediaConnectionEndPointSpecBuilder()
             .setOtsImpairments(otsImpairmentListZ).build();
-        LOG.debug("LINKIMPL365 OtsMediaConnectionEndSpec for link {} on A end is {}",link.getLinkId(), otsMCmCepSpecA);
-        LOG.debug("LINKIMPL366 OtsMediaConnectionEndSpec for link {} on Z end is {}}",link.getLinkId(), otsMCCepSpecZ);
+        LOG.debug("LINKIMPL365 OtsMediaConnectionEndSpec for link {} on A end is {}",
+            link.getLinkId(), otsMCmCepSpecA);
+        LOG.debug("LINK LINKIMPL366 OtsMediaConnectionEndSpec for link {} on Z end is {}",
+            link.getLinkId(), otsMCCepSpecZ);
 
 
         ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(
@@ -376,13 +386,13 @@ public class TapiLinkImpl implements TapiLink {
 
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiConstants.PHTNC_MEDIA_OTS, cepNodeAots);
-        LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
+        LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeAots.getName(), otsMCmCepSpecA);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeAoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiConstants.PHTNC_MEDIA_OMS, cepNodeAoms);
-        LOG.info("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
+        LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeAoms.getName());
         intermediateSupNodeId = getSupportingNodeFromNodeId(link.getDestination().getDestNode().getValue());
         intermediateTp = link.getDestination().getDestTp().getValue();
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
@@ -390,13 +400,13 @@ public class TapiLinkImpl implements TapiLink {
             intermediateTp), TapiConstants.PHTNC_MEDIA_OTS, otsMCCepSpecZ, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiConstants.PHTNC_MEDIA_OTS, cepNodeZots);
-        LOG.info("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
+        LOG.debug("In TapiLinkImpl create Cep {} with otsCepSpec {}", cepNodeZots.getName(), otsMCCepSpecZ);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint
                 cepNodeZoms = tapiFactory.createCepRoadm(0, 0, String.join("+", intermediateSupNodeId,
             intermediateTp), TapiConstants.PHTNC_MEDIA_OMS, null, false);
         putRdmCepInTopoContextAndAddToCepList(intermediateSupNodeId, intermediateTp,
             TapiConstants.PHTNC_MEDIA_OMS, cepNodeZoms);
-        LOG.info("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
+        LOG.debug("In TapiLinkImpl create Cep {} ", cepNodeZoms.getName());
 
     }
 
