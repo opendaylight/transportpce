@@ -16,6 +16,24 @@
       "message": "Why are these additional dependencies needed for the TAPI feature (especially the odl-netconf-all)? Could it be an alternative solution to simply remove them?",
       "revId": "525c33d82e60509cf76eeb5cd6c69ac35d4bfe61",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e890fa68_95a01b1f",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-07T14:35:38Z",
+      "side": 1,
+      "message": "I thought I had just checked that we really needed it. Apparently, I must have forgotten to do so. Indeed, we had two dependencies that weren\u0027t necessary. So I simply removed them. Thanks, Jonas, for noticing that.",
+      "parentUuid": "80b81c67_a0fa83f0",
+      "revId": "525c33d82e60509cf76eeb5cd6c69ac35d4bfe61",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
