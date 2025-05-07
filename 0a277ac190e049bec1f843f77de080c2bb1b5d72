@@ -365,6 +365,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f636b910_f6df2c51",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "aacf0309_5d3406ca",
+      "range": {
+        "startLine": 772,
+        "startChar": 12,
+        "endLine": 774,
+        "endChar": 13
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e844a454_6557d5fe",
@@ -426,6 +450,30 @@
       "side": 1,
       "message": "OK. Can you add a TODO comment so that we do not forget it? Thanks",
       "parentUuid": "f6862e81_1ca39a39",
+      "range": {
+        "startLine": 829,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 51
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e4b04c3_742dfaea",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "Update TODO comment.",
+      "parentUuid": "caa2f124_348c7235",
       "range": {
         "startLine": 829,
         "startChar": 1,
@@ -1574,6 +1622,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1792916d_8306d0ba",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "This OpenConfig check was removed and committed in Patchset3. Hence no TODO added.",
+      "parentUuid": "e5dda63b_b2429981",
+      "range": {
+        "startLine": 415,
+        "startChar": 6,
+        "endLine": 415,
+        "endChar": 34
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23c99c42_e3782a34",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -1669,6 +1741,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0678446e_8fe396b7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "This OpenConfig check was removed and committed in Patchset3. Hence no TODO added.",
+      "parentUuid": "b8419938_5a63b4bb",
+      "range": {
+        "startLine": 430,
+        "startChar": 2,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5eb5f443_5011e96d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
         "patchSetId": 3
@@ -1728,6 +1824,30 @@
       "side": 1,
       "message": "OK, lets keep it as is, but add a TODO comment. When we will fully handle Alien (meaning the RPCs dedicated to power adjustement loop) we may need later-on to adjust power to make sure it complies with the configuration we have (other adjacent channels on the same SRG)",
       "parentUuid": "b822647b_ebb669da",
+      "range": {
+        "startLine": 493,
+        "startChar": 31,
+        "endLine": 493,
+        "endChar": 98
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53de672_a3ed1801",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "When admin state is down, there is no effect for the frequency or power configured.",
+      "parentUuid": "46937c73_b42cf981",
       "range": {
         "startLine": 493,
         "startChar": 31,
@@ -1870,6 +1990,30 @@
       "side": 1,
       "message": "That makes sense to me for power, but I find it a bit dangerous for frequency.... We should avoid any potential conflict during further configuration (wavelength collide on same SRG)",
       "parentUuid": "62830369_908a9420",
+      "range": {
+        "startLine": 691,
+        "startChar": 5,
+        "endLine": 701,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2675ac70_d485829d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "When admin state is down, there is no effect for the frequency or power configured.",
+      "parentUuid": "073bd31f_45413fd2",
       "range": {
         "startLine": 691,
         "startChar": 5,
@@ -2261,6 +2405,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97a86b35_dbf64459",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "TODO comments updated",
+      "parentUuid": "d1caac50_482ab6da",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f1bb525_5185d663",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -2498,6 +2666,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d277fde_8d0b5d24",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "TODO comments updated",
+      "parentUuid": "30e19a7e_99a78f67",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3049e411_385dcf8a",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 3
@@ -2557,6 +2749,30 @@
       "side": 1,
       "message": "OK, same as before : if you don\u0027t mind, please put a TODO comment with what may need to be adjusted through future work.Thanks.",
       "parentUuid": "0d6d86a5_b10688b1",
+      "range": {
+        "startLine": 674,
+        "startChar": 8,
+        "endLine": 675,
+        "endChar": 26
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c877a69_e2a3c270",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2025-05-07T06:17:50Z",
+      "side": 1,
+      "message": "TODO comments updated",
+      "parentUuid": "f3d7f2a3_9ad87dc9",
       "range": {
         "startLine": 674,
         "startChar": 8,
