@@ -76,19 +76,25 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             }
 
             if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                        || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-                        || link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+                        || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)
+                        || link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))) {
                 // No creation of link for ADD/DROP/EXPRESS links
-                LOG.warn("Not triggering creation of link for type = {}", link1.getLinkType().getName());
+                LOG.debug("TapiORLinkListener Line 82 Not triggering creation of link for type = {}, RtoR = {}",
+                    link1.getLinkType().getName(), link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM));
                 continue;
             }
 
-            if (!oppositeLinkExists(link1.getOppositeLink())) {
-                LOG.warn("Opposite link doest exist. Not creating TAPI link");
+            if (link1.getOppositeLink() != null && !oppositeLinkExists(link1.getOppositeLink())) {
+                LOG.debug("Opposite link doesn't exist. Not creating TAPI link");
                 return;
             }
             LOG.info("Opposite link already in datastore. Creating TAPI bidirectional link");
-
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1 link11 = link
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1.class);
+            if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
+                && link11.getOMSAttributes() != null) {
+                LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());
+            }
             String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
             String srcTp = link.getSource().getSourceTp().getValue();
             String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
@@ -113,7 +119,9 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
 
             // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
             // through rpcs and do not contain characteristics subject to potential updates
-            if (change.getRootNode().dataBefore() != null) {
+            if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
+                || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
+                && change.getRootNode().dataBefore() != null) {
                 continue;
             }
             putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
