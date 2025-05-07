@@ -50,6 +50,7 @@ public final class NetworkUtils {
             LOG.error("NetworkUtils No Link getOMSAttributes available. {}", link.getLinkId().getValue());
             return null;
         }
+        LOG.debug("NetworkUtils Line 53: found augmentation OMS of link {}", link.getLinkId());
         return link1.getOMSAttributes().getSpan();
     }
 
