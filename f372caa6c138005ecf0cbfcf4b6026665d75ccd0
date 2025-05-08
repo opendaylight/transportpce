@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "f372caa6c138005ecf0cbfcf4b6026665d75ccd0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae840ee3_557ecc98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2025-05-08T11:00:32Z",
+      "side": 1,
+      "message": "plugin versions are managed upstream, there is no reason to declare surefire version.\n\nalso, are you saying https://git.opendaylight.org/gerrit/c/odlparent/+/113753/4/odlparent/pom.xml does not work?",
+      "revId": "f372caa6c138005ecf0cbfcf4b6026665d75ccd0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
