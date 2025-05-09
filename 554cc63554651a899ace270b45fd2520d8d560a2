@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "554cc63554651a899ace270b45fd2520d8d560a2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9285a97e_b6cf2094",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-09T15:35:14Z",
+      "side": 1,
+      "message": "Ah, sorry Joakim. I didn\u0027t notice that you had proposed this correction and I also fixed this issue in the change 116406...",
+      "revId": "554cc63554651a899ace270b45fd2520d8d560a2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
