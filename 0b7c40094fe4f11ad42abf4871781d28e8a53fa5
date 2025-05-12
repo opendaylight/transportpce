@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be19f58c_e11a6ed2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-12T14:34:36Z",
+      "side": 1,
+      "message": "As per now, getClientRateFromNep is supposed to return 999999.9 (kind of error code in a Double flavor) in case the supportedPayloadStructure of the NEP is not correctly populated, 100 if it did not succed finding something less than 100G in the supportedPayloadStructure, or a lower rate if it succeeded finding a lower value. As a value equals to 100 or greater could be return if nothing is populated at lower rate, for value \u003e\u003d 100 we investigate on the other end, to check if lower values are populated on the other xponder in supported payload structure. Then we take lowest value found.\nFor sure this is not perfect, and this will need to be completed as soon we will support higher rates with a possibility to multiplex, as an example, 400G client rate.\nFrom a general perspective, it is clear that my code could be improved. And this is clearly not the only example. However, as you know, I am running after time and I am clearly out fo schedule for my plans which is to have a full implementation of TAPI in tpce. This means that if I try to correct bugs that clearly affect the implementation, I don\u0027t spend to much time on improving code if it does not change the behavior, especially if I know that a piece of code will need to be refactored in a next step, while introducing a new feature or extending a feature. And this is the case here. We have some plans to support 800G end2end in tpce. A lot of code will need to be refactored, and this is one of our next priorities. \nHowever, not having time to do it, does not prevent someone else to make any adjustment. So feel free to apply the suggested modifications if you feel this must be done.",
+      "parentUuid": "efc10dd1_7e9da307",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1028,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c44f0502_64f403c2",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 19
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a7cbc0d_eb8dc71b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-12T14:34:36Z",
+      "side": 1,
+      "message": "Thanks Joakim, Good suggestion. Please see comment above. Feel free to apply it when we have merged the full suite.",
+      "parentUuid": "c44f0502_64f403c2",
+      "range": {
+        "startLine": 1659,
+        "startChar": 0,
+        "endLine": 1694,
+        "endChar": 5
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9334344d_7679d9de",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 19
@@ -77,6 +125,30 @@
       "writtenOn": "2025-05-06T05:43:35Z",
       "side": 1,
       "message": "Quite a few tiny things that may go wrong on these 4 four lines alone, if you ask me. Reading the code I\u0027m getting the impression a NEPid is both a \"clear text string\" and a Uuid where `clear_text_string !\u003d Uuid`. \n\nWouldn\u0027t it be helpful to keep these two values together as an object? Meaning creating a class from which both may be retrieved? Perhaps also creating a factory simplifying creating an \"ID object\". \n\nThe same goes for xpdr id (I\u0027m guessing it\u0027s a XPDR id in the parameter list based on the name of the method). \n\nSometimes, when a piece of information may be expressed in different ways (in this case as a plain text string and an UUID), I find it helpful to keep the original value and its converted counterpart together and thereby simplifying debugging/troubleshooting etc. Another approach is to keep them separate but allow easy conversion back and forth. As it is right now, the original value is somewhat \"lost in translation\". As useful as an Uuid is, it says nothing about its origin.\n\ne.g. (very simplified)\n\n    XPDRid xpdr \u003d new XPDRid(\"...\");\n    NEPid nep \u003d new IdFactory().nepFromXpdr(xpdr);\n\n    or\n\n    //Create a NEPid from an XPDR id by wrapping the XPDR id with an adapter\n    NEPid nep \u003d new XpdrNEPidAdapter(xpdr);\n\n    System.out.println(NEPid);\n    //echo out plain text string\n    \n    System.out.println(nep.uuid());\n    //echo out uuid\n    \nJust a thought.",
+      "range": {
+        "startLine": 1740,
+        "startChar": 0,
+        "endLine": 1743,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f88132_2df506e6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-12T14:34:36Z",
+      "side": 1,
+      "message": "Agree on your remarks. However, there is a huge number of locations where the same principle is applied. So a global correction and refactoring may be required, at a later step in my view, focusing on this point.\n \nThen we must consider that until now, everything that is associated with Tapi, is generated from OR world. When tapi SBI will be developped, we might have some Uuid that have no correspondance with the names. For this reason, I am not really in favor of building a specific object keping these 2 values. We will need in any case to make adjustment for all what is not associated with TAPI in a pure OpenROADM context.",
+      "parentUuid": "9334344d_7679d9de",
       "range": {
         "startLine": 1740,
         "startChar": 0,

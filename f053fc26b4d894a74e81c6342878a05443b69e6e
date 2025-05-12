@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dcf3103_83e77313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-12T14:34:36Z",
+      "side": 1,
+      "message": "Hi Joakim, \nThanks for your valuable comments. Provided some answer to your comments.\n\nIt is clear that my code could be improved, and in many other places. \nI am currently running after time and I am clearly out fo schedule for my plans which is to have a full implementation of TAPI in tpce.\n\nSo if I try to correct bugs that clearly affect the implementation, I don\u0027t spend to much time on improving code if it does not change the behavior, especially if I know that a piece of code will need to be refactored in a next step, and this is the case here (we have some plans to extend E2E support of 800G services in tpce).\n\nHowever, feel free to apply the suggested modifications if you feel this must be done when the suite will be merged.",
+      "revId": "f053fc26b4d894a74e81c6342878a05443b69e6e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
