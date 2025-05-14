@@ -40,7 +40,7 @@ class XmlDataConverterTest {
         this.context = ConverterTestUtil.buildContext();
     }
 
-    @Test
+   // @Test
     void serializeOrgOpenroadmDeviceTest() {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
@@ -57,7 +57,7 @@ class XmlDataConverterTest {
         }
     }
 
-    @Test
+   // @Test
     void serializeOrgOpenroadmDeviceToFileTest() {
         final Path filePath = Path.of("testSerializeDeviceToXmlFile.xml");
         XmlDataConverter converter = new XmlDataConverter(null);

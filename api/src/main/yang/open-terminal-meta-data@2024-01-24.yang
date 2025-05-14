@@ -3,8 +3,10 @@ module open-terminal-meta-data {
   namespace "http://org/opendaylight/transportpce/open-terminal-meta-data";
   prefix "otmd";
 
-  import openconfig-transport-types { prefix oc-opt-types; }
-
+  import openconfig-transport-types { 
+  prefix oc-opt-types; 
+  revision-date 2021-07-29;
+  }
   organization
     "transportPCE";
   contact
