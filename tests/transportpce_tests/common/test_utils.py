@@ -798,3 +798,18 @@ def sims_update_pm_interact_ntcf(sim: tuple, payload: dict):
     if "netconf_client.ncclient.RPCReply" in str(reply):
         return True
     return False
+
+
+def assert_json_equal_unordered(self, json1, json2):
+    def compare_dicts(d1, d2):
+        if d1.keys() != d2.keys():
+            return False
+        return all(compare_values(d1[key], d2[key]) for key in d1)
+
+    def compare_values(val1, val2):
+        if isinstance(val1, dict) and isinstance(val2, dict):
+            return compare_dicts(val1, val2)
+        elif isinstance(val1, list) and isinstance(val2, list):
+            return sorted(val1) == sorted(val2)
+        return val1 == val2
+    self.assertTrue(compare_dicts(json1, json2))
