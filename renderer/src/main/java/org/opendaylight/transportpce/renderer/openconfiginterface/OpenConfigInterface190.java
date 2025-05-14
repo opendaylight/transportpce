@@ -16,7 +16,7 @@ import java.util.Set;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev220610.interfaces.top.interfaces.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.PlatformComponentPropertiesConfig;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.anchors.top.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.PropertiesBuilder;
@@ -24,16 +24,16 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.properties.PropertyBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.properties.PropertyKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.Component1Builder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannel;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannelBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1Builder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPortBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.optical.port.Config;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.optical.port.ConfigBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.FrequencyType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.Component1Builder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.optical.channel.top.OpticalChannel;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.optical.channel.top.OpticalChannelBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.Port1;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.Port1Builder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.transport.line.common.port.top.OpticalPortBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.transport.line.common.port.top.optical.port.Config;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.transport.line.common.port.top.optical.port.ConfigBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.FrequencyType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev230126.EthernetCsmacd;
@@ -243,9 +243,9 @@ public class OpenConfigInterface190 {
 
     private List<ComponentBuilder> createOpticalChannelComponentBuilder(Mapping portMap, ServicePathInput input,
         boolean isAend) {
-        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610
                 .terminal.optical.channel.top.optical.channel.ConfigBuilder configBuilder = new org.opendaylight
-                .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.optical
+                .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.optical.channel.top.optical
                 .channel.ConfigBuilder();
         configBuilder.setTargetOutputPower(input.getTargetOutputPower());
         configBuilder.setOperationalMode(isAend
@@ -335,9 +335,9 @@ public class OpenConfigInterface190 {
             for (String supportedInterface : supportedInterfaces) {
                 InterfaceBuilder interfaceBuilder = new InterfaceBuilder();
                 interfaceBuilder.setName(supportedInterface);
-                org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces
+                org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev220610.interfaces.top.interfaces
                         ._interface.ConfigBuilder configBuilder = new org.opendaylight.yang.gen.v1.http.openconfig.net
-                        .yang.interfaces.rev210406.interfaces.top.interfaces._interface.ConfigBuilder();
+                        .yang.interfaces.rev220610.interfaces.top.interfaces._interface.ConfigBuilder();
                 configBuilder.setName(supportedInterface);
                 configBuilder.setType(EthernetCsmacd.VALUE);//mandatory parameter
                 configBuilder.setEnabled(enableState);

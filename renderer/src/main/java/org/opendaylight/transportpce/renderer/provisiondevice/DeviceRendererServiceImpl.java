@@ -62,7 +62,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Subscriber;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.NonStickHistoryMemory;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.NodelistBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.NodelistKey;

@@ -60,31 +60,29 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.Subcomponent;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.OPENCONFIGHARDWARECOMPONENT;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.TRANSCEIVER;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.OpenconfigTerminalDeviceData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDevice;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDeviceBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignments;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.LogicalChannelAssignmentsBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.Assignment;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.ingress.top.Ingress;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.ingress.top.IngressBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.LogicalChannels;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.LogicalChannelsBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.Channel;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.ChannelBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.ChannelKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1Builder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPort;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPortBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALCHANNEL;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALPORTTYPE;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TRIBUTARYPROTOCOLTYPE;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220610.OPENCONFIGHARDWARECOMPONENT;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.OpenconfigTerminalDeviceData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.device.top.TerminalDevice;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.device.top.TerminalDeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.chan.assignment.top.LogicalChannelAssignments;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.chan.assignment.top.LogicalChannelAssignmentsBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.chan.assignment.top.logical.channel.assignments.Assignment;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.chan.assignment.top.logical.channel.assignments.AssignmentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.ingress.top.Ingress;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.ingress.top.IngressBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.top.LogicalChannels;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.top.LogicalChannelsBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.top.logical.channels.Channel;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.top.logical.channels.ChannelBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal.logical.channel.top.logical.channels.ChannelKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.Port1;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.Port1Builder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.transport.line.common.port.top.OpticalPort;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev220610.transport.line.common.port.top.OpticalPortBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.OPTICALPORTTYPE;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.TRIBUTARYPROTOCOLTYPE;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaData;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaDataBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.LineCardInfo;
@@ -298,16 +296,16 @@ public class OCPortMappingTest {
     }
 
     LogicalChannels getLogicalChannelTestData() {
-        var state = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal
+        var state = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal
                 .logical.channel.ingress.top.ingress.StateBuilder().setTransceiver("qsfp-1").build();
-        var channelState = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal
+        var channelState = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610.terminal
                 .logical.channel.top.logical.channels.channel.StateBuilder()
                 .setTribProtocol(TRIBUTARYPROTOCOLTYPE.VALUE).build();
         Ingress ingress = new IngressBuilder().setState(state).build();
-        var assignmentState = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729
+        var assignmentState = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610
                 .terminal.logical.chan.assignment.top.logical.channel.assignments.assignment.StateBuilder()
                 .setLogicalChannel(Uint32.valueOf("10001")).build();
-        var assignmentState2 = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729
+        var assignmentState2 = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev220610
                 .terminal.logical.chan.assignment.top.logical.channel.assignments.assignment.StateBuilder().build();
         Assignment assignment = new AssignmentBuilder().setState(assignmentState)
                 .setIndex(Uint32.valueOf("10001")).build();
@@ -346,7 +344,7 @@ public class OCPortMappingTest {
         subcomponentMap.put(subcomponent.key(), subcomponent);
         Subcomponents subcomponents = new SubcomponentsBuilder().setSubcomponent(subcomponentMap).build();
         var opticalState = new  org.opendaylight.yang.gen.v1.http.openconfig.net.yang
-                .transport.line.common.rev190603.transport.line.common.port.top.optical.port.StateBuilder()
+                .transport.line.common.rev220610.transport.line.common.port.top.optical.port.StateBuilder()
                 .setOpticalPortType(getOpticalPorttype(TERMINALLINE)).build();
         OpticalPort opticalPort = new OpticalPortBuilder().setState(opticalState).build();
         Port1 port1 = new Port1Builder().setOpticalPort(opticalPort).build();
@@ -370,7 +368,7 @@ public class OCPortMappingTest {
         State statePort = new StateBuilder()
                 .setName("qsfp-1")
                 .setType(new PlatformComponentState.Type(
-                        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327.PORT.VALUE))
+                        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220610.PORT.VALUE))
                 .setDescription("QSFP PORT 1")
                 .setParent("linecard-1")
                 .build();
@@ -379,7 +377,7 @@ public class OCPortMappingTest {
         subcomponentMap.put(subcomponent.key(), subcomponent);
         Subcomponents subcomponents = new SubcomponentsBuilder().setSubcomponent(subcomponentMap).build();
         var opticalState = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang
-                .transport.line.common.rev190603.transport.line.common.port.top.optical.port.StateBuilder()
+                .transport.line.common.rev220610.transport.line.common.port.top.optical.port.StateBuilder()
                 .setOpticalPortType(getOpticalPorttype(TERMINALCLIENT))
                 .setAdminState(AdminStateType.ENABLED).build();
         OpticalPort opticalPort = new OpticalPortBuilder().setState(opticalState).build();
@@ -396,7 +394,7 @@ public class OCPortMappingTest {
         State statePort = new StateBuilder()
                 .setName("qsfp-transceiver-1")
                 .setType(new PlatformComponentState.Type(
-                        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220327
+                        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.types.rev220610
                                 .TRANSCEIVER.VALUE))
                 .setDescription("QSFP TRANSCEIVER 1")
                 .setParent("qsfp-1")
@@ -415,7 +413,7 @@ public class OCPortMappingTest {
         State statePort = new StateBuilder()
                 .setName("qsfp-opt-1-1")
                 .setType(new PlatformComponentState.Type(org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport
-                        .types.rev210729.OPTICALCHANNEL.VALUE))
+                        .types.rev220610.OPTICALCHANNEL.VALUE))
                 .setDescription("QSFP OPTICAL CHANNEL 1-1")
                 .setParent("qsfp-transceiver-1")
                 .build();
@@ -426,8 +424,8 @@ public class OCPortMappingTest {
 
     OPTICALPORTTYPE getOpticalPorttype(String portType) {
         return portType.equalsIgnoreCase(TERMINALLINE)
-                ? org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALLINE.VALUE
-                : org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TERMINALCLIENT.VALUE;
+                ? org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.TERMINALLINE.VALUE
+                : org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev220610.TERMINALCLIENT.VALUE;
     }
 
     OpenTerminalMetaData getTestMetaData() {

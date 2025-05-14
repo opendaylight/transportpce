@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.common.openconfiginterfaces;
 
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev220610.interfaces.top.interfaces.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
