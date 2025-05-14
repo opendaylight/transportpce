@@ -510,10 +510,16 @@ public class PceTapiOtnNode implements PceNode {
                 }
             }
         }
-        LOG.info("PTONLine471, did not find commonNRG to both Cl and NW with Rule can/must forward");
+        LOG.info("PTONLine513, did not find commonNRG to both Cl and NW with Rule can/must forward");
         // Being there means we did not find a common nrg with both one of the eODU and one iODU
         // Check if client Tps and Network tps have some nrgs that are interconnected through an IRG
         // with a Forwarding rule MAY/MUST meaning client are connected to Nw port
+        if (node.getInterRuleGroup() == null || node.getInterRuleGroup().isEmpty()
+                || node.getInterRuleGroup().entrySet().size() < 2) {
+            LOG.info("PTONLine519, did not find commonNRG to both Cl and NW with Rule can/must forward, "
+                + "and no usable IRG detected");
+            return false;
+        }
         for (Map.Entry<InterRuleGroupKey, InterRuleGroup> irg :node.getInterRuleGroup().entrySet()) {
             boolean nrgPresentInClient = false;
             boolean nrgPresentInNw = false;

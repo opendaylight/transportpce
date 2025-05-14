@@ -175,28 +175,19 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get link {} from mdsal: ", linkUuid, e);
         }
-        LOG.info("PceTapiLInkTest line 162 Link main parameters are {}, {}, {}, {}, {}, {}, {},",
-            rdm2rdmLink.getState(), rdm2rdmLink.getAdminStates(), rdm2rdmLink.getAvailableBandwidth(),
-            rdm2rdmLink.getLength(), rdm2rdmLink.getcd(), rdm2rdmLink.getpmd2(), rdm2rdmLink.getspanLoss());
-        LOG.info("PceTapiLInkTest line 165 Link main parameters are {}, {}, {}, {}, {}, {}, {}",
-            rdm2rdmLink.getLatency(), rdm2rdmLink.getsrlgList(), rdm2rdmLink.getlinkType(), rdm2rdmLink.getLinkName(),
-            rdm2rdmLink.getLinkId(), rdm2rdmLink.getSourceId(), rdm2rdmLink.getsourceNetworkSupNodeId());
-        LOG.info("PceTapiLInkTest line 190 Link main parameters are {}, {}, {}, {}, {}, {}, {}",
-            rdm2rdmLink.getDestTP(), rdm2rdmLink.getUsedBandwidth(), rdm2rdmLink.getAvailableBandwidth(),
-            rdm2rdmLink.getOppositeLink(), rdm2rdmLink.getpowerCorrection(), rdm2rdmLink.getDestId(),
-            rdm2rdmLink.getdestNetworkSupNodeId());
+
         assertTrue(rdm2rdmLink.isValid() == true, "RDM to RDM Link shall be valid)");
         assertTrue(rdm2rdmLink.getAdminStates().equals(AdministrativeState.UNLOCKED),
             "RDM to RDM Link admin state shall be Unlock)");
         assertTrue(rdm2rdmLink.getState().equals(OperationalState.ENABLED),
             "RDM to RDM Link operational state shall be enabled)");
-        assertTrue(rdm2rdmLink.getAvailableBandwidth().equals(100.0),
-            "RDM to RDM Link available bandwidth shall be 100.0)");
-        assertTrue(rdm2rdmLink.getpmd2().equals(0.0),"RDM to RDM LinkPMD shall be 0.0)");
-        assertTrue(rdm2rdmLink.getcd().equals(0.0),"RDM to RDM Link Chromatic dispersion shall be 0.0)");
-        assertTrue(rdm2rdmLink.getspanLoss().equals(0.0),"RDM to RDM link span loss shall be 0.0)");
-        assertTrue(rdm2rdmLink.getLength().equals(0.0),"RDM to RDM Link Length shall be 0.0)");
-        assertTrue(rdm2rdmLink.getLatency().equals(0.0),"RDM to RDM Link Latency shall be 0.0)");
+        assertTrue(rdm2rdmLink.getAvailableBandwidth().equals(Double.valueOf(96.0)),
+            "RDM to RDM Link available bandwidth shall be 96.0, based on a 50 GHz Grid (Not used)");
+        assertTrue(rdm2rdmLink.getpmd2().equals(16.0),"RDM to RDM LinkPMD2 shall be 16.0 ps/km)");
+        assertTrue(rdm2rdmLink.getcd().equals(1650.0),"RDM to RDM Link Chromatic dispersion shall be 1600 ps)");
+        assertTrue(rdm2rdmLink.getspanLoss().equals(12.0),"RDM to RDM link span loss shall be 12.0 dB)");
+        assertTrue(rdm2rdmLink.getLength().equals(100.0),"RDM to RDM Link Length shall be 100.0 km)");
+        assertTrue(rdm2rdmLink.getLatency().equals(501.0),"RDM to RDM Link Latency shall be 501.0 micro seconds)");
         assertTrue(rdm2rdmLink.getsrlgList() == null,"No SRLG declared for RDM to RDM )");
         assertTrue(rdm2rdmLink.getlinkType().equals(OpenroadmLinkType.ROADMTOROADM),
             "RDM to RDM Link link type shall be ROADMTOROADM)");
@@ -219,8 +210,6 @@ public class PceTapiLinkTest  extends AbstractTest {
         assertTrue(rdm2rdmLink.getdestNetworkSupNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"),
             "RDM to RDM Destination Supporting Node Id shall be ROADM-A1+PHOTONIC_MEDIA");
         assertTrue(rdm2rdmLink.getUsedBandwidth().equals(0.0), "RDM to RDM Link Used bandwidth shall be 0.0");
-        assertTrue(rdm2rdmLink.getAvailableBandwidth().equals(100.0),
-            "RDM to RDM Link Available bandwidth shall be 0.0");
         assertTrue(rdm2rdmLink.getpowerCorrection().equals(0.0),
             "RDM to RDM Link being by default G.652, Power correction shall be 0.0");
         assertTrue(rdm2rdmLink.getOppositeLink().getValue().equals("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef"),
@@ -257,7 +246,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get link {} from mdsal: ", linkUuid, e);
         }
-        // As port nETWORK1 already used on SPDR-SA1, it is not available for WDM service creation. As a result
+        // As port NETWORK1 already used on SPDR-SA1, it is not available for WDM service creation. As a result
         // The corresponding OTS NEP does not appear as a valid port in SPDR-SA1 and the Link from it to
         // the ROADM A-SRG can not be validated because.
         assertTrue(rdm2tspLink.isValid() == false, "RDM to RDM Link shall not be valid)");
