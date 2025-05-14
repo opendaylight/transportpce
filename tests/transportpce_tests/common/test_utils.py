@@ -821,3 +821,17 @@ def sims_update_pm_interact_ntcf(sim: tuple, payload: dict):
     if "netconf_client.ncclient.RPCReply" in str(reply):
         return True
     return False
+
+
+#
+# Recursively sorts the keys of dictionaries at all levels, including sorting lists.
+#
+
+def recursive_sort(d):
+    if isinstance(d, dict):
+        # Sort the dictionary keys at this level and recursively sort the values
+        return {k: recursive_sort(v) for k, v in sorted(d.items())}
+    if isinstance(d, list):
+        # If it's a list, sort each item in the list, ensuring that nested lists and dictionaries are also sorted
+        return sorted(recursive_sort(item) for item in d)
+    return d
