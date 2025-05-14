@@ -174,9 +174,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "FDvaQIf2Z08="
         self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
-        self.assertIn(
-            self.NETWORK1_CHECK_DICT,
-            response["mapping"])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK1_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_06_get_portmapping_network1(self):
         response = test_utils.get_portmapping_node_attr("XPDR-C2", "mapping", "XPDR3-NETWORK1")
@@ -184,9 +186,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR3-NETWORK1-OTUC1"
         self.NETWORK1_CHECK_DICT["lcp-hash-val"] = "AJpkaVmZKJk5"
         self.NETWORK1_CHECK_DICT["connection-map-lcp"] = "XPDR3-CLIENT1"
-        self.assertIn(
-            self.NETWORK1_CHECK_DICT,
-            response["mapping"])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK1_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_07_check_interface_otsi(self):
         # pylint: disable=line-too-long
@@ -616,9 +620,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         self.assertEqual(response["status_code"], requests.codes.ok)
         self.NETWORK1_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
         del self.NETWORK1_CHECK_DICT["connection-map-lcp"]
-        self.assertIn(
-            self.NETWORK1_CHECK_DICT,
-            response["mapping"])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK1_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_34_check_interface_otsi(self):
         # pylint: disable=line-too-long
