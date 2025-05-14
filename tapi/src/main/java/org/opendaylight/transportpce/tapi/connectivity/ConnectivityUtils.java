@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -130,7 +131,17 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.EndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.CapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU0;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU2E;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODU4;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.ODUTYPEODUCN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121.OTUTYPEOTU4;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPEGigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTSiMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
@@ -1489,10 +1500,42 @@ public final class ConnectivityUtils {
             .setConnectionEndPoint(new HashMap<>(Map.of(cep1.key(), cep1, cep2.key(), cep2)))
             .setOperationalState(OperationalState.ENABLED)
             .setLayerProtocolName(topProtocol)
+            .setLayerProtocolQualifier(setLPQfromString(qual))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
             .setLowerConnection(xcMap)
             .build();
+    }
+
+    private LAYERPROTOCOLQUALIFIER setLPQfromString(String lpq) {
+        LAYERPROTOCOLQUALIFIER layerProtQual;
+        switch (lpq) {
+            case TapiConstants.PHTNC_MEDIA_OTS:
+                layerProtQual = PHOTONICLAYERQUALIFIEROTS.VALUE;
+                break;
+            case TapiConstants.OTSI_MC:
+                layerProtQual = PHOTONICLAYERQUALIFIEROTSiMC.VALUE;
+                break;
+            case TapiConstants.MC:
+                layerProtQual = PHOTONICLAYERQUALIFIERMC.VALUE;
+                break;
+            case TapiConstants.I_OTU:
+                layerProtQual = OTUTYPEOTU4.VALUE;
+                break;
+            case TapiConstants.E_ODUCN:
+                layerProtQual = ODUTYPEODUCN.VALUE;
+                break;
+            case TapiConstants.E_ODU:
+                layerProtQual = ODUTYPEODU4.VALUE;
+                break;
+            case TapiConstants.I_ODU:
+                layerProtQual = ODUTYPEODU4.VALUE;
+                break;
+            default :
+                layerProtQual = null;
+                break;
+        }
+        return layerProtQual;
     }
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -1535,6 +1578,7 @@ public final class ConnectivityUtils {
             .setConnectionEndPoint(new HashMap<>(Map.of(cepServ1.key(), cepServ1, cepServ2.key(), cepServ2)))
             .setOperationalState(OperationalState.ENABLED)
             .setLayerProtocolName(xcProtocol)
+            .setLayerProtocolQualifier(setLPQfromString(qual))
             .setLifecycleState(LifecycleState.INSTALLED)
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
             .build();
@@ -1599,7 +1643,8 @@ public final class ConnectivityUtils {
             .setDirection(Direction.BIDIRECTIONAL)
             .setOperationalState(OperationalState.ENABLED)
             .setLifecycleState(LifecycleState.INSTALLED)
-            .setLayerProtocolName(cepProtocol);
+            .setLayerProtocolName(cepProtocol)
+            .setLayerProtocolQualifier(setLPQfromString(qualifier));
         return (cnep == null)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
@@ -1737,6 +1782,49 @@ public final class ConnectivityUtils {
     }
 
     private void updateXpdrNepPayloadStructure(String id, String qualifier, Double capacityDecrement) {
+        Set<LAYERPROTOCOLQUALIFIER> muxSeqSet = new HashSet<>();
+        Double capacity = 0.0;
+        switch (qualifier) {
+            case TapiConstants.I_ODU:
+                muxSeqSet.add(ODUTYPEODU4.VALUE);
+                capacity = 100.0;
+                break;
+            case TapiConstants.I_OTU:
+                muxSeqSet.add(OTUTYPEOTU4.VALUE);
+                capacity = 100.0;
+                break;
+            case TapiConstants.E_ODU:
+                if (capacityDecrement > 10.0) {
+                    muxSeqSet.add(ODUTYPEODU4.VALUE);
+                } else if (capacityDecrement > 2.5) {
+                    muxSeqSet.add(ODUTYPEODU2.VALUE);
+                    muxSeqSet.add(ODUTYPEODU2E.VALUE);
+                } else {
+                    muxSeqSet.add(ODUTYPEODU0.VALUE);
+                }
+                capacity = capacityDecrement;
+                break;
+            case TapiConstants.DSR:
+                if (capacityDecrement > 10.0) {
+                    muxSeqSet.add(DIGITALSIGNALTYPE100GigE.VALUE);
+                } else if (capacityDecrement > 2.5) {
+                    muxSeqSet.add(DIGITALSIGNALTYPE10GigELAN.VALUE);
+                } else {
+                    muxSeqSet.add(DIGITALSIGNALTYPEGigE.VALUE);
+                }
+                capacity = capacityDecrement;
+                break;
+            case TapiConstants.OTSI_MC:
+                muxSeqSet.add(PHOTONICLAYERQUALIFIEROTSiMC.VALUE);
+                capacity = capacityDecrement;
+                break;
+            case TapiConstants.PHTNC_MEDIA_OTS:
+                muxSeqSet.add(PHOTONICLAYERQUALIFIEROTS.VALUE);
+                capacity = capacityDecrement;
+                break;
+            default:
+                capacity = capacityDecrement;
+        }
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
         String nepNodeId = String.join("+",id.split("\\+")[0], TapiConstants.XPDR);
         Uuid nepUuid = new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString());
@@ -1776,6 +1864,17 @@ public final class ConnectivityUtils {
                 }
                 targetApsList.add(apsBldr.build());
             }
+        } else {
+            AvailablePayloadStructureBuilder apsBldr = new AvailablePayloadStructureBuilder();
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.payload.structure.CapacityBuilder
+                capaBldr = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121
+                    .payload.structure.CapacityBuilder();
+            capaBldr.setUnit(CAPACITYUNITGBPS.VALUE)
+                .setValue(Decimal64.valueOf(capacity, RoundingMode.DOWN));
+            apsBldr.setNumberOfCepInstances(Uint64.ZERO)
+                .setMultiplexingSequence(muxSeqSet)
+                .setCapacity(capaBldr.build());
+            targetApsList.add(apsBldr.build());
         }
         onepBdr.setAvailablePayloadStructure(targetApsList);
         AvailableCapacityBuilder avCapBldr = new AvailableCapacityBuilder();

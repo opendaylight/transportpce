@@ -330,9 +330,6 @@ public class TapiOpticalNode {
                             otsCep.setParentNep(ownedNep.getKey().getUuid());
                             otsCep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
-                            otsLcpList.add(otsCep);
-                            LOG.debug("TONline306: initRoadmIlaTps: OTS Cep added to otsLcpList  {}",
-                                otsCep.getName());
                             otsNep.setCepOtsUuid(cep.getValue().getUuid());
                             otsNep.setClientNep(cep.getValue().getClientNodeEdgePoint().keySet().iterator().next()
                                 .getNodeEdgePointUuid());
@@ -346,10 +343,19 @@ public class TapiOpticalNode {
                                     .getOtsMediaConnectionEndPointSpec() != null) {
                                 otsNep.setCepOtsSpec(cep.getValue().augmentation(ConnectionEndPoint2.class)
                                     .getOtsMediaConnectionEndPointSpec());
+                                otsCep.setCepOtsSpec(cep.getValue().augmentation(ConnectionEndPoint2.class)
+                                    .getOtsMediaConnectionEndPointSpec());
+                                otsLcpList.add(otsCep);
+                                LOG.info("TONline349: initRoadmIlaTps: OTS CepSpec {} added to otsNep {} in AllOtsNep",
+                                    cep.getValue().augmentation(ConnectionEndPoint2.class)
+                                        .getOtsMediaConnectionEndPointSpec(), otsNep.getName());
                                 // check if spectrum shall be populated here
                                 //Goes out of the loop as soon it has found a OtsMediaConnectionEndPointSpec
                                 break;
                             }
+                            otsLcpList.add(otsCep);
+                            LOG.debug("TONline357: initRoadmIlaTps: OTS Cep added to otsLcpList  {}",
+                                otsCep.getName());
                         }
                         allOtsNep.add(otsNep);
                     }
@@ -454,6 +460,8 @@ public class TapiOpticalNode {
                     otsNep.setTpType(direction.values().iterator().next());
                     otsNep.setFrequencyBitset(buildBitsetFromSpectrum(otsNep.getNepCepUuid()));
                     otsNep.setCepOtsSpec(otsCep.getCepOtsSpec());
+                    LOG.info("TONline460: initRoadmIlaTps: OTS CepSpec {} added to otsNep {} in AllOtsNep",
+                        otsCep.getCepOtsSpec(), otsNep.getName());
                     mmDegOtsNep.put(otsNep.getNepCepUuid(), otsNep);
                     //degOtsNep.add(otsNep);
                     LOG.debug("TONline426: initRoadmIlaTps: OTS nep from allOTsNep added to mmDegOTSNep  {}",
@@ -1367,7 +1375,10 @@ public class TapiOpticalNode {
                 LOG.info("TONLine1308: ValidateAZxponder for node : {}, allOtsNep : {}", this.nodeName,
                     allOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
                 Map<Uuid, Name> nodeId = new HashMap<>();
-                nodeId.put(nodeUuid, node.getName().entrySet().iterator().next().getValue());
+                nodeId.put(nodeUuid, node.getName().entrySet().stream()
+                    .filter(name -> !name.getKey().getValueName().equals("Node Type"))
+                    .findFirst().orElseThrow().getValue());
+
                 // Map<Uuid, String> xpdrKey = new HashMap<>();
                 // xpdrKey.put(nodeId.keySet().iterator().next(), deviceNodeId);
                 PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
@@ -1538,13 +1549,14 @@ public class TapiOpticalNode {
                 LOG.info("TON Line 1526 : Handling NEP {} ", ownedNep.getValue().getName());
                 Uuid clientNepUuid = null;
                 String nepType = "";
+                ConnectionEndPoint refCep = null;
                 if (ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class) != null
                         && ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList() != null
                         && !ownedNep.getValue().augmentation(OwnedNodeEdgePoint1.class).getCepList()
                             .getConnectionEndPoint().isEmpty()) {
                     for (Map.Entry<ConnectionEndPointKey, ConnectionEndPoint> cep : ownedNep.getValue()
-                        .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint()
-                        .entrySet()) {
+                            .augmentation(OwnedNodeEdgePoint1.class).getCepList().getConnectionEndPoint().entrySet()) {
+                        refCep = cep.getValue();
                         if (!(cep.getValue().getClientNodeEdgePoint() == null)
                             && !cep.getValue().getClientNodeEdgePoint().isEmpty()) {
                             clientNepUuid = cep.getValue().getClientNodeEdgePoint().entrySet().iterator().next()
@@ -1599,12 +1611,41 @@ public class TapiOpticalNode {
                     otnNep.setOperationalState(ownedNep.getValue().getOperationalState());
                     otnNep.setAdminState(ownedNep.getValue().getAdministrativeState());
                     otnNep.setSipUuid(getOnepSipUuid(ownedNep.getValue()));
+
+                    BasePceNep otnCep = null;
+                    if (refCep != null) {
+                        otnCep  = new BasePceNep(refCep.getUuid(), refCep.getName());
+                        otnCep.setParentNep(refCep.getParentNodeEdgePoint().getNodeEdgePointUuid());
+                        @Nullable
+                        Map<ClientNodeEdgePointKey, ClientNodeEdgePoint> cepClientNepMap = refCep
+                            .getClientNodeEdgePoint();
+                        if (cepClientNepMap != null) {
+                            otnCep.setClientNep(cepClientNepMap.keySet().iterator().next().getNodeEdgePointUuid());
+                        }
+                        otnCep.setLpn(LayerProtocolName.DIGITALOTN);
+                        otnCep.setLpq(refCep.getLayerProtocolQualifier());
+                        otnCep.setOperationalState(refCep.getOperationalState());
+                        // No admin state for cep, set to default UNLOCKED
+                        otnCep.setAdminState(AdministrativeState.UNLOCKED);
+                        direction = calculateDirection(null, refCep, TpType.CLIENT);
+                        otnCep.setDirection(direction.keySet().iterator().next());
+                        otnCep.setTpType(direction.values().iterator().next());
+                        direction.clear();
+                    }
+
                     if (nepType.equals("iOTU")) {
                         otuLcpList.add(otnNep);
+                        if (refCep != null && otnCep != null) {
+                            otuLcpList.add(otnCep);
+                        }
                     } else {
                         oduLcpList.add(otnNep);
+                        if (refCep != null && otnCep != null) {
+                            oduLcpList.add(otnCep);
+                        }
                         if (nepType.equals("eODU") || (nepType.equals("iODU"))) {
                             clientDsrNep.add(otnNep);
+                            //clientDsrNep.add(otnCep);
                         }
                     }
                 }

@@ -423,6 +423,10 @@ public class PceTapiOtnNode implements PceNode {
     }
 
     private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
+        if (node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).collect(Collectors.toList()).isEmpty()) {
+            return null;
+        }
         OwnedNodeEdgePoint ownedNep = node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).findFirst().orElseThrow().getValue();
         if (ownedNep.augmentation(OwnedNodeEdgePoint1.class) != null
@@ -518,10 +522,16 @@ public class PceTapiOtnNode implements PceNode {
                 }
             }
         }
-        LOG.info("PTONLine471, did not find commonNRG to both Cl and NW with Rule can/must forward");
+        LOG.info("PTONLine513, did not find commonNRG to both Cl and NW with Rule can/must forward");
         // Being there means we did not find a common nrg with both one of the eODU and one iODU
         // Check if client Tps and Network tps have some nrgs that are interconnected through an IRG
         // with a Forwarding rule MAY/MUST meaning client are connected to Nw port
+        if (node.getInterRuleGroup() == null || node.getInterRuleGroup().isEmpty()
+                || node.getInterRuleGroup().entrySet().size() < 2) {
+            LOG.info("PTONLine519, did not find commonNRG to both Cl and NW with Rule can/must forward, "
+                + "and no usable IRG detected");
+            return false;
+        }
         for (Map.Entry<InterRuleGroupKey, InterRuleGroup> irg :node.getInterRuleGroup().entrySet()) {
             boolean nrgPresentInClient = false;
             boolean nrgPresentInNw = false;
@@ -710,7 +720,6 @@ public class PceTapiOtnNode implements PceNode {
 
     public List<BasePceNep> getTotalListOfNep() {
         List<BasePceNep> listOfNep = new ArrayList<>();
-        this.tapiON.getClientDsrNep();
         listOfNep.addAll(this.tapiON.getClientDsrNep());
         listOfNep.addAll(this.tapiON.getOduNep());
         listOfNep.addAll(this.tapiON.getOtuNep());
@@ -718,6 +727,14 @@ public class PceTapiOtnNode implements PceNode {
         listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
         return listOfNep;
     }
+
+//    public List<BasePceNep> getListOfOduOtuCepAndNep() {
+//        List<BasePceNep> listOfCep = new ArrayList<>();
+//        listOfCep.addAll(this.tapiON.getOduNep());
+//        listOfCep.addAll(this.tapiON.getOtuNep());
+//        listOfCep = listOfCep.stream().distinct().collect(Collectors.toList());
+//        return listOfCep;
+//    }
 
     @Override
     public void addOutgoingLink(PceLink outLink) {
@@ -886,10 +903,15 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public List<BasePceNep> getListOfNep() {
-        List<BasePceNep> listOfNep = new ArrayList<>();
-        listOfNep.addAll(availableXpdrClientTps);
-        listOfNep.addAll(availableXpdrNWTps);
-        listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
-        return listOfNep;
+//        List<BasePceNep> listOfNep = new ArrayList<>();
+//        listOfNep.addAll(availableXpdrClientTps);
+//        listOfNep.addAll(availableXpdrNWTps);
+//        listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
+//        return listOfNep;
+        List<BasePceNep> listOfCepAndNep = new ArrayList<>();
+        listOfCepAndNep.addAll(this.tapiON.getOduNep());
+        listOfCepAndNep.addAll(this.tapiON.getOtuNep());
+        listOfCepAndNep = listOfCepAndNep.stream().distinct().collect(Collectors.toList());
+        return listOfCepAndNep;
     }
 }

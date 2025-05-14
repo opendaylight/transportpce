@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -25,11 +25,13 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Laye
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OtsMediaConnectionEndPointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.impairments.ImpairmentRouteEntry;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ots.media.connection.end.point.spec.OtsImpairments;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
@@ -65,7 +67,10 @@ public class PceTapiLink implements Serializable {
     private Uuid destTpId;
     private String sourceNetworkSupNodeId;
     private String destNetworkSupNodeId;
+    private Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap;
+    private Map<NodeEdgePointKey, NodeEdgePoint> nepMap;
     private String client = "";
+    private String orgNode = "";
     private LayerProtocolName lpn;
     private LAYERPROTOCOLQUALIFIER lpq;
     private ForwardingDirection direction;
@@ -100,11 +105,16 @@ public class PceTapiLink implements Serializable {
         if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
             this.oppositeLink = link.getUuid();
         }
-        List<Uuid> linkEnds = link.getNodeEdgePoint().entrySet().stream().map(Entry::getKey)
-            .collect(Collectors.toList()).stream()
-            .map(NodeEdgePointKey::getNodeEdgePointUuid).collect(Collectors.toList());
-        LOG.info("PceTapiLInk Line 106 : Processing Link {}, LinkEnds are = {}", link.getName(), linkEnds);
-        retrieveSrcDestNodeIds(topoId, link.getUuid(), linkEnds, link.getDirection(), nodeX, nodeY);
+        this.nepMap = link.getNodeEdgePoint();
+//        for (NodeEdgePointKey nepKey : link.getNodeEdgePoint().entrySet().stream().map(Entry::getKey)
+//            .collect(Collectors.toList())) {
+//            xepAndNodeList.add(new HashMap<>(Map.of(nepKey.getNodeEdgePointUuid(), nepKey.getNodeUuid())));
+//        }
+//        List<Uuid> linkEnds = link.getNodeEdgePoint().entrySet().stream().map(Entry::getKey)
+//            .collect(Collectors.toList()).stream()
+//            .map(NodeEdgePointKey::getNodeEdgePointUuid).collect(Collectors.toList());
+//        LOG.info("PceTapiLInk Line 106 : Processing Link {}, LinkEnds are = {}", link.getName(), linkEnds);
+        retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
         LOG.info("PceTapiLInk Line 107 : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {}",
             link.getName(), sourceTpId, destTpId);
 
@@ -125,7 +135,7 @@ public class PceTapiLink implements Serializable {
             this.srlgList = TapiMapUtils.getSRLG(link);
             this.lpn = LayerProtocolName.PHOTONICMEDIA;
             this.lpq = null;
-            this.availableBandwidth = 0.0;
+            this.availableBandwidth = 96.0;
             this.usedBandwidth = 0.0;
         } else {
             this.sourceOtsSpec = null;
@@ -158,6 +168,8 @@ public class PceTapiLink implements Serializable {
         //Administrative state is not defined for connections : will assume it is UNLOCKED by default
         this.adminStates = AdministrativeState.UNLOCKED;
         this.opState = conn.getOperationalState();
+        //TODO: Add method that retrieve CEP -> parent NEP -> available BW and set BW accordingly
+        this.availableBandwidth = 100.0;
         if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
             this.oppositeLink = conn.getUuid();
         }
@@ -168,22 +180,31 @@ public class PceTapiLink implements Serializable {
         }
         this.lpn = LayerProtocolName.DIGITALOTN;
         this.lpq = conn.getLayerProtocolQualifier();
-        if (!(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType) != null
-                && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType)) != null
-                && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType))
-                    .equals(this.lpq))) {
-            this.isValid = false;
-            return;
-        }
-
-        this.isValid = isOtnValid(serviceType);
-        if (!isValid) {
-            return;
-        }
-        List<Uuid> connectionEnds = conn.getConnectionEndPoint().entrySet().stream().map(Entry::getKey)
-            .collect(Collectors.toList()).stream()
-            .map(ConnectionEndPointKey::getConnectionEndPointUuid).collect(Collectors.toList());
-        retrieveSrcDestNodeIds(topoId, conn.getUuid(), connectionEnds, conn.getDirection(), nodeX, nodeY);
+//        if (!(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType) != null
+//                && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType)) != null
+//                && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType))
+//                    .equals(this.lpq))) {
+//            this.isValid = false;
+//            return;
+//        }
+//
+        //to be removed after consolidation
+        boolean isvaaaaaalid = isOtnValid(serviceType);
+        LOG.info("Link Valid ? line 181 {}", isvaaaaaalid);
+//        this.isValid = isOtnValid(serviceType);
+//        if (!isValid) {
+//            return;
+//        }
+        this.cepMap = conn.getConnectionEndPoint();
+//        for (ConnectionEndPointKey cepKey : conn.getConnectionEndPoint().entrySet().stream().map(Entry::getKey)
+//            .collect(Collectors.toList())) {
+//            xepAndNodeList.add(new HashMap<>(Map.of(cepKey.getNodeEdgePointUuid(), cepKey.getNodeUuid())));
+//        }
+//        List<Uuid> connectionEnds = conn.getConnectionEndPoint().entrySet().stream().map(Entry::getKey)
+//            .collect(Collectors.toList()).stream()
+//            .map(ConnectionEndPointKey::getConnectionEndPointUuid).collect(Collectors.toList());
+        LOG.info("PceLink Line 186: calling  retrieveSrcDestNodeIds for PceLink OTN {} ", linkId);
+        retrieveSrcDestNodeIds(topoId, conn.getUuid(), conn.getDirection(), nodeX, nodeY, false);
 
         this.latency = 0L;
         this.length = 0.0;
@@ -233,7 +254,8 @@ public class PceTapiLink implements Serializable {
             .collect(Collectors.toList()));
         LOG.info("PCETAPILINK line 167 NodeYListofNEP {}", nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
             .collect(Collectors.toList()));
-        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {}", sourceTpId, destTpId);
+        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {} and sourceIndex is {}", sourceTpId, destTpId,
+            sourceIndex);
         BasePceNep sourceNep;
         BasePceNep destNep;
         if (sourceIndex == 0) {
@@ -311,128 +333,142 @@ public class PceTapiLink implements Serializable {
         }
     }
 
-    private void retrieveSrcDestNodeIds(TopologyKey topoIid, Uuid linkUuid, List<Uuid> linkEndPointsUuid,
-            ForwardingDirection dir, PceNode nodeX, PceNode nodeY) {
+    private void retrieveSrcDestNodeIds(TopologyKey topoIid, Uuid linkUuid, ForwardingDirection dir,
+            PceNode nodeX, PceNode nodeY, boolean isLink) {
         int sourceindex;
         Uuid srcTpUuid = null;
         Uuid destTpUuid = null;
-        if (ForwardingDirection.BIDIRECTIONAL.equals(dir)) {
-            // In case of Bidirectional link we don't care of who is the source or the destination
+        DirectionType nepDirectionX = null;
+        DirectionType nepDirectionY = null;
+        String node0 = "";
+        Uuid tpUuid0;
+        Uuid tpUuid1;
+        if (isLink) {
+            tpUuid0 = nepMap.entrySet().stream().findFirst().orElseThrow().getKey().getNodeEdgePointUuid();
+            tpUuid1 = nepMap.entrySet().stream().filter(nep -> nep.getKey().getNodeEdgePointUuid() != tpUuid0)
+                .collect(Collectors.toList()).stream().findFirst().orElseThrow().getKey().getNodeEdgePointUuid();
+        } else {
+            tpUuid0 = cepMap.entrySet().stream().findFirst().orElseThrow().getKey().getConnectionEndPointUuid();
+            tpUuid1 = cepMap.entrySet().stream().filter(cep -> cep.getKey().getConnectionEndPointUuid() != tpUuid0)
+                .collect(Collectors.toList()).stream().findFirst().orElseThrow().getKey().getConnectionEndPointUuid();
+        }
+        if (nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
+            .contains(tpUuid0)) {
             sourceindex = 0;
-            this.oppositeLink = linkUuid;
-            Uuid tpUuid = linkEndPointsUuid.stream().findFirst().orElseThrow();
-            if (nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
-                .contains(tpUuid)) {
-                sourceindex = 0;
-                srcTpUuid = tpUuid;
-                destTpUuid = linkEndPointsUuid.stream().filter(uuid -> !uuid.equals(tpUuid)).findFirst().orElseThrow();
-                if (!nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
-                    .contains(destTpUuid)) {
-                    isValid = false;
-                    LOG.info("TapiPceLink: Line  331 did not succeed finding Nep {} in Node Y Listof"
-                        + " NEP for Bidir link {}", destTpUuid, linkUuid.getValue());
-                    return;
-                }
-            } else {
-                if (nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
-                    .contains(tpUuid)) {
-                    sourceindex = 1;
-                    destTpUuid = tpUuid;
-                    srcTpUuid = linkEndPointsUuid.stream()
-                        .filter(uuid -> !uuid.equals(tpUuid)).findFirst().orElseThrow();
-                    if (!nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
-                        .contains(srcTpUuid)) {
-                        isValid = false;
-                        LOG.info("TapiPceLink: Line  345 did not succeed finding Nep {} in Node X Listof"
-                            + " NEP for Bidir link {}", srcTpUuid, linkUuid.getValue());
-                        return;
-                    }
-                } else {
-                    isValid = false;
-                    LOG.info("TapiPceLink: Line  351 did not succeed finding Nep {} in neither nodeX, or Node Y Listof"
-                        + " NEP for Bidir link {}", tpUuid, linkUuid.getValue());
-                    return;
-                }
+            node0 = "X";
+            srcTpUuid = tpUuid0;
+            destTpUuid = tpUuid1;
+            nepDirectionX = nodeX.getListOfNep().stream()
+                .filter(bpN -> bpN.getNepCepUuid().equals(tpUuid0)).findFirst().orElseThrow().getDirection();
+            if (!nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
+                .contains(destTpUuid)) {
+                isValid = false;
+                LOG.info("TapiPceLink: Line  331 did not succeed finding Nep {} in Node Y Listof"
+                    + " NEP for Bidir link {}", destTpUuid, linkUuid.getValue());
+                return;
             }
         } else {
-            // Unidirectional or undefined case
-            int index = 0;
-            String node0 = "";
-            DirectionType nepDirectionX = null;
-            DirectionType nepDirectionY = null;
-            for (Uuid nepUuid : linkEndPointsUuid) {
-                if (!nodeX.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(nepUuid))
-                        .collect(Collectors.toList()).isEmpty()) {
-                    nepDirectionX = nodeX.getListOfNep().stream()
-                        .filter(bpN -> bpN.getNepCepUuid().equals(nepUuid)).findFirst().orElseThrow().getDirection();
-                    if (index == 0) {
-                        node0 = "X";
-                        srcTpUuid = nepUuid;
-                    } else {
-                        node0 = "Y";
-                        destTpUuid = nepUuid;
-                    }
-                    index++ ;
-                } else if (!nodeY.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(nepUuid))
-                        .collect(Collectors.toList()).isEmpty()) {
-                    nepDirectionY = nodeY.getListOfNep().stream()
-                        .filter(bpN -> bpN.getNepCepUuid().equals(nepUuid)).findFirst().orElseThrow().getDirection();
-                    if (index == 0) {
-                        node0 = "Y";
-                        srcTpUuid = nepUuid;
-                    } else {
-                        node0 = "X";
-                        destTpUuid = nepUuid;
-                    }
-                    index++ ;
-                } else {
-                    LOG.error("TapiPceLink: Error proceeding Link {} for which NEP {} can not be identified ",
-                        linkUuid.getValue(), nepUuid);
-                    LOG.info("TapiPceLink: Line  390 did not succeed finding Nep {} in neither nodeX, or Node Y Listof"
-                        + " NEP for Unidir link {}", nepUuid, linkUuid.getValue());
+            if (nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
+                .contains(tpUuid0)) {
+                sourceindex = 1;
+                node0 = "Y";
+                destTpUuid = tpUuid1;
+                srcTpUuid = tpUuid0;
+                nepDirectionY = nodeY.getListOfNep().stream()
+                    .filter(bpN -> bpN.getNepCepUuid().equals(tpUuid0)).findFirst().orElseThrow().getDirection();
+                if (!nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
+                    .contains(destTpUuid)) {
                     isValid = false;
+                    LOG.info("TapiPceLink: Line  345 did not succeed finding Nep {} in Node X Listof"
+                        + " NEP for Bidir link {}", srcTpUuid, linkUuid.getValue());
                     return;
                 }
+            } else {
+                isValid = false;
+                LOG.info("TapiPceLink: Line  351 did not succeed finding Xep {} and {} in neither nodeX, or Node Y"
+                    + " Listof XEP for Bidir link {}", tpUuid0, tpUuid1, linkUuid.getValue());
+                return;
             }
+        }
+        if (ForwardingDirection.BIDIRECTIONAL.equals(dir)) {
+            this.oppositeLink = linkUuid;
+
+        } else {
+            // Unidirectional or undefined case
             if (node0.equals("X") && nepDirectionX != null
                 && (DirectionType.SOURCE.equals(nepDirectionX) || DirectionType.BIDIRECTIONAL.equals(nepDirectionX))) {
-                sourceindex = 0;
+                // sourceindex = 0, and we keep it as is as nothing needs to be changed
             } else if (node0.equals("X") && nepDirectionX != null && DirectionType.SINK.equals(nepDirectionX)) {
+                // Need to change source index because first tp found is the one of Node0 = X, but the tp is RX
                 sourceindex = 1;
+                srcTpUuid = tpUuid1;
+                destTpUuid = tpUuid0;
             } else if (node0.equals("Y") && nepDirectionY != null
                 && (DirectionType.SOURCE.equals(nepDirectionY) || DirectionType.BIDIRECTIONAL.equals(nepDirectionY))) {
-                sourceindex = 1;
+               // sourceindex = 1, and we keep it as is as nothing needs to be changed
             } else if (node0.equals("Y") && nepDirectionY != null && DirectionType.SINK.equals(nepDirectionY)) {
+              // Need to change source index because first tp found is the one of Node0 = Y, but the tp is RX
                 sourceindex = 0;
+                srcTpUuid = tpUuid1;
+                destTpUuid = tpUuid0;
             } else {
-                LOG.error("TapiPceLink: Error proceeding Link {} for which source and dest NEP can not be identified ",
-                    linkUuid.getValue());
-                LOG.info("TapiPceLink: Line  395 Handling link {} directions -> is Valid False", linkUuid.getValue());
+                LOG.error("TapiPceLink: Line 415 Error proceeding Link {} for which source and dest NEP can not be"
+                    + " identified, set is valid to False ", linkUuid.getValue());
                 isValid = false;
                 return;
             }
         }
+        // At the end sourceIndex = 0 <-> NodeX is the Source / sourceIndex = 1 <-> NodeY is the Source
+        // Node0 defines the order of items (Cep/Nep) found in either CepMap for connection or NepMap for Link
+        //            If Node0 = X, the first item of the xepMap is associated with NodeX
+        //            If Node0 = Y, the first item of the xepMap is associated with NodeY
         this.sourceTpId = srcTpUuid;
         this.destTpId = destTpUuid;
         this.sourceIndex = sourceindex;
+        this.orgNode = node0;
+        LOG.info("PceTapiLink Line 429 : qualifying link {}, sourceindex = {} sourceTPId = {} destTpId = {}",
+            linkName, sourceIndex, sourceTpId, destTpId);
+        if (sourceIndex == 0 && nodeX.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(sourceTpId))
+            .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  420 Handling link {} sourceTp {} not found in NodeX {},"
+                + " error on sourceIndex", linkUuid.getValue(), sourceTpId, nodeX.getNodeId());
+        } else if (sourceIndex == 1
+                && nodeY.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(sourceTpId))
+                    .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  425 Handling link {} sourceTp {} not found in NodeY {},"
+                + " error on sourceIndex", linkUuid.getValue(), sourceTpId, nodeY.getNodeId());
+        } else if (sourceIndex == 0 && nodeY.getListOfNep().stream()
+                .filter(bpn -> bpn.getNepCepUuid().equals(destTpId))
+                .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  430 Handling link {} destTp {} not found in NodeY {}, error on sourceIndex",
+                linkUuid.getValue(), destTpId, nodeY.getNodeId());
+        } else if (sourceIndex == 1
+                && nodeX.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(destTpId))
+                    .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  434 Handling link {} destTp {} not found in NodeX {}, error on sourceIndex",
+                linkUuid.getValue(), destTpId, nodeX.getNodeId());
+        } else {
+            LOG.info("TapiPceLink: Line  437 Handling link {} sourceTp and destTp {} compatible with sourceIndex",
+                linkUuid.getValue(), sourceTpId);
+        }
         isValid = true;
         LOG.info("TapiPceLink: Line  404 Handling link {} directions -> is Valid True", linkUuid.getValue());
         setSrcDestIds(nodeX, nodeY);
     }
 
     private void retrieveEndPointSpecs(PceNode nodeX, PceNode nodeY) {
-        OtsMediaConnectionEndPointSpec otsCepSpecX = null;
-        OtsMediaConnectionEndPointSpec otsCepSpecY = null;
         if (sourceIndex == 0) {
             sourceOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             destOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
+            LOG.info("TapiPceLink: Line  452 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         } else {
             destOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             sourceOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
+            LOG.info("TapiPceLink: Line  458 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         }
         if ((sourceOtsSpec == null) && (destOtsSpec == null)) {
             LOG.error("TapiOpticalLink[retrieveEndPointSpecs]: Error retrieving OTS Cep Spec for link {} named {} ",
@@ -447,7 +483,7 @@ public class PceTapiLink implements Serializable {
     private Long calcLatency(double fiberLength) {
         LOG.debug("In PceLink: The latency of link {} named {} is extrapolated from link length and == {}",
             linkId, linkName, fiberLength * 1000 / GLASSCELERITY);
-        return (long) Math.ceil(length * 1000 / GLASSCELERITY);
+        return (long) Math.ceil(length / GLASSCELERITY * 1E6);
     }
 
     // Compute the main parameters of Line Links from T-API CEP OTS
@@ -457,11 +493,12 @@ public class PceTapiLink implements Serializable {
         Double dlength = 0.0;
         Double dtotalLoss = 0.0;
         String fiberType = "SMF";
+        String efiberType = "SMF";
         boolean firstLoop = true;
         LOG.info("In PceTapiLink[Line 460], qualify link {} named {} with OTSCepSpec for SOURCE {} and DEST {}",
             link.getUuid(), linkName.toString(), sourceOtsSpec, destOtsSpec);
         if (sourceOtsSpec == null && destOtsSpec == null) {
-            LOG.debug("In PceTapiLink, on Link {} named  {} no OTS present, assume direct connection of 0 km",
+            LOG.info("In PceTapiLink, on Link {} named  {} no OTS present, assume direct connection of 0 km",
                 link.getUuid(), linkName);
             return;
         } else {
@@ -471,10 +508,12 @@ public class PceTapiLink implements Serializable {
             } else {
                 otsImpairment = destOtsSpec.getOtsImpairments();
             }
-            List<ImpairmentRouteEntry> imRoEnt;
-            for (OtsImpairments otsImp : otsImpairment) {
-                imRoEnt = otsImp.getImpairmentRouteEntry();
-                for (ImpairmentRouteEntry ire : imRoEnt) {
+            OtsImpairments otsImp = otsImpairment.stream()
+                .filter(otsI -> otsI.getIngressDirection() == true)
+                .findAny().orElseThrow();
+            List<ImpairmentRouteEntry> imRoEntry = otsImp.getImpairmentRouteEntry();
+            if (imRoEntry != null) {
+                for (ImpairmentRouteEntry ire : imRoEntry) {
                     dlength = dlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
                     dpmd2 = dpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
                     dtotalLoss = dtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
@@ -484,27 +523,41 @@ public class PceTapiLink implements Serializable {
                     }
                 }
             }
-            if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
-                Double ddpmd2 = 0.0;
-                Double ddlength = 0.0;
-                Double ddtotalLoss = 0.0;
-                otsImpairment = destOtsSpec.getOtsImpairments();
-                for (OtsImpairments otsImp : otsImpairment) {
-                    imRoEnt = otsImp.getImpairmentRouteEntry();
-                    for (ImpairmentRouteEntry ire : imRoEnt) {
-                        ddlength = ddlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
-                        ddpmd2 = ddpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
-                        ddtotalLoss = ddtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
+            Double edpmd2 = 0.0;
+            Double edlength = 0.0;
+            Double edtotalLoss = 0.0;
+            boolean efirstLoop = true;
+            otsImp = otsImpairment.stream()
+                .filter(otsI -> otsI.getIngressDirection() == false)
+                .findAny().orElseThrow();
+            imRoEntry = otsImp.getImpairmentRouteEntry();
+            if (imRoEntry != null) {
+                for (ImpairmentRouteEntry ire : imRoEntry) {
+                    edlength = edlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
+                    edpmd2 = edpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
+                    edtotalLoss = edtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
+                    if (efirstLoop) {
+                        efiberType = ire.getOtsFiberSpanImpairments().getFiberTypeVariety();
+                        efirstLoop = false;
                     }
                 }
-                dlength = Math.max(dlength, ddlength);
-                dpmd2 = Math.max(dpmd2, ddpmd2);
-                dtotalLoss = Math.max(dtotalLoss, ddtotalLoss);
             }
-            if (fiberType == null) {
-                fiberType = "SMF";
+            if (dlength != 0.0 && edlength != 0.0) {
+                dlength = Math.max(dlength, edlength);
+                dpmd2 = Math.max(dpmd2, edpmd2);
+                dtotalLoss = Math.max(dtotalLoss, edtotalLoss);
+            } else if (dlength == 0.0 && edlength != 0.0) {
+                dlength = edlength;
+                dpmd2 = edpmd2;
+                dtotalLoss = edtotalLoss;
             }
         }
+        if (fiberType == null && efiberType == null) {
+            fiberType = "SMF";
+        } else if (fiberType == null && efiberType != null) {
+            fiberType = efiberType;
+        }
+
         FiberType orFiberType = StringConstants.FIBER_TYPES_TABLE.get(fiberType);
         if (orFiberType == null) {
             orFiberType = FiberType.Smf;
@@ -654,6 +707,7 @@ public class PceTapiLink implements Serializable {
                 break;
             case "ODU4":
             case "100GEs":
+            case "100GEm":
                 neededBW = 100000.0;
                 neededType = OtnLinkType.OTU4;
                 break;
@@ -690,10 +744,6 @@ public class PceTapiLink implements Serializable {
                 neededBW = 400000.0;
                 neededType = OtnLinkType.ODUC4;
                 break;
-            case "100GEm":
-                neededBW = 100000.0;
-                neededType = OtnLinkType.ODU4;
-                break;
             default:
                 LOG.error("PceLink: isOtnValid Link {} unsupported serviceType {} ", linkId, serviceType);
                 return false;
@@ -703,7 +753,7 @@ public class PceTapiLink implements Serializable {
                 && TapiMapUtils.LPN_OR_TAPI.get(neededType).equals(this.lpq)) {
             this.availableBandwidth = neededBW;
             isOtnValid = true;
-            LOG.debug("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
+            LOG.info("PceLink Line 756: Selected Link {} has available bandwidth and is eligible for {} creation ",
                 linkId, serviceType);
         }
         return isOtnValid && checkParams();
