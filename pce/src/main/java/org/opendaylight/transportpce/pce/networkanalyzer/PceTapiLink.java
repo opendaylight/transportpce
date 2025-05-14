@@ -125,7 +125,7 @@ public class PceTapiLink implements Serializable {
             this.srlgList = TapiMapUtils.getSRLG(link);
             this.lpn = LayerProtocolName.PHOTONICMEDIA;
             this.lpq = null;
-            this.availableBandwidth = 0.0;
+            this.availableBandwidth = 96.0;
             this.usedBandwidth = 0.0;
         } else {
             this.sourceOtsSpec = null;
@@ -233,7 +233,8 @@ public class PceTapiLink implements Serializable {
             .collect(Collectors.toList()));
         LOG.info("PCETAPILINK line 167 NodeYListofNEP {}", nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
             .collect(Collectors.toList()));
-        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {}", sourceTpId, destTpId);
+        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {} and sourceIndex is {}", sourceTpId, destTpId,
+            sourceIndex);
         BasePceNep sourceNep;
         BasePceNep destNep;
         if (sourceIndex == 0) {
@@ -415,24 +416,46 @@ public class PceTapiLink implements Serializable {
         this.sourceTpId = srcTpUuid;
         this.destTpId = destTpUuid;
         this.sourceIndex = sourceindex;
+        if (sourceIndex == 0 && nodeX.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(sourceTpId))
+            .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  420 Handling link {} sourceTp {} not found in NodeX {}, error on sourceIndex",
+                linkUuid.getValue(), sourceTpId, nodeX.getNodeId());
+        } else if (sourceIndex == 1
+                && nodeY.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(sourceTpId))
+                    .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  425 Handling link {} sourceTp {} not found in NodeY {}, error on sourceIndex",
+                linkUuid.getValue(), sourceTpId, nodeY.getNodeId());
+        } else if (sourceIndex == 0 && nodeY.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(destTpId))
+            .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  430 Handling link {} destTp {} not found in NodeY {}, error on sourceIndex",
+                linkUuid.getValue(), destTpId, nodeY.getNodeId());
+        } else if (sourceIndex == 1
+                && nodeX.getListOfNep().stream().filter(bpn -> bpn.getNepCepUuid().equals(destTpId))
+                    .collect(Collectors.toList()).isEmpty()) {
+            LOG.error("TapiPceLink: Line  434 Handling link {} destTp {} not found in NodeX {}, error on sourceIndex",
+                linkUuid.getValue(), destTpId, nodeX.getNodeId());
+        } else {
+            LOG.info("TapiPceLink: Line  437 Handling link {} sourceTp and destTp {} compatible with sourceIndex",
+                linkUuid.getValue(), sourceTpId);
+        }
         isValid = true;
         LOG.info("TapiPceLink: Line  404 Handling link {} directions -> is Valid True", linkUuid.getValue());
         setSrcDestIds(nodeX, nodeY);
     }
 
     private void retrieveEndPointSpecs(PceNode nodeX, PceNode nodeY) {
-        OtsMediaConnectionEndPointSpec otsCepSpecX = null;
-        OtsMediaConnectionEndPointSpec otsCepSpecY = null;
         if (sourceIndex == 0) {
             sourceOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             destOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
+            LOG.info("TapiPceLink: Line  452 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         } else {
             destOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             sourceOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
+            LOG.info("TapiPceLink: Line  458 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         }
         if ((sourceOtsSpec == null) && (destOtsSpec == null)) {
             LOG.error("TapiOpticalLink[retrieveEndPointSpecs]: Error retrieving OTS Cep Spec for link {} named {} ",
@@ -447,7 +470,7 @@ public class PceTapiLink implements Serializable {
     private Long calcLatency(double fiberLength) {
         LOG.debug("In PceLink: The latency of link {} named {} is extrapolated from link length and == {}",
             linkId, linkName, fiberLength * 1000 / GLASSCELERITY);
-        return (long) Math.ceil(length * 1000 / GLASSCELERITY);
+        return (long) Math.ceil(length / GLASSCELERITY * 1E6);
     }
 
     // Compute the main parameters of Line Links from T-API CEP OTS
@@ -457,11 +480,12 @@ public class PceTapiLink implements Serializable {
         Double dlength = 0.0;
         Double dtotalLoss = 0.0;
         String fiberType = "SMF";
+        String efiberType = "SMF";
         boolean firstLoop = true;
         LOG.info("In PceTapiLink[Line 460], qualify link {} named {} with OTSCepSpec for SOURCE {} and DEST {}",
             link.getUuid(), linkName.toString(), sourceOtsSpec, destOtsSpec);
         if (sourceOtsSpec == null && destOtsSpec == null) {
-            LOG.debug("In PceTapiLink, on Link {} named  {} no OTS present, assume direct connection of 0 km",
+            LOG.info("In PceTapiLink, on Link {} named  {} no OTS present, assume direct connection of 0 km",
                 link.getUuid(), linkName);
             return;
         } else {
@@ -471,10 +495,12 @@ public class PceTapiLink implements Serializable {
             } else {
                 otsImpairment = destOtsSpec.getOtsImpairments();
             }
-            List<ImpairmentRouteEntry> imRoEnt;
-            for (OtsImpairments otsImp : otsImpairment) {
-                imRoEnt = otsImp.getImpairmentRouteEntry();
-                for (ImpairmentRouteEntry ire : imRoEnt) {
+            OtsImpairments otsImp = otsImpairment.stream()
+                .filter(otsI -> otsI.getIngressDirection() == true)
+                .findAny().orElseThrow();
+            List<ImpairmentRouteEntry> imRoEntry = otsImp.getImpairmentRouteEntry();
+            if (imRoEntry != null) {
+                for (ImpairmentRouteEntry ire : imRoEntry) {
                     dlength = dlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
                     dpmd2 = dpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
                     dtotalLoss = dtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
@@ -484,27 +510,41 @@ public class PceTapiLink implements Serializable {
                     }
                 }
             }
-            if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
-                Double ddpmd2 = 0.0;
-                Double ddlength = 0.0;
-                Double ddtotalLoss = 0.0;
-                otsImpairment = destOtsSpec.getOtsImpairments();
-                for (OtsImpairments otsImp : otsImpairment) {
-                    imRoEnt = otsImp.getImpairmentRouteEntry();
-                    for (ImpairmentRouteEntry ire : imRoEnt) {
-                        ddlength = ddlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
-                        ddpmd2 = ddpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
-                        ddtotalLoss = ddtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
+            Double edpmd2 = 0.0;
+            Double edlength = 0.0;
+            Double edtotalLoss = 0.0;
+            boolean efirstLoop = true;
+            otsImp = otsImpairment.stream()
+                .filter(otsI -> otsI.getIngressDirection() == false)
+                .findAny().orElseThrow();
+            imRoEntry = otsImp.getImpairmentRouteEntry();
+            if (imRoEntry != null) {
+                for (ImpairmentRouteEntry ire : imRoEntry) {
+                    edlength = edlength + ire.getOtsFiberSpanImpairments().getLength().doubleValue();
+                    edpmd2 = edpmd2 + Math.pow(ire.getOtsFiberSpanImpairments().getPmd().doubleValue(), 2);
+                    edtotalLoss = edtotalLoss + ire.getOtsFiberSpanImpairments().getTotalLoss().doubleValue();
+                    if (efirstLoop) {
+                        efiberType = ire.getOtsFiberSpanImpairments().getFiberTypeVariety();
+                        efirstLoop = false;
                     }
                 }
-                dlength = Math.max(dlength, ddlength);
-                dpmd2 = Math.max(dpmd2, ddpmd2);
-                dtotalLoss = Math.max(dtotalLoss, ddtotalLoss);
             }
-            if (fiberType == null) {
-                fiberType = "SMF";
+            if (dlength != 0.0 && edlength != 0.0) {
+                dlength = Math.max(dlength, edlength);
+                dpmd2 = Math.max(dpmd2, edpmd2);
+                dtotalLoss = Math.max(dtotalLoss, edtotalLoss);
+            } else if (dlength == 0.0 && edlength != 0.0) {
+                dlength = edlength;
+                dpmd2 = edpmd2;
+                dtotalLoss = edtotalLoss;
             }
         }
+        if (fiberType == null && efiberType == null) {
+            fiberType = "SMF";
+        } else if (fiberType == null && efiberType != null) {
+            fiberType = efiberType;
+        }
+
         FiberType orFiberType = StringConstants.FIBER_TYPES_TABLE.get(fiberType);
         if (orFiberType == null) {
             orFiberType = FiberType.Smf;
