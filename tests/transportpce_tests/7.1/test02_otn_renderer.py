@@ -98,9 +98,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC2"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_04_check_interface_otsi(self):
         # pylint: disable=line-too-long
@@ -189,9 +191,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-oducn"] = "XPDR2-NETWORK1-ODUC2"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_09_check_interface_oduc2(self):
         response = test_utils.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC2")
@@ -470,9 +474,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC3"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_28_check_interface_otsi(self):
         # pylint: disable=line-too-long
@@ -562,9 +568,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-oducn"] = "XPDR2-NETWORK1-ODUC3"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_33_check_interface_oduc3(self):
         response = test_utils.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC3")
@@ -694,9 +702,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-otucn"] = "XPDR2-NETWORK1-OTUC4"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_42_check_interface_otsi(self):
         # pylint: disable=line-too-long
@@ -786,9 +796,11 @@ class TransportPCE400GPortMappingTesting(unittest.TestCase):
         response = test_utils.get_portmapping_node_attr("XPDR-A2", "mapping", "XPDR2-NETWORK1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.NETWORK2_CHECK_DICT["supporting-oducn"] = "XPDR2-NETWORK1-ODUC4"
-        self.assertIn(
-            self.NETWORK2_CHECK_DICT,
-            response['mapping'])
+        expected_sorted = test_utils.recursive_sort(self.NETWORK2_CHECK_DICT)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['mapping']
+        ]
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_47_check_interface_oduc4(self):
         response = test_utils.check_node_attribute_request("XPDR-A2", "interface", "XPDR2-NETWORK1-ODUC4")
