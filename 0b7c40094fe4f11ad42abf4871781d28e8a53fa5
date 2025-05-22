@@ -65,6 +65,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06bfec24_78543a91",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:29:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be19f58c_e11a6ed2",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1028,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c44f0502_64f403c2",
@@ -112,6 +136,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "349cb002_c4b744b9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:29:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a7cbc0d_eb8dc71b",
+      "range": {
+        "startLine": 1659,
+        "startChar": 0,
+        "endLine": 1694,
+        "endChar": 5
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9334344d_7679d9de",
@@ -149,6 +197,30 @@
       "side": 1,
       "message": "Agree on your remarks. However, there is a huge number of locations where the same principle is applied. So a global correction and refactoring may be required, at a later step in my view, focusing on this point.\n \nThen we must consider that until now, everything that is associated with Tapi, is generated from OR world. When tapi SBI will be developped, we might have some Uuid that have no correspondance with the names. For this reason, I am not really in favor of building a specific object keping these 2 values. We will need in any case to make adjustment for all what is not associated with TAPI in a pure OpenROADM context.",
       "parentUuid": "9334344d_7679d9de",
+      "range": {
+        "startLine": 1740,
+        "startChar": 0,
+        "endLine": 1743,
+        "endChar": 0
+      },
+      "revId": "0b7c40094fe4f11ad42abf4871781d28e8a53fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faca1b9b_66064e52",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:29:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2f88132_2df506e6",
       "range": {
         "startLine": 1740,
         "startChar": 0,
