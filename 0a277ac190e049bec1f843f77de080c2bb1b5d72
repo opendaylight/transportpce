@@ -294,6 +294,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ca784d_cf3d5ed3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aa97eb5_d11d3d08",
+      "range": {
+        "startLine": 191,
+        "startChar": 75,
+        "endLine": 191,
+        "endChar": 93
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fc8d3da_82ca096f",
@@ -474,6 +498,30 @@
       "side": 1,
       "message": "Update TODO comment.",
       "parentUuid": "caa2f124_348c7235",
+      "range": {
+        "startLine": 829,
+        "startChar": 1,
+        "endLine": 830,
+        "endChar": 51
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d5a53d_ce438167",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/OCPortMappingVersion190.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "7e4b04c3_742dfaea",
       "range": {
         "startLine": 829,
         "startChar": 1,
@@ -1644,6 +1692,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "234718a5_8a4f9782",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1792916d_8306d0ba",
+      "range": {
+        "startLine": 415,
+        "startChar": 6,
+        "endLine": 415,
+        "endChar": 34
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23c99c42_e3782a34",
@@ -1763,6 +1835,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e22dfb7e_d3509bff",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0678446e_8fe396b7",
+      "range": {
+        "startLine": 430,
+        "startChar": 2,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5eb5f443_5011e96d",
@@ -1848,6 +1944,30 @@
       "side": 1,
       "message": "When admin state is down, there is no effect for the frequency or power configured.",
       "parentUuid": "46937c73_b42cf981",
+      "range": {
+        "startLine": 493,
+        "startChar": 31,
+        "endLine": 493,
+        "endChar": 98
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8992b3ed_6f849e71",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "OK, fair enough.",
+      "parentUuid": "d53de672_a3ed1801",
       "range": {
         "startLine": 493,
         "startChar": 31,
@@ -2014,6 +2134,30 @@
       "side": 1,
       "message": "When admin state is down, there is no effect for the frequency or power configured.",
       "parentUuid": "073bd31f_45413fd2",
+      "range": {
+        "startLine": 691,
+        "startChar": 5,
+        "endLine": 701,
+        "endChar": 21
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fdc0310_e49c8fdb",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2675ac70_d485829d",
       "range": {
         "startLine": 691,
         "startChar": 5,
@@ -2427,6 +2571,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a8af10_687e5151",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "97a86b35_dbf64459",
+      "range": {
+        "startLine": 160,
+        "startChar": 1,
+        "endLine": 162,
+        "endChar": 94
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f1bb525_5185d663",
@@ -2678,6 +2846,30 @@
       "side": 1,
       "message": "TODO comments updated",
       "parentUuid": "30e19a7e_99a78f67",
+      "range": {
+        "startLine": 256,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 119
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d6dfbd6_2b35ea83",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-05-22T15:39:48Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "7d277fde_8d0b5d24",
       "range": {
         "startLine": 256,
         "startChar": 20,
