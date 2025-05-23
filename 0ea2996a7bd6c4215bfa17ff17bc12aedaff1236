@@ -16,6 +16,23 @@
       "message": "Hi Joakim. Thanks for your valuable comments. Acked them even if I did not provide any enhacement, I keep all of this is mind. As agreed during meeting of the 15th, propose to merge this relation chain so that it can be included in Ti. Plan to make some updates when we will support higher rates. Feel free as soon it is merged to make some adjustments. I have no issue with that. \nAgain, I would be happy to improve my code, but I am very late with my schedule. My main goal is to have Pce abstraction classes done by the end of the month, so that I can in a second step modify the Pce algo to route on T-api domain.",
       "revId": "0ea2996a7bd6c4215bfa17ff17bc12aedaff1236",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de3e1c66_50b42d9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-23T06:44:11Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "0ea2996a7bd6c4215bfa17ff17bc12aedaff1236",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
