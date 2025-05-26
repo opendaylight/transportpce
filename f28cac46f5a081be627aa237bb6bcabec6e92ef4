@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2520ab4a_081f63e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "Thanks Joakim. See my few comments.",
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c170a8_540137b9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/TeraHertz.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "This double conversion doesn\u0027t seem necessary. Couldn\u0027t we just return frequencyInThz?",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 63
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d71e29c_513f5c7c",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/TeraHertzFactoryTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bf66b28_b8ee4a6a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/TeraHertzTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6d202b0_c0d7f35c",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/range/SortedRangeTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "You can use static import for Assertions to improve visibility and maintain consistency with the rest of TPCE code",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2c8fb8_46f90537",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/range/SortedRangeTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:53:41Z",
+      "side": 1,
+      "message": "idem, you can use static import for Mockito",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
