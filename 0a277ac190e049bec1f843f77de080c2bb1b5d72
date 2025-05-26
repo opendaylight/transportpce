@@ -863,6 +863,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea61c083_fda0ee3f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openconfiginterfaces/OpenConfigInterfacesImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T07:06:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a63a5ef0_d6d48361",
+      "range": {
+        "startLine": 39,
+        "startChar": 64,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "0a277ac190e049bec1f843f77de080c2bb1b5d72",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf688ebc_db226040",
