@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf68428_a5094903",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-05-26T09:57:34Z",
+      "side": 1,
+      "message": "Hi Joakim,\nI let you rebase your relation chain on master.",
+      "revId": "b2ed81f384e148f8f5e664329065c1107769903b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
