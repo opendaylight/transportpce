@@ -40,6 +40,7 @@ import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
 import org.opendaylight.transportpce.tapi.openroadm.service.OpenRoadmService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.OpenRoadmTopology;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
@@ -183,7 +184,8 @@ public class TapiProvider {
                         dataBroker,
                         networkTransactionService,
                         serviceDataStoreOperations,
-                        tapiContext)
+                        tapiContext),
+                new OpenRoadmTopology(networkTransactionService)
         );
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
