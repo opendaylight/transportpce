@@ -89,8 +89,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class TapiTopologyImplTest extends AbstractTest {
-    private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImplTest.class);
+public class TapiOpenRoadmTopologyImplTest extends AbstractTest {
+    private static final Logger LOG = LoggerFactory.getLogger(TapiOpenRoadmTopologyImplTest.class);
 
     @Mock
     private RpcService rpcService;

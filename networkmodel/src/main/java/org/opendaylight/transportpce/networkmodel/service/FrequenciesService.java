@@ -21,7 +21,7 @@ public interface FrequenciesService {
      * @param atoZDirection AToZDirection: a to z path
      * @param ztoADirection ZToADirection: z to a path
      */
-    void allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection);
+    boolean allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection);
 
     /**
      * Release frequency in network topology.
