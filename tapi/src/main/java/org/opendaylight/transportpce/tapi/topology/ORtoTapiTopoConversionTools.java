@@ -1395,8 +1395,10 @@ public class ORtoTapiTopoConversionTools {
 //                    .setLowerFrequency(Uint64.ZERO);
             onepBldr.setAvailablePayloadStructure(
                 createAvailablePayloadStructureForPhtncMedia(rate, false, sicColl,operModeList));
-            onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
-                createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
+            AvailableCapacity availableCapacity = new AvailableCapacityBuilder().setTotalSize(
+                    createTotalSizeForCommonNeps(Double.valueOf(rate))).build();
+            LOG.info("JT: Available Capacity for NEP {} is {}", nodeId, availableCapacity);
+            onepBldr.setAvailableCapacity(availableCapacity);
             AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
                 .setLowerFrequency(lowSupFreq.hertz())
                 .setUpperFrequency(upSupFreq.hertz())
@@ -1408,8 +1410,10 @@ public class ORtoTapiTopoConversionTools {
             LOG.debug("Entering LOOP Step2");
             onepBldr.setAvailablePayloadStructure(
                 createAvailablePayloadStructureForPhtncMedia(rate, true, sicColl,operModeList));
-            onepBldr.setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
-                createTotalSizeForCommonNeps(Double.valueOf(0.0))).build());
+            AvailableCapacity availableCapacity = new AvailableCapacityBuilder().setTotalSize(
+                    createTotalSizeForCommonNeps(Double.valueOf(0.0))).build();
+            LOG.info("JT: Available Capacity for NEP {} is {}", nodeId, availableCapacity);
+            onepBldr.setAvailableCapacity(availableCapacity);
             for (Map.Entry<Frequency, Frequency> frequency : freqMap.entrySet()) {
                 ospecBd
                     .setLowerFrequency(frequency.getKey().hertz())
