@@ -38,7 +38,7 @@ import org.opendaylight.yangtools.yang.common.ErrorType;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 @ExtendWith(MockitoExtension.class)
-public class TapiTopologyImplExceptionTest {
+public class TapiOpenRoadmTopologyImplExceptionTest {
     @Mock
     private RpcService rpcService;
     @Mock

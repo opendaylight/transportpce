@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -29,6 +30,10 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1Builder;
@@ -77,6 +82,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceImpl.class);
     private final DataBroker dataBroker;
     private final AvailFreqMapsKey availFreqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+    private final NotificationPublishService notificationPublishService;
 
     /**
      * Create instance of the FrequenciesService.
@@ -84,14 +90,16 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param dataBroker Provides access to the conceptual data tree store used by the implementation.
      */
     @Activate
-    public FrequenciesServiceImpl(@Reference DataBroker dataBroker) {
+    public FrequenciesServiceImpl(@Reference DataBroker dataBroker,
+            @Reference NotificationPublishService notificationPublishService) {
         this.dataBroker = dataBroker;
+        this.notificationPublishService = notificationPublishService;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
-        updateFrequencies(atoZDirection, ztoADirection, true);
+    public boolean allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection) {
+        return updateFrequencies(atoZDirection, ztoADirection, true);
     }
 
 
@@ -107,7 +115,11 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param ztoADirection ZToADirection
      * @param used used boolean true if frequencies are used, false otherwise.
      */
-    private void updateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection, boolean used) {
+    private boolean updateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection, boolean used) {
+        boolean frequencies4NodesAtoZ = true;
+        boolean frequencies4TpsAtoZ = true;
+        boolean frequencies4NodesZtoA = true;
+        boolean frequencies4TpsZtoA = true;
         if (atoZDirection != null && atoZDirection.getAToZMinFrequency() != null) {
             LOG.info("Update frequencies for a to z direction {}, used {}", atoZDirection, used);
             List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
@@ -117,16 +129,21 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             if (modulationFormat == null) {
                 LOG.error("Unknown modulation format {} for a to z direction, frequencies not updated",
                         atoZDirection.getModulationFormat());
-                return;
+                return false;
             }
-            setFrequencies4Tps(
+            LOG.info("atoZDirection setFrequencies4Tps...");
+            frequencies4TpsAtoZ = setFrequencies4Tps(
                     atozMinFrequency, atozMaxFrequency,
                     atoZDirection.getRate(), modulationFormat, atozTpIds,
                     used);
-            setFrequencies4Nodes(
+            LOG.info("atoZDirection setFrequencies4Nodes...");
+            frequencies4NodesAtoZ = setFrequencies4Nodes(
                     atozMinFrequency, atozMaxFrequency,
                     atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                     used);
+        } else {
+            LOG.info("atoZDirection: Well, this is embarrassing, "
+                    + "atoZDirection is null or it doesn't contain a minimum frequency.");
         }
         if (ztoADirection != null && ztoADirection.getZToAMinFrequency() != null) {
             LOG.info("Update frequencies for z to a direction {}, used {}", ztoADirection, used);
@@ -137,17 +154,24 @@ public class FrequenciesServiceImpl implements FrequenciesService {
             if (modulationFormat == null) {
                 LOG.error("Unknown modulation format {} for z to a direction, frequencies not updated",
                         ztoADirection.getModulationFormat());
-                return;
+                return false;
             }
-            setFrequencies4Tps(
+            LOG.info("setFrequencies4Tps...");
+            frequencies4TpsZtoA = setFrequencies4Tps(
                     ztoaMinFrequency, ztoaMaxFrequency,
                     ztoADirection.getRate(), modulationFormat, ztoaTpIds,
                     used);
-            setFrequencies4Nodes(
+            LOG.info("setFrequencies4Nodes...");
+            frequencies4NodesZtoA = setFrequencies4Nodes(
                     ztoaMinFrequency, ztoaMaxFrequency,
                     ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                     used);
+        } else {
+            LOG.info("ztoADirection: Well, this is embarrassing, "
+                    + "ztoADirection is null or it doesn't contain a minimum frequency.");
         }
+
+        return frequencies4NodesZtoA && frequencies4TpsZtoA && frequencies4NodesAtoZ && frequencies4TpsAtoZ;
     }
 
     /**
@@ -218,9 +242,9 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param nodeIds List of node id
      * @param used boolean true if min and max frequencies are used, false otherwise.
      */
-    private void setFrequencies4Nodes(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
+    private boolean setFrequencies4Nodes(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
             List<String> nodeIds, boolean used) {
-        updateFreqMaps4Nodes(nodeIds, atozMinFrequency, atozMaxFrequency, used);
+        return updateFreqMaps4Nodes(nodeIds, atozMinFrequency, atozMaxFrequency, used);
     }
 
 
@@ -292,14 +316,18 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param tpIds List of NodeIdPair
      * @param sed boolean true if min and max frequencies are used, false otherwise.
      */
-    private void setFrequencies4Tps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate,
+    private boolean setFrequencies4Tps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate,
             ModulationFormat modulationFormat, List<NodeIdPair> tpIds, boolean used) {
+
+        TopologyUpdateResultBuilder topologyUpdateResultBuilder = new TopologyUpdateResultBuilder();
+        Map<TopologyChangesKey, TopologyChanges> topologyChangesMap = new HashMap<>();
         String strTpIdsList = String.join(", ", tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList()));
         LOG.debug(
             "Update frequencies for termination points {}, rate {}, modulation format {},"
                 + " min frequency {}, max frequency {}, used {}",
             strTpIdsList, rate, modulationFormat, atozMinFrequency, atozMaxFrequency, used);
         WriteTransaction updateFrequenciesTransaction = this.dataBroker.newWriteOnlyTransaction();
+        LOG.info("JT:updateFrequenciesTransaction: {}", updateFrequenciesTransaction.getClass().getCanonicalName());
         for (NodeIdPair idPair : tpIds) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1
                     commonNetworkTerminationPoint =
@@ -357,14 +385,33 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     break;
                 default:
                     LOG.warn("Termination point type {} not managed", commonNetworkTerminationPoint.getTpType());
-                    return;
+                    return false;
             }
-            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers
-                    .createNetworkTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                            idPair.getTpID()), networkTerminationPointBuilder.build());
+            TopologyChanges topologyChangesBuilder = new TopologyChangesBuilder()
+                    .setNodeId(idPair.getNodeID())
+                    .setTpId(idPair.getTpID())
+                    .build();
+            topologyChangesMap.put(topologyChangesBuilder.key(), topologyChangesBuilder);
+            DataObjectIdentifier<TerminationPoint1> networkTerminationPoint1IIDBuilder =
+                    InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(
+                            idPair.getNodeID(),
+                            idPair.getTpID()
+            );
+            updateFrequenciesTransaction.put(
+                    LogicalDatastoreType.CONFIGURATION,
+                    networkTerminationPoint1IIDBuilder,
+                    networkTerminationPointBuilder.build()
+            );
         }
+
         try {
             updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            topologyUpdateResultBuilder.setTopologyChanges(topologyChangesMap);
+            LOG.info("JT: Successfully updated frequencies for termination points {}", strTpIdsList);
+            notificationPublishService.putNotification(topologyUpdateResultBuilder.build());
+            LOG.info("JT: Successfully sent notification for updated frequencies for termination points {}",
+                strTpIdsList);
+            return true;
         } catch (ExecutionException | TimeoutException e) {
             LOG.error(
                 "Something went wrong for frequencies update (min frequency {}, max frequency {}, used {} for TPs {}",
@@ -375,6 +422,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     strTpIdsList, e);
             Thread.currentThread().interrupt();
         }
+        return false;
     }
 
     /**
@@ -384,7 +432,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param atozMaxFrequency BigDecimal
      * @param used boolean true if min and max frequencies are used, false otherwise.
      */
-    private void updateFreqMaps4Nodes(List<String> nodeIds, Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
+    private boolean updateFreqMaps4Nodes(List<String> nodeIds, Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency,
             boolean used) {
         String strNodesList = String.join(", ", nodeIds);
         LOG.debug("Update frequencies for nodes {}, min frequency {}, max frequency {}, used {}",
@@ -421,6 +469,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
         }
         try {
             updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            return true;
         } catch (ExecutionException | TimeoutException e) {
             LOG.error("Cannot update frequencies {} {} for nodes {}", atozMinFrequency, atozMaxFrequency,
                     strNodesList, e);
@@ -429,6 +478,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     strNodesList, e);
             Thread.currentThread().interrupt();
         }
+        return false;
     }
 
     /**
