@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -83,6 +84,27 @@ public final class TopologyUtils {
         this.tapiSips = new HashMap<>();
         this.tapiLink = tapiLink;
         // TODO: Initially set topological mode to Full. Shall be set through the setter at controller initialization
+    }
+
+    public Topology readTapiTopology(DataObjectIdentifier.WithKey<Topology, TopologyKey> tapiTopologyKey) {
+
+        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
+        FluentFuture<Optional<Topology>> read = readTransaction.read(LogicalDatastoreType.OPERATIONAL, tapiTopologyKey);
+
+        if (read.isDone()) {
+            try {
+                Optional<Topology> tpOpt;
+                tpOpt = read.get();
+                if (tpOpt.isPresent()) {
+                    return tpOpt.orElseThrow();
+                }
+                LOG.error("TAPI topology with key {} not found in operational datastore", tapiTopologyKey);
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Failed reading TAPI topology with key: {}", tapiTopologyKey, e);
+            }
+        }
+
+        return new TopologyBuilder().build();
     }
 
     public Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {

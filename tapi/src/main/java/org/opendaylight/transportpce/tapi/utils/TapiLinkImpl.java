@@ -40,6 +40,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Life
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.TotalSizeBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacity;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.AvailableCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.capacity.pac.TotalPotentialCapacityBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
@@ -101,6 +102,7 @@ public class TapiLinkImpl implements TapiLink {
         this.cepMap = new HashMap<>();
     }
 
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public Link createTapiLink(String srcNodeId, String srcTpId, String dstNodeId, String dstTpId, String linkType,
             String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
@@ -187,6 +189,11 @@ public class TapiLinkImpl implements TapiLink {
             .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
             .build();
         LOG.info("LINKIMPL195, successfully created tapiLink {} of type {}", linkKey, linkType);
+        AvailableCapacity availableCapacity = new AvailableCapacityBuilder().setTotalSize(
+                        new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE)
+                                .setValue(Decimal64.valueOf("100")).build())
+                .build();
+        LOG.info("JT: availableCapacity {} for link {}", availableCapacity, linkKey);
         return new LinkBuilder()
             .setUuid(new Uuid(
                 UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
@@ -200,9 +207,7 @@ public class TapiLinkImpl implements TapiLink {
             .setNodeEdgePoint(
                 new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
             .setDirection(ForwardingDirection.BIDIRECTIONAL)
-            .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
-                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
-                .build())
+            .setAvailableCapacity(availableCapacity)
             .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTION)
                 .setRestorationPolicy(RestorationPolicy.NA)
                 .build())
