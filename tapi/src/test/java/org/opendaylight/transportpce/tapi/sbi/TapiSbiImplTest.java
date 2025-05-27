@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,13 @@ import org.opendaylight.transportpce.test.converter.JsonDataConverter;
 import org.opendaylight.transportpce.test.converter.ProcessingException;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +66,20 @@ public class TapiSbiImplTest extends AbstractTest {
     @Test
     void getTapiTopology() throws InterruptedException, ExecutionException {
         LOG.info("test getTapiTopologyContext");
-        Topology topology = (Topology) TopologyDataUtils.readTapiTopologyFromDatastore(getDataStoreContextUtil(),
-                TapiConstants.TAPI_TOPOLOGY_II);
+        DataObjectIdentifier.WithKey<Topology, TopologyKey> key = DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class)
+                .child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(TapiConstants.T0_FULL_MULTILAYER_UUID))
+                .build();
+
+        Topology topology = (Topology) TopologyDataUtils.readTapiTopologyFromDatastore(getDataStoreContextUtil(), key);
+
+        Map<NodeKey, Node> node = topology.getNode();
+        if (node != null || ! node.isEmpty()) {
+            for (Map.Entry<NodeKey, Node> entry : node.entrySet()) {
+                LOG.info("Node: {}", entry.getValue().getOwnedNodeEdgePoint());
+            }
+        }
         assertNotNull(topology, "TAPI Topology should not be null");
         LOG.info(topology.toString());
     }
