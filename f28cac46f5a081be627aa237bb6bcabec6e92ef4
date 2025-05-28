@@ -41,6 +41,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c400c95_e61fe1bf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/TeraHertz.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-28T06:00:37Z",
+      "side": 1,
+      "message": "You\u0027re right, this conversion is not necessary.",
+      "parentUuid": "f7c170a8_540137b9",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 63
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d71e29c_513f5c7c",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-05-26T09:53:41Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f8d4b2_05f8c1e7",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/TeraHertzFactoryTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-28T06:00:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d71e29c_513f5c7c",
       "range": {
         "startLine": 25,
         "startChar": 8,
@@ -87,6 +135,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e4ed6d_865b88b5",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/TeraHertzTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-28T06:00:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5bf66b28_b8ee4a6a",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6d202b0_c0d7f35c",
@@ -110,6 +182,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e93265e7_24025c83",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/range/SortedRangeTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-28T06:00:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b6d202b0_c0d7f35c",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c2c8fb8_46f90537",
@@ -123,6 +219,30 @@
       "writtenOn": "2025-05-26T09:53:41Z",
       "side": 1,
       "message": "idem, you can use static import for Mockito",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "f28cac46f5a081be627aa237bb6bcabec6e92ef4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c3406c6_e463f104",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/frequency/range/SortedRangeTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-05-28T06:00:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9c2c8fb8_46f90537",
       "range": {
         "startLine": 94,
         "startChar": 8,
