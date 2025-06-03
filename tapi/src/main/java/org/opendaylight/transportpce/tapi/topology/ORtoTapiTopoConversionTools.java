@@ -53,6 +53,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
@@ -1104,27 +1105,15 @@ public class ORtoTapiTopoConversionTools {
     /**
      * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
      * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     * @param terminationPoint OpenROADM Termination Point (ietf/openROADM topology Object),
      */
-    public Map<Frequency, Frequency> getPPUsedWavelength(TerminationPoint tp) {
-        var tpAug = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
-        if (tpAug == null) {
-            return new HashMap<>();
-        }
-        PpAttributes ppAtt = tpAug.getPpAttributes();
-        if (ppAtt == null) {
-            return new HashMap<>();
-        }
-        var usedWvl = ppAtt.getUsedWavelength();
-        if (usedWvl == null || usedWvl.isEmpty()) {
-            return new HashMap<>();
-        }
-        var usedWvlfirstValue = usedWvl.entrySet().iterator().next().getValue();
-        Double centFreq = usedWvlfirstValue.getFrequency().getValue().doubleValue();
-        Double width = usedWvlfirstValue.getWidth().getValue().doubleValue();
-
-        return rangeFactory.range(centFreq, width).ranges();
+    public Map<Frequency, Frequency> getPPUsedFrequencies(TerminationPoint terminationPoint) {
+        return getPP11UsedWavelength(
+                terminationPoint.augmentation(
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
+                                .rev230526.TerminationPoint1.class
+                )
+        );
     }
 
 
@@ -1278,21 +1267,33 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPP11UsedWavelength(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+        SortedRange sortedRange = new SortedRange();
         if (tp == null) {
             return new HashMap<>();
         }
+
+        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = new HashMap<>();
         PpAttributes ppAtt = tp.getPpAttributes();
-        if (ppAtt == null) {
-            return new HashMap<>();
+        if (ppAtt != null) {
+            avlFreqMaps = ppAtt.getAvailFreqMaps();
         }
-        var usedWvl = ppAtt.getUsedWavelength();
-        if (usedWvl == null || usedWvl.isEmpty()) {
-            return new HashMap<>();
+
+        if (avlFreqMaps != null && avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+
+            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+            freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
+                    .filter(afm -> afm.getKey().equals(availFreqMapsKey))
+                    .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);
+            LOG.debug("Available frequency byte set: {}", freqByteSet);
+
+            Map<Double, Double> ranges = numericFrequency.assignedFrequency(new AvailableGrid(freqByteSet));
+            LOG.debug("Used frequency ranges: {}", ranges);
+
+            sortedRange.add(new SortedRange(ranges));
         }
-        var usedWvlFirstValue = usedWvl.entrySet().iterator().next().getValue();
-        Double centFreq = usedWvlFirstValue.getFrequency().getValue().doubleValue();
-        Double width = usedWvlFirstValue.getWidth().getValue().doubleValue();
-        return rangeFactory.range(centFreq, width).ranges();
+
+        return sortedRange.ranges();
     }
 
     /**
