@@ -15,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,8 @@ class ORtoTapiTopoConversionToolsTest {
     @BeforeEach
     void setUp() {
         Math math = mock(Math.class);
+        when(math.getStartFrequencyFromIndex(736)).thenReturn(195.925);
+        when(math.getStartFrequencyFromIndex(744)).thenReturn(195.975);
         when(math.getStartFrequencyFromIndex(760)).thenReturn(196.075);
         when(math.getStopFrequencyFromIndex(767)).thenReturn(196.125);
 
@@ -113,8 +116,8 @@ class ORtoTapiTopoConversionToolsTest {
     }
 
     @Test
-    void getPP11UsedWavelength() {
-
+    void getPP11UsedFrequencies() {
+        //Only available frequency map is used. Used wavelength is not used.
         UsedWavelengthBuilder usedWavelengthBuilder = new UsedWavelengthBuilder();
         usedWavelengthBuilder.setIndex(760)
                 .setFrequency(FrequencyTHz.getDefaultInstance("196.075"))
@@ -132,9 +135,43 @@ class ORtoTapiTopoConversionToolsTest {
                 .setPpAttributes(ppAttributes)
                 .build();
 
-        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(196.05), new TeraHertz(196.1));
-        assertEquals(expected, convertORToTapiTopology.getPP11UsedWavelength(tp));
-        assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedWavelength(tp)));
+        assertEquals(new HashMap<>(), convertORToTapiTopology.getPP11UsedFrequencies(tp));
 
+    }
+
+    @Test
+    void testGetPP11UsedFrequenciesOnlyUsesAvailableFrequencyMap() {
+        //Only available frequency map is used. Used wavelength is not used.
+        UsedWavelengthBuilder usedWavelengthBuilder = new UsedWavelengthBuilder();
+        usedWavelengthBuilder.setIndex(760)
+                .setFrequency(FrequencyTHz.getDefaultInstance("196.075"))
+                .setWidth(FrequencyGHz.getDefaultInstance("50"));
+        UsedWavelength usedWavelength = usedWavelengthBuilder.build();
+
+        byte[] availableFrequencyMap = new byte[96];
+        Arrays.fill(availableFrequencyMap,0, 92, (byte) 255);
+        Arrays.fill(availableFrequencyMap,93, 96, (byte) 255);
+
+        AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder()
+                .setMapName(new AvailFreqMapsKey("cband").getMapName())
+                .setFreqMap(availableFrequencyMap)
+                .build();
+
+        PpAttributesBuilder ppAttributesBuilder = new PpAttributesBuilder();
+        PpAttributes ppAttributes = ppAttributesBuilder
+                .setUsedWavelength(Map.of(usedWavelength.key(), usedWavelength))
+                .setAvailFreqMaps(Map.of(availFreqMaps.key(), availFreqMaps))
+                .build();
+
+        TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder();
+        TerminationPoint1 tp = terminationPoint1Builder
+                .setPpAttributes(ppAttributes)
+                .build();
+
+        Map<Frequency, Frequency> expected = Map.of(
+                new TeraHertz(195.925), new TeraHertz(195.975)
+        );
+        assertEquals(expected, convertORToTapiTopology.getPP11UsedFrequencies(tp));
+        assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedFrequencies(tp)));
     }
 }
