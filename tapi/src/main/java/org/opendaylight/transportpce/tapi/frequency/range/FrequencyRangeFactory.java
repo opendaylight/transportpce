@@ -47,4 +47,5 @@ public class FrequencyRangeFactory implements RangeFactory {
         return sortedRange;
 
     }
+
 }
