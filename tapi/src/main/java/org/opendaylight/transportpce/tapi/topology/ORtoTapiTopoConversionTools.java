@@ -45,6 +45,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.PpAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.TxTtpAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.pp.attributes.UsedWavelength;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.pp.attributes.UsedWavelengthKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
@@ -53,6 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
@@ -1108,23 +1111,47 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPPUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
-        if (tpAug == null) {
-            return new HashMap<>();
-        }
-        PpAttributes ppAtt = tpAug.getPpAttributes();
-        if (ppAtt == null) {
-            return new HashMap<>();
-        }
-        var usedWvl = ppAtt.getUsedWavelength();
-        if (usedWvl == null || usedWvl.isEmpty()) {
-            return new HashMap<>();
-        }
-        var usedWvlfirstValue = usedWvl.entrySet().iterator().next().getValue();
-        Double centFreq = usedWvlfirstValue.getFrequency().getValue().doubleValue();
-        Double width = usedWvlfirstValue.getWidth().getValue().doubleValue();
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
 
-        return rangeFactory.range(centFreq, width).ranges();
+        SortedRange sortedRange = new SortedRange();
+        if (tpAug == null) {
+            return sortedRange.ranges();
+        }
+
+        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = new HashMap<>();
+        Map<UsedWavelengthKey, UsedWavelength> usedWvl = new HashMap<>();
+        PpAttributes ppAtt = tpAug.getPpAttributes();
+        if (ppAtt != null) {
+            avlFreqMaps = ppAtt.getAvailFreqMaps();
+            usedWvl = ppAtt.getUsedWavelength();
+        }
+
+        if (avlFreqMaps != null && avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+
+            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+            freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
+                    .filter(afm -> afm.getKey().equals(availFreqMapsKey))
+                    .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);
+            LOG.debug("PP11 available frequency byte set: {}", freqByteSet);
+
+            Map<Double, Double> ranges = numericFrequency.assignedFrequency(new AvailableGrid(freqByteSet));
+            LOG.debug("PP11 used frequency ranges: {}", ranges);
+
+            sortedRange.add(rangeFactory.range(ranges));
+        }
+
+        if (usedWvl != null && !usedWvl.isEmpty()) {
+            LOG.debug("PP used frequency map: {}", usedWvl);
+            usedWvl.entrySet().iterator().forEachRemaining(entry -> {
+                var usedWvlValue = entry.getValue();
+                Double centFreq = usedWvlValue.getFrequency().getValue().doubleValue();
+                Double width = usedWvlValue.getWidth().getValue().doubleValue();
+                sortedRange.add(centFreq, width, frequencyFactory);
+            });
+        }
+
+        return sortedRange.ranges();
     }
 
 
@@ -1278,21 +1305,45 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPP11UsedWavelength(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+        SortedRange sortedRange = new SortedRange();
         if (tp == null) {
-            return new HashMap<>();
+            return sortedRange.ranges();
         }
+
+        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = new HashMap<>();
+        Map<UsedWavelengthKey, UsedWavelength> usedWvl = new HashMap<>();
         PpAttributes ppAtt = tp.getPpAttributes();
-        if (ppAtt == null) {
-            return new HashMap<>();
+        if (ppAtt != null) {
+            avlFreqMaps = ppAtt.getAvailFreqMaps();
+            usedWvl = ppAtt.getUsedWavelength();
         }
-        var usedWvl = ppAtt.getUsedWavelength();
-        if (usedWvl == null || usedWvl.isEmpty()) {
-            return new HashMap<>();
+
+        if (avlFreqMaps != null && avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+
+            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+            freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
+                    .filter(afm -> afm.getKey().equals(availFreqMapsKey))
+                    .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);
+            LOG.debug("PP11 available frequency byte set: {}", freqByteSet);
+
+            Map<Double, Double> ranges = numericFrequency.assignedFrequency(new AvailableGrid(freqByteSet));
+            LOG.debug("PP11 used frequency ranges: {}", ranges);
+
+            sortedRange.add(rangeFactory.range(ranges));
         }
-        var usedWvlFirstValue = usedWvl.entrySet().iterator().next().getValue();
-        Double centFreq = usedWvlFirstValue.getFrequency().getValue().doubleValue();
-        Double width = usedWvlFirstValue.getWidth().getValue().doubleValue();
-        return rangeFactory.range(centFreq, width).ranges();
+
+        if (usedWvl != null && !usedWvl.isEmpty()) {
+            LOG.debug("PP11 used frequency map: {}", usedWvl);
+            usedWvl.entrySet().iterator().forEachRemaining(entry -> {
+                var usedWvlValue = entry.getValue();
+                Double centFreq = usedWvlValue.getFrequency().getValue().doubleValue();
+                Double width = usedWvlValue.getWidth().getValue().doubleValue();
+                sortedRange.add(centFreq, width, frequencyFactory);
+            });
+        }
+
+        return sortedRange.ranges();
     }
 
     /**
