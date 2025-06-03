@@ -8,7 +8,10 @@
 
 package org.opendaylight.transportpce.tapi.frequency.range;
 
+import java.util.Map;
+
 public interface RangeFactory {
+
 
     /**
      * Create an effective range (i.e. the entire range) based on a start frequency, granularity
@@ -22,5 +25,11 @@ public interface RangeFactory {
      * The range is calculated as centerFrequency - (bandwidth/2) to centerFrequency + (bandwidth/2).
      */
     Range range(Double centerFrequencyTHz, Double bandwidthGHz);
+
+    /**
+     * Create a range based on a map of lower and upper frequencies.
+     * The map should contain entries where the key is the lower frequency and the value is the upper frequency.
+     */
+    Range range(Map<Double, Double> ranges);
 
 }

@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.tapi.frequency.range;
 
+import java.util.Map;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
@@ -46,5 +47,16 @@ public class FrequencyRangeFactory implements RangeFactory {
 
         return sortedRange;
 
+    }
+
+    @Override
+    public Range range(Map<Double, Double> ranges) {
+        Range sortedRange = new SortedRange();
+
+        for (Map.Entry<Double, Double> range : ranges.entrySet()) {
+            sortedRange.add(range.getKey(), range.getValue());
+        }
+
+        return sortedRange;
     }
 }
