@@ -572,7 +572,7 @@ public class ConvertTopoORtoTapiAtInit {
                     case SRGRXPP:
                     case SRGTXPP:
                     case SRGTXRXPP:
-                        usedFreqMap = tapiFactory.getPPUsedWavelength(tp);
+                        usedFreqMap = tapiFactory.getPPUsedFrequencies(tp);
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
                             availableFreqMap.put(
                                     new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
