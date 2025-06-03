@@ -2027,7 +2027,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     case SRGRXPP:
                     case SRGTXPP:
                     case SRGTXRXPP:
-                        usedFreqMap = tapiFactory.getPP11UsedWavelength(
+                        usedFreqMap = tapiFactory.getPP11UsedFrequencies(
                             getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
                             availableFreqMap.put(
