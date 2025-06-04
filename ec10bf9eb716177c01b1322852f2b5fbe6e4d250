@@ -17,6 +17,23 @@
       "message": "recheck",
       "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee26a1cc_e7218736",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-04T12:00:45Z",
+      "side": 1,
+      "message": "Thanks Joakim. \nThe idea was that used wavelength reflects the wavelength used by the connected TSP: corresponds to a setting exercised at a time to configure on one PP port of the ROADMs \"SRG\" (or let say \"Add/drop\"), the Wavelength band it shall be passing through to its multiplexing port CP. There shall be only one MediaChannel (Center Freq + width) configured, and this is the reason why we take only the first item.\n\nAvailable wavelength in contrary corresponds to available frequency slots : as a regular WSS multiplexes several ports (PPs) onto the same output port (CP), it is most of the time blocking, meaning that if a channel is configured on one PP port, the same channel can not be used on any other port. Thus available wavelengths are all the ones that have not been set on any of the PP ports. It reflects what\u0027s available from current configuration on the different PP ports.\n\nWhat you propose makes sense : merging both comes down to give the visibility of what\u0027s available on the CP port, down to the PP port. But we lose a level of information. Used shall reflect what’s configured on the port, available, what could be provisioned on the port, whether the port is free or not (one wavelength provisioned). Then, the question is do we need to backport this information to the PP, since it is still available at the CP which will be part of the path and will be analyzed by the PCE when it computes the available spectrum on the full path.\n\nPlease note that it also has some implications. In TapiNetworkModelServiceImpl, populateNepsforRdmNodes, Neps are created based on the result of the getPP11UsedWavelength. If the result shows one wavelength is provisioned on the port, this triggers the creation of an OTSiMC and an MC Nep (Line 2032/2034). (We currently make a shortcut, computing available wavelength on that port ignoring what is provisioned on the other ports and I will need to correct this : line 2027). \n\nIf we apply your change, OTSiMC and MC will be created as soon as another wavelength has been provisioned on the SRG block, which is not what we want. You won’t see it directly, because we are lacking some tests there: the result will be seen in the generated topology, which is tested only indirectly, as we use the full topology file to test the PCE, but do not regenerate the topo automatically. \n\nTo be honest, I did not spend to much time building the tests on this part of the code. The reason is that building this topology took a very long time, and is only an intermediate step. At the end the topology saved in the data store (translation of OR topo to tapi topo) will only be a summarized abstracted topo, not the full one. I am not saying this is great, just that as we are missing some resources we try to do our best to have something that works….\n\nThus  I would prefer not to merge the information of used and available wavelength.",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
