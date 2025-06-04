@@ -17,6 +17,23 @@
       "message": "Excellent! Thanks so much Joakim for participating in consolidating TAPI implementation, identifying gaps and filling them. LGTM!!!",
       "revId": "ec8db199c01848120d0832e5257104a263a6d18d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5a54e5_65124b4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-04T08:41:50Z",
+      "side": 1,
+      "message": "Oups! Sorry, did it too fast! Need to investigate why Tapi Test on full topology fails...",
+      "revId": "ec8db199c01848120d0832e5257104a263a6d18d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
