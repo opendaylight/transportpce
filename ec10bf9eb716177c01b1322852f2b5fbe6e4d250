@@ -52,6 +52,23 @@
       "parentUuid": "ee26a1cc_e7218736",
       "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd1b1f3c_2af156d1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-06-05T08:49:51Z",
+      "side": 1,
+      "message": "Seems to me we can just remove the code based on UsedWavelength since that attribute is never set by TransportPCE in my understanding.",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
