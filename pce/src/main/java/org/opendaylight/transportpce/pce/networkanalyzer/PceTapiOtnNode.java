@@ -200,6 +200,17 @@ public class PceTapiOtnNode implements PceNode {
     private TapiOpticalNode tapiON;
     private final String pceNodeType;
 
+    /**
+     * PceTapiOtnNode is an abstracted Node in the OTN layer corresponding to a Graph Vertex for path computation.
+     *  Corresponds to the OTN/DSR part of a XPONDER.
+     * @param serviceType   The service type which for PceTapiOtnNodes is an OTN service : 1GE, 10GE, 100GEm, 100GEs,
+     *                      ODU4, ODUCN.
+     * @param node          The Associated node in Tapi-Topology DataStore from which the Pce Node is abstracted.
+     * @param nodeType      The Node Type as in OpenROADM topology layer. Currently handled : SRG, DEGREE, XPONDER.
+     * @param ton           The source TapiOpticalNode which instantiated this PceTapiOTnNode.
+     * @param clientPort    The Uuid of the node's port identified as one end of the current service.
+     * @param deviceNodeId  The node name
+     */
     public PceTapiOtnNode(Node node, OpenroadmNodeType nodeType, String deviceNodeId, String serviceType,
         Uuid clientPort, TapiOpticalNode ton) {
         this.node = node;
@@ -227,7 +238,7 @@ public class PceTapiOtnNode implements PceNode {
             this.valid = false;
         }
         if (valid) {
-            LOG.info("PceTapiOtnNodeLine233: Node {} passed first step of validation", node.getName());
+            LOG.debug("PceTapiOtnNodeLine241: Node {} passed first step of validation", node.getName());
         }
         if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
                 && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
@@ -235,10 +246,20 @@ public class PceTapiOtnNode implements PceNode {
             this.valid = false;
         }
         if (valid) {
-            LOG.info("PceTapiOtnNodeLine242: Node {} passed 2nd step of validation", node.getName());
+            LOG.debug("PceTapiOtnNodeLine249: Node {} passed 2nd step of validation", node.getName());
         }
     }
 
+    /**
+     * Checks for XPONDERS availability of NEPs/CEPs and class them into availableXpdrClientTps and availableXpdrNWTps.
+     *   NetworkNeps are filtered according to presence and the ability of NEPs in the supporting connection layer to
+     *   support the connections to be established on the upper layer.
+     *   List availableXpdrClientTps is filled only with Client NEPs that are in visibility of Network through valid
+     *   Network NEPs.
+     *   Both lists are purged from irrelevant NEPs. Internal connectivity is checked calling checkSwPool
+     * @param mode  Mode of operation that defines whether the XPonder is considered as an end node or an intermediate
+     *              node for path computation : AZ_MODETYPE/ INTERMEDIATE_MODETYPE.
+     */
     public void initXndrTps(String mode) {
         LOG.debug("PceTapiOtnNode: initXndrTps for node {}", this.nodeId);
         this.availableXpdrClientTps.clear();
@@ -265,11 +286,11 @@ public class PceTapiOtnNode implements PceNode {
             availableXpdrNWTps = tapiON.getOduCepAndNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList());
-            LOG.info("PTOtnN Line272 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.debug("PTOtnN Line289 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
-            LOG.info("PTOtnN Line273 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+            LOG.debug("PTOtnN Line291 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
-            LOG.info("PTOtnN Line275 : availableXpdrClientTps vertConnectedNep {}", availableXpdrClientTps.stream()
+            LOG.debug("PTOtnN Line293 : availableXpdrClientTps vertConnectedNep {}", availableXpdrClientTps.stream()
                 .map(BasePceNep::getVerticallyConnectedNep).collect(Collectors.toList()));
             int clientListSize = availableXpdrClientTps.size();
             if (availableXpdrClientTps.isEmpty()) {
@@ -291,16 +312,16 @@ public class PceTapiOtnNode implements PceNode {
             LOG.error("PceOtnNode: initXndrTps: Unidentified Service Type {}", otnServiceType);
         }
         // Purge availableXpder-NW/Client-Tps from ports that are not directly or undirectly connected to clientPort
-        LOG.info("PTOtnN Line298 : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
+        LOG.debug("PTOtnN Line315 : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
             .filter(bpn -> isValidBpn(bpn)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTOtnN Line299 : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
+        LOG.debug("PTOtnN Line318 : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
             .filter(bpn -> bpn.getVerticallyConnectedNep().contains(clientPortId)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
         availableXpdrClientTps.removeAll(availableXpdrClientTps.stream()
             .filter(bpn -> (!(isValidBpn(bpn) || (bpn.getVerticallyConnectedNep().contains(clientPortId)))))
             .collect(Collectors.toList()));
-        LOG.info("PTOtnN Line301 : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+        LOG.debug("PTOtnN Line324 : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
         if (!availableXpdrClientTps.isEmpty()) {
             List<BasePceNep> bpnToRemove = new ArrayList<>();
@@ -308,7 +329,7 @@ public class PceTapiOtnNode implements PceNode {
                 // In the case of an ODU4 service, the iODU (HighOrder) on the network side will be added to the
                 // Client TPs. We need to avoid it is removed from the list
                 boolean isDSR = bpn.getLpn().getName().contains("DSR");
-                LOG.info("PTOtnN Line314 : 1st purge step-> Analizing bpn {}, LayerProtocolQualifier = {}, is DSR = {}",
+                LOG.debug("PTOtnNLine332 : 1st purge step-> Analizing bpn {}, LayerProtocolQualifier = {}, is DSR = {}",
                     bpn.getName(), isDSR, bpn.getLpn());
                 if (!isValidTp(bpn, false, isDSR) && (bpn.getLpq() != null && !bpn.getLpq().equals(ODUTYPEODU4.VALUE))
                         || !isValidTp(bpn, true, isDSR)
@@ -318,21 +339,20 @@ public class PceTapiOtnNode implements PceNode {
             }
             availableXpdrClientTps.removeAll(bpnToRemove);
         }
-        LOG.info("PTOtnN Line309 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+        LOG.debug("PTOtnN Line342 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
         if (availableXpdrNWTps != null && !availableXpdrNWTps.isEmpty()) {
-            LOG.info("PTOtnN Line312 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.debug("PTOtnN Line345 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
             availableXpdrNWTps.removeAll(availableXpdrNWTps.stream()
                 // We shall not remove tp that are not vertically connected to NW nep (more NRG aspects checked through
                 // checkSwPool -> only remove tp that are not valid
-                //.filter(bpn -> !bpn.getVerticallyConnectedNep().contains(clientPortId) || !isValidTp(bpn))
                 .filter(bpn -> !isValidTp(bpn, true, false))
                 .collect(Collectors.toList()));
-            LOG.info("PTOtnN Line315 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.debug("PTOtnN Line352 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
         }
-        LOG.info("PceOtnNode Line 323 InitXndrTp, before checking SW pool Valid is  {}", valid);
+        LOG.debug("PceOtnNode Line 355 InitXndrTp, before checking SW pool Valid is  {}", valid);
         if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             this.valid = checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
         } else if (availableXpdrClientTps != null && !availableXpdrClientTps.isEmpty()) {
@@ -340,10 +360,17 @@ public class PceTapiOtnNode implements PceNode {
             // but in this case the NW port is in the Client MAp
             this.valid = true;
         }
-        LOG.info("PceOtnNode Line 330 InitXndrTp, after checking SW pool Valid is  {}", valid);
+        LOG.debug("PceOtnNode Line 363 InitXndrTp, after checking SW pool Valid is  {}", valid);
 
     }
 
+    /**
+     * Checks the validity of a NEP/CEP, according to its LayerProtocolQualifier and its AvailablePayloadStructure.
+     * @param bpn           The input BasePceNep to check.
+     * @param isHighOrder   Boolean indicating whether the nEP/CEP is is of high or low Order.
+     * @param isDSR         Boolean indicating if a NEP/CEP is a Client DRS NEP.
+     * @return              Boolean : true if the NEP/CEP is valid.
+     */
     private boolean isValidTp(BasePceNep bpn, boolean isHighOrder, boolean isDSR) {
         // We find the Onep that either correspond to the bpn, or if the bpn is a cep, the Onep that contains in its
         // cepList the Cep, and check that the Onep is valid. If the Onep is valid the associated CEP is also considered
@@ -381,9 +408,9 @@ public class PceTapiOtnNode implements PceNode {
             boolean result = isHighOrder ? true
                 : onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
-            LOG.info("PceOtnNode Line 344 InitXndrTp, isValidBpn ExpectedLPN is {} and is ValidTp {}", expectedLpn,
+            LOG.debug("PceOtnNode Line 411 InitXndrTp, isValidBpn ExpectedLPN is {} and is ValidTp {}", expectedLpn,
                 result);
-            // If checked TP is a Nw TP of higher order that expected LPN (Multiplexing function
+            // If checked TP is a Nw TP of higher order that expected LPN (Multiplexing function)
             // We don't check that the multiplexing sequence of the bpn includes expected lpn
             // since the bpn is not of the same order
             return result;
@@ -394,6 +421,11 @@ public class PceTapiOtnNode implements PceNode {
         return false;
     }
 
+    /**
+     * Validates/invalidates a XPONDER node calling initXndrTp() that checks the presence of required NEPs.
+     * @param anodeId   NodeId of the service end potentially associated with the XPONDER (if the XPONDER is not used
+     *                  as a regenerator.
+     */
     public void validateXponder(String anodeId) {
         if (!isValid()) {
             return;
@@ -408,12 +440,18 @@ public class PceTapiOtnNode implements PceNode {
         }
     }
 
+    /**
+     * Allows checking the validity of a NEP whether the service end correspond to the NEP or has kindred relationships.
+     * @param bpn   The BasePceNep to check.
+     * @return      Boolean : true if the NEP/CEP has some kindred relationship with the service end that could be
+     *              either a SIP, CEP or NEP.
+     */
     private boolean isValidBpn(BasePceNep bpn) {
         if (clientPortId == null) {
             return true;
         }
         if (bpn.getSipUuid() == null) {
-            LOG.debug("TONLine1021, null SIP for BPN {}", bpn.getName());
+            LOG.debug("PceOtnNodeLine416, null SIP for BPN {}", bpn.getName());
         }
         // Allows to qualify node validity whatever is the portId used : NEP Uuid, CEP Uuid or SIP Uuid. If CEP Uuid
         // or SIP Uuid is used, Bpn that has CEP/SIP corresponding to the PortId provided in the request will be
@@ -429,6 +467,11 @@ public class PceTapiOtnNode implements PceNode {
         }
     }
 
+    /**
+     * Provides the child CEP's Uuid of an input NEP.
+     * @param Uuid  The NEP Uuid provided as an input.
+     * @return      Uuid of the CEP that corresponds to child of the input NEP.
+     */
     private Uuid getCepUuidFromParentNepUuid(Uuid nepUuid) {
         if (node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepUuid)).collect(Collectors.toList()).isEmpty()) {
@@ -451,6 +494,14 @@ public class PceTapiOtnNode implements PceNode {
         return null;
     }
 
+    /**
+     * Provides the NEP Uuid that corresponds to a BasePceNep, whether it is the NEP itself or its parent NEP.
+     *  Checks whether it finds the Uuid provided as an input in the Node Map of OwnedNodeEdgePoint,
+     *  or if the Uuid corresponds to a CEP. In the last case returns the CEP's parent NEP Uuid.
+     * @param Uuid  The Uuid of a BasePceNep.
+     * @return      Uuid of the NEP that corresponds to the parent of the BasePceNep or the NEP Uuid itself, if the
+     *              the BasePceNep is a NEP.
+     */
     private Uuid getNepUuidFromNepCepUuid(Uuid nepCepUuid) {
         if (!node.getOwnedNodeEdgePoint().entrySet().stream()
             .filter(nep -> nep.getKey().getUuid().equals(nepCepUuid)).collect(Collectors.toList()).isEmpty()) {
@@ -475,19 +526,29 @@ public class PceTapiOtnNode implements PceNode {
         return null;
     }
 
+    /**
+     * Checks whether or not any of the ClientTp can be connected to any of the Network tps provided as input lists.
+     *   Analyze Node internal connectivity scanning NRGs and if needed IRGs and returns a boolean that reflect the
+     *   ability of the node to interconnect the client and network tps provided as input list.
+     *   Populates lists usableXpdrClientTps and usableXpdrNWTps.
+     * @param netwTps       A list of Network BasePceNeps
+     * @param clientTps     A list of Client BasePceNeps
+     * @return              Boolean set to true if the connectivity defined through the Node's NRGs and IRGs allows
+     *                      the interconnection of the clien tps to the network tps.
+     */
     private boolean checkAZSwPool(List<BasePceNep> netwTps, List<BasePceNep> clientTps) {
         // Check first if client Tps and Network tps have some common nrg with a Forwarding rule MAY/MUST
         // meaning client are connected to Nw port
-        LOG.info("PTONLine430, checkAZSwPool");
-        LOG.info("PTONLine431, clientNRGUuid before filtering {}", clientTps.stream()
+        LOG.debug("PTONLine542, checkAZSwPool");
+        LOG.debug("PTONLine543, clientNRGUuid before filtering {}", clientTps.stream()
             .map(BasePceNep::getNodeRuleGroupUuid).collect(Collectors.toList()));
-        LOG.info("PTONLine433, nwNRGUuid before filtering {}", netwTps.stream()
+        LOG.debug("PTONLine545, nwNRGUuid before filtering {}", netwTps.stream()
             .map(BasePceNep::getNodeRuleGroupUuid).collect(Collectors.toList()));
-        LOG.info("PTONLine435, nwBpn before filtering {}", netwTps.stream()
+        LOG.debug("PTONLine547, nwBpn before filtering {}", netwTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTONLine449, clientBpn before filtering {}", clientTps.stream()
+        LOG.debug("PTONLine549, clientBpn before filtering {}", clientTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTONLine451, clientBpn before filtering {}", clientTps.stream()
+        LOG.debug("PTONLine551, clientBpn before filtering {}", clientTps.stream()
             .map(BasePceNep::getLpn).collect(Collectors.toList()));
         List<BasePceNep> eoduBpnList = clientTps.stream()
             .filter(bpn -> !bpn.getLpn().equals(LayerProtocolName.DSR)).collect(Collectors.toList());
@@ -495,14 +556,14 @@ public class PceTapiOtnNode implements PceNode {
         for (BasePceNep bpn : eoduBpnList) {
             clientNrgList.addAll(bpn.getNodeRuleGroupUuid());
         }
-        LOG.info("PTONLine459, clientNRGUuid are {}", clientNrgList);
+        LOG.debug("PTONLine559, clientNRGUuid are {}", clientNrgList);
         clientNrgList = clientNrgList.stream().distinct().collect(Collectors.toList());
         List<Uuid> nwNrgList = new ArrayList<>();
         for (BasePceNep bpn : netwTps) {
             nwNrgList.addAll(bpn.getNodeRuleGroupUuid());
         }
         nwNrgList = nwNrgList.stream().distinct().collect(Collectors.toList());
-        LOG.info("PTONLine444, networkNRGUuid are {}", nwNrgList);
+        LOG.debug("PTONLine566, networkNRGUuid are {}", nwNrgList);
         for (Uuid clientNrg : clientNrgList) {
             if (nwNrgList.contains(clientNrg) && !node.getNodeRuleGroup().entrySet().stream()
                     .filter(nrg -> nrg.getKey().getUuid().equals(clientNrg)).findFirst().orElseThrow().getValue()
@@ -533,13 +594,13 @@ public class PceTapiOtnNode implements PceNode {
                 }
             }
         }
-        LOG.info("PTONLine513, did not find commonNRG to both Cl and NW with Rule can/must forward");
+        LOG.debug("PTONLine597, did not find commonNRG to both Cl and NW with Rule can/must forward");
         // Being there means we did not find a common nrg with both one of the eODU and one iODU
         // Check if client Tps and Network tps have some nrgs that are interconnected through an IRG
         // with a Forwarding rule MAY/MUST meaning client are connected to Nw port
         if (node.getInterRuleGroup() == null || node.getInterRuleGroup().isEmpty()
                 || node.getInterRuleGroup().entrySet().size() < 2) {
-            LOG.info("PTONLine519, did not find commonNRG to both Cl and NW with Rule can/must forward, "
+            LOG.debug("PTONLine603, did not find commonNRG to both Cl and NW with Rule can/must forward, "
                 + "and no usable IRG detected");
             return false;
         }
@@ -599,6 +660,16 @@ public class PceTapiOtnNode implements PceNode {
         return false;
     }
 
+    /**
+     * According to the defined mode, verifies internal connectivity calling the appropriate method.
+     *   Check consistency of the request service Type, checks modeType that defines how the XPONDER shall be considered
+     *   and calls either checkIntermediateSwPool() (if the XPONDER is considered as a regenerator) or
+     *   checkAZSwPool() if it is considered as an end of the service.
+     * @param netwTps       List of BasePceNEp corresponding to Network ports
+     * @param clientTps     List of BasePceNEp corresponding to Client ports
+     * @return              True if node characteristics are consistent with the service request and the node provides
+     *                      adequate internal connectivity, false if the other case.
+     */
     private boolean checkSwPool(List<BasePceNep> netwTps, List<BasePceNep> clientTps) {
 
         if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)) {
@@ -627,7 +698,12 @@ public class PceTapiOtnNode implements PceNode {
         }
     }
 
-
+    /**
+     * Verifies that Node's internal connectivity allows cross-connecting the network ports provided in the input list.
+     *   Also populates list usableXpdrNWTps.
+     * @param netwTps       List of BasePceNEp corresponding to Network ports
+     * @return              True if the node provides adequate internal connectivity, false if the other case.
+     */
     private boolean checkIntermediateSwPool(List<BasePceNep> netwTps) {
         for (BasePceNep bpn1 : netwTps) {
             for (BasePceNep bpn2 : netwTps) {
@@ -702,6 +778,11 @@ public class PceTapiOtnNode implements PceNode {
         return false;
     }
 
+    /**
+     * Provides NEP available bandwidth if the relevant augmentation is present in the OwnedNodeEdgePoint of the topo.
+     * @param nepCepUuid    The Uuid of the NEP
+     * @return              Double value of the available bandwidth if present in the OwnedNodeEdgePoint.
+     */
     public Double getAvailableCapacityFromUuid(Uuid nepCepUuid) {
         Uuid nepUuid = getNepUuidFromNepCepUuid(nepCepUuid);
         List<Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint>> onepList = this.node.getOwnedNodeEdgePoint().entrySet()
@@ -726,6 +807,9 @@ public class PceTapiOtnNode implements PceNode {
         return 0.0;
     }
 
+    /**
+     * Validates a SWITCH node used as a regenerator on a path calling initXndrTps.
+     */
     public void validateIntermediateSwitch() {
         if (!isValid()) {
             return;
@@ -742,6 +826,10 @@ public class PceTapiOtnNode implements PceNode {
         }
     }
 
+    /**
+     * Checks basic parameter of a node (NodeType, presence of Supporting Node and Clli Node).
+     * @return Boolean set to true if the Node basic parameters are valid.
+     */
     public boolean isValid() {
         if (nodeId == null
                 || nodeType == null
