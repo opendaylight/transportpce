@@ -56,7 +56,6 @@ public class PceTapiLink implements Serializable {
     // this member is for XPONDER INPUT/OUTPUT links.
     // it keeps name of client corresponding to NETWORK TP
 
-    // private Map<NameKey, Name> linkName;
     private Name linkName;
     private final Uuid linkId;
     private OpenroadmLinkType linkType;
@@ -81,9 +80,7 @@ public class PceTapiLink implements Serializable {
     private Double availableBandwidth;
     private Double usedBandwidth;
     private final Set<String> srlgList;
-    // source index will be set to reflect whether the source is NodeX (0) or
-    // NodeY
-    // (1)
+    // source index will be set to reflect whether the source is NodeX (0) or NodeY (1)
     private int sourceIndex;
     private Double length;
     private Double cd;
@@ -96,6 +93,17 @@ public class PceTapiLink implements Serializable {
     private static final double GLASSCELERITY = 2.99792458 * 1e5 / 1.5;
     private static final double PMD_CONSTANT = 0.04;
 
+    /**
+     * PceTapiLink joining 2 PceTapiOpticalNodes is an abstraction of a physical link (Graph edge for path computation).
+     *  As far as the 2 PceNodes on both end of the link are PceTapiOpticalNodes, the link corresponds to a physical
+     *  optical link (Photonic layer). Considering OpenROADM representation, it can be an ADD/Drop/Express link for
+     *  ROADM's internal links, a ROADM/ILA to ROADM/ILA link for physical optical links interconnecting ROADMs, or an
+     *  XPONDER to ROADM link.
+     * @param topologyId    A Uuid (TopologyKey) used to define the topology the link belongs to
+     * @param link          A link of the T-API topology.
+     * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode (TapiPceOpticalNode) corresponding to the other end of the PceTapiLink,
+     */
     public PceTapiLink(TopologyKey topologyId, Link link, PceNode nodeX, PceNode nodeY) {
         LOG.debug("PceLink: : PceLink start ");
         this.linkId = link.getUuid();
@@ -146,7 +154,17 @@ public class PceTapiLink implements Serializable {
         LOG.debug("PceLink: created PceLink  {} for topo {}", linkId, topoId);
     }
 
-
+    /**
+     * PceTapiLink joining 2 TapiOtnNodes is an abstraction of an OTN link (Graph edge for path computation).
+     *  As far as the 2 PceNodes on both end of the link are PceTapiOtnNodes, the link corresponds to an OTN link which
+     *  can be of different sub-layers/LayerProtocolQualifier (OTU4, OTUCN, ODUCN, ODU4/3/2).
+     *  In T-API topology, OTN links are Top-connections established between ConnectionEndPoints.
+     * @param topologyId    A Uuid (TopologyKey) used to define the topology the link belongs to.
+     * @param conn           A connection of the T-API connectivity-context.
+     * @param nodeX         A PceNode (TapiPceOtnNode) corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode (TapiPceOtnNode) corresponding to the other end of the PceTapiLink,
+     * @param serviceType   The serviceType which is associated to a specific OTN-layer/LayerProtocolQualifier.
+     */
     public PceTapiLink(TopologyKey topologyId, Connection conn, PceNode nodeX, PceNode nodeY, String serviceType) {
         LOG.debug("PceLink: : PceLink start ");
         //This is the constructor for OTN Link which correspond to connections in T-API
@@ -170,7 +188,7 @@ public class PceTapiLink implements Serializable {
         }
         this.lpn = LayerProtocolName.DIGITALOTN;
         this.lpq = conn.getLayerProtocolQualifier();
-        LOG.info("PceTapiLInk Line 183, Conncetion lpq of OTN link is : {} ", lpq);
+        LOG.debug("PceTapiLInk Line 191, Connection lpq of OTN link is : {} ", lpq);
         if (!(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType) != null
                 && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType)) != null
                 && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType))
@@ -200,6 +218,16 @@ public class PceTapiLink implements Serializable {
         LOG.debug("PceLink: created PceLink OTN {} for topo {}", linkId, topoId);
     }
 
+    /**
+     * Generic PceTapiLink joining 2 Tapi Nodes is an abstraction of topological link (Graph edge for path computation).
+     *  Generic Link defined between 2 PceNodes that could be either a physical or an OTN link.
+     * @param linkName      The link Name used in the T-API topology.
+     * @param linkUuid      The link Uuid used to define uniquely the link in the T-API topology.
+     * @param sourceTpUuid  The source Tp Uuid.
+     * @param destTpUuid    The destination Tp Uuid.
+     * @param nodeX         A PceNode corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode corresponding to the other end of the PceTapiLink.
+     */
     public PceTapiLink(Name linkName, Uuid linkUuid, Uuid sourceTpUuid, Uuid destTpUuid, PceNode nodeX, PceNode nodeY) {
 
         LOG.debug("PceLink: : PceLink start ");
@@ -230,6 +258,11 @@ public class PceTapiLink implements Serializable {
         LOG.debug("PceLink: created PceLink  {}", linkId);
     }
 
+    /**
+     * Sets availableBandwidth from the source Tp AvailableCapacity container for OTN Links.
+     * @param nodeX         A PceNode (TapiPceOtnNode) corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode (TapiPceOtnNode) corresponding to the other end of the PceTapiLink.
+     */
     private void calculateOtnBandwidth(PceNode nodeX, PceNode nodeY) {
         PceTapiOtnNode nodeXX = (PceTapiOtnNode) nodeX;
         PceTapiOtnNode nodeYY = (PceTapiOtnNode) nodeY;
@@ -256,13 +289,18 @@ public class PceTapiLink implements Serializable {
         this.availableBandwidth = availableBandwidthSrc == null ? null : availableBandwidthSrc * 1000.0;
     }
 
+    /**
+     * Qualifies the link type from the Tp Type of the Origin NEP for physical optical links.
+     * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode (TapiPceOpticalNode) corresponding to the other end of the PceTapiLink.
+     */
     private void qualifyLinkType(PceNode nodeX, PceNode nodeY) {
 
-        LOG.info("PCETAPILINK line 167 NodeXListofNEP {}", nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
+        LOG.debug("PCETAPILINK line 299 NodeXListofNEP {}", nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
             .collect(Collectors.toList()));
-        LOG.info("PCETAPILINK line 167 NodeYListofNEP {}", nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
+        LOG.debug("PCETAPILINK line 301 NodeYListofNEP {}", nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid)
             .collect(Collectors.toList()));
-        LOG.info("PCETAPILINK line 173 SourceTpId = {}, destTpId = {} and sourceIndex is {}", sourceTpId, destTpId,
+        LOG.debug("PCETAPILINK line 303 SourceTpId = {}, destTpId = {} and sourceIndex is {}", sourceTpId, destTpId,
             sourceIndex);
         BasePceNep sourceNep;
         BasePceNep destNep;
@@ -322,6 +360,11 @@ public class PceTapiLink implements Serializable {
         }
     }
 
+    /**
+     * Set main Node parameters for both source and Destination of the PceLink.
+     * @param nodeX         A PceNode corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode corresponding to the other end of the PceTapiLink.
+     */
     private void setSrcDestIds(PceNode nodeX, PceNode nodeY) {
         switch (this.sourceIndex) {
             case 0:
@@ -341,6 +384,16 @@ public class PceTapiLink implements Serializable {
         }
     }
 
+    /**
+     * Defines which ends is the source/destination, sets sourceindex  and source/destTpId accordingly.
+     * @param topoIid       TopologyKey (Uuid) of the Topology the node belongs to.
+     * @param linkUuid      Uuid of the Link,
+     * @param dir           ForwardingDirection as defined by T-API,
+     * @param nodeX         A PceNode corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode corresponding to the other end of the PceTapiLink,
+     * @param isLink        Boolean which defines whether the input parameters correspond to a link (true) or a
+     *                      connection (false).
+     */
     private void retrieveSrcDestNodeIds(TopologyKey topoIid, Uuid linkUuid, ForwardingDirection dir,
             PceNode nodeX, PceNode nodeY, boolean isLink) {
         int sourceindex;
@@ -371,7 +424,7 @@ public class PceTapiLink implements Serializable {
             if (!nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
                 .contains(destTpUuid)) {
                 isValid = false;
-                LOG.info("TapiPceLink: Line  331 did not succeed finding Nep {} in Node Y Listof"
+                LOG.debug("TapiPceLink: Line  427 did not succeed finding Nep {} in Node Y Listof"
                     + " NEP for Bidir link {}", destTpUuid, linkUuid.getValue());
                 return;
             }
@@ -387,13 +440,13 @@ public class PceTapiLink implements Serializable {
                 if (!nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
                     .contains(destTpUuid)) {
                     isValid = false;
-                    LOG.info("TapiPceLink: Line  345 did not succeed finding Nep {} in Node X Listof"
+                    LOG.debug("TapiPceLink: Line  443 did not succeed finding Nep {} in Node X Listof"
                         + " NEP for Bidir link {}", srcTpUuid, linkUuid.getValue());
                     return;
                 }
             } else {
                 isValid = false;
-                LOG.info("TapiPceLink: Line  351 did not succeed finding Xep {} and {} in neither nodeX, or Node Y"
+                LOG.debug("TapiPceLink: Line  449 did not succeed finding Xep {} and {} in neither nodeX, or Node Y"
                     + " Listof XEP for Bidir link {}", tpUuid0, tpUuid1, linkUuid.getValue());
                 return;
             }
@@ -464,19 +517,24 @@ public class PceTapiLink implements Serializable {
         setSrcDestIds(nodeX, nodeY);
     }
 
+    /**
+     * Retrieve the OtsMediaConnectionEndPointSpec of source/destination CEPs and sets link's params accordingly.
+     * @param nodeX         A PceNode (TapiPceOpticalNode) corresponding to one end of the PceTapiLink,
+     * @param nodeY         A PceNode (TapiPceOpticalNode) corresponding to the other end of the PceTapiLink.
+     */
     private void retrieveEndPointSpecs(PceNode nodeX, PceNode nodeY) {
         if (sourceIndex == 0) {
             sourceOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             destOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
-            LOG.info("TapiPceLink: Line  452 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
+            LOG.debug("TapiPceLink: Line  531 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         } else {
             destOtsSpec = nodeX.getListOfNep().stream()
                 .filter(bpn -> this.destTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
             sourceOtsSpec = nodeY.getListOfNep().stream()
                 .filter(bpn -> this.sourceTpId.equals(bpn.getNepCepUuid())).findFirst().orElseThrow().getCepOtsSpec();
-            LOG.info("TapiPceLink: Line  458 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
+            LOG.debug("TapiPceLink: Line  537 srcOtsSpec is {}, DestOtsSpec is {}", sourceOtsSpec, destOtsSpec);
         }
         if ((sourceOtsSpec == null) && (destOtsSpec == null)) {
             LOG.error("TapiOpticalLink[retrieveEndPointSpecs]: Error retrieving OTS Cep Spec for link {} named {} ",
@@ -486,16 +544,22 @@ public class PceTapiLink implements Serializable {
         return;
     }
 
-    // Compute the link latency : if the latency is not defined, the latency is
-    // computed from the length
+    /**
+     * Calculates latency from length for physical optical links.
+     * @param fiberLength   The link length expressed in kms.
+     * @return              Long the latency expressed in seconds.
+     */
     private Long calcLatency(double fiberLength) {
         LOG.debug("In PceLink: The latency of link {} named {} is extrapolated from link length and == {}",
             linkId, linkName, fiberLength * 1000 / GLASSCELERITY);
         return (long) Math.ceil(length / GLASSCELERITY * 1E6);
     }
 
-    // Compute the main parameters of Line Links from T-API CEP OTS
-    // specification
+    /**
+     * Compute the main parameters of line physical Optical Links from preset T-API CEP OtsMediaCepSpecs.
+     *  Main link physical parameters includes length, loss, pmd and cd.
+     * @param link The Link as defined in T-API topology.
+     */
     private void qualifyLineLink(Link link) {
         Double dpmd2 = 0.0;
         Double dlength = 0.0;
@@ -607,6 +671,11 @@ public class PceTapiLink implements Serializable {
         return;
     }
 
+    /**
+     * Calculates typical launch power reference according to fiber type for line physical optical links.
+     * @param fiberType     FiberType as coded in OpenROADM enumeration.
+     * @return              Double corresponding to typical launch power expressed in dBm.
+     */
     private double retrievePower(FiberType fiberType) {
         double power;
         switch (fiberType) {
@@ -631,6 +700,11 @@ public class PceTapiLink implements Serializable {
         return power;
     }
 
+    /**
+     * Provides typical Chromatic Dispersion value (ps/km) according to fiber type for line physical optical links.
+     * @param fiberType     FiberType as coded in OpenROADM enumeration.
+     * @return              Double corresponding to typical Chromatic Dispersion expressed in ps/nm.
+     */
     private double retrieveCdFromFiberType(FiberType fiberType) {
         double cdPerKm;
         switch (fiberType) {
@@ -665,6 +739,11 @@ public class PceTapiLink implements Serializable {
         return cdPerKm;
     }
 
+    /**
+     * Evaluates the validity of line physical optical links.
+     *   Checks generic parameters partially relying on checkParams for parameters common to optical and OTN links.
+     * @return      Boolean set to true if the link is considered as valid, false otherwise.
+     */
     private boolean isPhyValid() {
         if ((this.linkId == null) || (this.linkType == null)
         // || (this.oppositeLink == null)
@@ -684,6 +763,14 @@ public class PceTapiLink implements Serializable {
         return isValid;
     }
 
+    /**
+     * Evaluates the validity of OTN links.
+     *   Checks generic parameters (available bandwidth, connection LayerProtocQualifier), partially relying on
+     *   checkParams for parameters common to optical and Otn links.
+     * @param serviceType   The serviceType used to check whether the evaluated OTN link (a connection) is valid or not
+     *                      for supporting the corresponding service.
+     * @return      Boolean set to true if the link is considered as valid, false otherwise.
+     */
     private boolean isOtnValid(String serviceType) {
         // TODO: OTN not planned at initialization of T-API functionality
         // Function to be coded at a later step
@@ -762,12 +849,18 @@ public class PceTapiLink implements Serializable {
                 && this.availableBandwidth >= neededBW) {
             //this.availableBandwidth = neededBW;
             isOtnValid = true;
-            LOG.info("PceLink Line 756: Selected Link {} has available bandwidth and is eligible for {} creation ",
+            LOG.debug("PceLink Line 852: Selected Link {} has available bandwidth and is eligible for {} creation ",
                 linkId, serviceType);
         }
         return isOtnValid && checkParams();
     }
 
+    /**
+     * Check generic parameters common to optical and OTN links to evaluate link validity.
+     *   Checked parameters include : linkId, linkType, administrative and operational states, the presence of source
+     *   and destination Node/tpIds.
+     * @return  Boolean set to true if the link is considered as valid, false otherwise.
+     */
     private boolean checkParams() {
         if ((this.linkId == null) || (this.linkType == null)) {
                     // || (this.oppositeLink == null)
@@ -791,67 +884,131 @@ public class PceTapiLink implements Serializable {
         return true;
     }
 
+    /**
+     * Sets the opposite linkId.
+     * @param oppositeLinkId  Uuid of the opposite link.
+     */
     public void setOppositeLink(Uuid oppositeLinkId) {
         this.oppositeLink = oppositeLinkId;
     }
 
+    /**
+     * Provides the result of the validity check for any kind of T-API PceLinks.
+     * @return  Boolean set to true if the link is considered as valide, false otherwise.
+     */
     public boolean isValid() {
         return this.isValid;
     }
 
+    /**
+     * Provides the Id of the opposite Link.
+     * @return  Uuid of the opposite ink.
+     */
     public Uuid getOppositeLink() {
         return oppositeLink;
     }
 
+    /**
+     * Provides the administrative state of the T-API Pcelink.
+     * @return AdministrativeState (T-API)
+     */
     public AdministrativeState getAdminStates() {
         return adminStates;
     }
 
+    /**
+     * Provides the operational state of the T-API Pcelink.
+     * @return OperationalState (T-API)
+     */
     public OperationalState getState() {
         return opState;
     }
 
+    /**
+     * Provides the T-API sourceTpId.
+     * @return  Uuid of the source .
+     */
     public Uuid getSourceTP() {
         return sourceTpId;
     }
 
+    /**
+     * Provides the T-API destTpId.
+     * @return  Uuid of the destination Tp.
+     */
     public Uuid getDestTP() {
         return destTpId;
     }
 
+    /**
+     * Provides the linkType as defined by the corresponding OpenROADM enumeration.
+     * @return linkType as defined by the corresponding OpenROADM enumeration : EXPRESS-LINK, ADD-LINK, DROP-LINK,
+     *         ROADM-TO-ROADM, XPONDER-INPUT, XPONDER-OUTPUT, OTN-LINK, REGEN-INPUT, REGEN-OUTPUT, TURNBACK-LINK.
+     */
     public OpenroadmLinkType getlinkType() {
         return linkType;
     }
 
+    /**
+     * Provides the Uuid corresponding to the LinkId.
+     * @return      Uuid of the link.
+     */
     public Uuid getLinkId() {
         return linkId;
     }
 
+    /**
+     * Provides the Uuid corresponding to the Source TP of the link.
+     * @return      Uuid of the source Tp.
+     */
     public Uuid getSourceId() {
         return sourceNodeId;
     }
 
+    /**
+     * Provides the Uuid corresponding to the destination TP of the link.
+     * @return      Uuid of the destination Tp.
+     */
     public Uuid getDestId() {
         return destNodeId;
     }
 
+    /**
+     * Provides the LinkName corresponding to the Link.
+     * @return      Uuid of the link.
+     */
     public Name getLinkName() {
         return this.linkName;
     }
 
+    /**
+     * Provides for OTN link the client Link if the link corresponds to a server.
+     * @return String corresponding to the client link/connection.
+     */
     public String getClient() {
         return client;
     }
 
+    /**
+     * Provides link length for physical optical links.
+     * @return  Double which corresponds to the link length expressed in kms.
+     */
     public Double getLength() {
         return length;
     }
 
+    /**
+     * Allows setting the client link (a TOP-connection) for OTN links.
+     * @param client String corresponding to client link name.
+     */
     public void setClient(String client) {
         this.client = client;
     }
 
-    // Double for transformer of JUNG graph
+    /**
+     * Provides latency of the link (evaluated only for physical optical link at that time).
+     * @return  Double for transformer of JUNG graph.
+     */
     public Double getLatency() {
         if (latency == null) {
             return 0.0;
@@ -859,46 +1016,89 @@ public class PceTapiLink implements Serializable {
         return latency.doubleValue();
     }
 
+    /**
+     * Provides available bandwidth associated with OTN links.
+     * @return  Double corresponding to available bandwidth expressed in Gbit/s.
+     */
     public Double getAvailableBandwidth() {
         return availableBandwidth;
     }
 
+    /**
+     * Provides used bandwidth associated with OTN links.
+     * @return  Double corresponding to used bandwidth expressed in Gbit/s.
+     */
     public Double getUsedBandwidth() {
         return usedBandwidth;
     }
 
+    /**
+     * Provides the Id of the source Network Supporting Node of any kind of links.
+     * @return  String that corresponds to the supporting Node Id.
+     */
     public String getsourceNetworkSupNodeId() {
         return sourceNetworkSupNodeId;
     }
 
+    /**
+     * Provides the Id of the destination Network Supporting Node of any kind of links.
+     * @return  String that corresponds to the supporting Node Id.
+     */
     public String getdestNetworkSupNodeId() {
         return destNetworkSupNodeId;
     }
 
+    /**
+     * Provides the SRG list of the link (not handled at that time for T-API links).
+     * @return   An empty set of strings.
+     */
     public Set<String> getsrlgList() {
         return srlgList;
     }
 
+    /**
+     * Provides the span loss of an optical physical link.
+     * @return  Double wich corresponds to the fiber loss , expressed in dB, 0 for OTN links.
+     */
     public Double getspanLoss() {
         return spanLoss;
     }
 
+    /**
+     * Provides the Chromatic dispersion associated with the physical optical link.
+     * @return  Double value of the Chromatic dispersion calculated for the link expressed in ps, 0 for OTN links.
+     */
     public Double getcd() {
         return cd;
     }
 
+    /**
+     * Provides the square value of the mean PMD calculated for the physical optical link.
+     * @return  Double value of the square of the mean PMD value expressed in ps2/km, 0 for OTN links.
+     */
     public Double getpmd2() {
         return pmd2;
     }
 
+    /**
+     * Provides the correction (according to fiber type) to be applied on target power calculations for optical links.
+     * @return  Double corresponding to the correction to be applied (added to calculated power) in dB.
+     */
     public Double getpowerCorrection() {
         return powerCorrection;
     }
 
+    /**
+     * Provides Layer Protocol Name of the link.
+     * @return  LayerProtocolName of the link (either ETH, DSR, PHOTONIC_MEDIA or DIGITAL_OTN).
+     */
     public LayerProtocolName getLpn() {
         return lpn;
     }
 
+    /**
+     * Provides implementation of .toString for Links.
+     */
     @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency + " Name=" + linkName;

@@ -22,18 +22,11 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
-//import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute
-//.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev211210.available.freq.map.AvailFreqMapsKey;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCH;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOCHOTU4ODU4;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.IfOtsiOtsigroup;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev201211.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -41,11 +34,13 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Oper
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROTS;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.InterRuleGroupKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.ProfileKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SinkProfileKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.edge.point.SourceProfileKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
-//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connection.end.point.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,17 +68,25 @@ public class PceTapiOpticalNode implements PceNode {
 
     private List<String> availableXpndrNWTps = new ArrayList<>();
     private List<BasePceNep> listOfNep = new ArrayList<>();
-    /*
-     * Complete description
-     */
 
+    /**
+     * PceTapiOpticalNode is an abstracted Node in photonic layer corresponding to a Graph Vertex for path computation.
+     *  Corresponds to the Photonic part of a XPONDER, or to one of the disaggregated elements of a ROADM (SRG/Degree).
+     * @param serviceType   The service type which for PceTapiOpticalNodes is a photonic service : 100GEt, OTU4, OTUCN.
+     * @param node          The Associated node in Tapi-Topology DataStore from which the Pce Node is abstracted.
+     * @param nodeType      The Node Type as in OpenROADM topology layer. Currently handled : SRG, DEGREE, XPONDER.
+     * @param version       The Node Version.
+     * @param nepList       A list of the Node's relevant BasePceNep.
+     * @param nodeId        A Map of node name associated to its Uuid (Contains a single element).
+     * @param deviceNodeId  The node name
+     * @param mcCapability  Media Channel Capabilities as defined in portMapping (SlotWidth/CenterFrequency Granularity)
+     */
     public PceTapiOpticalNode(String serviceType, Node node, OpenroadmNodeType nodeType, String version,
             List<BasePceNep> nepList, Map<Uuid, Name> nodeId, String deviceNodeId, McCapability mcCapability) {
 
 
         this.serviceType = serviceType;
         this.node = node;
-//        this.nodeName = node.getName().entrySet().iterator().next().getValue();
         this.nodeName = nodeId.entrySet().iterator().next().getValue();
         this.nodeType = nodeType;
         this.nodeUuid = nodeId.entrySet().iterator().next().getKey();
@@ -97,6 +100,9 @@ public class PceTapiOpticalNode implements PceNode {
         this.mcCapability = mcCapability;
     }
 
+    /**
+     * Checks for SRGs availability of NEPs and CEPs and class them into availableSrgPp and availableSrgCp.
+     */
     public void initSrgTps() {
         this.availableSrgPp.clear();
         this.availableSrgCp.clear();
@@ -136,12 +142,15 @@ public class PceTapiOpticalNode implements PceNode {
             this.availableSrgPp.size(), this.availableSrgCp.size(), this);
     }
 
+    /**
+     * Initialize the binaries coding spectrum use for the different WDM Optical ports of a PceNode.
+     */
     public void initFrequenciesBitSet() {
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         // to set all bits to 0 (used/false) or 1 (available/true)
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
         List<BitSet> bitsetList;
-        LOG.info("PTONLine155 Entering InitFreqBitset, for Node {}, nodeType {}", deviceNodeId, nodeType);
+        LOG.debug("PTONLine153 Entering InitFreqBitset, for Node {}, nodeType {}", deviceNodeId, nodeType);
         switch (this.nodeType) {
             case SRG :
                 bitsetList = listOfNep.stream()
@@ -190,29 +199,38 @@ public class PceTapiOpticalNode implements PceNode {
                 LOG.error("initFrequenciesBitSet: unsupported node type {} in node {}", this.nodeType, this);
                 break;
         }
-        LOG.debug("PTONLine203 InitFreqBitset, for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
+        LOG.debug("PTONLine202 InitFreqBitset, for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
     }
 
+    /**
+     * Checks for XPONDERS availability of NEPs and CEPs and class them into clientOtsNep and nwOtsNep.
+     *   NetworkNeps are filtered according to their ability to handle OTS LayerProtcolQualifier.
+     *   List clientOtsNep is filled only with Client NEPs that are in visibility of Network through valid Network NEPs.
+     *   Internal connectivity is checked using BasePceNep getNodeRuleGroupUuid and checking Node IRGs for switch and
+     *   Muxponders.
+     * @param serviceFormat Service Format, not used for optical Node, included to have common signatures of the method
+     *                      towards the different kind of nodes.
+     */
     public void initXndrTps(ServiceFormat serviceFormat) {
-        LOG.info("PTONLine 207: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
-        LOG.info("PTONLine209: initXndrTps for node : {}, ListOfNep : {}", this.nodeName,
+        LOG.debug("PTONLine 215: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+        LOG.debug("PTONLine216: initXndrTps for node : {}, ListOfNep : {}", this.nodeName,
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
         if (!isValid()) {
-            LOG.info("PTONLine 209: initXndrTps Non valid node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+            LOG.debug("PTONLine 219: initXndrTps Non valid node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
             return;
         }
         if (listOfNep.isEmpty()) {
-            LOG.error("PTONLine 212/initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
+            LOG.error("PceTapiOpticalNode initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
                  this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
-        LOG.info("PTONLine 218: nwOtsNep Protocols : {}", listOfNep.stream()
+        LOG.debug("PTONLine 228: nwOtsNep Protocols : {}", listOfNep.stream()
             .map(BasePceNep::getLpn).collect(Collectors.toList()));
         List<BasePceNep> nwOtsNep = listOfNep.stream()
             .filter(bpn -> ((bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
                     || bpn.getTpType().equals(OpenroadmTpType.EXTPLUGGABLETP)
-                && (bpn.getLpq() != null
+                    && (bpn.getLpq() != null
                     && bpn.getLpq().equals(PHOTONICLAYERQUALIFIEROTS.VALUE)))))
             .collect(Collectors.toList());
         List<BasePceNep> clientOtsNep = listOfNep.stream()
@@ -223,7 +241,7 @@ public class PceTapiOpticalNode implements PceNode {
         }
         for (BasePceNep cbpn : clientOtsNep) {
             List<Uuid> clientNrgUuidList = cbpn.getNodeRuleGroupUuid();
-            LOG.info("PTONLine 235: clientNrgUuidList for bpn {} is : {}", cbpn.getName(), clientNrgUuidList);
+            LOG.debug("PTONLine 244: clientNrgUuidList for bpn {} is : {}", cbpn.getName(), clientNrgUuidList);
             if (clientNrgUuidList == null || clientNrgUuidList.isEmpty()) {
                 continue;
             }
@@ -268,7 +286,7 @@ public class PceTapiOpticalNode implements PceNode {
                         //interconnects their respective NRGs
                         for (BasePceNep nwbpn : nwOtsNep) {
                             List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
-                            LOG.info("PTONLine 328: nwNrgUuidList : {}", nwNrgUuidList);
+                            LOG.debug("PTONLine 289: nwNrgUuidList : {}", nwNrgUuidList);
                             if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
                                 continue;
                             }
@@ -309,18 +327,22 @@ public class PceTapiOpticalNode implements PceNode {
                 }
             }
         }
-        LOG.info("PTONLine230/initXndrTps: ListOfNep {}",
+        LOG.debug("PTONLine330/initXndrTps: ListOfNep {}",
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTONLine232/initXndrTps: clientOtsNep {}",
+        LOG.debug("PTONLine332/initXndrTps: clientOtsNep {}",
             clientOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTONLine234/initXndrTps: nwOtsNep {}",
+        LOG.debug("PTONLine334/initXndrTps: nwOtsNep {}",
             nwOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.info("PTONLine411/initXndrTps: availableXpndrNWTps {}", availableXpndrNWTps);
-        LOG.info("PTONLine413/initXndrTps: clientPerNwTp {}", clientPerNwTp);
+        LOG.debug("PTONLine336/initXndrTps: availableXpndrNWTps {}", availableXpndrNWTps);
+        LOG.debug("PTONLine337/initXndrTps: clientPerNwTp {}", clientPerNwTp);
 
 
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getRdmSrgClient()
+     */
     @Override
     public String getRdmSrgClient(String tp, String direction) {
         LOG.debug("TapiOpticalNode/getRdmSrgClient: Getting PP client for tp '{}' on node : {}, Uuid : {}",
@@ -366,14 +388,6 @@ public class PceTapiOpticalNode implements PceNode {
                 break;
         }
         final OpenroadmTpType openType = srgType;
-
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        //TODO: Adapt function since sorting port on Uuid (this is the Key used in TAPI may not be the best option
-        // Also with T-API we try to use as much as possible port of transponder :
-        // Identify if this method was used
-        //only in case of Tunnel from PP to PP . Not easy to figure how it is used for TSP connected to PP
-// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
         Optional<String> client = this.availableSrgPp.entrySet()
             .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
             .map(Map.Entry::getKey).min(new SortPortsByName());
@@ -385,46 +399,10 @@ public class PceTapiOpticalNode implements PceNode {
         return client.orElseThrow();
     }
 
-    @Override
-    public String getOperationalMode() {
-        return null;
-    }
-
-    @Override
-    public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
-        return null;
-    }
-
-    @Override
-    public String getXpdrOperationalMode(Uuid nepUuid) {
-        // TODO: when 2.4 models available, retrieve Operational modes from Profiles
-        List<String> supportedOM = new ArrayList<>();
-
-        if (supportedOM == null || supportedOM.isEmpty()) {
-            LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared ",
-                nepUuid, this.nodeName, this.nodeUuid);
-            return StringConstants.UNKNOWN_MODE;
-        }
-        for (String operationalMode : supportedOM) {
-            if (operationalMode.contains(StringConstants.SERVICE_TYPE_RATE
-                .get(this.serviceType).toCanonicalString())) {
-                LOG.info(
-                    "getOperationalMode: NetworkPort {} of Node {}  with Uuid {}  has {} operational mode declared",
-                    nepUuid, this.nodeName, this.nodeUuid, operationalMode);
-                return operationalMode;
-            }
-        }
-        LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared"
-            + "compatible with service type {}. Supported modes are : {} ",
-            nepUuid, this.nodeName, this.nodeUuid, this.serviceType, supportedOM.toString());
-        return StringConstants.UNKNOWN_MODE;
-    }
-
-    @Override
-    public boolean checkTP(String tp) {
-        return !this.usedXpndrNWTps.contains(tp);
-    }
-
+    /**
+     * Check that basic generic parameters of the node are available.
+     * @return  True if all required parameters have been set for the node.
+     */
     public boolean isValid() {
         String nodeNName;
         if (node == null) {
@@ -440,86 +418,227 @@ public class PceTapiOpticalNode implements PceNode {
         return valid;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getOperationalMode()
+     */
+    @Override
+    public String getOperationalMode() {
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getXponderOperationnalMode()
+     */
+    @Override
+    public String getXponderOperationalMode(XpdrNetworkAttributes tp) {
+        return null;
+    }
+
+    /**
+     * Retrieves port Operational mode from the standard/souce/sink-Profiles.
+     * @param nepUuid   Uuid of the NEP associated to the network port.
+     * @return First    Operational Mode that includes the rate of the service in its name, "UNKNOWN_MODE" if no
+     *                  operational mode is populated in any of the NEPs' profiles.
+     */
+    @Override
+    public String getXpdrOperationalMode(Uuid nepUuid) {
+        List<String> supportedOM = new ArrayList<>();
+        OwnedNodeEdgePoint nep = node.getOwnedNodeEdgePoint().entrySet().stream()
+            .filter(onep -> onep.getKey().getUuid().equals(nepUuid)).findFirst().orElseThrow().getValue();
+        if (nep.getProfile() != null && !nep.getProfile().isEmpty()) {
+            supportedOM.addAll(nep.getProfile().entrySet()
+                .stream().map(Map.Entry::getKey).collect(Collectors.toList())
+                .stream().map(ProfileKey::getProfileUuid).collect(Collectors.toList())
+                .stream().map(Uuid::getValue).collect(Collectors.toList()));
+        } else if (nep.getSourceProfile() != null && !nep.getSourceProfile().isEmpty()) {
+            supportedOM.addAll(nep.getSourceProfile().entrySet()
+                .stream().map(Map.Entry::getKey).collect(Collectors.toList())
+                .stream().map(SourceProfileKey::getProfileUuid).collect(Collectors.toList())
+                .stream().map(Uuid::getValue).collect(Collectors.toList()));
+        } else if (nep.getSinkProfile() != null && !nep.getSinkProfile().isEmpty()) {
+            supportedOM.addAll(nep.getSinkProfile().entrySet()
+                .stream().map(Map.Entry::getKey).collect(Collectors.toList())
+                .stream().map(SinkProfileKey::getProfileUuid).collect(Collectors.toList())
+                .stream().map(Uuid::getValue).collect(Collectors.toList()));
+        }
+        if (supportedOM == null || supportedOM.isEmpty()) {
+            LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared ",
+                nepUuid, this.nodeName, this.nodeUuid);
+            return StringConstants.UNKNOWN_MODE;
+        }
+        for (String operationalMode : supportedOM) {
+            if (operationalMode.contains(StringConstants.SERVICE_TYPE_RATE
+                .get(this.serviceType).toCanonicalString())) {
+                LOG.debug("TONLine2185: NetworkPort {} of Node {}  with Uuid {}  has {} operational mode declared",
+                    nepUuid, this.nodeName, this.nodeUuid, operationalMode);
+                return operationalMode;
+            }
+        }
+        LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared"
+            + "compatible with service type {}. Supported modes are : {} ",
+            nepUuid, this.nodeName, this.nodeUuid, this.serviceType, supportedOM.toString());
+        return StringConstants.UNKNOWN_MODE;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#checkTP()
+     */
+    @Override
+    public boolean checkTP(String tp) {
+        return !this.usedXpndrNWTps.contains(tp);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getOutgoingLinks()
+     */
     @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getAdminStates()
+     */
     @Override
     public AdminStates getAdminStates() {
         return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getAdminState()
+     */
     @Override
     public AdministrativeState getAdminState() {
         return adminState;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getState()
+     */
     @Override
     public State getState() {
         return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getOperationalState()
+     */
     @Override
     public OperationalState getOperationalState() {
         return operationalState;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getNodeId()
+     */
     @Override
     public NodeId getNodeId() {
         return  new NodeId(nodeName.getValue());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getNodeUuid()
+     */
     @Override
     public Uuid getNodeUuid() {
         return nodeUuid;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#toString()
+     */
     @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeUuid.getValue() + " Name=" + node.getName().toString();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getPceNodeType()
+     */
     @Override
     public String getPceNodeType() {
         return "optical";
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSupNetworkNodeId()
+     */
     @Override
     public String getSupNetworkNodeId() {
         return deviceNodeId;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getSupClliNodeId()
+     */
     @Override
     public String getSupClliNodeId() {
         return deviceNodeId;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#addOutgoingLink()
+     */
     @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getXpdrNWfromClient()
+     */
     @Override
     public String getXpdrNWfromClient(String tp) {
         return this.clientPerNwTp.entrySet().stream()
             .filter(elt -> tp.equals(elt.getKey())).findFirst().orElseThrow().getValue();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getXpdrAvailNW()
+     */
     public List<String> getXpdrAvailNW() {
         return this.availableXpndrNWTps;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getAvailableTribPorts()
+     */
     @Override
     public Map<String, List<Uint16>> getAvailableTribPorts() {
         return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getORNodeType()
+     */
     @Override
     public OpenroadmNodeType getORNodeType() {
         return this.nodeType;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getAvailableTribSlots()
+     */
     @Override
     public Map<String, List<Uint16>> getAvailableTribSlots() {
         return null;
@@ -568,16 +687,28 @@ public class PceTapiOpticalNode implements PceNode {
         return mcCapability.centerFrequencyGranularity();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getMinSlots()
+     */
     @Override
     public int getMinSlots() {
         return mcCapability.minSlots();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getMaxSlots()
+     */
     @Override
     public int getMaxSlots() {
         return mcCapability.maxSlots();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getListOfNep()
+     */
     @Override
     public List<BasePceNep> getListOfNep() {
         return this.listOfNep;
