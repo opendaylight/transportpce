@@ -56,7 +56,6 @@ public class PceTapiLink implements Serializable {
     // this member is for XPONDER INPUT/OUTPUT links.
     // it keeps name of client corresponding to NETWORK TP
 
-    // private Map<NameKey, Name> linkName;
     private Name linkName;
     private final Uuid linkId;
     private OpenroadmLinkType linkType;
@@ -81,9 +80,7 @@ public class PceTapiLink implements Serializable {
     private Double availableBandwidth;
     private Double usedBandwidth;
     private final Set<String> srlgList;
-    // source index will be set to reflect whether the source is NodeX (0) or
-    // NodeY
-    // (1)
+    // source index will be set to reflect whether the source is NodeX (0) or NodeY (1)
     private int sourceIndex;
     private Double length;
     private Double cd;
