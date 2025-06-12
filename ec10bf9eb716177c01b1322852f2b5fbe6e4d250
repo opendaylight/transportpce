@@ -73,6 +73,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12a68e2f_f07492c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-12T12:45:15Z",
+      "side": 1,
+      "message": "I am still consolidating the code for T-API and made the assumption the information is available to generate the topology. Did not realize the information was not there. \nSo you must be right on the fact that it is not set. Then if it is not set, we need to do it and modify the service handler so that at the end of service provisioning the used spectrum is set. This information is needed to check that a PP port is not already used. Especially in the context of Alien Wavelength and IPoWDM. \n\nSo we should add the setting of used spectrum one the one hand, and add a condition on the creation of a tunnel between 2 PP ports on the other hand (PP port not used check through used spectrum).",
+      "parentUuid": "d861db55_7d31c0f9",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6242d6ed_f505681b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-12T12:45:15Z",
+      "side": 1,
+      "message": "Hi, replied to Jonas comments",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd1b1f3c_2af156d1",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 6
@@ -84,6 +119,24 @@
       "writtenOn": "2025-06-05T08:49:51Z",
       "side": 1,
       "message": "Seems to me we can just remove the code based on UsedWavelength since that attribute is never set by TransportPCE in my understanding.",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37fcf277_15c8c4bd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-12T12:45:15Z",
+      "side": 1,
+      "message": "Would prefer to make it the reverse way. Keep it, and add what\u0027s missing to garantee that we can not create a service on a port that is already used.",
+      "parentUuid": "cd1b1f3c_2af156d1",
       "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
