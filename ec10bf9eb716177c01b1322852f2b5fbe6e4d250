@@ -106,6 +106,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc3efe5_864d87d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-06-12T16:49:34Z",
+      "side": 1,
+      "message": "To make a summary of what was discussed during the TPCE meeting of the 12th of June (Please correct me if I am wrong)\n\nCurrently used spectrum is not populated on PP by tpce (whether this is volontary, deprecating used spectrum associated with Fix grid, or because we forgot to populate it after service is provisoned).\nCurrently, available spectrum on PP does not reflect spectrum occupation on the aggregating tp (CP of the SRG). \n-This is not an issue for path computation since the CP is part of the path, and as the PostAlgoValidator goes through each elements, including CP, to evaluate the spectrum occupation.\n-As far as the available spectrum on a PP port only reflects what is provisioned on the port itself, it can be used to evaluate whether the port is available or not.\n\nAs a result, you can follow both options you proposed :\n1- Merge of used wavelength and available spectrum information as proposed initially\n2- Remove in the code anything associated with used spectrum since this parameter is not correctly refreshed by tpce and unusable as such.\n\n@gilles.thouenon@orange.com : Gilles can you indicate your preference so that Joakim can proceed?\n\nLast but not least, realizing that used spectrum is not refreshed after service provisioning, I may need on my side to modify part of the TAPI code to generate topolgy, and will need to modify the code of the pceTapiNodes to prune ports based on available spectrum rather than used spectrum.\n\nThanks so much to all of you for bringing this issue to our eyes and helping in improving the code.",
+      "revId": "ec10bf9eb716177c01b1322852f2b5fbe6e4d250",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd1b1f3c_2af156d1",
