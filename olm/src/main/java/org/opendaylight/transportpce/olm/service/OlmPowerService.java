@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.olm.service;
 
+import java.util.List;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossCurrentInput;
@@ -35,6 +37,19 @@ public interface OlmPowerService {
      * @return Result of the request
      */
     GetPmOutput getPm(GetPmInput input);
+
+    /**
+     * This method is the implementation of the 'get-pm' service.
+     *
+     * <p>This operation traverse through current PM list and return all
+     * PM for the given node.
+     *
+     * @param input
+     *            Input parameter from the olm yang model
+     *
+     * @return  a map with the realNodeId + interface name as key, and the corresponding measurements as values.
+     */
+    Map<String, List<GetPmOutput>> getPmAll(GetPmInput input);
 
     /**
      * This method is the implementation of the 'service-power-setup'.
