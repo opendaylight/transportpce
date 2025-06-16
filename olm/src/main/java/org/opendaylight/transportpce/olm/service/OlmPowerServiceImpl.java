@@ -7,19 +7,28 @@
  */
 
 package org.opendaylight.transportpce.olm.service;
+import static org.opendaylight.transportpce.common.StringConstants.RX;
+import static org.opendaylight.transportpce.common.StringConstants.TX;
 
 import com.google.common.base.Strings;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -36,11 +45,10 @@ import org.opendaylight.transportpce.common.device.observer.EventSubscriber;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
+import org.opendaylight.transportpce.olm.util.NodeInterfaceKey;
 import org.opendaylight.transportpce.olm.util.OlmUtils;
-import org.opendaylight.transportpce.olm.util.OtsPmHolder;
 import org.opendaylight.transportpce.olm.util.RoadmLinks;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseOutput;
@@ -65,19 +73,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.Ots;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmNamesEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -92,7 +92,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
-import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -132,25 +131,74 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId()) == null) {
             return pmOutputBuilder.build();
         }
-        OpenroadmNodeVersion nodeVersion;
-        switch (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                nodeVersion = OpenroadmNodeVersion._121;
-                break;
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                nodeVersion = OpenroadmNodeVersion._221;
-                break;
-            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
-                nodeVersion = OpenroadmNodeVersion._71;
-                break;
-            default:
-                LOG.error("Unknown device version");
-                return pmOutputBuilder.build();
+        OpenroadmNodeVersion nodeVersion = getNodeVersion(pmInput.getNodeId());
+        if (nodeVersion == null) {
+            return pmOutputBuilder.build();
         }
         LOG.info("Now calling get pm data");
         pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
             nodeVersion);
         return pmOutputBuilder.build();
+    }
+
+    @Override
+    public Map<String, List<GetPmOutput>> getPmAll(GetPmInput input) {
+        Map<String, List<GetPmOutput>> pmOutputMap = new HashMap<>();
+        if (mappingUtils.getOpenRoadmVersion(input.getNodeId()) == null) {
+            return pmOutputMap;
+        }
+        OpenroadmNodeVersion nodeVersion = getNodeVersion(input.getNodeId());
+        if (nodeVersion == null) {
+            return pmOutputMap;
+        }
+        LOG.info("Now calling get pm data");
+        pmOutputMap = OlmUtils.pmFetchAll(input, deviceTransactionManager,
+                nodeVersion);
+        return pmOutputMap;
+    }
+
+    /**
+     * This method retrieves all PM from a realId node.
+     *
+     * <p>Steps:
+     *
+     * <p>1. Get OTS interface name from port mapping by TPId
+     *
+     * <p>2. Call getPm RPC to get all OTS PMs
+     *
+     * @param realNodeId the real Node-id of the NE.
+     * @return {@code Map<String, List<GetPmOutput>>} where the key is the nodeInterfaceName for the corresponding list.
+     */
+    private Map<NodeInterfaceKey, List<GetPmOutput>> getPmAll(String realNodeId) {
+        LOG.info(" ------ Fetching data for realNode: {} --------", realNodeId);
+        Map<MappingKey, Mapping> mappingMap = portMapping.getNode(realNodeId).getMapping();
+        GetPmInput getPmInput = createPmInput(realNodeId);
+        Map<String, List<GetPmOutput>> pmOutputMap = getPmAll(getPmInput);
+        Map<NodeInterfaceKey, List<GetPmOutput>> outputMap = updateKeys(pmOutputMap, realNodeId, mappingMap);
+
+        if (outputMap == null || outputMap.isEmpty()) {
+            LOG.info("OTS PM not found for NodeId: {}", realNodeId);
+            return null;
+        }
+        return outputMap;
+    }
+
+    private OpenroadmNodeVersion getNodeVersion(String nodeId) {
+        if (mappingUtils.getOpenRoadmVersion(nodeId) == null) {
+            return null;
+        }
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        switch (openRoadmVersion) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return OpenroadmNodeVersion._121;
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return OpenroadmNodeVersion._221;
+            case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
+                return OpenroadmNodeVersion._71;
+            default:
+                LOG.error("Unknown device version: {}", openRoadmVersion);
+                return null;
+        }
     }
 
     @Override
@@ -258,7 +306,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             spanLossBaseBuilder.setResult(ResponseCodes.FAILED_RESULT);
             return spanLossBaseBuilder.build();
         }
-
     }
 
 
@@ -345,50 +392,45 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         return new ArrayList<>(networkLinks.values());
     }
 
-    /**
-     * This method retrieves OTS PM from current PM list by nodeId and TPId:
-     *
-     * <p>Steps:
-     *
-     * <p>1. Get OTS interface name from port mapping by TPId
-     *
-     * <p>2. Call getPm RPC to get OTS PM
-     *
-     * @param nodeId Node-id of the NE.
-     * @param tpID Termination point Name.
-     * @param pmName PM name which need to be retrieved
-     * @return reference to OtsPmHolder
+    /*
+     * Sorts and changes they keys for this map. Replaces the interface name (OMS or OTS) with the realNodeId
+     * to create the correct string key. If there would exist OTS and OMS interfaces on the same node this method
+     * discards the OMS entries.
      */
-    private OtsPmHolder getPmMeasurements(String nodeId, String tpID, String pmName) {
-        String realNodeId = getRealNodeId(nodeId);
-        Mapping mapping = portMapping.getMapping(realNodeId, tpID);
-        if (mapping == null) {
-            return null;
-        }
-        GetPmInput getPmInput = new GetPmInputBuilder().setNodeId(realNodeId)
-            .setResourceType(ResourceTypeEnum.Interface)
-            .setResourceIdentifier(
-                new ResourceIdentifierBuilder().setResourceName(mapping.getSupportingOts()).build())
-            .setPmNameType(PmNamesEnum.valueOf(pmName))
-            .setGranularity(PmGranularity._15min)
-            .build();
-        GetPmOutput otsPmOutput = getPm(getPmInput);
+    private Map<NodeInterfaceKey, List<GetPmOutput>> updateKeys(Map<String, List<GetPmOutput>> outputMap,
+                                                                String realNodeId,
+                                                                Map<MappingKey, Mapping> mapping) {
+        Map<NodeInterfaceKey, List<GetPmOutput>> transformed = outputMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        entry -> replaceInterfaceWithNodeId(entry.getKey(), realNodeId, mapping),
+                        Map.Entry::getValue,
+                        (original, duplicate) -> original, // in case of a key clash, keep the original
+                        LinkedHashMap::new  //keep the sortorder.
+                ));
+        return transformed;
+    }
 
-        if (otsPmOutput == null || otsPmOutput.getMeasurements() == null) {
-            LOG.info("OTS PM not found for NodeId: {} TP Id:{} PMName:{}", realNodeId, tpID, pmName);
-            return null;
-        }
-        try {
-            for (Measurements measurement : otsPmOutput.getMeasurements()) {
-                if (pmName.equalsIgnoreCase(measurement.getPmparameterName())) {
-                    return new OtsPmHolder(pmName, Double.parseDouble(measurement.getPmparameterValue()),
-                        mapping.getSupportingOts());
-                }
+    private NodeInterfaceKey replaceInterfaceWithNodeId(String key,
+                                                        String realNodeId, Map<MappingKey, Mapping> mapping) {
+        for (Entry<MappingKey, Mapping> mapEntry:mapping.entrySet()) {
+            if (hasValidInterface(mapEntry, key)) {
+                return new NodeInterfaceKey(realNodeId, mapEntry.getValue().getLogicalConnectionPoint());
             }
-        } catch (NumberFormatException e) {
-            LOG.warn("Unable to get PM for NodeId: {} TP Id:{} PMName:{}", realNodeId, tpID, pmName, e);
         }
         return null;
+    }
+
+    private static boolean hasValidInterface(Entry<MappingKey, Mapping> mapEntry, String key) {
+        return key.equals(mapEntry.getValue().getSupportingOts()) || key.equals(mapEntry.getValue().getSupportingOms());
+    }
+
+    private static GetPmInput createPmInput(String realNodeId) {
+        GetPmInputBuilder builder = new GetPmInputBuilder();
+        builder.setNodeId(realNodeId);
+        builder.setGranularity(PmGranularity._15min);
+        builder.setResourceType(ResourceTypeEnum.Interface);
+        return builder.build();
     }
 
     /**
@@ -400,185 +442,25 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      *
      * <p>2. Set spanloss
      *
-     * @param nodeId nodeId of NE on which spanloss need to be updated
+     * @param realNodeId The real nodeId of NE on which spanloss need to be updated
      * @param interfaceName OTS interface for NE on which spanloss is cacluated
      * @param spanLoss calculated spanloss value
      * @param direction for which spanloss is calculated.It can be either Tx or Rx
      * @return true/false
      */
-    private boolean setSpanLoss(String nodeId, String interfaceName, BigDecimal spanLoss, String direction) {
-        String realNodeId = getRealNodeId(nodeId);
-        try {
-            LOG.info("Setting Spanloss in device for {}, InterfaceName: {}", realNodeId, interfaceName);
-            if (mappingUtils.getOpenRoadmVersion(realNodeId)
-                .equals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1)) {
-                RatioDB spanLossRx;
-                RatioDB spanLossTx;
-
-                Optional<Interface> interfaceObject;
-                interfaceObject = openRoadmInterfaces.getInterface(realNodeId, interfaceName);
-                if (interfaceObject.isPresent()) {
-                    InterfaceBuilder interfaceBuilder = new InterfaceBuilder(interfaceObject.orElseThrow());
-                    OtsBuilder otsBuilder = new OtsBuilder();
-                    Interface intf = interfaceObject.orElseThrow();
-                    if (intf.augmentation(Interface1.class) != null
-                        && intf.augmentation(Interface1.class).getOts() != null) {
-                        Ots ots = intf.augmentation(Interface1.class).getOts();
-                        otsBuilder.setFiberType(ots.getFiberType());
-                        spanLossRx = ots.getSpanLossReceive();
-                        spanLossTx = ots.getSpanLossTransmit();
-                    } else {
-                        spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss));
-                        spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss));
-                    }
-                    Interface1Builder intf1Builder = new Interface1Builder();
-                    if (direction.equals("TX")) {
-                        otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss)));
-                        otsBuilder.setSpanLossReceive(spanLossRx);
-                    } else {
-                        otsBuilder
-                            .setSpanLossTransmit(spanLossTx)
-                            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(spanLoss)));
-                    }
-                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
-                    openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
-                    LOG.info("Spanloss Value update completed successfully");
-                    return true;
-                } else {
-                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId, interfaceName);
-                    return false;
-                }
-            } else if (mappingUtils.getOpenRoadmVersion(realNodeId)
-                .equals(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1)) {
-
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB spanLossRx;
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
-                    .rev181019.RatioDB spanLossTx;
-                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
-                    .interfaces.grp.Interface> interfaceObject =
-                        openRoadmInterfaces.getInterface(realNodeId, interfaceName);
-                if (interfaceObject.isPresent()) {
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                        .rev181019.interfaces.grp.InterfaceBuilder interfaceBuilder =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                            .rev181019.interfaces.grp.InterfaceBuilder(interfaceObject.orElseThrow());
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                        .transport.interfaces.rev181019.ots.container.OtsBuilder otsBuilder =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm
-                            .optical.transport.interfaces.rev181019.ots.container.OtsBuilder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface intf =
-                        interfaceObject.orElseThrow();
-                    if (intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                        .transport.interfaces.rev181019.Interface1.class) != null
-                            && intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport
-                                .interfaces.rev181019.Interface1.class).getOts() != null) {
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
-                            .rev181019.ots.container.Ots ots =
-                                intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                                    .transport.interfaces.rev181019.Interface1.class).getOts();
-
-                        otsBuilder.setFiberType(ots.getFiberType());
-                        spanLossRx = ots.getSpanLossReceive();
-                        spanLossTx = ots.getSpanLossTransmit();
-                    } else {
-                        spanLossRx = new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss));
-                        spanLossTx = new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss));
-                    }
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
-                        .rev181019.Interface1Builder intf1Builder =
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                            .transport.interfaces.rev181019.Interface1Builder();
-                    if (direction.equals("TX")) {
-                        otsBuilder.setSpanLossTransmit(new org.opendaylight.yang.gen.v1.http.org
-                            .openroadm.common.types.rev181019.RatioDB(Decimal64.valueOf(spanLoss)));
-                        otsBuilder.setSpanLossReceive(spanLossRx);
-                    } else {
-                        otsBuilder
-                            .setSpanLossTransmit(spanLossTx)
-                            .setSpanLossReceive(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB(
-                                    Decimal64.valueOf(spanLoss)));
-                    }
-                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
-                    openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
-                    LOG.info("Spanloss Value update completed successfully");
-                    return true;
-                } else {
-                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId, interfaceName);
-                    return false;
-                }
-            } else if (mappingUtils.getOpenRoadmVersion(realNodeId)
-                    .equals(StringConstants.OPENROADM_DEVICE_VERSION_7_1)) {
-
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB spanLossRx;
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB spanLossTx;
-                Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529
-                        .interfaces.grp.Interface> interfaceObject =
-                        openRoadmInterfaces.getInterface(realNodeId, interfaceName);
-                if (interfaceObject.isPresent()) {
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                            .rev200529.interfaces.grp.InterfaceBuilder interfaceBuilder =
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm.device
-                                    .rev200529.interfaces.grp.InterfaceBuilder(interfaceObject.orElseThrow());
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                            .transport.interfaces.rev200529.ots.container.OtsBuilder otsBuilder =
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm
-                                    .optical.transport.interfaces.rev200529.ots.container.OtsBuilder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.interfaces.grp.Interface intf =
-                            interfaceObject.orElseThrow();
-                    if (intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                            .transport.interfaces.rev200529.Interface1.class) != null
-                            && intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport
-                            .interfaces.rev200529.Interface1.class).getOts() != null) {
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
-                                .rev200529.ots.container.Ots ots =
-                                intf.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                                        .transport.interfaces.rev200529.Interface1.class).getOts();
-
-                        otsBuilder.setFiberType(ots.getFiberType());
-                        spanLossRx = ots.getSpanLossReceive();
-                        spanLossTx = ots.getSpanLossTransmit();
-                    } else {
-                        spanLossRx = new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss));
-                        spanLossTx = new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss));
-                    }
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces
-                            .rev200529.Interface1Builder intf1Builder =
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                                    .transport.interfaces.rev200529.Interface1Builder();
-                    if (direction.equals("TX")) {
-                        otsBuilder.setSpanLossTransmit(new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.link.types.rev191129.RatioDB(Decimal64.valueOf(spanLoss)));
-                        otsBuilder.setSpanLossReceive(spanLossRx);
-                    } else {
-                        otsBuilder
-                            .setSpanLossTransmit(spanLossTx)
-                            .setSpanLossReceive(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB(
-                                        Decimal64.valueOf(spanLoss)));
-                    }
-                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
-                    openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
-                    LOG.info("Spanloss Value update completed successfully");
-                    return true;
-                } else {
-                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId,interfaceName);
-                    return false;
-                }
-            }
-        } catch (OpenRoadmInterfaceException e) {
-            // TODO Auto-generated catch block
-            LOG.error("OpenRoadmInterfaceException occured: ",e);
-        } /**catch (InterruptedException e) {
-         // TODO Auto-generated catch block
-         } catch (ExecutionException e) {
-         // TODO Auto-generated catch block
-         }**/
-        return false;
+    private boolean setSpanLoss(String realNodeId, String interfaceName, BigDecimal spanLoss, String direction) {
+        OpenroadmNodeVersion nodeVersion = getNodeVersion(realNodeId);
+        if (nodeVersion == null) {
+            LOG.error("Couldn't get node version for node {}", realNodeId);
+            return false;
+        } else {
+            return OlmUtils.setSpanLoss(realNodeId,
+                    interfaceName,
+                    spanLoss,
+                    direction,
+                    nodeVersion,
+                    openRoadmInterfaces);
+        }
     }
 
     /**
@@ -593,51 +475,278 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      * @return map with list of spans with their spanloss value
      */
     private Map<LinkId, BigDecimal> getLinkSpanloss(List<RoadmLinks> roadmLinks) {
-        Map<LinkId, BigDecimal> map = new HashMap<>();
         LOG.info("Executing GetLinkSpanLoss");
-        BigDecimal spanLoss;
+        LOG.info("Updating {} RoadmLinks", roadmLinks.size());
+
+        //Map nodeId -> RealNodeId
+        Map<String, String> realNodeIdMap = populateRealIdMap(roadmLinks);
+        //Map NodeInterfaceKey -> list of GetPmOutput
+        Map<NodeInterfaceKey, List<GetPmOutput>> nodePms = fetchMeasurements(realNodeIdMap);
+
+        LOG.info("Done, got {} nodes", nodePms.size());
+
+        Map<NodeInterfaceKey, Map<String, BigDecimal>> spanLosses;
+        spanLosses = calculateSpannLosses(roadmLinks, nodePms, realNodeIdMap);
+        Map<LinkId, BigDecimal> map = getLinksResultMap(roadmLinks, spanLosses, realNodeIdMap);
+        Map<NodeInterfaceKey, Boolean> resultMap = setSpanLosses(nodePms, spanLosses);
+        logSpanLossResult(resultMap);
+        return map;
+    }
+
+    private Map<NodeInterfaceKey, Map<String, BigDecimal>> calculateSpannLosses(
+            List<RoadmLinks> roadmLinks,
+            Map<NodeInterfaceKey, List<GetPmOutput>> nodePms,
+            Map<String, String> realNodeIdMap) {
+
+        Map<NodeInterfaceKey, Map<String, BigDecimal>> spanLosses = new HashMap<>();
+
         for (RoadmLinks link : roadmLinks) {
             String sourceNodeId = link.getSrcNodeId();
-            String sourceTpId = link.getSrcTpId();
             String destNodeId = link.getDestNodeId();
-            String destTpId = link.getDestTpid();
-            OtsPmHolder srcOtsPmHolder = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
-            if (srcOtsPmHolder == null) {
-                srcOtsPmHolder = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutputOSC");
-                if (srcOtsPmHolder == null) {
-                    LOG.warn("OTS configuration issue at {} - {}", sourceNodeId, sourceTpId);
-                    continue;
-                }
+
+            NodeInterfaceKey sourceNodeKey = createKey(realNodeIdMap.get(sourceNodeId), link.getSrcTpId());
+            NodeInterfaceKey destNodeKey = createKey(realNodeIdMap.get(destNodeId), link.getDestTpid());
+            List<String> outputMeasures = List.of("OpticalPowerOutput", "OpticalPowerOutputOCS");
+            List<String> inputMeasures = List.of("OpticalPowerInput", "OpticalPowerInputOCS");
+
+            if (getMeasurement(nodePms.get(sourceNodeKey), outputMeasures) == null) {
+                LOG.warn("OTS configuration issue at {}", sourceNodeKey);
+                continue;
             }
-            OtsPmHolder destOtsPmHolder = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
-            if (destOtsPmHolder == null) {
-                destOtsPmHolder = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInputOSC");
-                if (destOtsPmHolder == null) {
-                    LOG.warn("OTS configuration issue at {} - {}", destNodeId, destTpId);
-                    continue;
-                }
+
+            if (getMeasurement(nodePms.get(destNodeKey), inputMeasures) == null) {
+                LOG.warn("OTS configuration issue at {} ", destNodeKey);
+                continue;
             }
-            spanLoss = BigDecimal.valueOf(srcOtsPmHolder.getOtsParameterVal() - destOtsPmHolder.getOtsParameterVal())
-                .setScale(1, RoundingMode.HALF_UP);
+
+            Double srcPowerOutput = getMeasurement(nodePms.get(sourceNodeKey), outputMeasures);
+            Double destPowerInput = getMeasurement(nodePms.get(destNodeKey), inputMeasures);
+
+            BigDecimal spanLoss = BigDecimal.valueOf(srcPowerOutput - destPowerInput)
+                    .setScale(1, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :{}={}-{}",
-                spanLoss, srcOtsPmHolder.getOtsParameterVal(), destOtsPmHolder.getOtsParameterVal());
+                    spanLoss, srcPowerOutput, destPowerInput);
             if (spanLoss.doubleValue() > 28) {
                 LOG.warn("Span Loss is out of range of OpenROADM specifications");
             }
             if (spanLoss.intValue() <= 0) {
                 spanLoss = BigDecimal.valueOf(0);
             }
-            if (!setSpanLoss(sourceNodeId, srcOtsPmHolder.getOtsInterfaceName(), spanLoss, "TX")) {
-                LOG.info("Setting spanLoss failed for {}", sourceNodeId);
-                return null;
-            }
-            if (!setSpanLoss(destNodeId, destOtsPmHolder.getOtsInterfaceName(), spanLoss, "RX")) {
-                LOG.info("Setting spanLoss failed for {}", destNodeId);
-                return null;
-            }
+
+            spanLosses = setSpanLossMap(spanLosses, sourceNodeKey, TX, spanLoss);
+            spanLosses = setSpanLossMap(spanLosses, destNodeKey, RX, spanLoss);
+        }
+        return spanLosses;
+    }
+
+    private Map<LinkId, BigDecimal> getLinksResultMap(List<RoadmLinks> roadmLinks,
+                                                      Map<NodeInterfaceKey, Map<String, BigDecimal>> spanLosses,
+                                                      Map<String, String> realNodeIdMap) {
+        Map<LinkId, BigDecimal> map = new HashMap<>();
+        for (RoadmLinks link : roadmLinks) {
+            String sourceNodeId = link.getSrcNodeId();
+            NodeInterfaceKey sourceNodeKey = createKey(realNodeIdMap.get(sourceNodeId), link.getSrcTpId());
+            BigDecimal spanLoss = spanLosses.get(sourceNodeKey).get(TX);
             map.put(link.getLinkId(), spanLoss);
         }
         return map;
+    }
+
+    private void logSpanLossResult(Map<NodeInterfaceKey, Boolean> resultMap) {
+        LOG.info("Set spanloss result:");
+
+        for (Entry<NodeInterfaceKey, Boolean> entry: resultMap.entrySet().stream()
+                .sorted(Comparator.comparing(entry -> entry.getKey().toString())).toList()) {
+            String success = (entry.getValue() ? "Success!" : " -- Failed! --");
+            LOG.info("Node id {} - {}: {}",
+                    entry.getKey().nodeId(),
+                    entry.getKey().logicalConnectionPoint(),
+                    success);
+        }
+    }
+
+    //Creates a Map where each NodeInterfaceKey has a status boolean whether or not the setSpanloss succeeded or not.
+    private Map<NodeInterfaceKey, Boolean> setSpanLosses(Map<NodeInterfaceKey, List<GetPmOutput>> nodePms,
+                                                         Map<NodeInterfaceKey, Map<String, BigDecimal>> lossMap) {
+        Map<NodeInterfaceKey, Boolean> resultMap = new HashMap<>();
+
+        Map<String, List<NodeInterfaceKey>> nodesWithKeys = lossMap.entrySet().stream()
+                .collect(Collectors.groupingBy(
+                        entry -> entry.getKey().nodeId(),
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+
+        List<Callable<Map<NodeInterfaceKey, Boolean>>> tasks = new ArrayList<>();
+        for (Entry<String, List<NodeInterfaceKey>> entry : nodesWithKeys.entrySet()) {
+            List<NodeInterfaceKey> nodeKeys = entry.getValue();
+            tasks.add(() -> setSpanLossForNode(nodeKeys, nodePms, lossMap));
+        }
+
+        LOG.info("Setting spanlosses on the nodes in parallell....");
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            List<Future<Map<NodeInterfaceKey, Boolean>>> futures = invokeAll(executor, tasks);
+            for (Future<Map<NodeInterfaceKey, Boolean>> future : futures) {
+                resultMap.putAll(getFutureMap(future));  // Will block until result is ready
+            }
+        }
+        return resultMap;
+    }
+
+    /*
+     * Substitute method for the executor.invokeAll method.
+     * Using submit makes sure this do not throw InterruptedException, and hence all tasks will succeed to be scheduled.
+     */
+    private <T> List<Future<T>> invokeAll(ExecutorService executor, List<Callable<T>> tasks) {
+        List<Future<T>> futures = new ArrayList<>();
+
+        for (Callable<T> task:tasks) {
+            futures.add(executor.submit(task));
+        }
+        return futures;
+    }
+
+    /*
+     * Factored out for readability. Could be modified to keep waiting in case if an InterruoptedException is thrown
+     * but for now we just return an empty map in this case.
+     */
+    private <K, V> Map<K, V> getFutureMap(Future<Map<K, V>> future) {
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            LOG.error("ExecutionException while getting future map", e);
+        } catch (InterruptedException e) {
+            LOG.error("InterruptedException while getting future map", e);
+        }
+        return Map.of();
+    }
+
+    private Map<NodeInterfaceKey, Boolean> setSpanLossForNode(List<NodeInterfaceKey> nodeKeys,
+                                       Map<NodeInterfaceKey, List<GetPmOutput>> nodePms,
+                                       Map<NodeInterfaceKey, Map<String, BigDecimal>> lossMap) {
+        boolean successTx;
+        boolean successRx;
+        Map<NodeInterfaceKey, Boolean> returnMap = new HashMap<>();
+        for (NodeInterfaceKey key:nodeKeys) {
+            LOG.info("Setting spanloss for node {}, connectionPoint {}", key.nodeId(), key.logicalConnectionPoint());
+            String resourceName = nodePms.get(key).getFirst().getResourceIdentifier().getResourceName();
+            if (lossMap.get(key).get(TX) != null) {
+                successTx = setSpanLoss(key.nodeId(),
+                        resourceName,
+                        lossMap.get(key).get(TX),
+                        TX);
+
+                if (!successTx) {
+                    logSetSpanLossFail(key.nodeId(), TX);
+                }
+            } else {
+                successTx = true; //Nothing to set for Tx so operation is considered succeeded.
+            }
+
+            if (lossMap.get(key).get(RX) != null) {
+                successRx = setSpanLoss(key.nodeId(),
+                        resourceName,
+                        lossMap.get(key).get(RX),
+                        RX);
+
+                if (!successTx) {
+                    logSetSpanLossFail(key.nodeId(), RX);
+                }
+            } else {
+                successRx = true; //nothing to set for RX so operation is considered succeeded.
+            }
+            returnMap.put(key, successTx && successRx);
+        }
+        return returnMap;
+    }
+
+    private void logSetSpanLossFail(String nodeId, String direction) {
+        LOG.info("Setting spanLoss failed for realNodeId {} direction {}",nodeId, direction);
+    }
+
+    private Map<NodeInterfaceKey, Map<String, BigDecimal>> setSpanLossMap(
+            Map<NodeInterfaceKey,Map<String, BigDecimal>> spanLoss,
+            NodeInterfaceKey key, String direction, BigDecimal spanloss) {
+        if (spanLoss == null) {
+            spanLoss = new HashMap<>();
+        }
+
+        Map<String, BigDecimal> innerMap = spanLoss.get(key);
+
+        if (innerMap == null) {
+            innerMap = new HashMap<>();
+        }
+
+        innerMap.put(direction, spanloss);
+        spanLoss.put(key, innerMap);
+
+        return spanLoss;
+    }
+
+    private NodeInterfaceKey createKey(String realNodeId, String tpId) {
+        return new NodeInterfaceKey(realNodeId, tpId);
+    }
+
+    /*
+     * Creates a Map of type {@code <String, String>} where the key is the nodeId from the link (either src or dest
+     * node) and the value is the RealNodeId. This is to quickly be able to look up the realNodeId.
+     */
+    private Map<String, String> populateRealIdMap(List<RoadmLinks> roadmLinks) {
+        Map<String, String> realNodeIdMap = new HashMap<>();
+        for (RoadmLinks link : roadmLinks) {
+            String srcNodeId = link.getSrcNodeId();
+            String destNodeId = link.getDestNodeId();
+            realNodeIdMap.put(srcNodeId, getRealNodeId(srcNodeId));
+            realNodeIdMap.put(destNodeId, getRealNodeId(destNodeId));
+        }
+        return realNodeIdMap;
+    }
+
+    private Map<NodeInterfaceKey, List<GetPmOutput>> fetchMeasurements(Map<String, String> realNodeIdMap) {
+
+        Map<NodeInterfaceKey, List<GetPmOutput>> nodePms = new HashMap<>();
+        Set<String> realNodeIds = new HashSet<>(realNodeIdMap.values());
+
+        List<Callable<Map<NodeInterfaceKey, List<GetPmOutput>>>> tasks = new ArrayList<>();
+        for (String realNodeId : realNodeIds) {
+            tasks.add(() -> getPmAll(realNodeId));
+        }
+
+        LOG.info("Fetching measurements from nodes in parallell....");
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            List<Future<Map<NodeInterfaceKey, List<GetPmOutput>>>> futures = invokeAll(executor, tasks);
+            for (Future<Map<NodeInterfaceKey, List<GetPmOutput>>> future : futures) {
+                nodePms.putAll(getFutureMap(future));
+            }
+        }
+        return nodePms;
+    }
+
+    /*
+     * Extracts a measurement from the list of outputs. The list of string given is a prioritized
+     * list of measurements to fetch. The first one to contain a valid measurement is returned.
+     */
+    private Double getMeasurement(List<GetPmOutput> outputs, List<String> names) {
+        if (outputs == null || outputs.isEmpty()) {
+            return null;
+        }
+        for (GetPmOutput output : outputs) {
+            if (output.getMeasurements() == null || output.getMeasurements().size() == 0) {
+                return null;
+            }
+            for (String name:names) {
+                for (Measurements measurement : output.getMeasurements()) {
+                    if (isValidMeasurement(name, measurement)) {
+                        return Double.parseDouble(measurement.getPmparameterValue());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isValidMeasurement(String name, Measurements measurement) {
+        return measurement.getPmparameterName().equalsIgnoreCase(name)
+                && measurement.getPmparameterValue() != null
+                && !measurement.getPmparameterValue().isEmpty();
     }
 
     private String getRealNodeId(String mappedNodeId) {
@@ -688,5 +797,4 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             return null;
         }
     }
-
 }
