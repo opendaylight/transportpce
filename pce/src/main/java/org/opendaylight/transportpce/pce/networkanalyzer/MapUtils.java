@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -26,6 +27,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLink;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +77,68 @@ public final class MapUtils {
         }
 
         LOG.info("mapDiversityConstraints after : ExcludeCLLI {} \n ExcludeSupNodes {} \n ExcludeSRLG {}",
+                pceHardConstraints.getExcludeCLLI(),
+                pceHardConstraints.getExcludeSupNodes(),
+                pceHardConstraints.getExcludeSRLG());
+
+    }
+
+    public static void mapDiversityConstraintsForTapi(
+            Map<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node>  allNodes,
+            Map<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
+                allLinks, PceConstraints pceHardConstraints) {
+        List<String> excClliNodes = pceHardConstraints.getExcludeClliNodes();
+        List<String> excNodes = pceHardConstraints.getExcludeNodes();
+        List<String> excSrlgLinks = pceHardConstraints.getExcludeSrlgLinks();
+
+        LOG.info("mapDiversityConstraintsForTapi before: ExcludeClliNodes {} \n ExcludeNodes {} \n ExcludeSrlgLinks {}",
+                excClliNodes, excNodes, excSrlgLinks);
+
+        for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node>
+            entry : allNodes.entrySet()) {
+            var node = entry.getValue();
+            if (excClliNodes.contains(node.getUuid().getValue())) {
+                LOG.debug("mapDiversityConstraints setExcludeCLLI for node {}", node.getUuid().getValue());
+                pceHardConstraints.setExcludeCLLI(List.of(node.getUuid().getValue()));
+            }
+
+            if (excNodes.contains(node.getUuid().getValue())) {
+                LOG.debug("mapDiversityConstraints setExcludeSupNodes for node {}", node.getUuid().getValue());
+                pceHardConstraints.setExcludeSupNodes(Arrays.asList(node.getUuid().getValue()));
+            }
+        }
+
+        for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                .topology.Link> entry : allLinks.entrySet()) {
+            var link = entry.getValue();
+            if (excSrlgLinks.contains(link.getUuid().getValue())) {
+                // zero SRLG means not populated as not OMS link
+                Set<String> srlgTapiList = TapiMapUtils.getSRLG(link);
+                List<Long> convertedSrlgList = new ArrayList<>();
+                if (srlgTapiList != null) {
+                    for (String srlgEntry : srlgTapiList) {
+                        try {
+                            if (Long.valueOf(srlgEntry) != null) {
+                                convertedSrlgList.add(Long.valueOf(srlgEntry));
+                            } else {
+                                break;
+                            }
+                        } catch (NumberFormatException e) {
+                            LOG.debug("SRLG List for Link {} not convertable to Long required with OR API:"
+                                + " Execption raised", link.getName(), e);
+                            break;
+                        }
+                    }
+                    if (!convertedSrlgList.isEmpty()) {
+                        pceHardConstraints.setExcludeSRLG(convertedSrlgList);
+                        LOG.debug("mapDiversityConstraints setExcludeSRLG {} for link {}",
+                            convertedSrlgList, link.getUuid().getValue());
+                    }
+                }
+            }
+        }
+
+        LOG.info("mapDiversityConstraintsforTapi after : ExcludeCLLI {} \n ExcludeSupNodes {} \n ExcludeSRLG {}",
                 pceHardConstraints.getExcludeCLLI(),
                 pceHardConstraints.getExcludeSupNodes(),
                 pceHardConstraints.getExcludeSRLG());

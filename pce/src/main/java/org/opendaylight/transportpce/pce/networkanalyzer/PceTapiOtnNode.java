@@ -180,6 +180,7 @@ public class PceTapiOtnNode implements PceNode {
     private final String nodeId;
     private final OpenroadmNodeType nodeType;
     private final String otnServiceType;
+    private Uuid topoUuid;
     private String modeType;
     private AdministrativeState adminState;
     private OperationalState operState;
@@ -215,6 +216,7 @@ public class PceTapiOtnNode implements PceNode {
         Uuid clientPort, TapiOpticalNode ton) {
         this.node = node;
         this.tapiON = ton;
+        this.topoUuid = ton.getTopoUuid();
         this.nodeId = deviceNodeId;
         this.nodeType = nodeType;
         this.pceNodeType = "otn";
@@ -849,6 +851,10 @@ public class PceTapiOtnNode implements PceNode {
         listOfNep.addAll(this.tapiON.getnetOtsNep());
         listOfNep = listOfNep.stream().distinct().collect(Collectors.toList());
         return listOfNep;
+    }
+
+    public Uuid getTopology() {
+        return this.topoUuid;
     }
 
     @Override

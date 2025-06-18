@@ -92,10 +92,10 @@ public final class TapiConstants {
             .build();
     public static final DataObjectIdentifier<TopologyContext> TAPI_TOPOLOGY_CONTEXT_II = DataObjectIdentifier.builder(
             Context.class).augmentation(Context1.class).child(TopologyContext.class).build();
-    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_II = DataObjectIdentifier.builder(Context.class)
-            .augmentation(Context1.class).child(TopologyContext.class).child(Topology.class,
-                new TopologyKey(T0_FULL_MULTILAYER_UUID))
-            .build();
+    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_T0_FULL_IID = DataObjectIdentifier
+        .builder(Context.class).augmentation(Context1.class).child(TopologyContext.class)
+        .child(Topology.class, new TopologyKey(T0_FULL_MULTILAYER_UUID))
+        .build();
 
     private TapiConstants() {
         // hiding the default constructor
