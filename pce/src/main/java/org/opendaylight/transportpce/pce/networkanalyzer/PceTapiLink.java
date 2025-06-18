@@ -785,8 +785,7 @@ public class PceTapiLink implements Serializable, PceLink {
      *                      for supporting the corresponding service.
      * @return      Boolean set to true if the link is considered as valid, false otherwise.
      */
-    private boolean isOtnValid(String serviceType) {
-        // TODO: OTN not planned at initialization of T-API functionality
+    public boolean isOtnValid(String serviceType) {
         // Function to be coded at a later step
         if (this.linkType != OpenroadmLinkType.OTNLINK) {
             LOG.error("PceLink: Not an OTN link. Link is ignored {}", linkId);
@@ -1005,7 +1004,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public TpId getSourceTP() {
-        return null;
+        return new TpId(sourceTpId.getValue());
     }
 
     /*
@@ -1025,7 +1024,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public TpId getDestTP() {
-        return null;
+        return new TpId(destTpId.getValue());
     }
 
     /*
@@ -1331,10 +1330,19 @@ public class PceTapiLink implements Serializable, PceLink {
     }
 
     /**
+     * Provides the Uuid of the topology the link belongs to.
+     * @return Uuid of the topology the node belongs to.
+     */
+    public Uuid getTopologyUuid() {
+        return this.topoId.getUuid();
+    }
+
+    /**
      * Provides implementation of .toString for Links.
      */
     @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency + " Name=" + linkName;
     }
+
 }
