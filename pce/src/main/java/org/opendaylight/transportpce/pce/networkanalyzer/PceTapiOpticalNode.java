@@ -95,7 +95,6 @@ public class PceTapiOpticalNode implements PceNode {
         this.listOfNep = nepList;
         this.adminState = node.getAdministrativeState();
         this.operationalState = node.getOperationalState();
-
         this.valid = true;
         this.mcCapability = mcCapability;
     }
@@ -237,7 +236,9 @@ public class PceTapiOpticalNode implements PceNode {
             .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERCLIENT))
             .collect(Collectors.toList());
         for (BasePceNep bpn : nwOtsNep) {
-            this.availableXpndrNWTps.add(bpn.getNepCepUuid().getValue());
+            if (!this.usedXpndrNWTps.contains(bpn.getNepCepUuid().getValue())) {
+                this.availableXpndrNWTps.add(bpn.getNepCepUuid().getValue());
+            }
         }
         for (BasePceNep cbpn : clientOtsNep) {
             List<Uuid> clientNrgUuidList = cbpn.getNodeRuleGroupUuid();
@@ -480,6 +481,10 @@ public class PceTapiOpticalNode implements PceNode {
             + "compatible with service type {}. Supported modes are : {} ",
             nepUuid, this.nodeName, this.nodeUuid, this.serviceType, supportedOM.toString());
         return StringConstants.UNKNOWN_MODE;
+    }
+
+    public void setUsedXpndrNWTps(List<String> listOfUsedNep) {
+        this.usedXpndrNWTps.addAll(listOfUsedNep);
     }
 
     /*
