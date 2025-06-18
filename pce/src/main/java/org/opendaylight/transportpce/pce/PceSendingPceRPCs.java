@@ -77,12 +77,17 @@ public class PceSendingPceRPCs {
     private PortMapping portMapping;
     // Define the termination points whose reservation status is not taken into account during the pruning process
     private Endpoints endpoints;
-
+    // Define PCE mode of operation (OpenROADM/TAPI)
+    private String pceOperMode;
+    public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
+    public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
+    
     public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
         this.gnpyConsumer = gnpyConsumer;
+        this.pceOperMode = OR_PCE_OPER_MODE;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
@@ -94,6 +99,7 @@ public class PceSendingPceRPCs {
         this.networkTransaction = networkTransaction;
         this.portMapping = portMapping;
         this.endpoints = null;
+        this.pceOperMode = OR_PCE_OPER_MODE;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
@@ -105,6 +111,21 @@ public class PceSendingPceRPCs {
         this.networkTransaction = networkTransaction;
         this.portMapping = portMapping;
         this.endpoints = endpoints;
+        this.pceOperMode = OR_PCE_OPER_MODE;
+    }
+
+
+    public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
+                             GnpyConsumer gnpyConsumer, PortMapping portMapping,
+                             Endpoints endpoints,
+                             String pceOperationalMode) {
+        this.gnpyConsumer = gnpyConsumer;
+        setPathDescription(null);
+        this.input = input;
+        this.networkTransaction = networkTransaction;
+        this.portMapping = portMapping;
+        this.endpoints = endpoints;
+        this.pceOperMode = pceOperationalMode;
     }
 
     public void cancelResourceReserve() {
@@ -125,7 +146,7 @@ public class PceSendingPceRPCs {
 
         rc = new PceResult();
         PceCalculation nwAnalizer = new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc,
-                portMapping, endpoints);
+                portMapping, endpoints, pceOperMode);
         nwAnalizer.retrievePceNetwork();
         rc = nwAnalizer.getReturnStructure();
         String serviceType = nwAnalizer.getServiceType();
@@ -207,25 +228,31 @@ public class PceSendingPceRPCs {
             atoz = rc.getAtoZDirection();
             ztoa = rc.getZtoADirection();
         }
-
-        //Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
-        try {
-            if (gnpyConsumer.isAvailable()) {
-                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
-                        gnpyConsumer);
-                if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
+        if (this.pceOperMode.equals(OR_PCE_OPER_MODE)) {
+            //Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
+            try {
+                if (gnpyConsumer.isAvailable()) {
+                    GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
+                            gnpyConsumer);
+                    if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
+                        setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+                        return;
+                    }
+                    callGnpyToComputeNewPath(gnpy);
+                } else {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-                    return;
                 }
-                callGnpyToComputeNewPath(gnpy);
-            } else {
+            }
+            catch (GnpyException e) {
+                LOG.error("Exception raised by GNPy {}",e.getMessage());
                 setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
             }
-        }
-        catch (GnpyException e) {
-            LOG.error("Exception raised by GNPy {}",e.getMessage());
+        } else {
+            //TODO : develop Serializer for GNPY analysis of path over a T-API topology
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+            LOG.warn("No GNPY path analysis on T-API topology : T-API Path serializer not available yet");
         }
+
     }
 
     private boolean gnpyToCheckFeasiblity(AToZDirection atoz, ZToADirection ztoa, GnpyUtilitiesImpl gnpy)

@@ -9,6 +9,10 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import static org.junit.jupiter.api.DynamicTest.stream;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +30,7 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.service.ServiceTypes;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
+import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Factory;
 import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
@@ -35,12 +40,15 @@ import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mc.capabilities.McCapabilitiesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -50,7 +58,21 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.context.ConnectivityContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.link.NodeEdgePointKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier.WithKey;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +104,11 @@ public class PceCalculation {
 
     private List<Link> allLinks = null;
     private List<Node> allNodes = null;
+    private Map<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
+        allTapiLinks = null;
+    private Map<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node>
+        allTapiNodes = null;
+    private List<Connection> allCons = null;
 
     // this List serves graph calculation
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
@@ -93,6 +120,26 @@ public class PceCalculation {
     private PortMapping portMapping;
     // Define the termination points whose reservation status is not taken into account during the pruning process
     private Endpoints endpoints;
+    private String pceOperMode;
+
+    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_T0_ABSTRACTED_IID = DataObjectIdentifier
+        .builder(Context.class).augmentation(Context1.class).child(TopologyContext.class)
+        .child(Topology.class,new TopologyKey(StringConstants.T0_MULTILAYER_UUID))
+        .build();
+    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_T0_FULL_IID = DataObjectIdentifier
+        .builder(Context.class).augmentation(Context1.class).child(TopologyContext.class)
+        .child(Topology.class,new TopologyKey(StringConstants.T0_FULL_MULTILAYER_UUID))
+        .build();
+    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_SBI_IID = DataObjectIdentifier
+        .builder(Context.class).augmentation(Context1.class).child(TopologyContext.class)
+        .child(Topology.class, new TopologyKey(StringConstants.SBI_TAPI_TOPOLOGY_UUID))
+        .build();
+    public static final WithKey<Topology, TopologyKey> TAPI_TOPOLOGY_ALIEN_IID = DataObjectIdentifier
+        .builder(Context.class).augmentation(Context1.class).child(TopologyContext.class)
+        .child(Topology.class, new TopologyKey(StringConstants.ALIEN_XPDR_TAPI_TOPOLOGY_UUID))
+        .build();
+    private static final List<WithKey<Topology, TopologyKey>> IID_LIST = new ArrayList<>(List.of(
+        TAPI_TOPOLOGY_T0_ABSTRACTED_IID, TAPI_TOPOLOGY_T0_FULL_IID, TAPI_TOPOLOGY_SBI_IID, TAPI_TOPOLOGY_ALIEN_IID));
 
     private enum ConstraintTypes {
         NONE, HARD_EXCLUDE, HARD_INCLUDE, HARD_DIVERSITY, SOFT_EXCLUDE, SOFT_INCLUDE, SOFT_DIVERSITY;
@@ -113,12 +160,30 @@ public class PceCalculation {
         LOG.debug("instancing TapiMapUtils {}", tapiMappingUtils.getClass());
         this.portMapping = portMapping;
         this.endpoints = null;
+        this.pceOperMode = PceSendingPceRPCs.OR_PCE_OPER_MODE;
         parseInput();
     }
 
+//    public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
+//                          PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
+//                          PortMapping portMapping, Endpoints endpoints) {
+//        this.input = input;
+//        this.networkTransactionService = networkTransactionService;
+//        this.returnStructure = rc;
+//        this.pceHardConstraints = pceHardConstraints;
+//        this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
+//        this.tapiMappingUtils = new TapiMapUtils(networkTransactionService.getDataBroker());
+//        LOG.debug("instancing TapiMapUtils {}", tapiMappingUtils.getClass());
+//        this.portMapping = portMapping;
+//        this.endpoints = endpoints;
+//        this.pceOperMode = PceSendingPceRPCs.OR_PCE_OPER_MODE;
+//        parseInput();
+//    }
+
+
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
                           PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc,
-                          PortMapping portMapping, Endpoints endpoints) {
+                          PortMapping portMapping, Endpoints endpoints, String pceOperMode) {
         this.input = input;
         this.networkTransactionService = networkTransactionService;
         this.returnStructure = rc;
@@ -128,6 +193,7 @@ public class PceCalculation {
         LOG.debug("instancing TapiMapUtils {}", tapiMappingUtils.getClass());
         this.portMapping = portMapping;
         this.endpoints = endpoints;
+        this.pceOperMode = pceOperMode;
         parseInput();
     }
 
@@ -137,10 +203,18 @@ public class PceCalculation {
 
         Subscriber subscriber = new EventSubscriber();
 
-        if (!readMdSal(subscriber)) {
-            returnStructure.error(subscriber);
-            return;
+        if (pceOperMode.equals(PceSendingPceRPCs.TAPI_PCE_OPER_MODE)) {
+            if (!readMdSalTapi(subscriber)) {
+                returnStructure.error(subscriber);
+                return;
+            }
+        } else {
+            if (!readMdSal(subscriber)) {
+                returnStructure.error(subscriber);
+                return;
+            }
         }
+
         MapUtils.mapDiversityConstraints(allNodes, allLinks, pceHardConstraints);
 
         if (!analyzeNw(subscriber)) {
@@ -284,6 +358,76 @@ public class PceCalculation {
         return true;
     }
 
+
+    private boolean readMdSalTapi(Subscriber subscriber) {
+        ConnectivityContext conCont = null;
+        boolean isserviceOTN = false;
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_100GE_M:
+            case StringConstants.SERVICE_TYPE_100GE_S:
+            case StringConstants.SERVICE_TYPE_ODU4:
+            case StringConstants.SERVICE_TYPE_ODUC2:
+            case StringConstants.SERVICE_TYPE_ODUC3:
+            case StringConstants.SERVICE_TYPE_ODUC4:
+            case StringConstants.SERVICE_TYPE_10GE:
+            case StringConstants.SERVICE_TYPE_1GE:
+                isserviceOTN = true;
+                break;
+            default:
+                break;
+        }
+        if (isserviceOTN) {
+            var conContIID = DataObjectIdentifier
+                .builder(Context.class)
+                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                        .Context1.class).child(ConnectivityContext.class)
+                .build();
+            try {
+                Optional<ConnectivityContext> conContOptional =
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, conContIID).get();
+                if (conContOptional.isPresent()) {
+                    conCont = conContOptional.orElseThrow();
+                    LOG.debug("readMdSal: T-API ConnectivityContext: conContOptional.isPresent = true {}", conContIID);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("readMdSal: Error reading ConnectivityContext {}", conContIID, e);
+                returnStructure.error("Unexpected error occurred while reading ConnectivityContext"
+                    + "from internal data store.");
+            }
+            if (conCont == null) {
+                LOG.error("readMdSal: no ConnectivityContext ");
+                subscriber.event(Level.ERROR, String. format("ConnectivityContext is null: %s", conContIID));
+            }
+            this.allCons = conCont.getConnection().entrySet().stream()
+                .map(Map.Entry::getValue).collect(Collectors.toList());
+            if (allCons == null || allCons.isEmpty()) {
+                LOG.error("readMdSal: no ConnectivityContext");
+                subscriber.event(Level.ERROR, "No ConnectivityContext found in DataStore");
+            }
+        }
+
+        for (WithKey<Topology, TopologyKey> topoIID : IID_LIST) {
+            readTapiTopology(topoIID, subscriber);
+        }
+        if (allTapiNodes == null || allTapiNodes.isEmpty()) {
+            LOG.error("readMdSal: no nodes ");
+            subscriber.event(Level.ERROR, "No nodes found in network");
+            return false;
+        }
+        LOG.info("readMdSal: network nodes: {} nodes added", allTapiNodes.size());
+        LOG.debug("readMdSal: network nodes: {} nodes added", allTapiNodes);
+
+        if (allTapiLinks == null || allTapiLinks.isEmpty()) {
+            LOG.error("readMdSal: no links ");
+            subscriber.event(Level.ERROR, "No links found in network");
+            return false;
+        }
+        LOG.info("readMdSal: network links: {} links added", allTapiLinks.size());
+        LOG.debug("readMdSal: network links: {} links added", allTapiLinks);
+
+        return true;
+    }
+
     private Network readTopology(DataObjectIdentifier<Network> nwInstanceIdentifier) {
         Network nw = null;
         try {
@@ -299,6 +443,47 @@ public class PceCalculation {
         }
         return nw;
     }
+
+
+    private void readTapiTopology(WithKey<Topology, TopologyKey> topoIID, Subscriber subscriber) {
+        Topology topo = null;
+        Uuid topoUuid = topoIID.getKey().getUuid();
+        try {
+            Optional<Topology> topoOptional =
+                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, topoIID).get();
+            if (topoOptional.isPresent()) {
+                topo = topoOptional.orElseThrow();
+                LOG.debug("readMdSal: T-API Topology: topoOptional.isPresent = true {}", topoIID);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("readMdSal: Error reading topology {}", topoIID, e);
+            returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
+        }
+        if (topo == null) {
+            LOG.error("readMdSal: network is null for topology: {}", topoUuid);
+            subscriber.event(Level.ERROR, String. format("Network is null: %s", topoIID));
+            return;
+        }
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node> 
+            nodeList = topo.nonnullNode().values().stream()
+                .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
+                .collect(Collectors.toList());
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node tapiNode: nodeList) {
+            Map<Uuid, Uuid> nodeKey = new HashMap<>();
+            nodeKey.put(tapiNode.getUuid(), topoUuid);
+            allTapiNodes.put(nodeKey, tapiNode);
+        }
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link>
+            linkList = topo.nonnullLink().values().stream()
+                .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
+                .collect(Collectors.toList());
+        for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiLink: linkList) {
+            Map<Uuid, Uuid> linkKey = new HashMap<>();
+            linkKey.put(tapiLink.getUuid(), topoUuid);
+            allTapiLinks.put(linkKey, tapiLink);
+        }
+    }
+
 
     private boolean analyzeNw(Subscriber subscriber) {
 
@@ -371,6 +556,103 @@ public class PceCalculation {
                 }
                 for (Link link : allLinks) {
                     validateLink(link);
+                }
+                break;
+        }
+
+        LOG.info("analyzeNw: allPceNodes size {}, allPceLinks size {}", allPceNodes.size(), allPceLinks.size());
+
+        if ((allPceNodes.size() == 0) || (allPceLinks.size() == 0)) {
+            if (allPceNodes.size() == 0) {
+                subscriber.event(Level.ERROR, "No nodes found in network.");
+            } else {
+                subscriber.event(Level.ERROR, "No links found in network.");
+            }
+            return false;
+        }
+
+        LOG.debug("analyzeNw: allPceNodes {}", allPceNodes);
+        LOG.debug("analyzeNw: allPceLinks {}", allPceLinks);
+
+        return true;
+    }
+
+
+    private boolean analyzeTapiNw(Subscriber subscriber) {
+
+        LOG.debug("analyzeTapiNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
+        switch (serviceType) {
+            case StringConstants.SERVICE_TYPE_100GE_T:
+            case StringConstants.SERVICE_TYPE_OTU4:
+            case StringConstants.SERVICE_TYPE_400GE:
+            case StringConstants.SERVICE_TYPE_OTUC2:
+            case StringConstants.SERVICE_TYPE_OTUC3:
+            case StringConstants.SERVICE_TYPE_OTUC4:
+            case StringConstants.SERVICE_TYPE_OTHER:
+                Factory portPreferenceFactory = new PreferenceFactory();
+                Preference portPreference = portPreferenceFactory.portPreference(input);
+                for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .Node> tapiNode : allTapiNodes.entrySet()) {
+                    validateTapiNode(tapiNode.getValue(), tapiNode.getKey().entrySet().stream()
+                        .findFirst().orElseThrow().getValue(), portPreference);
+                }
+                LOG.info("PCEcalcLine549 analyzeTapiNw: allPceNodes size {}", allPceNodes.size());
+
+                if (aendPceNode == null || zendPceNode == null) {
+                    if (aendPceNode == null) {
+                        LOG.error("analyzeNw: Error in reading nodes: A not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: A is not present in the network");
+                    } else {
+                        LOG.error("analyzeNw: Error in reading nodes: Z not present in the network");
+                        subscriber.event(Level.ERROR, "Error during reading nodes: Z is not present in the network");
+                    }
+                    return false;
+                }
+                for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .topology.Link> tapiLink : allTapiLinks.entrySet()) {
+                    validateTapiLink(tapiLink.getValue(), tapiLink.getKey().entrySet().stream()
+                        .findFirst().orElseThrow().getValue(), portPreference);
+                }
+
+                // debug prints
+                LOG.debug("analyzeNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
+                // debug prints
+                LOG.debug("analyzeNw: azSrgs size = {}", azSrgs.size());
+                for (NodeId srg : azSrgs) {
+                    LOG.debug("analyzeNw: A/Z Srgs SRG = {}", srg.getValue());
+                }
+                // debug prints
+                for (PceLink link : addLinks) {
+                    filteraddLinks(link);
+                }
+                for (PceLink link : dropLinks) {
+                    filterdropLinks(link);
+                }
+                break;
+
+            default:
+                // ODU4, 10GE/ODU2e or 1GE/ODU0 services are handled at openroadm-otn layer
+                for (Map.Entry<Map<Uuid, Uuid>, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                        .Node> tapiNode : allTapiNodes.entrySet()) {
+                    validateTapiOtnNode(tapiNode.getValue(), tapiNode.getKey().entrySet().stream()
+                        .findFirst().orElseThrow().getValue(), portPreference);
+                }
+
+                LOG.info("analyzeTApiNw: allPceNodes {}", allPceNodes);
+
+                if (aendPceNode == null || zendPceNode == null) {
+                    LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
+                    if (aendPceNode == null) {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. A-node was not found in the network.");
+                    } else {
+                        subscriber.event(
+                            Level.ERROR, "OTN node validation failed. Z-node was not found in the network.");
+                    }
+                    return false;
+                }
+                for (Connection connection : allCons) {
+                    validateTapiCons(connection);
                 }
                 break;
         }
@@ -478,6 +760,70 @@ public class PceCalculation {
         }
     }
 
+    private boolean validateTapiLinks(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+            .topology.Link link, Uuid topoUuid, Preference portPreference) {
+        LOG.debug("validateLink: link {} ", link);
+
+        List<Uuid> nodeUuidList = link.getNodeEdgePoint().entrySet().stream()
+                .map(Map.Entry::getKey).collect(Collectors.toList())
+            .stream().map(NodeEdgePointKey::getNodeUuid).collect(Collectors.toList());
+        Uuid arbitrarySourceId = nodeUuidList.get(0);
+        Uuid arbitraryDestId = nodeUuidList.get(1);
+        PceNode source = allPceNodes.get(arbitrarySourceId);
+        PceNode dest = allPceNodes.get(arbitraryDestId);
+        OperationalState state = link.getOperationalState();
+
+        if (source == null) {
+            LOG.debug("validateTapiLink: Link is ignored due source node is rejected by node validation - {}",
+                nodeUuidList.get(0));
+            return false;
+        }
+        if (dest == null) {
+            LOG.debug("validateTapiLink: Link is ignored due source node is rejected by node validation - {}",
+                nodeUuidList.get(1));
+            return false;
+        }
+
+        if (OperationalState.DISABLED.equals(state)) {
+            LOG.debug("validateLink: Link {} is ignored due operational state - {}",
+                    link.getName(), OperationalState.DISABLED);
+            return false;
+        }
+        return processPceTapiLink(link, topoUuid, source, dest);
+    }
+
+
+    private boolean validateTapiCons(Connection connection) {
+        LOG.debug("validateLink: link {} ", connection);
+
+        List<Uuid> nodeUuidList = connection.getConnectionEndPoint().entrySet().stream()
+                .map(Map.Entry::getKey).collect(Collectors.toList())
+            .stream().map(ConnectionEndPointKey::getNodeUuid).collect(Collectors.toList());
+        Uuid arbitrarySourceId = nodeUuidList.get(0);
+        Uuid arbitraryDestId = nodeUuidList.get(1);
+        PceNode source = allPceNodes.get(arbitrarySourceId);
+        PceNode dest = allPceNodes.get(arbitraryDestId);
+        OperationalState state = connection.getOperationalState();
+
+        if (source == null) {
+            LOG.debug("validateTapiLink: Link is ignored due source node is rejected by node validation - {}",
+                nodeUuidList.get(0));
+            return false;
+        }
+        if (dest == null) {
+            LOG.debug("validateTapiLink: Link is ignored due source node is rejected by node validation - {}",
+                nodeUuidList.get(1));
+            return false;
+        }
+
+        if (OperationalState.DISABLED.equals(state)) {
+            LOG.debug("validateLink: Link {} is ignored due operational state - {}",
+                    connection.getName(), OperationalState.DISABLED);
+            return false;
+        }
+        return processPceTapiConnection(connection, arbitrarySourceId, arbitraryDestId, source, dest);
+    }
+
     private void validateNode(Node node, Preference portPreference) {
         LOG.debug("validateNode: node {} ", node);
         // PceNode will be used in Graph algorithm
@@ -517,7 +863,7 @@ public class PceCalculation {
         }
 
         if (endPceNode(nodeType, pceNode.getNodeId(), pceNode, portPreference)) {
-            if (this.aendPceNode == null && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
+            if (this.aendPceNode == null && isAZendPceNode(this.serviceFormatA, pceNode, null, anodeId, "A")) {
                 // Added to ensure A-node has a addlink in the topology
                 List<Link> links = this.allLinks.stream()
                     .filter(x -> x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
@@ -526,7 +872,7 @@ public class PceCalculation {
                     this.aendPceNode = pceNode;
                 }
             }
-            if (this.zendPceNode == null && isAZendPceNode(this.serviceFormatZ, pceNode, znodeId, "Z")) {
+            if (this.zendPceNode == null && isAZendPceNode(this.serviceFormatZ, pceNode, null, znodeId, "Z")) {
                 // Added to ensure Z-node has a droplink in the topology
                 List<Link> links = this.allLinks.stream()
                     .filter(x -> x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
@@ -544,11 +890,96 @@ public class PceCalculation {
         LOG.debug("validateNode: node is saved {}", pceNode.getNodeId().getValue());
     }
 
+
+    private void validateTapiNode(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Node node,
+            Uuid topoUuid, Preference portPreference) {
+        LOG.debug("validateNode: node {} ", node);
+        // PceNode will be used in Graph algorithm
+        if (OperationalState.DISABLED.equals(node.getOperationalState())) {
+            LOG.debug("getNodeType: node is ignored due to operational state - {}", node.getOperationalState()
+                .getName());
+            return;
+        }
+        var ton = new TapiOpticalNode(serviceType, portMapping, node, null,
+            BigDecimal.valueOf(12.5), BigDecimal.valueOf(6.25),
+            new Uuid(anodeId), new Uuid(znodeId),
+            new Uuid(input.getServiceAEnd().getTxDirection().getPort().getPortName()),
+            new Uuid(input.getServiceZEnd().getTxDirection().getPort().getPortName()),
+            input.getServiceAEnd().getServiceFormat(),
+            (McCapability) new McCapabilitiesBuilder()
+                .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25))))
+                .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5))))
+                .build());
+        ton.initialize();
+        Map<Uuid, PceTapiOpticalNode> ptonMap = new HashMap<>();
+        for (Map.Entry<Uuid, PceTapiOpticalNode> pton : ton.getPceNodeMap().entrySet()) {
+            if (!pton.getValue().isValid()) {
+                if (!validateNodeConstraints(pton.getValue()).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                    if (endTapiPceNode(pton.getValue().getORNodeType(), pton.getValue().getNodeId(), pton.getValue(),
+                            portPreference)) {
+                        // Add link not tested for Tapi Node, since they are are not part of the T-API topology and are
+                        // created automatically in a second step during the process of disaggregation of ROADM nodes
+                        // TODO : check how to pass portPreference to the function of TapiOpticalNode associated with
+                        // the initialization of SRG Tps.
+                    } else if (!pton.getValue().isValid()) {
+                      LOG.debug(" validateNode: Node {} is ignored", pton.getValue().getNodeId().getValue());
+                      continue;
+                    }
+                    ptonMap.put(pton.getKey(), pton.getValue());
+                }
+            }
+        }
+        if (ptonMap.isEmpty()) {
+            LOG.debug(" validateNode: Nodes {} are ignored", ptonMap.entrySet().stream()
+                .map(Map.Entry::getValue).collect(Collectors.toList()).stream()
+                .map(PceTapiOpticalNode::getNodeId).collect(Collectors.toList()));
+            return;
+        }
+        for (Map.Entry<Uuid, PceTapiOpticalNode> pceTapiOptNode : ptonMap.entrySet()) {
+            allPceNodes.put(new NodeId(pceTapiOptNode.getKey().getValue()), pceTapiOptNode.getValue());
+            LOG.debug("validateNode: node {} is saved", pceTapiOptNode.getValue().getNodeId());
+        }
+    }
+
+//    @SuppressWarnings("fallthrough")
+//    @SuppressFBWarnings(
+//        value = "SF_SWITCH_FALLTHROUGH",
+//        justification = "intentional fallthrough")
+//    private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode, String azNodeId, String azEndPoint) {
+//        switch (serviceFormat) {
+//            case "Ethernet":
+//            case "OC":
+//                if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
+//                    return true;
+//                }
+//            //fallthrough
+//            case "OTU":
+//            case "other":
+//                switch (azEndPoint) {
+//                    case "A":
+//                        return checkAendInputTxPortDeviceName()
+//                            && pceNode.getNodeId().getValue()
+//                                .equals(this.input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName());
+//                    case "Z":
+//                        return checkZendInputTxPortDeviceName()
+//                            && pceNode.getNodeId().getValue()
+//                                .equals(this.input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName());
+//                    default:
+//                        return false;
+//                }
+//            default:
+//                LOG.debug("Unsupported service Format {} for node {}", serviceFormat, pceNode.getNodeId().getValue());
+//                return false;
+//        }
+//    }
+
     @SuppressWarnings("fallthrough")
     @SuppressFBWarnings(
         value = "SF_SWITCH_FALLTHROUGH",
         justification = "intentional fallthrough")
-    private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode, String azNodeId, String azEndPoint) {
+    private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode1, PceTapiOpticalNode pceNode2,
+            String azNodeId, String azEndPoint) {
+        var pceNode = (pceNode1 == null) ? pceNode2 : pceNode1;
         switch (serviceFormat) {
             case "Ethernet":
             case "OC":
@@ -644,17 +1075,33 @@ public class PceCalculation {
         if (pceHardConstraints.getExcludeSRLG().isEmpty()) {
             return ConstraintTypes.NONE;
         }
-
         // for now SRLG is the only constraint for link
         if (link.getlinkType() != OpenroadmLinkType.ROADMTOROADM) {
             return ConstraintTypes.NONE;
         }
-
         List<Long> constraints = new ArrayList<>(pceHardConstraints.getExcludeSRLG());
         constraints.retainAll(link.getsrlgList());
         if (!constraints.isEmpty()) {
             LOG.debug("validateLinkConstraints: {}", link.getLinkId().getValue());
             return ConstraintTypes.HARD_EXCLUDE;
+        }
+        return ConstraintTypes.NONE;
+    }
+
+
+    private ConstraintTypes validateTapiLinkConstraints(PceTapiLink link) {
+        if (pceHardConstraints.getExcludeSRLG().isEmpty()) {
+            return ConstraintTypes.NONE;
+        }
+        // for now SRLG is the only constraint for link
+        if (link.getlinkType() != OpenroadmLinkType.ROADMTOROADM) {
+            return ConstraintTypes.NONE;
+        }
+        List<Long> constraints = new ArrayList<>(pceHardConstraints.getExcludeSRLG());
+        //constraints.retainAll(link.getsrlgList());
+        if (!constraints.isEmpty()) {
+            LOG.warn("Unable to map string SRLGs from TAPI into long SRLG of OR API (SRLG contraints not handled)");
+            return ConstraintTypes.NONE;
         }
 
         return ConstraintTypes.NONE;
@@ -667,6 +1114,17 @@ public class PceCalculation {
             allPceLinks.remove(opplink);
         } else {
             linksToExclude.add(opplink);
+        }
+    }
+
+
+    private void dropOppositeTapiLink(PceTapiLink link) {
+        Uuid opplinkUuid = link.getLinkId();
+
+        if (allPceLinks.containsKey(new LinkId(opplinkUuid.getValue()))) {
+            allPceLinks.remove(new LinkId(opplinkUuid.getValue()));
+        } else {
+            linksToExclude.add(new LinkId(opplinkUuid.getValue()));
         }
     }
 
@@ -692,6 +1150,29 @@ public class PceCalculation {
         return true;
     }
 
+
+    private Boolean endTapiPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceTapiOpticalNode pceNode,
+                               Preference portPreference) {
+        switch (openroadmNodeType) {
+            case SRG:
+                //TODO: implement portPreference
+                //pceNode.initSrgTps(portPreference);
+                this.azSrgs.add(nodeId);
+                break;
+            case XPONDER:
+                break;
+            default:
+                LOG.debug("endPceNode: Node {} is not SRG or XPONDER !", nodeId);
+                return false;
+        }
+
+        if (!pceNode.isValid()) {
+            LOG.error("validateNode : there are no available frequencies in node {}", pceNode.getNodeId().getValue());
+            return false;
+        }
+        return true;
+    }
+
     private boolean processPceLink(Link link, NodeId sourceId, NodeId destId, PceNode source, PceNode dest) {
         PceORLink pcelink = new PceORLink(link, source, dest);
         if (!pcelink.isValid()) {
@@ -702,6 +1183,80 @@ public class PceCalculation {
         LinkId linkId = pcelink.getLinkId();
         if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             dropOppositeLink(link);
+            LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+            return false;
+        }
+        switch (pcelink.getlinkType()) {
+            case ROADMTOROADM:
+            case EXPRESSLINK:
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
+                    pcelink.getlinkType(), pcelink);
+                break;
+            case ADDLINK:
+                pcelink.setClientA(
+                    source.getRdmSrgClient(pcelink.getSourceTP().getValue(), StringConstants.SERVICE_DIRECTION_AZ));
+                addLinks.add(pcelink);
+                LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
+                break;
+            case DROPLINK:
+                pcelink.setClientZ(
+                    dest.getRdmSrgClient(pcelink.getDestTP().getValue(), StringConstants.SERVICE_DIRECTION_ZA));
+                dropLinks.add(pcelink);
+                LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
+                break;
+            case XPONDERINPUT:
+                // store separately all SRG links directly
+                azSrgs.add(sourceId);
+                // connected to A/Z
+                if (!dest.checkTP(pcelink.getDestTP().getValue())) {
+                    LOG.debug(
+                        "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
+                    return false;
+                }
+                if (dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()) != null) {
+                    pcelink.setClientZ(dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()));
+                }
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
+                break;
+            // does it mean XPONDER==>>SRG ?
+            case XPONDEROUTPUT:
+                // store separately all SRG links directly
+                azSrgs.add(destId);
+                // connected to A/Z
+                if (!source.checkTP(pcelink.getSourceTP().getValue())) {
+                    LOG.debug(
+                        "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
+                    return false;
+                }
+                if (source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()) != null) {
+                    pcelink.setClientA(source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()));
+                }
+                allPceLinks.put(linkId, pcelink);
+                source.addOutgoingLink(pcelink);
+                LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
+                break;
+            default:
+                LOG.warn("validateLink: link type is not supported {}", pcelink);
+        }
+        return true;
+    }
+
+    private boolean processTapiLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+            .topology.Link link, Uuid topoUuid, PceNode source, PceNode dest) {
+        PceTapiLink pcelink = new PceTapiLink(new TopologyKey(topoUuid), link, source, dest);
+        if (!pcelink.isValid()) {
+            dropOppositeTapiLink(pcelink);
+            LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+            return false;
+        }
+        LinkId linkId = new LinkId(pcelink.getLinkId().getValue());
+        if (validateTapiLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+            // Will go through this loop : TPAI SRLG handled as string currently not handled (OR SRLG are longs)
+            dropOppositeTapiLink(pcelink);
             LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
             return false;
         }

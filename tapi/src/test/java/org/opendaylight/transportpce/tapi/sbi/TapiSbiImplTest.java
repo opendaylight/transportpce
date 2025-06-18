@@ -35,7 +35,7 @@ public class TapiSbiImplTest extends AbstractTest {
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
         TopologyDataUtils.writeTapiTopologyFromFileToDatastore(getDataStoreContextUtil(),
-                TapiTopologyDataUtils.TAPI_SBI_TOPOLOGY_FILE, TapiConstants.TAPI_TOPOLOGY_II);
+                TapiTopologyDataUtils.TAPI_SBI_TOPOLOGY_FILE, TapiConstants.TAPI_TOPOLOGY_T0_FULL_IID);
         LOG.info("setup done");
     }
 
@@ -61,7 +61,7 @@ public class TapiSbiImplTest extends AbstractTest {
     void getTapiTopology() throws InterruptedException, ExecutionException {
         LOG.info("test getTapiTopologyContext");
         Topology topology = (Topology) TopologyDataUtils.readTapiTopologyFromDatastore(getDataStoreContextUtil(),
-                TapiConstants.TAPI_TOPOLOGY_II);
+                TapiConstants.TAPI_TOPOLOGY_T0_FULL_IID);
         assertNotNull(topology, "TAPI Topology should not be null");
         LOG.info(topology.toString());
     }
