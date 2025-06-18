@@ -91,6 +91,7 @@ public class TapiOpticalNode {
     private Uuid zzNodeId;
     private Uuid aaPortId;
     private Uuid zzPortId;
+    private Uuid topoUuid;
     private ServiceFormat servFormat;
     private String version;
     private McCapability mcCapability;
@@ -1492,6 +1493,9 @@ public class TapiOpticalNode {
 
                 PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
                     OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability);
+                for (Uuid invalidNepUuid : this.invalidNwNepList) {
+                    xpdr.setUsedXpndrNWTps(List.of(invalidNepUuid.getValue()));
+                }
                 xpdr.initXndrTps(servFormat);
                 xpdr.initFrequenciesBitSet();
                 LOG.info("TapiOpticalNode: Node Id: {}, Name : {} has been created and validated",
@@ -2714,6 +2718,23 @@ public class TapiOpticalNode {
      */
     public Map<Uuid, PceTapiLink> getPceInternalLinkMap() {
         return this.pceInternalLinkMap;
+    }
+
+
+    /**
+     * Provides the Uuid of the topology the Tapi Optical Node belongs to.
+     * @return  Uuid of the topology.
+     */
+    public Uuid getTopoUuid() {
+        return this.topoUuid;
+    }
+
+    /**
+     * Sets topology Uuid of the Tapi Optical Node.
+     * @param topologyUuid is the Uuid of the topology the Tapi Optical Node belongs to.
+     */
+    public void setTopoUuid(Uuid topologyUuid) {
+        this.topoUuid = topologyUuid;
     }
 
     /**
