@@ -19,10 +19,10 @@ else
 fi
 
 #download maven image 3.9.8 and install it
-wget -nv https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz -P /tmp
+wget -nv https://dlcdn.apache.org/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.tar.gz -P /tmp
 sudo mkdir -p /opt
-sudo tar xf /tmp/apache-maven-3.9.8-bin.tar.gz -C /opt
-sudo ln -s /opt/apache-maven-3.9.8 /opt/maven
+sudo tar xf /tmp/apache-maven-3.9.10-bin.tar.gz -C /opt
+sudo ln -s /opt/apache-maven-3.9.10 /opt/maven
 sudo ln -s /opt/maven/bin/mvn /usr/bin/mvn
 
 mvn --version
