@@ -82,7 +82,7 @@
   </availableSrgCp>
   <usedXpndrNWTps/>
   <outgoingLinks>
-    <org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
+    <org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
       <weight>0.0</weight>
       <isValid>true</isValid>
       <clientA>SRG13-PP1-TXRX</clientA>
@@ -120,8 +120,8 @@
       <pmd2>0.0</pmd2>
       <spanLoss>0.0</spanLoss>
       <powerCorrection>0.0</powerCorrection>
-    </org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
-    <org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
+    </org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
+    <org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
       <weight>0.0</weight>
       <isValid>true</isValid>
       <clientA></clientA>
@@ -159,7 +159,7 @@
       <pmd2>0.0</pmd2>
       <spanLoss>0.0</spanLoss>
       <powerCorrection>0.0</powerCorrection>
-    </org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
+    </org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
   </outgoingLinks>
   <clientPerNwTp/>
   <freqMapKey>
