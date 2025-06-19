@@ -46,7 +46,7 @@ public interface PceNode {
      * Adds to the PceNode's List of outgoing links, a Pce Link.
      * @param outLink     The PceLink connected to the PceNode
      */
-    void addOutgoingLink(PceLink outLink);
+    void addOutgoingLink(PceORLink outLink);
 
     /**
      * For ROADM SRG (Add/drop) Nodes, provides the Id of a PP termination point connected to input Tp.
@@ -72,7 +72,7 @@ public interface PceNode {
      * For any kind of PceNodes return the list of connected links.
      * @return  List of PceLink
      */
-    List<PceLink> getOutgoingLinks();
+    List<PceORLink> getOutgoingLinks();
 
     /**
      * Provides Administrative state for nodes in OpenROADM topology.

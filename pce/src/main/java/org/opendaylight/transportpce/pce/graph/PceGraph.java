@@ -30,7 +30,7 @@ import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.input.ClientInput;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
@@ -51,7 +51,7 @@ public class PceGraph {
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
-    private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
+    private Map<LinkId, PceORLink> allPceLinks = new HashMap<>();
     private PceNode apceNode = null;
     private PceNode zpceNode = null;
     private String serviceType = "";
@@ -63,17 +63,17 @@ public class PceGraph {
 
     // results
     private PceResult pceResult = null;
-    private List<PceLink> shortestPathAtoZ = null;
+    private List<PceORLink> shortestPathAtoZ = null;
 
     // for path calculation
     Map<Integer, GraphPath<String, PceGraphEdge>> allWPaths = null;
 
-    private List<PceLink> pathAtoZ = new ArrayList<>();
+    private List<PceORLink> pathAtoZ = new ArrayList<>();
 
     private final NetworkTransactionService networkTransactionService;
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
+            Map<LinkId, PceORLink> allPceLinks, PceConstraints pceHardConstraints,PceResult pceResult, String serviceType,
             NetworkTransactionService networkTransactionService, PceConstraintMode mode, BitSet spectrumConstraint,
             ClientInput clientInput) {
         super();
@@ -203,7 +203,7 @@ public class PceGraph {
         return true;
     }
 
-    private boolean validateLinkforGraph(PceLink pcelink) {
+    private boolean validateLinkforGraph(PceORLink pcelink) {
 
         PceNode source = allPceNodes.get(pcelink.getSourceId());
         PceNode dest = allPceNodes.get(pcelink.getDestId());
@@ -239,11 +239,11 @@ public class PceGraph {
             Map.Entry<NodeId, PceNode> node = nodes.next();
 
             PceNode pcenode = node.getValue();
-            List<PceLink> links = pcenode.getOutgoingLinks();
+            List<PceORLink> links = pcenode.getOutgoingLinks();
 
             LOG.debug("In populateGraph: use node for graph {}", pcenode);
 
-            for (PceLink link : links) {
+            for (PceORLink link : links) {
                 LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode, link);
 
                 if (!validateLinkforGraph(link)) {
@@ -260,7 +260,7 @@ public class PceGraph {
         return true;
     }
 
-    private double chooseWeight(PceLink link) {
+    private double chooseWeight(PceORLink link) {
         // HopCount is default
         double weight = 1;
         switch (pceHardConstraints.getPceMetrics()) {
@@ -296,7 +296,7 @@ public class PceGraph {
         this.kpathsToBring = kpathsToBring;
     }
 
-    public List<PceLink> getPathAtoZ() {
+    public List<PceORLink> getPathAtoZ() {
         return shortestPathAtoZ;
     }
 

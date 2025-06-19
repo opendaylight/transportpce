@@ -107,18 +107,18 @@ public class ConvertTopoORtoTapiNbi {
                 .networks.network.Link> otnLinkMap) {
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link> otnLinkList = new ArrayList<>(otnLinkMap.values());
-        Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue().compareTo(l2.getLinkId().getValue()));
+        Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkUuid().getValue().compareTo(l2.getLinkUuid().getValue()));
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} otn links", otnLinkMap.size() / 2);
         for (var otnlink : otnLinkList) {
-            String otnlinkId = otnlink.getLinkId().getValue();
+            String otnlinkId = otnlink.getLinkUuid().getValue();
             if (linksToNotConvert.contains(otnlinkId)) {
                 continue;
             }
             var otnlinkAug = otnlink.augmentation(Link1.class);
             var oppositeLink = otnLinkMap.get(
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.LinkKey(otnlinkAug.getOppositeLink()));
+                    .networks.network.LinkKey(otnlinkAug.getOppositeLinkUuid()));
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
             String oppositeLinkId = null;
@@ -126,7 +126,7 @@ public class ConvertTopoORtoTapiNbi {
                 var oppositeLinkAug = oppositeLink.augmentation(Link1.class);
                 oppLnkAdmState = oppositeLinkAug.getAdministrativeState();
                 oppLnkOpState = oppositeLinkAug.getOperationalState();
-                oppositeLinkId = oppositeLink.getLinkId().getValue();
+                oppositeLinkId = oppositeLink.getLinkUuid().getValue();
             }
             // TODO: Handle not only OTU4 but also other cases
             String prefix = otnlinkId.split("-")[0];

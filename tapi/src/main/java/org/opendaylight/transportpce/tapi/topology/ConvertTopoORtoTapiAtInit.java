@@ -117,13 +117,13 @@ public class ConvertTopoORtoTapiAtInit {
         List<String> linksToNotConvert = new ArrayList<>();
         LOG.info("creation of {} roadm to roadm links", rdmTordmLinkList.size() / 2);
         for (var link : rdmTordmLinkList) {
-            if (linksToNotConvert.contains(link.getLinkId().getValue())) {
+            if (linksToNotConvert.contains(link.getLinkUuid().getValue())) {
                 continue;
             }
             var lnk1 = link.augmentation(Link1.class);
-            var lnk1OppLnk = lnk1.getOppositeLink();
+            var lnk1OppLnk = lnk1.getOppositeLinkUuid();
             var oppositeLink = rdmTordmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(lnk1OppLnk))
+                .filter(l -> l.getLinkUuid().equals(lnk1OppLnk))
                 .findAny().orElse(null);
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
@@ -633,11 +633,11 @@ public class ConvertTopoORtoTapiAtInit {
         LOG.info("creation of {} xpdr to roadm links", xpdrRdmLinkList.size() / 2);
         LOG.debug("Link list = {}", xpdrRdmLinkList);
         for (var link:xpdrRdmLinkList) {
-            if (linksToNotConvert.contains(link.getLinkId().getValue())) {
+            if (linksToNotConvert.contains(link.getLinkUuid().getValue())) {
                 continue;
             }
             var oppositeLink = xpdrRdmLinkList.stream()
-                .filter(l -> l.getLinkId().equals(link.augmentation(Link1.class).getOppositeLink()))
+                .filter(l -> l.getLinkUuid().equals(link.augmentation(Link1.class).getOppositeLinkUuid()))
                 .findAny().orElse(null);
             AdminStates oppLnkAdmState = null;
             State oppLnkOpState = null;
@@ -672,7 +672,7 @@ public class ConvertTopoORtoTapiAtInit {
                         link.augmentation(Link1.class).getOperationalState(), oppLnkOpState).getName(),
                 Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
                 this.tapiTopoUuid);
-            linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLink().getValue());
+            linksToNotConvert.add(link.augmentation(Link1.class).getOppositeLinkUuid().getValue());
             this.tapiLinks.put(tapLink.key(), tapLink);
         }
     }

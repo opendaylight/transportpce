@@ -496,7 +496,7 @@ public class DowngradeConstraintsTest {
         assertEquals(1, genSoftConstraints.getExclude().getLinkIdentifier().size(),
             "generated soft constraints should contain exclude constraint with one link-id");
         assertEquals("link-id 1",
-            genSoftConstraints.getExclude().getLinkIdentifier().stream().findAny().orElseThrow().getLinkId());
+            genSoftConstraints.getExclude().getLinkIdentifier().stream().findAny().orElseThrow().getLinkUuid());
         assertEquals("openroadm-topology",
             genSoftConstraints.getExclude().getLinkIdentifier().stream().findAny().orElseThrow()
                 .getLinkNetworkId());

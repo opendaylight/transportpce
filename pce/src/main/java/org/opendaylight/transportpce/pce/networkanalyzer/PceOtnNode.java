@@ -105,7 +105,7 @@ public class PceOtnNode implements PceNode {
     private List<TpId> availableXpdrClientTps;
     private List<TpId> usableXpdrClientTps;
 
-    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private List<PceORLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private String clientPort;
 
@@ -481,17 +481,17 @@ public class PceOtnNode implements PceNode {
     }
 
     @Override
-    public void addOutgoingLink(PceLink outLink) {
+    public void addOutgoingLink(PceORLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
     @Override
-    public List<PceLink> getOutgoingLinks() {
+    public List<PceORLink> getOutgoingLinks() {
         return outgoingLinks;
     }
 
     @Override
-    public AdminStates getAdminStates() {
+    public AdminStates getAdministrativeState() {
         return adminStates;
     }
 

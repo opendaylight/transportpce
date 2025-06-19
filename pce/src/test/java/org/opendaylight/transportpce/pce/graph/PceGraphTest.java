@@ -50,7 +50,7 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.frequency.interval.EntireSpectrum;
 import org.opendaylight.transportpce.pce.input.ClientInput;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOtnNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -112,12 +112,12 @@ public class PceGraphTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(PceGraphTest.class);
     private Link link1 = null;
     private Node node = null;
-    private PceLink pceLink1 = null;
+    private PceORLink pceLink1 = null;
     private PceGraph pceGraph = null;
     private PceConstraints pceHardConstraints = null;
     private PceResult rc = null;
     private Map<NodeId, PceNode> allPceNodes = null;
-    private Map<LinkId, PceLink> allPceLinks = null;
+    private Map<LinkId, PceORLink> allPceLinks = null;
     private static final String CATALOG_FILE = "src/test/resources/apidocCatalog12_0-OptSpecV5_1.json";
     private static final String MAPPING_FILE = "src/test/resources/topologyData/portMapping2.json";
     private static OperationalModeCatalog omCatalog;
@@ -414,7 +414,7 @@ public class PceGraphTest extends AbstractTest {
         pceOtnNode2.checkAvailableTribPort();
         pceOtnNode2.checkAvailableTribSlot();
 
-        pceLink1 = new PceLink(link1, pceOtnNode, pceOtnNode2);
+        pceLink1 = new PceORLink(link1, pceOtnNode, pceOtnNode2);
         pceLink1.setClientA("XPONDER-CLIENT");
 
         pceLink1.getDestId();

@@ -66,7 +66,7 @@ public class PceOpticalNode implements PceNode {
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<>();
     private List<String> usedXpndrNWTps = new ArrayList<>();
-    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private List<PceORLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
     private BitSet frequenciesBitSet;
@@ -465,12 +465,12 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public List<PceLink> getOutgoingLinks() {
+    public List<PceORLink> getOutgoingLinks() {
         return outgoingLinks;
     }
 
     @Override
-    public AdminStates getAdminStates() {
+    public AdminStates getAdministrativeState() {
         return adminStates;
     }
 
@@ -520,7 +520,7 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public void addOutgoingLink(PceLink outLink) {
+    public void addOutgoingLink(PceORLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 

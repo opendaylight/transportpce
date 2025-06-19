@@ -217,13 +217,13 @@ public class PceConstraintsCalc {
             return aToZ.getResource().getResource() instanceof Link;
         }).filter(aToZ -> {
             Link link = (Link) aToZ.getResource().getResource();
-            if (link.getLinkId() == null) {
+            if (link.getLinkUuid() == null) {
                 LOG.warn("Link in AToZ link {} contains null! Skipping this link!", aToZ.getId());
                 return false;
             }
             return true;
         }).map(aToZ -> {
-            return ((Link) aToZ.getResource().getResource()).getLinkId();
+            return ((Link) aToZ.getResource().getResource()).getLinkUuid();
         }).collect(Collectors.toList());
     }
 

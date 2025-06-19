@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,9 +16,14 @@ import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev230526.span.attributes.LinkConcatenation1.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
@@ -42,7 +48,7 @@ import org.slf4j.LoggerFactory;
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings({ "SE_BAD_FIELD", "SE_TRANSIENT_FIELD_NOT_RESTORED",
     "SE_NO_SERIALVERSIONID" })
 
-public class PceTapiLink implements Serializable {
+public class PceTapiLink implements Serializable, PceLink {
 
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceTapiLink.class);
@@ -884,92 +890,193 @@ public class PceTapiLink implements Serializable {
         return true;
     }
 
-    /**
-     * Sets the opposite linkId.
-     * @param oppositeLinkId  Uuid of the opposite link.
-     */
-    public void setOppositeLink(Uuid oppositeLinkId) {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#setOppositeLinkUuid()
+    */
+    @Override
+    public void setOppositeLinkUuid(Uuid oppositeLinkId) {
         this.oppositeLink = oppositeLinkId;
     }
 
-    /**
-     * Provides the result of the validity check for any kind of T-API PceLinks.
-     * @return  Boolean set to true if the link is considered as valide, false otherwise.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#isValid()
+    */
+    @Override
     public boolean isValid() {
         return this.isValid;
     }
 
-    /**
-     * Provides the Id of the opposite Link.
-     * @return  Uuid of the opposite ink.
-     */
-    public Uuid getOppositeLink() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getOppositeLink()
+    */
+    @Override
+    public LinkId getOppositeLink() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getOppositeLink()
+    */
+    @Override
+    public Uuid getOppositeLinkUuid() {
         return oppositeLink;
     }
 
-    /**
-     * Provides the administrative state of the T-API Pcelink.
-     * @return AdministrativeState (T-API)
-     */
-    public AdministrativeState getAdminStates() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getAdminStates()
+    */
+    @Override
+    public AdminStates getAdminStates() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getAdministrativeState()
+    */
+    @Override
+    public AdministrativeState getAdministrativeState() {
         return adminStates;
     }
 
-    /**
-     * Provides the operational state of the T-API Pcelink.
-     * @return OperationalState (T-API)
-     */
-    public OperationalState getState() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getOperationalState()
+    */
+    @Override
+    public OperationalState getOperationalState() {
         return opState;
     }
 
-    /**
-     * Provides the T-API sourceTpId.
-     * @return  Uuid of the source .
-     */
-    public Uuid getSourceTP() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getState()
+    */
+    @Override
+    public State getState() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceTP()
+    */
+    @Override
+    public TpId getSourceTP() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceTPUuid()
+    */
+    @Override
+    public Uuid getSourceTPUuid() {
         return sourceTpId;
     }
 
-    /**
-     * Provides the T-API destTpId.
-     * @return  Uuid of the destination Tp.
-     */
-    public Uuid getDestTP() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestTP()
+    */
+    @Override
+    public TpId getDestTP() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestTPUuid()
+    */
+    @Override
+    public Uuid getDestTPUuid() {
         return destTpId;
     }
 
-    /**
-     * Provides the linkType as defined by the corresponding OpenROADM enumeration.
-     * @return linkType as defined by the corresponding OpenROADM enumeration : EXPRESS-LINK, ADD-LINK, DROP-LINK,
-     *         ROADM-TO-ROADM, XPONDER-INPUT, XPONDER-OUTPUT, OTN-LINK, REGEN-INPUT, REGEN-OUTPUT, TURNBACK-LINK.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getlinkType()
+    */
+    @Override
     public OpenroadmLinkType getlinkType() {
         return linkType;
     }
 
-    /**
-     * Provides the Uuid corresponding to the LinkId.
-     * @return      Uuid of the link.
-     */
-    public Uuid getLinkId() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLinkId()
+    */
+    @Override
+    public LinkId getLinkId() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLinkUuid()
+    */
+    @Override
+    public Uuid getLinkUuid() {
         return linkId;
     }
 
-    /**
-     * Provides the Uuid corresponding to the Source TP of the link.
-     * @return      Uuid of the source Tp.
-     */
-    public Uuid getSourceId() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceId()
+    */
+    @Override
+    public NodeId getSourceId() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceUuid()
+    */
+    @Override
+    public Uuid getSourceUuid() {
         return sourceNodeId;
     }
 
-    /**
-     * Provides the Uuid corresponding to the destination TP of the link.
-     * @return      Uuid of the destination Tp.
-     */
-    public Uuid getDestId() {
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestId()
+    */
+    @Override
+    public NodeId getDestId() {
+        return null;
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestId()
+    */
+    @Override
+    public Uuid getDestUuid() {
         return destNodeId;
     }
 
@@ -989,10 +1096,12 @@ public class PceTapiLink implements Serializable {
         return client;
     }
 
-    /**
-     * Provides link length for physical optical links.
-     * @return  Double which corresponds to the link length expressed in kms.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLength()
+    */
+    @Override
     public Double getLength() {
         return length;
     }
@@ -1005,10 +1114,12 @@ public class PceTapiLink implements Serializable {
         this.client = client;
     }
 
-    /**
-     * Provides latency of the link (evaluated only for physical optical link at that time).
-     * @return  Double for transformer of JUNG graph.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLatency()
+    */
+    @Override
     public Double getLatency() {
         if (latency == null) {
             return 0.0;
@@ -1016,74 +1127,102 @@ public class PceTapiLink implements Serializable {
         return latency.doubleValue();
     }
 
-    /**
-     * Provides available bandwidth associated with OTN links.
-     * @return  Double corresponding to available bandwidth expressed in Gbit/s.
-     */
-    public Double getAvailableBandwidth() {
-        return availableBandwidth;
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getAvailableBandwidth()
+    */
+    @Override
+    public Long getAvailableBandwidth() {
+        return availableBandwidth.longValue();
     }
 
-    /**
-     * Provides used bandwidth associated with OTN links.
-     * @return  Double corresponding to used bandwidth expressed in Gbit/s.
-     */
-    public Double getUsedBandwidth() {
-        return usedBandwidth;
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getUsedBandwidth()
+    */
+    @Override
+    public Long getUsedBandwidth() {
+        return usedBandwidth.longValue();
     }
 
-    /**
-     * Provides the Id of the source Network Supporting Node of any kind of links.
-     * @return  String that corresponds to the supporting Node Id.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getsourceNetworkSupNodeId()
+    */
+    @Override
     public String getsourceNetworkSupNodeId() {
         return sourceNetworkSupNodeId;
     }
 
-    /**
-     * Provides the Id of the destination Network Supporting Node of any kind of links.
-     * @return  String that corresponds to the supporting Node Id.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getdestNetworkSupNodeId()
+    */
+    @Override
     public String getdestNetworkSupNodeId() {
         return destNetworkSupNodeId;
     }
 
-    /**
-     * Provides the SRG list of the link (not handled at that time for T-API links).
-     * @return   An empty set of strings.
-     */
-    public Set<String> getsrlgList() {
-        return srlgList;
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getsrlgList()
+    */
+    @Override
+    public List<Long> getsrlgList() {
+        List<Long> convertedList = new ArrayList<>();
+        boolean error = false;
+        for (String entry : srlgList) {
+            if(Long.valueOf(entry) != null) {
+                convertedList.add(Long.valueOf(entry));
+            } else {
+                error = true;
+                break;
+            }
+        }
+        return (error) ? null : convertedList;
     }
 
-    /**
-     * Provides the span loss of an optical physical link.
-     * @return  Double wich corresponds to the fiber loss , expressed in dB, 0 for OTN links.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getspanLoss()
+    */
+    @Override
     public Double getspanLoss() {
         return spanLoss;
     }
 
-    /**
-     * Provides the Chromatic dispersion associated with the physical optical link.
-     * @return  Double value of the Chromatic dispersion calculated for the link expressed in ps, 0 for OTN links.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getcd()()
+    */
+    @Override
     public Double getcd() {
         return cd;
     }
 
-    /**
-     * Provides the square value of the mean PMD calculated for the physical optical link.
-     * @return  Double value of the square of the mean PMD value expressed in ps2/km, 0 for OTN links.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getpmd2()
+    */
+    @Override
     public Double getpmd2() {
         return pmd2;
     }
 
-    /**
-     * Provides the correction (according to fiber type) to be applied on target power calculations for optical links.
-     * @return  Double corresponding to the correction to be applied (added to calculated power) in dB.
-     */
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getpowerCorrection()
+    */
+    @Override
     public Double getpowerCorrection() {
         return powerCorrection;
     }

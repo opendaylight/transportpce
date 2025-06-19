@@ -194,7 +194,7 @@ public class PceTapiOtnNode implements PceNode {
     private List<BasePceNep> availableXpdrClientTps;
     private List<BasePceNep> usableXpdrClientTps;
 
-    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private List<PceORLink> outgoingLinks = new ArrayList<>();
     private Uuid clientPortId;
     private String supConLayer;
     private TapiOpticalNode tapiON;
@@ -852,17 +852,17 @@ public class PceTapiOtnNode implements PceNode {
     }
 
     @Override
-    public void addOutgoingLink(PceLink outLink) {
+    public void addOutgoingLink(PceORLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
     @Override
-    public List<PceLink> getOutgoingLinks() {
+    public List<PceORLink> getOutgoingLinks() {
         return outgoingLinks;
     }
 
     @Override
-    public AdminStates getAdminStates() {
+    public AdminStates getAdministrativeState() {
         return null;
     }
 

@@ -2068,7 +2068,7 @@ public class TapiOpticalNode {
 
         for (Map.Entry<Uuid, IntLinkObj> linkTBC : internalLinkMap.entrySet()) {
             LOG.debug("TONLine2068 Link to be configure = {}",
-                linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue());
+                linkTBC.getValue().getLinkUuid().entrySet().iterator().next().getValue());
             LOG.debug("TONLine2070 bindingVNepToSubnodeMap = {}", bindingVNepToSubnodeMap);
             LOG.debug("TONLine2071 Link to be configure ORG = {} DEST = {}",
                 linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid());
@@ -2080,7 +2080,7 @@ public class TapiOpticalNode {
                 .filter(vts -> vts.getKey()
                     .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue());
             this.pceInternalLinkMap.put(linkTBC.getKey(),
-                new PceTapiLink(linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue(),
+                new PceTapiLink(linkTBC.getValue().getLinkUuid().entrySet().iterator().next().getValue(),
                     linkTBC.getKey(), linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid(),
                     pceNodeMap.get(bindingVNepToSubnodeMap.entrySet().stream()
                         .filter(vts -> vts.getKey()

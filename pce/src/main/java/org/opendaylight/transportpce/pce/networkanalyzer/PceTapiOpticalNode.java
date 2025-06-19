@@ -61,7 +61,7 @@ public class PceTapiOpticalNode implements PceNode {
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<>();
     private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<>();
     private List<String> usedXpndrNWTps = new ArrayList<>();
-    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private List<PceORLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private BitSet frequenciesBitSet;
     private String version;
@@ -496,7 +496,7 @@ public class PceTapiOpticalNode implements PceNode {
      * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getOutgoingLinks()
      */
     @Override
-    public List<PceLink> getOutgoingLinks() {
+    public List<PceORLink> getOutgoingLinks() {
         return outgoingLinks;
     }
 
@@ -505,7 +505,7 @@ public class PceTapiOpticalNode implements PceNode {
      * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getAdminStates()
      */
     @Override
-    public AdminStates getAdminStates() {
+    public AdminStates getAdministrativeState() {
         return null;
     }
 
@@ -595,7 +595,7 @@ public class PceTapiOpticalNode implements PceNode {
      * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#addOutgoingLink()
      */
     @Override
-    public void addOutgoingLink(PceLink outLink) {
+    public void addOutgoingLink(PceORLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
