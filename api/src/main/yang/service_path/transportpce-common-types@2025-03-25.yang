@@ -524,6 +524,18 @@ module transportpce-common-types {
     leaf service-name {
       type string;
     }
+    container optical-operational-mode {
+      leaf az-operational-mode {
+        type string;
+        description
+              "Optical operational mode on the AZ-side";
+      }
+      leaf za-operational-mode {
+        type string;
+          description
+              "Optical operational mode on the ZA-side";
+      }
+    }
     leaf wave-number {
       type uint32;
     }
