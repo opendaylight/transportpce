@@ -67,7 +67,7 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 public class PceLinkTest extends AbstractTest {
 
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
-    private PceLink pceLink = null;
+    private PceORLink pceLink = null;
     private String deviceNodeId = "device node";
     private String deviceNodeId2 = "device node 2";
     private String serviceType = "100GE";
@@ -78,7 +78,7 @@ public class PceLinkTest extends AbstractTest {
     @Test
     void testBuildPceLinkRoadmToRoadm() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             createRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -92,7 +92,7 @@ public class PceLinkTest extends AbstractTest {
     void testBuildPceLinkRoadmToRoadmWithoutPMD() {
         Link link = createRoadmToRoadmWithoutPMD("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -110,7 +110,7 @@ public class PceLinkTest extends AbstractTest {
     @Test
     void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             createRoadmToRoadmWithoutLinkLatency("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -124,7 +124,7 @@ public class PceLinkTest extends AbstractTest {
     void testBuildPceLinkOTN() {
         // TODO: Modify with OTN node not PceOpticalNode
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             createOTNLink("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SWITCH, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -137,7 +137,7 @@ public class PceLinkTest extends AbstractTest {
     @Test
     void testBuildPceLinkExponder() {
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             createXponderLink("srcNode", "destNode", "srcTp", "destTp").build(),
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -151,7 +151,7 @@ public class PceLinkTest extends AbstractTest {
     void testCalcSpanOSNR() {
         Link link = createRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -191,7 +191,7 @@ public class PceLinkTest extends AbstractTest {
     void testWrongSpanLoss() {
         Link link = createInvalidRoadmToRoadm("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
@@ -209,7 +209,7 @@ public class PceLinkTest extends AbstractTest {
     void testExtrapolatedPMD() {
         Link link = createRoadmToRoadmWithoutPMD("srcNode", "destNode", "srcTp", "destTp").build();
         Node node = getNodeBuilder(geSupportingNodes()).setNodeId(new NodeId("test")).build();
-        pceLink = new PceLink(
+        pceLink = new PceORLink(
             link,
             new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
