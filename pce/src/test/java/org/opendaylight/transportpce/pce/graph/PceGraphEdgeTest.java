@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.transportpce.pce.utils.NodeUtils;
@@ -30,7 +30,7 @@ public class PceGraphEdgeTest {
 
     private Link link = null;
     private Node node = null;
-    private PceLink pceLink = null;
+    private PceORLink pceLink = null;
     private PceGraphEdge pceGraphEdge = null;
     private String deviceNodeId = "device node";
     private String serviceType = "100GE";
@@ -50,7 +50,7 @@ public class PceGraphEdgeTest {
         PceOpticalNode pceOpticalNode2 = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1,
                 new NodeMcCapability());
-        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
+        pceLink = new PceORLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClientA("XPONDER-CLIENT");
 
         pceGraphEdge = new PceGraphEdge(pceLink);

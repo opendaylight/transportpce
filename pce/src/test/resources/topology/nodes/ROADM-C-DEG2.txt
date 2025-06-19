@@ -23,7 +23,7 @@
   <availableSrgCp class="tree-map"/>
   <usedXpndrNWTps/>
   <outgoingLinks>
-    <org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
+    <org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
       <weight>0.0</weight>
       <isValid>true</isValid>
       <clientA></clientA>
@@ -64,7 +64,7 @@
       <pmd2>0.16000000000000003</pmd2>
       <spanLoss>19.7</spanLoss>
       <powerCorrection>0.0</powerCorrection>
-    </org.opendaylight.transportpce.pce.networkanalyzer.PceLink>
+    </org.opendaylight.transportpce.pce.networkanalyzer.PceORLink>
   </outgoingLinks>
   <clientPerNwTp/>
   <freqMapKey>
