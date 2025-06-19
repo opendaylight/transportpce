@@ -38,8 +38,8 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair
 import org.opendaylight.transportpce.pce.frequency.FrequencySelectionFactory;
 import org.opendaylight.transportpce.pce.frequency.Select;
 import org.opendaylight.transportpce.pce.input.ClientInput;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.spectrum.assignment.Assign;
 import org.opendaylight.transportpce.pce.spectrum.assignment.AssignSpectrumHighToLow;
@@ -91,7 +91,7 @@ public class PostAlgoPathValidator {
         value = "SF_SWITCH_FALLTHROUGH",
         justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
+            Map<LinkId, PceORLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
             String serviceType, PceConstraintMode mode) {
         LOG.info("path = {}", path);
         // check if the path is empty
@@ -410,7 +410,7 @@ public class PostAlgoPathValidator {
     }
 
     private double checkOSNR(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
+            Map<LinkId, PceORLink> allPceLinks, String serviceType, String direction, CatalogUtils cu) {
         switch (direction) {
             case StringConstants.SERVICE_DIRECTION_AZ:
                 return checkOSNRaz(path, allPceNodes, allPceLinks, serviceType, cu);
@@ -433,7 +433,7 @@ public class PostAlgoPathValidator {
      * @return the calculated margin according to the Transponder performances and path impairments.
      */
     private double checkOSNRaz(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<LinkId, PceORLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -507,7 +507,7 @@ public class PostAlgoPathValidator {
                         LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                             currentNode.getNodeId(), pathElement - 1);
                     }
-                    PceLink pceLink = edges.get(pathElement - 2).link();
+                    PceORLink pceLink = edges.get(pathElement - 2).link();
                     LOG.info("loop of check OSNR : SRG, pathElement = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement - 2, pceLink.getcd());
                     calcDropContrib(cu, signal, currentNode, pceLink);
@@ -578,7 +578,7 @@ public class PostAlgoPathValidator {
                     LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                         currentNode.getNodeId(), vertices.size() - 2);
                 }
-                PceLink pceLink = edges.get(vertices.size() - 3).link();
+                PceORLink pceLink = edges.get(vertices.size() - 3).link();
                 LOG.info("loop of check OSNR : SRG, pathElement = {} CD on preceeding link {} = {} ps",
                     vertices.size() - 1, vertices.size() - 3, pceLink.getcd());
                 calcDropContrib(cu, signal, currentNode, pceLink);
@@ -637,7 +637,7 @@ public class PostAlgoPathValidator {
      * @return the calculated margin according to the Transponder performances and path impairments.
      */
     private double checkOSNRza(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
-            Map<LinkId, PceLink> allPceLinks, String serviceType, CatalogUtils cu) {
+            Map<LinkId, PceORLink> allPceLinks, String serviceType, CatalogUtils cu) {
         Map<String, Double> signal = new HashMap<>(
             Map.of(
                 "spacing", Double.valueOf(50.0),
@@ -708,7 +708,7 @@ public class PostAlgoPathValidator {
                         LOG.error("Error processing Node {} for which input link {} is not a DROPLINK Type",
                             currentNode.getNodeId(), pathElement);
                     }
-                    PceLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
+                    PceORLink pceLink = getOppPceLink(pathElement + 1, edges, allPceLinks);
                     LOG.info("loop of check OSNR direction ZA: SRG, path Element = {} CD on preceeding link {} = {} ps",
                         pathElement, pathElement + 1, pceLink.getcd());
                     calcDropContrib(cu, signal, currentNode, pceLink);
@@ -779,7 +779,7 @@ public class PostAlgoPathValidator {
                     LOG.error("Error processing Node {} for which input link 0 is not a DROPLINK Type",
                         currentNode.getNodeId());
                 }
-                PceLink pceLink = getOppPceLink(1, edges, allPceLinks);
+                PceORLink pceLink = getOppPceLink(1, edges, allPceLinks);
                 LOG.info("loop of check OSNR direction ZA: SRG, path Element = 0 CD on preceeding link 1 = {} ps",
                     pceLink.getcd());
                 calcDropContrib(cu, signal, currentNode, pceLink);
@@ -834,8 +834,8 @@ public class PostAlgoPathValidator {
                 : opMode;
     }
 
-    private PceLink getOppPceLink(Integer pathEltNber, List<PceGraphEdge> edges,
-            Map<LinkId, PceLink> allPceLinks) {
+    private PceORLink getOppPceLink(Integer pathEltNber, List<PceGraphEdge> edges,
+            Map<LinkId, PceORLink> allPceLinks) {
         return allPceLinks.get(new LinkId(edges.get(pathEltNber).link().getOppositeLink()));
     }
 
@@ -912,7 +912,7 @@ public class PostAlgoPathValidator {
     }
 
     private void calcDropContrib(
-            CatalogUtils cu, Map<String, Double> signal, PceNode currentNode, PceLink pceLink) {
+            CatalogUtils cu, Map<String, Double> signal, PceNode currentNode, PceORLink pceLink) {
         //calculation of the SRG contribution for Drop
         calcLineDegradation(cu, signal, pceLink);
         Map<String, Double> impairments = cu.getPceRoadmAmpParameters(
@@ -935,7 +935,7 @@ public class PostAlgoPathValidator {
     }
 
     private void calcAddContrib(
-            CatalogUtils cu, Map<String, Double> signal, PceNode currentNode, PceLink pceLink) {
+            CatalogUtils cu, Map<String, Double> signal, PceNode currentNode, PceORLink pceLink) {
         //calculation of the SRG contribution for Add
         String srgMode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWWRCORE);
         // If the operational mode of the ADD/DROP MUX is not consistent or is not declared in the topology (Network TP)
@@ -958,7 +958,7 @@ public class PostAlgoPathValidator {
     }
 
     private void calcBypassContrib(CatalogUtils cu, Map<String, Double> signal,
-            PceNode currentNode, PceNode nextNode, PceLink pceLink0, PceLink pceLink1) {
+            PceNode currentNode, PceNode nextNode, PceORLink pceLink0, PceORLink pceLink1) {
         // If the operational mode of the Degree is not consistent or declared in the topology
         // Operational mode is set by default to standard opMode for Degree
         String degree1Mode = setOpMode(currentNode.getOperationalMode(), CatalogConstant.MWMWCORE);
@@ -990,7 +990,7 @@ public class PostAlgoPathValidator {
     }
     //TODO these methods might be more indicated in a catalog utils refactoring
 
-    private void calcLineDegradation(CatalogUtils cu, Map<String, Double> signal, PceLink pceLink) {
+    private void calcLineDegradation(CatalogUtils cu, Map<String, Double> signal, PceORLink pceLink) {
         // Calculate degradation accumulated across incoming Link and add them to
         // accumulated impairments
         // This also includes Non Linear Contribution from the path
