@@ -82,6 +82,9 @@ module transportpce-device-renderer {
       leaf operational-mode {
         type uint16;
       }
+      leaf optical-operational-mode {
+        type string;
+      }
       leaf target-output-power {
         type decimal64 {
           fraction-digits 2;
