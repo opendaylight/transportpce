@@ -73,8 +73,8 @@ public class PceCalculation {
     private PceConstraints pceHardConstraints;
 
     ///////////// Intermediate data/////////////////
-    private List<PceLink> addLinks = new ArrayList<>();
-    private List<PceLink> dropLinks = new ArrayList<>();
+    private List<PceORLink> addLinks = new ArrayList<>();
+    private List<PceORLink> dropLinks = new ArrayList<>();
     private List<NodeId> azSrgs = new ArrayList<>();
 
     private PceNode aendPceNode = null;
@@ -87,7 +87,7 @@ public class PceCalculation {
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
     // this List serves calculation of ZtoA path description
     // TODO maybe better solution is possible
-    private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
+    private Map<LinkId, PceORLink> allPceLinks = new HashMap<>();
     private List<LinkId> linksToExclude = new ArrayList<>();
     private PceResult returnStructure;
     private PortMapping portMapping;
@@ -341,10 +341,10 @@ public class PceCalculation {
                     LOG.debug("analyzeNw: A/Z Srgs SRG = {}", srg.getValue());
                 }
                 // debug prints
-                for (PceLink link : addLinks) {
+                for (PceORLink link : addLinks) {
                     filteraddLinks(link);
                 }
-                for (PceLink link : dropLinks) {
+                for (PceORLink link : dropLinks) {
                     filterdropLinks(link);
                 }
                 break;
@@ -392,7 +392,7 @@ public class PceCalculation {
         return true;
     }
 
-    private boolean filteraddLinks(PceLink pcelink) {
+    private boolean filteraddLinks(PceORLink pcelink) {
 
         NodeId nodeId = pcelink.getSourceId();
 
@@ -410,7 +410,7 @@ public class PceCalculation {
         return false;
     }
 
-    private boolean filterdropLinks(PceLink pcelink) {
+    private boolean filterdropLinks(PceORLink pcelink) {
 
         NodeId nodeId = pcelink.getDestId();
 
@@ -640,7 +640,7 @@ public class PceCalculation {
         return ConstraintTypes.NONE;
     }
 
-    private ConstraintTypes validateLinkConstraints(PceLink link) {
+    private ConstraintTypes validateLinkConstraints(PceORLink link) {
         if (pceHardConstraints.getExcludeSRLG().isEmpty()) {
             return ConstraintTypes.NONE;
         }
@@ -693,7 +693,7 @@ public class PceCalculation {
     }
 
     private boolean processPceLink(Link link, NodeId sourceId, NodeId destId, PceNode source, PceNode dest) {
-        PceLink pcelink = new PceLink(link, source, dest);
+        PceORLink pcelink = new PceORLink(link, source, dest);
         if (!pcelink.isValid()) {
             dropOppositeLink(link);
             LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
@@ -765,7 +765,7 @@ public class PceCalculation {
     }
 
     private boolean processPceOtnLink(Link link, PceNode source, PceNode dest) {
-        PceLink pceOtnLink = new PceLink(link, source, dest);
+        PceORLink pceOtnLink = new PceORLink(link, source, dest);
 
         if (!pceOtnLink.isOtnValid(link, serviceType)) {
             dropOppositeLink(link);
@@ -810,7 +810,7 @@ public class PceCalculation {
         return this.allPceNodes;
     }
 
-    public Map<LinkId, PceLink> getAllPceLinks() {
+    public Map<LinkId, PceORLink> getAllPceLinks() {
         return this.allPceLinks;
     }
 
