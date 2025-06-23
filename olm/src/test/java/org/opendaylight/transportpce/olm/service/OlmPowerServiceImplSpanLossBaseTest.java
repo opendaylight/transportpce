@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -42,6 +43,7 @@ import org.opendaylight.transportpce.olm.util.OlmTransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
@@ -89,9 +91,13 @@ class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         this.dataBroker = getDataBroker();
         doReturn(StringConstants.OPENROADM_DEVICE_VERSION_2_2_1)
             .when(this.mappingUtils).getOpenRoadmVersion(anyString());
+        Nodes nodes1 = Mockito.mock(Nodes.class);
+        Nodes nodes2 = Mockito.mock(Nodes.class);
 
-        when(this.portMapping.getMapping("ROADM-A1", "DEG2-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping1());
-        when(this.portMapping.getMapping("ROADM-C1", "DEG1-TTP-TXRX")).thenReturn(OlmTransactionUtils.getMapping2());
+        when(this.portMapping.getNode("ROADM-A1")).thenReturn(nodes1);
+        when(this.portMapping.getNode("ROADM-C1")).thenReturn(nodes2);
+        when(nodes1.getMapping()).thenReturn(OlmTransactionUtils.getMappingMap1());
+        when(nodes2.getMapping()).thenReturn(OlmTransactionUtils.getMappingMap2());
 
         DataObjectIdentifier<CurrentPmList> iidCurrentPmList = DataObjectIdentifier
                 .builder(CurrentPmList.class)
