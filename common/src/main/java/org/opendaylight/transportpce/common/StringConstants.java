@@ -60,6 +60,9 @@ public final class StringConstants {
     public static final String SERVICE_DIRECTION_ZA = "zToa";
     public static final String UNKNOWN_MODE = "Unknown Mode";
 
+    public static final String TX = "TX";
+    public static final String RX = "RX";
+
     /**
      * Defining string constants required for supporting Openconfig XPDRS.
      */
