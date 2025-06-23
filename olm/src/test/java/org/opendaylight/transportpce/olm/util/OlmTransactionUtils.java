@@ -17,6 +17,7 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
@@ -265,6 +266,14 @@ public final class OlmTransactionUtils {
             .build();
     }
 
+    public static Map<MappingKey, Mapping> getMappingMap1() {
+        return Map.of(new MappingKey(getMapping1().getLogicalConnectionPoint()), getMapping1());
+    }
+
+    public static Map<MappingKey, Mapping> getMappingMap2() {
+        return Map.of(new MappingKey(getMapping2().getLogicalConnectionPoint()), getMapping2());
+    }
+
     public static Optional<CurrentPmList> getCurrentPmListA() {
         Measurement measurementA =
             new MeasurementBuilder()
@@ -335,3 +344,4 @@ public final class OlmTransactionUtils {
                 .build());
     }
 }
+
