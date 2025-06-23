@@ -7,21 +7,36 @@
  */
 package org.opendaylight.transportpce.olm.util;
 
-import com.google.common.base.Strings;
+import static org.opendaylight.transportpce.common.StringConstants.TX;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.MeasurementsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.Ots;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.Resource;
@@ -36,14 +51,21 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Shelf;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.resource.resource.Srg;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 final class OlmUtils121 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils121.class);
+
+    private OlmUtils121() {
+    }
 
     /**
      * This method retrieves list of current PMs for given nodeId,
@@ -60,15 +82,19 @@ final class OlmUtils121 {
      *
      * @return Result of the request list of PM readings
      */
-    public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
+    public static List<org.opendaylight.yang.gen.v1.http
+            .org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
+            pmFetch(GetPmInput input,DeviceTransactionManager deviceTransactionManager) {
         LOG.info("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
                 input.getResourceType(), input.getResourceIdentifier());
-        GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
         DataObjectIdentifier<CurrentPmlist> currentPmsIID = DataObjectIdentifier.builder(CurrentPmlist.class).build();
         Optional<CurrentPmlist> currentPmList;
         currentPmList = deviceTransactionManager
                 .getDataFromDevice(input.getNodeId(), LogicalDatastoreType.OPERATIONAL, currentPmsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        List<org.opendaylight.yang.gen.v1.http
+                .org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
+                measurements = new ArrayList<>();
         if (currentPmList.isPresent()) {
             String pmExtension = null;
             org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location location = null;
@@ -83,50 +109,139 @@ final class OlmUtils121 {
                 direction = input.getDirection();
             }
             //PmNamesEnum pmName = null;
-            List<org.opendaylight.yang.gen.v1.http
-                    .org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements> measurements =
-                extractWantedMeasurements(currentPmList.orElseThrow(),
+
+
+            measurements = extractWantedMeasurements(currentPmList.orElseThrow(),
                     ResourceTypeEnum.forValue(input.getResourceType().getIntValue()),
-                    input.getResourceIdentifier(),
+                    input,
                     PmGranularity.forValue(input.getGranularity().getIntValue()),
                     //pmName
                     null,
                     pmExtension,
                     location,
                     direction);
-            if (measurements.isEmpty()) {
-                LOG.error("No Matching PM data found for node: {}, resource type: {}, resource name: {}",
-                        input.getNodeId(), input.getResourceType(),
-                        getResourceIdentifierAsString(input.getResourceIdentifier()));
-            } else {
-                pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
-                        .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
-                        .setMeasurements(measurements);
-                LOG.info("PM Data found successfully for node: {}, resource type: {}, resource name {}",
-                        input.getNodeId(), input.getResourceType(),
-                        getResourceIdentifierAsString(input.getResourceIdentifier()));
-            }
 
         } else {
             LOG.info("Device PM Data for node: {} is not available", input.getNodeId());
         }
 
-        return pmOutputBuilder;
+        return measurements;
     }
 
-    private static String getResourceIdentifierAsString(ResourceIdentifier resourceIdentifier) {
-        if (Strings.isNullOrEmpty(resourceIdentifier.getCircuitPackName())) {
-            return resourceIdentifier.getResourceName();
+    /**
+     * This method retrieves list of current PMs for given nodeId,
+     * resourceType, resourceName and Granularity. Currently vendorExtentions
+     * are excluded but can be added back based on requirement.
+     *
+     * <p>This operation traverse through current PM list and gets PM for
+     * given NodeId and Resource name
+     *
+     * @param input
+     *            Input parameter from the olm yang model get-pm rpc
+     * @param deviceTransactionManager
+     *            Device tx manager
+     *
+     * @return Result of the request list of PM readings
+     */
+    public static Map<String, List<GetPmOutput>> pmFetchAll(GetPmInput input,
+                                                            DeviceTransactionManager deviceTransactionManager) {
+        LOG.info("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
+                input.getResourceType(), input.getResourceIdentifier());
+        DataObjectIdentifier<CurrentPmlist> currentPmsIID = DataObjectIdentifier.builder(CurrentPmlist.class).build();
+        Optional<CurrentPmlist> currentPmList;
+        currentPmList = deviceTransactionManager
+                .getDataFromDevice(input.getNodeId(), LogicalDatastoreType.OPERATIONAL, currentPmsIID,
+                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (currentPmList.isPresent()) {
+            return getPms(currentPmList.orElseThrow(), input); //Modernizer forces me to use orElseThrow even though
+                                                               //the condition is already checked.
         } else {
-            return resourceIdentifier.getResourceName() + ", circuit pack name: "
-                    + resourceIdentifier.getCircuitPackName();
+            LOG.error("Unable to get CurrentPmList for node {}", input.getNodeId());
         }
+        return Map.of();
+    }
+
+    /*
+     * Retrieves a map on the form interfaceName -> List<GetPmOutput>
+     */
+    private static Map<String, List<GetPmOutput>> getPms(CurrentPmlist currentPmList, GetPmInput input) {
+        Map<String, List<GetPmOutput>> returnMap = new HashMap<>();
+        Map<CurrentPmKey, CurrentPm> currentPmEntryList = currentPmList.nonnullCurrentPm();
+
+        for (Map.Entry<CurrentPmKey, CurrentPm> entry : currentPmEntryList.entrySet()) {
+
+            CurrentPm currentPm = entry.getValue();
+            String interfaceName = getInterfaceName(currentPm);
+            List<GetPmOutput> returnList = getReturnList(interfaceName, returnMap);
+            ResourceIdentifier rsId = new ResourceIdentifierBuilder()
+                    .setResourceName(interfaceName)
+                    .build();
+            GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
+            List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce
+                    .olm.rev210618.get.pm.output.Measurements> measurements = getMeasurements(currentPm);
+            if (!measurements.isEmpty()) {
+                pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
+                        .setResourceIdentifier(rsId).setGranularity(input
+                                .getGranularity())
+                        .setMeasurements(measurements);
+
+                returnList.add(pmOutputBuilder.build());
+            } else {
+                LOG.info("No measurements found for node {} on type {} for granularity {}",
+                        input.getNodeId(),
+                        currentPm.getResource().getResourceType().getType().getName(),
+                        input.getGranularity());
+            }
+            returnMap.put(interfaceName,returnList);
+        }
+        return returnMap;
+    }
+
+    private static List<GetPmOutput> getReturnList(String interfaceName, Map<String, List<GetPmOutput>> returnMap) {
+        List<GetPmOutput> returnList = returnMap.get(interfaceName);
+        if (returnList == null) {
+            returnList = new ArrayList<>();
+        }
+        return returnList;
+    }
+
+    //Uses input only for throwing the error. Could and should be removed.
+    private static List<org.opendaylight.yang.gen.v1.http.org.opendaylight
+            .transportpce.olm.rev210618.get.pm.output.Measurements>
+        getMeasurements(CurrentPm currentPm) {
+        List<Measurements> pmMeasurements = currentPm.getMeasurements();
+        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
+                extractedMeasurements = new ArrayList<>();
+        if (pmMeasurements != null) {
+            for (Measurements measure : pmMeasurements) {
+                MeasurementsBuilder measurement = new MeasurementsBuilder();
+                measurement.setPmparameterName(measure.getMeasurement().getPmParameterName().getType().toString());
+                PmDataType pmValue = measure.getMeasurement().getPmParameterValue();
+                if (pmValue != null) {
+                    if (pmValue.getDecimal64() != null) {
+                        measurement.setPmparameterValue(pmValue.getDecimal64()
+                                .toString());
+                    } else if (pmValue.getUint64() != null) {
+                        measurement.setPmparameterValue(pmValue.getUint64().toString());
+                    }
+                    extractedMeasurements.add(measurement.build());
+                }
+            }
+        }
+        return extractedMeasurements;
+    }
+
+    private static String getInterfaceName(CurrentPm pm) {
+        if (pm.getResource().getResourceType().getType().compareTo(ResourceTypeEnum.Interface) == 0) {
+            return ((Interface) pm.getResource().getResource().getResource()).getInterfaceName();
+        }
+        return null;
     }
 
     private static
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
             extractWantedMeasurements(CurrentPmlist currentPmList, ResourceTypeEnum resourceTypeEnum,
-            ResourceIdentifier wantedResourceIdentifier,PmGranularity pmGranularity, PmNamesEnum pmNamesEnum,
+            GetPmInput input,PmGranularity pmGranularity, PmNamesEnum pmNamesEnum,
             String extension, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location
             location, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction direction) {
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
@@ -137,10 +252,10 @@ final class OlmUtils121 {
                 Resource currentResource = pm.getResource().getResource().getResource();
                 PmGranularity currentGranularity = pm.getGranularity();
                 boolean isWantedPowerMeasure = isWantedPowerMeasure(currentResource, currentGranularity,
-                        resourceTypeEnum, wantedResourceIdentifier, pmGranularity);
+                        resourceTypeEnum, input.getResourceIdentifier(), pmGranularity);
                 if (isWantedPowerMeasure) {
                     measurements.addAll(extractMeasurements(pm.getMeasurements(),pmNamesEnum,
-                            extension,location,direction));
+                            extension,location,direction, input.getNodeId()));
                 }
             }
         }
@@ -149,9 +264,12 @@ final class OlmUtils121 {
 
     private static
          List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements>
-            extractMeasurements(List<Measurements> measurementsFromDevice, PmNamesEnum pmNamesEnum, String extension,
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location location,
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction direction) {
+            extractMeasurements(List<Measurements> measurementsFromDevice,
+                                PmNamesEnum pmNamesEnum,
+                                String extension,
+                                Location location,
+                                Direction direction,
+                                String nodeId) {
         List<Measurements> pmMeasurements = measurementsFromDevice;
         Stream<Measurements> measurementStream = pmMeasurements.stream();
         if (pmNamesEnum != null) {
@@ -182,11 +300,18 @@ final class OlmUtils121 {
         for (Measurements measure : filteredMeasurements) {
             MeasurementsBuilder measurement = new MeasurementsBuilder();
             measurement.setPmparameterName(measure.getMeasurement().getPmParameterName().getType().toString());
-            if (measure.getMeasurement().getPmParameterValue().getDecimal64() != null) {
-                measurement.setPmparameterValue(measure.getMeasurement().getPmParameterValue().getDecimal64()
-                    .toString());
-            } else if (measure.getMeasurement().getPmParameterValue().getUint64() != null) {
-                measurement.setPmparameterValue(measure.getMeasurement().getPmParameterValue().getUint64().toString());
+            org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType
+                    pmValue = measure.getMeasurement().getPmParameterValue();
+            if (pmValue != null) {
+                if (pmValue.getDecimal64() != null) {
+                    measurement.setPmparameterValue(pmValue.getDecimal64()
+                            .toString());
+                } else if (pmValue.getUint64() != null) {
+                    measurement.setPmparameterValue(pmValue.getUint64().toString());
+                }
+            } else {
+                throw new RuntimeException("No ParameterValue found for node " + nodeId
+                        + " on parameter: " + measurement.getPmparameterName());
             }
             extractedMeasurements.add(measurement.build());
         }
@@ -279,6 +404,55 @@ final class OlmUtils121 {
         }
     }
 
+    public static boolean setSpanLoss(String realNodeId, String interfaceName, BigDecimal spanLoss,
+                                      String direction, OpenRoadmInterfaces openRoadmInterfaces) {
+        RatioDB spanLossRx;
+        RatioDB spanLossTx;
+
+        try {
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface>
+                    interfaceObject;
+            interfaceObject = openRoadmInterfaces.getInterface(realNodeId, interfaceName);
+            if (interfaceObject.isPresent()) {
+                InterfaceBuilder interfaceBuilder = new InterfaceBuilder(interfaceObject.orElseThrow());
+                OtsBuilder otsBuilder = new OtsBuilder();
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface
+                        intf = interfaceObject.orElseThrow();
+                if (intf.augmentation(Interface1.class) != null
+                        && intf.augmentation(Interface1.class).getOts() != null) {
+                    Ots ots = intf.augmentation(Interface1.class).getOts();
+                    otsBuilder.setFiberType(ots.getFiberType());
+                    spanLossRx = ots.getSpanLossReceive();
+                    spanLossTx = ots.getSpanLossTransmit();
+                } else {
+                    spanLossRx = new RatioDB(Decimal64.valueOf(spanLoss));
+                    spanLossTx = new RatioDB(Decimal64.valueOf(spanLoss));
+                }
+                Interface1Builder intf1Builder = new Interface1Builder();
+                if (direction.equals(TX)) {
+                    otsBuilder.setSpanLossTransmit(new RatioDB(Decimal64.valueOf(spanLoss)));
+                    otsBuilder.setSpanLossReceive(spanLossRx);
+                } else {
+                    otsBuilder
+                            .setSpanLossTransmit(spanLossTx)
+                            .setSpanLossReceive(new RatioDB(Decimal64.valueOf(spanLoss)));
+                }
+                interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
+                openRoadmInterfaces.postInterface(realNodeId, interfaceBuilder);
+                LOG.info("Spanloss Value update completed successfully");
+                return true;
+            } else {
+                LOG.error("Interface not found for realNodeId: {} and interfaceName: {}", realNodeId, interfaceName);
+                return false;
+            }
+        } catch (OpenRoadmInterfaceException e) {
+            LOG.error("Failed to set spanloss on node {}, OpenRoadmInterfaceException occured: {}",
+                    realNodeId,
+                    e.getMessage());
+            return false;
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends Resource> Optional<T> tryCastToParticularResource(Class<T> resourceClass,
             Resource resource) {
@@ -292,8 +466,5 @@ final class OlmUtils121 {
         }
         return Optional.empty();
     }
-
-    private OlmUtils121() {
-    }
-
 }
+
