@@ -680,7 +680,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         //      power up/down sequence recommended by NEC documentation for enabling/disabling datapath for XPDRs.
         //      We can look at enhancing this in a future update.
         if (!isOpenConfig) {
-            olmPowerSetup(
+            List<OLMRenderingResult> olmRenderingResults = olmPowerSetup(
                     rollbackProcessor,
                     //olmPowerSetupInputAtoZ,
                     ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
@@ -692,7 +692,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         ServicePathNotificationTypes.ServiceImplementationRequest,
                         input.getServiceName(),
                         RpcStatusEx.Failed,
-                        OLM_ROLL_BACK_MSG);
+                        olmResultMessage(olmRenderingResults));
                 return false;
             }
         }
