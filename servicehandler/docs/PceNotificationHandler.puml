@@ -1,0 +1,74 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+group PathComputationResult
+    == Incomming notifications failed, pending or unknown ==
+    NotificationPublishService -> PceNotificationHandler: onServicePathRpcResult(ServicePathRpcResult), status = failed,pending, unknown
+    alt status = failed or unknown
+        PceNotificationHandler -> NbiNotification: operationalstate = degraded
+    else status = pending
+        PceNotificationHandler -> PceNotificationHandler: log.warn()
+    end
+    == Incomming notification successful ==
+    NotificationPublishService -> PceNotificationHandler: onServicePathRpcResult(ServicePathRpcResult), status = successful
+    PceNotificationHandler -> PceNotificationHandler: Log.info()
+    PceNotificationHandler -> ServiceDatastoreOperation: createService()
+    PceNotificationHandler -> ServiceDatastoreOperation: createServicePath()
+    PceNotificationHandler -> RendererServiceOperationsImpl: serviceImplementation()
+    RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, PENDING
+
+    RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, PENDING, A-Z
+    RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, PENDING, Z-A
+
+    group Non OTN serviceType
+        alt  not opencofig and (Rollback or empty results)
+            RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, FAILED, OLM_ROLL_BACK_MSG
+        else openconfig and (rollback or empty results)
+            RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, FAILED, resultMessage
+        else success
+            RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, SUCCESS, OPERATION_SUCCESSFUL
+        end
+
+    end group
+
+    group OTN serviceType
+        alt failure
+            RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, FAILED
+        else success
+            RendererServiceOperationsImpl -> NotificationPublishService: RendererRpcResultSp, ServiceImplementationRequest, SUCCESS
+        end
+
+    end group
+
+end group
+
+group CancelResourceResult
+    == Incomming notifications pending or unknown ==
+    NotificationPublishService -> PceNotificationHandler: onServicePathRpcResult(ServicePathRpcResult), status = failed,pending, unknown
+    alt status = failed or unknown
+        PceNotificationHandler -> PceNotificationHandler: log.error()
+    else status = pending
+        PceNotificationHandler -> PceNotificationHandler: log.warn()
+    end
+    == Incomming notification failed or successful ==
+    PceNotificationHandler -> NbiNotification: service.getServicename, IsTempService
+    group status = failed
+        PceNotificationHandler -> NbiNotification: "PCE cancel resource failed !", service.getOperationalState()
+        note right of PceNotificationHandler: Execution stops here
+    end group
+    alt deleteService == true
+        PceNotificationHandler -> NbiNotification: "Service deleted !", State.Degraded
+    else
+        PceNotificationHandler -> NbiNotification: "ServiceDelete request failed ...", service.getOperationalState()
+    end
+
+    group serviceReconfigure == true
+        PceNotificationHandler -> PceNotificationHandler: PceServiceWrapper.performPce()
+        note right of PceNotificationHandler: This will trigger a PathComputationResult Notification, see above
+    end group
+
+end group
+
+@enduml

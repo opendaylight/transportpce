@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant NotificationService
+participant NetworkModelNotificationHandler
+
+NotificationService -> NetworkModelNotificationHandler: onTopologyUpdateResult()
+NetworkModelNotificationHandler -> NetworkModelNotificationHandler: Only logging
+
+
+
+@enduml
