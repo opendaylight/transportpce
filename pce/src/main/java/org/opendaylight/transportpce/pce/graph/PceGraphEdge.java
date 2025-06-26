@@ -9,7 +9,8 @@ package org.opendaylight.transportpce.pce.graph;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+//import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 
 @SuppressWarnings("serial")
 @SuppressFBWarnings(
@@ -17,14 +18,14 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class PceGraphEdge extends DefaultWeightedEdge {
 
-    private PceORLink link;
+    private PceLink link;
 
-    public PceGraphEdge(PceORLink link) {
+    public PceGraphEdge(PceLink link) {
         super();
         this.link = link;
     }
 
-    public PceORLink link() {
+    public PceLink link() {
         return link;
     }
 
