@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+External -> ServiceCreateImpl: invoke()
+ServiceCreateImpl -> PCEServiceWrapper: PerformPCE
+PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh: PENDING: PCE computation started.
+PCEServiceWrapper -> PathComputationServiceImpl: pathComputationRequest()
+
+PathComputationServiceImpl -> NotificationPublishService: PathComputationRequest, PENDING
+alt foundPath == true
+    PathComputationServiceImpl -> NotificationPublishService: ServicePathRpcResult, PathComputationRequest, Successful
+else foundPath == false
+    PathComputationServiceImpl -> NotificationPublishService: ServicePathRpcResult, PathComputationRequest, Failed
+end
+
+PathComputationServiceImpl -> PCEServiceWrapper: PathComputationRequestOutputCallback
+
+alt Response success
+    PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh: SUCCESSFULL: PCE replied to PCR Request !
+else Response failed/null
+    PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh: FAILED: PCE replied to PCR Request/PCE failed
+end
+
+PCEServiceWrapper -> ServiceCreateImpl: return output
+
+alt output == null
+    ServiceCreateImpl -> External: FINAL ACK YES, PCE_FAILED, RESPONSE_FAILED
+    ServiceCreateImpl -> NbiNotification: State.degraded, ABORT_PCE_FAILED
+else output != null
+    ServiceCreateImpl -> External: output.getAckIndicator, RPC serviceCreate in progress
+end
+
+@enduml

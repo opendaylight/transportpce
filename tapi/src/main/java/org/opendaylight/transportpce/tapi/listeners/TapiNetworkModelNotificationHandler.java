@@ -112,7 +112,8 @@ public class TapiNetworkModelNotificationHandler {
             // TODO: need to re-think this to update first the connections from roadm to roadm and then the others
             updateConnections(notification.getChangedAttributes().keySet().stream()
                     .map(changedAttributesKey -> new Uuid(changedAttributesKey.getValueName()))
-                    .collect(Collectors.toList()), notification.getChangedAttributes().values().stream()
+                    .collect(Collectors.toList()),
+                    notification.getChangedAttributes().values().stream()
                     .map(NameAndValueChange::getNewValue)
                     .collect(Collectors.toList()));
             updateConnectivityServices();
