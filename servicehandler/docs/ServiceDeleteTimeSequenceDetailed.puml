@@ -1,0 +1,53 @@
+
+@startuml
+'https://plantuml.com/sequence-diagram
+participant External
+participant ServiceDeleteImpl
+participant RendererNotificationHandler
+participant NotificationPublishService
+participant NbiNotification
+
+autonumber
+== Start ==
+External -> ServiceDeleteImpl: invoke()
+ServiceDeleteImpl -> ServiceHandlerComplianceCheck: Check input
+ServiceHandlerComplianceCheck -> ServiceDeleteImpl: ServicePathRpcResult
+group result == fail
+    ServiceDeleteImpl -> External:\nfinalAck,\nservice noncompliant,\nresponse failed.
+end group
+group service does not exist
+    ServiceDeleteImpl -> External: finalAck,\nservice not in ds,\nresponse failed.
+end group
+
+ServiceDeleteImpl -> RendererServiceWrapper: performRenderer()
+RendererServiceWrapper -> NotificationPublishService: ServiceRpcResultSh, PENDING
+RendererServiceWrapper -> ExecutorService: addCallback()
+RendererServiceWrapper -> ExecutorService: submit(\nRendererServiceOperationImpl\n.serviceDelete)
+ExecutorService -> RendererServiceOperationImpl: call()
+RendererServiceOperationImpl -> NotificationPublishService: RendererRpcResultSh, service-delete, PENDING
+
+group Pathdescription for service is empty
+    RendererServiceOperationImpl -> NotificationPublishService: RendererRpcResultSh,\nservicename,\nservice-delete,\nFAILED
+    RendererServiceOperationImpl -> ExecutorService: serviceDeleteOutput,\nresponse failed,\noperations failed
+    ExecutorService -> RendererServiceOperationImpl: onSuccess(ServiceDeleteOutput)
+    group ServiceDeleteOutput != null
+        note right of NotificationPublishService: we dont check the ServiceDeleteOutput status here?!?!!?!?
+        RendererServiceOperationImpl -> NotificationPublishService:  ServiceRpcResultSh, servicename, service-delete, SUCCESSFUL
+        end group
+    group ServiceDeleteOutput == null
+        RendererServiceOperationImpl -> NotificationPublishService: ServiceRpcResultSh, servicename, service-delete, FAILED
+     end group
+end group
+
+RendererServiceWrapper -> ServiceDeleteImpl: output
+note right of External: Again we are assuming\n that if we have output it is successsful
+group output == null
+    ServiceDeleteImpl -> ServiceDeleteImpl:Log.error(\nserviceDeleteMSg, \nRenderer delete failed)
+    ServiceDeleteImpl -> NbiNotification: Servicename,\ninservice,\nrenderer delete failed
+    ServiceDeleteImpl -> External: finalAck,\nRenderer delete failed,\nresponse failed
+end group
+
+ServiceDeleteImpl -> External: finalAck,\ncommen.responseMessage,\ncommon.responsecode
+
+== Done ==
+@enduml

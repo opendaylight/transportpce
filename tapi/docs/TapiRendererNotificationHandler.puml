@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+NotificationsService -> TapiRendererNotificationHandler: onRendererRpcResultsSp RendererRpcResultSp
+== status == successful && NotificationType == 3 ==
+group for each connection
+    TapiRendererNotificationHandler -> TapiRendererNotificationHandler: updateConnectionState()
+end group
+TapiRendererNotificationHandler -> TapiRendererNotificationHandler: updateConnectivityService()
+TapiRendererNotificationHandler -> NbiNotification: NotificationType - AttributeValueChange, \n ConnectivityObjectType - ConnectivityService
+
+@enduml
