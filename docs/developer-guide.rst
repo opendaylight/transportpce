@@ -344,6 +344,146 @@ tables as per the supplied database. The database structure details can be retri
 tests/inventory/initdb.sql inside project sources. Installation scripts and a docker file are also
 provided.
 
+Notification Flow between modules
+---------------------------------
+
+Modules send notifications via the notification service when key events have completed with the status of that event
+being either PENDING, FAILED or SUCCESSFUL. Below are sequence diagrams of the ServiceCreate and ServiceDelete of the
+servicehandler module as well as all the listeners for these events, and a brief
+explanation what each listener is supposed to do.
+
+Service handlermodule
+~~~~~~~~~~~~~~~~~~~~~
+
+ServiceCreate
+^^^^^^^^^^^^^
+
+`Happy path for ServiceCreate <./images/Notification%20diagrams/Serverhandler/HappyPathServiceCreate.png>`_
+
+`Very detailed pseudo sequence diagram <./images/Notification%20diagrams/Serverhandler/ServiceCreateTimeSequenceDetailed.png>`_
+
+ServiceDelete
+^^^^^^^^^^^^^
+
+`Happy path for ServiceDelete <./images/Notification%20diagrams/Serverhandler/HappyPathServiceDelete.png>`_
+
+`Very detailed pseudo sequence diagram <images/Notification%20diagrams/Serverhandler/ServiceDeleteTimeSequenceDetailed.png>`_
+
+NetworkModelNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `TopologyUpdateResult` from the `NetworkModel` module.
+* Only outputs logs of the notification statuses.
+
+`Overview <images/Notification%20diagrams/Serverhandler/NetworkModelNotificationHandler.png>`_
+
+PceNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `ServicePathRpcResult` from `transportpce.pce.rev240205`.
+* if this result is a successful `PathComputationResult`, then it will create a new service and service path.
+* if this result is a failed or unknown `PatchComputationResult`, then it will forward this as a NbiNotification.
+* if this result is a sucessful `CancelResourceResult`, then it will delete the service fetched from the notification.
+* It will send `NbiNotifications` about the status of the deletion.
+
+`Overview <images/Notification%20diagrams/Serverhandler/PceNotificationHandler.png>`_
+
+RendererNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `RendererRpcResultSp` from the `Renderer`module.
+
+For `service-implementation-request` this applies.
+
+* if the request is successful , then it tries to start the service. The result is forwarded as an `NbiNotification`
+* if the request is failed, then it forward this as a `NbiNotification`.
+* if the request is pending or unknown (default) then it logs this result as warning
+
+For `service-delete-request` this applies:
+
+* if the request is successful It tries to delete the service name from the otn-topology.
+* if the request is pending it logs this as warning
+* if the request failed it forwards this as an `NbiNotification`
+* if the request unknown status (default), it logs this as an error.
+
+`Overview <images/Notification%20diagrams/Serverhandler/RendererNotificationHandler.png>`_
+
+ServiceListener
+^^^^^^^^^^^^^^^
+
+* Listens to `DataTreeChanged`
+* if `DELETE` it does nothing
+* if `DELETE` is combined with a service name that is beeing rerouted it will try to create a new service with the
+service name from the notification. This is actually rerouting step 2.
+* if `WRITE` with a node that is taken out of service it forwards this as an NbiNotification.
+Further if the `adminstrativeState` is `inService`, and there still exist a valid path, it will try to reroute the service
+by adding it to the rerouting services and then delete the service. This will trigger a new `DataTreeChanged`
+notification that will start rerouting step 2 above.
+* if `WRITE` with a node that is taken into service, and the `administrativeState` is `ìnService` then it
+forwards this as an `NbiNotification`.
+
+`Overview <images/Notification%20diagrams/Serverhandler/ServiceListener.png>`_
+
+Tapi module
+~~~~~~~~~~~
+
+TapiNetworkNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to the general `Notification`
+* if notificationType is `NOTIFICATIONTYPEATTRIBUTEVALUECHANGE` and targetObjectType is `TOPOLOGYOBJECTTYPENODEEDGEPOINT` 
+  then it updates the connections and the connectivity services with regards to the changes. It then sends an 
+  `NbiNotification`for each connectivityService updated.
+
+`Overview <images/Notification%20diagrams/Tapi/TapiNetworkNotificationHandler.png>`_
+
+TapiPceNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `ServicePathRpcresult` from the `pce` module.
+
+For a `path-computation-result` this applies:
+
+* if this result is a successful , then it creates connections from the `ServicePathResult`
+  and stores it in the database.
+* if this result is pending, it will log a warning
+* if this result is failed, or unkown (default) then it will log an error.
+
+For a `cancel-resource-result` this applies:
+
+* If the result is failed, then it logs this as info.
+* If the result is pending, then it logs this as a warning.
+* If the result is unknown, then it logs an error
+* If the result is successful, then it deletes the connections and connectivity associated with the servicename 
+  in the result.
+
+`Overview <images/Notification%20diagrams/Tapi/TapiPceNotificationHandler.png>`_
+
+
+TapiRendererNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `RendererRpcResultSp` from the `renderer`module.
+
+For a result of type `service-implementation-request` this applies:
+
+* If status is pending or unknown (default) it will log this as a warning.
+* If status is failed it will delete the associated connections and connectivity of the associated service.
+* If status is successful it will update the connections and connectivity of the associated service,
+  and it will also send an `NbiNotification` that the service has been published to TAPI.
+
+`Overview <images/Notification%20diagrams/Tapi/TapiRendererNotificationHandler.png>`_
+
+
+TapiServiceNotificationHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Listens to `ServiceRpcResultSh` from the `servicehandler`module.
+* Whenever triggered it will log an error message "Avoid dataBroker error " and the name of the databroker.
+
+`Overview <images/Notification%20diagrams/Tapi/TapiServiceNotificationHandler.png>`_
+
+
 Key APIs and Interfaces
 -----------------------
 
@@ -2217,6 +2357,8 @@ To retrieve these alarm notifications stored in the Kafka server :
 
 .. note::
     This sample is used to retrieve all the alarm notifications related to infrastructure services.
+
+
 
 Help
 ----

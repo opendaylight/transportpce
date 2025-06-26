@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant External
+participant ServiceCreateImpl
+participant PceNotificationHandler
+participant RendererNotificationHandler
+participant NotificationPublishService
+participant NbiNotification
+
+autonumber
+== Start ==
+External -> ServiceCreateImpl: invoke()
+ServiceCreateImpl -> ServiceCreateImpl: Performs PCE
+ServiceCreateImpl -> NotificationPublishService: ServiceRpcResultSh: PathComputationRequest, PENDING: PCE computation started.
+
+ServiceCreateImpl -> NotificationPublishService: ServicePathRpcResult, PathComputationRequest, PENDING
+
+ServiceCreateImpl -> NotificationPublishService: ServicePathRpcResult, PathComputationRequest, Successful
+
+ServiceCreateImpl -> NotificationPublishService: ServiceRpcResultSh: SUCCESSFULL: PCE replied to PCR Request !
+
+ServiceCreateImpl -> External: output.getAckIndicator,\nRPC serviceCreate\nin progress
+
+== PceNotificationHandler ==
+NotificationPublishService -> PceNotificationHandler: onServicePathRpcResult(ServicePathRpcResult), \nstatus = successful
+PceNotificationHandler -> PceNotificationHandler: Log.info()
+PceNotificationHandler -> PceNotificationHandler: createService()
+PceNotificationHandler -> PceNotificationHandler: createServicePath()
+PceNotificationHandler -> PceNotificationHandler: serviceImplementation()
+PceNotificationHandler -> NotificationPublishService: RendererRpcResultSp, \nServiceImplementationRequest, \nPENDING
+
+PceNotificationHandler -> NotificationPublishService: RendererRpcResultSp, \nServiceImplementationRequest, \nPENDING, A-Z
+PceNotificationHandler -> NotificationPublishService: RendererRpcResultSp, \nServiceImplementationRequest, \nPENDING, Z-A
+
+group Non OTN serviceType
+    PceNotificationHandler -> NotificationPublishService: RendererRpcResultSp,\nServiceImplementationRequest,\nSUCCESS,\nOPERATION_SUCCESSFUL
+end group
+
+group OTN serviceType
+    PceNotificationHandler -> NotificationPublishService: RendererRpcResultSp,\nServiceImplementationRequest,\nSUCCESS
+end group
+
+== RendererNotificationHandler ==
+NotificationPublishService -> RendererNotificationHandler: onRendererRpcResultSp\n(RendererRpcResultSp),\nstatus = successful
+RendererNotificationHandler -> NbiNotification: ServiceName,inservice
+== Done==
+@enduml
