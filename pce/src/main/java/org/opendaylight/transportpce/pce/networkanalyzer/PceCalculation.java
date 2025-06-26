@@ -112,11 +112,11 @@ public class PceCalculation {
     // this List serves graph calculation
     private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
     // this List serves calculation of ZtoA path description
-    private Map<LinkId, PceORLink> allPceLinks = new HashMap<>();
+    private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
     // this List serves graph calculation
-    private Map<Uuid, PceNode> allPceTapiNodes = new HashMap<>();
+//    private Map<Uuid, PceNode> allPceTapiNodes = new HashMap<>();
     // this List serves calculation of ZtoA path description
-    private Map<Uuid, PceTapiLink> allPceTapiLinks = new HashMap<>();
+//    private Map<Uuid, PceLink> allPceTapiLinks = new HashMap<>();
     private List<LinkId> linksToExclude = new ArrayList<>();
     private PceResult returnStructure;
     private PortMapping portMapping;
@@ -215,7 +215,7 @@ public class PceCalculation {
                 returnStructure.error(subscriber);
                 return;
             }
-            printTapiNodesInfo(allPceTapiNodes);
+            printNodesInfo(allPceNodes);
             returnStructure.success();
         } else {
             if (!readMdSal(subscriber)) {
@@ -397,12 +397,12 @@ public class PceCalculation {
                     LOG.debug("readMdSal: T-API ConnectivityContext: conContOptional.isPresent = true {}", conContIID);
                 }
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("readMdSal: Error reading ConnectivityContext {}", conContIID, e);
+                LOG.error("readMdSalTapi: Error reading ConnectivityContext {}", conContIID, e);
                 returnStructure.error("Unexpected error occurred while reading ConnectivityContext"
                     + "from internal data store.");
             }
             if (conCont == null) {
-                LOG.error("readMdSal: no ConnectivityContext ");
+                LOG.error("readMdSalTapi: no ConnectivityContext ");
                 subscriber.event(Level.ERROR, String. format("ConnectivityContext is null: %s", conContIID));
                 return false;
             }
@@ -410,7 +410,7 @@ public class PceCalculation {
                 this.allCons.put(con.getKey().getUuid(), con.getValue());
             }
             if (allCons == null || allCons.isEmpty()) {
-                LOG.error("readMdSal: no ConnectivityContext");
+                LOG.error("readMdSalTapi: no ConnectivityContext");
                 subscriber.event(Level.ERROR, "No ConnectivityContext found in DataStore");
                 return false;
             }
@@ -420,20 +420,20 @@ public class PceCalculation {
             readTapiTopology(topoIID, subscriber);
         }
         if (allTapiNodes == null || allTapiNodes.isEmpty()) {
-            LOG.error("readMdSal: no nodes ");
+            LOG.error("readMdSalTapi: no nodes ");
             subscriber.event(Level.ERROR, "No nodes found in network");
             return false;
         }
-        LOG.info("readMdSal: network nodes: {} nodes added", allTapiNodes.size());
-        LOG.debug("readMdSal: network nodes: {} nodes added", allTapiNodes);
+        LOG.info("readMdSalTapi: network nodes: {} nodes added", allTapiNodes.size());
+        LOG.debug("readMdSalTapi: network nodes: {} nodes added", allTapiNodes);
 
         if (allTapiLinks == null || allTapiLinks.isEmpty()) {
-            LOG.error("readMdSal: no links ");
+            LOG.error("readMdSalTapi: no links ");
             subscriber.event(Level.ERROR, "No links found in network");
             return false;
         }
-        LOG.info("readMdSal: network links: {} links added", allTapiLinks.size());
-        LOG.debug("readMdSal: network links: {} links added", allTapiLinks);
+        LOG.info("readMdSalTapi: network links: {} links added", allTapiLinks.size());
+        LOG.debug("readMdSalTapi: network links: {} links added", allTapiLinks);
 
         return true;
     }
@@ -457,20 +457,20 @@ public class PceCalculation {
 
     private void readTapiTopology(WithKey<Topology, TopologyKey> topoIID, Subscriber subscriber) {
         Topology topo = null;
-        Uuid topoUuid = topoIID.getKey().getUuid();
+        Uuid topoUuid = topoIID.key().getUuid();
         try {
             Optional<Topology> topoOptional =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, topoIID).get();
             if (topoOptional.isPresent()) {
                 topo = topoOptional.orElseThrow();
-                LOG.debug("readMdSal: T-API Topology: topoOptional.isPresent = true {}", topoIID);
+                LOG.debug("readMdSalTapi: T-API Topology: topoOptional.isPresent = true {}", topoIID);
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("readMdSal: Error reading topology {}", topoIID, e);
+            LOG.error("readMdSalTapi: Error reading topology {}", topoIID, e);
             returnStructure.error("Unexpected error occurred while reading topology from internal data store.");
         }
         if (topo == null) {
-            LOG.error("readMdSal: network is null for topology: {}", topoUuid);
+            LOG.error("readMdSalTapi: network is null for topology: {}", topoUuid);
             subscriber.event(Level.ERROR, String. format("Network is null: %s", topoIID));
             return;
         }
@@ -606,14 +606,14 @@ public class PceCalculation {
                     validateTapiNode(tapiNode.getValue(), tapiNode.getKey().entrySet().stream()
                         .findFirst().orElseThrow().getValue(), portPreference);
                 }
-                LOG.info("PCEcalcLine602 analyzeTapiNw: allPceTapiNodes size {}", allPceTapiNodes.size());
+                LOG.info("PCEcalculationLine609 analyzeTapiNw: allPceTapiNodes size {}", allPceNodes.size());
 
                 if (aendPceNode == null || zendPceNode == null) {
                     if (aendPceNode == null) {
-                        LOG.error("analyzeNw: Error in reading nodes: A not present in the network");
+                        LOG.error("analyzeTapiNw: Error in reading nodes: A not present in the network");
                         subscriber.event(Level.ERROR, "Error during reading nodes: A is not present in the network");
                     } else {
-                        LOG.error("analyzeNw: Error in reading nodes: Z not present in the network");
+                        LOG.error("analyzeTapiNw: Error in reading nodes: Z not present in the network");
                         subscriber.event(Level.ERROR, "Error during reading nodes: Z is not present in the network");
                     }
                     return false;
@@ -625,11 +625,11 @@ public class PceCalculation {
                 }
 
                 // debug prints
-                LOG.debug("analyzeNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
+                LOG.debug("analyzeTapiNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
                 // debug prints
-                LOG.debug("analyzeNw: azSrgs size = {}", azSrgs.size());
+                LOG.debug("analyzeTapiNw: azSrgs size = {}", azSrgs.size());
                 for (NodeId srg : azSrgs) {
-                    LOG.debug("analyzeNw: A/Z Srgs SRG = {}", srg.getValue());
+                    LOG.debug("analyzeTapiNw: A/Z Srgs SRG = {}", srg.getValue());
                 }
                 // debug prints
                 for (PceTapiLink link : addTapiLinks) {
@@ -648,7 +648,7 @@ public class PceCalculation {
                         .findFirst().orElseThrow().getValue());
                 }
 
-                LOG.info("analyzeTApiNw: allPceNodes {}", allPceNodes);
+                LOG.info("analyzeTapiNw: allPceNodes {}", allPceNodes);
 
                 if (aendPceNode == null || zendPceNode == null) {
                     LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
@@ -708,23 +708,23 @@ public class PceCalculation {
         // In TAPI, as source & destination are not clearly identified we need to check whether the source or the
         // destination corresponds to azSRG
         if (azSrgs.contains(sourceNodeId)) {
-            allPceTapiLinks.put(pcelink.getLinkUuid(), pcelink);
-            allPceTapiNodes.get(new Uuid(sourceNodeId.getValue())).addOutgoingLink(pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkUuid().getValue()), pcelink);
+            allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
             LOG.debug("analyzeTapiNw: Add_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
             return true;
         } else if (azSrgs.contains(destNodeId)) {
-            allPceTapiLinks.put(pcelink.getLinkUuid(), pcelink);
-            allPceTapiNodes.get(new Uuid(destNodeId.getValue())).addOutgoingLink(pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkUuid().getValue()), pcelink);
+            allPceNodes.get(destNodeId).addOutgoingLink(pcelink);
             LOG.debug("analyzeTapiNw: Add_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
             return true;
         }
 
         // remove the SRG from PceNodes, as it is not directly connected to A/Z
-        if (allPceTapiNodes.get(new Uuid(sourceNodeId.getValue())).getORNodeType().equals(OpenroadmNodeType.SRG)) {
-            allPceTapiNodes.remove(new Uuid(sourceNodeId.getValue()));
+        if (allPceNodes.get(sourceNodeId).getORNodeType().equals(OpenroadmNodeType.SRG)) {
+            allPceNodes.remove(sourceNodeId);
             LOG.debug("analyzeTapiNw: SRG removed {}", sourceNodeId.getValue());
-        } else if (allPceTapiNodes.get(new Uuid(destNodeId.getValue())).getORNodeType().equals(OpenroadmNodeType.SRG)) {
-            allPceTapiNodes.remove(new Uuid(destNodeId.getValue()));
+        } else if (allPceNodes.get(destNodeId).getORNodeType().equals(OpenroadmNodeType.SRG)) {
+            allPceNodes.remove(destNodeId);
             LOG.debug("analyzeTapiNw: SRG removed {}", destNodeId.getValue());
         }
         return false;
@@ -754,24 +754,24 @@ public class PceCalculation {
         // In TAPI, as source & destination are not clearly identified we need to check whether the source or the
         // destination corresponds to azSRG
         if (azSrgs.contains(destNodeId)) {
-            allPceTapiLinks.put(pcelink.getLinkUuid(), pcelink);
-            allPceTapiNodes.get(new Uuid(destNodeId.getValue())).addOutgoingLink(pcelink);
+            allPceLinks.put(pcelink.getLinkId(), pcelink);
+            allPceNodes.get(destNodeId).addOutgoingLink(pcelink);
             LOG.debug("analyzeTapiNw: Drop_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
             return true;
         } else if (azSrgs.contains(sourceNodeId)) {
-            allPceTapiLinks.put(pcelink.getLinkUuid(), pcelink);
-            allPceTapiNodes.get(new Uuid(sourceNodeId.getValue())).addOutgoingLink(pcelink);
+            allPceLinks.put(pcelink.getLinkId(), pcelink);
+            allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
             LOG.debug("analyzeTapiNw: Drop_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
             return true;
         }
 
         // remove the SRG from PceNodes, as it is not directly connected to A/Z
-        if (allPceTapiNodes.get(new Uuid(destNodeId.getValue())).getORNodeType().equals(OpenroadmNodeType.SRG)) {
-            allPceTapiNodes.remove(new Uuid(destNodeId.getValue()));
+        if (allPceNodes.get(destNodeId).getORNodeType().equals(OpenroadmNodeType.SRG)) {
+            allPceNodes.remove(destNodeId);
             LOG.debug("analyzeTapiNw: SRG removed {}", destNodeId.getValue());
-        } else if (allPceTapiNodes.get(new Uuid(sourceNodeId.getValue())).getORNodeType()
+        } else if (allPceNodes.get(sourceNodeId).getORNodeType()
                 .equals(OpenroadmNodeType.SRG)) {
-            allPceTapiNodes.remove(new Uuid(sourceNodeId.getValue()));
+            allPceNodes.remove(sourceNodeId);
             LOG.debug("analyzeTapiNw: SRG removed {}", sourceNodeId.getValue());
         }
         return false;
@@ -834,10 +834,10 @@ public class PceCalculation {
         List<Uuid> nodeUuidList = link.getNodeEdgePoint().entrySet().stream()
                 .map(Map.Entry::getKey).collect(Collectors.toList())
             .stream().map(NodeEdgePointKey::getNodeUuid).collect(Collectors.toList());
-        Uuid arbitrarySourceId = nodeUuidList.get(0);
-        Uuid arbitraryDestId = nodeUuidList.get(1);
-        PceNode source = allPceTapiNodes.get(arbitrarySourceId);
-        PceNode dest = allPceTapiNodes.get(arbitraryDestId);
+        NodeId arbitrarySourceId = new NodeId(nodeUuidList.get(0).getValue());
+        NodeId arbitraryDestId = new NodeId(nodeUuidList.get(1).getValue());
+        PceNode source = allPceNodes.get(arbitrarySourceId);
+        PceNode dest = allPceNodes.get(arbitraryDestId);
         OperationalState state = link.getOperationalState();
 
         if (source == null) {
@@ -866,10 +866,10 @@ public class PceCalculation {
         List<Uuid> nodeUuidList = connection.getConnectionEndPoint().entrySet().stream()
                 .map(Map.Entry::getKey).collect(Collectors.toList())
             .stream().map(ConnectionEndPointKey::getNodeUuid).collect(Collectors.toList());
-        Uuid arbitrarySourceId = nodeUuidList.get(0);
-        Uuid arbitraryDestId = nodeUuidList.get(1);
-        PceNode source = allPceTapiNodes.get(arbitrarySourceId);
-        PceNode dest = allPceTapiNodes.get(arbitraryDestId);
+        NodeId arbitrarySourceId = new NodeId(nodeUuidList.get(0).getValue());
+        NodeId arbitraryDestId = new NodeId(nodeUuidList.get(1).getValue());
+        PceNode source = allPceNodes.get(arbitrarySourceId);
+        PceNode dest = allPceNodes.get(arbitraryDestId);
         OperationalState state = connection.getOperationalState();
 
         if (source == null) {
@@ -1211,9 +1211,9 @@ public class PceCalculation {
     }
 
     private void dropOppositeTapiLink(PceTapiLink link) {
-        Uuid opplinkUuid = link.getOppositeLinkUuid();
-        if (allPceTapiLinks.containsKey(opplinkUuid)) {
-            allPceTapiLinks.remove(opplinkUuid);
+        LinkId opplinkUuid = new LinkId(link.getOppositeLinkUuid().getValue());
+        if (allPceLinks.containsKey(opplinkUuid)) {
+            allPceLinks.remove(opplinkUuid);
         } else {
             linksToExclude.add(new LinkId(opplinkUuid.getValue()));
         }
@@ -1357,17 +1357,17 @@ public class PceCalculation {
             LOG.error(" validateTapiLink: Link is ignored due errors in network data or in opposite link");
             return false;
         }
-        Uuid linkUuid = pceTapiLink.getLinkUuid();
+        LinkId linkid = new LinkId(pceTapiLink.getLinkUuid().getValue());
         if (validateTapiLinkConstraints(pceTapiLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             // Will not go through this loop : TAPI SRLG handled as string currently not handled (OR SRLG are longs)
             dropOppositeTapiLink(pceTapiLink);
-            LOG.debug("validateLink: constraints : link is ignored == {}", linkUuid.getValue());
+            LOG.debug("validateLink: constraints : link is ignored == {}", linkid.getValue());
             return false;
         }
         switch (pceTapiLink.getlinkType()) {
             case ROADMTOROADM:
             case EXPRESSLINK:
-                allPceTapiLinks.put(linkUuid, pceTapiLink);
+                allPceLinks.put(linkid, pceTapiLink);
                 source.addOutgoingLink(pceTapiLink);
                 dest.addOutgoingLink(pceTapiLink);
                 LOG.debug("validateLink: {}-LINK added to allPceLinks {}",pceTapiLink.getlinkType(), pceTapiLink);
@@ -1417,7 +1417,7 @@ public class PceCalculation {
                             pceTapiLink.setClientZ(source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid()
                                 .getValue()));
                         }
-                        allPceTapiLinks.put(linkUuid, pceTapiLink);
+                        allPceLinks.put(linkid, pceTapiLink);
                         dest.addOutgoingLink(pceTapiLink);
                         LOG.debug("validateLink: XPONDER-INPUT link added to allPceTapiLinks {}", pceTapiLink);
                     }
@@ -1427,7 +1427,7 @@ public class PceCalculation {
                     if (dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid().getValue()) != null) {
                         pceTapiLink.setClientZ(dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid().getValue()));
                     }
-                    allPceTapiLinks.put(linkUuid, pceTapiLink);
+                    allPceLinks.put(linkid, pceTapiLink);
                     source.addOutgoingLink(pceTapiLink);
                     LOG.debug("validateLink: XPONDER-INPUT link added to allPceTapiLinks {}", pceTapiLink);
                 }
@@ -1444,7 +1444,7 @@ public class PceCalculation {
                             pceTapiLink.setClientA(dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid()
                                 .getValue()));
                         }
-                        allPceTapiLinks.put(linkUuid, pceTapiLink);
+                        allPceLinks.put(linkid, pceTapiLink);
                         dest.addOutgoingLink(pceTapiLink);
                         LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceTapiLinks {}", pceTapiLink);
                     }
@@ -1454,7 +1454,7 @@ public class PceCalculation {
                     if (source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid().getValue()) != null) {
                         pceTapiLink.setClientA(source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid().getValue()));
                     }
-                    allPceTapiLinks.put(linkUuid, pceTapiLink);
+                    allPceLinks.put(linkid, pceTapiLink);
                     source.addOutgoingLink(pceTapiLink);
                     LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceTapiLinks {}", pceTapiLink);
                 }
@@ -1509,11 +1509,11 @@ public class PceCalculation {
             return false;
         }
 
-        Uuid linkUuid = pceOtnLink.getLinkUuid();
+        LinkId linkId = new LinkId(pceOtnLink.getLinkUuid().getValue());
         if (validateTapiLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             // Will not go through this loop : TAPI SRLG handled as string currently not handled (OR SRLG are longs)
             dropOppositeTapiLink(pceOtnLink);
-            LOG.debug("validateLink: constraints : link is ignored == {}", linkUuid.getValue());
+            LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
             return false;
         }
 
@@ -1525,7 +1525,7 @@ public class PceCalculation {
                 if (dest.getXpdrNWfromClient(pceOtnLink.getDestTPUuid().getValue()) != null) {
                     pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()));
                 }
-                allPceTapiLinks.put(linkUuid, pceOtnLink);
+                allPceLinks.put(linkId, pceOtnLink);
                 source.addOutgoingLink(pceOtnLink);
                 dest.addOutgoingLink(pceOtnLink);
                 LOG.debug("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
@@ -1548,7 +1548,7 @@ public class PceCalculation {
         return this.allPceNodes;
     }
 
-    public Map<LinkId, PceORLink> getAllPceLinks() {
+    public Map<LinkId, PceLink> getAllPceLinks() {
         return this.allPceLinks;
     }
 
@@ -1567,12 +1567,12 @@ public class PceCalculation {
         }));
     }
 
-    private static void printTapiNodesInfo(Map<Uuid, PceNode> allPceTapiNodes) {
-        allPceTapiNodes.forEach(((nodeId, pceNode) -> {
-            LOG.debug("In printNodes in node {} : outgoing links {} ", pceNode.getNodeId().getValue(),
-                    pceNode.getOutgoingLinks());
-        }));
-    }
+//    private static void printTapiNodesInfo(Map<NodeId, PceNode> allPceTapiNodes) {
+//        allPceTapiNodes.forEach(((nodeId, pceNode) -> {
+//            LOG.debug("In printNodes in node {} : outgoing links {} ", pceNode.getNodeId().getValue(),
+//                    pceNode.getOutgoingLinks());
+//        }));
+//    }
 
     /**
      * Get mc capability for device.

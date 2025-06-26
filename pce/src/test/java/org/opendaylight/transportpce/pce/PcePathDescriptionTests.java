@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.networkanalyzer.MapUtils;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -43,7 +44,7 @@ public class PcePathDescriptionTests extends AbstractTest {
 
     private PcePathDescription pcePathDescription;
     private PceResult pceResult;
-    private PceORLink pceLink = null;
+    private PceLink pceLink = null;
     private Link link = null;
     private Node node = null;
     private String deviceNodeId = "device node";
@@ -78,7 +79,7 @@ public class PcePathDescriptionTests extends AbstractTest {
         pceResult.setServiceType(StringConstants.SERVICE_TYPE_100GE_T);
         pceResult.setMaxFreq(new BigDecimal("195.900"));
         pceResult.setMinFreq(new BigDecimal("191.101"));
-        Map<LinkId, PceORLink> map = Map.of(
+        Map<LinkId, PceLink> map = Map.of(
             new LinkId("OpenROADM-3-2-DEG1-DEG1-TTP-TXtoOpenROADM-3-1-DEG1-DEG1-TTP-RX"), pceLink,
             new LinkId("OpenROADM-3-1-DEG1-DEG1-TTP-RXtoOpenROADM-3-2-DEG1-DEG1-TTP-TX"), pceLink);
         pcePathDescription = new PcePathDescription(List.of(pceLink), map, pceResult);
