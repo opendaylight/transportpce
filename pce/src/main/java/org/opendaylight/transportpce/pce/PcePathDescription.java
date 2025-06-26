@@ -15,7 +15,8 @@ import java.util.Map;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
-import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+//import org.opendaylight.transportpce.pce.networkanalyzer.PceORLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
@@ -46,11 +47,11 @@ public class PcePathDescription {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PcePathDescription.class);
 
-    private List<PceORLink> pathAtoZ = null;
+    private List<PceLink> pathAtoZ = null;
     private PceResult rc;
-    private Map<LinkId, PceORLink> allPceLinks = null;
+    private Map<LinkId, PceLink> allPceLinks = null;
 
-    public PcePathDescription(List<PceORLink> pathAtoZ, Map<LinkId, PceORLink> allPceLinks, PceResult rc) {
+    public PcePathDescription(List<PceLink> pathAtoZ, Map<LinkId, PceLink> allPceLinks, PceResult rc) {
         super();
         this.allPceLinks = allPceLinks;
         this.pathAtoZ = pathAtoZ;
@@ -68,7 +69,7 @@ public class PcePathDescription {
 
         buildAtoZ(atozMap, pathAtoZ);
         rc.setAtoZDirection(buildAtoZDirection(atozMap).build());
-        List<PceORLink> pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
+        List<PceLink> pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
         LOG.info("In buildDescriptions: ZtoA {}", pathZtoA);
 
         Map<ZToAKey,ZToA> ztoaMap = new HashMap<>();
@@ -215,9 +216,9 @@ public class PcePathDescription {
 
     //sonar issue This method has 77 lines, which is greater than the 75 lines authorized. Split it into smaller
     //ignore as it's not relevant to split it from functional point
-    private void buildAtoZ(Map<AToZKey, AToZ> atozMap, List<PceORLink> path) {
+    private void buildAtoZ(Map<AToZKey, AToZ> atozMap, List<PceLink> path) {
         Integer index = 0;
-        PceORLink lastLink = null;
+        PceLink lastLink = null;
         AToZ lastResource = null;
 
         // build A side Client TP
@@ -232,7 +233,7 @@ public class PcePathDescription {
         AToZ firstResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
         atozMap.put(firstResource.key(),firstResource);
         index += 1;
-        for (PceORLink pcelink : path) {
+        for (PceLink pcelink : path) {
             String srcName = pcelink.getSourceId().getValue();
             // Nodes
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
@@ -320,13 +321,13 @@ public class PcePathDescription {
 
     }
 
-    private void buildZtoA(Map<ZToAKey, ZToA> ztoaList, List<PceORLink> path) {
+    private void buildZtoA(Map<ZToAKey, ZToA> ztoaList, List<PceLink> path) {
         Integer index = 0;
-        PceORLink lastLink = null;
+        PceLink lastLink = null;
         ZToA lastResource = null;
 
         // build Z size Client TP
-        PceORLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
+        PceLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
         String tpName = pcelink.getClientA();
         String xname = pcelink.getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
@@ -339,7 +340,7 @@ public class PcePathDescription {
         ztoaList.put(firstResource.key(),firstResource);
         index += 1;
 
-        for (PceORLink pcelinkAtoZ : path) {
+        for (PceLink pcelinkAtoZ : path) {
 
             pcelink = this.allPceLinks.get(pcelinkAtoZ.getOppositeLink());
             LOG.debug("link to oppsite: {} to {}", pcelinkAtoZ, pcelink);
