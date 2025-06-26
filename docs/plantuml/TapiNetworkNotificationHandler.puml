@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+NotificationService -> TapiNetworkModelNotificationHandler: Notification
+
+== Notification is valuechange on nodeEdgePoint with changed attributes ==
+TapiNetworkModelNotificationHandler -> TapiNetworkModelNotificationHandler: UpdateConnections()
+TapiNetworkModelNotificationHandler -> TapiNetworkModelNotificationHandler: UpdateConnectivityServices()
+group for each connectivityService
+    TapiNetworkModelNotificationHandler -> NbiNotifications: NotificationAttributeValueChange, ConnectivityObjectTypeConnectivityService
+end group
+
+
+@enduml
