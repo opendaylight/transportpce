@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant NotificationService
+participant ServiceListener
+participant NbiNotification
+participant ServiceCreateImpl
+participant ServiceDeleteImpl
+
+NotificationService -> ServiceListener: onDataTreeChanged DELETE
+ServiceListener -> ServiceListener: Do nothing
+
+NotificationService -> ServiceListener: onDataTreeChanged DELETE and service name exists in REROUTE
+ServiceListener -> ServiceCreateImpl: (rerouteStep2) invoke() (see createService.puml)
+
+NotificationService -> ServiceListener: onDataTreeChanged WRITE: Node taken out of service
+ServiceListener -> NbiNotification: serviceName, OutOfService
+group Administrative state == InService AND Path exists
+    ServiceListener -> ServiceDeleteImpl: invoke() (see ServiceDelete.puml if it exists)
+    note right of ServiceListener: This will generate a DataTreeChanged DELETE Notification which will start rerouteStep2\nof the rerouting process.(Above)
+end
+NotificationService -> ServiceListener: onDataTreeChanged WRITE: Node taken into service
+group Administrative state = Inservice
+    ServiceListener -> NbiNotification: serviceName, InService
+end
+
+@enduml
