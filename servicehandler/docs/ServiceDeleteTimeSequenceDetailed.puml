@@ -1,0 +1,92 @@
+
+@startuml
+'https://plantuml.com/sequence-diagram
+participant External
+participant ServiceDeleteImpl
+participant RendererNotificationHandler
+participant NotificationPublishService
+participant NbiNotification
+
+autonumber
+== Start: serviceDeleteImpl==
+External -> ServiceDeleteImpl: invoke()
+ServiceDeleteImpl -> ServiceHandlerComplianceCheck: Check input
+ServiceHandlerComplianceCheck -> ServiceDeleteImpl: ServicePathRpcResult
+group result == fail
+    ServiceDeleteImpl -> External:\nfinalAck,\nservice noncompliant,\nresponse failed.
+end group
+group service does not exist
+    ServiceDeleteImpl -> External: finalAck,\nservice not in ds,\nresponse failed.
+end group
+
+ServiceDeleteImpl -> RendererServiceWrapper: performRenderer()
+RendererServiceWrapper -> NotificationPublishService: ServiceRpcResultSh, PENDING
+RendererServiceWrapper -> ExecutorService: addCallback()
+RendererServiceWrapper -> ExecutorService: submit(\nRendererServiceOperationImpl\n.serviceDelete)
+ExecutorService -> RendererServiceOperationImpl: call()
+RendererServiceOperationImpl -> NotificationPublishService: RendererRpcResultSh, service-delete, PENDING
+
+group Pathdescription for service is empty
+    RendererServiceOperationImpl -> NotificationPublishService: RendererRpcResultSh,\nservicename,\nservice-delete,\nFAILED
+    RendererServiceOperationImpl -> ExecutorService: serviceDeleteOutput,\nresponse failed,\noperations failed
+    ExecutorService -> RendererServiceOperationImpl: onSuccess\n(ServiceDeleteOutput)
+    group ServiceDeleteOutput != null
+        note right of NotificationPublishService: we dont check the ServiceDeleteOutput status here?!?!!?!?
+        RendererServiceOperationImpl -> NotificationPublishService:  ServiceRpcResultSh, servicename, service-delete, SUCCESSFUL
+        end group
+    group ServiceDeleteOutput == null
+        RendererServiceOperationImpl -> NotificationPublishService: ServiceRpcResultSh, servicename, service-delete, FAILED
+     end group
+end group
+
+RendererServiceWrapper -> ServiceDeleteImpl: output
+note right of External: Again we are assuming\n that if we have output it is successsful
+group output == null
+    ServiceDeleteImpl -> ServiceDeleteImpl:Log.error(\nserviceDeleteMSg, \nRenderer delete failed)
+    ServiceDeleteImpl -> NbiNotification: Servicename,\ninservice,\nrenderer delete failed
+    ServiceDeleteImpl -> External: finalAck,\nRenderer delete failed,\nresponse failed
+end group
+
+ServiceDeleteImpl -> External: finalAck,\ncommen.responseMessage,\ncommon.responsecode
+
+== RendererNotificationHandler ==
+NotificationPublishService -> RendererNotificationHandler: OnRendererRpcResultSp\n(RendererRpcResultSp),\nserviceDelete
+group status = pending/unknown
+RendererNotificationHandler -> RendererNotificationHandler: Log.warn/log.error
+end group
+group status = failure
+RendererNotificationHandler -> NbiNotification: Servicename, service.operationalState, responseFailed
+end group
+group status = successful
+RendererNotificationHandler -> NetworkModelServiceImpl: deleteOtnLinks()
+NetworkModelServiceImpl -> RendererNotificationHandler: return
+RendererNotificationHandler -> PceServiceWrapper: CancelPCEResource(ServiceName, ServiceDeleteResult)
+PceServiceWrapper -> ExecutorService: addCallBack(PathComputationServiceImpl.cancelResourceReserve,\nPCEServiceWrapper.CancelResourceReserverOutputFutureCallback)
+PceServiceWrapper -> ExecutorService: PathComputationServiceImpl: CancelResourceReserve.call()
+ExecutorService -> PathComputationServiceImpl: CancelResourceReserve.call()
+PathComputationServiceImpl -> NotificationPublishService: ServicePathRpcResult, cancel-resource-reserve, PENDING
+PathComputationServiceImpl -> PceSendingPceRPCs: cancelResource reserve
+PceSendingPceRPCs -> PathComputationServiceImpl: Always return true
+PathComputationServiceImpl -> NotificationPublishService: ServicePathRpcResult, cancel-resource-reserve, SUCCESSFUL
+PathComputationServiceImpl -> ExecutorService: output, success
+
+group OnSuccess
+ExecutorService -> PCEServiceWrapper: CancelResourceReserveOutputFutureCallback.onSuccess()
+alt output != null (Will only happen if something throws)
+PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh, service-delete-result, SUCCESSFUL
+else out == null
+PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh, service-delete-result, FAILED
+end
+PCEServiceWrapper -> RendererNotificationHandler: CancelReserveReserveOutout, RESPONSE-OK
+end group
+
+group onFailure (Only happens if something throws)
+ExecutorService -> PCEServiceWrapper: CancelResourceReserveOutputFutureCallback.onFailure()
+PCEServiceWrapper -> NotificationPublishService: ServiceRpcResultSh, service-delete-result, FAILED
+PCEServiceWrapper -> RendererNotificationHandler: RendererNotificationHandler: CancelReserveReserveOutout, RESPONSE-FAILED
+end group
+RendererNotificationHandler -> RendererNotificationHandler: The result is dropped, nothing logged, done.
+end group
+
+== Done ==
+@enduml

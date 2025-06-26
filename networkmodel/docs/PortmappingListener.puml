@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+NotificationService -> PortmappingListener: onDataTreeChanged()
+== If mapping has changed ==
+PortmappingListener -> NetworkModelService: updateRoadmTopologies()
+@enduml
