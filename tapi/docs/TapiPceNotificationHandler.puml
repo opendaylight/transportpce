@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+NotificationService -> TapiPceNotificationHandler: onServicePathRpcResult
+
+== On failed, pending or not successful ==
+TapiPceNotificationHandler -> TapiPceNotificationHandler: Log and return.
+
+== On successful ==
+group PathcomputationResult
+    TapiPceNotificationHandler -> TapiPceNotificationHandler: Creates connections from the given servicename and Uuid
+    TapiPceNotificationHandler -> NetworkTransactionService: merge()
+end group
+
+group CancelResourceResult
+    TapiPceNotificationHandler -> NetworkTransactionService: delete()
+end group
+
+@enduml

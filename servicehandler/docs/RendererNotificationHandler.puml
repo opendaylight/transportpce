@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant NotificationService
+participant RendererNotificationHandler
+
+NotificationService -> RendererNotificationHandler: onRendererRpcResultSp(), service-implementation-request
+alt SUCCESS
+    alt ModifyService to inservice == SUCCESS
+        RendererNotificationHandler -> NbiNotification: servicename, InService
+    else ModifyService to inservice == FAILED
+        RendererNotificationHandler -> NbiNotification: servicename, OutOfService
+    end
+else FAILED
+    RendererNotificationHandler -> NbiNotification: serviceName, service.getOperationalState()
+else PENDING
+    RendererNotificationHandler -> RendererNotificationHandler: LOG.warn()
+else default
+    RendererNotificationHandler -> RendererNotificationHandler: LOG.warn()
+end
+
+NotificationService -> RendererNotificationHandler: onRenderRpcResultSp(), service-delete
+alt SUCCESS
+    RendererNotificationHandler -> RendererNotificationHandler: updateOtnTopology(delete=true)
+    RendererNotificationHandler -> RendererNotificationHandler: LOG.info()
+    RendererNotificationHandler -> PceServiceWrapper: cancelPCEResource()
+    PceServiceWrapper -> NotificationService: ServiceRpcResultSh, service-delete, PENDING
+    PceServiceWrapper -> PathComputationServiceImpl: cancelResourceReserve
+    PathComputationServiceImpl -> NotificationService: (From call())ServicePathRpcResult,cancel-resource-reserve,PENDING
+    note left of PathComputationServiceImpl:(This never fails)
+    PathComputationServiceImpl -> NotificationService: (from call())ServicePathRpcResult,cancel-resource-reserve, SUCCESS
+    alt message != null
+        PathComputationServiceImpl -> NotificationService:(from onSuccess())ServiceRpcResultSh, service-delete-result, SUCCESS
+    else message == null
+        PathComputationServiceImpl -> NotificationService:(from onSuccess())ServiceRpcResultSh, service-delete-result,FAILED
+    end
+    RendererNotificationHandler->NotificationService:RendererRpcResultSp,service-delete-result, SUCCESS
+else FAILED
+    RendererNotificationHandler -> NbiNotification: serviceName, service.getOperationalState()
+else PENDING
+    RendererNotificationHandler -> RendererNotificationHandler: LOG.warn()
+else default
+    RendererNotificationHandler -> RendererNotificationHandler: LOG.error()
+end
+
+@enduml
