@@ -174,10 +174,12 @@ public class PceSendingPceRPCs {
                 GridConstant.GRANULARITY
         );
         LOG.info("PceGraph ...");
+
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
-                nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
-                rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-                clientInput);
+            nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
+            rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
+            clientInput);
+
         Subscriber errorSubscriber = new EventSubscriber();
         graph.calcPath(errorSubscriber);
         rc = graph.getReturnStructure();
