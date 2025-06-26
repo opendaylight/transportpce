@@ -1,0 +1,34 @@
+
+@startuml
+'https://plantuml.com/sequence-diagram
+participant External
+participant ServiceDeleteImpl
+participant RendererNotificationHandler
+participant PceNotificationHandler
+participant NotificationPublishService
+participant NbiNotification
+
+autonumber
+== Start ==
+External -> ServiceDeleteImpl: invoke()
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, PENDING
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, PENDING\n(RendererServiceOperationImpl.serviceDelete())
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, PENDING\n(Turndown task A-Z)
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, PENDING\n(Turndown task Z-A)
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, PENDING\n"Deleting path via renderer"
+ServiceDeleteImpl -> NotificationPublishService: RendererRpcResultSh, service-delete-result, SUCCESSFUL
+ServiceDeleteImpl -> External: AckFinalIndicator,\nresponseMessage,\nresponseCode.
+
+== RendererNotificationHandler ==
+NotificationPublishService -> RendererNotificationHandler: onRendererRpcResultSp,\nservice-delete,\nSUCCESSFUL
+RendererNotificationHandler -> NotificationPublishService: ServiceRpcResultSh,\nservice-delete-result,\nPENDING
+RendererNotificationHandler -> NotificationPublishService: ServicePathRpcResult,\ncancel-resource-reserve,\nPENDING
+RendererNotificationHandler -> NotificationPublishService: ServicePathRpcResult,\ncancel-resource-reserve,\nSUCCESSSFUL
+RendererNotificationHandler -> NotificationPublishService: ServiceRpcResultSh,\nservice-delete-result,\nSUCCESSFUL
+RendererNotificationHandler -> NotificationPublishService: ServiceRpcResultSh,\nservice-delete-result,\nSUCCESSFUL
+
+== PceNotificationHandler ==
+NotificationPublishService -> PceNotificationHandler:onServicePathRpcResult,\ncancel-resource-reserve,\nSUCCESSFULL
+PceNotificationHandler -> NbiNotification:"Service deleted !",state.degraded
+== Done ==
+@enduml
