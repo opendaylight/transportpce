@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -30,6 +31,8 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
@@ -1151,4 +1154,42 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         );
     }
 
+    //Two cases:
+    //When occupied, occupied spectrum is the spectrum, available spectrum is empty and supported spectrum is what is supported
+    //When not used, available spectrum is the same as supported spectrum. Occupied is empty.
+
+    @Test
+    @DisplayName("Test used frequency map is empty")
+    void testCreateAvailabelFrequencyMapEmpty() {
+        ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
+                topologyUuid,
+                tapiLink);
+        Frequency lowerBound = new TeraHertz(1.0d);
+        Frequency upperBound = new TeraHertz(4.0d);
+        Map<Frequency, Frequency> used = Map.of();
+        Map<Frequency, Frequency> avail = convertORTopoToTapiFullTopo
+                .createAvailableFreqMap(used, lowerBound, upperBound);
+
+        assertTrue(!avail.isEmpty());
+        assertTrue(avail.size() == 1);
+        assertTrue(avail.containsKey(lowerBound));
+        assertTrue(avail.containsValue(upperBound));
+    }
+
+    @Test
+    @DisplayName("Test used frequency map is not empty")
+    void testCreateAvailabelFrequencyMapNotEmpty() {
+        ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
+                topologyUuid,
+                tapiLink);
+        Frequency lowerBound = new TeraHertz(1.0d);
+        Frequency upperBound = new TeraHertz(4.0d);
+        Frequency usedLow = new TeraHertz(2.53d);
+        Frequency usedUpper = new TeraHertz(2.78d);
+        Map<Frequency, Frequency> used = Map.of(usedLow, usedUpper);
+        Map<Frequency, Frequency> avail = convertORTopoToTapiFullTopo
+                .createAvailableFreqMap(used, lowerBound, upperBound);
+
+        assertTrue(avail.isEmpty());
+    }
 }
