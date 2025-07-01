@@ -17,6 +17,23 @@
       "message": "recheck",
       "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c58966d4_11cb974a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-07-01T13:02:23Z",
+      "side": 1,
+      "message": "Maybe the name of this method should be changed. Now it\u0027s very confusing since we don\u0027t work with used wavelengths.",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
