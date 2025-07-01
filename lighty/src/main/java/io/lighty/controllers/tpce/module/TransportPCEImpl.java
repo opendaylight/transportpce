@@ -128,7 +128,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         NotificationService notificationService = lightyServices.getNotificationService();
         new NetworkUtilsImpl(dataBroker, rpcProviderService);
         networkModelProvider = new NetworkModelProvider(networkTransaction, dataBroker, networkModelService,
-                deviceTransactionManager, portMapping, notificationService, new FrequenciesServiceImpl(dataBroker));
+                deviceTransactionManager, portMapping, notificationService, new FrequenciesServiceImpl(dataBroker,
+                notificationPublishService));
 
         LOG.info("Creating PCE beans ...");
         // TODO: pass those parameters through command line
