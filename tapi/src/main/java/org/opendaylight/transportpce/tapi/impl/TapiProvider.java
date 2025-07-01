@@ -39,7 +39,10 @@ import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotification
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
+import org.opendaylight.transportpce.tapi.openroadm.OpenRoadmTopologyUpdate;
 import org.opendaylight.transportpce.tapi.openroadm.service.OpenRoadmService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmDataStore;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.TapiDataStore;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
@@ -177,13 +180,20 @@ public class TapiProvider {
         rendererlistenerRegistration = notificationService
             .registerCompositeListener(rendererListenerImpl.getCompositeListener());
         LOG.debug("Renderer Listener Registration in TapiProvider : {}", rendererlistenerRegistration);
+        TapiDataStore tapiDataStore = new TapiDataStore(networkTransactionService);
         TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(
                 dataBroker,
                 new OpenRoadmService(
                         dataBroker,
                         networkTransactionService,
                         serviceDataStoreOperations,
-                        tapiContext)
+                        tapiContext),
+                new OpenRoadmTopologyUpdate(
+                        tapiContext,
+                        tapiDataStore,
+                        new OpenRoadmDataStore(networkTransactionService),
+                        networkTransactionService
+                )
         );
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
