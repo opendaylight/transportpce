@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -29,6 +30,10 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1Builder;
@@ -77,6 +82,7 @@ public class FrequenciesServiceImpl implements FrequenciesService {
     private static final Logger LOG = LoggerFactory.getLogger(FrequenciesServiceImpl.class);
     private final DataBroker dataBroker;
     private final AvailFreqMapsKey availFreqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+    private final NotificationPublishService notificationPublishService;
 
     /**
      * Create instance of the FrequenciesService.
@@ -84,8 +90,10 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      * @param dataBroker Provides access to the conceptual data tree store used by the implementation.
      */
     @Activate
-    public FrequenciesServiceImpl(@Reference DataBroker dataBroker) {
+    public FrequenciesServiceImpl(@Reference DataBroker dataBroker,
+            @Reference NotificationPublishService notificationPublishService) {
         this.dataBroker = dataBroker;
+        this.notificationPublishService = notificationPublishService;
     }
 
     /** {@inheritDoc} */
@@ -294,6 +302,9 @@ public class FrequenciesServiceImpl implements FrequenciesService {
      */
     private void setFrequencies4Tps(Decimal64 atozMinFrequency, Decimal64 atozMaxFrequency, Uint32 rate,
             ModulationFormat modulationFormat, List<NodeIdPair> tpIds, boolean used) {
+
+        TopologyUpdateResultBuilder topologyUpdateResultBuilder = new TopologyUpdateResultBuilder();
+        Map<TopologyChangesKey, TopologyChanges> topologyChangesMap = new HashMap<>();
         String strTpIdsList = String.join(", ", tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList()));
         LOG.debug(
             "Update frequencies for termination points {}, rate {}, modulation format {},"
@@ -359,12 +370,28 @@ public class FrequenciesServiceImpl implements FrequenciesService {
                     LOG.warn("Termination point type {} not managed", commonNetworkTerminationPoint.getTpType());
                     return;
             }
-            updateFrequenciesTransaction.put(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers
-                    .createNetworkTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                            idPair.getTpID()), networkTerminationPointBuilder.build());
+            TopologyChanges topologyChangesBuilder = new TopologyChangesBuilder()
+                    .setNodeId(idPair.getNodeID())
+                    .setTpId(idPair.getTpID())
+                    .build();
+            topologyChangesMap.put(topologyChangesBuilder.key(), topologyChangesBuilder);
+            DataObjectIdentifier<TerminationPoint1> networkTerminationPoint1IIDBuilder =
+                    InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(
+                            idPair.getNodeID(),
+                            idPair.getTpID()
+            );
+            updateFrequenciesTransaction.put(
+                    LogicalDatastoreType.CONFIGURATION,
+                    networkTerminationPoint1IIDBuilder,
+                    networkTerminationPointBuilder.build()
+            );
         }
+
         try {
             updateFrequenciesTransaction.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            LOG.info("Successfully updated frequencies for termination points {}", strTpIdsList);
+            topologyUpdateResultBuilder.setTopologyChanges(topologyChangesMap);
+            notificationPublishService.putNotification(topologyUpdateResultBuilder.build());
         } catch (ExecutionException | TimeoutException e) {
             LOG.error(
                 "Something went wrong for frequencies update (min frequency {}, max frequency {}, used {} for TPs {}",
