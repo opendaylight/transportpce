@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -559,6 +560,11 @@ public class ConvertTopoORtoTapiAtInit {
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
                 Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
                 Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
+                Frequency upperBound = frequencyFactory.frequency(
+                        GridConstant.START_EDGE_FREQUENCY_THZ,
+                        GridConstant.GRANULARITY,
+                        GridConstant.EFFECTIVE_BITS);
+                Frequency lowerBound = new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ);
                 switch (tpType) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
@@ -566,17 +572,13 @@ public class ConvertTopoORtoTapiAtInit {
                     case SRGTXPP:
                     case SRGTXRXPP:
                         usedFreqMap = tapiFactory.getPPUsedWavelength(tp);
-                        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(
-                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ),
-                                    frequencyFactory.frequency(
-                                            GridConstant.START_EDGE_FREQUENCY_THZ,
-                                            GridConstant.GRANULARITY,
-                                            GridConstant.EFFECTIVE_BITS)
-                            );
-                        } else {
+                        availableFreqMap = createAvailableFreqMap(usedFreqMap, lowerBound, upperBound);
+                        if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
-                                usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
+                                    usedFreqMap,
+                                    String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId),
+                                    nodeId);
+                            usedFreqMap = Map.of(); //prevent usedFreqMap from being null, and thus not be inclued
                             onepMap.putAll(populateNepsForRdmNode(srg,
                                 nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC));
                             onepMap.putAll(populateNepsForRdmNode(srg,
@@ -628,6 +630,20 @@ public class ConvertTopoORtoTapiAtInit {
         }
         LOG.info("TopoInitialMapping, SRG OTS CepMAp is {}", srgOtsCepMap);
         return onepMap;
+    }
+
+    //Two cases. If There is an occupied spectrum, the avaiable is empty.
+    //if there is nothing occupied, the available is the same as supported.
+    @VisibleForTesting
+    public Map<Frequency, Frequency> createAvailableFreqMap(Map<Frequency, Frequency> usedFreqMap,
+                                                            Frequency lowerBound,
+                                                            Frequency upperBound) {
+        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
+            return Map.of(lowerBound, upperBound);
+        }
+        else {
+            return Map.of();
+        }
     }
 
     /**
