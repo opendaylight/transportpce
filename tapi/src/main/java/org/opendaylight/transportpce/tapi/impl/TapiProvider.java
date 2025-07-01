@@ -40,6 +40,11 @@ import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
 import org.opendaylight.transportpce.tapi.openroadm.service.OpenRoadmService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.OpenRoadmTopology;
+import org.opendaylight.transportpce.tapi.openroadm.topology.storage.OpenRoadmStorage;
+import org.opendaylight.transportpce.tapi.openroadm.topology.storage.TAPIStorage;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.OpenRoadmTerminationPoint;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.factory.OwnNodeEdgePointFactory;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
@@ -177,13 +182,21 @@ public class TapiProvider {
         rendererlistenerRegistration = notificationService
             .registerCompositeListener(rendererListenerImpl.getCompositeListener());
         LOG.debug("Renderer Listener Registration in TapiProvider : {}", rendererlistenerRegistration);
+        TAPIStorage tapiStorage = new TAPIStorage(networkTransactionService);
         TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(
                 dataBroker,
                 new OpenRoadmService(
                         dataBroker,
                         networkTransactionService,
                         serviceDataStoreOperations,
-                        tapiContext)
+                        tapiContext),
+                new OpenRoadmTopology(
+                        tapiContext,
+                        tapiStorage,
+                        new OpenRoadmStorage(networkTransactionService),
+                        new OwnNodeEdgePointFactory(
+                                new OpenRoadmTerminationPoint(networkTransactionService),
+                                tapiContext))
         );
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
