@@ -30,6 +30,8 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
@@ -1149,6 +1151,34 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         assertTrue(
                 "ROADMA".equals(convertORTopoToTapiFullTopo.getIdBasedOnModelVersion("ROADMA-SRG1"))
         );
+    }
+
+    @Test
+    void testCreateAvailableFrequencyMap() {
+        ConvertTopoORtoTapiAtInit convertORTopoToTapiFullTopo = new ConvertTopoORtoTapiAtInit(
+                topologyUuid,
+                tapiLink);
+        Frequency lowerBound = new TeraHertz(1.0d);
+        Frequency upperBound = new TeraHertz(4.0d);
+        Map<Frequency, Frequency> usedFreqMap = Map.of(
+                THz(2.4d), THz(2.6d),
+                THz(1.4), THz(1.6),
+                THz(3.2), THz(3.4),
+                THz(2.0d), THz(2.2d));
+        Map<Frequency, Frequency> expectedAvialableMap = Map.of(
+                THz(1.0d), THz(1.4d),
+                THz(1.6), THz(2.0d),
+                THz(2.2d), THz(2.4d),
+                THz(2.6d), THz(3.2d),
+                THz(3.4d), THz(4.0d));
+
+        Map<Frequency, Frequency> producedAvailableMap = convertORTopoToTapiFullTopo.createAvailableFreqMap(usedFreqMap, lowerBound, upperBound);
+
+        assertEquals(expectedAvialableMap, producedAvailableMap);
+    }
+
+    private TeraHertz THz(Double freq) {
+        return new TeraHertz(freq);
     }
 
 }
