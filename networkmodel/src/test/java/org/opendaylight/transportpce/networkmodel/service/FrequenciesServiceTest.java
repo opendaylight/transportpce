@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
@@ -79,7 +81,8 @@ public class FrequenciesServiceTest extends AbstractTest {
 
     @Test
     void allocateFrequenciesTest() {
-        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
+        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker(),
+                Mockito.mock(NotificationPublishService.class));
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
         assertEquals(
@@ -104,7 +107,8 @@ public class FrequenciesServiceTest extends AbstractTest {
 
     @Test
     void releaseFrequenciesTest() {
-        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker());
+        FrequenciesService service = new FrequenciesServiceImpl(getDataBroker(),
+                Mockito.mock(NotificationPublishService.class));
         service.allocateFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         service.releaseFrequencies(pathDescription.getAToZDirection(), pathDescription.getZToADirection());
         TerminationPoint1 terminationPoint = getNetworkTerminationPointFromDatastore("ROADM-A1-DEG2", "DEG2-CTP-TXRX");
