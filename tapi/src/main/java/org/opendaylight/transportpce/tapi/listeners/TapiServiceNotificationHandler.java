@@ -10,7 +10,9 @@ package org.opendaylight.transportpce.tapi.listeners;
 import java.util.Set;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationService.CompositeListener;
+import org.opendaylight.transportpce.tapi.openroadm.TopologyUpdate;
 import org.opendaylight.transportpce.tapi.openroadm.service.Service;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
@@ -22,15 +24,22 @@ public class TapiServiceNotificationHandler {
     private static final Logger LOG = LoggerFactory.getLogger(TapiServiceNotificationHandler.class);
     private final DataBroker dataBroker;
     private final Service openRoadmService;
+    private final TopologyUpdate openRoadmTopologyUpdate;
 
-    public TapiServiceNotificationHandler(DataBroker dataBroker, Service openRoadmService) {
+    public TapiServiceNotificationHandler(
+            DataBroker dataBroker,
+            Service openRoadmService,
+            TopologyUpdate openRoadmTopologyUpdate) {
+
         this.dataBroker = dataBroker;
         this.openRoadmService = openRoadmService;
+        this.openRoadmTopologyUpdate = openRoadmTopologyUpdate;
     }
 
     public CompositeListener getCompositeListener() {
         return new CompositeListener(Set.of(
-                new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh)));
+                new CompositeListener.Component<>(ServiceRpcResultSh.class, this::onServiceRpcResultSh),
+                new CompositeListener.Component<>(TopologyUpdateResult.class, this::onTopologyChange)));
     }
 
     private void onServiceRpcResultSh(ServiceRpcResultSh notification) {
@@ -40,5 +49,11 @@ public class TapiServiceNotificationHandler {
                 && notification.getNotificationType().equals(ServiceNotificationTypes.ServiceCreateResult)) {
             openRoadmService.copyServiceToTAPI(notification.getServiceName());
         }
+    }
+
+    private void onTopologyChange(TopologyUpdateResult notification) {
+        // Handle topology change notification
+        LOG.info("TapiTopologyNotificationListener, Topology change notification received: {}", notification);
+        openRoadmTopologyUpdate.copyToTAPI(notification);
     }
 }
