@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -566,6 +567,11 @@ public class ConvertTopoORtoTapiAtInit {
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
                 Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
                 Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
+                Frequency upperBound = frequencyFactory.frequency(
+                        GridConstant.START_EDGE_FREQUENCY,
+                        GridConstant.GRANULARITY,
+                        GridConstant.EFFECTIVE_BITS);
+                Frequency lowerBound = new TeraHertz(GridConstant.START_EDGE_FREQUENCY);
                 switch (tpType) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
@@ -573,17 +579,12 @@ public class ConvertTopoORtoTapiAtInit {
                     case SRGTXPP:
                     case SRGTXRXPP:
                         usedFreqMap = tapiFactory.getPPUsedFrequencies(tp);
-                        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(
-                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
-                                    frequencyFactory.frequency(
-                                            GridConstant.START_EDGE_FREQUENCY,
-                                            GridConstant.GRANULARITY,
-                                            GridConstant.EFFECTIVE_BITS)
-                            );
-                        } else {
+                        availableFreqMap = createAvailableFreqMap(usedFreqMap, lowerBound, upperBound);
+                        if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
-                                usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
+                                    usedFreqMap,
+                                    String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId),
+                                    nodeId);
                             onepMap.putAll(populateNepsForRdmNode(srg,
                                 nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC));
                             onepMap.putAll(populateNepsForRdmNode(srg,
@@ -635,6 +636,39 @@ public class ConvertTopoORtoTapiAtInit {
         }
         LOG.info("TopoInitialMapping, SRG OTS CepMAp is {}", srgOtsCepMap);
         return onepMap;
+    }
+
+    // Map frequency start (key)  to frequency end (value)
+    @VisibleForTesting
+    public Map<Frequency, Frequency> createAvailableFreqMap(Map<Frequency, Frequency> usedFreqMap,
+                                                            Frequency lowerBound,
+                                                            Frequency upperBound) {
+        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
+            return Map.of(lowerBound, upperBound);
+        }
+        Frequency endFreq = lowerBound;
+        Frequency startFreq;
+        Map<Frequency, Frequency> returnMap = new HashMap<>();
+        //sort the map on the keys before iterating
+        List<Map.Entry<Frequency,Frequency>> sortedList = usedFreqMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .toList();
+        for (Map.Entry<Frequency, Frequency> entry:sortedList) {
+            startFreq = entry.getKey();
+            if (endFreq.compareTo(startFreq) != 0) {
+                returnMap.put(endFreq, startFreq);
+            }
+            endFreq = entry.getValue();
+        }
+        //Check if there is unused frequencies after the last used frequency
+        startFreq = upperBound;
+        if (endFreq.compareTo(startFreq) != 0) {
+            //one last hole
+            returnMap.put(endFreq, startFreq);
+        }
+        return returnMap;
     }
 
     /**
