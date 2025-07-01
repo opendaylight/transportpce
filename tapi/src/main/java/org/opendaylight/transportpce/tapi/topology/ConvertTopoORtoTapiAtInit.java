@@ -297,9 +297,11 @@ public class ConvertTopoORtoTapiAtInit {
                     LOG.info("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
                     oneplist.putAll(
-                        populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
+                         populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS,
+                                this.ietfNodeId));
                     oneplist.putAll(
-                        populateNepsForRdmNode(false, nodeId, degPortList, false, TapiConstants.PHTNC_MEDIA_OMS));
+                        populateNepsForRdmNode(false, nodeId, degPortList, false, TapiConstants.PHTNC_MEDIA_OMS,
+                                this.ietfNodeId));
                     numNeps += degPortList.size() * 2;
                     break;
                 case 12:
@@ -317,7 +319,8 @@ public class ConvertTopoORtoTapiAtInit {
                     LOG.info("Srg port List: {}", srgPortList.stream().map(srg ->
                             srg.getTpId().getValue()).collect(Collectors.toSet()));
                     oneplist.putAll(
-                        populateNepsForRdmNode(true, nodeId, srgPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
+                        populateNepsForRdmNode(true, nodeId, srgPortList, true, TapiConstants.PHTNC_MEDIA_OTS,
+                                this.ietfNodeId));
 
                     numNeps += srgPortList.size();
                     numSips += srgPortList.size();
@@ -347,7 +350,8 @@ public class ConvertTopoORtoTapiAtInit {
             .collect(Collectors.toList()).toString());
         //org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
         var roadmNode = createRoadmTapiNode(nodeUuid,
-            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist, "Full");
+            Map.of(nodeNames.key(), nodeNames, nameNodeType.key(), nameNodeType), layerProtocols, oneplist, "Full",
+                this.ietfNodeId);
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNF)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNF)",
@@ -432,7 +436,7 @@ public class ConvertTopoORtoTapiAtInit {
             // Convert TP List in NEPs and put it in onepl
             LOG.debug("Srg port List: {}", srgPortList);
             oneMap.putAll(populateNepsForRdmNode(true, node.getNodeId().getValue(), srgPortList, true,
-                TapiConstants.PHTNC_MEDIA_OTS));
+                TapiConstants.PHTNC_MEDIA_OTS, this.ietfNodeId));
             numNeps += srgPortList.size();
             numSips += srgPortList.size();
         }
@@ -449,7 +453,7 @@ public class ConvertTopoORtoTapiAtInit {
         // Build tapi node
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node roadmNode =
             createRoadmTapiNode(nodeUuid, Map.of(nodeName.key(), nodeName, nameNodeType.key(), nameNodeType),
-            layerProtocols, oneMap, "Abstracted");
+            layerProtocols, oneMap, "Abstracted", this.ietfNodeId);
         // TODO add states corresponding to device config
         LOG.info("ROADM node {} should have {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA, numNeps, numSips);
         LOG.info("ROADM node {} has {} NEPs and {} SIPs (CRNA)", TapiConstants.RDM_INFRA,
@@ -472,7 +476,7 @@ public class ConvertTopoORtoTapiAtInit {
      */
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node
              createRoadmTapiNode(Uuid nodeUuid, Map<NameKey, Name> nameMap, Set<LayerProtocolName> layerProtocols,
-             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode) {
+             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap, String topoMode, String ietfNodeIdStr) {
         // Empty random creation of mandatory fields for avoiding errors....
         CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
             .setCostAlgorithm("Restricted Shortest Path - RSP")
@@ -497,7 +501,7 @@ public class ConvertTopoORtoTapiAtInit {
                 topoMode.equals("Full")
                     ? "Full"
                     : "Abstracted",
-                nodeUuid, this.ietfNodeId, onepMap.values());
+                nodeUuid, ietfNodeIdStr, onepMap.values());
         Map<NodeRuleGroupKey, String> nrgMap = new HashMap<>();
         for (Map.Entry<NodeRuleGroupKey, NodeRuleGroup> nrgMapEntry : nodeRuleGroupMap.entrySet()) {
             nrgMap.put(nrgMapEntry.getKey(), nrgMapEntry.getValue().getName().get(new NameKey("nrg name")).getValue());
@@ -507,7 +511,7 @@ public class ConvertTopoORtoTapiAtInit {
                 topoMode.equals("Full")
                     ? "Full"
                     : "Abstracted",
-                nodeUuid, this.ietfNodeId, nrgMap);
+                nodeUuid, ietfNodeIdStr, nrgMap);
         return new NodeBuilder()
             .setUuid(nodeUuid)
             .setName(nameMap)
@@ -541,7 +545,8 @@ public class ConvertTopoORtoTapiAtInit {
      * @param nepPhotonicSublayer The CEP layer protocol qualifier associated with the NEP's client CEP,
      */
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
-            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
+            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer,
+            String ietfNodeIdS) {
         // create neps for MC and and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
         LOG.info("Populating NEPs for ROADM node {} (ietf node id: {}), ", nodeId, this.ietfNodeId);
@@ -551,7 +556,7 @@ public class ConvertTopoORtoTapiAtInit {
             // Admin and oper state common for all tps
             OpenroadmTpType tpType = tp.augmentation(TerminationPoint1.class).getTpType();
             // PHOTONIC MEDIA nep
-            LOG.debug("PHOTO NEP = {}", String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId));
+            LOG.debug("PHOTO NEP = {}", String.join("+", ietfNodeIdS, nepPhotonicSublayer, tpId));
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
                 new SupportedCepLayerProtocolQualifierInstancesBuilder()
                     .setNumberOfCepInstances(Uint64.ONE);
@@ -576,10 +581,10 @@ public class ConvertTopoORtoTapiAtInit {
             State oper = tp.augmentation(TerminationPoint1.class).getOperationalState();
             Name nepName = new NameBuilder()
                 .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
-                .setValue(String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
+                .setValue(String.join("+", ietfNodeIdS, nepPhotonicSublayer, tpId))
                 .build();
             OwnedNodeEdgePointBuilder onepBdd = new OwnedNodeEdgePointBuilder()
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes((String.join("+", ietfNodeIdS, nepPhotonicSublayer, tpId))
                     .getBytes(StandardCharsets.UTF_8)).toString()))
                 .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
                 .setName(Map.of(nepName.key(), nepName))
@@ -616,9 +621,9 @@ public class ConvertTopoORtoTapiAtInit {
                             LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
                                 usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
                             onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC));
+                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC, ietfNodeIdS));
                             onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.OTSI_MC));
+                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.OTSI_MC, ietfNodeIdS));
                         }
                         break;
                     case DEGREERXTTP:
@@ -645,12 +650,12 @@ public class ConvertTopoORtoTapiAtInit {
                 int highFrequencyIndex = 0;
                 int lowFrequencyIndex = 0;
                 var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
-                    String.join("+", this.ietfNodeId, tpId), nepPhotonicSublayer, null, srg);
+                    String.join("+", ietfNodeIdS, tpId), nepPhotonicSublayer, null, srg);
                 LOG.debug("Populate NEPs for ROADM node {}: creating CEP for SRG ({})", nodeId, srg);
                 var uuidMap = new HashMap<>(Map.of(
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", this.ietfNodeId, nepPhotonicSublayer,
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", "CEP", ietfNodeIdS, nepPhotonicSublayer,
                         tpId)).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
-                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", this.ietfNodeId, TapiConstants.PHTNC_MEDIA))
+                    new Uuid(UUID.nameUUIDFromBytes((String.join("+", ietfNodeIdS, TapiConstants.PHTNC_MEDIA))
                         .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
                 this.srgOtsCepMap.put(uuidMap, cep);
                 logCreatedCep(this.ietfNodeId, tpId, cep);
@@ -658,6 +663,8 @@ public class ConvertTopoORtoTapiAtInit {
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+                LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                    ietfNodeIdS, tpId, cep);
 
                 onepBdd.addAugmentation(onep1Bldr)
                         .build();
