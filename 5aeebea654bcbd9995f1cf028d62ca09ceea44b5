@@ -19,6 +19,40 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fba7f1_0275cd0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T10:36:46Z",
+      "side": 1,
+      "message": "Looks good.",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb241ccf_2e11bd0b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/range/FrequencyRangeFactory.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T10:36:46Z",
+      "side": 1,
+      "message": "Isn\u0027t this already supported in supported range? Dont you just need to do supportedRange.add(ranges);",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c58966d4_11cb974a",
