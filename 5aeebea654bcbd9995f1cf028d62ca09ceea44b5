@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa25b548_18b7ebd6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/range/FrequencyRangeFactory.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T10:41:48Z",
+      "side": 1,
+      "message": "Sorry I meant new SortedRange(ranges);",
+      "parentUuid": "bb241ccf_2e11bd0b",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c58966d4_11cb974a",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 10
