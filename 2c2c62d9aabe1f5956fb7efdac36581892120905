@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4b874d4_96b6eb39",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "Could we split this method up in maybe three or four smaller methods?\n\nThere is a lot going on here and it would help readability a lot.",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd6e488_a605e6c3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "This stream().filter could be refactored out to its own method.",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d6aeb0e_2bd570d7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "This stream().filter could be refactored to its own method.\n\nMaybe there are some pattern similarities from the previous one that can be used?",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b1ad41_30bc19a1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "Also here maybe throw this into some log method?\n\n`logUpdatedNodes(ownNodeEdgepints);`",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26fec2f3_27f32020",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "Maybe the for loops in this method can be put in their own methods for both readability and compactness?",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd399bac_c1b939d2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "Maybe put this logging in its own method.\nMaybe make the for loop its own method also?",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "664a8555_a132b97a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-02T08:26:40Z",
+      "side": 1,
+      "message": "should we assert some correctness to the topology?",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
