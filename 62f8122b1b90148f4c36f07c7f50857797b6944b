@@ -16,6 +16,24 @@
       "message": "Why not remove this if it\u0027s not used anymore?",
       "revId": "62f8122b1b90148f4c36f07c7f50857797b6944b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc04e3ad_62e84d4f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-03T14:00:31Z",
+      "side": 1,
+      "message": "My mistake. I completely forgot about this change. Shouldn\u0027t have been committed in  this state.",
+      "parentUuid": "5d9fc4dd_bf54de1e",
+      "revId": "62f8122b1b90148f4c36f07c7f50857797b6944b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
