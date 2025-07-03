@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9fc4dd_bf54de1e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-07-03T13:49:30Z",
+      "side": 1,
+      "message": "Why not remove this if it\u0027s not used anymore?",
+      "revId": "62f8122b1b90148f4c36f07c7f50857797b6944b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
