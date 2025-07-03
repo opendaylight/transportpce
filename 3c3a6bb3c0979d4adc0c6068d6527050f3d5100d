@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3314dd00_c34a83d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-07-03T12:14:26Z",
+      "side": 1,
+      "message": "Your commit title exceeds the 50 authorized characters",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "3c3a6bb3c0979d4adc0c6068d6527050f3d5100d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83730f0_d1493de7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-07-03T12:14:26Z",
+      "side": 1,
+      "message": "Thank you Jimmi for your change. One remark with regards your commit message.\nCould you also add a JIRA ticket reference to the footer of your commit message?\nThank you in advance.",
+      "revId": "3c3a6bb3c0979d4adc0c6068d6527050f3d5100d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
