@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43a8519b_c84463e7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c4b874d4_96b6eb39",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fd6e488_a605e6c3",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-07-02T08:26:40Z",
       "side": 1,
       "message": "This stream().filter could be refactored out to its own method.",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b0b56a_46c21d73",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "The filter has been refactored into its own method `terminationPointIsSRG` in the class `OpenRoadmTerminationPoint`.",
+      "parentUuid": "5fd6e488_a605e6c3",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbd331f8_dd569943",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "The filter has been refactored into its own method `terminationPointIsDegree` in the class `OpenRoadmTerminationPoint`.",
+      "parentUuid": "2d6aeb0e_2bd570d7",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1b1ad41_30bc19a1",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
         "patchSetId": 24
@@ -65,6 +119,24 @@
       "writtenOn": "2025-07-02T08:26:40Z",
       "side": 1,
       "message": "Also here maybe throw this into some log method?\n\n`logUpdatedNodes(ownNodeEdgepints);`",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ce0582_2afee911",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1b1ad41_30bc19a1",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -86,6 +158,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b7359d4_1b1ff268",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "26fec2f3_27f32020",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd399bac_c1b939d2",
@@ -103,6 +193,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c888b583_d7a0e8ae",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dd399bac_c1b939d2",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "664a8555_a132b97a",
@@ -116,6 +224,24 @@
       "writtenOn": "2025-07-02T08:26:40Z",
       "side": 1,
       "message": "should we assert some correctness to the topology?",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8bfa604_0f3e0d7f",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-04T11:59:50Z",
+      "side": 1,
+      "message": "This change shouldn\u0027t have been committed. I need to go through the commits again to make sure stuff like this hasn\u0027t been committed.",
+      "parentUuid": "664a8555_a132b97a",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
