@@ -1798,6 +1798,8 @@ public final class ConnectivityUtils {
                 tsbBldr.setValue(Decimal64.valueOf((initialCapa - capacityDecrement), RoundingMode.DOWN));
                 LOG.debug("CU line 1801 updating Available Capacity for Nep {}, from {} to {}",
                     nepId, initialCapa, initialCapa - capacityDecrement);
+            } else {
+                tsbBldr.setValue(Decimal64.valueOf(0.0, RoundingMode.DOWN));
             }
         } else {
             LOG.debug("CU line 1802 updating Available Capacity for Nep {}, NullAvailableCapa or TotalSize", nepId);
