@@ -35,6 +35,12 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 public class TpceNetworkTest extends AbstractTest {
     TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(getDataBroker()));
 
+    /**
+     * Default constructor.
+     */
+    public TpceNetworkTest() {
+    }
+
     @Test
     void createLayerClliTest() throws InterruptedException, ExecutionException {
         tpceNetwork.createLayer("clli-network");
