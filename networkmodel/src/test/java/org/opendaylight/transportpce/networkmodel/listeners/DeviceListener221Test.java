@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceData;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.change.notification.Edit;
@@ -48,6 +48,12 @@ public class DeviceListener221Test {
     private Mapping oldMapping;
     @Mock
     private ChangeNotification notification;
+
+    /**
+     * Default constructor.
+     */
+    public DeviceListener221Test() {
+    }
 
     @Test
     void testOnChangeNotificationWhenPortUpdated() {
