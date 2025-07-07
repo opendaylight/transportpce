@@ -80,8 +80,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.renderer.rollback.output.FailedToRollbackKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.list.Services;
@@ -184,7 +184,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             try {
                 // if the node is currently mounted then proceed
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
                             .network.Nodes mappingNode = portMapping.getNode(nodeId);
                     if (mappingNode != null && mappingNode.getDatamodelType() != null
                             && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
@@ -468,7 +468,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 //TODO should deletion end here?
             }
             // if the node is currently mounted then proceed.
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
                     .network.Nodes mappingNode = portMapping.getNode(nodeId);
             if (mappingNode != null && mappingNode.getDatamodelType() != null
                     && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
