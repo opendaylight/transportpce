@@ -11,10 +11,12 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Optional;
+import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.binding.DataContainer;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.Notification;
+import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
@@ -36,6 +38,9 @@ public interface DataObjectConverter {
 
     Optional<NormalizedNode> transformIntoNormalizedNode(
             @NonNull Reader inputReader);
+
+    Optional<NormalizedNode> transformIntoNormalizedNode(
+            @NonNull Reader inputReader, @NonNull Set<YangModuleInfo> models);
 
     <T extends DataObject> Writer writerFromDataObject(@NonNull DataObject object, Class<T> dataObjectClass,
             ConvertType<T> convertType);

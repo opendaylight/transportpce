@@ -101,6 +101,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
+import org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev250325.YangModuleInfoImpl;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -184,7 +185,8 @@ public class PceGraphTest extends AbstractTest {
         }
         // The mapping corresponding to the topology is directly populated from a file in the Dta Store
         try (Reader reader = Files.newBufferedReader(Path.of(MAPPING_FILE), StandardCharsets.UTF_8)) {
-            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader).orElseThrow();
+            NormalizedNode normalizedNode = dataObjectConverter.transformIntoNormalizedNode(reader,
+                    Set.of(YangModuleInfoImpl.getInstance())).orElseThrow();
             networkNode = (org.opendaylight.yang.gen.v1.http.org.opendaylight
                     .transportpce.portmapping.rev250325.Network) getDataStoreContextUtil()
                 .getBindingDOMCodecServices()

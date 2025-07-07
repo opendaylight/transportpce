@@ -13,6 +13,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Optional;
+import java.util.Set;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -24,6 +25,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.binding.data.codec.api.BindingNormalizedNodeSerializer;
+import org.opendaylight.yangtools.binding.meta.YangModuleInfo;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
@@ -116,6 +118,12 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
 
     @Override
     public Optional<NormalizedNode> transformIntoNormalizedNode(Reader inputReader, SchemaNode parentSchema) {
+        throw new UnsupportedOperationException("Not Implemented yet");
+    }
+
+    @Override
+    public Optional<NormalizedNode> transformIntoNormalizedNode(@NonNull Reader inputReader,
+            Set<YangModuleInfo> models) {
         throw new UnsupportedOperationException("Not Implemented yet");
     }
 
