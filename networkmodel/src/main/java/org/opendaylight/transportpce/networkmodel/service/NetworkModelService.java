@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.renderer.rpc.result.sp.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev241009.ConnectionOper.ConnectionStatus;

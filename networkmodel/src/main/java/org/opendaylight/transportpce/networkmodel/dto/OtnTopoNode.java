@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.networkmodel.dto;
 
 import java.util.List;
 import java.util.Map;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 
 /**

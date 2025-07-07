@@ -44,10 +44,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.DataModelEnum;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
