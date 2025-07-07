@@ -293,7 +293,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.pce.rev240205.YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev250325.YangModuleInfoImpl
+            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev250714.YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728
                     .YangModuleInfoImpl.getInstance(),
@@ -305,7 +305,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.svc.v1.http.org.transportpce.common.types.rev250325.YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.svc.v1.http.org.transportpce.common.types.rev250714.YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.svc.v1.gnpy.gnpy.api.rev220221.YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.svc.v1.gnpy.gnpy.eqpt.config.rev220221.YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.svc.v1.gnpy.gnpy.network.topology.rev220615.YangModuleInfoImpl.getInstance(),

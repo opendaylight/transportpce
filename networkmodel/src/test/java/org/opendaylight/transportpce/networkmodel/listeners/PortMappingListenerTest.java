@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.mapping.Mapping;
 
 
 /**
@@ -35,6 +35,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
  */
 @ExtendWith(MockitoExtension.class)
 public class PortMappingListenerTest {
+
+    /**
+     * Default constructor.
+     */
+    public PortMappingListenerTest() {
+    }
 
     @Mock
     private NetworkModelService networkModelService;
