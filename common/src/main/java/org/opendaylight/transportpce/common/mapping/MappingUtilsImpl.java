@@ -285,7 +285,8 @@ public final class MappingUtilsImpl implements MappingUtils {
     @Override
     public List<McCapabilities> getMcCapabilitiesForNode(String nodeId) {
         List<McCapabilities> mcCapabilities = new ArrayList<>();
-        DataObjectIdentifier<Nodes> nodePortMappingIID = DataObjectIdentifier.builder(Network.class)
+        DataObjectIdentifier<Nodes> nodePortMappingIID = DataObjectIdentifier
+                .builder(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
                 .build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
