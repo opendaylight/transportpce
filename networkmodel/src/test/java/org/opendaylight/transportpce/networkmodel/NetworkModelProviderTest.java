@@ -50,6 +50,12 @@ public class NetworkModelProviderTest {
     @Mock
     FrequenciesService frequenciesService;
 
+    /**
+     * Default constructor.
+     */
+    public NetworkModelProviderTest() {
+    }
+
     @Test
     void networkmodelProviderInitTest() {
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {

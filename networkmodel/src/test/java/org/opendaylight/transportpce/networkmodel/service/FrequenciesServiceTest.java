@@ -59,6 +59,12 @@ public class FrequenciesServiceTest extends AbstractTest {
     private final BitSet usedBits = new BitSet(8);
     private static BitSet availableBits = new BitSet(8);
 
+    /**
+     * Default constructor.
+     */
+    public FrequenciesServiceTest() {
+    }
+
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
         availableBits.set(0, 8, true);
