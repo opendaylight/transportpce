@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.network.Nodes;
 
 public interface TapiNetworkModelService {
 
