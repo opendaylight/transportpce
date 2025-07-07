@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -28,6 +28,12 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
  * ClliNetworkTest class.
  */
 public class ClliNetworkTest {
+
+    /**
+     * Default constructor.
+     */
+    public ClliNetworkTest() {
+    }
 
     @Test
     void createNodeTest() {
