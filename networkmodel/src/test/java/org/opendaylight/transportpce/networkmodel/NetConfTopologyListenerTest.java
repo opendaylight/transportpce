@@ -31,8 +31,8 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.NodeDatamodelType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Host;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
@@ -74,6 +74,12 @@ public class NetConfTopologyListenerTest {
     private Nodes nodes;
     @Mock
     private NodeDatamodelType nodeDatamodelType;
+
+    /**
+     * Default constructor.
+     */
+    public NetConfTopologyListenerTest() {
+    }
 
     @Test
     void testOnDataTreeChangedWhenDeleteNode() {

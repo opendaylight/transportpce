@@ -21,10 +21,10 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.switching.pool.lcp.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.switching.pool.lcp.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.switching.pool.lcp.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714.switching.pool.lcp.SwitchingPoolLcpKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -762,9 +762,9 @@ public final class OpenRoadmOtnTopology {
         Map<OduSwitchingPoolsKey, OduSwitchingPools> oduSwPoolMap = new HashMap<>();
         for (Map.Entry<SwitchingPoolLcpKey, SwitchingPoolLcp> oslp : oslpMap.entrySet()) {
             Map<NonBlockingListKey, NonBlockingList> nblMap = new HashMap<>();
-            for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
+            for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714
                     .switching.pool.lcp.switching.pool.lcp.NonBlockingListKey,
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250714
                         .switching.pool.lcp.switching.pool.lcp.NonBlockingList> nblEntry : oslp
                             .getValue().getNonBlockingList().entrySet()) {
                 Set<TpId> tpList = new HashSet<>();
