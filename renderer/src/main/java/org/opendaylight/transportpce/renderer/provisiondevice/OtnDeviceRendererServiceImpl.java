@@ -39,7 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTpBuilder;
@@ -99,7 +99,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             //Based on first node's datamodelType we decide the flow for OpenConfig or OpenRoadm
             Nodes nodes = input.getNodes().stream().findFirst().orElseThrow();
             if (nodes.getNodeId() != null) {
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes
                         mappingNode = portMapping.getNode(nodes.getNodeId());
                 if (mappingNode != null && mappingNode.getDatamodelType() != null
                         && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
@@ -298,7 +298,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 // TODO should deletion end here?
             }
             boolean isOpenConfig = false;
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes
                     mappingNode = portMapping.getNode(nodeId);
             if (mappingNode != null && mappingNode.getDatamodelType() != null
                     && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {

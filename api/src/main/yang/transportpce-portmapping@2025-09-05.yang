@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2025-09-05 {
+    description
+      "Add wavelength duplication support for SRG";
+  }
+
   revision 2025-09-02 {
     description
       "Change revision of org-openroadm imported model to use the 13.1.1 version";
@@ -500,6 +505,22 @@ module transportpce-portmapping {
     }
   }
 
+  grouping shared-risk-group {
+    list shared-risk-group {
+      key "srg-number";
+      description
+        "SRG";
+      leaf srg-number {
+        type uint16;
+        description
+          "Validating if the srg is supported by add/drop group";
+      }
+      leaf wavelength-duplication {
+        type org-openroadm-common-optical-channel-types:wavelength-duplication-type;
+      }
+    }
+  }
+
   container network {
     list nodes {
       key "node-id";
@@ -520,6 +541,7 @@ module transportpce-portmapping {
       uses mc-capabilities;
       uses cp-to-degree;
       uses switching-pool-lcp;
+      uses shared-risk-group;
     }
   }
 }
