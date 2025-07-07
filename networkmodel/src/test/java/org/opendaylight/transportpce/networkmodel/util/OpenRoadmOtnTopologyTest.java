@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
@@ -63,6 +64,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.portmapping.rev250325.YangModuleInfoImpl;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -85,7 +87,8 @@ public class OpenRoadmOtnTopologyTest {
         try (Reader reader = Files.newBufferedReader(
                 Path.of("src/test/resources/portMapping.json"),
                 StandardCharsets.UTF_8)) {
-            Network portMapping = (Network) new JsonDataConverter(null).deserialize(reader, Network.QNAME);
+            Network portMapping = (Network) new JsonDataConverter(
+                    Set.of(YangModuleInfoImpl.getInstance())).deserialize(reader, Network.QNAME);
             for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {
                     this.portMappingTpdr = nodes;

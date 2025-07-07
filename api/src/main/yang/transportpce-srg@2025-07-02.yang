@@ -1,0 +1,129 @@
+module transportpce-srg {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/srg";
+  prefix transportpce-srg;
+
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2020-05-29;
+  }
+  import org-openroadm-device-types {
+    prefix org-openroadm-device-types;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2020-03-27;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2023-05-26;
+  }
+
+  organization
+    "Smartoptics";
+  contact
+    "smartoptics.com";
+  description
+    "A srg yang model primarily intended to be used for saving C/D/C
+    information to the datastore in TransportPCE.
+
+    Copyright ©  2025 Smartoptics and others.  All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation and/or
+    other materials provided with the distribution.
+    * Neither Smartoptics nor the names of its contributors may be used to endorse or promote
+    products derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY ITS AUTHORS AND SMARTOPTCIS AND OTHER CONTRIBUTORS ''AS IS''
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+    IN NO EVENT ITS AUTHORS AND SMARTOPTCIS AND OTHER CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+    NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+    OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2025-07-02 {
+    description
+      "Initial revision.";
+  }
+
+  grouping circuit-pack-name {
+    leaf circuit-pack-name {
+      description
+        "Circuit-Pack identifier. Unique within the context of a device.";
+      type leafref {
+        path "/org-openroadm-device/circuit-packs/circuit-pack-name";
+      }
+    }
+  }
+
+  grouping srg {
+    leaf max-add-drop-ports {
+      type uint16;
+      config false;
+      mandatory true;
+    }
+    leaf srg-number {
+      type uint16;
+      description
+        "Validating if the srg is supported by add/drop group";
+    }
+    leaf wavelengthDuplication {
+      description
+        "Whether the SRG can handle duplicate wavelengths and if so to what extent.";
+      config false;
+      mandatory true;
+      type enumeration {
+        enum "onePerSRG" {
+          description
+            "The SRG cannot handle wavelength duplication. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will result in failure.";
+          value 1;
+        }
+        enum "onePerDegree" {
+          description
+            "The SRG can handle wavelength duplication, but only one per degree. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will succeed, so long as the connections are not using the same degree.";
+          value 2;
+        }
+      }
+    }
+    list circuit-packs {
+      key "index";
+      description
+        "list for Cards associated with an add/drop group and srg";
+      leaf index {
+        type uint32;
+      }
+      uses circuit-pack-name {
+        refine "circuit-pack-name" {
+          mandatory true;
+        }
+      }
+    }
+  }
+
+  container network {
+    list network-nodes {
+      key "node-id";
+      leaf node-id {
+        type string;
+        description
+          "Unique identifier for node in the network";
+      }
+      list shared-risk-group {
+        when "/org-openroadm-device/info/node-type='rdm'";
+        key "srg-number";
+        uses srg;
+      }
+    }
+  }
+}
