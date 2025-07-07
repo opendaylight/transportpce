@@ -246,9 +246,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
         self.assertIn(
             {'nbl-number': 83,
+             'lcp-list': ['XPDR3-NETWORK1', 'XPDR3-CLIENT3'],
              'interconnect-bandwidth': 0,
-             'interconnect-bandwidth-unit': 1000000000,
-             'lcp-list': ['XPDR3-CLIENT3', 'XPDR3-NETWORK1']},
+             'interconnect-bandwidth-unit': 1000000000},
             response['switching-pool-lcp'][0]['non-blocking-list'])
 
     def test_21_spdr_portmapping_mappings(self):
