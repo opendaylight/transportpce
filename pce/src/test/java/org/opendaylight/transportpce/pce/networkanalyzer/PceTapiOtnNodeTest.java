@@ -163,7 +163,7 @@ public class PceTapiOtnNodeTest extends AbstractTest {
 
         assertTrue(pceONspdrSA1.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
+        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR1+XPONDER"),
             "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
         assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
             "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
@@ -242,7 +242,7 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         PceTapiOtnNode pceONspdrSA1 = tapiONspdrAx1.getXpdrOtnNode();
         assertTrue(pceONspdrSA1.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
+        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR1+XPONDER"),
             "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
         assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
             "SPDR-SA1 Node shall be of Xponder Type");
@@ -301,12 +301,12 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         PceTapiOtnNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOtnNode();
         assertTrue(pceONspdrSA2.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA2-XPDR1+XPONDER NodeId");
+        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR2+XPONDER"),
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
         assertTrue(pceONspdrSA2.getSupNetworkNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting Network NodeId");
         assertTrue(pceONspdrSA2.getSupClliNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting CLLI NodeId");
         assertTrue(pceONspdrSA2.getORNodeType().equals(OpenroadmNodeType.XPONDER),
             "SPDR-SA1 Node shall be of Xponder Type");
         assertTrue(pceONspdrSA2.getPceNodeType().equals("otn"),
@@ -366,8 +366,8 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         PceTapiOtnNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOtnNode();
         assertTrue(pceONspdrSA2.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA2-XPDR1+XPONDER NodeId");
+        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR2+XPONDER"),
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
         assertTrue(pceONspdrSA2.getORNodeType().equals(OpenroadmNodeType.XPONDER),
             "SPDR-SA1 Node shall be of Xponder Type");
         assertTrue(pceONspdrSA2.getPceNodeType().equals("otn"),
@@ -421,12 +421,12 @@ public class PceTapiOtnNodeTest extends AbstractTest {
 
         assertTrue(pceONspdrSA1.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
+        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR3+XPONDER"),
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
         assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
         assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
         assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
             "SPDR-SA1 Node shall be of Xponder Type");
         assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
@@ -492,12 +492,12 @@ public class PceTapiOtnNodeTest extends AbstractTest {
 
         assertTrue(pceONspdrSA1.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
+        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR3+XPONDER"),
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
         assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
         assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
+            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
         assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
             "SPDR-SA1 Node shall be of Xponder Type");
         assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
