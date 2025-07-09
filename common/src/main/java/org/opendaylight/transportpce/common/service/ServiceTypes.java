@@ -19,11 +19,12 @@ import org.slf4j.LoggerFactory;
 
 public final class ServiceTypes {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceTypes.class);
+    private static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
 
     private ServiceTypes() {
     }
 
-    public static String getServiceType(String serviceFormat, Uint32 serviceRate, Mapping mapping) {
+    public static String getServiceType(String serviceFormat, Uint32 serviceRate, Mapping mapping, String pceOperMode) {
 
         switch (serviceFormat) {
             case "OC":
@@ -57,6 +58,9 @@ public final class ServiceTypes {
                 return getOtnServiceType(serviceFormat, serviceRate);
 
             case "other":
+                if (Uint32.valueOf(100).equals(serviceRate) && (TAPI_PCE_OPER_MODE).equals(pceOperMode)) {
+                    return StringConstants.SERVICE_TYPE_100GE_S;
+                }
                 return StringConstants.SERVICE_TYPE_OTHER;
             //case "ODU":
             //case "OTU":

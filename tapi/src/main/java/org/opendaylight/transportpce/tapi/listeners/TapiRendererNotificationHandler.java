@@ -229,6 +229,8 @@ public class TapiRendererNotificationHandler {
                 newConnection = new ConnectionBuilder(optConn.orElseThrow()).setLifecycleState(LifecycleState.INSTALLED)
                     .setOperationalState(OperationalState.ENABLED).build();
             // merge in datastore
+            LOG.info("TRNHLine232 : Updating connection {} to OperationalState enable ",
+                connectionUuid);
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectionIID,
                     newConnection);
             this.networkTransactionService.commit().get();
