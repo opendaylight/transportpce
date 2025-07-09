@@ -173,7 +173,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             && input.getServiceAEnd().getTxDirection().getPort().getPortName() != null
                         ? portMapping.getMapping(input.getServiceAEnd().getNodeId(),
                             input.getServiceAEnd().getTxDirection().getPort().getPortName())
-                        : null
+                        : null,
+                        null
                     );
                 }
                 //TODO a Map might be more indicated here
@@ -272,7 +273,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     .orElseThrow().getPort().getPortName() == null
                                     ? null : portMapping.getMapping(service.getServiceAEnd().getNodeId().getValue(),
                                     service.getServiceAEnd().getTxDirection().values().stream().findFirst()
-                                            .orElseThrow().getPort().getPortName()));
+                                            .orElseThrow().getPort().getPortName()),
+                             null);
                 }
                 switch (serviceType) {
                     case StringConstants.SERVICE_TYPE_100GE_T:
@@ -519,7 +521,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("For temp-service create OLM is not computed and skipped");
             return new ArrayList<>();
         }
-        LOG.info("Olm power setup A-Z");
+        LOG.info("Olm power setup A-Z powerSetUpInputAtoZ = {}", powerSetupInputAtoZ);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),
@@ -529,7 +531,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 this.executor.submit(
                     new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputAtoZ));
 
-        LOG.info("OLM power setup Z-A");
+        LOG.info("Olm power setup Z-A powerSetUpInputAtoZ = {}", powerSetupInputZtoA);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),

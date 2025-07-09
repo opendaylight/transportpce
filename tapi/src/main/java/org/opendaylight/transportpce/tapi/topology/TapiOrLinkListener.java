@@ -196,7 +196,8 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                             .build())
                     .get()
                     .isEmpty()) {
-                LOG.error("Opposite link not found in datastore {}", oppositeLink.getValue());
+                LOG.warn("Opposite link not found in datastore {}. May correspond to an intermediate step",
+                    oppositeLink.getValue());
                 return false;
             }
             return true;

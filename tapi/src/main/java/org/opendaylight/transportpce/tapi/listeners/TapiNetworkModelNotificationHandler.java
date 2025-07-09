@@ -442,6 +442,12 @@ public class TapiNetworkModelNotificationHandler {
                                 changedOneps.indexOf(connectionNeps.get(1)))) : null) == OperationalState.DISABLED) {
                 return OperationalState.DISABLED;
             }
+            if ((changedOneps.contains(connectionNeps.get(0)) ? transformOperState(operState.get(
+                    changedOneps.indexOf(connectionNeps.get(0)))) : null) == OperationalState.ENABLED
+                        || (changedOneps.contains(connectionNeps.get(1)) ? transformOperState(operState.get(
+                                changedOneps.indexOf(connectionNeps.get(1)))) : null) == OperationalState.ENABLED) {
+                return OperationalState.ENABLED;
+            }
             LOG.info("Didnt transform correctly the states");
             for (Uuid connectionNep : connectionNeps) {
                 Optional<org.opendaylight.yang.gen.v1.urn
