@@ -8,10 +8,13 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
@@ -31,6 +34,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Laye
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+//import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connection.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.context.Connection;
@@ -85,7 +89,7 @@ public class PceTapiLink implements Serializable, PceLink {
     private Long latency;
     private Double availableBandwidth;
     private Double usedBandwidth;
-    private final Set<String> srlgList;
+    private Set<String> srlgList;
     // source index will be set to reflect whether the source is NodeX (0) or NodeY (1)
     private int sourceIndex;
     private String clientA;
@@ -120,9 +124,6 @@ public class PceTapiLink implements Serializable, PceLink {
         this.linkName = link.getName().values().stream().findFirst().orElseThrow();
         this.topoId = topologyId;
         this.direction = link.getDirection();
-        if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
-            this.oppositeLink = link.getUuid();
-        }
         this.nepMap = link.getNodeEdgePoint();
         retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
         LOG.info("PceTapiLInk Line 107 : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {}",
@@ -161,6 +162,13 @@ public class PceTapiLink implements Serializable, PceLink {
             this.pmd2 = 0.0;
         }
 
+        if (ForwardingDirection.BIDIRECTIONAL.equals(link.getDirection())) {
+            this.direction = ForwardingDirection.UNIDIRECTIONAL;
+            String oppLinkName = String.join("-", "ADDEDunidirLink",
+                nodeY.getNodeId().getValue(), nodeX.getNodeId().getValue());
+            this.oppositeLink = new Uuid(UUID.nameUUIDFromBytes(oppLinkName.getBytes(StandardCharsets.UTF_8))
+                .toString());
+        }
         LOG.debug("PceLink: created PceLink  {} for topo {}", linkId, topoId);
     }
 
@@ -188,6 +196,7 @@ public class PceTapiLink implements Serializable, PceLink {
         //Administrative state is not defined for connections : will assume it is UNLOCKED by default
         this.adminStates = AdministrativeState.UNLOCKED;
         this.opState = conn.getOperationalState();
+        // Following line used for early exit (link is not valid). Opposite link uuid modified later on if con is valid
         if (ForwardingDirection.BIDIRECTIONAL.equals(direction)) {
             this.oppositeLink = conn.getUuid();
         }
@@ -207,7 +216,9 @@ public class PceTapiLink implements Serializable, PceLink {
             return;
         }
         this.cepMap = conn.getConnectionEndPoint();
-        LOG.info("PceLink Line 186: calling  retrieveSrcDestNodeIds for PceLink OTN {} ", linkId);
+        LOG.info("PceLink Line 218: serviceType {} line protocolqualifier of link {} is {}",
+            serviceType, linkId, lpq);
+        LOG.info("PceLink Line 219: calling  retrieveSrcDestNodeIds for PceLink OTN {} ", linkId);
         retrieveSrcDestNodeIds(topoId, conn.getUuid(), conn.getDirection(), nodeX, nodeY, false);
 
         calculateOtnBandwidth(nodeX, nodeY);
@@ -224,6 +235,14 @@ public class PceTapiLink implements Serializable, PceLink {
         this.powerCorrection = 0.0;
         this.cd = 0.0;
         this.pmd2 = 0.0;
+
+        if (ForwardingDirection.BIDIRECTIONAL.equals(conn.getDirection())) {
+            this.direction = ForwardingDirection.UNIDIRECTIONAL;
+            String oppLinkName = String.join("-", "ADDEDunidirCon",
+                nodeY.getNodeId().getValue(), nodeX.getNodeId().getValue());
+            this.oppositeLink = new Uuid(UUID.nameUUIDFromBytes(oppLinkName.getBytes(StandardCharsets.UTF_8))
+                .toString());
+        }
 
         LOG.debug("PceLink: created PceLink OTN {} for topo {}", linkId, topoId);
     }
@@ -269,6 +288,68 @@ public class PceTapiLink implements Serializable, PceLink {
     }
 
     /**
+     * Generic PceTapiLink used to build reverse unidirectional link in case the link is originally bidirectional.
+     * The generated PceTapiLink corresponds the the reverse link of the pceLink provided as input parameter.
+     * LinkName and Uuid are provided as input to make sure they are unique and correspond to what is generated in PCE,
+     * as they can not be easily deduced from original PceLink name and Uuid.
+     * @param pceLink       The revert PceLink used as a base to construct the opposite PceLink.
+     * @param linkName      The link Name to be used.
+     * @param linkUuid      The link Uuid to be used.
+     * @param orLinkType    OpenROADM link type to be used.
+     */
+    public PceTapiLink(PceTapiLink pceLink, OpenroadmLinkType orLinkType, Name linkName, Uuid linkUuid) {
+
+        LOG.debug("PceLink: : PceLink start ");
+        this.sourceIndex = 0;
+        this.linkId = linkUuid;
+        this.linkName = linkName;
+        this.direction = ForwardingDirection.UNIDIRECTIONAL;
+        this.sourceNodeId = pceLink.getDestUuid();
+        this.destNodeId = pceLink.getSourceUuid();
+        this.sourceTpId = pceLink.getDestTPUuid();
+        this.sourceCLLI = pceLink.getdestCLLI();
+        this.destCLLI = pceLink.getsourceCLLI();
+        this.destTpId = pceLink.getSourceTPUuid();
+        this.oppositeLink = pceLink.getLinkUuid();
+        this.adminStates = pceLink.getAdministrativeState();
+        this.opState = pceLink.getOperationalState();
+        this.lpn = pceLink.getLpn();
+        this.srlgList = null;
+        if (!orLinkType.equals(OpenroadmLinkType.OTNLINK)) {
+            this.isValid = pceLink.isValid;
+            Set<String> srlglList = new HashSet<>();
+            if (pceLink.getsrlgList() != null && !pceLink.getsrlgList().isEmpty()) {
+                for (Long srlg : pceLink.getsrlgList()) {
+                    srlglList.add(srlg.toString());
+                }
+                this.srlgList = srlglList;
+            } else {
+                this.srlgList = null;
+            }
+        }
+
+        this.latency = pceLink.getLatency().longValue();
+        this.length = pceLink.getLength();
+        if (pceLink.getAvailableBandwidth() != null) {
+            this.availableBandwidth = pceLink.getAvailableBandwidth().doubleValue();
+        } else {
+            this.availableBandwidth = 0.0;
+        }
+        if (pceLink.getUsedBandwidth() != null) {
+            this.usedBandwidth =  pceLink.getUsedBandwidth().doubleValue();
+        } else {
+            this.usedBandwidth = 0.0;
+        }
+        this.spanLoss = pceLink.getspanLoss();
+        this.powerCorrection = pceLink.getpowerCorrection();
+        this.cd = pceLink.getcd();
+        this.pmd2 = pceLink.getpmd2();
+        this.linkType = orLinkType;
+
+        LOG.debug("PceLink: created PceLink  {}", linkId);
+    }
+
+    /**
      * Sets availableBandwidth from the source Tp AvailableCapacity container for OTN Links.
      * @param nodeX         A PceNode (TapiPceOtnNode) corresponding to one end of the PceTapiLink,
      * @param nodeY         A PceNode (TapiPceOtnNode) corresponding to the other end of the PceTapiLink.
@@ -297,6 +378,8 @@ public class PceTapiLink implements Serializable, PceLink {
             availableBandwidthSrc = Math.min(availableBandwidthSrc, availableBandwidthDst);
         }
         this.availableBandwidth = availableBandwidthSrc == null ? null : availableBandwidthSrc * 1000.0;
+        LOG.info("PceTapiLink:calculateOtnBandwidth Line369 -> available BW is {} with SrcNodeTpId = {} and"
+            + " DestNodeTpId = {}", availableBandwidth, sourceTpId, destTpId);
     }
 
     /**
@@ -810,14 +893,21 @@ public class PceTapiLink implements Serializable, PceLink {
                 neededType = OtnLinkType.OTUC3;
                 break;
             case "ODUC4":
+            case "400GEm":
+            case "400GEs":
+            case "400GEt":
                 neededBW = 400000.0;
+                // neededType not used for 400GEt but there to path condition in following if
                 neededType = OtnLinkType.OTUC4;
                 break;
             case "ODU4":
+                neededBW = 100000.0;
+                neededType = OtnLinkType.OTU4;
+                break;
             case "100GEs":
             case "100GEm":
                 neededBW = 100000.0;
-                neededType = OtnLinkType.OTU4;
+                neededType = OtnLinkType.ODU4;
                 break;
             // For ODU0 to ODU2, not really needed as created at the same time of DSR service
             // So will never have service create of these types
@@ -843,14 +933,7 @@ public class PceTapiLink implements Serializable, PceLink {
             case "800GEs":
             case "800GEt":
                 neededBW = 800000.0;
-                break;
-            case "400GEm":
-            case "400GEs":
-                neededBW = 400000.0;
-                break;
-            case "400GEt":
-                neededBW = 400000.0;
-                neededType = OtnLinkType.ODUC4;
+                // neededType to be defined when identity available
                 break;
             default:
                 LOG.error("PceLink: isOtnValid Link {} unsupported serviceType {} ", linkId, serviceType);
@@ -944,7 +1027,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public LinkId getOppositeLink() {
-        return null;
+        return new LinkId(oppositeLink.getValue());
     }
 
     /*
@@ -1054,7 +1137,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public LinkId getLinkId() {
-        return null;
+        return new LinkId(linkId.getValue());
     }
 
     /*
@@ -1074,7 +1157,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public NodeId getSourceId() {
-        return null;
+        return new NodeId(sourceNodeId.getValue());
     }
 
     /*
@@ -1094,7 +1177,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public NodeId getDestId() {
-        return null;
+        return new NodeId(destNodeId.getValue());
     }
 
     /*
@@ -1161,6 +1244,9 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public Long getAvailableBandwidth() {
+        if (availableBandwidth == null) {
+            return Long.valueOf(0);
+        }
         return availableBandwidth.longValue();
     }
 
@@ -1171,6 +1257,9 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public Long getUsedBandwidth() {
+        if (usedBandwidth == null) {
+            return Long.valueOf(0);
+        }
         return usedBandwidth.longValue();
     }
 
@@ -1345,4 +1434,11 @@ public class PceTapiLink implements Serializable, PceLink {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency + " Name=" + linkName;
     }
 
+    /**
+     * Provides implementation of .toString for Links.
+     */
+    @Override
+    public int getSourceIndex() {
+        return this.sourceIndex;
+    }
 }

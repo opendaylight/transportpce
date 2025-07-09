@@ -184,6 +184,7 @@ public class PceTapiOtnNode implements PceNode {
     private String modeType;
     private AdministrativeState adminState;
     private OperationalState operState;
+    private Uuid parentNodeUuid;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
@@ -240,7 +241,7 @@ public class PceTapiOtnNode implements PceNode {
             this.valid = false;
         }
         if (valid) {
-            LOG.debug("PceTapiOtnNodeLine241: Node {} passed first step of validation", node.getName());
+            LOG.info("PceTapiOtnNodeLine241: Node {} passed first step of validation", node.getName());
         }
         if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
                 && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
@@ -248,7 +249,7 @@ public class PceTapiOtnNode implements PceNode {
             this.valid = false;
         }
         if (valid) {
-            LOG.debug("PceTapiOtnNodeLine249: Node {} passed 2nd step of validation", node.getName());
+            LOG.info("PceTapiOtnNodeLine249: Node {} passed 2nd step of validation", node.getName());
         }
     }
 
@@ -288,11 +289,11 @@ public class PceTapiOtnNode implements PceNode {
             availableXpdrNWTps = tapiON.getOduCepAndNep().stream()
                 .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList());
-            LOG.debug("PTOtnN Line289 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.info("PTOtnN Line289 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
-            LOG.debug("PTOtnN Line291 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+            LOG.info("PTOtnN Line291 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
-            LOG.debug("PTOtnN Line293 : availableXpdrClientTps vertConnectedNep {}", availableXpdrClientTps.stream()
+            LOG.info("PTOtnN Line293 : availableXpdrClientTps vertConnectedNep {}", availableXpdrClientTps.stream()
                 .map(BasePceNep::getVerticallyConnectedNep).collect(Collectors.toList()));
             int clientListSize = availableXpdrClientTps.size();
             if (availableXpdrClientTps.isEmpty()) {
@@ -313,17 +314,19 @@ public class PceTapiOtnNode implements PceNode {
         } else {
             LOG.error("PceOtnNode: initXndrTps: Unidentified Service Type {}", otnServiceType);
         }
+        LOG.info("PTOtnN Line313 : availableXpdrClientTps contains before purge {}", availableXpdrClientTps);
+        LOG.info("PTOtnN Line314 : clientPortId is {}", clientPortId);
         // Purge availableXpder-NW/Client-Tps from ports that are not directly or undirectly connected to clientPort
-        LOG.debug("PTOtnN Line315 : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
+        LOG.info("PTOtnN Line315 : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
             .filter(bpn -> isValidBpn(bpn)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.debug("PTOtnN Line318 : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
+        LOG.info("PTOtnN Line318 : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
             .filter(bpn -> bpn.getVerticallyConnectedNep().contains(clientPortId)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
         availableXpdrClientTps.removeAll(availableXpdrClientTps.stream()
             .filter(bpn -> (!(isValidBpn(bpn) || (bpn.getVerticallyConnectedNep().contains(clientPortId)))))
             .collect(Collectors.toList()));
-        LOG.debug("PTOtnN Line324 : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+        LOG.info("PTOtnN Line324 : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
         if (!availableXpdrClientTps.isEmpty()) {
             List<BasePceNep> bpnToRemove = new ArrayList<>();
@@ -331,7 +334,7 @@ public class PceTapiOtnNode implements PceNode {
                 // In the case of an ODU4 service, the iODU (HighOrder) on the network side will be added to the
                 // Client TPs. We need to avoid it is removed from the list
                 boolean isDSR = bpn.getLpn().getName().contains("DSR");
-                LOG.debug("PTOtnNLine332 : 1st purge step-> Analizing bpn {}, LayerProtocolQualifier = {}, is DSR = {}",
+                LOG.info("PTOtnNLine332 : 1st purge step-> Analizing bpn {}, LayerProtocolQualifier = {}, is DSR = {}",
                     bpn.getName(), isDSR, bpn.getLpn());
                 if (!isValidTp(bpn, false, isDSR) && (bpn.getLpq() != null && !bpn.getLpq().equals(ODUTYPEODU4.VALUE))
                         || !isValidTp(bpn, true, isDSR)
@@ -341,20 +344,20 @@ public class PceTapiOtnNode implements PceNode {
             }
             availableXpdrClientTps.removeAll(bpnToRemove);
         }
-        LOG.debug("PTOtnN Line342 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
+        LOG.info("PTOtnN Line342 : availableXpdrClientTps contains {}", availableXpdrClientTps.stream()
             .map(BasePceNep::getName).collect(Collectors.toList()));
         if (availableXpdrNWTps != null && !availableXpdrNWTps.isEmpty()) {
-            LOG.debug("PTOtnN Line345 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.info("PTOtnN Line345 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
             availableXpdrNWTps.removeAll(availableXpdrNWTps.stream()
                 // We shall not remove tp that are not vertically connected to NW nep (more NRG aspects checked through
                 // checkSwPool -> only remove tp that are not valid
                 .filter(bpn -> !isValidTp(bpn, true, false))
                 .collect(Collectors.toList()));
-            LOG.debug("PTOtnN Line352 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
+            LOG.info("PTOtnN Line352 : availableXpdrNWTps contains {}", availableXpdrNWTps.stream()
                 .map(BasePceNep::getName).collect(Collectors.toList()));
         }
-        LOG.debug("PceOtnNode Line 355 InitXndrTp, before checking SW pool Valid is  {}", valid);
+        LOG.info("PceOtnNode Line 355 InitXndrTp, before checking SW pool Valid is  {}", valid);
         if (SERVICE_TYPE_ETH_CLASS_MAP.containsKey(otnServiceType)) {
             this.valid = checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
         } else if (availableXpdrClientTps != null && !availableXpdrClientTps.isEmpty()) {
@@ -362,7 +365,7 @@ public class PceTapiOtnNode implements PceNode {
             // but in this case the NW port is in the Client MAp
             this.valid = true;
         }
-        LOG.debug("PceOtnNode Line 363 InitXndrTp, after checking SW pool Valid is  {}", valid);
+        LOG.info("PceOtnNode Line 363 InitXndrTp, after checking SW pool Valid is  {}", valid);
 
     }
 
@@ -430,11 +433,17 @@ public class PceTapiOtnNode implements PceNode {
      */
     public void validateXponder(String anodeId) {
         if (!isValid()) {
+            LOG.info("PceTapiOtnNode Line436 :No Tp Initialization as node not valid {} for aNodeId {}",
+                this.nodeId, anodeId);
             return;
         }
         if (this.nodeId.equals(anodeId)) {
+            LOG.info("PceTapiOtnNode Line439 :Initializing PCeTapiOTnNode Tps in AZ Mode for node {} for aNodeId {}",
+                this.nodeId, anodeId);
             initXndrTps(AZ_MODETYPE);
         } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
+            LOG.info("PceTapiOtnNode Line442 :Initializing PCeTapiOTnNode Tps in int-Mode for node {} & aNodeId {}",
+                this.nodeId, anodeId);
             initXndrTps(INTERMEDIATE_MODETYPE);
         } else {
             LOG.warn("validateAZxponder: XPONDER is ignored == {}", nodeId);
@@ -804,6 +813,8 @@ public class PceTapiOtnNode implements PceNode {
                 availableBandwidth = onepList.stream().findFirst().orElseThrow().getValue()
                     .getAvailableCapacity().getTotalSize().getValue().doubleValue();
             }
+            LOG.info("PceTapiOtnNode:getAvailableCapacityFromUuid Line810 -> available BW is {} with NepUuid = {} and"
+                + " input Uuid = {}", availableBandwidth, nepUuid, nepCepUuid);
             return availableBandwidth;
         }
         return 0.0;
@@ -932,7 +943,10 @@ public class PceTapiOtnNode implements PceNode {
 
     @Override
     public NodeId getNodeId() {
-        return new NodeId(nodeId);
+        // return new NodeId(nodeId);
+        return new NodeId(node.getName().entrySet().stream()
+            .filter(name -> name.getKey().getValueName().equals("dsr/odu node name"))
+            .findFirst().orElseThrow().getValue().getValue());
     }
 
     @Override
@@ -1030,4 +1044,15 @@ public class PceTapiOtnNode implements PceNode {
         listOfCepAndNep = listOfCepAndNep.stream().distinct().collect(Collectors.toList());
         return listOfCepAndNep;
     }
+
+    @Override
+    public Uuid getParentNodeUuid() {
+        return this.parentNodeUuid;
+    }
+
+    public void setParentNodeUuid(Uuid pnodeUuid) {
+        this.parentNodeUuid = pnodeUuid;
+    }
+
+
 }

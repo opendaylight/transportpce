@@ -140,6 +140,12 @@ public interface PceNode {
     Uuid getNodeUuid();
 
     /**
+     * Provides the Uuid of a the parentNode of a Pcenode of the T-API topology.
+     * @return Uuid of the node in T-API topology (before disaggregation for ROADMS), null for others.
+     */
+    Uuid getParentNodeUuid();
+
+    /**
      * Provides available trib-ports for an OTN termination point of an OpenROADM XPONDER.
      * @return  For OTN OpenROADM Nodes, a Map of List of integers (each integer corresponding to the number of an
      *          available tributary-port), with a String as the key, corresponding to the port name.
