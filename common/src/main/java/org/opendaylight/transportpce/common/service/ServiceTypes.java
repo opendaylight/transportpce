@@ -57,6 +57,9 @@ public final class ServiceTypes {
                 return getOtnServiceType(serviceFormat, serviceRate);
 
             case "other":
+                if (Uint32.valueOf(100).equals(serviceRate) && mapping == null) {
+                    return StringConstants.SERVICE_TYPE_100GE_S;
+                }
                 return StringConstants.SERVICE_TYPE_OTHER;
             //case "ODU":
             //case "OTU":

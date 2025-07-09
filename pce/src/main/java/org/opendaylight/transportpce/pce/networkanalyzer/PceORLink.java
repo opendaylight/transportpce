@@ -659,6 +659,14 @@ public class PceORLink implements Serializable, PceLink {
         return true;
     }
 
+    /**
+     * Provides implementation of .toString for Links.
+     */
+    @Override
+    public int getSourceIndex() {
+        return 0;
+    }
+
     @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency;

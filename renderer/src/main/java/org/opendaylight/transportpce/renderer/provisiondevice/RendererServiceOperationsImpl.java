@@ -519,7 +519,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("For temp-service create OLM is not computed and skipped");
             return new ArrayList<>();
         }
-        LOG.info("Olm power setup A-Z");
+        LOG.info("Olm power setup A-Z powerSetUpInputAtoZ = {}", powerSetupInputAtoZ);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),
@@ -529,7 +529,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 this.executor.submit(
                     new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputAtoZ));
 
-        LOG.info("OLM power setup Z-A");
+        LOG.info("Olm power setup Z-A powerSetUpInputAtoZ = {}", powerSetupInputZtoA);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
                 powerSetupInputAtoZ.getServiceName(),

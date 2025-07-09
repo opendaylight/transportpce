@@ -29,9 +29,8 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         if (size == 0) {
             return true;
         }
-        LOG.debug("InAlgoPathValidator: partialPath size: {} prev edge {} new edge {}",
+        LOG.info("InAlgoPathValidator: partialPath size: {} new edge {} previous edge {}",
             size, edge.link().getlinkType(), partialPath.getEdgeList().get(size - 1).link().getlinkType());
-
         return (checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()));
     }
 
@@ -68,7 +67,6 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
             LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
-
         return true;
     }
 }

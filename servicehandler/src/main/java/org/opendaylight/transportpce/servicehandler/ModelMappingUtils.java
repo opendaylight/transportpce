@@ -10,8 +10,11 @@ package org.opendaylight.transportpce.servicehandler;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Pattern;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
@@ -102,6 +105,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -210,16 +214,18 @@ public final class ModelMappingUtils {
     }
 
     private static OduRateIdentity getOduServiceRate(OduRateIdentity oduServiceRate) {
-        if (oduServiceRate == null || !ODU_RATE_MAP.containsKey(oduServiceRate.toString())) {
-            LOG.error("ODU rate {} not recognized", oduServiceRate);
+        if (oduServiceRate == null || !ODU_RATE_MAP.containsKey(oduServiceRate.implementedInterface()
+                .getSimpleName())) {
+            LOG.warn("ODU rate {} not recognized", oduServiceRate);
             return null;
         }
         return ODU_RATE_MAP.get(oduServiceRate.toString());
     }
 
     private static OtuRateIdentity getOtuServiceRate(OtuRateIdentity otuServiceRate) {
-        if (otuServiceRate == null || !OTU_RATE_MAP.containsKey(otuServiceRate.toString())) {
-            LOG.error("OTU rate {} not recognized", otuServiceRate);
+        if (otuServiceRate == null || !OTU_RATE_MAP.containsKey(otuServiceRate.implementedInterface()
+                .getSimpleName())) {
+            LOG.warn("OTU rate {} not recognized", otuServiceRate);
             return null;
         }
         return OTU_RATE_MAP.get(otuServiceRate.toString());
@@ -276,9 +282,17 @@ public final class ModelMappingUtils {
             ServiceEndpoint serviceAEnd,
             SpectrumAllocation spectrumAEndAllocation) {
 
+        String nodeAid = serviceAEnd.getNodeId().getValue();
+        String intermediateNodeAid = nodeAid.substring(2, nodeAid.length());
+        if (getUuidFromInput(intermediateNodeAid).getValue().equals(intermediateNodeAid)) {
+            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
+            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
+            // as the Node Id. Otherwise use as is.
+            nodeAid = intermediateNodeAid;
+        }
         ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
                 .setClli(serviceAEnd.getClli())
-                .setNodeId(serviceAEnd.getNodeId().getValue())
+                .setNodeId(nodeAid)
                 .setRxDirection(
                         createRxDirection(serviceAEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
                 .setServiceFormat(serviceAEnd.getServiceFormat())
@@ -322,9 +336,18 @@ public final class ModelMappingUtils {
             ServiceEndpoint serviceZEnd,
             SpectrumAllocation spectrumZEndAllocation
     ) {
+
+        String nodeZid = serviceZEnd.getNodeId().getValue();
+        String intermediateNodeZid = nodeZid.substring(2, nodeZid.length());
+        if (getUuidFromInput(intermediateNodeZid).getValue().equals(intermediateNodeZid)) {
+            // For request exercised through Tapi, the provided NodeId in the ServiceAend is a Uuid that has been
+            // modified adding "aa" at the begining to fit with OR NodeIdType pattern : will use the initial Uuid
+            // as the Node Id. Otherwise use as is.
+            nodeZid = intermediateNodeZid;
+        }
         ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
                 .setClli(serviceZEnd.getClli())
-                .setNodeId(serviceZEnd.getNodeId().getValue())
+                .setNodeId(nodeZid)
                 .setRxDirection(
                         createRxDirection(serviceZEnd.getRxDirection().values().stream().findFirst().orElseThrow()))
                 .setServiceFormat(serviceZEnd.getServiceFormat())
@@ -769,4 +792,18 @@ public final class ModelMappingUtils {
                 .buildFuture();
     }
 
+    private static Uuid getUuidFromInput(String inString) {
+        if (inString == null) {
+            return null;
+        }
+        Uuid outUuid;
+        Pattern uuidRegex =
+            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(inString).matches()) {
+            outUuid = new Uuid(inString);
+        } else {
+            outUuid = new Uuid(UUID.nameUUIDFromBytes(inString.getBytes(StandardCharsets.UTF_8)).toString());
+        }
+        return outUuid;
+    }
 }

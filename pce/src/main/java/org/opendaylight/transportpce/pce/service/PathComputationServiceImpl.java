@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -71,6 +72,9 @@ public class PathComputationServiceImpl implements PathComputationService {
     private ServicePathRpcResult notification = null;
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
+    private static String pceOperationalMode;
+    public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
+    public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
 
     @Activate
     public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -111,9 +115,25 @@ public class PathComputationServiceImpl implements PathComputationService {
         }
     }
 
+    private void evaluatePceOperType(String serviceName) throws IllegalArgumentException {
+        //check whether service name corresponds to an Uuid or not
+        PathComputationServiceImpl.setPceOperationalMode(PathComputationServiceImpl.OR_PCE_OPER_MODE);
+        if (serviceName == null) {
+            LOG.info("serviceName null, PCE operational mode set as OpenROADM by default");
+            return;
+        }
+        Pattern uuidRegex =
+            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(serviceName).matches()) {
+            PathComputationServiceImpl.setPceOperationalMode(PathComputationServiceImpl.TAPI_PCE_OPER_MODE);
+            LOG.info("serviceName {} identified as an UUID, PCE operational mode set as TAPI", serviceName);
+        }
+    }
+
     @Override
     public ListenableFuture<CancelResourceReserveOutput> cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("cancelResourceReserve");
+        evaluatePceOperType(input.getServiceName());
         return executor.submit(new Callable<CancelResourceReserveOutput>() {
 
             @Override
@@ -124,7 +144,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending,
                         "Service compliant, submitting cancelResourceReserve Request ...",
                         null);
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer, getPceOperationalMode());
                 sendingPCE.cancelResourceReserve();
                 LOG.info("in PathComputationServiceImpl : {}",
                         Boolean.TRUE.equals(sendingPCE.getSuccess())
@@ -152,6 +172,7 @@ public class PathComputationServiceImpl implements PathComputationService {
     @Override
     public ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input) {
         LOG.debug("input parameters are : input = {}", input.toString());
+        evaluatePceOperType(input.getServiceName());
         return executor.submit(new Callable<PathComputationRequestOutput>() {
 
             @Override
@@ -189,7 +210,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                     "Service compliant, submitting pathComputation Request ...",
                     null);
                 PceSendingPceRPCs sendingPCE =
-                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping);
+                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping,
+                        getPceOperationalMode());
                 sendingPCE.pathComputation();
                 String message = sendingPCE.getMessage();
                 String responseCode = sendingPCE.getResponseCode();
@@ -284,6 +306,7 @@ public class PathComputationServiceImpl implements PathComputationService {
     @Override
     public ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
             PathComputationRerouteRequestInput input) {
+        evaluatePceOperType("NotAUuid");
         return executor.submit(() -> {
             PathComputationRerouteRequestOutputBuilder output = new PathComputationRerouteRequestOutputBuilder();
             ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -312,7 +335,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setRoutingMetric(input.getRoutingMetric())
                     .build();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
-                    gnpyConsumer, portMapping, input.getEndpoints());
+                    gnpyConsumer, portMapping, input.getEndpoints(), getPceOperationalMode());
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
@@ -387,6 +410,14 @@ public class PathComputationServiceImpl implements PathComputationService {
             .setResponseType(null)
             .setFeasibility(true)
             .build();
+    }
+
+    public static String getPceOperationalMode() {
+        return pceOperationalMode;
+    }
+
+    public static void setPceOperationalMode(String pceOperMode) {
+        PathComputationServiceImpl.pceOperationalMode = pceOperMode;
     }
 
 }

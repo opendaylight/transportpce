@@ -218,11 +218,14 @@ public class PcePathDescription {
     //ignore as it's not relevant to split it from functional point
     private void buildAtoZ(Map<AToZKey, AToZ> atozMap, List<PceLink> path) {
         Integer index = 0;
-        PceLink lastLink = null;
-        AToZ lastResource = null;
 
         // build A side Client TP
         String tpName = path.get(0).getClientA();
+        LOG.info("PcePathDescription Line227 build AtoZ : link0 ClientA = {}", tpName);
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = path.get(0).getSourceTP().getValue();
+//            LOG.info("PcePathDescription Line230 build AtoZ : link0 ClientA is null, retrieve sourceTp = {}", tpName);
+//        }
         String xname = path.get(0).getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpId(tpName).setTpNodeId(xname)
@@ -233,6 +236,8 @@ public class PcePathDescription {
         AToZ firstResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
         atozMap.put(firstResource.key(),firstResource);
         index += 1;
+        AToZ lastResource = null;
+        PceLink lastLink = null;
         for (PceLink pcelink : path) {
             String srcName = pcelink.getSourceId().getValue();
             // Nodes
@@ -308,6 +313,11 @@ public class PcePathDescription {
 
         // build Z side Client TP
         tpName = lastLink.getClientZ();
+        LOG.info("PcePathDescription Line319 build AtoZ : lastlink ClientZ  = {}", tpName);
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = lastLink.getDestTP().getValue();
+//            LOG.info("PcePathDescription Line319 build AtoZ : lastlink ClientZ null, retrieve sourceTp = {}", tpName);
+//        }
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -329,6 +339,9 @@ public class PcePathDescription {
         // build Z size Client TP
         PceLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
         String tpName = pcelink.getClientA();
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = pcelink.getSourceTP().getValue();
+//        }
         String xname = pcelink.getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -417,6 +430,9 @@ public class PcePathDescription {
 
         // build Z side Client TP
         tpName = lastLink.getClientZ();
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = lastLink.getDestTP().getValue();
+//        }
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName).build();

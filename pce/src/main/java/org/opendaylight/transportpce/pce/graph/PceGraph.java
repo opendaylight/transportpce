@@ -39,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +92,7 @@ public class PceGraph {
         this.clientInput = clientInput;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
+        LOG.info("In PceGraph, serviceType is {} ", serviceType);
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
     }
 
@@ -107,6 +109,7 @@ public class PceGraph {
         populateWithNodes(weightedGraph);
         populateWithLinks(weightedGraph);
 
+        LOG.info(" InPCEGRAPHLine112 calcPath weightedGraph is {}", weightedGraph);
         if (!runKgraphs(weightedGraph)) {
             LOG.error("In calcPath : pceResult {}", pceResult);
             return false;
@@ -178,14 +181,31 @@ public class PceGraph {
 
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
             pceResult.error("Unable to create a valid weighted graph to calculate the shortest path.");
+            if (weightedGraph.edgeSet().isEmpty()) {
+                LOG.info(" In runKgraphs : Edge of weighted graph is empty");
+            }
+            if (weightedGraph.vertexSet().isEmpty()) {
+                LOG.info(" In runKgraphs : VertexSet of weighted graph is empty");
+            }
             return false;
         }
+        LOG.info(" In runKgraphs : weighted graph is : {}", weightedGraph);
         PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
 
         // YenShortestPath on weightedGraph
         YenKShortestPath<String, PceGraphEdge> swp = new YenKShortestPath<>(weightedGraph, wpv);
-        List<GraphPath<String, PceGraphEdge>> weightedPathList = swp
-            .getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
+        List<GraphPath<String, PceGraphEdge>> weightedPathList;
+        LOG.info("kpathsToBring : {}", kpathsToBring);
+        if (apceNode.getNodeUuid() == null && zpceNode.getNodeUuid() == null) {
+            weightedPathList = swp
+                .getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
+        } else {
+            LOG.info("in Pce Graph RunKGraph line201, search for a path between :{} AND {}",
+                apceNode.getNodeUuid().getValue(), zpceNode.getNodeUuid().getValue());
+            weightedPathList = swp
+                .getPaths(apceNode.getNodeUuid().getValue(), zpceNode.getNodeUuid().getValue(), kpathsToBring);
+            LOG.info("in Pce Graph RunKGraph line204, weighted path list :{} ", weightedPathList);
+        }
         allWPaths = IntStream
             .range(0, weightedPathList.size())
             .boxed()
@@ -217,7 +237,8 @@ public class PceGraph {
             LOG.error("In addLinkToGraph link dest node is null : {}", pcelink);
             return false;
         }
-        LOG.debug("In addLinkToGraph link to nodes : {}{} {}", pcelink, source, dest);
+        LOG.info("In addLinkToGraphLine 237 validated link between nodes : {} & {} of type {} and Uuid {}",
+            source.getNodeId(), dest.getNodeId(), pcelink.getlinkType(), pcelink.getLinkUuid());
         return true;
     }
 
@@ -225,9 +246,14 @@ public class PceGraph {
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
-            if (State.InService.equals(node.getValue().getState())) {
+            if (node.getValue().getState() != null && State.InService.equals(node.getValue().getState())) {
                 weightedGraph.addVertex(node.getValue().getNodeId().getValue());
-                LOG.debug("In populateWithNodes in node :  {}", node.getValue());
+                LOG.info("In populateWithNodes add to Vertices node :  {}", node.getValue().getNodeId());
+            } else if (node.getValue().getOperationalState() != null
+                && OperationalState.ENABLED.equals(node.getValue().getOperationalState())) {
+                weightedGraph.addVertex(node.getValue().getNodeUuid().getValue());
+                LOG.info("In populateWithNodes add to Vertices tapi node :  {} of Uuid {}",
+                    node.getValue().getNodeId(), node.getValue().getNodeUuid());
             }
         }
     }
@@ -246,19 +272,27 @@ public class PceGraph {
             }
             //List<PceLink> links = pcenode.getOutgoingLinks();
 
-            LOG.debug("In populateGraph: use node for graph {}", pcenode);
+            LOG.debug("In Graph populateWithLinks: use node for graph {}", pcenode);
 
             for (PceLink link : links) {
-                LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode, link);
+                LOG.info("In Graph populateWithLinks node {} : add edge to graph {}",
+                    pcenode.getNodeId(), link.getLinkId());
 
                 if (!validateLinkforGraph(link)) {
+                    LOG.info("PceGraph populateWithLinks Line279: Link {} of type {} is not valid",
+                        link.getLinkId(), link.getlinkType());
                     continue;
                 }
-                if (State.InService.equals(link.getState())) {
-                    PceGraphEdge graphLink = new PceGraphEdge(link);
+                PceGraphEdge graphLink = new PceGraphEdge(link);
+                if (link.getState() != null && State.InService.equals(link.getState())) {
                     weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
 
                     weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                    LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
+                } else {
+                    weightedGraph.addEdge(link.getSourceUuid().getValue(), link.getDestUuid().getValue(), graphLink);
+                    weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                    LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
                 }
             }
         }

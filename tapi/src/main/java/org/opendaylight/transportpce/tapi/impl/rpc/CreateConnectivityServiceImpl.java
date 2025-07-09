@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.tapi.impl.rpc;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -77,7 +78,15 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
     public ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> invoke(CreateConnectivityServiceInput input) {
         // TODO: later version of TAPI models include Name as an input parameter in connectivity.yang
         LOG.info("RPC create-connectivity received: {}", input.getEndPoint());
-        Uuid serviceUuid = new Uuid(UUID.randomUUID().toString());
+        String serviceName = null;
+        Uuid serviceUuid = null;
+        if (input.getName() != null && !input.getName().entrySet().isEmpty()
+                && input.getName().entrySet().stream().findFirst().orElseThrow().getValue() != null) {
+            serviceName = input.getName().entrySet().stream().findFirst().orElseThrow().getValue().getValue();
+            serviceUuid = new Uuid(UUID.nameUUIDFromBytes(serviceName.getBytes(StandardCharsets.UTF_8)).toString());
+        } else {
+            serviceUuid = new Uuid(UUID.randomUUID().toString());
+        }
         this.pceListenerImpl.setInput(input);
         this.pceListenerImpl.setServiceUuid(serviceUuid);
         this.rendererListenerImpl.setServiceUuid(serviceUuid);
@@ -108,7 +117,8 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         }
         LOG.info("SIPs found in sipMap");
         // TODO: differentiate between OTN service and GbE service in TAPI
-        ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input, serviceUuid);
+        ServiceCreateInput sci = this.connectivityUtils.createORServiceInput(input,
+            serviceName == null ? serviceUuid.getValue() : serviceName);
         if (sci == null) {
             return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                 .withError(ErrorType.RPC, "Couldnt map Service create input")

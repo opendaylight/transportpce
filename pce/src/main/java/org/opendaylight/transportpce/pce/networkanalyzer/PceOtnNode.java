@@ -650,4 +650,9 @@ public class PceOtnNode implements PceNode {
     public List<BasePceNep> getListOfNep() {
         return null;
     }
+
+    @Override
+    public Uuid getParentNodeUuid() {
+        return null;
+    }
 }

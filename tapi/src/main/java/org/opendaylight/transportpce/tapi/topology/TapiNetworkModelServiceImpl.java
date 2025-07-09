@@ -1257,7 +1257,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 }
 
             } else if ((nepProtocol.equals(LayerProtocolName.ODU) || nepProtocol.equals(LayerProtocolName.DIGITALOTN))
-                    && mapping.getPortQual().equals("xpdr-client")) {
+                    && (mapping.getPortQual().equals("xpdr-client") || mapping.getPortQual().equals("switch-client"))) {
 
                 Map<LAYERPROTOCOLQUALIFIER, Uint64> supInt = new HashMap<>();
                 if (!sicColl.stream().filter(lp -> lp.getIfCapType().implementedInterface().getSimpleName()
