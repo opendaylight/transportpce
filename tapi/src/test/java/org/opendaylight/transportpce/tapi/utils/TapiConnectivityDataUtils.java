@@ -55,6 +55,9 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev22112
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectionKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectivityConstraint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.ConnectivityConstraintBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ConnectionEndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ConnectionEndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ConnectionEndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity.service.end.point.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointBuilder;
@@ -97,6 +100,13 @@ public final class TapiConnectivityDataUtils {
 
     private static EndPointBuilder getEndPoint2Builder() {
         Name name = new NameBuilder().setValueName("OpenROADM node id").setValue("SPDR-SC1-XPDR1").build();
+        ConnectionEndPointBuilder cepBld = new ConnectionEndPointBuilder()
+            .setTopologyUuid(new Uuid("393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7"))
+            .setNodeUuid(new Uuid("215ee18f-7869-3492-94d2-0f24ed0a3023"))
+            .setNodeEdgePointUuid(new Uuid("50b7521a-4a38-358f-9846-45c55813416a"))
+            .setConnectionEndPointUuid(new Uuid("a7ef6781-c149-394b-b21c-48b324f68c98"));
+        Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
+        cepMap.put(cepBld.build().key(), cepBld.build());
         return new EndPointBuilder().setLayerProtocolName(LayerProtocolName.DSR)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
@@ -104,6 +114,7 @@ public final class TapiConnectivityDataUtils {
             .setRole(PortRole.SYMMETRIC)
             .setProtectionRole(ProtectionRole.NA)
             .setLocalId("SPDR-SC1-XPDR1")
+            .setConnectionEndPoint(cepMap)
             .setName(Map.of(name.key(), name))
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(
                 new Uuid("25812ef2-625d-3bf8-af55-5e93946d1c22")).build());
@@ -111,6 +122,13 @@ public final class TapiConnectivityDataUtils {
 
     private static EndPointBuilder getEndPoint1Builder() {
         Name name = new NameBuilder().setValueName("OpenROADM node id").setValue("SPDR-SA1-XPDR1").build();
+        ConnectionEndPointBuilder cepBld = new ConnectionEndPointBuilder()
+            .setTopologyUuid(new Uuid("393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7"))
+            .setNodeUuid(new Uuid("4e44bcc5-08d3-3fee-8fac-f021489e5a61"))
+            .setNodeEdgePointUuid(new Uuid("c6cd334c-51a1-3995-bed3-5cf2b7445c04"))
+            .setConnectionEndPointUuid(new Uuid("12bc1201-bb84-3280-b4bf-df58b3cf057c"));
+        Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = new HashMap<>();
+        cepMap.put(cepBld.build().key(), cepBld.build());
         return new EndPointBuilder().setLayerProtocolName(LayerProtocolName.DSR)
             .setAdministrativeState(AdministrativeState.UNLOCKED)
             .setOperationalState(OperationalState.ENABLED)
@@ -118,6 +136,7 @@ public final class TapiConnectivityDataUtils {
             .setRole(PortRole.SYMMETRIC)
             .setProtectionRole(ProtectionRole.NA)
             .setLocalId("SPDR-SA1-XPDR1")
+            .setConnectionEndPoint(cepMap)
             .setName(Map.of(name.key(), name))
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(
                 new Uuid("c14797a0-adcc-3875-a1fe-df8949d1a2d7")).build());

@@ -314,8 +314,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
         for (Map<Uuid, Name> clink : connectedLink) {
             linkSize = linkSize + clink.size();
         }
-        assertEquals(6, linkSize,
-            "ROADM A shall contain 2(DEG1&DEG2)x 3(to CP SRG1, CP SRG2, and other Degree) = 6 declared outgoing links");
+        assertEquals(12, linkSize, "ROADM A shall contain 2x(2(DEG1&DEG2)x 3(to CP SRG1, CP SRG2, and other Degree))"
+            + " = 12 declared outgoing Unidir links");
         assertEquals(2, rdmAdegOMSNep.stream()
             .filter(bpn -> clientOtsNep.contains(bpn.getNepCepUuid()))
             .collect(Collectors.toList()).size(),
@@ -365,8 +365,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
         for (Map<Uuid, Name> clink : connectedLink) {
             linkSize = linkSize + clink.size();
         }
-        assertEquals(4, linkSize,
-            "ROADM A shall contain 2 (SRG1&SRG3)x 2 declared outgoing links to Degrees");
+        assertEquals(8, linkSize,
+            "ROADM A shall contain 2x(2(SRG1&SRG3)x 2(DEG1&DEG2)) declared outgoing unidir links to Degrees");
         //Testing private method buildBitsetFromSpectrum()
         for (BasePceNep bpn : rdmAsrgOTSNep) {
             assertTrue(bpn.getFrequenciesBitSet().equals(freqBitSet), "SRG OTSNep spectrum shall be fully available");
@@ -887,8 +887,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
             LOG.error("Unable to get node from mdsal: ", e);
         }
         tapiONroadmA.initialize();
-        assertEquals(5, tapiONroadmA.getPceInternalLinkMap().size(),
-            "ROADM internalLinkMap shall include 5 bidirectional links (2x(SRG Cp - DEG1&2 Ctp) + 1 optical bypass ");
+        assertEquals(10, tapiONroadmA.getPceInternalLinkMap().size(),
+            "ROADM internalLinkMap shall include 10 unidir links 2x[2x(SRG Cp - DEG1&2 Ctp) + 1 optical bypass] ");
         LOG.info("TESTPERFORMED:18");
     }
 
