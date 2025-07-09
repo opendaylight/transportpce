@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "47c0f0a6753851a27beb63de58101fc015b36de3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "242eebcf_25e9c64b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-07-09T12:20:13Z",
+      "side": 1,
+      "message": "@joakim.tornqvist@smartoptics.com : Please Joakim, could you check this change that would go on top of yours (116679) to address my comment of the 12th of June : \"Last but not least, realizing that used spectrum is not refreshed after service provisioning, I may need on my side to modify part of the TAPI code to generate topolgy\". \nI made this change looking at yours, but not being comfortable with the implementation of your spectrum tools, I would appreciate you can double check it, especially as you have removed since patchset 6 of 116679 some of the implementations of the range method in FrequencyRangeFactory. Not sure whether it has an impact on my change or not.\nThanks!",
+      "revId": "47c0f0a6753851a27beb63de58101fc015b36de3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
