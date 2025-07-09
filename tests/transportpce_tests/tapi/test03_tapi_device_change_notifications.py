@@ -42,12 +42,26 @@ class UuidServices:
 class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 
     cr_serv_input_data = {
+        "name": [
+            {
+                "value-name": "service-name",
+                "value": "serviceEthernet-1"
+            }
+        ],
         "end-point": [
             {
                 "layer-protocol-name": "DSR",
                 "service-interface-point": {
                     "service-interface-point-uuid": "b1f4bd3b-7fa9-367b-a8ab-6e80293238df"
                 },
+                "connection-end-point": [
+                    {
+                        "topology-uuid": "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7",
+                        "node-uuid": "1770bea4-b1da-3b20-abce-7d182c0ec0df",
+                        "node-edge-point-uuid": "126d66e8-5028-3bb0-9769-9f3f966c6a99",
+                        "connection-end-point-uuid": "126d66e8-5028-3bb0-9769-9f3f966c6a99"
+                    }
+                ],
                 "administrative-state": "UNLOCKED",
                 "operational-state": "ENABLED",
                 "direction": "BIDIRECTIONAL",
@@ -66,6 +80,14 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
                 "service-interface-point": {
                     "service-interface-point-uuid": "b5964ce9-274c-3f68-b4d1-83c0b61bc74e"
                 },
+                "connection-end-point": [
+                    {
+                        "topology-uuid": "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7",
+                        "node-uuid": "4378fc29-6408-39ec-8737-5008c3dc49e5",
+                        "node-edge-point-uuid": "5dc0f306-763d-34a7-9419-d15e23891edd",
+                        "connection-end-point-uuid": "5dc0f306-763d-34a7-9419-d15e23891edd"
+                    }
+                ],
                 "administrative-state": "UNLOCKED",
                 "operational-state": "ENABLED",
                 "direction": "BIDIRECTIONAL",
@@ -273,10 +295,10 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 #        time.sleep(self.WAITING)
 
     def test_12_get_service_Ethernet(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.eth))
+        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceEthernet-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], str(self.uuid_services.eth))
+        self.assertEqual(response['services'][0]['service-name'], "serviceEthernet-1")
         self.assertEqual(response['services'][0]['connection-type'], 'service')
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
@@ -287,7 +309,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             'tapi-connectivity', 'get-connectivity-service-details', self.tapi_serv_details)
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['output']['service']['operational-state'], 'ENABLED')
-        self.assertEqual(response['output']['service']['name'][0]['value'], self.uuid_services.eth)
+        self.assertEqual(response['output']['service']['name'][0]['value'], "serviceEthernet-1")
         self.assertEqual(response['output']['service']['administrative-state'], 'UNLOCKED')
         self.assertEqual(response['output']['service']['lifecycle-state'], 'INSTALLED')
 
@@ -402,7 +424,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         time.sleep(1)
 
     def test_19_check_update_service_Ethernet(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.eth))
+        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceEthernet-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['operational-state'], 'outOfService')
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
@@ -488,6 +510,8 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
         self.test_12_get_service_Ethernet()
 
     def test_27_check_update_connectivity_service_Ethernet_ok(self):
+        time.sleep(10)
+        print(format(self.uuid_services.eth))
         self.test_13_get_connectivity_service_Ethernet()
 
     def test_28_change_status_port_roadma_srg(self):
