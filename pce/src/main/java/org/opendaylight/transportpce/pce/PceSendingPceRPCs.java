@@ -82,16 +82,16 @@ public class PceSendingPceRPCs {
     public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
 
-    public PceSendingPceRPCs(GnpyConsumer gnpyConsumer) {
+    public PceSendingPceRPCs(GnpyConsumer gnpyConsumer, String pceOperationalMode) {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
         this.gnpyConsumer = gnpyConsumer;
-        this.pceOperMode = OR_PCE_OPER_MODE;
+        this.pceOperMode = pceOperationalMode;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
-                             GnpyConsumer gnpyConsumer, PortMapping portMapping) {
+                             GnpyConsumer gnpyConsumer, PortMapping portMapping, String pceOperationalMode) {
         this.gnpyConsumer = gnpyConsumer;
         setPathDescription(null);
         // TODO compliance check to check that input is not empty
@@ -99,21 +99,8 @@ public class PceSendingPceRPCs {
         this.networkTransaction = networkTransaction;
         this.portMapping = portMapping;
         this.endpoints = null;
-        this.pceOperMode = OR_PCE_OPER_MODE;
+        this.pceOperMode = pceOperationalMode;
     }
-
-    public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
-                             GnpyConsumer gnpyConsumer, PortMapping portMapping,
-                             Endpoints endpoints) {
-        this.gnpyConsumer = gnpyConsumer;
-        setPathDescription(null);
-        this.input = input;
-        this.networkTransaction = networkTransaction;
-        this.portMapping = portMapping;
-        this.endpoints = endpoints;
-        this.pceOperMode = OR_PCE_OPER_MODE;
-    }
-
 
     public PceSendingPceRPCs(PathComputationRequestInput input, NetworkTransactionService networkTransaction,
                              GnpyConsumer gnpyConsumer, PortMapping portMapping,
