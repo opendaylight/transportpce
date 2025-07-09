@@ -71,12 +71,26 @@ class TestTransportPCEFullTopology(unittest.TestCase):
     # uuid_C = uuid.UUID(bytes("SPDR-SC1-XPDR1+DSR+eOTSI+XPDR1-NETWORK1", 'utf-8'))
 
     cr_serv_input_data = {
+        "name": [
+            {
+                "value-name": "service-name",
+                "value": "servicephotonic-1"
+            }
+        ],
         "end-point": [
             {
                 "layer-protocol-name": "PHOTONIC_MEDIA",
                 "service-interface-point": {
                     "service-interface-point-uuid": "c14797a0-adcc-3875-a1fe-df8949d1a2d7"
                 },
+                "connection-end-point": [
+                    {
+                        "topology-uuid": "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7",
+                        "node-uuid": "4e44bcc5-08d3-3fee-8fac-f021489e5a61",
+                        "node-edge-point-uuid": "c6cd334c-51a1-3995-bed3-5cf2b7445c04",
+                        "connection-end-point-uuid": "12bc1201-bb84-3280-b4bf-df58b3cf057c"
+                    }
+                ],
                 "administrative-state": "UNLOCKED",
                 "operational-state": "ENABLED",
                 "direction": "BIDIRECTIONAL",
@@ -95,6 +109,14 @@ class TestTransportPCEFullTopology(unittest.TestCase):
                 "service-interface-point": {
                     "service-interface-point-uuid": "25812ef2-625d-3bf8-af55-5e93946d1c22"
                 },
+                "connection-end-point": [
+                    {
+                        "topology-uuid": "393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7",
+                        "node-uuid": "215ee18f-7869-3492-94d2-0f24ed0a3023",
+                        "node-edge-point-uuid": "50b7521a-4a38-358f-9846-45c55813416a",
+                        "connection-end-point-uuid": "a7ef6781-c149-394b-b21c-48b324f68c98"
+                    }
+                ],
                 "administrative-state": "UNLOCKED",
                 "operational-state": "ENABLED",
                 "direction": "BIDIRECTIONAL",
@@ -310,6 +332,10 @@ class TestTransportPCEFullTopology(unittest.TestCase):
     def test_16_create_connectivity_service_PhotonicMedia(self):
         self.cr_serv_input_data["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = self.sAOTS
         self.cr_serv_input_data["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = self.sZOTS
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["node-edge-point-uuid"] = "21efd6a4-2d81-3cdb-aabb-b983fb61904e"
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["connection-end-point-uuid"] = "d8ef5622-df73-322f-8b62-e51a2ec3f797"
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["node-edge-point-uuid"] = "ff10784b-3da2-3b88-88c3-27abc02b66fe"
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["connection-end-point-uuid"] = "cf91f296-7ce7-3d15-a868-0c65d3f76453"
         response = test_utils.transportpce_api_rpc_request(
             'tapi-connectivity', 'create-connectivity-service', self.cr_serv_input_data)
         time.sleep(self.WAITING)
@@ -342,10 +368,11 @@ class TestTransportPCEFullTopology(unittest.TestCase):
 #        time.sleep(self.WAITING)
 
     def test_17_get_service_PhotonicMedia(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.pm))
+        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.pm))
+        response = test_utils.get_ordm_serv_list_attr_request("services", "servicephotonic-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], str(self.uuid_services.pm))
+        self.assertEqual(response['services'][0]['service-name'], "servicephotonic-1")
         self.assertEqual(response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
@@ -450,11 +477,16 @@ class TestTransportPCEFullTopology(unittest.TestCase):
 # test create connectivity service from spdrA to spdrC for odu
     def test_19_create_connectivity_service_ODU(self):
         # pylint: disable=line-too-long
+        self.cr_serv_input_data["name"][0]["value"] = "serviceOdu4-1"
         self.cr_serv_input_data["layer-protocol-name"] = "ODU"
         self.cr_serv_input_data["end-point"][0]["layer-protocol-name"] = "ODU"
         self.cr_serv_input_data["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = self.sAeODU
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["node-edge-point-uuid"] = "72c6b97a-3944-3d88-9882-b7e688bb2772"
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["connection-end-point-uuid"] = "de16e16e-eb69-3819-8f59-4378b12a36ec"
         self.cr_serv_input_data["end-point"][1]["layer-protocol-name"] = "ODU"
         self.cr_serv_input_data["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = self.sZeODU
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["node-edge-point-uuid"] = "99e1461c-4679-3dc5-9f59-b3054dce08a4"
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["connection-end-point-uuid"] = "2a7cd883-4017-3f69-b39a-12b81d57d955"
 #        self.cr_serv_input_data["connectivity-constraint"]["service-layer"] = "ODU"
         self.cr_serv_input_data["connectivity-constraint"]["service-level"] = self.uuid_services.pm
 
@@ -548,10 +580,11 @@ class TestTransportPCEFullTopology(unittest.TestCase):
                          ['parent-node-edge-point']['node-edge-point-uuid'], '2bdca70f-ef1e-3e56-b251-07eda88f31ba')
 
     def test_21_get_service_ODU(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.odu))
+        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.odu))
+        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceOdu4-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], str(self.uuid_services.odu))
+        self.assertEqual(response['services'][0]['service-name'], "serviceOdu4-1")
         self.assertEqual(response['services'][0]['connection-type'], 'infrastructure')
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
@@ -559,12 +592,17 @@ class TestTransportPCEFullTopology(unittest.TestCase):
 # test create connectivity service from spdrA to spdrC for dsr
     def test_22_create_connectivity_service_DSR(self):
         # pylint: disable=line-too-long
+        self.cr_serv_input_data["name"][0]["value"] = "serviceDSR-1"
         self.cr_serv_input_data["layer-protocol-name"] = "DSR"
         self.cr_serv_input_data["end-point"][0]["layer-protocol-name"] = "DSR"
         self.cr_serv_input_data["end-point"][0]["service-interface-point"]["service-interface-point-uuid"] = self.sADSR
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["node-edge-point-uuid"] = "c6cd334c-51a1-3995-bed3-5cf2b7445c04"
+        self.cr_serv_input_data["end-point"][0]["connection-end-point"][0]["connection-end-point-uuid"] = "12bc1201-bb84-3280-b4bf-df58b3cf057c"
         self.cr_serv_input_data["end-point"][1]["layer-protocol-name"] = "DSR"
         self.cr_serv_input_data["end-point"][1]["service-interface-point"]["service-interface-point-uuid"] = self.sZDSR
-#        self.cr_serv_input_data["connectivity-constraint"]["service-layer"] = "DSR"
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["node-edge-point-uuid"] = "50b7521a-4a38-358f-9846-45c55813416a"
+        self.cr_serv_input_data["end-point"][1]["connection-end-point"][0]["connection-end-point-uuid"] = "a7ef6781-c149-394b-b21c-48b324f68c98"
+        self.cr_serv_input_data["end-point"][1]["layer-protocol-name"] = "DSR"
         self.cr_serv_input_data["connectivity-constraint"]["requested-capacity"]["total-size"]["value"] = "10"
         self.cr_serv_input_data["connectivity-constraint"]["service-level"] = self.uuid_services.odu
 
@@ -638,10 +676,11 @@ class TestTransportPCEFullTopology(unittest.TestCase):
                          ['parent-node-edge-point']['node-edge-point-uuid'], 'c6cd334c-51a1-3995-bed3-5cf2b7445c04')
 
     def test_24_get_service_DSR(self):
-        response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.dsr))
+        #response = test_utils.get_ordm_serv_list_attr_request("services", str(self.uuid_services.dsr))
+        response = test_utils.get_ordm_serv_list_attr_request("services", "serviceDSR-1")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['services'][0]['administrative-state'], 'inService')
-        self.assertEqual(response['services'][0]['service-name'], str(self.uuid_services.dsr))
+        self.assertEqual(response['services'][0]['service-name'], "serviceDSR-1")
         self.assertEqual(response['services'][0]['connection-type'], 'service')
         self.assertEqual(response['services'][0]['lifecycle-state'], 'planned')
         time.sleep(1)
