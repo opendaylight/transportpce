@@ -65,6 +65,7 @@ public class PceTapiOpticalNode implements PceNode {
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private BitSet frequenciesBitSet;
     private String version;
+    private Uuid parentNodeUuid;
 
     private List<String> availableXpndrNWTps = new ArrayList<>();
     private List<BasePceNep> listOfNep = new ArrayList<>();
@@ -610,6 +611,10 @@ public class PceTapiOpticalNode implements PceNode {
      */
     @Override
     public String getXpdrNWfromClient(String tp) {
+        if (this.clientPerNwTp.entrySet().stream().filter(elt -> tp.equals(elt.getKey())).collect(Collectors.toList())
+                .isEmpty()) {
+            return null;
+        }
         return this.clientPerNwTp.entrySet().stream()
             .filter(elt -> tp.equals(elt.getKey())).findFirst().orElseThrow().getValue();
     }
@@ -717,6 +722,15 @@ public class PceTapiOpticalNode implements PceNode {
     @Override
     public List<BasePceNep> getListOfNep() {
         return this.listOfNep;
+    }
+
+    @Override
+    public Uuid getParentNodeUuid() {
+        return this.parentNodeUuid;
+    }
+
+    public void setParentNodeUuid(Uuid pnodeUuid) {
+        this.parentNodeUuid = pnodeUuid;
     }
 
 }

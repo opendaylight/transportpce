@@ -135,12 +135,13 @@ public class TapiPceNotificationHandler {
         //  verify the type of XPDR and the capacity and determine if it is an OTN service or pure WDM service
         // Create connections and ceps for the connectivity service.
         //  Connections must be with a locked stated. As the renderer hasnt implemented yet the oc's
-        LOG.debug("TapiPceNotificationHandler Line 141 : calls createConnectionsForService for Service {}, Uuid {}",
+        LOG.info("TapiPceNotificationHandler Line 141 : calls createConnectionsForService for Service {}, Uuid {}",
             serviceName, serviceUuid);
+        connectivityUtils.setConnectionCreationModeToActive(false);
         Map<ConnectionKey, Connection> connectionMap = connectivityUtils.createConnectionsFromService(
                 pathDescription, input.getLayerProtocolName(), serviceName, serviceUuid);
         this.connectionFullMap.putAll(connectivityUtils.getConnectionFullMap());
-        LOG.debug("TapiPceNotificationHandler Line 144 : Connection Map from createConnectionsAndCepsForService is {},"
+        LOG.info("TapiPceNotificationHandler Line 144 : Connection Map from createConnectionsAndCepsForService is {},"
             + "for Service {} of Uuid {} and LAYERPROTOCOL  {} ",
             serviceName, serviceUuid, connectionMap.toString(), input.getLayerProtocolName());
         // add connections to connection context and to connectivity context
@@ -280,6 +281,7 @@ public class TapiPceNotificationHandler {
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         try {
             ConnectivityService connServ = getConnectivityService(suuid);
+            LOG.info("TAPI connectivity Service Line 283 {} retrieved from DataStore : {}",suuid, connServ);
             ConnectivityService updtConnServ = new ConnectivityServiceBuilder(connServ)
                 .setConnection(connMap)
                 .build();
@@ -301,7 +303,7 @@ public class TapiPceNotificationHandler {
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, connectivitycontextIID,
                 connectivityContext);
             this.networkTransactionService.commit().get();
-            LOG.info("TAPI connectivity merged successfully.");
+            LOG.info("TAPI connectivity Line 305 for Service {} merged successfully.", suuid);
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI connectivity", e);
         }
@@ -320,12 +322,12 @@ public class TapiPceNotificationHandler {
             Optional<ConnectivityService> optConnServ =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, connectivityServIID).get();
             if (optConnServ.isEmpty()) {
-                LOG.error("Connectivity service not found in tapi context");
+                LOG.error("TapiPceNotificationHandler Line323 :Connectivity service not found in tapi context");
                 return null;
             }
             return optConnServ.orElseThrow();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Connectivity service not found in tapi context. Error:", e);
+            LOG.error("TapiPceNotificationHandler Line328 Connectivity service not found in tapi context. Error:", e);
             return null;
         }
     }
