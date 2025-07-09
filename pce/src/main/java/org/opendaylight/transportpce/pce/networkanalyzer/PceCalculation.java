@@ -246,7 +246,8 @@ public class PceCalculation {
         serviceType = ServiceTypes.getServiceType(
             serviceFormatA,
             serviceRate,
-            NodeTypes.Xpdr.equals(portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
+            portMapping.getNode(input.getServiceAEnd().getNodeId())!= null && NodeTypes.Xpdr.equals(
+                portMapping.getNode(input.getServiceAEnd().getNodeId()).getNodeInfo().getNodeType())
                     && checkAendInputTxPortName()
                 ? portMapping.getMapping(
                     input.getServiceAEnd().getNodeId(),
@@ -460,7 +461,7 @@ public class PceCalculation {
         Uuid topoUuid = topoIID.key().getUuid();
         try {
             Optional<Topology> topoOptional =
-                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, topoIID).get();
+                networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, topoIID).get();
             if (topoOptional.isPresent()) {
                 topo = topoOptional.orElseThrow();
                 LOG.debug("readMdSalTapi: T-API Topology: topoOptional.isPresent = true {}", topoIID);
@@ -590,7 +591,8 @@ public class PceCalculation {
 
     private boolean analyzeTapiNw(Subscriber subscriber) {
 
-        LOG.debug("analyzeTapiNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
+        LOG.info("analyzeTapiNw: allTapiNodes size {}, allLinks size {}", allTapiNodes.size(), allTapiLinks.size());
+        LOG.info("analyzeTapiNw: ServiceType = {}", serviceType);
         switch (serviceType) {
             case StringConstants.SERVICE_TYPE_100GE_T:
             case StringConstants.SERVICE_TYPE_OTU4:

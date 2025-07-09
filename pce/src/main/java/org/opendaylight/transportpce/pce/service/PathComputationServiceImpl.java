@@ -54,6 +54,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.handler.header.ServiceHandlerHeaderBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yangtools.binding.util.BindingMap;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -71,6 +72,9 @@ public class PathComputationServiceImpl implements PathComputationService {
     private ServicePathRpcResult notification = null;
     private final GnpyConsumer gnpyConsumer;
     private PortMapping portMapping;
+    private static String pceOperationalMode;
+    public static final String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
+    public static final String TAPI_PCE_OPER_MODE = "T-API-PCE-Operation-Mode";
 
     @Activate
     public PathComputationServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -111,9 +115,27 @@ public class PathComputationServiceImpl implements PathComputationService {
         }
     }
 
+    private void evaluatePceOperType(String serviceName) throws IllegalArgumentException {
+        //check whether service name corresponds to an Uuid or not
+        PathComputationServiceImpl.setPceOperationalMode(PathComputationServiceImpl.OR_PCE_OPER_MODE);
+        if (serviceName == null) {
+            LOG.info("Exception raised: serviceName null, PCE operational mode set as OpenROADM by default");
+            return;
+        }
+        try {
+            Uuid  serviceUuid = new Uuid(serviceName);
+            PathComputationServiceImpl.setPceOperationalMode(PathComputationServiceImpl.TAPI_PCE_OPER_MODE);
+            LOG.info("serviceName {} identified as an UUID, PCE operational mode set as TAPI", serviceUuid);
+        } catch (IllegalArgumentException e) {
+            LOG.info("Exception raised: serviceName {} not identified as UUID, PCE operational mode set as OpenROADM",
+                serviceName, e);
+        }
+    }
+
     @Override
     public ListenableFuture<CancelResourceReserveOutput> cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("cancelResourceReserve");
+        evaluatePceOperType(input.getServiceName());
         return executor.submit(new Callable<CancelResourceReserveOutput>() {
 
             @Override
@@ -124,7 +146,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending,
                         "Service compliant, submitting cancelResourceReserve Request ...",
                         null);
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(gnpyConsumer, getPceOperationalMode());
                 sendingPCE.cancelResourceReserve();
                 LOG.info("in PathComputationServiceImpl : {}",
                         Boolean.TRUE.equals(sendingPCE.getSuccess())
@@ -152,6 +174,7 @@ public class PathComputationServiceImpl implements PathComputationService {
     @Override
     public ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input) {
         LOG.debug("input parameters are : input = {}", input.toString());
+        evaluatePceOperType(input.getServiceName());
         return executor.submit(new Callable<PathComputationRequestOutput>() {
 
             @Override
@@ -189,7 +212,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                     "Service compliant, submitting pathComputation Request ...",
                     null);
                 PceSendingPceRPCs sendingPCE =
-                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping);
+                    new PceSendingPceRPCs(input, networkTransactionService, gnpyConsumer, portMapping,
+                        getPceOperationalMode());
                 sendingPCE.pathComputation();
                 String message = sendingPCE.getMessage();
                 String responseCode = sendingPCE.getResponseCode();
@@ -284,6 +308,7 @@ public class PathComputationServiceImpl implements PathComputationService {
     @Override
     public ListenableFuture<PathComputationRerouteRequestOutput> pathComputationRerouteRequest(
             PathComputationRerouteRequestInput input) {
+        evaluatePceOperType("NotAUuid");
         return executor.submit(() -> {
             PathComputationRerouteRequestOutputBuilder output = new PathComputationRerouteRequestOutputBuilder();
             ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -312,7 +337,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setRoutingMetric(input.getRoutingMetric())
                     .build();
             PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(pathComputationInput, networkTransactionService,
-                    gnpyConsumer, portMapping, input.getEndpoints());
+                    gnpyConsumer, portMapping, input.getEndpoints(), getPceOperationalMode());
             sendingPCE.pathComputation();
             String message = sendingPCE.getMessage();
             String responseCode = sendingPCE.getResponseCode();
@@ -387,6 +412,14 @@ public class PathComputationServiceImpl implements PathComputationService {
             .setResponseType(null)
             .setFeasibility(true)
             .build();
+    }
+
+    public static String getPceOperationalMode() {
+        return pceOperationalMode;
+    }
+
+    public static void setPceOperationalMode(String pceOperMode) {
+        PathComputationServiceImpl.pceOperationalMode = pceOperMode;
     }
 
 }
