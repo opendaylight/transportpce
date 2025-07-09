@@ -138,9 +138,16 @@ public class TapiLinkImpl implements TapiLink {
                 linkName
                     .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                     .setValue(linkKey);
-                createCepForLink(getORLinkFromLinkId(buildORLinkId(
+                LinkId linkiid = buildORLinkId(
                     String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
-                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)));
+                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId);
+                LOG.info("createTapiLink141, OMS link, buildORLinkId builds link Id {}", linkiid);
+                LOG.info("createTapiLink144, OMS link, getORLinkFromLinkId returns {}", getORLinkFromLinkId(linkiid));
+                if (getORLinkFromLinkId(linkiid) == null) {
+                    LOG.error("unable to create Cep for link {} which was not found in OR Topology", linkiid);
+                    break;
+                }
+                createCepForLink(getORLinkFromLinkId(linkiid));
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
@@ -308,30 +315,37 @@ public class TapiLinkImpl implements TapiLink {
                 .networks.network.Link oppLink = getORLinkFromLinkId(
                     link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
                     .Link1.class).getOppositeLink());
-            Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
-            LOG.debug("In TapiLinkImpl, for link {} opposite lossPoutcorrect equals {}",
-                link.getLinkId(), opplossPoutcorrect);
-            oppLinkLoss = Decimal64.valueOf("9999");
-            if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
-                oppLinkLoss = Decimal64.valueOf(opplossPoutcorrect.entrySet().stream()
-                    .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue().doubleValue(),
-                    RoundingMode.UP);
+            if (oppLink == null) {
+                otsFSimpOppLink = otsFSimp;
+                oppLinkLoss = linkLoss;
+                LOG.warn("Did not succed retrieving opposite link  from LinkId for link {},"
+                    + "applying forward link impairments in reverse direction", link.getLinkId());
+            } else {
+                Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
+                LOG.debug("In TapiLinkImpl, for link {} opposite lossPoutcorrect equals {}",
+                    link.getLinkId(), opplossPoutcorrect);
+                oppLinkLoss = Decimal64.valueOf("9999");
+                if (opplossPoutcorrect != null && opplossPoutcorrect.containsKey("SpanLoss")) {
+                    oppLinkLoss = Decimal64.valueOf(opplossPoutcorrect.entrySet().stream()
+                        .filter(res -> res.getKey().equals("SpanLoss")).findFirst().orElseThrow().getValue()
+                        .doubleValue(), RoundingMode.UP);
+                }
+                Map<String, Double> opppmd = NetworkUtils.calcCDandPMD(link);
+                Decimal64 opppmdValue = Decimal64.valueOf("0");
+                if (opppmd != null && opppmd.containsKey("PMD")) {
+                    opppmdValue = Decimal64.valueOf(opppmd.entrySet().stream().filter(res -> res.getKey()
+                        .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
+                }
+                otsFSimpOppLink = new OtsFiberSpanImpairmentsBuilder()
+                    .setConnectorIn(Decimal64.valueOf("0"))
+                    .setConnectorOut(Decimal64.valueOf("0"))
+                    .setLength(NetworkUtils.calcLength(oppLink) != null
+                            ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(oppLink)))
+                            : Uint64.valueOf(9999))
+                    .setPmd(opppmdValue)
+                    .setTotalLoss(oppLinkLoss)
+                    .build();
             }
-            Map<String, Double> opppmd = NetworkUtils.calcCDandPMD(link);
-            Decimal64 opppmdValue = Decimal64.valueOf("0");
-            if (opppmd != null && opppmd.containsKey("PMD")) {
-                opppmdValue = Decimal64.valueOf(opppmd.entrySet().stream().filter(res -> res.getKey()
-                    .equals("PMD")).findFirst().orElseThrow().getValue().doubleValue(),RoundingMode.UP);
-            }
-            otsFSimpOppLink = new OtsFiberSpanImpairmentsBuilder()
-                .setConnectorIn(Decimal64.valueOf("0"))
-                .setConnectorOut(Decimal64.valueOf("0"))
-                .setLength(NetworkUtils.calcLength(oppLink) != null
-                        ? Uint64.valueOf(Math.round(NetworkUtils.calcLength(oppLink)))
-                        : Uint64.valueOf(9999))
-                .setPmd(opppmdValue)
-                .setTotalLoss(oppLinkLoss)
-                .build();
         }
         LOG.info("In TapiLinkImpl, building Impairments for CEP");
         ImpairmentRouteEntry ire = new ImpairmentRouteEntryBuilder()
