@@ -600,6 +600,11 @@ public class PceOpticalNode implements PceNode {
         return null;
     }
 
+    @Override
+    public Uuid getParentNodeUuid() {
+        return null;
+    }
+
     public void setEndpoints(Endpoints endpoints) {
         this.endpoints = endpoints;
     }

@@ -82,7 +82,10 @@ public class DeleteConnectivityServiceImpl implements DeleteConnectivityService 
                 rpcService.getRpc(ServiceDelete.class)
                     .invoke(new ServiceDeleteInputBuilder()
                             .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                                    .setServiceName(input.getUuid().getValue())
+                                    //.setServiceName(input.getUuid().getValue())
+                                    .setServiceName(
+                                        (serviceName == null || serviceName.isEmpty()) ? input.getUuid().getValue()
+                                            : serviceName.get(0))
                                     .setTailRetention(ServiceDeleteReqInfo.TailRetention.No)
                                     .build())
                             .setSdncRequestHeader(new SdncRequestHeaderBuilder()
