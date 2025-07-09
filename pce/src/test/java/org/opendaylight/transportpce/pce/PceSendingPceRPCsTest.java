@@ -50,6 +50,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
     private Mapping mapping;
     private DataBroker dataBroker;
     private GnpyConsumer gnpyConsumer;
+    private static String OR_PCE_OPER_MODE = "OpenROADM-PCE-Operation-Mode";
     @Mock
     private PortMapping portMapping;
 
@@ -61,7 +62,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
         gnpyConsumer = new GnpyConsumerImpl(
             "http://localhost:9998", "mylogin", "mypassword", getDataStoreContextUtil().getBindingDOMCodecServices());
         pceSendingPceRPCs = new PceSendingPceRPCs(
-            PceTestData.getPCE_test1_request_54(), networkTransaction, gnpyConsumer, portMapping);
+            PceTestData.getPCE_test1_request_54(), networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE);
         mapping = new MappingBuilder()
             .setLogicalConnectionPoint("logicalConnectionPoint")
             .setPortQual("xpdr-client")
@@ -93,7 +94,7 @@ class PceSendingPceRPCsTest extends AbstractTest {
                                 .readString(
                                         Path.of("src", "test", "resources", "gnpy", "gnpy_result_with_path.json")))));
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                networkTransaction, gnpyConsumer, portMapping);
+                networkTransaction, gnpyConsumer, portMapping, OR_PCE_OPER_MODE);
         when(portMapping.getMapping(anyString(), anyString())).thenReturn(mapping);
         // WHEN
         pceSendingPceRPCs.pathComputation();

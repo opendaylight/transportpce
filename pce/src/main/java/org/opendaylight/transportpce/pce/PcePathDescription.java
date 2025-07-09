@@ -22,6 +22,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.ty
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirectionBuilder;
@@ -223,6 +224,11 @@ public class PcePathDescription {
 
         // build A side Client TP
         String tpName = path.get(0).getClientA();
+        LOG.info("PcePathDescription Line227 build AtoZ : link0 ClientA = {}", tpName);
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = path.get(0).getSourceTP().getValue();
+//            LOG.info("PcePathDescription Line230 build AtoZ : link0 ClientA is null, retrieve sourceTp = {}", tpName);
+//        }
         String xname = path.get(0).getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpId(tpName).setTpNodeId(xname)
@@ -308,6 +314,11 @@ public class PcePathDescription {
 
         // build Z side Client TP
         tpName = lastLink.getClientZ();
+        LOG.info("PcePathDescription Line319 build AtoZ : lastlink ClientZ  = {}", tpName);
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = lastLink.getDestTP().getValue();
+//            LOG.info("PcePathDescription Line319 build AtoZ : lastlink ClientZ null, retrieve sourceTp = {}", tpName);
+//        }
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -329,6 +340,9 @@ public class PcePathDescription {
         // build Z size Client TP
         PceLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
         String tpName = pcelink.getClientA();
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = pcelink.getSourceTP().getValue();
+//        }
         String xname = pcelink.getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
@@ -417,6 +431,9 @@ public class PcePathDescription {
 
         // build Z side Client TP
         tpName = lastLink.getClientZ();
+//        if (tpName == null || tpName.isBlank()) {
+//            tpName = lastLink.getDestTP().getValue();
+//        }
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName).build();

@@ -259,4 +259,10 @@ public interface PceLink {
      */
     String getdestCLLI();
 
+
+    /**
+     * Provides the source index used to determine whether NodeX is source or destination in PceTapiLinks.
+     * @return  int equal to 0 if NodeX is the source or 1 if NodeX is destination. 0 for PceORLinks
+     */
+    int getSourceIndex();
 }

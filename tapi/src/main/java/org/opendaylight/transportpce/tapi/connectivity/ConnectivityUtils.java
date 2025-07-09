@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -797,14 +798,23 @@ public final class ConnectivityUtils {
                 .create.connectivity.service.input.EndPoint> endPointMap = input.getEndPoint();
         ConnectionType connType = null;
         ServiceFormat serviceFormat = null;
-        String nodeAid = String.join("+",
-            endPointMap.values().stream().findFirst().orElseThrow().getLocalId(),
-            TapiConstants.XPDR);
-        String nodeZid = String.join("+",
-            endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId(),
-            TapiConstants.XPDR);
-        LOG.info("NodeAid = {}", nodeAid);
-        LOG.info("NodeZid = {}", nodeZid);
+        String nodeAid = endPointMap.values().stream().findFirst().orElseThrow().getLocalId();
+        String nodeZid = endPointMap.values().stream().skip(1).findFirst().orElseThrow().getLocalId();
+        NodeIdType nodeZZid;
+        NodeIdType nodeAAid;
+        try {
+            nodeZZid = new NodeIdType(nodeZid);
+            nodeAAid = new NodeIdType(nodeAid);
+        } catch (IllegalArgumentException i) {
+            LOG.info("Exception catched due to Unsuccessfull conversion of nodeAid {} and-or nodeZid {} to NodeIdType"
+                + "  respecting pattern \"^(?:([a-zA-Z][a-zA-Z0-9-]{5,61}[a-zA-Z0-9]))$\" ", nodeAid, nodeZid, i);
+            LOG.info("NodeId A before compilation = {}", String.join("aa", getUuidFromInput(nodeAid).getValue()));
+            LOG.info("NodeId Z before compilation = {}", String.join("aa", getUuidFromInput(nodeZid).getValue()));
+            nodeZZid = new NodeIdType("aa" + getUuidFromInput(nodeZid).getValue());
+            nodeAAid = new NodeIdType("aa" + getUuidFromInput(nodeAid).getValue());
+            LOG.info("WARNING generate new nodeAid {} and new nodeZid {} with concatenated aa start string to conform"
+                + "with OpenROADM NodeIdType", nodeAAid, nodeZZid);
+        }
         //switch (constraint.getServiceLayer().getIntValue()) {
         switch (input.getLayerProtocolName().getIntValue()) {
             case 0:
@@ -836,12 +846,18 @@ public final class ConnectivityUtils {
         Uint64 capacity = Uint64.valueOf(Math.abs(
             input.getConnectivityConstraint().getRequestedCapacity().getTotalSize().getValue().intValue()));
         // map endpoints into service end points. Map the type of service from TAPI to OR
+        LOG.info("Calling tapiEndPointToServiceAPoint w endpoint {}, ServiceFormat = {}, nodeAId = {}, capacity = {},"
+            + " input LayerProtocolName = {}", endPointMap.values().stream().findFirst().orElseThrow(), 
+            serviceFormat, nodeAAid, capacity, input.getLayerProtocolName());
         ServiceAEnd serviceAEnd = tapiEndPointToServiceAPoint(
             endPointMap.values().stream().findFirst().orElseThrow(),
-            serviceFormat, nodeAid, capacity, input.getLayerProtocolName());
+            serviceFormat, nodeAAid.getValue(), capacity, input.getLayerProtocolName());
+        LOG.info("Calling tapiEndPointToServiceAPoint w endpoint {}, ServiceFormat = {}, nodeZId = {}, capacity = {},"
+            + " input LayerProtocolName = {}", endPointMap.values().stream().skip(1).findFirst().orElseThrow(),
+            serviceFormat, nodeZZid, capacity, input.getLayerProtocolName());
         ServiceZEnd serviceZEnd = tapiEndPointToServiceZPoint(
             endPointMap.values().stream().skip(1).findFirst().orElseThrow(),
-            serviceFormat, nodeZid, capacity, input.getLayerProtocolName());
+            serviceFormat, nodeZZid.getValue(), capacity, input.getLayerProtocolName());
         if (serviceAEnd == null || serviceZEnd == null) {
             LOG.error("Couldnt map endpoints to service end");
             return null;
@@ -2235,13 +2251,13 @@ public final class ConnectivityUtils {
     private ServiceZEnd tapiEndPointToServiceZPoint(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint endPoint,
-            ServiceFormat serviceFormat, String nodeZid, Uint64 capacity, LayerProtocolName serviceLayer) {
-        // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
-        //  Not the rest which is needed in the txPortDeviceName.
-        //  It could be obtained from the SIP which has the NEP and includes all the OR name.
+            ServiceFormat serviceFormat, String nodeZZid, Uint64 capacity, LayerProtocolName serviceLayer) {
+
         Uuid sipUuid = endPoint.getServiceInterfacePoint().getServiceInterfacePointUuid();
-        // Todo -> need to find the NEP associated to that SIP
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeZid.getBytes(StandardCharsets.UTF_8)).toString());
+        String nodeZid = nodeZZid.substring(2, nodeZZid.length());
+        Uuid nodeUuid = getUuidFromInput(nodeZid);
+        // BeforePCEtapi  Uuid nodeUuid =
+        //  new Uuid(UUID.nameUUIDFromBytes(nodeZid.getBytes(StandardCharsets.UTF_8)).toString());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
         if (node == null) {
@@ -2269,31 +2285,34 @@ public final class ConnectivityUtils {
                 endPoint.getName().entrySet()) {
             if (!("Node Type").equals(entry.getValue().getValueName())) {
                 nodeName = entry.getValue().getValue();
+                LOG.info("tapiEndPointToServiceZPoint Line2279 NodeName (Clli) = {}", nodeName);
             }
         }
-//        String nodeName = endPoint.getName().values().stream().findFirst().orElseThrow().getValue();
-        String nodeid = String.join("-", nodeName.split("-")[0], nodeName.split("-")[1]);
-        String nepName = nep.getName().values().stream().findFirst().orElseThrow().getValue();
-        String txPortDeviceName = nepName.split("\\+")[0];
-        String txPortName = nepName.split("\\+")[2];
+
+        // Try to rely as far as possible on Uuid as unique identifier so that we do not depend on implementations
+        String nodeid = nodeUuid.getValue();
+        String txPortDeviceName = nodeid;
+        String txPortName = nep.getUuid().getValue();
         String rxPortDeviceName = txPortDeviceName;
         String rxPortName = txPortName;
-        LOG.debug("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
-        LOG.debug("Node z id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
-        // TODO --> get clli from datastore?
-        String clli = "NodeSC";
-        LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
-        LOG.info("Node z id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
-        ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
-            .setClli(clli)
-            .setNodeId(new NodeIdType(nodeid))
+        // TODO --> get clli from datastore as soon as for a SBI implementation we identify a value name for the Node
+        //  name that may corresponds to clli/building. Use nodeName and try to avoid relying on it in the meanwhile.
+        LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeZid, txPortDeviceName, txPortName);
+        LOG.info("Node z id = {}, rxportDeviceName = {}, rxPortName = {}", nodeZid, rxPortDeviceName, rxPortName);
+        ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder();
+        LOG.info("tapiEndPointToServiceZPoint Line2306 NodeZId = {}", nodeZid);
+        serviceZEndBuilder
+            .setClli(nodeName)
+            .setNodeId(new NodeIdType(nodeZZid))
             .setOpticType(OpticTypes.Gray)
             .setServiceFormat(serviceFormat)
             .setServiceRate(Uint32.valueOf(capacity))
-            .setEthernetAttributes(new EthernetAttributesBuilder().setSubrateEthSla(new SubrateEthSlaBuilder()
-                    .setCommittedBurstSize(Uint16.valueOf(64))
-                    .setCommittedInfoRate(Uint32.valueOf(100000))
-                    .build())
+            .setEthernetAttributes(new EthernetAttributesBuilder().setSubrateEthSla(
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110
+                            .subrate.eth.sla.SubrateEthSlaBuilder()
+                        .setCommittedBurstSize(Uint16.valueOf(64))
+                        .setCommittedInfoRate(Uint32.valueOf(100000))
+                        .build())
                 .build())
             .setTxDirection(Map.of(new TxDirectionKey(Uint8.ZERO), new TxDirectionBuilder()
                 .setPort(new PortBuilder()
@@ -2327,13 +2346,15 @@ public final class ConnectivityUtils {
                     .build())
                 .setIndex(Uint8.ZERO)
                 .build()));
+        LOG.info("tapiEndPointToServiceZPoint Line2348");
         if (serviceFormat.equals(ServiceFormat.ODU)) {
             serviceZEndBuilder.setOduServiceRate(ODU4.VALUE);
-        }
-        if (serviceFormat.equals(ServiceFormat.OTU)) {
+        } else if (serviceFormat.equals(ServiceFormat.OTU)) {
+            LOG.info("tapiEndPointToServiceZPoint Line2352");
             serviceZEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
-        return serviceLayer.equals(LayerProtocolName.ETH)
+        LOG.info("tapiEndPointToServiceZPoint ServiceZend = {}, ", serviceZEndBuilder.build());
+        return !serviceLayer.equals(LayerProtocolName.ETH)
             ? serviceZEndBuilder.build()
             : serviceZEndBuilder
                 .setEthernetAttributes(new EthernetAttributesBuilder()
@@ -2348,14 +2369,15 @@ public final class ConnectivityUtils {
     private ServiceAEnd tapiEndPointToServiceAPoint(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint endPoint,
-            ServiceFormat serviceFormat, String nodeAid, Uint64 capacity, LayerProtocolName serviceLayer) {
-        // TODO -> change way this is being created. The name includes only SPDR-SA1-XPDR1.
-        //  Not the rest which is needed in the txPortDeviceName.
-        //  It could be obtained from the SIP which has the NEP and includes all the OR name.
+            ServiceFormat serviceFormat, String nodeAAid, Uint64 capacity, LayerProtocolName serviceLayer) {
+
         Uuid sipUuid = endPoint.getServiceInterfacePoint().getServiceInterfacePointUuid();
-        // Todo -> need to find the NEP associated to that SIP
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeAid.getBytes(StandardCharsets.UTF_8)).toString());
-        LOG.info("NodeA {} Uuid is {}", nodeAid, nodeUuid);
+        String nodeAid = nodeAAid.substring(2, nodeAAid.length());
+        LOG.info("NodeA Uuid after extraction is {}", nodeAid);
+        Uuid nodeUuid = getUuidFromInput(nodeAid);
+        // BeforePCEtapi  Uuid nodeUuid =
+        //     new Uuid(UUID.nameUUIDFromBytes(nodeZid.getBytes(StandardCharsets.UTF_8)).toString());
+        LOG.info("NodeA {} Uuid is {}", nodeAAid, nodeUuid);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node node =
             this.tapiContext.getTapiNode(this.tapiTopoUuid, nodeUuid);
         if (node == null) {
@@ -2385,20 +2407,20 @@ public final class ConnectivityUtils {
                 nodeName = entry.getValue().getValue();
             }
         }
-//        String nodeName = endPoint.getName().values().stream().findFirst().orElseThrow().getValue();
-        String nodeid = String.join("-", nodeName.split("-")[0], nodeName.split("-")[1]);
-        String nepName = nep.getName().values().stream().findFirst().orElseThrow().getValue();
-        String txPortDeviceName = nepName.split("\\+")[0];
-        String txPortName = nepName.split("\\+")[2];
+        // Try to rely as far as possible on Uuid as unique identifier so that we do not depend on implementations
+        String nodeid = nodeUuid.getValue();
+        String txPortDeviceName = nodeid;
+        String txPortName = nep.getUuid().getValue();
         String rxPortDeviceName = txPortDeviceName;
         String rxPortName = txPortName;
-        LOG.debug("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
-        LOG.debug("Node a id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
-        // TODO --> get clli from datastore?
-        String clli = "NodeSA";
+        LOG.info("Node a id = {}, txportDeviceName = {}, txPortName = {}", nodeAid, txPortDeviceName, txPortName);
+        LOG.info("Node a id = {}, rxportDeviceName = {}, rxPortName = {}", nodeAid, rxPortDeviceName, rxPortName);
+        // TODO --> get clli from datastore as soon as for a SBI implementation we identify a value name for the Node
+        //  name that may corresponds to clli/building. Use nodeName and try to avoid relying on it in the meanwhile.
+        String clli = nodeName;
         ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
             .setClli(clli)
-            .setNodeId(new NodeIdType(nodeid))
+            .setNodeId(new NodeIdType(nodeAAid))
             .setOpticType(OpticTypes.Gray)
             .setServiceFormat(serviceFormat)
             .setServiceRate(Uint32.valueOf(capacity))
@@ -2446,16 +2468,8 @@ public final class ConnectivityUtils {
         } else if (serviceFormat.equals(ServiceFormat.OTU)) {
             serviceAEndBuilder.setOtuServiceRate(OTU4.VALUE);
         }
-        return serviceLayer.equals(LayerProtocolName.ETH)
-            ? serviceAEndBuilder.build()
-            : serviceAEndBuilder
-                .setEthernetAttributes(new EthernetAttributesBuilder()
-                    .setSubrateEthSla(new SubrateEthSlaBuilder()
-                        .setCommittedBurstSize(Uint16.valueOf(64))
-                        .setCommittedInfoRate(Uint32.valueOf(100000))
-                        .build())
-                    .build())
-                .build();
+        LOG.info("tapiEndPointToServiceAPoint ServiceAend = {}, ", serviceAEndBuilder.build());
+        return serviceAEndBuilder.build();
     }
 
     private ConnectionType getConnectionTypePhtnc(
@@ -2643,4 +2657,18 @@ public final class ConnectivityUtils {
         return null;
     }
 
+    private Uuid getUuidFromInput(String inString) {
+        if (inString == null) {
+            return null;
+        }
+        Uuid outUuid;
+        Pattern uuidRegex =
+            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(inString).matches()) {
+            outUuid = new Uuid(inString);
+        } else {
+            outUuid = new Uuid(UUID.nameUUIDFromBytes(inString.getBytes(StandardCharsets.UTF_8)).toString());
+        }
+        return outUuid;
+    }
 }

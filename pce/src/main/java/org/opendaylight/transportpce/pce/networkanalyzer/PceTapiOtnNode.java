@@ -184,6 +184,7 @@ public class PceTapiOtnNode implements PceNode {
     private String modeType;
     private AdministrativeState adminState;
     private OperationalState operState;
+    private Uuid parentNodeUuid;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
@@ -1030,4 +1031,15 @@ public class PceTapiOtnNode implements PceNode {
         listOfCepAndNep = listOfCepAndNep.stream().distinct().collect(Collectors.toList());
         return listOfCepAndNep;
     }
+
+    @Override
+    public Uuid getParentNodeUuid() {
+        return this.parentNodeUuid;
+    }
+
+    public void setParentNodeUuid(Uuid pnodeUuid) {
+        this.parentNodeUuid = pnodeUuid;
+    }
+
+
 }

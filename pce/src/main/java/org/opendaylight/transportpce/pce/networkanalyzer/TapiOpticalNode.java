@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +124,7 @@ public class TapiOpticalNode {
         StringConstants.SERVICE_TYPE_OTUC4,
         StringConstants.SERVICE_TYPE_OTUC3,
         StringConstants.SERVICE_TYPE_OTUC2,
+        StringConstants.SERVICE_TYPE_400GE,
         StringConstants.SERVICE_TYPE_100GE_T);
 
 
@@ -252,9 +252,11 @@ public class TapiOpticalNode {
                 initIlaTps();
                 Map<Uuid, Name> ilaNodeId = new HashMap<>();
                 ilaNodeId.put(nodeUuid, nodeName);
+                PceTapiOpticalNode inLineAmp = new PceTapiOpticalNode(serviceType, node, OpenroadmNodeType.ROADM,
+                    version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability);
+                inLineAmp.setParentNodeUuid(nodeUuid);
                 // In case of ILA as this type of node is not defined at that time in OpenROADM, we use ORNodeType ROADM
-                this.pceNodeMap.put(nodeUuid, new PceTapiOpticalNode(serviceType, node, OpenroadmNodeType.ROADM,
-                    version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability));
+                this.pceNodeMap.put(nodeUuid, inLineAmp);
                 break;
             default:
                 break;
@@ -941,8 +943,8 @@ public class TapiOpticalNode {
                 for (org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.inter.rule.group.RuleKey
                         rk : fwdRuleKeyList) {
                     if (FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE
-                        .equals(irg.getValue().getRule().get(rk).getForwardingRule())
-                        || FORWARDINGRULEMUSTFORWARDACROSSGROUP.VALUE
+                            .equals(irg.getValue().getRule().get(rk).getForwardingRule())
+                            || FORWARDINGRULEMUSTFORWARDACROSSGROUP.VALUE
                             .equals(irg.getValue().getRule().get(rk).getForwardingRule())) {
                         Map<AssociatedNodeRuleGroupKey, AssociatedNodeRuleGroup> anrgMap = irg.getValue()
                             .getAssociatedNodeRuleGroup();
@@ -964,6 +966,11 @@ public class TapiOpticalNode {
                                     subIntercoMapI.put(0, intercoNepMap.get(index));
                                     subIntercoMapI.put(1, intercoNepMap.get(subIx));
                                     intLinkMap.putAll(createIrgPartialMesh(subIntercoMapI));
+                                    // added to complete links in reverse side
+                                    subIntercoMapI.clear();
+                                    subIntercoMapI.put(0, intercoNepMap.get(subIx));
+                                    subIntercoMapI.put(1, intercoNepMap.get(index));
+                                    intLinkMap.putAll(createIrgPartialMesh(subIntercoMapI));
                                 }
                             }
                             LOG.debug("TONLine869 IntLinkMap of {} links as follows orgTpList = {} dstTpList = {}",
@@ -978,7 +985,7 @@ public class TapiOpticalNode {
             }
         }
         this.internalLinkMap = intLinkMap;
-        LOG.debug("TONLine881 BuildInternalLinkMap intlinkMap = {}", this.internalLinkMap);
+        LOG.info("TONLine881 BuildInternalLinkMap intlinkMap = {}", this.internalLinkMap);
     }
 
     /**
@@ -1070,23 +1077,19 @@ public class TapiOpticalNode {
                 String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
                 LOG.debug("TON Line1068 createNrgPartialMesh, scanning NEP, destinationVnep UUID is {},"
                     + "destination Vnep Name is {}", destVnepUuid, destVnepName);
-                uuidSortedList.clear();
-                uuidSortedList.add(orgVnepUuid.toString());
-                uuidSortedList.add(destVnepUuid.toString());
-                // Assuming these links are bidirectional, sort the list in order to avoid creating 2 times the same
-                // link Org-Dest & Dest-Org
-                Collections.sort(uuidSortedList);
-                if (orgVnepUuid.toString().equals(uuidSortedList.get(0))) {
-                    Map<Uuid, Name> linkId = createLinkId(orgVnepName, destVnepName);
-                    intLinkMap.put(linkId.entrySet().iterator().next().getKey(),
-                        new IntLinkObj(linkId, orgVnepUuid, destVnepUuid));
-                    addCpCtpOutgoingLink(orgVnepUuid, destVnepUuid, orgNodeType, destNodeType, linkId);
-                } else {
-                    Map<Uuid, Name> linkId = createLinkId(destVnepName, orgVnepName);
-                    intLinkMap.put(linkId.entrySet().iterator().next().getKey(),
-                        new IntLinkObj(linkId, destVnepUuid, orgVnepUuid));
-                    addCpCtpOutgoingLink(destVnepUuid, orgVnepUuid, destNodeType, orgNodeType, linkId);
-                }
+
+                Map<Uuid, Name> linkId = new HashMap<>();
+                linkId = createLinkId(orgVnepName, destVnepName);
+                IntLinkObj link = new IntLinkObj(linkId, orgVnepUuid, destVnepUuid);
+                Map<Uuid, Name> revertlinkId = new HashMap<>();
+                revertlinkId = createLinkId(destVnepName, orgVnepName);
+                IntLinkObj revertlink = new IntLinkObj(revertlinkId, destVnepUuid, orgVnepUuid);
+                link.setOppositeLinkId(revertlinkId);
+                revertlink.setOppositeLinkId(linkId);
+                intLinkMap.put(linkId.entrySet().iterator().next().getKey(), link);
+                addCpCtpOutgoingLink(orgVnepUuid, destVnepUuid, orgNodeType, destNodeType, linkId);
+                intLinkMap.put(revertlinkId.entrySet().iterator().next().getKey(), revertlink);
+                addCpCtpOutgoingLink(destVnepUuid, orgVnepUuid, destNodeType, orgNodeType, revertlinkId);
             }
             nepOrder++;
         }
@@ -1289,6 +1292,7 @@ public class TapiOpticalNode {
             LOG.debug("TONLine1286 Node {} create TapiOpticalNode {}", nodeName, nodeId);
             var degNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.DEGREE,
                 version, degXOtsNep, nodeId, nodeName.getValue(), mcCapability);
+            degNode.setParentNodeUuid(this.node.getUuid());
             LOG.debug("TONLine1289 CREATEDEGNODE {} of class {} ", nodeId, degNode.getClass());
             Map<Uuid, Uuid> vnepToSubNode = new HashMap<>();
             for (BasePceNep bpn : degXOtsNep) {
@@ -1359,6 +1363,7 @@ public class TapiOpticalNode {
             // Creates a new PceTapiOpticalNode corresponding to the degree defined by this VirtualNep
             var srgNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.SRG,
                 version, srgXOtsNep, nodeId, nodeName.getValue(), mcCapability);
+            srgNode.setParentNodeUuid(this.node.getUuid());
             LOG.debug("TONLine1359 new PceTapiON {}, list of nep is {}",
                 srgNode.getNodeId(),
                 srgNode.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
@@ -1493,6 +1498,7 @@ public class TapiOpticalNode {
 
                 PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
                     OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability);
+                xpdr.setParentNodeUuid(node.getUuid());
                 for (Uuid invalidNepUuid : this.invalidNwNepList) {
                     xpdr.setUsedXpndrNWTps(List.of(invalidNepUuid.getValue()));
                 }
@@ -1501,7 +1507,7 @@ public class TapiOpticalNode {
                 LOG.info("TapiOpticalNode: Node Id: {}, Name : {} has been created and validated",
                     node.getUuid().toString(), node.getName().toString());
                 this.pceTapiOptNodeXpdr = xpdr;
-                LOG.debug("TONLine1498 : pceTapiOpticalNodecreated  {}", this.pceTapiOptNodeXpdr.getNodeId());
+                LOG.info("TONLine1498 : pceTapiOpticalNodecreated  {}", this.pceTapiOptNodeXpdr.getNodeId());
                 return;
             } else {
                 PceTapiOtnNode otnXpdr = new PceTapiOtnNode(this.node, OpenroadmNodeType.XPONDER,
@@ -1509,6 +1515,7 @@ public class TapiOpticalNode {
                     serviceType,
                     (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaPortId : zzPortId),
                     this);
+                otnXpdr.setParentNodeUuid(nodeUuid);
                 otnXpdr.validateXponder(
                     (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue());
                 this.pceTapiOtnNodeXpdr = otnXpdr;
@@ -2069,31 +2076,36 @@ public class TapiOpticalNode {
         for (Map<Uuid, Name> map : intLinkList) {
             LOG.debug("TONLine2064 For Node {}, Link to be configure = {}",nodeName, map.values().toString());
         }
-
         for (Map.Entry<Uuid, IntLinkObj> linkTBC : internalLinkMap.entrySet()) {
             LOG.debug("TONLine2068 Link to be configure = {}",
                 linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue());
             LOG.debug("TONLine2070 bindingVNepToSubnodeMap = {}", bindingVNepToSubnodeMap);
             LOG.debug("TONLine2071 Link to be configure ORG = {} DEST = {}",
                 linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid());
-            LOG.debug("TONLine2073 Link to be configure PceNodeORG = {} PceNodeDEST = {}",
-                bindingVNepToSubnodeMap.entrySet().stream()
+            Uuid orgNodeUuid = bindingVNepToSubnodeMap.entrySet().stream()
                 .filter(vts -> vts.getKey()
-                    .equals(linkTBC.getValue().getDestTpUuid())).findFirst().orElseThrow().getValue(),
-                bindingVNepToSubnodeMap.entrySet().stream()
+                    .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue();
+            Uuid destNodeUuid = bindingVNepToSubnodeMap.entrySet().stream()
                 .filter(vts -> vts.getKey()
-                    .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue());
-            this.pceInternalLinkMap.put(linkTBC.getKey(),
-                new PceTapiLink(linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue(),
-                    linkTBC.getKey(), linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid(),
-                    pceNodeMap.get(bindingVNepToSubnodeMap.entrySet().stream()
-                        .filter(vts -> vts.getKey()
-                            .equals(linkTBC.getValue().getOrgTpUuid())).findFirst().orElseThrow().getValue()),
-                    pceNodeMap.get(bindingVNepToSubnodeMap.entrySet().stream()
-                        .filter(vts -> vts.getKey()
-                            .equals(linkTBC.getValue().getDestTpUuid())).findFirst().orElseThrow().getValue())));
+                    .equals(linkTBC.getValue().getDestTpUuid())).findFirst().orElseThrow().getValue();
+            LOG.debug("TONLine2073 Link to be configure PceNodeORG = {} PceNodeDEST = {}", orgNodeUuid, destNodeUuid);
+            PceTapiOpticalNode orgPceNode = pceNodeMap.get(orgNodeUuid);
+            PceTapiOpticalNode destPceNode = pceNodeMap.get(destNodeUuid);
+            //pceNodeMap.remove(orgPceNode, destPceNode);
+            PceTapiLink pceTapiLinkTBC = new PceTapiLink(
+                linkTBC.getValue().getLinkId().entrySet().iterator().next().getValue(),
+                linkTBC.getKey(), linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid(),
+                orgPceNode, destPceNode);
+            if (linkTBC.getValue().getOppositeLinkId() != null && !linkTBC.getValue().getOppositeLinkId().isEmpty()) {
+                pceTapiLinkTBC.setOppositeLinkUuid(linkTBC.getValue().getOppositeLinkId().entrySet().stream()
+                    .findFirst().orElseThrow().getKey());
+            }
+
+            LOG.info("CreateLinks Line2105 for TapiOptical Node {}, Link Name {}, from {} to {}",
+                pceTapiLinkTBC.getLinkName(), orgPceNode.getNodeId(), destPceNode.getNodeId());
+            this.pceInternalLinkMap.put(pceTapiLinkTBC.getLinkUuid(), pceTapiLinkTBC);
         }
-        LOG.debug("TONLine2090 pceInternalLinkMap = {} ",
+        LOG.info("TONLine2090 pceInternalLinkMap = {} ",
             pceInternalLinkMap.values().stream().map(PceTapiLink::getLinkName).collect(Collectors.toList()));
     }
 
@@ -2577,21 +2589,13 @@ public class TapiOpticalNode {
                 String destVnepName = destBpn.getVirtualNep().entrySet().iterator().next().getValue().getValue();
                 LOG.debug("createIrgPartialMesh, scanning NEP, destinationVnep UUID is {}, destination Vnep Name is {}",
                     destVnepUuid, destVnepName);
-                uuidSortedList.clear();
-                uuidSortedList.add(orgVnepUuid.toString());
-                uuidSortedList.add(destVnepUuid.toString());
-                Collections.sort(uuidSortedList);
-                if (orgVnepUuid.toString().equals(uuidSortedList.get(0))) {
-                    Map<Uuid, Name> linkId = createLinkId(orgVnepName, destVnepName);
-                    internLinkMap.put(linkId.entrySet().iterator().next().getKey(),
-                        new IntLinkObj(linkId, orgVnepUuid, destVnepUuid));
-                    addCpCtpOutgoingLink(orgVnepUuid, destVnepUuid, orgNodeType, destNodeType, linkId);
-                } else {
-                    Map<Uuid, Name> linkId = createLinkId(destVnepName, orgVnepName);
-                    internLinkMap.put(linkId.entrySet().iterator().next().getKey(),
-                        new IntLinkObj(linkId, destVnepUuid, orgVnepUuid));
-                    addCpCtpOutgoingLink(destVnepUuid, orgVnepUuid, destNodeType, orgNodeType, linkId);
-                }
+
+                Map<Uuid, Name> linkId = createLinkId(orgVnepName, destVnepName);
+                Map<Uuid, Name> oppLinkId = createLinkId(destVnepName, orgVnepName);
+                IntLinkObj newLink = new IntLinkObj(linkId, orgVnepUuid, destVnepUuid);
+                newLink.setOppositeLinkId(oppLinkId);
+                internLinkMap.put(linkId.entrySet().iterator().next().getKey(),newLink);
+                addCpCtpOutgoingLink(orgVnepUuid, destVnepUuid, orgNodeType, destNodeType, linkId);
                 LOG.debug("TONLine2579 createIrgPartialMesh, scanning NEP, destination Vnep Name is {}", destVnepName);
             }
         }
@@ -2744,6 +2748,7 @@ public class TapiOpticalNode {
      */
     private static final class IntLinkObj {
         private Map<Uuid, Name> linkId;
+        private Map<Uuid, Name> oppLinkId;
         private Uuid orgTpUuid;
         private Uuid destTpUuid;
 
@@ -2776,6 +2781,19 @@ public class TapiOpticalNode {
         private Map<Uuid, Name> getLinkId() {
             return linkId;
         }
+
+        /**
+         * Provides a Uuid corresponding to origin NEP of the Link (Photonic Layer).
+         * @return  Origin NEP Uuid.
+         */
+        private void setOppositeLinkId(Map<Uuid, Name> oppositeLinkId) {
+            this.oppLinkId = oppositeLinkId;
+        }
+
+        private Map<Uuid, Name> getOppositeLinkId() {
+            return this.oppLinkId;
+        }
+
     }
 
 }
