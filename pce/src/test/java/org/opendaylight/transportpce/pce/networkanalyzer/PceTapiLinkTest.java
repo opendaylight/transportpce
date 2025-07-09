@@ -214,8 +214,8 @@ public class PceTapiLinkTest  extends AbstractTest {
         assertTrue(rdm2rdmLink.getUsedBandwidth().equals(Long.valueOf(0)), "RDM to RDM Link Used bandwidth shall be 0");
         assertTrue(rdm2rdmLink.getpowerCorrection().equals(0.0),
             "RDM to RDM Link being by default G.652, Power correction shall be 0.0");
-        assertTrue(rdm2rdmLink.getOppositeLinkUuid().getValue().equals("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef"),
-            "RDM to RDM Link opposite Link shall be itself");
+        assertTrue(rdm2rdmLink.getOppositeLinkUuid().getValue().equals("984c8390-962d-392f-9a3f-9d5da3d37666"),
+            "RDM to RDM Link opposite Link shall be 984c8390-962d-392f-9a3f-9d5da3d37666");
     }
 
 
@@ -322,8 +322,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "RDM to TSP Link Available bandwidth shall be 0.0");
         assertTrue(rdm2tspLink.getpowerCorrection().equals(0.0),
             "RDM to TSP Link being by default G.652, Power correction shall be 0.0");
-        assertTrue(rdm2tspLink.getOppositeLinkUuid().getValue().equals("79b23827-48eb-33ed-b110-fbeca32c4125"),
-            "RDM to TSP Link opposite Link shall be itself");
+        assertTrue(rdm2tspLink.getOppositeLinkUuid().getValue().equals("0f58cca7-87ac-368e-a526-49e47227b917"),
+            "RDM to TSP Link opposite Link shall be 0f58cca7-87ac-368e-a526-49e47227b917");
     }
 
     @Test
@@ -393,8 +393,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
         assertTrue(otu4Link.getpowerCorrection().equals(0.0),
             "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(otu4Link.getOppositeLinkUuid().getValue().equals("07df4edd-4408-310d-a820-5f34b0524900"),
-            "OTU4 Link (connection) opposite Link shall be itself");
+        assertTrue(otu4Link.getOppositeLinkUuid().getValue().equals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f"),
+            "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
     }
 
     @Test
@@ -501,8 +501,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
         assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
             "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("b90f7b96-4fe0-390c-8ef2-41942196f19e"),
-            "ODU4 Link (connection) opposite Link shall be itself");
+        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("606ade82-de21-3e95-b2cd-cdb2b03ef78b"),
+            "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
     }
 
     @Test
@@ -583,8 +583,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "TSP Source TPId shall be 74b4b605-379f-3700-bb46-97b578cb2c7d");
         assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
             "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("9e237eea-ce80-3490-9a66-34f7cbdac55f"),
-            "ODU4 Link (connection) opposite Link shall be itself");
+        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("1a9dea0a-0e90-3a72-98b7-2dc04d2ea115"),
+            "ODU4 Link (connection) opposite Link shall be 1a9dea0a-0e90-3a72-98b7-2dc04d2ea115");
     }
 
     @Test
@@ -651,8 +651,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
         assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
             "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("b90f7b96-4fe0-390c-8ef2-41942196f19e"),
-            "ODU4 Link (connection) opposite Link shall be itself");
+        assertTrue(iodu4Link.getOppositeLinkUuid().getValue().equals("606ade82-de21-3e95-b2cd-cdb2b03ef78b"),
+            "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
     }
 
     @Test
@@ -716,8 +716,8 @@ public class PceTapiLinkTest  extends AbstractTest {
             "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
         assertTrue(otu4Link.getpowerCorrection().equals(0.0),
             "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(otu4Link.getOppositeLinkUuid().getValue().equals("07df4edd-4408-310d-a820-5f34b0524900"),
-            "OTU4 Link (connection) opposite Link shall be itself");
+        assertTrue(otu4Link.getOppositeLinkUuid().getValue().equals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f"),
+            "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
     }
 
     private PceTapiLink getTapiOpticalLinkFromId(Uuid linkId, Uuid nodeXuuid, Uuid nodeYuuid,
