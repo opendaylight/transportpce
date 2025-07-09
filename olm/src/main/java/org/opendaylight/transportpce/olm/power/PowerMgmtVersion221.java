@@ -193,7 +193,7 @@ public final class PowerMgmtVersion221 {
             deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Transponder Power update is committed");
+            LOG.info("Transponder Power update is committed for {}", nodeId);
             return true;
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Setting transponder power failed: ", e);
@@ -258,7 +258,7 @@ public final class PowerMgmtVersion221 {
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
             try {
                 commit.get();
-                LOG.info("Roadm connection power level successfully set ");
+                LOG.info("Roadm connection power level successfully set for Node {}", deviceId);
                 return true;
             } catch (InterruptedException | ExecutionException ex) {
                 LOG.warn("Failed to post {}", newRdmConn, ex);
