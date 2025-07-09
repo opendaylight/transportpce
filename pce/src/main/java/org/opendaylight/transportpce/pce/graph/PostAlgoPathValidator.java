@@ -19,7 +19,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+//import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -33,6 +35,7 @@ import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.frequency.FrequencySelectionFactory;
@@ -62,6 +65,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OpucnTribSlotDef;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
@@ -79,6 +83,7 @@ public class PostAlgoPathValidator {
     private final NetworkTransactionService networkTransactionService;
     private final BitSet spectrumConstraint;
     private final ClientInput clientInput;
+    private String pceOperMode;
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint,
             ClientInput clientInput) {
@@ -115,6 +120,8 @@ public class PostAlgoPathValidator {
             case StringConstants.SERVICE_TYPE_OTU4:
             case StringConstants.SERVICE_TYPE_OTHER:
                 Subscriber subscriber = new EventSubscriber();
+                LOG.info("PostAlgoValidator, checkPath, calling getSpectrumAssignment with spectralWidthSlotNber = {}",
+                    spectralWidthSlotNumber);
                 spectrumAssignment = getSpectrumAssignment(path, allPceNodes, spectralWidthSlotNumber, subscriber);
                 pceResult.setServiceType(serviceType);
                 if (spectrumAssignment.getBeginIndex().equals(Uint16.ZERO)
@@ -187,7 +194,23 @@ public class PostAlgoPathValidator {
                 pceResult.setServiceType(serviceType);
                 Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
                 Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes, tribSlot, tribSlotNb);
-                List<OpucnTribSlotDef> resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
+                List<OpucnTribSlotDef> resultTribPortTribSlot = new ArrayList<>();
+                if (tribSlot == null || tribPort == null) {
+                    if (this.pceOperMode.equals(PceSendingPceRPCs.TAPI_PCE_OPER_MODE)) {
+                        pceResult.success();
+                        LOG.info("In PostAlgoPathValidator: did not found TribPort and tribSlot but skipped it as for"
+                            + "TAPI PCE OPER MODE tribPort and tribSlot do not need to be qualified");
+                        return pceResult;
+                    } else {
+                        pceResult.error(String.format("no trib-port/trib-slot found :Unsupported service type %s",
+                            serviceType));
+                        LOG.warn("In PostAlgoPathValidator did not succed finding trib-port/slot for serviceType {}, "
+                            + "found {}", serviceType, path);
+                        return pceResult;
+                    }
+                } else {
+                    resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
+                }
                 if (resultTribPortTribSlot.get(0) != null && resultTribPortTribSlot.get(1) != null) {
                     pceResult.setResultTribPortTribSlot(resultTribPortTribSlot);
                     pceResult.success();
@@ -330,6 +353,11 @@ public class PostAlgoPathValidator {
                     .getAvailableTribPorts()
                     .get(edge.link().getDestTP().getValue());
             List<Uint16> commonEdgeTpnPool = new ArrayList<>();
+            if (srcTpnPool == null || destTpnPool == null) {
+                LOG.warn("Analysing Edges, did not succeed retrieving Trib port Pool for either Src {} and/or Dest {}",
+                    edge.link().getSourceId(), edge.link().getDestId());
+                return null;
+            }
             for (Uint16 srcTpn : srcTpnPool) {
                 if (destTpnPool.contains(srcTpn)) {
                     commonEdgeTpnPool.add(srcTpn);
@@ -366,6 +394,11 @@ public class PostAlgoPathValidator {
                     .getAvailableTribSlots()
                     .get(edge.link().getDestTP().getValue());
             List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
+            if (srcTsPool == null || destTsPool == null) {
+                LOG.warn("Analysing Edges, did not succeed retrieving Time Slot Pool for either Src {} and/or Dest {}",
+                    edge.link().getSourceId(), edge.link().getDestId());
+                return null;
+            }
             for (Uint16 integer : srcTsPool) {
                 if (destTsPool.contains(integer)) {
                     commonEdgeTsPoolList.add(integer);
@@ -842,6 +875,7 @@ public class PostAlgoPathValidator {
 
     private String getXpdrOpMode(String nwTpId, String vertice, int pathElement, PceNode currentNode,
             String serviceType, CatalogUtils cu) {
+        // First case : OpenROADM topology . Try to retrieve Operational mode from XpdrNetworkAttributres
         DataObjectIdentifier<TerminationPoint1> nwTpIid =
                 InstanceIdentifiers.createNetworkTerminationPoint1IIDBuilder(vertice, nwTpId);
         String opMode = cu.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP, serviceType);
@@ -857,16 +891,29 @@ public class PostAlgoPathValidator {
                     opMode);
                     // Operational mode is retrieved from the service Type assuming it is supported
                     // by the Xponder
-                LOG.debug(
+                LOG.info(
                     "Transponder {} corresponding to path Element {} in the path has {} operational mode",
                     currentNode.getNodeId().getValue(), pathElement, opMode);
                 return opMode;
             }
         } catch (InterruptedException | ExecutionException e1) {
-            LOG.error("Issue accessing the XponderNetworkAttributes of {} for Transponder {}"
+            LOG.debug("Issue accessing the XponderNetworkAttributes of {} for Transponder {}"
                 + " corresponding to path Element {} in the path ",
                 nwTpId, currentNode.getNodeId().getValue(), pathElement, e1);
         }
+        // Second case : TAPI topology. Try to retrieve Operational mode from TP Uuid or directly from PceNode
+        String pceNodeOpMode =
+            (getUuidFromInput(nwTpId) != null && currentNode.getXpdrOperationalMode(getUuidFromInput(nwTpId)) != null
+                    && !currentNode.getXpdrOperationalMode(getUuidFromInput(nwTpId)).equals("Unknown Mode"))
+                ? currentNode.getXpdrOperationalMode(getUuidFromInput(nwTpId))
+                : currentNode.getOperationalMode();
+        if (pceNodeOpMode != null) {
+            LOG.info("Succesfully retrieved Operational Mode from PceNode {} : {}",
+                currentNode.getNodeId(), pceNodeOpMode);
+            return pceNodeOpMode;
+        }
+        // If none of the case were successfull, use default mode
+        //opMode = cu.getPceOperationalModeFromServiceType(CatalogConstant.CatalogNodeType.TSP, serviceType);
         LOG.info("Did not succeed finding network TP {} in Configuration Datastore. Retrieve"
             + " default Operational Mode {} from serviceType {}", nwTpId, opMode, serviceType);
         return opMode;
@@ -1079,7 +1126,7 @@ public class PostAlgoPathValidator {
                 pceNode.getNodeId(), pceNodeVersion, sltWdthGran, pceNode.getCentralFreqGranularity(), isFlexGrid);
         }
 
-        LOG.debug("Available bitset on nodes: {}", result);
+        LOG.info("Available bitset on nodes: {}", result);
 
         if (result.isEmpty()) {
             subscriber.error("No frequencies available");
@@ -1099,7 +1146,7 @@ public class PostAlgoPathValidator {
                 spectrumConstraint,
                 result);
 
-        LOG.debug("Assignable bitset: {}", assignableBitset);
+        LOG.info("Assignable bitset: {}", assignableBitset);
 
         if (assignableBitset.isEmpty()) {
             subscriber.error("No frequencies are assignable to the service.");
@@ -1164,5 +1211,22 @@ public class PostAlgoPathValidator {
 
     public Double getTpceCalculatedMargin() {
         return tpceCalculatedMargin;
+    }
+
+    public void setPceOperMode(String pceOperationalMode) {
+        this.pceOperMode = pceOperationalMode;
+    }
+
+    private Uuid getUuidFromInput(String inString) {
+        if (inString == null) {
+            return null;
+        }
+        Uuid outUuid = null;
+        Pattern uuidRegex =
+            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (uuidRegex.matcher(inString).matches()) {
+            outUuid = new Uuid(inString);
+        }
+        return outUuid;
     }
 }
