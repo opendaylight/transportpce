@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32259d8d_0a31f32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-07-09T14:53:16Z",
+      "side": 1,
+      "message": "Thanks Jimmy for your contribution. \nFor this specific change, I have an issue. If I understand your approach, in my mind AvailableFreqMap on a PP port shall not be the complement of the used freq map. A port is either used or available. Not both at the same time. And this is the way at that time it is handled in tpce. So changing this would imply to change a lot of things in different classes, some of them not being merged at that time (this is the case of the TAPI PCE, which I try to finish, but that is still in construction).\n\nThis being said, just would like to highlight another point, which is good to know when developing TAPI features in tpce.\n\nAt that time convertTopoORtoTapiAtInit is dedicated to the creation of the TAPI topology from the existing OR topo, when we activate tapi feature (\"At init\"). There is another class TapiNetworkModelServiceImpl, that includes somewhat equivalent methods, in the context of an update of the portMapping (when new devices are connected, or when device configuration changes). So it does the same, but \"on data tree change\" rather than \"at init\". Both classes relies on some common methods shared and available in ORtoTapiConversionTools. Some other methods do the same but can not be share because they rely for one class on the topology, for the other, on the PortMapping of the devices. This to say that when you make a change in one of the class, there is a high probability that the change shall be back-ported in the other, especially if it affects a method that is not share by the 2.\nThanks",
+      "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eedb5bd3_b6ae2780",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-07-09T14:53:16Z",
+      "side": 1,
+      "message": "Sorry but to me this modification does not make sense. A PP port is either used or Available.\nWhen it is used, usedFreqMap contains the range on which it is used, and availableFreqMap  shall be null or empty (don\u0027t know exactly, since I am a bit lost with the multitude of abstracted objects and interfaces you have created to handle the spectrum).\nWhen it is not used, we consider that the port is available on the full spectrum supported by the ROADM.  As mentioned during previous discussions, we could consider backporting the availableFreqMap of the CP aggregation port of the ROADM down to the PP, but it would introduce unneeded complexity with no real benefit : the postAlgoValidator will consider in any case the CP port bitmap on the path and make a logical AND between the different bitmaps of the different ports. Thus it is not needed.",
+      "range": {
+        "startLine": 582,
+        "startChar": 24,
+        "endLine": 582,
+        "endChar": 103
+      },
+      "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
