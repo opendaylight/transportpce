@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9576686_74a89da2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "Good work!\n\nMy comments are mostly about names of methods and classes. If you want we can talk about them. Maybe we can talk about all those interface as well? ;)",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff44f2b4_6a07facd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "maybe rename this to a less Generic name than Collection? So we do not confuse this with the more know Java.util.Collection?",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d240f511_5786f818",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "maybe rename this to `addAll` to be consistent with the syntax for collections?",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f42d04dc_ecce68e7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "Maybe rename this with an action? `getTerminationPoints` or maybe `getTerminationPointMap`. Just terminationPoints doesn\u0027t say much of what it does, or what it will return.\n\nThere could be an argument also for using a wrapper object over the Map\u003ctype, Map\u003cString set\u003c\u003e\u003e\u003e construction.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6bdf25f_24f0fc50",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3676c71f_f7657a1f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "This class (or the interface) doesn\u0027t seem to represent a termination point, but adds functionality. Suggestion: Change the name of this class to represent that it is a functional class.\n\nAlso since I have encountered similar classes already, maybe we can group the functionality in some smart way into the same utility class or factory if you want?",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20023af0_eaa27f72",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: remove the owned from the method name.\nI get confused, as to who owns these terminationpoints.\n\nI guess it follows from the earlier `OwnedNodeEdgePoint` and if so I suggest `getEdgePoints` or maybe `getEdgePointsForNode`or something similar.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae322ac2_8e54b963",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: either `getTerminationPoints` or maybe `getTerminationPointsForTopology`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb6de05d_011d7bdc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: change to `getSupportingNodeName`.\n\nAlso not sure if I like that this one throws if the supplied node did not have a supportingNode.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc3696e_ad2d5871",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion `getTerminationPoints`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8917d40c_69c244b9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: `getSrgNodeEdgePoints`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80ee3974_c0645e05",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: `isSrg(Terminationpoint tp)`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "537ea2e6_6ef70e74",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: `getEdgePointsForDegree` or maybe I misunderstood what it does.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a96f240_9f1761b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "suggestion: Skip the `terminationPoint`in the beginning. `isDegree`i think is enough. `ìsDegree(termPoint)`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1705e63_34f67129",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/TerminationPointCollection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "If I had not viewed this PR I would assume it is the java.utils.Collection that is inherited here.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3717dabb_d32c53ac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "maybe nitpick, but `Own` seems more like a variable name. What if I want to store `OwnNodeEdgepoint` in a variable called `ForeignEdgePoints`or I want to use this in another context? The interface name also sounds like an object name, but it is really a functional interface.\n\nSuggestion: rename this to something more functional (Maybe `NodeUtils` or something similar?)",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b7e235_f5f05b4a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-07-10T08:13:16Z",
+      "side": 1,
+      "message": "maybe nitpick: suggest rename of this method to `getEdgePointsForNode` or something similar. Follows from my previous comment.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
