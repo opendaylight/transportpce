@@ -39,6 +39,30 @@
       },
       "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89f40261_37fcbc33",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-10T06:37:59Z",
+      "side": 1,
+      "message": "\u003e ...availableFreqMap shall be null or empty...\n\nTo me, an empty list/array makes sense, if there are no available frequencies.\n\ne.g.\n\n    \"spectrum-capability-pac\": {\n        \"available-spectrum\": [],\n        ...\n    }\n\nWhat we noticed is that key `available-spectrum` was missing altogether, which seemed like an oversight.\n\n\u003e A PP port is either used or Available.\n\u003e When it is used, usedFreqMap contains the range on which it is used\n\nIf I understand you correctly, the logic should be:\n\n1. if there is an occupied-spectrum, available-spectrum is set to empty list\n2. if there is no occupied-spectrum, available-spectrum is set to the supportable-spectrum and occupied spectrum is set to an empty list\n\n## Examples\n\n### Scenario 1\n\n    \"spectrum-capability-pac\": {\n        \"available-spectrum\": [],\n        \"occupied-spectrum\": [\n            {\n                \"upper-frequency\": \"196125000000000\",\n                \"lower-frequency\": \"196075000000000\"\n            }\n        ],\n        \"supportable-spectrum\": [\n            {\n                \"upper-frequency\": \"196125000000000\",\n                \"lower-frequency\": \"191325000000000\"\n            }\n        ]\n    }\n\n### Scenario 2\n\n    \"spectrum-capability-pac\": {\n        \"available-spectrum\": [\n            {\n                \"upper-frequency\": \"196125000000000\",\n                \"lower-frequency\": \"191325000000000\"\n            }\n        ],\n        \"occupied-spectrum\": [],\n        \"supportable-spectrum\": [\n            {\n                \"upper-frequency\": \"196125000000000\",\n                \"lower-frequency\": \"191325000000000\"\n            }\n        ]\n    }",
+      "parentUuid": "eedb5bd3_b6ae2780",
+      "range": {
+        "startLine": 582,
+        "startChar": 24,
+        "endLine": 582,
+        "endChar": 103
+      },
+      "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
