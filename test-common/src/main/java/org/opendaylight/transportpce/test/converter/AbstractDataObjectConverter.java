@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Converts XML and {@link DataObject} vice versa.
  *
  */
-public abstract class AbstractDataObjectConverter implements DataObjectConverter {
+public abstract class AbstractDataObjectConverter extends AbstractConverter implements DataObjectConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDataObjectConverter.class);
 
