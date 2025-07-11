@@ -71,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "374cfbfd_42053e91",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/frequency/range/FrequencyRangeFactory.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-11T11:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa25b548_18b7ebd6",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c58966d4_11cb974a",
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "Maybe getPPUsedFrequencies or getPPUsedFrequencyRanges?",
       "parentUuid": "5c923493_7946e328",
+      "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cbd368_a20ad6c7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-11T11:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a80210e_c0dabd47",
       "revId": "5aeebea654bcbd9995f1cf028d62ca09ceea44b5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
