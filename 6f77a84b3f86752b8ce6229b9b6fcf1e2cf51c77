@@ -50,6 +50,24 @@
       "message": "12:44:20 sed: can\u0027t read ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-pekkoconf.xml: No such file or directory\n12:44:41 sed: can\u0027t read ../system/org/opendaylight/controller/sal-clustering-config/*/sal-clustering-config-*-pekkoconf.xml: No such file or directory",
       "revId": "6f77a84b3f86752b8ce6229b9b6fcf1e2cf51c77",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea8ce7b8_dfd45ff3",
+        "filename": "karaf/src/main/assembly/ressources/post_install_for_tests.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 8144
+      },
+      "writtenOn": "2025-07-11T07:05:00Z",
+      "side": 1,
+      "message": "rebased 😄, let\u0027s see how it works..",
+      "parentUuid": "52279ed4_bb356808",
+      "revId": "6f77a84b3f86752b8ce6229b9b6fcf1e2cf51c77",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
