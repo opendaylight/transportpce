@@ -16,6 +16,24 @@
       "message": "controller 11 and other MRI project for Titanium are ready - you can start to bump and adapt",
       "revId": "72b0757f1296c01f16a6213ac064dc7df902d913",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e30c4f6a_f749a215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-07-15T18:53:52Z",
+      "side": 1,
+      "message": "good news: it works again!",
+      "parentUuid": "f455e16c_711b71b7",
+      "revId": "72b0757f1296c01f16a6213ac064dc7df902d913",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
