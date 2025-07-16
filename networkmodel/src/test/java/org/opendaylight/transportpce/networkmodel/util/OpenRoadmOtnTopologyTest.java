@@ -709,7 +709,7 @@ public class OpenRoadmOtnTopologyTest {
     private void checkSpdrSwitchingPools(Uint16 xpdrNb, SwitchingPools sp) {
         List<OduSwitchingPools> oduSwitchingPools = new ArrayList<>(sp.nonnullOduSwitchingPools().values());
         assertEquals(
-            1,
+            2,
             oduSwitchingPools.size(),
             "switching-pools augmentation should contain a single odu-switching-pools");
         assertEquals(
@@ -731,9 +731,8 @@ public class OpenRoadmOtnTopologyTest {
                 .collect(Collectors.toList());
             for (NonBlockingList nbl : nblList) {
                 assertEquals(
-                    Uint32.TEN,
-                    nbl.getAvailableInterconnectBandwidth(),
-                    "for a 10G mux, interconnect BW should be 10G");
+                    Uint32.TEN, nbl.getAvailableInterconnectBandwidth(),
+                    "PortMapping declared interconnect BW should is 10");
                 assertEquals(Uint32.valueOf(1000000000), nbl.getInterconnectBandwidthUnit());
                 assertThat(nbl.getTpList())
                     .withFailMessage(
@@ -744,8 +743,12 @@ public class OpenRoadmOtnTopologyTest {
                     .containsExactlyInAnyOrder(new TpId("XPDR1-NETWORK1"), new TpId("XPDR1-CLIENT" + nb));
             }
         } else if (xpdrNb.equals(Uint16.TWO)) {
+            nonBlockingList =
+                new ArrayList<>(oduSwitchingPools.get(1).nonnullNonBlockingList().values());
             assertEquals(1, nonBlockingList.size(), "Switch should contain a single non blocking list");
             assertEquals(Uint16.ONE, nonBlockingList.get(0).getNblNumber());
+            assertEquals(Uint32.valueOf(100), nonBlockingList.get(0).getAvailableInterconnectBandwidth(),
+                "PortMapping declared interconnect BW should is 100");
             assertThat(nonBlockingList.get(0).getTpList())
                 .withFailMessage(
                         "for a 100G Switch, non blocking list should contain 8 entries (4 clients + 4 network ports)")
