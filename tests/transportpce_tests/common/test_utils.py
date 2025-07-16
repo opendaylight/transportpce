@@ -235,7 +235,7 @@ def start_tpce():
 
 
 def start_karaf():
-    print('starting KARAF TransportPCE build...')
+    print(f'starting KARAF ({KARAF_INSTALLDIR}) TransportPCE build...')
     executable = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         '..', '..', '..', KARAF_INSTALLDIR, 'target', 'assembly', 'bin', 'karaf')
