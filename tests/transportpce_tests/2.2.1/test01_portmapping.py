@@ -211,7 +211,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
             'nbl-number': 11,
             'lcp-list': ['XPDR1-CLIENT1', 'XPDR1-NETWORK1'],
             'interconnect-bandwidth-unit': 1000000000,
-            'interconnect-bandwidth': 0
+            'interconnect-bandwidth': 10
         }
         expected_sorted = test_utils.recursive_sort(expected)
         response_sorted = [
@@ -231,7 +231,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         expected_subset_response = {
             "nbl-number": 2,
             "interconnect-bandwidth-unit": 1000000000,
-            "interconnect-bandwidth": 0}
+            "interconnect-bandwidth": 100}
         subset = {k: v for k, v in response['switching-pool-lcp'][0]['non-blocking-list'][0].items()
                   if k in expected_subset_response}
         self.assertDictEqual(subset, expected_subset_response)
@@ -247,7 +247,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
         self.assertIn(
             {'nbl-number': 83,
-             'interconnect-bandwidth': 0,
+             'interconnect-bandwidth': 1,
              'interconnect-bandwidth-unit': 1000000000,
              'lcp-list': ['XPDR3-CLIENT3', 'XPDR3-NETWORK1']},
             response['switching-pool-lcp'][0]['non-blocking-list'])

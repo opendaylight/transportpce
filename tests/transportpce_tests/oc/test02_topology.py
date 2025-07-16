@@ -62,6 +62,11 @@ class TestTransportPCETopology(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['connection-status'], 'connected')
 
+        # check also portmapping
+        response = test_utils.get_portmapping()
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertEqual(response['portmapping']['transportpce-portmapping:network']['nodes'][0]['node-id'], 'XPDR-OC')
+
     def test_04_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -118,7 +123,7 @@ class TestTransportPCETopology(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('ietf-network-topology:link', response['network'][0])
 
-    def test_07_getNodes_OtnTopology(self):
+    def test_09_getNodes_OtnTopology(self):
         # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
@@ -130,7 +135,7 @@ class TestTransportPCETopology(unittest.TestCase):
                 'xpdr-number': 1,
                 'network_nb': 1,
                 'nbl_nb': 4,
-                'tp-checklist': ['XPDR1-NETWORK1', 'XPDR1-CLIENT1'],
+                'tp-checklist': ['XPDR1-NETWORK5', 'XPDR1-CLIENT1'],
                 'tp-unchecklist': ['XPDR1-CLIENT2']
             }
         }
@@ -169,8 +174,8 @@ class TestTransportPCETopology(unittest.TestCase):
             # pylint: disable=line-too-long
             for nbl in node['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list']:
                 if nbl['nbl-number'] == 1:
-                    self.assertEqual(nbl['available-interconnect-bandwidth'], 10)
-                    self.assertEqual(nbl['interconnect-bandwidth-unit'], 1000000000)
+                    self.assertNotIn('available-interconnect-bandwidth', nbl)
+                    self.assertNotIn('interconnect-bandwidth-unit', nbl)
                     for tp in CHECK_LIST[nodeId]['tp-checklist']:
                         self.assertIn(tp, nbl['tp-list'])
                     for tp in CHECK_LIST[nodeId]['tp-unchecklist']:
@@ -178,26 +183,26 @@ class TestTransportPCETopology(unittest.TestCase):
             listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
-    def test_08_disconnect_mpdr(self):
+    def test_10_disconnect_mpdr(self):
         response = test_utils.unmount_device("XPDR-OC")
         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
 
-    def test_09_getClliNetwork(self):
+    def test_11_getClliNetwork(self):
         response = test_utils.get_ietf_network_request('clli-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(len(response['network'][0]['node']), 1)
         self.assertEqual(response['network'][0]['node'][0]['org-openroadm-clli-network:clli'], '1')
 
-    def test_10_getOpenRoadmNetwork(self):
+    def test_12_getOpenRoadmNetwork(self):
         response = test_utils.get_ietf_network_request('openroadm-network', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertNotIn('node', response['network'][0])
 
-    def test_11_getNodes_OpenRoadmTopology(self):
+    def test_13_getNodes_OpenRoadmTopology(self):
         response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
         self.assertNotIn('node', response['network'][0])
 
-    def test_12_getNodes_OtnTopology(self):
+    def test_14_getNodes_OtnTopology(self):
         response = test_utils.get_ietf_network_request('otn-topology', 'config')
         self.assertNotIn('node', response['network'][0])
 

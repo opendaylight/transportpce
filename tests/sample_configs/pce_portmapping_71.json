@@ -21,7 +21,7 @@
                                 "XPDR2-NETWORK1",
                                 "XPDR2-CLIENT2"
                             ],
-                            "interconnect-bandwidth": 0
+                            "interconnect-bandwidth": 100
                         },
                         {
                             "nbl-number": 1,
@@ -29,7 +29,7 @@
                                 "XPDR2-CLIENT1",
                                 "XPDR2-NETWORK1"
                             ],
-                            "interconnect-bandwidth": 0
+                            "interconnect-bandwidth": 100
                         }
                     ]
                 }
@@ -249,7 +249,7 @@
                                 "XPDR2-NETWORK1",
                                 "XPDR2-CLIENT2"
                             ],
-                            "interconnect-bandwidth": 0
+                            "interconnect-bandwidth": 100
                         },
                         {
                             "nbl-number": 1,
@@ -257,7 +257,7 @@
                                 "XPDR2-CLIENT1",
                                 "XPDR2-NETWORK1"
                             ],
-                            "interconnect-bandwidth": 0
+                            "interconnect-bandwidth": 100
                         }
                     ]
                 }

@@ -78,39 +78,43 @@
                         "switching-pool-type": "non-blocking",
                         "non-blocking-list": [
                             {
-                                "nbl-number": 11,
+                                "nbl-number": 2,
                                 "lcp-list": [
                                     "XPDR1-CLIENT2",
                                     "XPDR1-NETWORK1"
                                 ],
-                                "interconnect-bandwidth": 0,
+                                "interconnect-bandwidth": 10,
+                                "available-interconnect-bandwidth": 10,
                                 "interconnect-bandwidth-unit": 1000000000
                             },
                             {
-                                "nbl-number": 12,
+                                "nbl-number": 3,
                                 "lcp-list": [
                                     "XPDR1-NETWORK1",
                                     "XPDR1-CLIENT3"
                                 ],
-                                "interconnect-bandwidth": 0,
+                                "interconnect-bandwidth": 10,
+                                "available-interconnect-bandwidth": 10,
                                 "interconnect-bandwidth-unit": 1000000000
                             },
                             {
-                                "nbl-number": 13,
+                                "nbl-number": 4,
                                 "lcp-list": [
                                     "XPDR1-CLIENT4",
                                     "XPDR1-NETWORK1"
                                 ],
-                                "interconnect-bandwidth": 0,
+                                "interconnect-bandwidth": 10,
+                                "available-interconnect-bandwidth": 10,
                                 "interconnect-bandwidth-unit": 1000000000
                             },
                             {
-                                "nbl-number": 14,
+                                "nbl-number": 1,
                                 "lcp-list": [
                                     "XPDR1-CLIENT1",
                                     "XPDR1-NETWORK1"
                                 ],
-                                "interconnect-bandwidth": 0,
+                                "interconnect-bandwidth": 10,
+                                "available-interconnect-bandwidth": 10,
                                 "interconnect-bandwidth-unit": 1000000000
                             }
                         ]
@@ -120,7 +124,7 @@
                         "switching-pool-type": "non-blocking",
                         "non-blocking-list": [
                             {
-                                "nbl-number": 2,
+                                "nbl-number": 1,
                                 "lcp-list": [
                                     "XPDR2-CLIENT1",
                                     "XPDR2-NETWORK3",
@@ -131,7 +135,8 @@
                                     "XPDR2-CLIENT3",
                                     "XPDR2-CLIENT2"
                                 ],
-                                "interconnect-bandwidth": 0,
+                                "interconnect-bandwidth": 100,
+                                "available-interconnect-bandwidth": 100,
                                 "interconnect-bandwidth-unit": 1000000000
                             }
                         ]

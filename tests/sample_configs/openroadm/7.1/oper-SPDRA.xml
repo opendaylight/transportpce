@@ -1065,7 +1065,7 @@
       <non-blocking-list>
         <nbl-number>1</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S1</slot-name>
@@ -1078,7 +1078,7 @@
       <non-blocking-list>
         <nbl-number>2</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S2</slot-name>
@@ -1091,7 +1091,7 @@
       <non-blocking-list>
         <nbl-number>3</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S3</slot-name>
@@ -1104,7 +1104,7 @@
       <non-blocking-list>
         <nbl-number>4</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S4</slot-name>
@@ -1117,7 +1117,7 @@
       <non-blocking-list>
         <nbl-number>5</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S5</slot-name>
@@ -1130,7 +1130,7 @@
       <non-blocking-list>
         <nbl-number>6</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S6</slot-name>
@@ -1143,7 +1143,7 @@
       <non-blocking-list>
         <nbl-number>7</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S7</slot-name>
@@ -1156,7 +1156,7 @@
       <non-blocking-list>
         <nbl-number>8</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S8</slot-name>
@@ -1169,7 +1169,7 @@
       <non-blocking-list>
         <nbl-number>9</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S9</slot-name>
@@ -1182,7 +1182,7 @@
       <non-blocking-list>
         <nbl-number>10</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP1</circuit-pack-name>
           <slot-name>CP1-S10</slot-name>
@@ -1195,7 +1195,7 @@
       <non-blocking-list>
         <nbl-number>11</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <port-list>
           <circuit-pack-name>CP1-CFP0</circuit-pack-name>
           <port-name>CP1-CFP0-P1</port-name>
@@ -1208,7 +1208,7 @@
       <non-blocking-list>
         <nbl-number>12</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <port-list>
           <circuit-pack-name>CP1-CFP0</circuit-pack-name>
           <port-name>CP1-CFP0-P1</port-name>
@@ -1221,7 +1221,7 @@
       <non-blocking-list>
         <nbl-number>13</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <port-list>
           <circuit-pack-name>CP1-CFP0</circuit-pack-name>
           <port-name>CP1-CFP0-P1</port-name>
@@ -1234,7 +1234,7 @@
       <non-blocking-list>
         <nbl-number>14</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <port-list>
           <circuit-pack-name>CP1-CFP0</circuit-pack-name>
           <port-name>CP1-CFP0-P1</port-name>
@@ -1251,7 +1251,7 @@
       <non-blocking-list>
         <nbl-number>1</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <pluggable-optics-holder-list>
           <circuit-pack-name>CP2</circuit-pack-name>
           <slot-name>CP2-S1</slot-name>
@@ -1288,7 +1288,7 @@
       <non-blocking-list>
         <nbl-number>2</nbl-number>
         <interconnect-bandwidth-unit>1000000000</interconnect-bandwidth-unit>
-        <interconnect-bandwidth>0</interconnect-bandwidth>
+        <interconnect-bandwidth>10</interconnect-bandwidth>
         <port-list>
           <circuit-pack-name>CP2-QSFP1</circuit-pack-name>
           <port-name>CP2-QSFP1-P1</port-name>

@@ -239,7 +239,6 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkSwPool(List<TpId> netwTps, List<TpId> clientTps) {
-
         if (SERVICE_TYPE_ODU_LIST.contains(this.otnServiceType)) {
             return true;
         }
@@ -253,10 +252,12 @@ public class PceOtnNode implements PceNode {
         if (node1 == null) {
             return false;
         }
+
         List<NonBlockingList> nblList = new ArrayList<>(
-                node1.getSwitchingPools().nonnullOduSwitchingPools()
-                        .values().stream().findFirst().orElseThrow()
-                                .getNonBlockingList().values());
+                node1.getSwitchingPools().nonnullOduSwitchingPools().values()
+                    .stream()
+                    .flatMap(pool -> pool.getNonBlockingList().values().stream())
+                    .collect(Collectors.toList()));
         netwTps.sort(Comparator.comparing(TpId::getValue));
 
         switch (modeType) {
