@@ -686,25 +686,25 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(60)
         print("Tapi Feature uninstalled")
         # Need to disable these checks due to too much read timeout errors on the CI only (not locally).
-        # response = test_utils.get_ietf_network_request('otn-topology', 'config')
-        # self.assertEqual(response['status_code'], requests.codes.ok)
-        # self.assertNotIn('node', response['network'][0])
-        # self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        #
-        # response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
-        # self.assertEqual(response['status_code'], requests.codes.ok)
-        # self.assertNotIn('node', response['network'][0])
-        # links = response['network'][0]['ietf-network-topology:link']
-        # self.assertEqual(len(links), 2)
-        #
-        # for link in links:
-        #     if link["org-openroadm-common-network:link-type"] in ('ROADM-TO-ROADM'):
-        #         response = test_utils.del_ietf_network_link_request('openroadm-topology', link['link-id'], 'config')
-        #         self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
-        #
-        # response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
-        # self.assertNotIn('ietf-network-topology:link', response['network'][0])
-        # print("Confirm Tapi Feature correctly uninstalled")
+        response = test_utils.get_ietf_network_request('otn-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
+        self.assertNotIn('ietf-network-topology:link', response['network'][0])
+
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertEqual(response['status_code'], requests.codes.ok)
+        self.assertNotIn('node', response['network'][0])
+        links = response['network'][0]['ietf-network-topology:link']
+        self.assertEqual(len(links), 2)
+
+        for link in links:
+            if link["org-openroadm-common-network:link-type"] in ('ROADM-TO-ROADM'):
+                response = test_utils.del_ietf_network_link_request('openroadm-topology', link['link-id'], 'config')
+                self.assertIn(response.status_code, (requests.codes.ok, requests.codes.no_content))
+
+        response = test_utils.get_ietf_network_request('openroadm-topology', 'config')
+        self.assertNotIn('ietf-network-topology:link', response['network'][0])
+        print("Confirm Tapi Feature correctly uninstalled")
 
 
 def count_object_with_double_key(list_dicts, key1, key2, value):
