@@ -183,15 +183,22 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertTrue(client == 4)
                 self.assertTrue(network == CHECK_LIST[nodeId]['network_nb'])
                 listNode.remove(nodeId)
+                print("oduswpool = {}".format(node['org-openroadm-otn-network-topology:switching-pools']))
+                ospIndex = 1
+                if nodeId == 'SPDR-SA1-XPDR1':
+                    ospIndex = 2
                 self.assertEqual(
                     len(node['org-openroadm-otn-network-topology:switching-pools']
-                        ['odu-switching-pools'][0]['non-blocking-list']),
+                        ['odu-switching-pools'][ospIndex]['non-blocking-list']),
                     CHECK_LIST[nodeId]['nbl_nb'])
                 # pylint: disable=line-too-long
-                for nbl in node['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list']:
+                for nbl in node['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][ospIndex]['non-blocking-list']:
                     if nbl['nbl-number'] == 1:
                         if nodeId == 'SPDR-SA1-XPDR1':
                             self.assertEqual(nbl['available-interconnect-bandwidth'], 10)
+                            self.assertEqual(nbl['interconnect-bandwidth-unit'], 1000000000)
+                        elif nodeId == 'SPDR-SA1-XPDR2':
+                            self.assertEqual(nbl['available-interconnect-bandwidth'], 100)
                             self.assertEqual(nbl['interconnect-bandwidth-unit'], 1000000000)
                         for tp in CHECK_LIST[nodeId]['tp-checklist']:
                             self.assertIn(tp, nbl['tp-list'])
