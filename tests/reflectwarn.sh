@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # those options are needed to remove JDK11 reflective access warnings at build and run time
 # GROOVY_TURN_OFF_JAVA_WARNINGS=true cannot be passed directly
 # see https://dev.to/erichelgeson/removing-illegal-reflective-access-warnings-in-grails-4-393o
