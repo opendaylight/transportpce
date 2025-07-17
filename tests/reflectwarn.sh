@@ -1,3 +1,10 @@
+#!/bin/sh
+
+# Common practice is to avoid shebangs in a script that is never called directly,
+# but only dotted or sourced from another script.
+# However, since checkbashism moved this from warning to error,
+# the absence of a shebang here would cause a CI failure.
+
 # those options are needed to remove JDK11 reflective access warnings at build and run time
 # GROOVY_TURN_OFF_JAVA_WARNINGS=true cannot be passed directly
 # see https://dev.to/erichelgeson/removing-illegal-reflective-access-warnings-in-grails-4-393o
