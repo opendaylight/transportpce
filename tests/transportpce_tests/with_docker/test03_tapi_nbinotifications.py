@@ -45,7 +45,7 @@ class UuidSubscriptions:
         self.eth = None
 
 
-class TransportNbiNotificationstesting(unittest.TestCase):
+class TestTransportPCETapiNbinotifications(unittest.TestCase):
     cr_serv_input_data = {
         "end-point": [
             {

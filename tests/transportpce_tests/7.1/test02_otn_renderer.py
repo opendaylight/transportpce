@@ -22,7 +22,7 @@ sys.path.append('transportpce_tests/common')
 import test_utils  # nopep8
 
 
-class TransportPCE400GPortMappingTesting(unittest.TestCase):
+class TestTransportPCEOtnRenderer(unittest.TestCase):
 
     processes = None
     NETWORK2_CHECK_DICT = {"logical-connection-point": "XPDR2-NETWORK1",

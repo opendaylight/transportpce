@@ -22,7 +22,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEPortMappingTesting(unittest.TestCase):
+class TestTransportPCEFlexGrid(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '2.2.1'

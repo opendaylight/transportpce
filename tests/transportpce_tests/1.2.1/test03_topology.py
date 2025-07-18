@@ -24,7 +24,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCETopologyTesting(unittest.TestCase):
+class TestTransportPCETopology(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '1.2.1'

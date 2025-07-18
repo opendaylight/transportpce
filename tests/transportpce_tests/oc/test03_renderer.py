@@ -23,7 +23,7 @@ import test_utils  # nopep8
 import test_utils_oc  # nopep8
 
 
-class TransportpceOCRendererTesting(unittest.TestCase):
+class TestTransportPCERenderer(unittest.TestCase):
     processes = None
     NODE_VERSION = 'oc'
     optical_channel_id = []

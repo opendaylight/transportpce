@@ -22,7 +22,7 @@ sys.path.append('transportpce_tests/common')
 import test_utils  # nopep8
 
 
-class TransportPCE400GPortMappingTesting(unittest.TestCase):
+class TestTransportPCEPortmapping(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '7.1'

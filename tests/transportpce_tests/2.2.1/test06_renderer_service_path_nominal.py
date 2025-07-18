@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCERendererTesting(unittest.TestCase):
+class TestTransportPCERenderer(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '2.2.1'

@@ -21,7 +21,7 @@ import test_utils  # nopep8
 import test_utils_oc  # nopep8
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCETopology(unittest.TestCase):
 
     processes = None
     NODE_VERSION = 'oc'

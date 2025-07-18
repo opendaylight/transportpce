@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEFulltesting(unittest.TestCase):
+class TestTransportPCEEndtoend(unittest.TestCase):
     cr_serv_input_data = {
         "sdnc-request-header": {
             "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
