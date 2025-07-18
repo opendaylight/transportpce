@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5dd4117_aa8ddd7e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff44f2b4_6a07facd",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d240f511_5786f818",
@@ -48,6 +66,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "maybe rename this to `addAll` to be consistent with the syntax for collections?",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ae5c45_adf6d2ad",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d240f511_5786f818",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c92e41b5_674fd645",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Personally, I find \"get\" prefixes pointless. The method declaration implies \"get\".\n\n    Map\u003cOpenroadmNodeType, Map\u003cString, Set\u003cTerminationPoint\u003e\u003e\u003e terminationPoints();\n\nThe only exception I can think of, is if you\u0027re dealing with a large class with a lot of methods. Grouping methods with getters/setters prefixes may be convenient in that case. Most of the time it\u0027s probably better to limit the nr of methods, imho.\n\n\u003e There could be an argument also for using a wrapper object over the Map\u003ctype, Map\u003cString set\u003c\u003e\u003e\u003e construction.\n\nYes, a wrapper could be used. However, I started off by changing the code to use this interface instead and afterwards I didn\u0027t feel it was necessary to use a wrapper.\nIn short I refactored code like this...\n\n    aMethod(Map\u003cOpenroadmNodeType, Map\u003cString, Set\u003cTerminationPoint\u003e\u003e\u003e tp) {}\n\n...into something like... \n\n    aMethod(NodeTypeCollection tp) {}\n\nWhich I think made things a little cleaner. Note: The variable name \"tp\" in the example above was chosen so the example would fit on one line. Also, the interface name \"Collection\" has been renamed to \"NodeTypeCollection\".",
+      "parentUuid": "f42d04dc_ecce68e7",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6bdf25f_24f0fc50",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
         "patchSetId": 31
@@ -82,6 +136,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "same as above",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1e9073_dc370e10",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f6bdf25f_24f0fc50",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -105,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b369e80_48e8ded4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "\u003e ...doesn\u0027t seem to represent a termination point...\n\nA valid point which did apply to all the new classes in this review, I\u0027m afraid. Thanks for pointing it out. I hindsight, I think I got stuck juggling primitive values and complex hashmaps around as opposed to actually trying to model something. I\u0027ve tried to remedy some of that shortcomings, although I suspect more could be done.\n\n\u003e group the functionality in some smart way into the same utility class\n\nI prefer trying to come up with a relevant model instead of clever utility classes.",
+      "parentUuid": "3676c71f_f7657a1f",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20023af0_eaa27f72",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
         "patchSetId": 31
@@ -116,6 +206,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "suggestion: remove the owned from the method name.\nI get confused, as to who owns these terminationpoints.\n\nI guess it follows from the earlier `OwnedNodeEdgePoint` and if so I suggest `getEdgePoints` or maybe `getEdgePointsForNode`or something similar.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef67f11_b0f3ec3c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "20023af0_eaa27f72",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -156,6 +264,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2dbffdfc_af4e0adc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "\u003e Also not sure if I like that this one throws if the supplied node did not have a supportingNode.\n\nAs of right now, I don\u0027t know how to recover from a situation like that, so for the time being, I\u0027ll leave it as is.",
+      "parentUuid": "cb6de05d_011d7bdc",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0cc3696e_ad2d5871",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
         "patchSetId": 31
@@ -167,6 +293,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "suggestion `getTerminationPoints`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f920ea2_71112c6f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0cc3696e_ad2d5871",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -188,6 +332,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1e51aec_ebd385f5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8917d40c_69c244b9",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80ee3974_c0645e05",
@@ -201,6 +363,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "suggestion: `isSrg(Terminationpoint tp)`",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60bae2a_ba5a7740",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80ee3974_c0645e05",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -222,6 +402,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f02eb6a_a56b5d60",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "537ea2e6_6ef70e74",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a96f240_9f1761b4",
@@ -239,6 +437,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e6cd6d7_be5defb4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a96f240_9f1761b4",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1705e63_34f67129",
@@ -252,6 +468,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "If I had not viewed this PR I would assume it is the java.utils.Collection that is inherited here.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9954dfc5_02fb6146",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/TerminationPointCollection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Hmm, ok. It has been renamed to `NodeTypeCollection`.",
+      "parentUuid": "c1705e63_34f67129",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -275,6 +509,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b356c43b_6358523d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "I was primarily trying to stick to some of the names that is used in the domain/model, so your example is somewhat void, but I understand your point.\nHowever, I don\u0027t like NodeUtils at all. What is that?\nAnyway, I got rid of this interface and the implementing factory altogether. I believe most of the related code ended up in the class `TapiTopologyNodes`.",
+      "parentUuid": "3717dabb_d32c53ac",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15b7e235_f5f05b4a",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
         "patchSetId": 31
@@ -286,6 +538,24 @@
       "writtenOn": "2025-07-10T08:13:16Z",
       "side": 1,
       "message": "maybe nitpick: suggest rename of this method to `getEdgePointsForNode` or something similar. Follows from my previous comment.",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9a2d98_5dd8994d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "After a lot of back and forth, this method was moved to `TapiTopologyNodes` and called `updatedNodeEdgePoints`. I reckon that name could also use som TLC.\n\n    public NodeEdgePoints updatedNodeEdgePoints(\n            ORTerminationPoint orTerminationPoint,\n            TapiContext tapiContext) {\n\n    ...\n    }",
+      "parentUuid": "15b7e235_f5f05b4a",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

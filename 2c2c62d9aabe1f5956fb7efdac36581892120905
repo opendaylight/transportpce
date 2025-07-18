@@ -71,6 +71,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d935f55d_6a115b53",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6b0b56a_46c21d73",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d6aeb0e_2bd570d7",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "The filter has been refactored into its own method `terminationPointIsDegree` in the class `OpenRoadmTerminationPoint`.",
       "parentUuid": "2d6aeb0e_2bd570d7",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df8ca009_ade5f0ae",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbd331f8_dd569943",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -242,6 +278,24 @@
       "side": 1,
       "message": "This change shouldn\u0027t have been committed. I need to go through the commits again to make sure stuff like this hasn\u0027t been committed.",
       "parentUuid": "664a8555_a132b97a",
+      "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04deaf7_c8ed2eb3",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/sbi/TapiSbiImplTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8bfa604_0f3e0d7f",
       "revId": "2c2c62d9aabe1f5956fb7efdac36581892120905",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

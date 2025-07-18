@@ -24,6 +24,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eebb9585_0334367c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ac8fcd0_68800285",
+      "range": {
+        "startLine": 78,
+        "startChar": 1,
+        "endLine": 91,
+        "endChar": 9
+      },
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57f06c30_7489941d",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-07-04T11:59:50Z",
       "side": 1,
       "message": "\u003e Could we split this method up in maybe three or four smaller methods?\n\u003e \n\u003e There is a lot going on here and it would help readability a lot.\n\nThese lines have been mode to a new class `TAPIStorage`. i.e. \n\n    boolean result \u003d tapiStorage.updateTopology(\n        topologyKey,\n        updatedOwnNodeEdgePoints\n    );",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 143,
+        "endChar": 9
+      },
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2d1aef3_27fd5bc8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57f06c30_7489941d",
       "range": {
         "startLine": 128,
         "startChar": 8,
@@ -64,6 +112,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e904644_3217491e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f64e7049_0ca27098",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7fe4ffc_4c914b55",
@@ -77,6 +143,24 @@
       "writtenOn": "2025-07-04T11:59:50Z",
       "side": 1,
       "message": "This method has been refactored to the class `OpenRoadmTerminationPoint`.",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c060b9_6cdc41a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7fe4ffc_4c914b55",
       "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -98,6 +182,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68da306f_8b93194c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa1208f_19333b61",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92f99fc9_866b935a",
@@ -111,6 +213,24 @@
       "writtenOn": "2025-07-04T11:59:50Z",
       "side": 1,
       "message": "This method has been refactored and moved to the method `ownedNodeEdgePoints` in the class `OpenRoadmTerminationPoint`.",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e804a9_1e45301e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92f99fc9_866b935a",
       "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -138,6 +258,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a00f350b_19b01a0a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fefc48cc_003782d6",
+      "range": {
+        "startLine": 321,
+        "startChar": 0,
+        "endLine": 322,
+        "endChar": 85
+      },
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71b7a2c1_1497aca9",
@@ -151,6 +295,24 @@
       "writtenOn": "2025-07-04T11:59:50Z",
       "side": 1,
       "message": "This iteration has been refactored and moved to the method `terminationPoints(...)` in the class `OpenRoadmTerminationPoint`.",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce82992_de33e78c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71b7a2c1_1497aca9",
       "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -172,6 +334,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd41ee73_92b42169",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae513ac5_95dcffd9",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cc78dcf_bd2b35c7",
@@ -189,6 +369,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71200e4d_2859d650",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cc78dcf_bd2b35c7",
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0d76c66_107b701e",
@@ -202,6 +400,30 @@
       "writtenOn": "2025-07-04T11:59:50Z",
       "side": 1,
       "message": "Moved to its own method `logFoundNodeEdgePoint()`.",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 70
+      },
+      "revId": "a33a265bd34ef4faeda66fa769856b69f1d84289",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6323ee_e20855e9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/OpenRoadmTopology.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-07-18T13:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0d76c66_107b701e",
       "range": {
         "startLine": 457,
         "startChar": 0,
