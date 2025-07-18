@@ -39,6 +39,7 @@ class TestTransportPCERenderer(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        test_utils.copy_karaf_log(cls.__name__)
 
     def test_01_rdm_device_connected(self):
         response = test_utils.mount_device("ROADM-A1", ('roadma', self.NODE_VERSION))

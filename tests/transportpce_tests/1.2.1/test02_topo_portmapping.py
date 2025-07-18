@@ -40,6 +40,7 @@ class TestTransportPCETopoPortmapping(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        test_utils.copy_karaf_log(cls.__name__)
 
     def setUp(self):
         time.sleep(2)
