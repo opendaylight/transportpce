@@ -102,6 +102,7 @@ class TestTransportPCEPce(unittest.TestCase):
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
+        test_utils.copy_karaf_log(cls.__name__)
 
     def setUp(self):  # instruction executed before each test method
         time.sleep(1)
