@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportNbiNotificationstesting(unittest.TestCase):
+class TestTransportPCENbinotifications(unittest.TestCase):
     processes = []
     cr_serv_input_data = {
         "sdnc-request-header": {

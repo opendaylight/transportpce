@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCEPceBugFix(unittest.TestCase):
     path_computation_input_data = {
         "service-name": "service-AB",
         "resource-reserve": "true",

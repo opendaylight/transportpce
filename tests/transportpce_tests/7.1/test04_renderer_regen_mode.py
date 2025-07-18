@@ -24,7 +24,7 @@ sys.path.append("transportpce_tests/common")
 import test_utils  # nopep8
 
 
-class TransportPCE400GPortMappingTesting(unittest.TestCase):
+class TestTransportPCERendererRegenMode(unittest.TestCase):
 
     processes = None
     NETWORK1_CHECK_DICT = {"logical-connection-point": "XPDR4-NETWORK1",

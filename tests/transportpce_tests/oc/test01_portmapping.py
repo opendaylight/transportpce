@@ -20,7 +20,7 @@ import test_utils  # nopep8
 import test_utils_oc  # nopep8
 
 
-class TransportpceOCPortMappingTesting(unittest.TestCase):
+class TestTransportPCEPortmapping(unittest.TestCase):
     processes = None
     NODE_VERSION = 'oc'
 

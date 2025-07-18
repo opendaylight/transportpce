@@ -33,7 +33,7 @@ class UuidServices:
         self.dsr = None
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCEFullTopology(unittest.TestCase):
 
     processes = []
     WAITING = 20  # nominal value is 300

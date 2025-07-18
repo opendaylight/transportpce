@@ -24,7 +24,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCEOtnTopology(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '2.2.1'

@@ -21,7 +21,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEFulltesting(unittest.TestCase):
+class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 
     processes = None
     cr_serv_input_data = {

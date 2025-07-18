@@ -26,7 +26,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCEAutonomousReroute(unittest.TestCase):
     processes = None
     WAITING = 20  # nominal value is 300
     NODE_VERSION_221 = '2.2.1'

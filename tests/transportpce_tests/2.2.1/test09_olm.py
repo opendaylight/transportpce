@@ -23,7 +23,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportOlmTesting(unittest.TestCase):
+class TestTransportOlm(unittest.TestCase):
 
     processes = None
     NODE_VERSION = '2.2.1'

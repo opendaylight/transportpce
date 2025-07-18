@@ -23,7 +23,7 @@ import test_utils  # nopep8
 import test_utils_oc  # nopep8
 
 
-class TransportpceOCRendererTesting(unittest.TestCase):
+class TestTransportPCERenderer(unittest.TestCase):
     processes = None
     NODE_VERSION = 'oc'
     optical_channel_id = []
@@ -189,9 +189,9 @@ class TransportpceOCRendererTesting(unittest.TestCase):
                 'service-format': 'Ethernet',
                 'nodes': [{'node-id': 'XPDR-OC', 'client-tp': 'XPDR1-CLIENT1'}]
             })
-        TransportpceOCRendererTesting.optical_channel_id = response['output']['node-interface'][0]['optical-channel-id']
-        TransportpceOCRendererTesting.interface_id = response['output']['node-interface'][0]['interface-id']
-        TransportpceOCRendererTesting.port_id = response['output']['node-interface'][0]['port-id']
+        TestTransportPCERenderer.optical_channel_id = response['output']['node-interface'][0]['optical-channel-id']
+        TestTransportPCERenderer.interface_id = response['output']['node-interface'][0]['interface-id']
+        TestTransportPCERenderer.port_id = response['output']['node-interface'][0]['port-id']
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn('Otn Service path was set up successfully for node :XPDR-OC',
                       response['output']['result'])
@@ -220,7 +220,7 @@ class TransportpceOCRendererTesting(unittest.TestCase):
 
     def test_13_service_path_create_client_check_optical_port(self):
         response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component",
-                                                               TransportpceOCRendererTesting.port_id[0], "port",
+                                                               TestTransportPCERenderer.port_id[0], "port",
                                                                "openconfig-transport-line-common:optical-port")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['port']['config']['admin-state'], 'ENABLED')
@@ -228,7 +228,7 @@ class TransportpceOCRendererTesting(unittest.TestCase):
         self.assertEqual(response['port']['state']['optical-port-type'], 'openconfig-transport-types:TERMINAL_CLIENT')
 
     def test_14_service_path_create_client_check_properties(self):
-        for optchannelid in TransportpceOCRendererTesting.optical_channel_id:
+        for optchannelid in TestTransportPCERenderer.optical_channel_id:
             response = test_utils_oc.check_node_attribute2_request("XPDR-OC", "component", optchannelid,
                                                                    "openconfig-platform:properties")
             self.assertEqual(response['status_code'], requests.codes.ok)
@@ -238,7 +238,7 @@ class TransportpceOCRendererTesting(unittest.TestCase):
                 self.assertEqual(prop['state'], {'name': 'tx-dis', 'value': 'FALSE', 'configurable': True})
 
     def test_15_service_path_create_client_check_interfaces(self):
-        for interfaceid in TransportpceOCRendererTesting.interface_id:
+        for interfaceid in TestTransportPCERenderer.interface_id:
             response = test_utils_oc.check_interface_attribute_request("XPDR-OC", "interface", interfaceid)
             self.assertEqual(response['interface'][0]['name'], interfaceid)
             self.assertEqual(response['interface'][0]['config'], {'description': 'description',
@@ -266,7 +266,7 @@ class TransportpceOCRendererTesting(unittest.TestCase):
 
     def test_17_service_path_delete_client_check_optical_port(self):
         response = test_utils_oc.check_node_attribute3_request("XPDR-OC", "component",
-                                                               TransportpceOCRendererTesting.port_id[0], "port",
+                                                               TestTransportPCERenderer.port_id[0], "port",
                                                                "openconfig-transport-line-common:optical-port")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['port']['config']['admin-state'], 'DISABLED')

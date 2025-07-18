@@ -34,7 +34,7 @@ class UuidServices:
         self.dsr = None
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCETopoExtension(unittest.TestCase):
 
     processes = []
     WAITING = 20  # nominal value is 300

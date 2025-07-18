@@ -39,7 +39,7 @@ class UuidServices:
 # 3b726367-6f2d-3e3f-9033-d99b61459075
 
 
-class TransportPCEFulltesting(unittest.TestCase):
+class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
 
     cr_serv_input_data = {
         "end-point": [

@@ -25,7 +25,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TestTransportPCETopology(unittest.TestCase):
 
     processes = None
     CHECK_DICT1 = {

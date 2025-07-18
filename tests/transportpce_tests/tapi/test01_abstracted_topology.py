@@ -29,7 +29,7 @@ import test_utils  # nopep8
 CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created successfully'
 
 
-class TransportTapitesting(unittest.TestCase):
+class TestTransportPCEAbstractedTopology(unittest.TestCase):
 
     processes = None
     WAITING = 20

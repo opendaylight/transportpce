@@ -25,7 +25,7 @@ sys.path.append('transportpce_tests/common/')
 import test_utils  # nopep8
 
 
-class TransportGNPYtesting(unittest.TestCase):
+class TestTransportGnpy(unittest.TestCase):
     path_computation_input_data = {
         "service-name": "service-1",
         "resource-reserve": "true",
