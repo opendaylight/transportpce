@@ -87,6 +87,7 @@ class TestTransportPCEDeviceChangeNotifications(unittest.TestCase):
             test_utils.shutdown_process(process)
         print("all processes killed")
         time.sleep(3)
+        test_utils.copy_karaf_log(cls.__name__)
 
     def setUp(self):  # instruction executed before each test method
         # pylint: disable=consider-using-f-string

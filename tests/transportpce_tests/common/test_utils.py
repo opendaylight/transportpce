@@ -19,6 +19,7 @@ import re
 import signal
 import subprocess
 import time
+import shutil
 
 import psutil
 import requests
@@ -286,6 +287,19 @@ def shutdown_process(process):
             child.send_signal(signal.SIGINT)
             child.wait()
         process.send_signal(signal.SIGINT)
+
+
+def copy_karaf_log(test_name: str):
+    dest_filename = f'{KARAF_INSTALLDIR}_{test_name}.log'
+    dest_wd = os.path.join(os.environ.get('TOX_WORK_DIR'), os.environ.get('TOX_ENV_NAME'), 'log')
+#    os.makedirs(dest_wd, exist_ok=True)
+    destination_path = os.path.join(dest_wd, dest_filename)
+
+    if os.path.exists(TPCE_LOG):
+        shutil.copy2(TPCE_LOG, destination_path)
+        print("ODL log file stored")
+    else:
+        print(f"File not found: {TPCE_LOG}")
 
 
 def wait_until_log_contains(log_file, regexps, time_to_wait=60):
