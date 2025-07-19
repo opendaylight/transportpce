@@ -68,6 +68,24 @@
       "parentUuid": "52279ed4_bb356808",
       "revId": "6f77a84b3f86752b8ce6229b9b6fcf1e2cf51c77",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5fc1bbc_074e2841",
+        "filename": "karaf/src/main/assembly/ressources/post_install_for_tests.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-07-19T08:52:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea8ce7b8_dfd45ff3",
+      "revId": "6f77a84b3f86752b8ce6229b9b6fcf1e2cf51c77",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
