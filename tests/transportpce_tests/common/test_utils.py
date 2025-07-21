@@ -491,6 +491,14 @@ def del_portmapping():
     return {'status_code': response.status_code}
 
 
+def get_portmapping():
+    url = {'rfc8040': '{}/data/transportpce-portmapping:network?content=config',
+           'draft-bierman02': '{}/config/transportpce-portmapping:network?content=config'}
+    response = get_request(url[RESTCONF_VERSION].format('{}'))
+    return {'status_code': response.status_code,
+            'portmapping': response.json()}
+
+
 def get_portmapping_node_attr(node: str, attr: str, value: str):
     # pylint: disable=consider-using-f-string
     url = {'rfc8040': '{}/data/transportpce-portmapping:network/nodes={}',
