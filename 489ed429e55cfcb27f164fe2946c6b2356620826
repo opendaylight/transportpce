@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b224ec9b_51db90d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2025-07-22T08:23:50Z",
+      "side": 1,
+      "message": "reflectwarn.sh is not called directly but is dotted or sourced from another script.\nCommon practice is to avoid shebangs in such files.\nThis used to be only a warning in checkbashisms. Has it become an error recently ?\nIf so, it would make sense to avoid checking this file or to leave a comment here to explain why this shebang was added.\n\nhttps://github.com/koalaman/shellcheck/issue\nhttps://github.com/chipsalliance/fpga-tool-perf/issues/487s/581\nhttps://stackoverflow.com/questions/7615430/do-you-need-shebang-in-all-bash-scripts\nhttps://unix.stackexchange.com/questions/291541/can-i-use-a-shebang-to-have-a-file-source-itself-into-current-bash-environment",
+      "revId": "489ed429e55cfcb27f164fe2946c6b2356620826",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c3c2b18c_3488b1fc",
