@@ -18,6 +18,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "220da3d1_95176797",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-07-22T08:29:39Z",
+      "side": 1,
+      "message": "Thank you for your review. This lack of shebang became an error last week causing the build to fail...",
+      "parentUuid": "b224ec9b_51db90d5",
+      "revId": "489ed429e55cfcb27f164fe2946c6b2356620826",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c3c2b18c_3488b1fc",
