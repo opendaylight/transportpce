@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce.gnpy.consumer;
 
 import java.io.IOException;
 import java.net.Authenticator;
+import java.net.ConnectException;
 import java.net.PasswordAuthentication;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -94,6 +95,9 @@ public class GnpyConsumerImpl implements GnpyConsumer {
                     HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             LOG.info("GNPy available {}", response.statusCode() == 200);
             return response.statusCode() == 200;
+        } catch (ConnectException e) {
+            LOG.info("Connection to GNPy refused or server simply not available: {}", e.getMessage());
+            return false;
         } catch (IOException e) {
             LOG.info("GNPy is not available ", e);
             return false;
