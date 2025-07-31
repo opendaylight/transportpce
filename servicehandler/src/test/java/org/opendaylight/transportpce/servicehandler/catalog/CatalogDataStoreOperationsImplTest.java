@@ -52,16 +52,20 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
                 networkTransactionService, getDataStoreContextUtil().getBindingDOMCodecServices());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testAddOpenroadmOperationalModesToCatalog() {
         OpenroadmOperationalModes operationalModes = mock(OpenroadmOperationalModes.class);
 
         catalogDataStoreOperations.addOpenroadmOperationalModesToCatalog(operationalModes);
 
-        verify(networkTransactionService)
-            .merge(eq(LogicalDatastoreType.CONFIGURATION), any(DataObjectIdentifier.class), eq(operationalModes));
+        verify(networkTransactionService).merge(
+                eq(LogicalDatastoreType.CONFIGURATION),
+                any(DataObjectIdentifier.class),
+                eq(operationalModes));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testAddSpecificOperationalModesToCatalog() {
         SpecificOperationalModes specificOperationalModes = mock(SpecificOperationalModes.class);

@@ -94,7 +94,7 @@ class CenterFrequencyGranularityCollectionTest {
         centerFrequencyGranularityCollection.add(75);
         centerFrequencyGranularityCollection.add(12.5);
 
-        Set<BigDecimal> expected = new LinkedHashSet(
+        Set<BigDecimal> expected = new LinkedHashSet<>(
             List.of(
                 BigDecimal.valueOf(6.25),
                 BigDecimal.valueOf(12.5),
