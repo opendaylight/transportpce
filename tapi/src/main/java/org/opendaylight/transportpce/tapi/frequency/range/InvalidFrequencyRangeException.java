@@ -9,6 +9,9 @@
 package org.opendaylight.transportpce.tapi.frequency.range;
 
 public class InvalidFrequencyRangeException extends RuntimeException {
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public InvalidFrequencyRangeException(String message) {
         super(message);
     }
