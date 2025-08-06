@@ -443,7 +443,6 @@ public class ORtoTapiTopoConversionTools {
             .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
             .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
             .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
-            .setCostCharacteristic(null)
             .build();
         return new HashMap<>(Map.of(nodeRuleGroup.key(), nodeRuleGroup));
     }
