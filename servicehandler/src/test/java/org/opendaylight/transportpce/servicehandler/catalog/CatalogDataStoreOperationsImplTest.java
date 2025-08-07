@@ -27,7 +27,9 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.binding.DataObjectReference;
 
 @ExtendWith(MockitoExtension.class)
 class CatalogDataStoreOperationsImplTest extends AbstractTest {
@@ -52,7 +54,6 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
                 networkTransactionService, getDataStoreContextUtil().getBindingDOMCodecServices());
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testAddOpenroadmOperationalModesToCatalog() {
         OpenroadmOperationalModes operationalModes = mock(OpenroadmOperationalModes.class);
@@ -61,11 +62,12 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
 
         verify(networkTransactionService).merge(
                 eq(LogicalDatastoreType.CONFIGURATION),
-                any(DataObjectIdentifier.class),
+                eq(DataObjectIdentifier.builder(OperationalModeCatalog.class)
+                        .child(OpenroadmOperationalModes.class)
+                        .build()),
                 eq(operationalModes));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testAddSpecificOperationalModesToCatalog() {
         SpecificOperationalModes specificOperationalModes = mock(SpecificOperationalModes.class);
@@ -73,7 +75,11 @@ class CatalogDataStoreOperationsImplTest extends AbstractTest {
         catalogDataStoreOperations.addSpecificOperationalModesToCatalog(specificOperationalModes);
 
         verify(networkTransactionService).merge(
-                eq(LogicalDatastoreType.CONFIGURATION), any(DataObjectIdentifier.class), eq(specificOperationalModes));
+                eq(LogicalDatastoreType.CONFIGURATION),
+                eq(DataObjectIdentifier.builder(OperationalModeCatalog.class)
+                        .child(SpecificOperationalModes.class)
+                        .build()),
+                eq(specificOperationalModes));
     }
 
 }
