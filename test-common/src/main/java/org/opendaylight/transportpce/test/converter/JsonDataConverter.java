@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class JsonDataConverter extends AbstractDataConverter {
+public class JsonDataConverter extends AbstractDataConverter<DataObject> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonDataConverter.class);
     private final JSONCodecFactory codecFactory;
