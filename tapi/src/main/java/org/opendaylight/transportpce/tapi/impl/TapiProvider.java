@@ -152,7 +152,7 @@ public class TapiProvider {
                 new GetTopologyDetailsImpl(tapiContext, topologyUtils, tapiLink, networkTransactionService),
                 new GetNodeEdgePointDetailsImpl(tapiContext),
                 new GetLinkDetailsImpl(tapiContext),
-                new GetTopologyListImpl(tapiContext),
+                new GetTopologyListImpl(tapiContext, topologyUtils),
                 new GetServiceInterfacePointDetailsImpl(tapiContext),
                 new GetServiceInterfacePointListImpl(tapiContext));
 
