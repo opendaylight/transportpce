@@ -318,6 +318,29 @@ public final class TopologyUtils {
         if (topology.nonnullNode().isEmpty()) {
             return topologyBuilder.build();
         }
+        return topologyBuilder.setNode(buildMapNode(topology)).build();
+    }
+
+    public org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+            .get.topology.list.output.Topology transformTopologyForTopoList(Topology topology) {
+        var topologyBuilder = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                .get.topology.list.output.TopologyBuilder()
+            .setUuid(topology.getUuid())
+            .setName(topology.getName())
+            .setLayerProtocolName(topology.getLayerProtocolName())
+            .setLink(topology.getLink());
+        if (topology.nonnullNode().isEmpty()) {
+            return topologyBuilder.build();
+        }
+        return topologyBuilder.setNode(buildMapNode(topology)).build();
+    }
+
+    public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
+        return tapiSips;
+    }
+
+
+    public Map<NodeKey, Node> buildMapNode(Topology topology) {
         Map<NodeKey, Node> mapNode = new HashMap<>();
         for (Node node: topology.nonnullNode().values()) {
             Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
@@ -354,11 +377,7 @@ public final class TopologyUtils {
                     .build();
             mapNode.put(newNode.key(), newNode);
         }
-        return topologyBuilder.setNode(mapNode).build();
-    }
-
-    public Map<ServiceInterfacePointKey, ServiceInterfacePoint> getSipMap() {
-        return tapiSips;
+        return mapNode;
     }
 
 }
