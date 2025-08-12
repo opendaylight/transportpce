@@ -10,12 +10,13 @@ package org.opendaylight.transportpce.tapi.impl.rpc;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
 import java.util.Map;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyList;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.GetTopologyListOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.TopologyKey;
 import org.opendaylight.yangtools.yang.common.ErrorType;
@@ -28,16 +29,18 @@ import org.slf4j.LoggerFactory;
 public class GetTopologyListImpl implements GetTopologyList {
     private static final Logger LOG = LoggerFactory.getLogger(GetTopologyListImpl.class);
     private final TapiContext tapiContext;
+    private final TopologyUtils topologyUtils;
 
-    public GetTopologyListImpl(TapiContext tapiContext) {
+    public GetTopologyListImpl(TapiContext tapiContext, TopologyUtils topologyUtils) {
         this.tapiContext = tapiContext;
+        this.topologyUtils = topologyUtils;
     }
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyListOutput>> invoke(GetTopologyListInput input) {
-        // TODO Auto-generated method stub
         // TODO -> maybe we get errors when having CEPs?
-        Map<TopologyKey, Topology> topologyMap = this.tapiContext.getTopologyContext();
+        Map<TopologyKey, Topology> topologyMap = this.tapiContext.getTapiContext().augmentation(Context1.class)
+            .getTopologyContext().getTopology();
         if (topologyMap.isEmpty()) {
             LOG.error("No topologies exist in tapi context");
             return RpcResultBuilder.<GetTopologyListOutput>failed()
@@ -49,7 +52,7 @@ public class GetTopologyListImpl implements GetTopologyList {
                 newTopoMap = new HashMap<>();
         for (Topology topo : topologyMap.values()) {
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.get.topology.list.output.Topology
-                    newTopo = new TopologyBuilder(topo).build();
+                    newTopo = this.topologyUtils.transformTopologyForTopoList(topo);
             newTopoMap.put(newTopo.key(), newTopo);
         }
         return RpcResultBuilder
