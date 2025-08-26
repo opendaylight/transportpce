@@ -34,6 +34,24 @@
       "message": "LGTM even if it is difficult to appreciate comparing latest patchset to patchset 6 whether everything has been addressed according to our last discussion. No objection to merge as soon as we understand why test 190 fails.\nAdded you as a reviewer of change 116763 which complements this change addressing part of my comment of June 12 (Modification of ORtoTapiTopoConversionTools).\nThanks",
       "revId": "d27c042a81980f095acd467b88a2900b78b61bb7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b20264_f1883502",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-08-26T07:52:51Z",
+      "side": 1,
+      "message": "Just one additional comment : if you rename getPPUsedWavelengths to getPPUsedFrequencies, why not doing the same with getPP11... just to be consistent? Thanks",
+      "parentUuid": "39617fe2_71e5d8c4",
+      "revId": "d27c042a81980f095acd467b88a2900b78b61bb7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
