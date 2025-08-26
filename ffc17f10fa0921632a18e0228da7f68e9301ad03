@@ -63,6 +63,30 @@
       },
       "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82fdced9_8c406c0f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-08-26T08:00:24Z",
+      "side": 1,
+      "message": "An empty list also makes sense to me. I am fine with your proposal (SC1 \u0026 SC2)",
+      "parentUuid": "89f40261_37fcbc33",
+      "range": {
+        "startLine": 582,
+        "startChar": 24,
+        "endLine": 582,
+        "endChar": 103
+      },
+      "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

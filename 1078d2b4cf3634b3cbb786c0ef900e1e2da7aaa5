@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1755671984 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1755671984-27F895C9A80CF64FAF4A18B05A4F5AA8E8C5EA4B\n\n0000000000000000000000000000000000000000 ce32d34dd12b9f475fbc5b9a6ea8c4fdf5c9fc36 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmilbbAACgkQX735uTFP\nrXFOIQ//S9kstWhb5v3pYJTUw8XihIsFSg+bEyMuXtrvkAvFIvvjv1ZdVDA/0fu6\newJnsf+Dx9H4DDCMH+l76MSBUEaALubTAOsP9AHL6lPFNgBfO33rix0wDXzVsAof\nnl8ZcXGlEWix4OsPbI5jLNq+nQ5IXfI8YgoeQXL/M0KsuV5N2TfuBacoEQuIIpmy\nTDJFHvK6tb2uNvW8VTziZ/PpQ6tiwZ+/e5t1Msq1bNr2Rh7Ay0oaUzdIUcJkdaF3\nisFIinuR7RUL9ZRC0Wg4vhVpsv5Yb1TaAduWn/p96aQiFtSOOcqmGsNNaIDWFV9x\n+4MvOEyaQXc4sb1DszzCBaJZuLI6nFeqWCxhC1VjUaINUwd0h498sqoa0LAertHH\nuWftdgabvH9NUe1gVVwLeW46DZLJkBpESuUxjYP6pWmeE97Eb3wYwo8cGztiiJr8\nylghMBsS1YQXRWVoLEXPEodjEtbe1jvtvQAhrLlbac1s/q84EO4dqShngIT+7P97\nBstboZ4nyFH+Yv6kS/FTwhyYAFbKK7dWwIXnYs1lU79BfT0hak1lJSfL3ANGFARU\nUFjBXQ/ryVRdM00ge00Ii+g01tl4rFSK1ZDap1opmg0pkGy2/nBvWZu+s123z82R\npfZzS3RCLANBkZSqoAC8bbqNUdlLSVEiHFJVndOaJ0r7k6AQywU\u003d\n\u003dkbXi\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a2dcda_6425b70a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-08-26T08:00:24Z",
+      "side": 1,
+      "message": "HI Joakim, I am fine with your proposal -\u003e empty available spectrum when the port is usude. SC1 and SC2 look fine to me",
+      "revId": "1078d2b4cf3634b3cbb786c0ef900e1e2da7aaa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
