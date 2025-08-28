@@ -17,6 +17,23 @@
       "message": "Sorry, it seems I forgot to validate my last comment. As it seems that your change now passes the gate, LGTM except one point :please rename getP11UsedWavelength to getPP11UsedFrequencies as it returns a Map\u003cFreq, Freq\u003e to be consistent with what you made for getPP.Thanks",
       "revId": "d7f8c3dfdeba7e983e7a3147d36c1ea5cb73fa2a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e405694_9f09b3aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T11:29:51Z",
+      "side": 1,
+      "message": "Thx, Olivier. Renamed getPP11UsedWavelength to getPP11UsedFrequencies.",
+      "revId": "d7f8c3dfdeba7e983e7a3147d36c1ea5cb73fa2a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
