@@ -123,6 +123,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d0fbf0_9a8dc7cc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/Collection.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c92e41b5_674fd645",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6bdf25f_24f0fc50",
@@ -193,6 +211,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1638e5e9_1d189431",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b369e80_48e8ded4",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20023af0_eaa27f72",
@@ -245,6 +281,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e8dd2d_e1588d02",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "This line has been refactored and is no longer relevant.",
+      "parentUuid": "ae322ac2_8e54b963",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb6de05d_011d7bdc",
@@ -276,6 +330,24 @@
       "side": 1,
       "message": "\u003e Also not sure if I like that this one throws if the supplied node did not have a supportingNode.\n\nAs of right now, I don\u0027t know how to recover from a situation like that, so for the time being, I\u0027ll leave it as is.",
       "parentUuid": "cb6de05d_011d7bdc",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e6f342_6a154bcc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dbffdfc_af4e0adc",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -525,6 +597,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb51250_cca6c188",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b356c43b_6358523d",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15b7e235_f5f05b4a",
@@ -556,6 +646,24 @@
       "side": 1,
       "message": "After a lot of back and forth, this method was moved to `TapiTopologyNodes` and called `updatedNodeEdgePoints`. I reckon that name could also use som TLC.\n\n    public NodeEdgePoints updatedNodeEdgePoints(\n            ORTerminationPoint orTerminationPoint,\n            TapiContext tapiContext) {\n\n    ...\n    }",
       "parentUuid": "15b7e235_f5f05b4a",
+      "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f5b4ffa_f995972f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/factory/OwnNodeEdgePoint.java",
+        "patchSetId": 31
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-08-28T12:56:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed9a2d98_5dd8994d",
       "revId": "dfaa71a34ddca5c531f603eaf77829bf52ba39cc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
