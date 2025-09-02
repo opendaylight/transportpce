@@ -14,7 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev210924.OpucnTribSlotDef;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OpucnTribSlotDef;
 
 public class PceResultTest extends AbstractTest {
 

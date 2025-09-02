@@ -66,20 +66,20 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PceConstraintMode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev230526.OpenroadmVersionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev230526.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev250110.OpenroadmVersionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev250110.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.CoRoutingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.constraints.co.routing.ServiceIdentifierListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constraints.rev221209.routing.constraints.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.OperationalModeCatalog;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.service.endpoint.sp.TxDirectionBuilder;
@@ -455,7 +455,7 @@ public class PceGraphTest extends AbstractTest {
             .addAugmentation(
                 new Node1Builder().setOpenroadmVersion(OpenroadmVersionType._221).build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1Builder()
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1Builder()
                     .setNodeType(nodeType).build())
             .build();
     }
@@ -483,10 +483,10 @@ public class PceGraphTest extends AbstractTest {
             .withKey(new NodeKey(new NodeId(nodeId)))
             .setSupportingNode(ImmutableMap.of(supportingNode.key(), supportingNode))
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1Builder()
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
                     .setXpdrAttributes(null).build())
             .addAugmentation(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1Builder()
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1Builder()
                     .setNodeType(nodeType).build())
             .build();
     }

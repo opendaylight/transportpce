@@ -43,23 +43,23 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.switching.pool.lcp.SwitchingPoolLcp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.switching.pool.lcp.SwitchingPoolLcpKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -2157,7 +2157,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     .networks.network.node.TerminationPoint.class,
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                     .networks.network.node.TerminationPointKey(new TpId(tpId)))
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
                 .TerminationPoint1.class)
             .build();
         try {
@@ -2178,9 +2178,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
     }
 
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
             .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(String nodeId, String tpId) {
-        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
                 .TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(
@@ -2195,10 +2195,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                     .networks.network.node.TerminationPointKey(new TpId(tpId)))
             .augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class)
             .build();
         try {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1>
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1>
                 tpOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
             if (tpOptional.isEmpty()) {
                 LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);

@@ -25,13 +25,13 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommon;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ZToADirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParameters;
@@ -175,7 +175,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     @Test
     void getTempServiceFromEmptyDataStoreShouldBeEmpty() {
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service.list
                 .Services> optService = this.serviceDataStoreOperations.getTempService("service 1");
         assertFalse(optService.isPresent());
     }
@@ -194,7 +194,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         PathDescription pathDescription = ServiceDataUtils.createPathDescription(0,1, 0, 1);
         this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
 
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service.list
                 .Services> optService = this.serviceDataStoreOperations.getTempService(createInput.getCommonId());
         assertTrue(optService.isPresent());
         assertEquals(createInput.getCommonId(), optService.orElseThrow().getCommonId());

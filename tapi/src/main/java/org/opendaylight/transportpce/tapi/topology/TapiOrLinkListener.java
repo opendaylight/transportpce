@@ -22,8 +22,8 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -89,8 +89,8 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 return;
             }
             LOG.info("Opposite link already in datastore. Creating TAPI bidirectional link");
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1 link11 = link
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1 link11 = link
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1.class);
             if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
                 && link11.getOMSAttributes() != null) {
                 LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());

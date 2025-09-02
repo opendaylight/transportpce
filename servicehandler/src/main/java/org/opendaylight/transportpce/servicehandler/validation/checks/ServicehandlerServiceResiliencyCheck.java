@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.resiliency.ServiceResiliency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.resiliency.ServiceResiliency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

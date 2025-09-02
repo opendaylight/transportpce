@@ -186,7 +186,7 @@ class TestTransportPCEOtnTopology(unittest.TestCase):
                 self.assertTrue(network == CHECK_LIST[nodeId]['network_nb'])
                 listNode.remove(nodeId)
                 print(f"oduswpool = {node['org-openroadm-otn-network-topology:switching-pools']}")
-                ospIndex = 1
+                ospIndex = 0
                 if nodeId == 'SPDR-SA1-XPDR1':
                     ospIndex = 2
                 self.assertEqual(

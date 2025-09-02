@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <transportpce.models.version>22.0.0</transportpce.models.version>
+    <transportpce.models.version>23.0.0-SNAPSHOT</transportpce.models.version>
   </properties>
 
   <dependencyManagement>
@@ -74,7 +74,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-common-13.1.0</artifactId>
+      <artifactId>openroadm-common-13.1.1</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
@@ -90,11 +90,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-network-13.1.0</artifactId>
+      <artifactId>openroadm-network-13.1.1</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce.models</groupId>
-      <artifactId>openroadm-service-13.1.0</artifactId>
+      <artifactId>openroadm-service-13.1.1</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

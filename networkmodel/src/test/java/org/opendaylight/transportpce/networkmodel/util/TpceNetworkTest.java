@@ -20,7 +20,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.networks.network.network.types.ClliNetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.networks.network.network.types.OpenroadmCommonNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.networks.network.network.types.OpenroadmCommonNetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -103,22 +103,22 @@ public class TpceNetworkTest extends AbstractTest {
             "toto layer should not have any network-type augmentation");
         assertNull(
             createdOrdNetwork.getNetworkTypes().augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.NetworkTypes1.class),
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.NetworkTypes1.class),
             "toto layer should not have any network-type augmentation");
     }
 
     private void commonNetworkAugmentationTest(Network createdOrdNetwork) {
         Augmentation<NetworkTypes> ordComNet
-            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.NetworkTypes1Builder()
+            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.NetworkTypes1Builder()
                 .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                 .build();
         assertNotNull(
             createdOrdNetwork.getNetworkTypes().augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.NetworkTypes1.class),
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.NetworkTypes1.class),
             "common-network augmentation should not be null");
         assertEquals(
             ordComNet, createdOrdNetwork.getNetworkTypes().augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.NetworkTypes1.class),
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.NetworkTypes1.class),
             "bad common-network augmentation for network-types");
     }
 }

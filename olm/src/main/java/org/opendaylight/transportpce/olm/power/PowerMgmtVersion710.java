@@ -41,9 +41,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interface
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.tributary.signal.interfaces.rev200529.otsi.container.OtsiBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOtsiOtsigroup;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;

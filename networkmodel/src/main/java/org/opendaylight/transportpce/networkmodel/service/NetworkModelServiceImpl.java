@@ -51,9 +51,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTpBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
@@ -326,7 +326,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .setNodeId(abstractNodeid)
                         .setTpId(tp.getTpId().getValue())
                         .setState(tp.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1
                                 .class).getOperationalState())
                         .build();
                     if (!this.topologyChanges.containsKey(tc.key())) {
@@ -367,7 +367,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .setNodeId(abstractNodeid)
                         .setTpId(tp.getTpId().getValue())
                         .setState(tp.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1
                                 .class).getOperationalState())
                         .build();
                     if (!this.topologyChanges.containsKey(tc.key())) {
@@ -657,7 +657,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     public void createTapiExtNodeAtInit() {
         var clliExt1 = new org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1Builder()
             .setClli("TAPI-SBI-ABS-NODE").build();
-        var commonExt1 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1Builder()
+        var commonExt1 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1Builder()
             .setAdministrativeState(AdminStates.InService)
             .setOperationalState(State.InService)
             .setNodeType(OpenroadmNodeType.ROADM)

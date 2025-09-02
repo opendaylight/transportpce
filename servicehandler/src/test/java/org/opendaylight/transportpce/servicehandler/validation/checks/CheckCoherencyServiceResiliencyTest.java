@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.Protected;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.Restorable;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.Unprotected;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.UnprotectedDiverselyRouted;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.resiliency.ServiceResiliencyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.resiliency.service.resiliency.CoupledServiceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.Protected;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.Restorable;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.Unprotected;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.UnprotectedDiverselyRouted;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.resiliency.ServiceResiliencyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.resiliency.service.resiliency.CoupledServiceBuilder;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.opendaylight.yangtools.yang.common.Uint8;
 

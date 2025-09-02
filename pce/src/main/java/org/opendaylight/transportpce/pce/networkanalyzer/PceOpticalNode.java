@@ -25,21 +25,21 @@ import org.opendaylight.transportpce.pce.networkanalyzer.port.Preference;
 import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCH;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOCHOTU4ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.IfOtsiOtsigroup;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev230526.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCH;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOtsiOtsigroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yangtools.yang.common.Uint16;
@@ -91,9 +91,9 @@ public class PceOpticalNode implements PceNode {
             this.version = version;
             this.mcCapability = mcCapability;
             this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev230526.Node1.class).getAdministrativeState();
+                    .org.openroadm.common.network.rev250110.Node1.class).getAdministrativeState();
             this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev230526.Node1.class).getOperationalState();
+                .org.openroadm.common.network.rev250110.Node1.class).getOperationalState();
         } else {
             LOG.error("PceNode {} : one of parameters is not populated : nodeId, node type, slot width granularity",
                 deviceNodeId);
@@ -121,8 +121,8 @@ public class PceOpticalNode implements PceNode {
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint tp : allTps) {
             TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 nttp1 = tp
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 nttp1 = tp
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
                         .TerminationPoint1.class);
             OpenroadmTpType type = cntp1.getTpType();
             LOG.debug("type = {} for tp {}", type.getName(), tp);
@@ -169,7 +169,7 @@ public class PceOpticalNode implements PceNode {
     }
 
     private boolean isTerminationPointAvailable(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 nttp1) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 nttp1) {
         byte[] availableByteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(availableByteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         return nttp1 == null || nttp1.getPpAttributes() == null
@@ -208,8 +208,8 @@ public class PceOpticalNode implements PceNode {
             return;
         }
         Node1 node1 = this.node.augmentation(Node1.class);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1 node11 =
-                this.node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1 node11 =
+                this.node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1
                         .class);
         switch (this.nodeType) {
             case SRG :
@@ -293,8 +293,8 @@ public class PceOpticalNode implements PceNode {
             if (endpoints == null
                     || (!endpoints.getAEndTp().equals(tp.getTpId().getValue())
                         && !endpoints.getZEndTp().equals(tp.getTpId().getValue()))) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 nttp1 =
-                        tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 nttp1 =
+                        tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
                                 .TerminationPoint1.class);
                 if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                     this.usedXpndrNWTps.add(tp.getTpId().getValue());

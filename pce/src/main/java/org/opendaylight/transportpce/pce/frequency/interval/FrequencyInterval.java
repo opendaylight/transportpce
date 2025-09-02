@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.pce.frequency.interval;
 import java.math.BigDecimal;
 import java.util.Objects;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.service.spectrum.constraint.rev230907.spectrum.allocation.FrequencyRange;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 
 
 public class FrequencyInterval implements Interval {

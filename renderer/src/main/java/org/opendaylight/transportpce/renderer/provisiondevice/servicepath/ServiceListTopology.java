@@ -11,21 +11,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.Topology;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.TopologyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.DeviceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.ResourceTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526.resource.resource.resource.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev220325.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.Hop.HopType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToABuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev230526.topology.ZToAKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110.resource.DeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110.resource.ResourceTypeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110.resource.resource.resource.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev250110.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.Hop.HopType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev250110.topology.ZToAKey;
 
 public class ServiceListTopology {
 
@@ -50,7 +50,7 @@ public class ServiceListTopology {
                     .setType(ResourceTypeEnum.Port)
                     .build())
                 .setResource(new ResourceBuilder()
-                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526
+                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110
                             .resource.resource.resource.PortBuilder()
                         .setPort(new PortBuilder()
                             .setCircuitPackName(port.getCircuitPackName())
@@ -84,7 +84,7 @@ public class ServiceListTopology {
                     .setType(ResourceTypeEnum.Port)
                     .build())
                 .setResource(new ResourceBuilder()
-                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev230526
+                    .setResource(new org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev250110
                             .resource.resource.resource.PortBuilder()
                         .setPort(new PortBuilder()
                             .setCircuitPackName(port.getCircuitPackName())
