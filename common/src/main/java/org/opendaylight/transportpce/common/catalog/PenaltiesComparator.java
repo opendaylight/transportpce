@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.common.catalog;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.util.Comparator;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.transponder.parameters.Penalties;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.Penalties;
 
 @SuppressWarnings("serial")
 @SuppressFBWarnings(

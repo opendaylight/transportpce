@@ -24,9 +24,9 @@ import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.OperationalModeCatalog;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.SpecificOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.OperationalModeCatalog;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 @ExtendWith(MockitoExtension.class)

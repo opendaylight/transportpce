@@ -299,14 +299,14 @@ public class TapiLinkImpl implements TapiLink {
             .setTotalLoss(linkLoss)
             .build();
         OtsFiberSpanImpairments otsFSimpOppLink;
-        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
                 .Link1.class).getOppositeLink() == null) {
             otsFSimpOppLink = otsFSimp;
             oppLinkLoss = linkLoss;
         } else {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
                 .networks.network.Link oppLink = getORLinkFromLinkId(
-                    link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+                    link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
                     .Link1.class).getOppositeLink());
             Map<String,Double> opplossPoutcorrect = NetworkUtils.calcSpanLoss(oppLink);
             LOG.debug("In TapiLinkImpl, for link {} opposite lossPoutcorrect equals {}",

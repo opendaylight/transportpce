@@ -16,8 +16,8 @@ import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelNotifi
 import org.opendaylight.transportpce.servicehandler.listeners.PceNotificationHandler;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererNotificationHandler;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.ServiceList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.list.Services;
 import org.opendaylight.yangtools.binding.DataObjectReference;
 import org.opendaylight.yangtools.concepts.Registration;
 import org.osgi.service.component.annotations.Activate;

@@ -21,7 +21,7 @@ import org.opendaylight.transportpce.pce.frequency.interval.FrequencyInterval;
 import org.opendaylight.transportpce.pce.frequency.interval.Interval;
 import org.opendaylight.transportpce.pce.frequency.spectrum.FrequencySpectrum;
 import org.opendaylight.transportpce.pce.frequency.spectrum.Spectrum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev230526.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 
 class FrequencySpectrumSetTest {
 

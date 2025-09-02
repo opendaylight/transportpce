@@ -13,15 +13,15 @@ module transportpce-or-network-augmentation {
   }
   import org-openroadm-network-topology {
     prefix topo;
-    revision-date 2023-05-26;
+    revision-date 2025-01-10;
   }
   import org-openroadm-network {
     prefix net;
-    revision-date 2023-05-26;
+    revision-date 2025-01-10;
   }
   import org-openroadm-common-network {
     prefix cnet;
-    revision-date 2023-05-26;
+    revision-date 2025-01-10;
   }
 
   organization

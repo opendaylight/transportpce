@@ -7,10 +7,10 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
 
 /**
  * Class for checking service sdnc-request-header compliance.
@@ -131,7 +131,7 @@ public final class ServicehandlerComplianceCheck {
     }
 
     public static ComplianceCheckResult checkSpecificCatalog(SdncRequestHeader sdncRequestHeader,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110
                 .add.specific.operational.modes.to.catalog.input.OperationalModeInfo operationalModeInfoSpecific,
             RpcActions action, Boolean sdncRequest) {
         String resultMsg = sdncRequestHeaderValidate(sdncRequest, sdncRequestHeader, action).getMessage();

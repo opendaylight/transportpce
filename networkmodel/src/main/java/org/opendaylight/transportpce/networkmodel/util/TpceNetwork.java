@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.networks.network.network.types.ClliNetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.networks.network.network.types.OpenroadmCommonNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.networks.network.network.types.OpenroadmCommonNetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -83,7 +83,7 @@ public class TpceNetwork {
             case StringConstants.OPENROADM_TOPOLOGY:
             case StringConstants.OTN_NETWORK:
                 Augmentation<NetworkTypes> ordTopology = new org.opendaylight.yang.gen.v1.http
-                    .org.openroadm.common.network.rev230526.NetworkTypes1Builder()
+                    .org.openroadm.common.network.rev250110.NetworkTypes1Builder()
                     .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                     .build();
                 networkTypesBldr.addAugmentation(ordTopology);

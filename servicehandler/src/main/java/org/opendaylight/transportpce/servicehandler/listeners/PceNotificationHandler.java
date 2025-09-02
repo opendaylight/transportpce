@@ -24,7 +24,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev24
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev220118.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.nbi.notifications.rev230728.PublishNotificationProcessService;
@@ -231,7 +231,7 @@ public class PceNotificationHandler implements PceListener {
         PublishNotificationProcessServiceBuilder nbiNotificationBuilder;
         State serviceOpState;
         if (tempService) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.temp.service.list.Services
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.temp.service.list.Services
                     tempServiceList = serviceDataStoreOperations.getTempService(input.getServiceName()).orElseThrow();
             serviceOpState = tempServiceList.getOperationalState();
             nbiNotificationBuilder =

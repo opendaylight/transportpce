@@ -23,13 +23,13 @@ import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
@@ -245,7 +245,7 @@ public class ConvertTopoORtoTapiAtInit {
     private void convertRoadmNodeFull(Node roadm, Network openroadmTopo) {
         this.ietfNodeId = roadm.getNodeId().getValue();
         this.ietfNodeType = roadm.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
             .getNodeType();
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> oneplist = new HashMap<>();
         // 1. Get degree and srg nodes to map TPs into NEPs
@@ -270,7 +270,7 @@ public class ConvertTopoORtoTapiAtInit {
                 continue;
             }
             OpenroadmNodeType nodeType = node.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class)
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class)
                 .getNodeType();
             var node1TpValues = node1.getTerminationPoint().values();
             LOG.info("TPs of node: {}", node1TpValues);
@@ -375,7 +375,7 @@ public class ConvertTopoORtoTapiAtInit {
                 continue;
             }
             OpenroadmNodeType nodeType = node.augmentation(org.opendaylight.yang.gen.v1.http
-                .org.openroadm.common.network.rev230526.Node1.class).getNodeType();
+                .org.openroadm.common.network.rev250110.Node1.class).getNodeType();
             if (nodeType.getIntValue() != 11) {
                 // Only consider ROADMS SRG Nodes
                 continue;

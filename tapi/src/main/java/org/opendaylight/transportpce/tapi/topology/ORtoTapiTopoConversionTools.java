@@ -37,27 +37,27 @@ import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.frequency.range.RangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.SortedRange;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev230526.degree.used.wavelengths.UsedWavelengthsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengths;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.PpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.TxTtpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.node.termination.point.XpdrNetworkAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev230526.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.available.freq.map.AvailFreqMapsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.PpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.TxTtpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev230526.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
@@ -318,7 +318,7 @@ public class ORtoTapiTopoConversionTools {
     public void convertNode(Node ietfNode, List<String> networkPorts) {
         this.ietfNodeId = ietfNode.getNodeId().getValue();
         var ietfAug =
-            ietfNode.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Node1.class);
+            ietfNode.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1.class);
         if (ietfAug == null) {
             return;
         }
@@ -1075,7 +1075,7 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class);
         if (tpAug == null) {
             return new HashMap<>();
         }
@@ -1107,7 +1107,7 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPPUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class);
         if (tpAug == null) {
             return new HashMap<>();
         }
@@ -1135,7 +1135,7 @@ public class ORtoTapiTopoConversionTools {
     public Range getTTPUsedFreqMap(TerminationPoint tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
-        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
             .TerminationPoint1.class);
         if (termPoint1 == null) {
             return new SortedRange();
@@ -1188,7 +1188,7 @@ public class ORtoTapiTopoConversionTools {
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
     public Range getTTPAvailableFreqMap(TerminationPoint tp) {
-        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526
+        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
             .TerminationPoint1.class);
         if (termPoint1 == null) {
             return new SortedRange();
@@ -1233,7 +1233,7 @@ public class ORtoTapiTopoConversionTools {
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object)
      */
     public Range getTTP11AvailableFreqMap(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
         if (tp == null) {
             return new SortedRange();
         }
@@ -1276,7 +1276,7 @@ public class ORtoTapiTopoConversionTools {
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
     public Map<Frequency, Frequency> getPP11UsedWavelength(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
         if (tp == null) {
             return new HashMap<>();
         }
@@ -1301,7 +1301,7 @@ public class ORtoTapiTopoConversionTools {
      * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
      */
     public Range getTTP11UsedFreqMap(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1 tp) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
         byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         if (tp == null) {
@@ -1531,7 +1531,7 @@ public class ORtoTapiTopoConversionTools {
         int count = 1;
         for (TerminationPoint tp : this.oorNetworkPortList) {
             Set<TpId> nblTpId = new HashSet<>();
-            nblTpId.addAll(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526
+            nblTpId.addAll(tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
                 .TerminationPoint1.class).getAssociatedConnectionMapTp());
             nblTpId.add(tp.getTpId());
             NonBlockingList nbl = new NonBlockingListBuilder()
@@ -1948,7 +1948,7 @@ public class ORtoTapiTopoConversionTools {
     private List<OwnedNodeEdgePoint> createNep(TerminationPoint oorTp, Map<NameKey, Name> nepNames,
             LayerProtocolName nepProtocol, LayerProtocolName nodeProtocol, boolean withSip, String keyword) {
         var tp1 = oorTp.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526.TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110.TerminationPoint1.class);
         var oorTpId = oorTp.getTpId();
         var oorTpIdValue = oorTpId.getValue();
         if (tp1.getTpSupportedInterfaces() == null) {
@@ -1962,7 +1962,7 @@ public class ORtoTapiTopoConversionTools {
         List<OperationalModeKey> opModeList = new ArrayList<>();
         if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
             var tp11 = oorTp.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.TerminationPoint1.class);
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class);
             if (tp11 == null || tp11.getXpdrNetworkAttributes() == null) {
                 for (SupportedInterfaceCapability sic : sicColl) {
                     String ifCapType = sic.getIfCapType().toString().split("\\{")[0];

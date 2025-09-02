@@ -37,13 +37,13 @@ import org.opendaylight.transportpce.tapi.utils.TapiLinkImpl;
 import org.opendaylight.transportpce.tapi.utils.TapiTopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -941,18 +941,17 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 "the rule type should be 'FORWARDING'");
             indexnrg++;
         }
-        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(2).nonnullNodeEdgePoint().values());
-
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(1).nonnullNodeEdgePoint().values());
         assertThat(nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue())
-            .withFailMessage("node-rule-group nb 3 should be between nep-client4 and nep-network1")
+            .withFailMessage("node-rule-group nb 2 should be between nep-client4 and nep-network1")
             .matches(value -> value.contains(networkNepUuid.getValue()) || value.contains(clientNepUuid.getValue()));
         assertThat(nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue())
-            .withFailMessage("node-rule-group nb 3 should be between nep-client4 and nep-network1")
+            .withFailMessage("node-rule-group nb 2 should be between nep-client4 and nep-network1")
             .matches(value -> value.contains(networkNepUuid.getValue()) || value.contains(clientNepUuid.getValue()));
         assertEquals(nodeEdgePointList.get(0).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 3 should be between nep-client4 and nep-network1 of the same node");
+            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
         assertEquals(nodeEdgePointList.get(1).getNodeUuid(), nodeUuid,
-            "node-rule-group nb 3 should be between nep-client4 and nep-network1 of the same node");
+            "node-rule-group nb 2 should be between nep-client4 and nep-network1 of the same node");
 
     }
 

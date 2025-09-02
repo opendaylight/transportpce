@@ -16,11 +16,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.networks.network.link.oms.attributes.Span;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.link.concatenation.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev230526.link.concatenation.LinkConcatenationKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.link.oms.attributes.Span;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.link.concatenation.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.link.concatenation.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -103,8 +103,8 @@ public final class MapUtils {
     }
 
     public static List<Long> getSRLGfromLink(Link link) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1 linkC = link
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1.class);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1 linkC = link
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1.class);
         if (linkC == null) {
             LOG.error(MAP_UTILS_NO_LINK_AUGMENTATION_AVAILABLE_MSG, link.getLinkId().getValue());
             return new ArrayList<>();
@@ -161,11 +161,11 @@ public final class MapUtils {
 
 
     public static Long getAvailableBandwidth(Link link) {
-        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
             .Link1.class) != null
-            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
                 .Link1.class).getAvailableBandwidth() != null) {
-            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
                 .Link1.class).getAvailableBandwidth().toJava();
         } else {
             LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
@@ -174,11 +174,11 @@ public final class MapUtils {
     }
 
     public static Long getUsedBandwidth(Link link) {
-        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
             .Link1.class) != null
-            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
                 .Link1.class).getUsedBandwidth() != null) {
-            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev230526
+            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev250110
                 .Link1.class).getUsedBandwidth().toJava();
         } else {
             LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
@@ -206,9 +206,9 @@ public final class MapUtils {
     }
 
     public static Span getOmsAttributesSpan(Link link) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1 link1 = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1 link1 = null;
         link1 =
-            link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev230526.Link1.class);
+            link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1.class);
 
         if (link1 == null) {
             LOG.error(MAP_UTILS_NO_LINK_AUGMENTATION_AVAILABLE_MSG, link.getLinkId().getValue());
@@ -223,7 +223,7 @@ public final class MapUtils {
 
     public static LinkId extractOppositeLink(Link link) {
         var linkOpposite
-            = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev230526.Link1.class);
+            = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1.class);
         if (linkOpposite == null) {
             LOG.error("No opposite link augmentation for network link {}", link);
             return null;

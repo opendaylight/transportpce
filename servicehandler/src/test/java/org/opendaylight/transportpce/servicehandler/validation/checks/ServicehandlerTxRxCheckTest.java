@@ -14,7 +14,7 @@ import static org.opendaylight.transportpce.servicehandler.validation.checks.Ser
 
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.service.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yangtools.yang.common.Uint32;
 

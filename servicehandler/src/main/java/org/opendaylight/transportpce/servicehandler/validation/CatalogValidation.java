@@ -12,7 +12,7 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.CatalogInput;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev230526.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

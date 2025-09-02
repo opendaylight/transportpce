@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.catalog;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.SpecificOperationalModes;
 
 /**
  * Store operational mode catalog into MDSAL .

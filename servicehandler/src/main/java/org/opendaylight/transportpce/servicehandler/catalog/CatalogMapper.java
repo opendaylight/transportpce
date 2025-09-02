@@ -9,19 +9,19 @@ package org.opendaylight.transportpce.servicehandler.catalog;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.OpenroadmOperationalModesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.SpecificOperationalModesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.openroadm.operational.modes.AmplifiersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.openroadm.operational.modes.GridParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.openroadm.operational.modes.RoadmsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.openroadm.operational.modes.XpondersPluggablesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalModeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526.operational.mode.catalog.specific.operational.modes.SpecificOperationalModeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddOpenroadmOperationalModesToCatalogInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.AddSpecificOperationalModesToCatalogInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.OpenroadmOperationalModesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.SpecificOperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.SpecificOperationalModesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.AmplifiersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.GridParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.RoadmsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.XpondersPluggablesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.openroadm.operational.modes.xponders.pluggables.XponderPluggableOpenroadmOperationalModeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.catalog.specific.operational.modes.SpecificOperationalModeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.AddOpenroadmOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.AddSpecificOperationalModesToCatalogInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.add.openroadm.operational.modes.to.catalog.input.OperationalModeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,16 +81,16 @@ public final class CatalogMapper {
      * Preparation of Xponders Pluggables for OpenroadmOperationalModes object.
      */
     private static void saveXpondersPlugabbles(OperationalModeInfo modesFromInput) {
-        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                 .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables
                 .XponderPluggableOpenroadmOperationalModeKey,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                 .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables
                 .XponderPluggableOpenroadmOperationalMode> mapFinal = new HashMap<>();
         for (var entry : modesFromInput.getXpondersPluggables().getXponderPluggableOpenroadmOperationalMode()
                 .entrySet()) {
             mapFinal.put(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                     .operational.mode.catalog.openroadm.operational.modes.xponders.pluggables
                     .XponderPluggableOpenroadmOperationalModeKey(entry.getKey().toString()),
                 new XponderPluggableOpenroadmOperationalModeBuilder(entry.getValue())
@@ -116,19 +116,19 @@ public final class CatalogMapper {
     /**
      * Preparation of Specific Operational Modes for SpecificOperationalModes object.
      */
-    private static  void saveSpecificOperationalModes(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev230526
+    private static  void saveSpecificOperationalModes(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110
            .add.specific.operational.modes.to.catalog.input.operational.mode.info.SpecificOperationalModes
                 specificModesFromInput) {
-        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                 .operational.mode.catalog.specific.operational.modes.SpecificOperationalModeKey,
-            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+            org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                 .operational.mode.catalog.specific.operational.modes.SpecificOperationalMode>
             mapFinal = new HashMap<>();
         for (var entry : specificModesFromInput.getSpecificOperationalMode().entrySet()) {
             SpecificOperationalModeBuilder specificModeBuilder = new SpecificOperationalModeBuilder();
             specificModeBuilder.fieldsFrom(entry.getValue());
             mapFinal.put(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev230526
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110
                     .operational.mode.catalog.specific.operational.modes.SpecificOperationalModeKey(
                         entry.getKey().toString()),
                 specificModeBuilder
