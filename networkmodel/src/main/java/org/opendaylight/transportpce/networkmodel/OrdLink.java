@@ -19,9 +19,9 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitInterDomainLinksInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodesInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.InitInterDomainLinksInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.InitRoadmNodesInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1Builder;
@@ -56,7 +56,7 @@ final class OrdLink {
      *Method to create OMS links if not discovered by LLDP. This is helpful
      *     to create test topologies using simulators*
      *
-     * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .InitRoadmNodesInput} object
      * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
      * @return a boolean
@@ -116,7 +116,7 @@ final class OrdLink {
      *Method to create InterDomain links that can't be discovered by LLDP. This is used
      *    to create topologies that span across several domains*
      *
-     * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     * @param input a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .InitInterDomainLinksInput} object
      * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
      * @return a boolean
@@ -179,9 +179,9 @@ final class OrdLink {
                     .setLinkType(OpenroadmLinkType.ROADMTOROADM)
                     .build());
         org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.or.network.augmentation.rev240923.Link1Builder tpceAugmLink11Bd =
+                .transportpce.or.network.augmentation.rev250902.Link1Builder tpceAugmLink11Bd =
             new org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.or.network.augmentation.rev240923.Link1Builder()
+                    .transportpce.or.network.augmentation.rev250902.Link1Builder()
                 .setLinkClass(LinkClassEnum.InterDomain);
         linkBuilderFW.addAugmentation(tpceAugmLink11Bd.build());
 
@@ -251,9 +251,9 @@ final class OrdLink {
             String topoUuid, String linkId, DataBroker dataBroker) {
         //Ietf tpBuilder
         org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.or.network.augmentation.rev240923.TerminationPoint1Builder tpceAugmTp111Bd =
+                .transportpce.or.network.augmentation.rev250902.TerminationPoint1Builder tpceAugmTp111Bd =
             new org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.or.network.augmentation.rev240923.TerminationPoint1Builder()
+                    .transportpce.or.network.augmentation.rev250902.TerminationPoint1Builder()
                 .setSupportingNodeTopologyUuid(topoUuid)
                 .setSupportingNodeUuid(nodeUuid)
                 .setTpUuid(tpUuid);

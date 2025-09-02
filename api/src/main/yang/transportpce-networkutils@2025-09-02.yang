@@ -16,6 +16,12 @@ module transportpce-networkutils {
     revision-date 2025-01-10;
   }
 
+  revision 2025-09-02 {
+    description
+      "Change revision of org-openroadm-common-network imported model
+      to use the 13.1.1 version";
+  }
+
   revision 2024-09-23 {
     description
       "Add T-API Ids to ROADM nodes to extend topology coverage and include

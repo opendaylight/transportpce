@@ -172,11 +172,14 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                          response['switching-pool-lcp'][0]['switching-pool-type'])
         self.assertEqual(2,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
-        self.assertIn(
+        expected = test_utils.recursive_sort(
             {'nbl-number': 2,
              'interconnect-bandwidth': 0,
-             'lcp-list': ['XPDR2-CLIENT2', 'XPDR2-NETWORK1']},
-            response['switching-pool-lcp'][0]['non-blocking-list'])
+             'lcp-list': ['XPDR2-CLIENT2', 'XPDR2-NETWORK1']})
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['switching-pool-lcp'][0]['non-blocking-list']
+        ]
+        self.assertIn(expected, response_sorted)
 
     def test_10_xpdr_device_disconnection(self):
         response = test_utils.unmount_device("XPDR-A2")

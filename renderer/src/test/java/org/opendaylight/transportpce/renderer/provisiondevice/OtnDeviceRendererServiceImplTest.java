@@ -31,10 +31,10 @@ import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInter
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.mapping.OpenconfigInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.mapping.OpenconfigInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.NodesBuilder;

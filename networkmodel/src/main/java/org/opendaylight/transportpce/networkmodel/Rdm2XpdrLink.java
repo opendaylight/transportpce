@@ -21,9 +21,9 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.links.input.grouping.LinksInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.links.input.grouping.LinksInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.DataModelEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -61,7 +61,7 @@ final class Rdm2XpdrLink {
     /**
      * createXpdrRdmLinks.
      *
-     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .links.input.grouping.LinksInput} object
      * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
      * @return a boolean
@@ -119,7 +119,7 @@ final class Rdm2XpdrLink {
     /**
      * createRdmXpdrLinks.
      *
-     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     * @param linksInput a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .links.input.grouping.LinksInput} object
      * @param dataBroker a {@link org.opendaylight.mdsal.binding.api.DataBroker} object
      * @return a boolean
@@ -225,9 +225,9 @@ final class Rdm2XpdrLink {
             .addAugmentation(lnk2bldr.build());
 
         org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.or.network.augmentation.rev240923.Link1Builder tpceAugmLink11Bd =
+                .transportpce.or.network.augmentation.rev250902.Link1Builder tpceAugmLink11Bd =
             new org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.or.network.augmentation.rev240923.Link1Builder();
+                .transportpce.or.network.augmentation.rev250902.Link1Builder();
         DataModelEnum nodeYangDataModel = getNodeModel(srcNode, srcTp, dataBroker);
         if (isRdmTapiNode) {
             tpceAugmLink11Bd.setLinkClass(LinkClassEnum.AlienToTapi);
@@ -283,22 +283,22 @@ final class Rdm2XpdrLink {
 
     private static DataModelEnum getNodeModel(String srcNode, String srcTp, DataBroker dataBroker) {
         DataObjectIdentifier<
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.Node1>
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.Node1>
             nodeIID = DataObjectIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
                 .child(Node.class, new NodeKey(new NodeId(srcNode)))
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.or.network.augmentation.rev240923.Node1.class)
+                    .transportpce.or.network.augmentation.rev250902.Node1.class)
                 .build();
         @NonNull
         ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
         @NonNull
         FluentFuture<Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
-                .rev240923.Node1>> nodeFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodeIID);
+                .rev250902.Node1>> nodeFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodeIID);
         if (nodeFf.isDone()) {
             try {
                 Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
-                    .rev240923.Node1> node;
+                    .rev250902.Node1> node;
                 node = nodeFf.get();
                 if (node.isPresent()) {
                     return node.orElseThrow().getYangDataModel();

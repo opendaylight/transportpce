@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mc.capabilities.McCapabilities;
 
 public interface MappingUtils {
 
