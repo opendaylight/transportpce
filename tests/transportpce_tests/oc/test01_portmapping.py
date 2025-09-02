@@ -132,10 +132,11 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                          response['switching-pool-lcp'][0]['switching-pool-type'])
         self.assertEqual(4,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
-        actual_lcp_list = response['switching-pool-lcp'][0]['non-blocking-list'][0]['lcp-list']
-        sorted_actual_lcp_list = sorted(actual_lcp_list)
-        expected_lcp_list = sorted(['XPDR1-CLIENT2', 'XPDR1-NETWORK5'])
-        self.assertEqual(sorted_actual_lcp_list, expected_lcp_list)
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['switching-pool-lcp'][0]['non-blocking-list']
+        ]
+        expected_sorted = {'nbl-number': 2, 'lcp-list': ['XPDR1-CLIENT2', 'XPDR1-NETWORK5']}
+        self.assertIn(expected_sorted, response_sorted)
 
     def test_09_check_mccapprofile(self):
         res = test_utils.get_portmapping_node_attr("XPDR-OC", "mc-capabilities", "XPDR-mcprofile")

@@ -41,13 +41,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmo
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChanges;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.TopologyChangesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.DataModelEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev240923.LinkClassEnum;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.DataModelEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -677,7 +677,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         String topoUuid = new Uuid(UUID.nameUUIDFromBytes("SBI - Multi-layer - TAPI topology"
                 .getBytes(StandardCharsets.UTF_8)).toString()).toString();
         var tapiExt1 = new org.opendaylight.yang.gen.v1.http.org
-            .opendaylight.transportpce.or.network.augmentation.rev240923.Node1Builder()
+            .opendaylight.transportpce.or.network.augmentation.rev250902.Node1Builder()
                 .setYangDataModel(DataModelEnum.TapiExt)
                 .setTopologyUuid(topoUuid)
                 .build();
@@ -779,14 +779,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 List<LinkId> tapiLinkIdList = new ArrayList<>();
                 for (Link link : nw.nonnullLink().values()) {
                     if ((link.augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                            .transportpce.or.network.augmentation.rev240923.Link1.class) != null
+                            .transportpce.or.network.augmentation.rev250902.Link1.class) != null
                             && link.augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                                .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass() != null)
+                                .transportpce.or.network.augmentation.rev250902.Link1.class).getLinkClass() != null)
                             && (link.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                                    .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                                    .transportpce.or.network.augmentation.rev250902.Link1.class).getLinkClass()
                                     .equals(LinkClassEnum.AlienToTapi)
                                 || link.augmentationOrElseThrow(org.opendaylight.yang.gen.v1.http.org.opendaylight
-                                    .transportpce.or.network.augmentation.rev240923.Link1.class).getLinkClass()
+                                    .transportpce.or.network.augmentation.rev250902.Link1.class).getLinkClass()
                                     .equals(LinkClassEnum.InterDomain))) {
 
                         tapiLinkIdList.add(link.getLinkId());

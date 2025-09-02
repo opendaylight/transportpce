@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.node.mccapabilities;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mc.capabilities.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mc.capabilities.McCapabilities;
 
 /**
  * The primary purpose of this POJO is to specify default values in regard to MC-capabilities

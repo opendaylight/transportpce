@@ -33,6 +33,10 @@ module transportpce-or-network-augmentation {
      Copyright (c) 2024 Orange and others. All rights reserved.
      authors: Olivier Renais";
 
+  revision 2025-09-02 {
+    description
+      "Change revision of org-openroadm imported model to use the 13.1.1 version";
+  }
 
   revision 2024-09-23 {
     description

@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -351,7 +351,7 @@ public class PceLink implements Serializable {
                 && (neededType == null
                     || neededType.equals(
                         link.augmentation(
-                                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+                                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
                                     .Link1.class)
                             .getOtnLinkType()))) {
             LOG.debug("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
