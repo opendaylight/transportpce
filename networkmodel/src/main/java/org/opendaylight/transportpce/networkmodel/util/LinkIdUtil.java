@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.InitRoadmNodesInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 
 
@@ -59,7 +59,7 @@ public final class LinkIdUtil {
     /**
      * Builds the opposite
      *      {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId}
-     *      from the {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     *      from the {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .InitRoadmNodesInput}.
      *
      * @param input an init link for ROADM nodes

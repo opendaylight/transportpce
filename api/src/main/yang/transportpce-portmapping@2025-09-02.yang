@@ -39,6 +39,11 @@ module transportpce-portmapping {
      authors: Dhruv Bhardwaj ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )
               Balagangadhar Bathula ( bb4341@att.com )";
 
+  revision 2025-09-02 {
+    description
+      "Change revision of org-openroadm imported model to use the 13.1.1 version";
+  }
+
   revision 2025-03-25 {
     description
       "Added openconfig-info container,
