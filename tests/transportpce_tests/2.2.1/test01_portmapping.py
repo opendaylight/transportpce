@@ -245,12 +245,15 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                          response['switching-pool-lcp'][0]['switching-pool-type'])
         self.assertEqual(4,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
-        self.assertIn(
+        expected = test_utils.recursive_sort(
             {'nbl-number': 83,
              'interconnect-bandwidth': 1,
              'interconnect-bandwidth-unit': 1000000000,
-             'lcp-list': ['XPDR3-CLIENT3', 'XPDR3-NETWORK1']},
-            response['switching-pool-lcp'][0]['non-blocking-list'])
+             'lcp-list': ['XPDR3-CLIENT3', 'XPDR3-NETWORK1']})
+        response_sorted = [
+            test_utils.recursive_sort(item) for item in response['switching-pool-lcp'][0]['non-blocking-list']
+        ]
+        self.assertIn(expected, response_sorted)
 
     def test_21_spdr_portmapping_mappings(self):
         response = test_utils.get_portmapping_node_attr("SPDR-SA1", None, None)

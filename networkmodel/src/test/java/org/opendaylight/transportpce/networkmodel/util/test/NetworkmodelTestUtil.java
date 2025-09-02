@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -72,7 +72,7 @@ public final class NetworkmodelTestUtil {
      * @param clli a {@link java.lang.String} object
      * @param degNb a int
      * @param srgNbs a {@link java.util.List} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902
      *      .network.Nodes} object
      */
     public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, List<Integer> srgNbs) {
@@ -97,7 +97,7 @@ public final class NetworkmodelTestUtil {
      * @param clientPortNb a int
      * @param xpdrNodeType a {@link org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
      *      .XpdrNodeTypes} object
-     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325
+     * @return a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902
      *      .network.Nodes} object
      */
     public static Nodes createMappingForXpdr(
@@ -116,7 +116,7 @@ public final class NetworkmodelTestUtil {
     /**
      * createSuppOTNLinks.
      *
-     * @param type a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+     * @param type a {@link org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
      *      .OtnLinkType} object
      * @param availBW a {@link org.opendaylight.yangtools.yang.common.Uint32} object
      * @return a {@link java.util.List} object
@@ -147,7 +147,7 @@ public final class NetworkmodelTestUtil {
                         .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
                         .build())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
                             .Link1Builder()
                         .setOtnLinkType(type)
                         .build())
@@ -178,7 +178,7 @@ public final class NetworkmodelTestUtil {
                         .setUsedBandwidth(Uint32.valueOf(100000 - availBW.intValue()))
                         .build())
                 .addAugmentation(
-                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923
+                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
                             .Link1Builder()
                         .setOtnLinkType(type)
                         .build())

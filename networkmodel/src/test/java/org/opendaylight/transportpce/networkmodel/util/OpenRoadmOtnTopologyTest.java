@@ -28,14 +28,14 @@ import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
 import org.opendaylight.transportpce.test.converter.JsonDataConverter;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.OtnLinkType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.mapping.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250325.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
@@ -245,7 +245,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             OtnLinkType.OTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.Link1.class)
                 .getOtnLinkType(),
             "otn link type should be OTU4");
     }
@@ -315,7 +315,7 @@ public class OpenRoadmOtnTopologyTest {
         assertEquals(
             OtnLinkType.ODTU4,
             sortedLinks.get(0).augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev240923.Link1.class)
+                    org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.Link1.class)
                 .getOtnLinkType(),
             "otn link type should be ODTU4");
 
