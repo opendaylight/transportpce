@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4395a6_ca5d34ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-04T15:57:07Z",
+      "side": 1,
+      "message": "Thanks for review, Joakim.\nYou are right. Will abandoned the change since you made updated modifications on your side in 116679.",
+      "revId": "6b12ab1f69832324f76af0d6a5989274cfa90a32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfe667c5_2007c1d1",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-09-04T13:58:22Z",
       "side": 1,
       "message": "I\u0027m somewhat confused about this change. Seems related to this change and discussion here: https://git.opendaylight.org/gerrit/c/transportpce/+/116679/6..16/tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java#b1282\n\nThe primary difference, if I\u0027m reading the code correctly, is this change uses both `ppAtt.getAvailFreqMaps()` and `ppAtt.getUsedWavelength()`, while the other only uses `ppAtt.getAvailFreqMaps()`.\n\nI believe we talked about this on a transportpce meeting and agreeed to only use `ppAtt.getAvailFreqMaps()`, however that decision was never documented anywhere. Anyway, that\u0027s way I removed the use of `ppAtt.getUsedWavelength()`.\n\nPerhaps we need to discuss this further.",
+      "range": {
+        "startLine": 1121,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 89
+      },
+      "revId": "6b12ab1f69832324f76af0d6a5989274cfa90a32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae5ca1d_3107546a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-04T15:57:07Z",
+      "side": 1,
+      "message": "Hi Joakim. Thanks for your review. Yes I agree. This change was made before you made the change on your side. I realized this this morning. So as mentioned during the meeting, it shall be considered as obsolete. \nThanks for having handled the required changes on your side. This will be definitely much better than through my poor implementation, trying to reproduce what you did!",
+      "parentUuid": "bfe667c5_2007c1d1",
       "range": {
         "startLine": 1121,
         "startChar": 0,
