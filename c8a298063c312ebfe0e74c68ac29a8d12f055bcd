@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1756966327 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1756966327-CBEDE6CA42462DFC789E4A451F745786DD8D027A\n\n0000000000000000000000000000000000000000 c8a298063c312ebfe0e74c68ac29a8d12f055bcd refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmi5LbcACgkQX735uTFP\nrXHbYw/+LgzDUaXXZOdpwVPyyW4/iiGy9VmrmIjSKsF/xiKGcmswopXxLbO1fsh4\nnmXq2miyFPKYreG9vH1bjlcc88MMXe8HreOMlaXcpmEQHLM5yFr6n/xjT7ryyaDS\nP07iy3OSgAF3Spque1tIdO6iB5+5iaRmC5ZHTbGqkblKXwzzxa4QK6AWzzXGN400\nI/Krl34s8x21u6MJAWkTbOpY9D9S8OoitSgMl4kYWaCutO3rj/YrGnxGAkFLml66\n2ig4RzSutKV+uoEfs7GHwWngdbf15X1JYNjG3HOQ5zvmkW67kD93rjrfNJbPI9WK\nBPWa8V7/AMwUpB72/mLpRvMm6IJ3LAn7TvsNvvcrwf0i83SvdMamgH63i49gKI3q\nKMT//Rs7brwtNKfqhNp81cgf2Jg1ioVgqqEQ0hXQT7CB9W5QLmPXx6xu077kuWFB\nxBKd+H5+TikyNcwBTh+qYE4eVGQ+1LFvEb5SJQuPicoleD8TNewOPDmTrUeg08Dq\nAvqngK+oU1aWIwI5SVEFS4DuiiGX910B3F4C4KUq31P2KhRSbA+iChjecWR8YvcJ\npVzMaL/kJcz2foFqAGSNzuxZoTUqQMznJ+5p0G8u5A+WhO3Dnbe+CZPjOTKUhgWB\n0ogwXq4FGDGL2Hp8Yn47Jc5V/lvHPBEkLsLRScN8rKBbe/0VAD4\u003d\n\u003dNnHb\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43a5a1d5_e123ace0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-04T11:22:26Z",
+      "side": 1,
+      "message": "Sorry Joakim for late review, but I looked at it before my vacations and it was at that time in WIP : did not want to comment incomplete work. Since then several patchsets were pushed in the mean while...\n\nWill make only generic comment as I do not have any specific comment on the huge work you have done and the way you did it.\n\nContext : My understanding is that you try to complement the code to update the TAPI topology from topology updates in OpenROADM topology, considering that this function was not existing. \nInitially we made a translation of OR topology at tapi feature installation. We were not listening to OR Topology update to refresh the TAPI topology in the datastore. This last was updated from portMapping changes through a TapiPortMappingListener as this is done for OR  with the PortMappingListener. The only thing this way that may not be reflected in topology is the addition/change of status of links. But we keep them in the topology, even if some ROADMs are disconnected, since links are added manually for XPDR to ROADM, and for ROADMtoROADM they depend on both lldp information of ROADMs and also OMS attributes added manually through RPCs.\nThus I am not convinced on the real need to catch OR Topology changes.\nOne other point to note is that currently, the OR topo is translated into the Full Multilayer TAPI topology. But at the target, we will translate the OR topology into an abstracted TAPI topology, where all ROADMs are merged into a single node (to save resources). The generation of Full Multilayer topology is only kept to generate files for test of or TAPI implementation. So this might lead later on to some issues…\nOne thing I am not sure to have understood is whether you update the TAPI topology with transponder information updates : looking at OpenROADMTerminationPoint, my feeling is that you focus on ROADMs SRGs and degrees (but I may have missed something).\nI have seen that you have change the name of number of classes and methods (I guess to avoid potential confusion reading the code with existing tapi attributes). Thanks for having done so! There is still NodeEdgePoint which could lead to some confusion.\nThanks. Happy to discuss this with you during our calls",
+      "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
