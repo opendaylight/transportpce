@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acc93718_5f213a2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-04T13:58:22Z",
+      "side": 1,
+      "message": "Hi Olivier! I completely forgot I agreed to review this change. Thanks Jonas for reminding me.",
+      "revId": "6b12ab1f69832324f76af0d6a5989274cfa90a32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe667c5_2007c1d1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-04T13:58:22Z",
+      "side": 1,
+      "message": "I\u0027m somewhat confused about this change. Seems related to this change and discussion here: https://git.opendaylight.org/gerrit/c/transportpce/+/116679/6..16/tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java#b1282\n\nThe primary difference, if I\u0027m reading the code correctly, is this change uses both `ppAtt.getAvailFreqMaps()` and `ppAtt.getUsedWavelength()`, while the other only uses `ppAtt.getAvailFreqMaps()`.\n\nI believe we talked about this on a transportpce meeting and agreeed to only use `ppAtt.getAvailFreqMaps()`, however that decision was never documented anywhere. Anyway, that\u0027s way I removed the use of `ppAtt.getUsedWavelength()`.\n\nPerhaps we need to discuss this further.",
+      "range": {
+        "startLine": 1121,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 89
+      },
+      "revId": "6b12ab1f69832324f76af0d6a5989274cfa90a32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
