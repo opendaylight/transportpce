@@ -40,6 +40,30 @@
       },
       "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0c09afd_65a2149c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-11T18:52:14Z",
+      "side": 1,
+      "message": "What do you mean be \"the new service has been copied to the OR service DataStore and that it should be found there\"? As you say above, even if a user creates a service using TAPI create-connectivity-service, this is translated to OR service-create RPC, so what is the difference compared to creating it using OR API directly?",
+      "parentUuid": "42906860_6e8e3273",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 9
+      },
+      "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
