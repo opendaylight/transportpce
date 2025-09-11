@@ -17,6 +17,24 @@
       "message": "Sorry Joakim for late review, but I looked at it before my vacations and it was at that time in WIP : did not want to comment incomplete work. Since then several patchsets were pushed in the mean while...\n\nWill make only generic comment as I do not have any specific comment on the huge work you have done and the way you did it.\n\nContext : My understanding is that you try to complement the code to update the TAPI topology from topology updates in OpenROADM topology, considering that this function was not existing. \nInitially we made a translation of OR topology at tapi feature installation. We were not listening to OR Topology update to refresh the TAPI topology in the datastore. This last was updated from portMapping changes through a TapiPortMappingListener as this is done for OR  with the PortMappingListener. The only thing this way that may not be reflected in topology is the addition/change of status of links. But we keep them in the topology, even if some ROADMs are disconnected, since links are added manually for XPDR to ROADM, and for ROADMtoROADM they depend on both lldp information of ROADMs and also OMS attributes added manually through RPCs.\nThus I am not convinced on the real need to catch OR Topology changes.\nOne other point to note is that currently, the OR topo is translated into the Full Multilayer TAPI topology. But at the target, we will translate the OR topology into an abstracted TAPI topology, where all ROADMs are merged into a single node (to save resources). The generation of Full Multilayer topology is only kept to generate files for test of or TAPI implementation. So this might lead later on to some issues…\nOne thing I am not sure to have understood is whether you update the TAPI topology with transponder information updates : looking at OpenROADMTerminationPoint, my feeling is that you focus on ROADMs SRGs and degrees (but I may have missed something).\nI have seen that you have change the name of number of classes and methods (I guess to avoid potential confusion reading the code with existing tapi attributes). Thanks for having done so! There is still NodeEdgePoint which could lead to some confusion.\nThanks. Happy to discuss this with you during our calls",
       "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b18e65_a47604d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-11T19:09:20Z",
+      "side": 1,
+      "message": "\u003eWe were not listening to OR Topology update to refresh the TAPI topology in the datastore. This last was updated from portMapping changes through a TapiPortMappingListener as this is done for OR with the PortMappingListener. The only thing this way that may not be reflected in topology is the addition/change of status of links. But we keep them in the topology, even if some ROADMs are disconnected, since links are added manually for XPDR to ROADM, and for ROADMtoROADM they depend on both lldp information of ROADMs and also OMS attributes added manually through RPCs.\nThus I am not convinced on the real need to catch OR Topology changes.\n\nThe point of this change is to update used frequencies in TAPI topology when a service is created using OR API. This is not currently done (it\u0027s not reflected in portmapping) in my understanding.\n\n\u003eOne other point to note is that currently, the OR topo is translated into the Full Multilayer TAPI topology. But at the target, we will translate the OR topology into an abstracted TAPI topology, where all ROADMs are merged into a single node (to save resources). The generation of Full Multilayer topology is only kept to generate files for test of or TAPI implementation. So this might lead later on to some issues…\n\nFor our use case we want to offer both full and abstracted topology over TAPI. I hope the full topology will not be removed.",
+      "parentUuid": "43a5a1d5_e123ace0",
+      "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
