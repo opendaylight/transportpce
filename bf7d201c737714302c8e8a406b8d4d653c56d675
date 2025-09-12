@@ -34,6 +34,24 @@
       "message": "I don\u0027t really understand the purpose of this class. Why do we need to adapt between revisions?",
       "revId": "bf7d201c737714302c8e8a406b8d4d653c56d675",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "850b9edb_cdd64730",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/srg/revision/SrgRev181019Adapter.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-12T09:04:04Z",
+      "side": 1,
+      "message": "During portmapping, we\u0027re reading from the device which in the case of version 2.2.1 is revision 181019. Saving the information to the datastore we\u0027re using revision 250714. Hence this conversion.\n\nSee https://git.opendaylight.org/gerrit/c/transportpce/+/109388",
+      "parentUuid": "40440ab4_1d651990",
+      "revId": "bf7d201c737714302c8e8a406b8d4d653c56d675",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
