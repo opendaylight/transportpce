@@ -17,6 +17,42 @@
       "message": "The leaf is called wavelength-duplication in openroadm device model. Can we use the same name here for consistency? Also, can we reuse the wavelength-duplication-type typedef from openroadm instead of redefining it here?",
       "revId": "c16f976d3fb8bc8ca8e6b20a607f322799f2a977",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffbd621c_c965e5c9",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-09-05.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-12T10:04:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49b371e4_d320ecbc",
+      "revId": "c16f976d3fb8bc8ca8e6b20a607f322799f2a977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9669d492_66c7873b",
+        "filename": "api/src/main/yang/transportpce-portmapping@2025-09-05.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-12T10:04:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49b371e4_d320ecbc",
+      "revId": "c16f976d3fb8bc8ca8e6b20a607f322799f2a977",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
