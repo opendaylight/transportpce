@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1757079535 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1757079535-81FB4325959AA5B86EA3FC7B3089FB7E66B266F2\n\n0000000000000000000000000000000000000000 e318f5712ffb1886266344ee82096a66db4779fd refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmi65+8ACgkQX735uTFP\nrXHGzw//T6hhmw44DmHL2PONAP4ogmI2gv30JK4c0dhbQ4EGYZaaASwYZJRJvtMW\nIhSQ96VsjKX8M/RD5KvB23FtBbfHMJrS/EyPf0MWurXE8pTm8zIzJ679pdodWZSr\n/SMPXyHcHITaN5vmhZ2vX53m42QrgXn/fttBMAxQdq7tY2JIfDXeZfN5hwpAhBlv\nhsZszVX//lJ8pHk2xVQTu6oQ7f7QqJkc+c7FWHCIuPBSx1b3iCcD6/lRfbsBvfkh\nAlJVprsF5HzPI8Ios+SfS+F4eFbHV2fuyhkEHMkcBdiQ+WBya/qO6tVlYe88LYtF\nlbrHsc8xvyBQBROPAfhjmVIYyk7spDVS4hnVcceouITZw7otpcduoGwxXgGhT3Bm\nxGbl3pudb1NKiG/eQjENOw33gGHz6Z9X5CN1uziZEI66QMvMw0I24YgG28ILls27\nNb7/u+ReXaxMxBGGrGzdM8BVSwyyMngikC+1Lfc18gwVMYYp/k7mCcwaXiuWMVIO\n0nQxdoqPWmWsEX/T9zBziBrzEVOoEPp7D4LZgddngFJ0u6vH4RSqPz8SdIIIfYfk\nRSRA+kqAIvw3WW/OigMKd1Agrx7iItM3iUgR9000yUVBtEUr32VKuHiT/Djp9Q7e\nScrvsBPb306JPuU+qpCPIrqxA0wSbfDYHJ1RllfLiT/Oo6imPHk\u003d\n\u003dKs7V\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0381ee9f_4e9834e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-12T05:44:53Z",
+      "side": 1,
+      "message": "I guess we also need to handle other device versions besides 2.2.1?",
+      "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
