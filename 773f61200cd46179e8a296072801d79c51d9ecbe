@@ -17,6 +17,23 @@
       "message": "I guess we also need to handle other device versions besides 2.2.1?",
       "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dde7edcb_aa8339eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-12T05:56:21Z",
+      "side": 1,
+      "message": "In addition to adding wavelength duplication information to portmapping, I think we should also add it to the openroadm topology, since the attribute exists there as well under srg-node-attributes. Then we could get the information from topology during path computation instead of reading it from portmapping. I think all other information required for path computation exist in the topology.",
+      "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
