@@ -35,6 +35,24 @@
       "parentUuid": "43a5a1d5_e123ace0",
       "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd562a6_d15fba2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-15T05:52:08Z",
+      "side": 1,
+      "message": "\u003e One thing I am not sure to have understood is whether you update the TAPI topology with transponder information updates : looking at OpenROADMTerminationPoint, my feeling is that you focus on ROADMs SRGs and degrees (but I may have missed something).\n\nYou\u0027re right, I haven\u0027t implemented anything regarding transponder. Currently, my develop environment doesn\u0027t contain any transponders so I unintentionally overlooked them.\n\nSo the question is, should I add support for transponders in this commit or leave transponders to be implemented in a future update?",
+      "parentUuid": "93b18e65_a47604d7",
+      "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
