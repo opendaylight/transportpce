@@ -64,6 +64,30 @@
       },
       "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795193f6_32f8079d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-15T07:26:17Z",
+      "side": 1,
+      "message": "\u003e Are you sure that at this stage (multiThread?...), the new service has been copied to the OR service DataStore and that it should be found there ?\n\nGood question. I believe it should be there. Here is how it works:\n\n### 1. RendererNotificationHandler\n\n```java\n...\nprivate void onSuccededServiceImplementation(RendererRpcResultSp notification) {\n\nLOG.info(\"Service implemented !\");\nOperationResult operationResult \u003d this.serviceDataStoreOperations.modifyService(\n    serviceRpcResultSp.getServiceName(),\n    State.InService,\n    AdminStates.InService\n);\nsendServiceHandlerNotification(\n    notification,\n    ServiceNotificationTypes.ServiceCreateResult\n);\n...\n```\n\n- The call `modifyService()` reads the service, modifies it and executes a write commit to the datastore.\n- The call sendServiceHandlerNotification(...) triggers a `ServiceRpcResultSh` notification being sent.\n\n### 2. TapiServiceNotificationHandler\n\nThis class is listening for `ServiceRpcResultSh.class` events and it triggers a openroadm service copy to TAPI. I\u0027ve intentionally edited the example to get to the core:\n\n```java\nprivate void onServiceRpcResultSh(ServiceRpcResultSh notification) {\n    openRoadmService.copyServiceToTAPI(notification.getServiceName());\n}\n```\n\nI don\u0027t think multi thread is an issue in this case. Reading the log, I see the line \"Service implemented !\" only once. However, there is an issue regarding topology, since it is updated separately. Topology is addressed in a separate commit.",
+      "parentUuid": "e0c09afd_65a2149c",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 9
+      },
+      "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
