@@ -21,7 +21,9 @@ import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -42,9 +44,12 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
@@ -288,6 +293,29 @@ public class OpenRoadmTopologyTest {
                 "ROADM-A1-DEG1", "ROADM-A1-SRG1", "DEG1-CTP-TXRX", "SRG1-CP-TXRX", networkTransactionService);
         verify(networkTransactionService, never()).merge(any(), any(), any());
         assertFalse(result, "Result should be false du to InterruptedException");
+    }
+
+    @Test
+    void testDefaultWaveLengthDuplication() {
+        SharedRiskGroup sharedRiskGroup = OpenRoadmTopology.sharedRiskGroup("SRG1", new HashMap<>());
+        assertNotNull(sharedRiskGroup);
+        assertEquals(WavelengthDuplicationType.OnePerSrg, sharedRiskGroup.getWavelengthDuplication());
+    }
+
+    @Test
+    void testWaveLengthDuplicationReturnedFromMap() {
+        SharedRiskGroup sharedRiskGroup1 = new SharedRiskGroupBuilder()
+                .setSrgNumber(Uint16.valueOf(1))
+                .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                .build();
+
+        SharedRiskGroup sharedRiskGroup = OpenRoadmTopology.sharedRiskGroup(
+                "SRG1",
+                Map.of(sharedRiskGroup1.key(), sharedRiskGroup1)
+        );
+
+        assertNotNull(sharedRiskGroup);
+        assertEquals(WavelengthDuplicationType.OnePerDegree, sharedRiskGroup.getWavelengthDuplication());
     }
 
     private void checkDegreeNode(String nodeNb, Node node) {
