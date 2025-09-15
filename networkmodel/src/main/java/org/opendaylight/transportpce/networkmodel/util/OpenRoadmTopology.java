@@ -28,9 +28,13 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1;
@@ -169,11 +173,17 @@ public final class OpenRoadmTopology {
                         mappingNode.getNodeInfo().getNodeClli(), firstMount)
                     .build());
         }
+
+        Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroups = mappingNode.getSharedRiskGroup();
+        if (sharedRiskGroups == null) {
+            sharedRiskGroups = new HashMap<>();
+        }
         // create srg nodes
         for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
             nodes.add(
                 createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
-                        mappingNode.getNodeInfo().getNodeClli(), firstMount)
+                        mappingNode.getNodeInfo().getNodeClli(), sharedRiskGroup(entry.getKey(), sharedRiskGroups),
+                        firstMount)
                     .build());
         }
         LOG.info("adding links numOfDegrees={} numOfSrgs={}", mapDeg.size(), mapSrg.size());
@@ -371,8 +381,29 @@ public final class OpenRoadmTopology {
                         .build());
     }
 
+    public static SharedRiskGroup sharedRiskGroup(
+            String srgNb,
+            Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroups) {
+
+        int number = Integer.parseInt(srgNb.split("SRG")[1]);
+        SharedRiskGroupKey srgKey = new SharedRiskGroupKey(Uint16.valueOf(number));
+
+        if (sharedRiskGroups.containsKey(srgKey)) {
+            SharedRiskGroup sharedRiskGroup = sharedRiskGroups.get(srgKey);
+            LOG.debug("SRG {} found in port-mapping: {}", srgNb, sharedRiskGroup);
+            return sharedRiskGroup;
+        }
+
+        LOG.warn("SRG {} not found in port-mapping, assuming wave-length-duplication=OnePerSrg", srgNb);
+        return new SharedRiskGroupBuilder()
+                .setSrgNumber(Uint16.valueOf(number))
+                .setWavelengthDuplication(org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types
+                        .rev200529.WavelengthDuplicationType.OnePerSrg)
+                .build();
+    }
+
     private static NodeBuilder createSrg(String srgNb, List<Mapping> srgListMap, String nodeId, String clli,
-                                         boolean firstMount) {
+            SharedRiskGroup sharedRiskGroup, boolean firstMount) {
         // Create tp-list
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         for (Mapping m : srgListMap) {
@@ -406,7 +437,9 @@ public final class OpenRoadmTopology {
         // set srg-attributes
         SrgAttributesBuilder srgAttrBldr = new SrgAttributesBuilder();
         if (firstMount) {
-            srgAttrBldr.setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available());
+            srgAttrBldr.setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available())
+                    .setWavelengthDuplication(
+                            WavelengthDuplicationType.forName(sharedRiskGroup.getWavelengthDuplication().getName()));
         }
         SrgAttributes srgAttr = srgAttrBldr.build();
         // Create ietf node augmentation to support ietf tp-list
