@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1758026130 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1758026130-CDDC85E8A70C60832243DC45E1EBAEA67D9DF8C0\n\n0000000000000000000000000000000000000000 d5472e14a60b4ea83357bec2291dc86846d17dfb refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmjJWZIACgkQX735uTFP\nrXEg9Q//SfhmEcdkC6jBrfgqCPW5Ds8/ilPuGz/D7m425GDlgeQvd1hJmZ/cYnLu\nlhk7/Otw9+vMaxpHfIqcySEOCP+O6OQxTjutoz+VGi0z0/rEWb20Y12lKjSLBYtr\nYSYTnf3W9zzT77KMkbgakqqIkYANrHoSt5JxiRoBwQxRWb0ZDjgtObi9Ay77JLI8\nasWKUuJwB7rGDhcgPj56YtZlJ08nsmaxIRIAd8XBtv6+Q3LXTbrhYmKHp6+NElzf\nMRO3dLvcwNKR/OZYiV3ycZyap01OwFkHQZngxX2bMKpxsHwM0+xLwtcsTuvKLsjz\ndPUl5tXLBscS5NolqUmhmLs7AcD55aG5vdAafcfN6wpeNcXAgmSvGsdKjG74KYkt\nABTpM4WQpOOahTCw5YDCz0uXF0UpxSgZZmQK6zC79ldiftmBZLW3iS+rsWgJ0nx3\ndl1kuGH/ldU0/wSAUxY6NKEkjZw5Jqs7p+aClICzRsV8HZmoanWtb8WevBWPlCnx\nVPICqQymmZF1+C+IPNbJ7Dt5n8wlkoGP5tt/46XCpex838K6rsiyulpWT2RvPVBu\n8efPAEJTBj6mfBHhH59f6MSsMsuRqw3Jh3iqxQ5m3luAxa1sZz7kpC3uoM9k1dQc\nZBdYEfLx+uujJTNIr1n2ji58nmsSOZq7jayVfBKsc8/BijBdQJk\u003d\n\u003dSsMQ\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc032008_feb8f87b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-16T21:26:34Z",
+      "side": 1,
+      "message": "I don\u0027t think it makes sense to read the full device data here unless you use it for everything. Now you you read all data here and then we continue to read parts of that data in other parts of this class.",
+      "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
