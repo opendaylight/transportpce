@@ -3,6 +3,17 @@
   <nodeId>
     <__value>ROADM-C-DEG2</__value>
   </nodeId>
+  <node>
+    <id>ROADM-C-DEG2</id>
+    <supporting-node>
+      <node-ref>NodeC</node-ref>
+      <network-ref>clli-network</network-ref>
+    </supporting-node>
+    <supporting-node>
+      <node-ref>ROADM-C</node-ref>
+      <network-ref>openroadm-network</network-ref>
+    </supporting-node>
+  </node>
   <deviceNodeId>ROADM-C</deviceNodeId>
   <nodeType>DEGREE</nodeType>
   <adminStates>InService</adminStates>
