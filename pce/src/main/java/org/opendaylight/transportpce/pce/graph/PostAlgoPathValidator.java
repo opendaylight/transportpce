@@ -1047,11 +1047,17 @@ public class PostAlgoPathValidator {
 
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
-            pceNodeFreqMap = pceNode.getBitSetData();
-            LOG.debug("Pce node bitset {}", pceNodeFreqMap);
-            if (pceNodeFreqMap != null) {
-                result.and(pceNodeFreqMap);
-                LOG.debug("intermediate bitset {}", result);
+
+            if (!pceNode.isContentionLessSrg()) {
+                pceNodeFreqMap = pceNode.getBitSetData();
+                LOG.debug("Pce node bitset {}", pceNodeFreqMap);
+
+                if (pceNodeFreqMap != null) {
+                    result.and(pceNodeFreqMap);
+                    LOG.debug("intermediate bitset {}", result);
+                }
+            } else {
+                LOG.debug("PCE node {} is a contentionless srg, skipping available frequency map.", pceNode);
             }
             centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
             mcCapabilityCollection.add(
