@@ -34,6 +34,42 @@
       "message": "In addition to adding wavelength duplication information to portmapping, I think we should also add it to the openroadm topology, since the attribute exists there as well under srg-node-attributes. Then we could get the information from topology during path computation instead of reading it from portmapping. I think all other information required for path computation exist in the topology.",
       "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a83db4_b1dd6540",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-16T12:59:22Z",
+      "side": 1,
+      "message": "Added the information to the OpenROADM topology.",
+      "parentUuid": "dde7edcb_aa8339eb",
+      "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a2d19cb_a574b3a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-16T12:59:22Z",
+      "side": 1,
+      "message": "Added support for 7.1.0",
+      "parentUuid": "0381ee9f_4e9834e7",
+      "revId": "773f61200cd46179e8a296072801d79c51d9ecbe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
