@@ -91,4 +91,9 @@ public interface PceNode {
      * @return Decimal64.
      */
     BigDecimal getCentralFreqGranularity();
+
+    /**
+     * Determines whether this node is a contentionless srg.
+     */
+    boolean isContentionLessSrg();
 }
