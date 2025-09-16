@@ -13,6 +13,8 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -43,7 +46,18 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignment;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.SpectrumAssignmentBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.shared.risk.group.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.WavelengthDuplicationType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 class PostAlgoPathValidatorTest {
@@ -165,6 +179,8 @@ class PostAlgoPathValidatorTest {
                 customerAvailableFrequencies, clientInputMock);
 
         GraphPath<String, PceGraphEdge> entry = allWPaths.get(0);
+
+        FluentFuture<Optional<DataObject>> srg = srg();
 
         SpectrumAssignment expected = new SpectrumAssignmentBuilder()
                 .setBeginIndex(Uint16.valueOf(740))
@@ -582,6 +598,8 @@ class PostAlgoPathValidatorTest {
 
     private Map<NodeId, PceNode> allPceNodes(String dir) throws IOException {
         XStream xstream = new XStream(new DomDriver());
+        xstream.alias("node", Node.class);
+        xstream.registerConverter(new NodeConverter());
         xstream.alias("PceOpticalNode", PceOpticalNode.class);
         xstream.omitField(PceOpticalNode.class, "availableSrgPp");
         xstream.omitField(PceOpticalNode.class, "availableSrgCp");
@@ -727,5 +745,105 @@ class PostAlgoPathValidatorTest {
         public double getWeight() {
             return weight;
         }
+    }
+
+    private class SrgNode {
+        private final String nodeId;
+        private final String nodeType;
+        private final String srgNumber;
+        private final String waveLengthDuplication;
+
+        SrgNode(String nodeId, String nodeType, String srgNumber, String waveLengthDuplication) {
+            this.nodeId = nodeId;
+            this.nodeType = nodeType;
+            this.srgNumber = srgNumber;
+            this.waveLengthDuplication = waveLengthDuplication;
+        }
+
+        SharedRiskGroup createSharedRiskGroup() {
+            return new SharedRiskGroupBuilder()
+                    .setSrgNumber(Uint16.valueOf(Integer.parseInt(srgNumber)))
+                    .setWavelengthDuplication(WavelengthDuplicationType.forName(waveLengthDuplication))
+                    .build();
+        }
+    }
+
+    private class NetWrkNde {
+        private final String nodeId;
+
+        private final List<SrgNode> srgNodes;
+
+        NetWrkNde(String nodeId, List<SrgNode> srgNodes) {
+            this.nodeId = nodeId;
+            this.srgNodes = srgNodes;
+        }
+
+        Nodes networkNodes() {
+            Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = srgNodes.stream()
+                    .map(SrgNode::createSharedRiskGroup)
+                    .collect(Collectors.toMap(SharedRiskGroup::key, Function.identity()));
+
+            return new NodesBuilder()
+                    .setNodeId(nodeId)
+                    .setNodeInfo(new NodeInfoBuilder()
+                            .setNodeType(NodeTypes.Rdm)
+                            .build())
+                    .setSharedRiskGroup(sharedRiskGroupMap)
+                    .build();
+        }
+    }
+
+    private Map<NodesKey, Nodes> createNetworkNodesMapTwo(List<NetWrkNde> netWrkNdes) {
+        return netWrkNdes.stream()
+                .collect(Collectors.toMap(
+                        n -> new NodesKey(n.nodeId),
+                        NetWrkNde::networkNodes));
+    }
+
+    private Nodes createNetworkNodesMap(List<NetWrkNde> netWrkNdes) {
+        NodesBuilder networkNodesBuilder = new NodesBuilder();
+
+        for (NetWrkNde netWrkNde : netWrkNdes) {
+            networkNodesBuilder
+                    .setNodeId(netWrkNde.nodeId)
+                    .setNodeInfo(new NodeInfoBuilder()
+                            .setNodeType(NodeTypes.Rdm)
+                            .build());
+            Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = netWrkNde.srgNodes.stream()
+                    .map(SrgNode::createSharedRiskGroup)
+                    .collect(Collectors.toMap(SharedRiskGroup::key, Function.identity()));
+            networkNodesBuilder.setSharedRiskGroup(sharedRiskGroupMap);
+        }
+
+        return networkNodesBuilder.build();
+    }
+
+    private Nodes createNetworkNodesMap() {
+        List<NetWrkNde> netWrkNdes = List.of(
+                new NetWrkNde("ROADM-A", List.of(
+                        new SrgNode("ROADM-A", "SRG", "1", "one-per-srg"),
+                        new SrgNode("ROADM-A", "SRG", "4", "one-per-srg")
+                )),
+                new NetWrkNde("ROADM-B", List.of(
+                        new SrgNode("ROADM-B", "SRG", "1", "one-per-srg"),
+                        new SrgNode("ROADM-B", "SRG", "3", "one-per-srg"),
+                        new SrgNode("ROADM-B", "SRG", "13", "one-per-srg")
+                )),
+                new NetWrkNde("ROADM-C", List.of(
+                        new SrgNode("ROADM-C", "SRG", "12", "one-per-srg"),
+                        new SrgNode("ROADM-C", "SRG", "13", "one-per-srg")
+                ))
+        );
+        return createNetworkNodesMap(netWrkNdes);
+    }
+
+    private FluentFuture<Optional<DataObject>> srg() {
+        Optional<Nodes> networkOptional = Optional.of(createNetworkNodesMap());
+
+        SettableFuture<Optional<Nodes>> objectSettableFuture = SettableFuture.create();
+        objectSettableFuture.set(networkOptional);
+
+        return FluentFuture.from(objectSettableFuture)
+                .transform(optional -> optional.map(Nodes.class::cast), Runnable::run);
     }
 }
