@@ -156,7 +156,7 @@ public class PceSendingPceRPCs {
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(), nwAnalizer.getzendPceNode(),
                 nwAnalizer.getAllPceNodes(), nwAnalizer.getAllPceLinks(), hardConstraints,
                 rc, serviceType, networkTransaction, mode, opConstraints.getBitMapConstraint(input.getCustomerName()),
-                clientInput);
+                clientInput, networkTransaction.getDataBroker());
         Subscriber errorSubscriber = new EventSubscriber();
         graph.calcPath(errorSubscriber);
         rc = graph.getReturnStructure();

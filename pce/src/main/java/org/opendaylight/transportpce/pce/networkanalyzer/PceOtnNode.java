@@ -620,4 +620,14 @@ public class PceOtnNode implements PceNode {
     public int getMaxSlots() {
         return 1;
     }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public boolean isContentionLessSrg() {
+        return false;
+    }
 }
