@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.path.computation.reroute.request.input.Endpoints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1;
@@ -575,4 +576,23 @@ public class PceOpticalNode implements PceNode {
         this.endpoints = endpoints;
     }
 
+    @Override
+    public boolean isContentionLessSrg() {
+        if (nodeType == null || !nodeType.equals(OpenroadmNodeType.SRG)) {
+            return false;
+        }
+
+        Node1 augmentation = this.node.augmentation(Node1.class);
+
+        if (augmentation == null
+                || augmentation.getSrgAttributes() == null
+                || augmentation.getSrgAttributes().getWavelengthDuplication() == null) {
+            return false;
+        }
+
+        return augmentation
+                .getSrgAttributes()
+                .getWavelengthDuplication()
+                .equals(WavelengthDuplicationType.OnePerDegree);
+    }
 }

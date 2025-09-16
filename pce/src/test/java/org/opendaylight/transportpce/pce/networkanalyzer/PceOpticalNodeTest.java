@@ -34,6 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.WavelengthDuplicationType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.DegreeAttributes;
@@ -217,6 +218,120 @@ public class PceOpticalNodeTest extends AbstractTest {
         assertFalse(pceOpticalNode.isValid());
         assertNull(pceOpticalNode.getBitSetData());
         assertTrue(pceOpticalNode.checkTP("testTP"));
+    }
+
+    @Test
+    void testIsContentionLessSrgForRoadmIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(null, null, null, node,
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertFalse(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgForRoadmWithSrgAttributesIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .setSrgAttributes(
+                                new SrgAttributesBuilder()
+                                        .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                                        .build()
+        ).build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertFalse(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgForDegreeIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .setSrgAttributes(
+                                new SrgAttributesBuilder()
+                                        .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                                        .build()
+                        ).build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertFalse(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgForXponderIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .setSrgAttributes(
+                                new SrgAttributesBuilder()
+                                        .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                                        .build()
+                        ).build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertFalse(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgOnePerDegreeIsTrue() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .setSrgAttributes(
+                                new SrgAttributesBuilder()
+                                        .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                                        .build()
+                        ).build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertTrue(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgOnePerSrgIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .setSrgAttributes(
+                                new SrgAttributesBuilder()
+                                        .setWavelengthDuplication(WavelengthDuplicationType.OnePerDegree)
+                                        .build()
+                        ).build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertTrue(pceOpticalNode.isContentionLessSrg());
+    }
+
+    @Test
+    void testIsContentionLessSrgMissingAttributesIsFalse() {
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1 node1 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1Builder()
+                        .build();
+        node1Builder.addAugmentation(node1);
+        node = node1Builder.build();
+        pceOpticalNode = new PceOpticalNode(deviceNodeId, serviceType, portMapping, node,
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1, new NodeMcCapability());
+
+        assertFalse(pceOpticalNode.isContentionLessSrg());
     }
 
     private Map<SupportingNodeKey,SupportingNode> geSupportingNodes() {
