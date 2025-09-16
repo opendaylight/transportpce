@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.jgrapht.GraphPath;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -92,7 +93,7 @@ public class PostAlgoPathValidator {
         justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
             Map<LinkId, PceLink> allPceLinks, PceResult pceResult, PceConstraints pceHardConstraints,
-            String serviceType, PceConstraintMode mode) {
+            String serviceType, PceConstraintMode mode, DataBroker dataBroker) {
         LOG.info("path = {}", path);
         // check if the path is empty
         if (path.getEdgeList().isEmpty()) {
@@ -1047,11 +1048,17 @@ public class PostAlgoPathValidator {
 
         for (PceNode pceNode : pceNodes) {
             LOG.debug("Processing PCE node {}", pceNode);
-            pceNodeFreqMap = pceNode.getBitSetData();
-            LOG.debug("Pce node bitset {}", pceNodeFreqMap);
-            if (pceNodeFreqMap != null) {
-                result.and(pceNodeFreqMap);
-                LOG.debug("intermediate bitset {}", result);
+
+            if (!pceNode.isContentionLessSrg()) {
+                pceNodeFreqMap = pceNode.getBitSetData();
+                LOG.debug("Pce node bitset {}", pceNodeFreqMap);
+
+                if (pceNodeFreqMap != null) {
+                    result.and(pceNodeFreqMap);
+                    LOG.debug("intermediate bitset {}", result);
+                }
+            } else {
+                LOG.debug("PCE node {} is a contentionless srg, skipping available frequency map.", pceNode);
             }
             centerFrequencyGranularityCollection.add(pceNode.getCentralFreqGranularity());
             mcCapabilityCollection.add(

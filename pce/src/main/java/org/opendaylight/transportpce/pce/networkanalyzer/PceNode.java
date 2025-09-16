@@ -17,6 +17,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
 public interface PceNode {
@@ -91,4 +92,11 @@ public interface PceNode {
      * @return Decimal64.
      */
     BigDecimal getCentralFreqGranularity();
+
+    Node getNode();
+
+    /**
+     * Determines whether this node is a contentionless srg.
+     */
+    boolean isContentionLessSrg();
 }
