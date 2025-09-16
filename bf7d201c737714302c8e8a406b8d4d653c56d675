@@ -52,6 +52,24 @@
       "parentUuid": "40440ab4_1d651990",
       "revId": "bf7d201c737714302c8e8a406b8d4d653c56d675",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f846a849_0713a378",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/srg/revision/SrgRev181019Adapter.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-16T12:59:16Z",
+      "side": 1,
+      "message": "This change has been refactored and as a result, this class has been moved to this change: \nhttps://git.opendaylight.org/gerrit/c/transportpce/+/109388/27?usp\u003drelated-change",
+      "parentUuid": "850b9edb_cdd64730",
+      "revId": "bf7d201c737714302c8e8a406b8d4d653c56d675",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
