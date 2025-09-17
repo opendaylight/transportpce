@@ -17,6 +17,24 @@
       "message": "Seems dataBroker is not needed here anymore?",
       "revId": "d5472e14a60b4ea83357bec2291dc86846d17dfb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba5173f_fd922c68",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-17T08:52:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1417307a_185eb45f",
+      "revId": "d5472e14a60b4ea83357bec2291dc86846d17dfb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
