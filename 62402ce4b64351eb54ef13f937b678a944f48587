@@ -17,6 +17,23 @@
       "message": "I don\u0027t think it makes sense to read the full device data here unless you use it for everything. Now you you read all data here and then we continue to read parts of that data in other parts of this class.",
       "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85ce6a3d_65219cb1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-17T05:12:55Z",
+      "side": 1,
+      "message": "There is already a getSrgs method in this class. Maybe you can take advantage of that (but don\u0027t call the method again) instead of reading the full device data above?",
+      "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
