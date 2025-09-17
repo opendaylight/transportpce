@@ -19,6 +19,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "593c8420_f9b78cf1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-17T08:51:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bc032008_feb8f87b",
+      "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85ce6a3d_65219cb1",
@@ -32,6 +50,24 @@
       "writtenOn": "2025-09-17T05:12:55Z",
       "side": 1,
       "message": "There is already a getSrgs method in this class. Maybe you can take advantage of that (but don\u0027t call the method again) instead of reading the full device data above?",
+      "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1f9c0f_54808060",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-09-17T08:51:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "85ce6a3d_65219cb1",
       "revId": "62402ce4b64351eb54ef13f937b678a944f48587",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
