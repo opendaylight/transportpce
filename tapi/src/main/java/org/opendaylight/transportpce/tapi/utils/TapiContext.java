@@ -459,7 +459,6 @@ public class TapiContext {
         // First read connectivity service with service uuid and update info
         Connection connection = getConnection(connectionUuid);
         if (connection == null || isUsedByOtherService(connection, serviceUuid)) {
-            rawDeleteConnection(connectionUuid);
             return;
         }
         Map<LowerConnectionKey, LowerConnection> lowerConnectionMap = connection.getLowerConnection();
