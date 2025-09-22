@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+
+import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
@@ -426,8 +428,18 @@ public class TapiContext {
             LOG.error("Service doesnt exist in tapi context");
             return;
         }
-        for (var connection : connectivityService.getConnection().values()) {
-            deleteConnection(connection.getConnectionUuid(), serviceUuid, connectivityService.getLayerProtocolName());
+        Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity
+                .service.ConnectionKey,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.connectivity
+                .service.Connection>
+            connection1 = connectivityService.getConnection();
+
+        if (connection1 != null) {
+            LOG.info("Deleting {} service connections", connection1.size());
+            for (var connection : connection1.values()) {
+                deleteConnection(
+                        connection.getConnectionUuid(), serviceUuid, connectivityService.getLayerProtocolName());
+            }
         }
         try {
             this.networkTransactionService.delete(
