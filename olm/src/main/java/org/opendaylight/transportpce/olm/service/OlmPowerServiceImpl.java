@@ -400,14 +400,27 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     private Map<NodeInterfaceKey, List<GetPmOutput>> updateKeys(Map<String, List<GetPmOutput>> outputMap,
                                                                 String realNodeId,
                                                                 Map<MappingKey, Mapping> mapping) {
-        Map<NodeInterfaceKey, List<GetPmOutput>> transformed = outputMap.entrySet().stream()
+        /*Map<NodeInterfaceKey, List<GetPmOutput>> transformed = outputMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
                         entry -> replaceInterfaceWithNodeId(entry.getKey(), realNodeId, mapping),
                         Map.Entry::getValue,
                         (original, duplicate) -> original, // in case of a key clash, keep the original
                         LinkedHashMap::new  //keep the sortorder.
-                ));
+                ));*/
+
+        Map<NodeInterfaceKey, List<GetPmOutput>> transformed =
+                outputMap.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
+                        .collect(Collectors.toMap(
+                                e -> replaceInterfaceWithNodeId(e.getKey(), realNodeId, mapping),
+                                e -> new ArrayList<>(e.getValue()),          // defensive copy
+                                (left, right) -> {
+                                    left.addAll(right);
+                                    return left;
+                                }, // append later entries
+                                LinkedHashMap::new                            // keep stream order
+                        ));
         return transformed;
     }
 
@@ -506,21 +519,23 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
             NodeInterfaceKey sourceNodeKey = createKey(realNodeIdMap.get(sourceNodeId), link.getSrcTpId());
             NodeInterfaceKey destNodeKey = createKey(realNodeIdMap.get(destNodeId), link.getDestTpid());
-            List<String> outputMeasures = List.of("OpticalPowerOutput", "OpticalPowerOutputOCS");
-            List<String> inputMeasures = List.of("OpticalPowerInput", "OpticalPowerInputOCS");
+            List<String> outputMeasures = List.of("OpticalPowerOutput", "OpticalPowerOutputOSC");
+            List<String> inputMeasures = List.of("OpticalPowerInput", "OpticalPowerInputOSC");
 
-            if (getMeasurement(nodePms.get(sourceNodeKey), outputMeasures) == null) {
-                LOG.warn("OTS configuration issue at {}", sourceNodeKey);
-                continue;
+            Double srcPowerOutput = getMeasurement(nodePms.get(sourceNodeKey), outputMeasures, "OTS");
+            Double destPowerInput = getMeasurement(nodePms.get(destNodeKey), inputMeasures, "OTS");
+
+            if (srcPowerOutput == null || destPowerInput == null) {
+                LOG.warn("OTS configuration issue at {}--{}, trying OMS", sourceNodeKey, destNodeKey);
+
+                srcPowerOutput = getMeasurement(nodePms.get(sourceNodeKey), outputMeasures, "OMS");
+                destPowerInput = getMeasurement(nodePms.get(destNodeKey), inputMeasures, "OMS");
+                if (srcPowerOutput == null || destPowerInput == null) {
+                    LOG.warn("OMS configuration issue at {}--{}, cannot calculate spanloss for this link.",
+                            sourceNodeKey, destNodeKey);
+                    continue;
+                }
             }
-
-            if (getMeasurement(nodePms.get(destNodeKey), inputMeasures) == null) {
-                LOG.warn("OTS configuration issue at {} ", destNodeKey);
-                continue;
-            }
-
-            Double srcPowerOutput = getMeasurement(nodePms.get(sourceNodeKey), outputMeasures);
-            Double destPowerInput = getMeasurement(nodePms.get(destNodeKey), inputMeasures);
 
             BigDecimal spanLoss = BigDecimal.valueOf(srcPowerOutput - destPowerInput)
                     .setScale(1, RoundingMode.HALF_UP);
@@ -724,17 +739,18 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      * Extracts a measurement from the list of outputs. The list of string given is a prioritized
      * list of measurements to fetch. The first one to contain a valid measurement is returned.
      */
-    private Double getMeasurement(List<GetPmOutput> outputs, List<String> names) {
+    private Double getMeasurement(List<GetPmOutput> outputs, List<String> names, String resourcePrefix) {
         if (outputs == null || outputs.isEmpty()) {
             return null;
         }
         for (GetPmOutput output : outputs) {
-            if (output.getMeasurements() == null || output.getMeasurements().size() == 0) {
-                return null;
+            if (output.getMeasurements() == null || output.getMeasurements().size() == 0
+                    || !output.getResourceIdentifier().getResourceName().startsWith(resourcePrefix)) {
+                continue;
             }
             for (String name:names) {
                 for (Measurements measurement : output.getMeasurements()) {
-                    if (isValidMeasurement(name, measurement)) {
+                    if (isValidMeasurement(name, measurement, resourcePrefix)) {
                         return Double.parseDouble(measurement.getPmparameterValue());
                     }
                 }
@@ -743,7 +759,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         return null;
     }
 
-    private boolean isValidMeasurement(String name, Measurements measurement) {
+    private boolean isValidMeasurement(String name, Measurements measurement, String resourcePrefix) {
         return measurement.getPmparameterName().equalsIgnoreCase(name)
                 && measurement.getPmparameterValue() != null
                 && !measurement.getPmparameterValue().isEmpty();
