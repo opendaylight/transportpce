@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1681044_92479e3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-09-24T08:05:56Z",
+      "side": 1,
+      "message": "Verified, this fixes the augmentation bug on my side.",
+      "revId": "72ed9e878d9037220a8268470b074ddd4faca9dd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
