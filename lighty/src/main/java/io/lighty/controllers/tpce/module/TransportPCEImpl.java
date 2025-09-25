@@ -247,7 +247,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                             tapiLink,
                             notificationPublishService),
                     tapiLink,
-                    tapiContext);
+                    tapiContext,
+                    portMapping);
             rpcRegistrations.add(tapiProvider.getRegisteredRpcs());
         }
         if (activateNbiNotification) {

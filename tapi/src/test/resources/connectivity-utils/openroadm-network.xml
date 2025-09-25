@@ -1,0 +1,67 @@
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <networks xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
+    <network xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
+      <network-id>openroadm-network</network-id>
+      <network-types>
+        <openroadm-common-network xmlns="http://org/openroadm/common/network"/>
+      </network-types>
+      <node>
+        <node-id>ROADM-A1</node-id>
+        <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+        <ip xmlns="http://org/openroadm/network">127.0.0.11</ip>
+        <supporting-node>
+          <network-ref>clli-network</network-ref>
+          <node-ref>NodeA</node-ref>
+        </supporting-node>
+        <model xmlns="http://org/openroadm/network">model2</model>
+        <node-type xmlns="http://org/openroadm/common/network">ROADM</node-type>
+      </node>
+      <node>
+        <node-id>SPDR-SC1</node-id>
+        <vendor xmlns="http://org/openroadm/network">vendorC</vendor>
+        <ip xmlns="http://org/openroadm/network">1.2.3.6</ip>
+        <supporting-node>
+          <network-ref>clli-network</network-ref>
+          <node-ref>NodeSC</node-ref>
+        </supporting-node>
+        <model xmlns="http://org/openroadm/network">universal-switchponder</model>
+        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+      </node>
+      <node>
+        <node-id>TAPI-SBI-ABS-NODE</node-id>
+        <yang-data-model xmlns="http://org/opendaylight/transportpce/or-network-augmentation">tapi-ext</yang-data-model>
+        <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
+        <topology-uuid xmlns="http://org/opendaylight/transportpce/or-network-augmentation">Uuid{value=a21e4756-4d70-3d40-95b6-f7f630b4a13b}</topology-uuid>
+        <supporting-node>
+          <network-ref>clli-network</network-ref>
+          <node-ref>TAPI-SBI-ABS-NODE</node-ref>
+        </supporting-node>
+        <clli xmlns="http://org/openroadm/clli/network">TAPI-SBI-ABS-NODE</clli>
+        <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
+        <node-type xmlns="http://org/openroadm/common/network">ROADM</node-type>
+      </node>
+      <node>
+        <node-id>SPDR-SA1</node-id>
+        <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+        <ip xmlns="http://org/openroadm/network">1.2.3.4</ip>
+        <supporting-node>
+          <network-ref>clli-network</network-ref>
+          <node-ref>NodeSA</node-ref>
+        </supporting-node>
+        <model xmlns="http://org/openroadm/network">universal-switchponder</model>
+        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+      </node>
+      <node>
+        <node-id>ROADM-C1</node-id>
+        <vendor xmlns="http://org/openroadm/network">vendorA</vendor>
+        <ip xmlns="http://org/openroadm/network">127.0.0.13</ip>
+        <supporting-node>
+          <network-ref>clli-network</network-ref>
+          <node-ref>NodeC</node-ref>
+        </supporting-node>
+        <model xmlns="http://org/openroadm/network">model2</model>
+        <node-type xmlns="http://org/openroadm/common/network">ROADM</node-type>
+      </node>
+    </network>
+  </networks>
+</data>

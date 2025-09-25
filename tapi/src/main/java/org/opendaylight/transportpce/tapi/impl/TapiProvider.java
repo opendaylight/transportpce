@@ -18,6 +18,7 @@ import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -120,7 +121,8 @@ public class TapiProvider {
             @Reference TapiNetworkModelNotificationHandler tapiNetworkModelNotificationHandler,
             @Reference TapiNetworkModelService tapiNetworkModelServiceImpl,
             @Reference TapiLink tapiLink,
-            @Reference TapiContext tapiContext) {
+            @Reference TapiContext tapiContext,
+            @Reference PortMapping portMapping) {
         this.dataBroker = dataBroker;
         this.networkTransactionService = networkTransactionService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
@@ -130,7 +132,7 @@ public class TapiProvider {
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
-                tapiContext, this.networkTransactionService, TAPI_TOPO_UUID);
+                tapiContext, this.networkTransactionService, TAPI_TOPO_UUID, topologyUtils, portMapping);
         TapiTopoContextInit tapiTopoContextInit = new TapiTopoContextInit(tapiContext);
         tapiTopoContextInit.initializeTopoContext();
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
