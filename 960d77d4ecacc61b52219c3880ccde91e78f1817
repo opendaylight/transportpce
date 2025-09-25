@@ -1,4 +1,45 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1758525521 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1758525521-20E00B6204F27CE6162C893C03D7859462BDD39D\n\n0000000000000000000000000000000000000000 960d77d4ecacc61b52219c3880ccde91e78f1817 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmjQ+FEACgkQX735uTFP\nrXE1qA/9GXdiFx3YkDw0WjnFRYgF7GLdzf4gQv7UzRzGXTI0ttoiAjVmYlHijJYs\nsroZnSMbKMlX794Uh5PSqwPCP+aDyC6AbPL/2vEdMp/jL7Trz35IExTtU3Iu+4R3\nu1NY+BllyylA2Sl28DP5WDI0su2KMm8nlOfvlFyq5SQOpUYBfs79b+fGsGQJrR/a\n9jOmye4S9Z0J5bEHVe9C5JVYBiw0WlEHyhey0kF3Iw1E8wJusyoNw/nC3P9cg9ZA\nQuMwsIk3RKwcp36y30+4RDSPUCczTncBGzDOEzWmewTAE4HoRWvDY/rhbGV6nnpe\nHkrVlT68Z3PNtdyR4QMkyzKXwY4yLTKC7rlME68z3mjzWC/OS7uYzyZNyJZ9biZu\n9MsAPwDb9LylC1VJiE6T1YsAYzg7HDpmrPixE0BvIxEIokGm+nEhicsohD8/ZoK9\n8Aq6VYohJN2YqmIaDzshGXwPeWfzUHuZVXuE+LPaJfBWpduHxtxQp8E758C75MS2\n9Luyf/FRglWi/nkYpRZ6cFTVBwFVErGcLTfjIr4aAWGRI+bys8nF3J0cJU7Sx2Wr\nB8TNqwFFKwi6fqiVHRwEezgNowDVZCpro2JaJZt2sNATMmMs9ndXwlhgJQZ0k1NQ\nt3IcEFbdHE3cVGFCUr1kUK5/wQ8NgdMGAc/K4a2OBgW9FJR/FoQ\u003d\n\u003dc6qo\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007a134a_59f11b28",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-09-25T13:50:00Z",
+      "side": 1,
+      "message": "where",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 32
+      },
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54f522d3_11b827c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-09-25T13:50:00Z",
+      "side": 1,
+      "message": "Can you add a JIRA tichek to identify the bug?",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
