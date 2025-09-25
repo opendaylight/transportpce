@@ -31,6 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.RpcService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -102,6 +103,7 @@ public class TapiTopologyImplTest extends AbstractTest {
     private static ServiceDataStoreOperations serviceDataStoreOperations;
     private static TapiInitialORMapping tapiInitialORMapping;
     private static TapiLink tapiLink;
+    private static PortMapping portMapping;
 
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
@@ -122,7 +124,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID));
+            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID), topologyUtils, portMapping);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
