@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ec3b4b1_cb2c96da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-09-30T20:42:30Z",
+      "side": 1,
+      "message": "I haven\u0027t reviewed all these TAPI PCE changes but I\u0027m wondering what is the thinking behind modifying the existing PCE code. The TAPI feature can be enabled or disabled, right? But this TAPI PCE code will be \"active\" even when the TAPI feature is disabled? Isn\u0027t that a bit confusing?",
+      "revId": "f05fd42836f0c6823b662e7d4bd61eaa230d2cd6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
