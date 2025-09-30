@@ -88,6 +88,30 @@
       },
       "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1236fbc1_121c56fd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-30T14:33:37Z",
+      "side": 1,
+      "message": "Thanks for the clarification, Joakim. Again, I am not familiar with this part of the code. That makes sense, and my feeling is that it should work.\nTo Jonas : yes the TAPI create-connectivity-service, is translated to OR service-create RPC. But rendering the service takes time. I was just wondering whether at the time you try to copy the service from OR to TAPI datastore, the service was already created and its status refreshed in OR DataStore. From Joakim explanation, it seems this is the case.",
+      "parentUuid": "795193f6_32f8079d",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 9
+      },
+      "revId": "e64c145a3c3aa83869905eed28e5b3f46019dfb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
