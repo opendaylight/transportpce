@@ -40,6 +40,23 @@
       "message": "Can you add a JIRA tichek to identify the bug?",
       "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9458c4c_53fc92fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-30T15:27:36Z",
+      "side": 1,
+      "message": "Thanks for solving that bug!!!!",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
