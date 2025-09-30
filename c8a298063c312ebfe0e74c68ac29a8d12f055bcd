@@ -53,6 +53,24 @@
       "parentUuid": "93b18e65_a47604d7",
       "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b50622_eb678a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-30T15:21:25Z",
+      "side": 1,
+      "message": "OK, so understand that the change is only dedicated to updates of spectrum parameters. \nThen please look at my comment regarding preceding change Copy OpenRoadm service to Tapi : some of the methods you removed in TapiPceNotificationhandler and calls to TapiContext.updateConnectivityContext removed from CreateConnectivityServiceImpl have probably no equivalent now, whereas they should exist and be called following the successful service rendering rather than successful path computation.\n\nThese methods concerns the update of the connections, as well as the update of some NEP and CEP (including transponders) in the topology.",
+      "parentUuid": "abd562a6_d15fba2a",
+      "revId": "c8a298063c312ebfe0e74c68ac29a8d12f055bcd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
