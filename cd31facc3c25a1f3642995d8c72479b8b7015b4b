@@ -17,6 +17,23 @@
       "message": "Can you add a JIRA ticket to ease the bug tracking?",
       "revId": "cd31facc3c25a1f3642995d8c72479b8b7015b4b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9340637_d11fb278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-09-30T15:27:09Z",
+      "side": 1,
+      "message": "Thanks for solving this bug! LGTM",
+      "revId": "cd31facc3c25a1f3642995d8c72479b8b7015b4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
