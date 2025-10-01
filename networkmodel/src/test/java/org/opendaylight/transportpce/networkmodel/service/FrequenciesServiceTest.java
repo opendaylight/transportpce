@@ -36,7 +36,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.JSONDataObjectConverter;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stub.rev230228.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stub.rev251001.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsKey;

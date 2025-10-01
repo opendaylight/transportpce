@@ -5,7 +5,7 @@ module transportpce-stub {
 
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2023-05-01;
+    revision-date 2025-10-01;
   }
 
 
@@ -18,6 +18,10 @@ module transportpce-stub {
      Copyright (c) 2023 Orange and others. All rights reserved.
      authors: Gilles Thouenon Emmanuelle Delfour";
 
+  revision 2025-10-01 {
+    description
+      "Revision update due to new version of pathDescription";
+  }
   revision 2023-02-28 {
     description
       "Model to parse json input file for FrequenciesServiceTests";

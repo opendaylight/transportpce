@@ -23,9 +23,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev251001.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev251001.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev251001.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
