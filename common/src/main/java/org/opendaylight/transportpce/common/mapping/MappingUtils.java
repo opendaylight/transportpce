@@ -18,6 +18,12 @@ public interface MappingUtils {
      */
     String getOpenRoadmVersion(String nodeId);
 
+    /*
+        This method returns the OpenConfig yang release
+        supported by the device.
+     */
+    String getOpenConfigVersion(String nodeId);
+
     /**
      * Get list of mc capabilities for node with nodeId.
      * @param nodeId String
