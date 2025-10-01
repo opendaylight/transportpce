@@ -49,6 +49,8 @@ public class PcePathDescription {
     private List<PceLink> pathAtoZ = null;
     private PceResult rc;
     private Map<LinkId, PceLink> allPceLinks = null;
+    private String aendOperationalMode;
+    private String zendOperationalMode;
 
     public PcePathDescription(List<PceLink> pathAtoZ, Map<LinkId, PceLink> allPceLinks, PceResult rc) {
         super();
@@ -110,7 +112,9 @@ public class PcePathDescription {
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
                         .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
-                                Uint32.valueOf(rc.getRate()), modulationFormat));
+                                Uint32.valueOf(rc.getRate()), modulationFormat))
+                        .setAtxOperationalMode(aendOperationalMode)
+                        .setZrxOperationalMode(zendOperationalMode);
                 break;
             case StringConstants.SERVICE_TYPE_OTHER:
                 FrequencyGHz width = FrequencyGHz.getDefaultInstance(rc.getMaxFreq().subtract(rc.getMinFreq())
@@ -121,7 +125,9 @@ public class PcePathDescription {
                         .setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
-                        .setWidth(width);
+                        .setWidth(width)
+                        .setAtxOperationalMode(aendOperationalMode)
+                        .setZrxOperationalMode(zendOperationalMode);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -174,7 +180,9 @@ public class PcePathDescription {
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
                         .setWidth(GridUtils.getWidthFromRateAndModulationFormat(
-                                Uint32.valueOf(rc.getRate()), modulationFormat));
+                                Uint32.valueOf(rc.getRate()), modulationFormat))
+                        .setArxOperationalMode(aendOperationalMode)
+                        .setZtxOperationalMode(zendOperationalMode);
                 break;
             case StringConstants.SERVICE_TYPE_OTHER:
                 FrequencyGHz width = FrequencyGHz.getDefaultInstance(rc.getMaxFreq().subtract(rc.getMinFreq())
@@ -185,7 +193,9 @@ public class PcePathDescription {
                         .setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()))
                         .setCentralFrequency(new FrequencyTHz(GridUtils.getCentralFrequencyWithPrecision(
                                 rc.getMinFreq(), rc.getMaxFreq(), 5).getValue()))
-                        .setWidth(width);
+                        .setWidth(width)
+                        .setArxOperationalMode(aendOperationalMode)
+                        .setZtxOperationalMode(zendOperationalMode);
                 break;
             case StringConstants.SERVICE_TYPE_100GE_M:
             case StringConstants.SERVICE_TYPE_100GE_S:
@@ -429,5 +439,12 @@ public class PcePathDescription {
 
     public PceResult getReturnStructure() {
         return rc;
+    }
+    public void setAendOperationalMode(String opMode) {
+        this.aendOperationalMode = opMode;
+    }
+
+    public void setZendOperationalMode(String opMode) {
+        this.zendOperationalMode = opMode;
     }
 }

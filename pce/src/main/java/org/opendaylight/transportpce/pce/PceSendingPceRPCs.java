@@ -183,6 +183,8 @@ public class PceSendingPceRPCs {
         }
         LOG.info("PcePathDescription ...");
         PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
+        description.setAendOperationalMode(graph.getAendOperationalMode());
+        description.setZendOperationalMode(graph.getZendOperationalMode());
         description.buildDescriptions();
         rc = description.getReturnStructure();
         if (!rc.getStatus()) {
