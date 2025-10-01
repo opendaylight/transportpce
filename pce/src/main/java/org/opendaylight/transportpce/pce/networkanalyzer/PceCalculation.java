@@ -486,7 +486,7 @@ public class PceCalculation {
                     .getName());
             return;
         }
-        OpenroadmNodeType nodeType = node1.getNodeType();
+
         String deviceNodeId = MapUtils.getSupNetworkNode(node);
         // Should never happen but because of existing topology test files
         // we have to manage this case
@@ -495,8 +495,19 @@ public class PceCalculation {
         }
 
         LOG.debug("Device node id {} for {}", deviceNodeId, node);
+        String nodeVersion;
+        if (mappingUtils.getOpenRoadmVersion(deviceNodeId) != null) {
+            nodeVersion = mappingUtils.getOpenRoadmVersion(deviceNodeId);
+        } else if (mappingUtils.getOpenConfigVersion(deviceNodeId) != null) {
+            nodeVersion = mappingUtils.getOpenConfigVersion(deviceNodeId);
+        } else {
+            LOG.warn("Unmanaged node {} which is of neither OpenROADM nor OpenConfig managed version", deviceNodeId);
+            return;
+        }
+        OpenroadmNodeType nodeType = node1.getNodeType();
         PceOpticalNode pceNode = new PceOpticalNode(deviceNodeId, this.serviceType, portMapping, node, nodeType,
-            mappingUtils.getOpenRoadmVersion(deviceNodeId), mcCapabilities(deviceNodeId, node.getNodeId()));
+            nodeVersion, mcCapabilities(deviceNodeId, node.getNodeId()));
+
         if (endpoints != null) {
             pceNode.setEndpoints(endpoints);
         }
