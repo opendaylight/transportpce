@@ -277,6 +277,34 @@ public final class MappingUtilsImpl implements MappingUtils {
         return null;
     }
 
+    public String getOpenConfigVersion(String nodeId) {
+        /*
+         * Getting physical mapping corresponding to logical connection point
+         */
+        DataObjectIdentifier<NodeInfo> nodeInfoIID = DataObjectIdentifier.builder(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId)).child(NodeInfo.class)
+                .build();
+        try (ReadTransaction readTx = dataBroker.newReadOnlyTransaction()) {
+            Optional<NodeInfo> nodeInfoObj =
+                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
+            if (nodeInfoObj.isPresent()) {
+                NodeInfo nodInfo = nodeInfoObj.orElseThrow();
+                switch (nodInfo.getOpenconfigVersion()) {
+                    case _190:
+                        return StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
+                    case PROTOTYPE:
+                    default:
+                        LOG.warn("unknown openCONFIG device version");
+                }
+            } else {
+                LOG.warn("Could not find mapping for nodeId {}", nodeId);
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);
+        }
+        return null;
+    }
+
     /*
     * (non-Javadoc)
     *
