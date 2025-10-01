@@ -48,10 +48,14 @@ module transportpce-pathDescription {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2025-10-01 {
+    description
+      "Version 1.8. Add operational mode to path description";
+  }
   revision 2023-05-01 {
-      description
-        "Version 1.7. Add central frequency and spectral width parameters";
-    }
+    description
+      "Version 1.7. Add central frequency and spectral width parameters";
+  }
   revision 2021-07-05 {
     description
       "Version 1.6.4. To add a list of trib-slots and complex-trib-slots
@@ -133,9 +137,17 @@ module transportpce-pathDescription {
          "Minimum frequency in THz.";
       }
       leaf aToZ-max-frequency {
-           type org-openroadm-common-optical-channel-types:frequency-THz;
+         type org-openroadm-common-optical-channel-types:frequency-THz;
          description
          "Maximum frequency in THz.";
+      }
+      leaf atx-operational-mode {
+         type string;
+         description "Selected Operational mode for AtoZ path.";
+      }
+      leaf zrx-operational-mode {
+         type string;
+         description "Selected Operational mode for AtoZ path.";
       }
       uses transportpce-common-types:service-result-rpc-common-parameters;
       list aToZ {
@@ -161,6 +173,14 @@ module transportpce-pathDescription {
            type org-openroadm-common-optical-channel-types:frequency-THz;
          description
          "Maximum frequency in THz.";
+      }
+      leaf ztx-operational-mode {
+         type string;
+         description "Selected Operational mode for AtoZ path.";
+      }
+      leaf arx-operational-mode {
+         type string;
+         description "Selected Operational mode for AtoZ path.";
       }
       uses transportpce-common-types:service-result-rpc-common-parameters;
       list zToA {

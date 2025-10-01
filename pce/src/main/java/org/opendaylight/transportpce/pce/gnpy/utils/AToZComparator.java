@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.pce.gnpy.utils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.util.Comparator;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev251001.path.description.atoz.direction.AToZ;
 
 @SuppressWarnings("serial")
 @SuppressFBWarnings(
