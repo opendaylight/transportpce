@@ -60,6 +60,8 @@ public class PceGraph {
     private PceConstraintMode pceConstraintMode;
     private BitSet spectrumConstraint;
     private final ClientInput clientInput;
+    private String aendOperationalMode ;
+    private String zendOperationalMode;
 
     // results
     private PceResult pceResult = null;
@@ -122,6 +124,8 @@ public class PceGraph {
             pceResult = papv.checkPath(
                     path, allPceNodes, allPceLinks, pceResult, pceHardConstraints, serviceType, pceConstraintMode);
             this.margin = papv.getTpceCalculatedMargin();
+            this.aendOperationalMode = papv.getAendOperationalMode();
+            this.zendOperationalMode = papv.getZendOperationalMode();
             if (ResponseCodes.RESPONSE_OK.equals(pceResult.getResponseCode())) {
                 LOG.info("Path is validated");
             } else {
@@ -306,6 +310,14 @@ public class PceGraph {
 
     public Double getmargin() {
         return margin;
+    }
+
+    public String getAendOperationalMode() {
+        return aendOperationalMode;
+    }
+
+    public String getZendOperationalMode() {
+        return zendOperationalMode;
     }
 
     public void setConstrains(PceConstraints pceHardConstraintsInput) {
