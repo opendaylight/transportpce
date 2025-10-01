@@ -78,6 +78,8 @@ public class PostAlgoPathValidator {
     private final NetworkTransactionService networkTransactionService;
     private final BitSet spectrumConstraint;
     private final ClientInput clientInput;
+    private String aendOperationalMode ;
+    private String zendOperationalMode;
 
     public PostAlgoPathValidator(NetworkTransactionService networkTransactionService, BitSet spectrumConstraint,
             ClientInput clientInput) {
@@ -466,7 +468,7 @@ public class PostAlgoPathValidator {
                             // First transponder on the Path (TX side) / Last Xponder of the path (RX side)
                             ? edges.get(pathElement).link().getSourceTP().getValue()
                             : edges.get(pathElement - 1).link().getDestTP().getValue(),
-                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement);
+                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement, true);
                     break;
                 case SRG:
                     LOG.debug("loop of check OSNR direction AZ: SRG, Path Element = {}", pathElement);
@@ -670,7 +672,7 @@ public class PostAlgoPathValidator {
                             // First transponder on the Path (TX side) / Last Xponder of the path (RX side)
                             ? getOppPceLink(pathElement - 1, edges, allPceLinks).getSourceTP().getValue()
                             : getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue(),
-                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement);
+                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement, false);
                     break;
                 case SRG:
                     LOG.debug("loop of check OSNR direction ZA: SRG, Path Element = {}", pathElement);
@@ -892,12 +894,17 @@ public class PostAlgoPathValidator {
 
     private void calcXpdrOSNR(
             CatalogUtils cu, Map<String, Double> signal, String nwTpId, String serviceType,
-            PceNode currentNode, PceNode nextNode, String vertice, int pathElement) {
+            PceNode currentNode, PceNode nextNode, String vertice, int pathElement, boolean isAend) {
         // If the Xponder operational mode (setOpMode Arg1) is not consistent nor declared in the topology (Network TP)
         // Operational mode is retrieved from the service Type assuming it is supported by the Xponder (setOpMode Arg2)
         String opMode = getXpdrOpMode(nwTpId, vertice, pathElement, currentNode, serviceType, cu);
         // If the operational mode of the ADD/DROP MUX is not consistent nor declared in the topology (Network TP)
         // Operational mode is set by default to standard opMode for ADD SRGs
+        if (isAend) {
+            this.aendOperationalMode = opMode;
+        } else {
+            this.zendOperationalMode = opMode;
+        }
         String adnMode = setOpMode(nextNode.getOperationalMode(), CatalogConstant.MWWRCORE);
         double calcOnsrLin = cu.getPceTxTspParameters(opMode, adnMode);
         LOG.debug(
@@ -1157,5 +1164,13 @@ public class PostAlgoPathValidator {
 
     public Double getTpceCalculatedMargin() {
         return tpceCalculatedMargin;
+    }
+
+    public String getAendOperationalMode() {
+        return aendOperationalMode;
+    }
+
+    public String getZendOperationalMode() {
+        return zendOperationalMode;
     }
 }
