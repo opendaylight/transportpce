@@ -34,9 +34,10 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.comm
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.optical.port.ConfigBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.FrequencyType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev230126.EthernetCsmacd;
+import org.opendaylight.yangtools.yang.common.Uint16;
 
 public class OpenConfigInterface190 {
 
@@ -199,7 +200,11 @@ public class OpenConfigInterface190 {
     public String configureNetworkOpticalChannel(String nodeId, String logicalConnPoint, ServicePathInput input)
             throws OpenConfigInterfacesException {
         Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
-        List<ComponentBuilder> opticalChannelBuilders = createOpticalChannelComponentBuilder(mapping, input);
+        boolean isAend = false;
+        if (input.getAEndApiInfo() != null && input.getAEndApiInfo().getNodeId() != null) {
+            isAend = input.getAEndApiInfo().getNodeId().equals(nodeId);
+        }
+        List<ComponentBuilder> opticalChannelBuilders = createOpticalChannelComponentBuilder(mapping, input, isAend);
         StringBuilder opticalChannelComponentNames = new StringBuilder();
         for (ComponentBuilder opticalChannelBuilder : opticalChannelBuilders) {
             openConfigInterfaces.configureComponent(nodeId, opticalChannelBuilder);
@@ -236,13 +241,16 @@ public class OpenConfigInterface190 {
      * @return ComponentBuilder list containing optical-channel configuration.
      */
 
-    private List<ComponentBuilder> createOpticalChannelComponentBuilder(Mapping portMap, ServicePathInput input) {
+    private List<ComponentBuilder> createOpticalChannelComponentBuilder(Mapping portMap, ServicePathInput input,
+        boolean isAend) {
         org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729
                 .terminal.optical.channel.top.optical.channel.ConfigBuilder configBuilder = new org.opendaylight
                 .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.optical
                 .channel.ConfigBuilder();
         configBuilder.setTargetOutputPower(input.getTargetOutputPower());
-        configBuilder.setOperationalMode(input.getOperationalMode());
+        configBuilder.setOperationalMode(isAend
+            ? Uint16.valueOf(input.getAendOperationalMode())
+            : Uint16.valueOf(input.getZendOperationalMode()));
         if (input.getCenterFreq() != null) { //input.getCenterFreq().getValue().intValue()
             configBuilder.setFrequency(FrequencyType
                     .getDefaultInstance(String.valueOf((long) (input.getCenterFreq().getValue()
