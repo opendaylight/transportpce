@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.renderer.utils;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.CreateOtsOmsInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.CreateOtsOmsInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.CreateOtsOmsInputBuilder;
 
 public final class CreateOtsOmsDataUtils {
 
