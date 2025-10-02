@@ -673,7 +673,7 @@ public class PostAlgoPathValidator {
                             // First transponder on the Path (TX side) / Last Xponder of the path (RX side)
                             ? getOppPceLink(pathElement - 1, edges, allPceLinks).getSourceTP().getValue()
                             : getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue(),
-                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement, 
+                        serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement,
                         pathElement == vertices.size() - 1 ? false : true);
                     break;
                 case SRG:
