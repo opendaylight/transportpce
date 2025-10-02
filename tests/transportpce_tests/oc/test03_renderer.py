@@ -99,7 +99,8 @@ class TestTransportPCERenderer(unittest.TestCase):
             {
                 'service-name': 'service_OC_network',
                 'operation': 'create',
-                'operational-mode': 4308,
+                'aend-operational-mode': '4308',
+                'zend-operational-mode': '4308',
                 'target-output-power': 0,
                 'center-freq': 194.1,
                 'nodes': [{'node-id': 'XPDR-OC', 'dest-tp': 'XPDR1-NETWORK5'}]
