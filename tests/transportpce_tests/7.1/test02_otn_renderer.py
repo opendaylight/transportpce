@@ -90,9 +90,8 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
         self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
         self.assertIn(
             {'node-id': 'XPDR-A2',
-             'otu-interface-id': ['XPDR2-NETWORK1-OTUC2'],
-             'och-interface-id': ['XPDR2-NETWORK1-OTSIGROUP-200G',
-                                  'XPDR2-NETWORK1-755:768']},
+             'och-interface-id': ['XPDR2-NETWORK1-755:768','XPDR2-NETWORK1-OTSIGROUP-200G'],
+             'otu-interface-id': ['XPDR2-NETWORK1-OTUC2']},
             response['output']['node-interface'])
 
     def test_03_get_portmapping_network1(self):

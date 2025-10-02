@@ -19,6 +19,10 @@ module transportpce-device-renderer {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2025-10-01 {
+    description
+      "Change operational-mode type from Uint16 to String in service-path";
+  }
   revision 2025-03-25 {
     description
       "Add operational-mode and target-output-power in service-path";
@@ -80,7 +84,7 @@ module transportpce-device-renderer {
         type action;
       }
       leaf operational-mode {
-        type uint16;
+        type string;
       }
       leaf target-output-power {
         type decimal64 {
