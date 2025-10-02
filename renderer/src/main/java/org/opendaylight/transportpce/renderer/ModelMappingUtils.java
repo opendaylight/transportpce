@@ -23,15 +23,15 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.mapping.PortMappingUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.Action;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.ServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.AEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.AEndApiInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.ZEndApiInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.ZEndApiInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.az.api.info.AEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.az.api.info.AEndApiInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.az.api.info.ZEndApiInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.az.api.info.ZEndApiInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
@@ -60,7 +60,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,7 +193,7 @@ public final class ModelMappingUtils {
             }
         }
         if (atoZDirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(atoZDirection.getOpticalOperationalMode()));
+            servicePathInputBuilder.setOperationalMode(atoZDirection.getOpticalOperationalMode());
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
@@ -272,7 +271,7 @@ public final class ModelMappingUtils {
             }
         }
         if (ztoADirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(ztoADirection.getOpticalOperationalMode()));
+            servicePathInputBuilder.setOperationalMode(ztoADirection.getOpticalOperationalMode());
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))

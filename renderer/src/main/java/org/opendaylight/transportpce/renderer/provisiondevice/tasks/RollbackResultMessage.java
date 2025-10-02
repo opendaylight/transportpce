@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.renderer.rollback.output.FailedToRollback;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.renderer.rollback.output.FailedToRollback;
 
 public class RollbackResultMessage implements ResultMessage {
 
