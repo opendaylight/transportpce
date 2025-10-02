@@ -141,6 +141,7 @@ public final class ModelMappingUtils {
             .setServiceName(serviceName)
             .setOperation(operation)
             .setTargetOutputPower(atoZDirection.getTargetOutputPower())
+            .setOperationalMode(pathDescription.getAToZDirection().getAtxOperationalMode())
             .setNodes(nodeLists.getRendererNodeList());
         if (atoZDirection.getAToZMaxFrequency() != null || atoZDirection.getAToZMinFrequency() != null) {
             servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)));
@@ -211,6 +212,7 @@ public final class ModelMappingUtils {
             .setOperation(operation)
             .setServiceName(serviceName)
             .setTargetOutputPower(ztoADirection.getTargetOutputPower())
+            .setOperationalMode(pathDescription.getZToADirection().getZtxOperationalMode())
             .setNodes(nodeLists.getRendererNodeList());
         if (ztoADirection.getZToAMaxFrequency() != null || ztoADirection.getZToAMinFrequency() != null) {
             servicePathInputBuilder.setNmcWidth(new FrequencyGHz(Decimal64.valueOf(GridConstant.WIDTH_40)));
