@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.mapping.Mapping;
@@ -51,8 +51,7 @@ public class PortMappingListenerTest {
         final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
-        @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
-                mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModified<Mapping> mappingObject = mock();
         final Mapping oldMapping = mock(Mapping.class);
         final Mapping newMapping = mock(Mapping.class);
 
@@ -73,8 +72,7 @@ public class PortMappingListenerTest {
         final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
-        @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
-                mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModified<Mapping> mappingObject = mock();
         final Mapping oldMapping = mock(Mapping.class);
         final Mapping newMapping = mock(Mapping.class);
 
@@ -93,8 +91,7 @@ public class PortMappingListenerTest {
         final List<DataTreeModification<Mapping>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Mapping> ch = mock(DataTreeModification.class);
         changes.add(ch);
-        @SuppressWarnings("unchecked") final DataObjectModification<Mapping> mappingObject =
-                mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModified<Mapping> mappingObject = mock();
         final Mapping oldMapping = mock(Mapping.class);
         final Mapping newMapping = mock(Mapping.class);
 
