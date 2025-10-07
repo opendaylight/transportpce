@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>14.0.13</version>
+    <version>15.0.0</version>
     <relativePath/>
   </parent>
 
@@ -83,19 +83,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>binding-spec</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <groupId>org.opendaylight.ietf.model</groupId>
       <artifactId>rfc6991-ietf-inet-types</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <groupId>org.opendaylight.ietf.model</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <groupId>org.opendaylight.ietf.model</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
+      <groupId>org.opendaylight.ietf.model</groupId>
       <artifactId>rfc8345-ietf-network-topology</artifactId>
     </dependency>
     <dependency>

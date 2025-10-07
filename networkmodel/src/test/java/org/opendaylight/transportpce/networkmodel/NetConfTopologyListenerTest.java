@@ -14,6 +14,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.DELETE;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.SUBTREE_MODIFIED;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.WRITE;
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
@@ -25,7 +28,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -77,7 +82,7 @@ public class NetConfTopologyListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenDeleteNode() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectDeleted<Node> node = mock();
         final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         final NodeRegistration nodeRegistration = mock(NodeRegistration.class);
@@ -86,7 +91,7 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
             OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(node.modificationType()).thenReturn(DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
         when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
         when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
@@ -104,7 +109,7 @@ public class NetConfTopologyListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenDeleteOpenConfigNode() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectDeleted<Node> node = mock();
         final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         final NodeRegistration nodeRegistration = mock(NodeRegistration.class);
@@ -113,7 +118,7 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
                 OPENCONFIG_DEVICE_VERSION_1_9_0);
-        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(node.modificationType()).thenReturn(DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
         when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
         when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
@@ -131,7 +136,7 @@ public class NetConfTopologyListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenAddNode() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModified<Node> node = mock();
         final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -141,7 +146,7 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
+        when(node.modificationType()).thenReturn(SUBTREE_MODIFIED);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
@@ -157,7 +162,7 @@ public class NetConfTopologyListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenDisconnectingNode() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectModified<Node> node = mock();
         final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -167,7 +172,7 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
+        when(node.modificationType()).thenReturn(SUBTREE_MODIFIED);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
@@ -184,7 +189,7 @@ public class NetConfTopologyListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenShouldNeverHappen() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Node> node = mock(DataObjectModification.class);
+        @SuppressWarnings("unchecked") final DataObjectWritten<Node> node = mock();
         final List<DataTreeModification<Node>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Node> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -192,7 +197,7 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(node.modificationType()).thenReturn(WRITE);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
