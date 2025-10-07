@@ -15,6 +15,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.DELETE;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.SUBTREE_MODIFIED;
+import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.WRITE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
+import org.opendaylight.mdsal.binding.api.DataObjectModified;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcService;
@@ -85,14 +90,13 @@ public class ServiceListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenDeleteService() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
-                mock(DataObjectModification.class);
+        final DataObjectDeleted<Services> service = mock();
         final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.modificationType()).thenReturn(DELETE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
@@ -110,15 +114,14 @@ public class ServiceListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenServiceBecomesOutOfService() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
-                mock(DataObjectModification.class);
+        final DataObjectWritten<Services> service = mock();
         final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceDown = buildService(State.OutOfService, AdminStates.InService);
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.dataAfter()).thenReturn(serviceDown);
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
@@ -138,14 +141,13 @@ public class ServiceListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenShouldNeverHappen() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
-                mock(DataObjectModification.class);
+        final DataObjectModified<Services> service = mock();
         final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.SUBTREE_MODIFIED);
+        when(service.modificationType()).thenReturn(SUBTREE_MODIFIED);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
                 notificationPublishService);
@@ -163,8 +165,7 @@ public class ServiceListenerTest {
 
     @Test
     void testOnDataTreeChangedWhenServiceDegradedShouldBeRerouted() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
-                mock(DataObjectModification.class);
+        final DataObjectWritten<Services> service = mock();
         final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
@@ -174,7 +175,7 @@ public class ServiceListenerTest {
         Services serviceAfter = new ServicesBuilder(buildService(State.OutOfService, AdminStates.InService))
                 .setServiceResiliency(serviceResiliency)
                 .build();
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore())
             .thenReturn(new ServicesBuilder(buildService(State.InService, AdminStates.InService))
                         .setServiceResiliency(serviceResiliency)
@@ -214,22 +215,21 @@ public class ServiceListenerTest {
         verify(service, times(1)).dataAfter();
 //        verify(servicehandler, times(1)).serviceDelete(any());
 
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.modificationType()).thenReturn(DELETE);
         listener.onDataTreeChanged(changes);
 //        verify(servicehandler, times(1)).serviceCreate(any());
     }
 
     @Test
     void testOnDataTreeChangedWhenServiceDegradedShouldNotBeRerouted() {
-        @SuppressWarnings("unchecked") final DataObjectModification<Services> service =
-                mock(DataObjectModification.class);
+        final DataObjectWritten<Services> service = mock();
         final List<DataTreeModification<Services>> changes = new ArrayList<>();
         @SuppressWarnings("unchecked") final DataTreeModification<Services> ch = mock(DataTreeModification.class);
         changes.add(ch);
         when(ch.getRootNode()).thenReturn(service);
 
         Services serviceAfter = buildService(State.OutOfService, AdminStates.InService);
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.WRITE);
+        when(service.modificationType()).thenReturn(WRITE);
         when(service.dataBefore()).thenReturn(buildService(State.InService, AdminStates.InService));
         when(service.dataAfter()).thenReturn(serviceAfter);
         ServiceListener listener = new ServiceListener(rpcService, serviceDataStoreOperations,
@@ -241,7 +241,7 @@ public class ServiceListenerTest {
         verify(service, times(1)).dataAfter();
 //        verify(servicehandler, times(0)).serviceDelete(any());
 
-        when(service.modificationType()).thenReturn(DataObjectModification.ModificationType.DELETE);
+        when(service.modificationType()).thenReturn(DELETE);
         listener.onDataTreeChanged(changes);
 //        verify(servicehandler, times(0)).serviceCreate(any());
     }
