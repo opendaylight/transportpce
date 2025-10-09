@@ -57,6 +57,40 @@
       "message": "Thanks for solving that bug!!!!",
       "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b089f59_67f9f48c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-10-09T10:16:17Z",
+      "side": 1,
+      "message": "Hard to know if this fix has some long term unintended effects.",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ba5d124_d01a5808",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-10-09T10:16:17Z",
+      "side": 1,
+      "message": "Hard to see what is supposed to be correct here. The original method seem not to want to delete a connection that is being used by another service.\n\nIf this is correct I think we should rewrite it a bit as the logic for the raw delete can be simplified.",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
