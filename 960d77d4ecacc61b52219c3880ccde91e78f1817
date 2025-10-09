@@ -93,6 +93,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "388ae7f0_40b861ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-10-09T14:27:12Z",
+      "side": 1,
+      "message": "Resolved the comment",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba5d124_d01a5808",
@@ -124,6 +141,24 @@
       "side": 1,
       "message": "Missunderstanding from my side. \nThis change is ok!",
       "parentUuid": "5ba5d124_d01a5808",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db08f33_361d8c25",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-10-09T14:27:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be20696d_2184183e",
       "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
