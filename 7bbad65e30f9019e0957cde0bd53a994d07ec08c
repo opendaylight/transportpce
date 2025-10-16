@@ -35,6 +35,41 @@
       "parentUuid": "ae027d3b_be57ab59",
       "revId": "7bbad65e30f9019e0957cde0bd53a994d07ec08c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eff56d4_3a1950e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-10-16T09:12:59Z",
+      "side": 1,
+      "message": "Sorry for late feedback on latest developments in TAPI PCE and how we shall proceed with this change to avoid, as far as possible, future unsolvable merge conflicts.\n\nAfter a consolidation of TAPI-PCE code and having a number of functional tests running, would like to provide information on how it will work:\n\nIf a path-computation request is exercised using an Uuid for the service-name, a path computation is triggered through the TAPI PCE. This allows us to test the TAPI-PCE.\n\nWhen a create-connectivity-service is exercised using a string for the service-name, it is converted to an OR compliant service-create, and the path-computation is handled by the OR PCE. On successful path computation, the service is rendered using the regular process. The connectivity service is updated as well as the resulting connections in T-API datastore.\n\nI kept the initial implementation: in TapiPceNotificationHandler ,  onPathComputationResult builds a path description after a path computation occurred in the PCE. It also triggers through connectivityUtils the creation of connections and their update in the Datastore. At that stage, their states are DISABLED/LOCKED). Their state will be updated when a notification is received after the service has been correctly rendered. This is the way it works now, and at the end, I think it make sense.\n\nIn order to avoid potential merge conflicts when we will merge the code for the TAPI Pce, in TapiPceNotificationHandler I suggest that we keep in onServicePathRpcResult, the call of onPathComputationResult. onPathComputationResult needs to be kept as is, as well as updateConnectionContextWithConn. Both setInput and setServiceUuid shall be kept. However both updateTopologyWithCep and update TopologyWithNep can be removed, as you did.\n\nFor what concerns TAPI connectivity service database update, listening to ANY openRoadm service successful creation. I replied to Jonas comment. As a summary, I\u0027m fine with your approach, but to avoid potential scalability issues in the future, propose to make the update of TAPI connectivity services conditional to the value of a variable such as \"ServiceStoragePolicy\". If this variable has the value “ORANDTAPI”, all created services will be updated in TAPI connectivity services. If this variable has the value “TAPIONLY”, only services that were created through TAPI interface shall be updated. In a first step we could hardly set it to “ORANDTAPI”.\nThis will allow us, later on, by just adding the code to be able to modify the setting of the variable externally (by an option at the tapi-feature installation), to trigger 2 potential behaviors that fit the user expectation. This would also fit with what we currently plan to do for the OR topology that we convert in the Tapi DataStore (ABSTRACTED vs FULL).\n\nHappy to discuss all of this with you during our next standup meeting, to see if this looks acceptable to you. \nThanks!",
+      "revId": "7bbad65e30f9019e0957cde0bd53a994d07ec08c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0706424_42c04986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-10-16T09:12:59Z",
+      "side": 1,
+      "message": "\u003e \u003eI think that when an OR service is created through OR API, it is not copied in the TAPI datastore\n\u003e \n\u003e Yes, correct, that is what we wanted to fix.\n\u003e \n\u003e \u003eHowever, I like it, and would like to keep this behavior, so that we have in the TAPI service datastore, only what is created from the TAPI API.\n\u003e \n\u003e Unfortunately, this makes the TAPI feature useless for us in most cases as it is now.\n\nOK, Understand from the explanation you gave us on why TAPI feature would be useless for the specific use case you consider (Use OR API to create/delete service as far it is transparent to the user who uses a GUI; whereas the TAPI interface is used to read topology and services in the DataStore.\n\nHowever, IMHO, this does not help improving scalability. My proposal is to implement it the way you wish, and at a later step, make this behaviour optional, giving the ability to the user to set the general behaviour of TAPI feature at instalation of the feature : \n\n- OR-Topology  in tapi Datastore : ABSTRACTED versus FULL\n- Services in tapi Datastore : ORANDTAPI versus TAPIONLY view (ORANDTAPI : all created services, TAPIONLY : only services that were created through TAPI interface)\n\nMaybe we should already condition this behaviour to the value of a variable such as \"ServiceStoragePolicy\", that we currently set to \"ORANDTAPI\" so that at later on, we just need to add the code to be able to modify the setting of the variable externally This would fit with what we currently do for the topology.\nIs it acceptable to you?\n@gilles.thouenon@orange.com : are you OK with this proposal?",
+      "parentUuid": "19532608_b8ff8196",
+      "revId": "7bbad65e30f9019e0957cde0bd53a994d07ec08c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
