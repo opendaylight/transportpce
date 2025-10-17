@@ -478,8 +478,7 @@ public class PowerMgmtImpl implements PowerMgmt {
     }
 
     /**
-     * This methods turns down power a WL by performing
-     * following steps:
+     * This methods turns down power of a WL by performing following steps.
      *
      * <p>1. Pull interfaces used in service and change
      * status to outOfService
