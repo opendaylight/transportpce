@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.pce.node.mccapabilities;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.math.BigDecimal;
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * This interface is intended to specify methods from
