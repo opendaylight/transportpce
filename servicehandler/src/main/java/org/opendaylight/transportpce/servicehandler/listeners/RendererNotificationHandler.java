@@ -300,9 +300,8 @@ public class RendererNotificationHandler implements RendererListener {
                                             .setWidth(notification
                                                             .getAToZDirection()
                                                             .getWidth())
-                                            // TODO: here the optical operational mode should be set
-                                            // A default value is set here
-                                            .setOpticalOperationalMode("OR-W-400G-oFEC-63.1Gbd")
+                                            .setOpticalOperationalMode(notification.getAToZDirection()
+                                                .getZendOpticalOperationalMode())
                                             // TODO: also set the GNSR, OSNR, power values
                                             .build())
                             .setZToA(new ZToABuilder()
@@ -312,9 +311,8 @@ public class RendererNotificationHandler implements RendererListener {
                                             .setWidth(notification
                                                             .getZToADirection()
                                                             .getWidth())
-                                            // TODO: here the optical operational mode should be set
-                                            // A default value is set here
-                                            .setOpticalOperationalMode("OR-W-400G-oFEC-63.1Gbd")
+                                            .setOpticalOperationalMode(notification.getAToZDirection()
+                                                .getAendOpticalOperationalMode())
                                             // TODO: also set the GNSR, OSNR, power values
                                             .build())
                             .build())

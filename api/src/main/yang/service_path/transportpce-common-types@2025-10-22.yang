@@ -20,6 +20,10 @@ module transportpce-common-types {
       prefix org-openroadm-otn-common-types;
   }
 
+  revision 2025-10-22 {
+      description
+        "separate aend from zend optical-operational-mode in service-result-rpc-common-parameters";
+  }
   revision 2025-03-25 {
       description
         "updating node-interface list with port-id, optical-channel-id and interface-id";
@@ -725,7 +729,12 @@ module transportpce-common-types {
                 description
                     "Assigned frequency width (transponder/NMC)";
           }
-          leaf optical-operational-mode {
+          leaf aend-optical-operational-mode {
+                type string;
+                description
+                    "Operation mode ID selected by the PCE";
+          }
+          leaf zend-optical-operational-mode {
                 type string;
                 description
                     "Operation mode ID selected by the PCE";
