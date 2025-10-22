@@ -110,6 +110,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10cf09d3_b95184ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-22T13:45:24Z",
+      "side": 1,
+      "message": "Hello Joakim,\nCould you please describe the bug and the way to reproduce it in a JIRA ticket please?\nThanks in advance.",
+      "revId": "960d77d4ecacc61b52219c3880ccde91e78f1817",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba5d124_d01a5808",
