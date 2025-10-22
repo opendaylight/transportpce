@@ -10,9 +10,9 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.Collections;
 import java.util.List;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.node.interfaces.NodeInterface;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.Nodes;
 
 public final class DeviceRenderingResult extends OperationResult {
 

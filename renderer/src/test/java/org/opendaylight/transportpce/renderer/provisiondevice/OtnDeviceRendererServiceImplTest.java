@@ -35,9 +35,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.mapping.OpenconfigInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.link.tp.LinkTp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.link.tp.LinkTp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes.NodesBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class OtnDeviceRendererServiceImplTest  extends AbstractTest {

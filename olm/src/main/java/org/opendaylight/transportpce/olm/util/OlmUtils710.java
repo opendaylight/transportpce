@@ -60,11 +60,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.l
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.list.CurrentPmEntryKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev200529.current.pm.val.group.Measurement;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Direction;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.Location;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmNamesEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifier;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.Direction;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.Location;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmNamesEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint16;

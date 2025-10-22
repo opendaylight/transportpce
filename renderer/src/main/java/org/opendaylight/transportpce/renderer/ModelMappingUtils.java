@@ -54,9 +54,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.NodesKey;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -193,8 +193,8 @@ public final class ModelMappingUtils {
                         modulationFormat)));
             }
         }
-        if (atoZDirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(atoZDirection.getOpticalOperationalMode()));
+        if (atoZDirection.getZendOpticalOperationalMode() != null) {
+            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(atoZDirection.getZendOpticalOperationalMode()));
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
@@ -271,8 +271,8 @@ public final class ModelMappingUtils {
                                 modulationFormat)));
             }
         }
-        if (ztoADirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(ztoADirection.getOpticalOperationalMode()));
+        if (ztoADirection.getAendOpticalOperationalMode() != null) {
+            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(ztoADirection.getAendOpticalOperationalMode()));
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
@@ -284,7 +284,7 @@ public final class ModelMappingUtils {
     public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, Action operation,
         String serviceFormat, Uint32 serviceRate, PathDescription pathDescription, boolean asideToZside) {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
-        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.Nodes> nodes =
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes.Nodes> nodes =
             new ArrayList<>();
         NodeLists nodeLists =
             (asideToZside)
@@ -292,8 +292,8 @@ public final class ModelMappingUtils {
             : getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         LOG.info("These are node-lists {}, {}", nodeLists.getRendererNodeList(), nodeLists.getOlmNodeList());
         for (Nodes node: nodeLists.getRendererNodeList()) {
-            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes.NodesBuilder nb
-                = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.otn.renderer.nodes
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes.NodesBuilder nb
+                = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.otn.renderer.nodes
                     .NodesBuilder().setNodeId(node.getNodeId()).setNetworkTp(node.getDestTp());
             if (node.getSrcTp() != null && node.getSrcTp().contains("NETWORK")) {
                 nb.setNetwork2Tp(node.getSrcTp());

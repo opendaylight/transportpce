@@ -33,7 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlis
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resource.ResourceTypeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 
 
@@ -78,7 +78,7 @@ public class OlmUtils121Test {
                 "ROADM-TEST",
                 org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum.Interface,
                 org.opendaylight.yang.gen.v1.http.org.transportpce.common.types
-                        .rev250325.PmGranularity._15min,
+                        .rev251022.PmGranularity._15min,
                 new ResourceIdentifierBuilder().setResourceName("TestInterface").build());
 
         DeviceTransactionManager testMgr = Mockito.mock(DeviceTransactionManager.class);
@@ -152,7 +152,7 @@ public class OlmUtils121Test {
                 "ROADM-TEST",
                 org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum.Interface,
                 org.opendaylight.yang.gen.v1.http.org.transportpce.common.types
-                        .rev250325.PmGranularity._15min);
+                        .rev251022.PmGranularity._15min);
 
         DeviceTransactionManager testMgr = Mockito.mock(DeviceTransactionManager.class);
 

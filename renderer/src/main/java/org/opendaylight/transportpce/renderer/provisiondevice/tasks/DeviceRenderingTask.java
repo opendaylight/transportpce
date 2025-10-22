@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingRes
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.ServicePathOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.optical.renderer.nodes.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.optical.renderer.nodes.Nodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
