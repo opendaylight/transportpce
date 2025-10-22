@@ -20,7 +20,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250902.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
