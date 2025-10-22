@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -154,17 +155,26 @@ public final class TopologyUtils {
         if (openroadmTopo == null) {
             return topoBdr.build();
         }
-        List<Link> linkList = openroadmTopo.augmentation(Network1.class) == null ? new ArrayList<>()
-            : new ArrayList<>(openroadmTopo.augmentation(Network1.class).getLink().values());
+        List<Link> linkList = Optional.ofNullable(openroadmTopo.augmentation(Network1.class))
+                .map(Network1::getLink)
+                .map(Map::values)
+                .map(ArrayList::new)
+                .orElseGet(ArrayList::new);
         List<Link> xponderOutLinkList = new ArrayList<>();
         List<Link> xponderInLinkList = new ArrayList<>();
         for (Link lk : linkList) {
-            switch (lk.augmentation(Link1.class).getLinkType()) {
+            OpenroadmLinkType openroadmLinkType = Optional.ofNullable(lk.augmentation(Link1.class))
+                    .map(Link1::getLinkType)
+                    .orElse(null);
+            switch (openroadmLinkType) {
                 case XPONDEROUTPUT:
                     xponderOutLinkList.add(lk);
                     break;
                 case XPONDERINPUT:
                     xponderInLinkList.add(lk);
+                    break;
+                case null:
+                    LOG.warn("LinkType is null for link {}", lk.getLinkId().getValue());
                     break;
                 default:
                     break;
