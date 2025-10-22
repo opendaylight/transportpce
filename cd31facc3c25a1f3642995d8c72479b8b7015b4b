@@ -34,6 +34,23 @@
       "message": "Thanks for solving this bug! LGTM",
       "revId": "cd31facc3c25a1f3642995d8c72479b8b7015b4b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1fa473_3353e380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-22T13:45:03Z",
+      "side": 1,
+      "message": "Hello Joakim,\nCould you please describe the bug and the way to reproduce it in a JIRA ticket please?\nThanks in advance.",
+      "revId": "cd31facc3c25a1f3642995d8c72479b8b7015b4b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
