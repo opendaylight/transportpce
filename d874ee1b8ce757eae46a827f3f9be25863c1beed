@@ -1,4 +1,22 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761137650 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761137650-25FA3BC9F1178B91A0E40EDAB89E4F46B44FC05C\n\n0000000000000000000000000000000000000000 d874ee1b8ce757eae46a827f3f9be25863c1beed refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmj40/IACgkQX735uTFP\nrXE3sw//alL1q44kUivXm+I2Wsh6ySF9fdM+G0rQvKfDs3So4D28WeIJkx0I/Gbt\nV6qO/FfYpptQ3THjvoE/Ujyw1cASrsyCpJXghbSRznxl6hDPOYe0wPhNdoJIJUbV\nMM4P9z4JpjMFMAku8+FgwOEFL3ik3eYDl9fY2y2E1VoUZS9ZPRiojKdWjxQNtYDm\nsOJp1B8I9VLW3y6G6HXSP/nWF8WILssc2yndVYvhK8A5rKKyH7J0Kz/blVveKCao\nWJU7j/Rl2CFQS4L5KBcHnoFpkNWmG6uPVzo9qMwYsgSThkf8noQ8O/XTir12Yiid\n9pvjwUUvoy56rEiQyl3h9ifyXAaci+0dFakZ3kDbgtf3uNhHN557XePtIcCMin+B\nbsQMkBQa+xYRXPXh9B4/jQ91X/DwWFWeNRXn98XV4kVD+3YUskdGIxG1bFk5FV4B\nsCkNVuiSmzhx/i7aqsAysk7N671DJGLd9Uy8rp39qZL4c7ye7ySGBdFj5NmWetal\n1NBVdrXNWmopXUK4rW4EoYkDd6MdBLrnn61XOirPEgOtrZy0avRW0+5tp418qQWR\nicAXTB6r4BkxpHuR6+FRrOM1LS33EIGb84Wc3vR/mXSZp9vDgrv0qV+UG2Wz8+wC\nhH/IuZVFSfL5zPFkUYjJpHfEkvx8IGk35tOIfPg/4SQ/BoRAXC0\u003d\n\u003dS63F\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f25abdb4_efbeb26c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-22T17:17:11Z",
+      "side": 1,
+      "message": "Couldn\u0027t we just do that?\n\nList\u003cLink\u003e linkList \u003d openroadmTopo.augmentation(Network1.class) \u003d\u003d null\n        || openroadmTopo.augmentation(Network1.class).getLink() \u003d\u003d null\n    ? new ArrayList\u003c\u003e()\n    : new ArrayList\u003c\u003e(openroadmTopo.augmentation(Network1.class).getLink().values());",
+      "revId": "d874ee1b8ce757eae46a827f3f9be25863c1beed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
