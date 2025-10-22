@@ -17,6 +17,24 @@
       "message": "Couldn\u0027t we just do that?\n\nList\u003cLink\u003e linkList \u003d openroadmTopo.augmentation(Network1.class) \u003d\u003d null\n        || openroadmTopo.augmentation(Network1.class).getLink() \u003d\u003d null\n    ? new ArrayList\u003c\u003e()\n    : new ArrayList\u003c\u003e(openroadmTopo.augmentation(Network1.class).getLink().values());",
       "revId": "d874ee1b8ce757eae46a827f3f9be25863c1beed",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7549c4ac_14814a39",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-22T19:05:05Z",
+      "side": 1,
+      "message": "I suppose it comes down to personal preference. I really like how clean my suggestion looks. No if-else-statemens cluttering up the code. I mean, the if-statements are there, but not up front and center. Primarily, there is a else clause right at the end. Feels neatly sorted. Nicely indented as well. Reading it is mostly a breeze where your eyes move from top to bottom. \n\nI had a hard time reading and understanding your suggestion. It felt like my eyes where going up and down a few times before the penny finally dropped. Also difficult to neatly indent. Maybe that is just a me problem.\n\nBut I get it, not everyone likes the code I suggested and normally I try to stay away from it. One downside of my approach is it makes it harder to maintain/extend.\n\nWith that said, I think this alternative would be a better option since it may be easier to maintain and extend in the future. It is also quite easy to read, imho.\n\n    List\u003cLink\u003e linkList \u003d new ArrayList\u003c\u003e();\n    Network1 network1 \u003d openroadmTopo.augmentation(Network1.class);\n    if (network1 !\u003d null \u0026\u0026 network1.getLink() !\u003d null) {\n        linkList.addAll(network1.getLink().values());\n    }",
+      "parentUuid": "f25abdb4_efbeb26c",
+      "revId": "d874ee1b8ce757eae46a827f3f9be25863c1beed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
