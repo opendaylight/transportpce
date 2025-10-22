@@ -18,8 +18,8 @@ public final class OlmUtilsTestObjects {
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput
         newGetPmInput210618(String nodeId,
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum type,
-                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity gran,
-                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input
+                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity gran,
+                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input
                                 .ResourceIdentifier identifier) {
         return new GetPmInputBuilder()
                 .setNodeId(nodeId)
@@ -33,7 +33,7 @@ public final class OlmUtilsTestObjects {
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput
         newGetPmInput210618(String nodeId,
                         org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum type,
-                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity gran) {
+                        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity gran) {
         return new GetPmInputBuilder()
                 .setNodeId(nodeId)
                 .setResourceType(type)

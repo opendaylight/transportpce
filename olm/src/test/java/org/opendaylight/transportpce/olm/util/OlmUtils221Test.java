@@ -86,8 +86,8 @@ public class OlmUtils221Test {
         Map<CurrentPmEntryKey, CurrentPmEntry> pmMap = new HashMap<>();
         pmMap.put(cpe.key(), cpe);
 
-        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.PmGranularity
-                granularity = org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325
+        org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.PmGranularity
+                granularity = org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022
                 .PmGranularity._15min;
 
         CurrentPmList pmList = new CurrentPmListBuilder().setCurrentPmEntry(pmMap).build();

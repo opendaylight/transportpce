@@ -15,7 +15,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev250325.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022.olm.get.pm.input.ResourceIdentifierBuilder;
 
 public class OlmUtilsTest {
 
@@ -58,7 +58,7 @@ public class OlmUtilsTest {
                 "ROADM-TEST",
                 org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum.Interface,
                 org.opendaylight.yang.gen.v1.http.org.transportpce.common.types
-                        .rev250325.PmGranularity._15min,
+                        .rev251022.PmGranularity._15min,
                 new ResourceIdentifierBuilder().setResourceName("test-interface-name").build());
     }
 }
