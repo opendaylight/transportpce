@@ -166,17 +166,12 @@ public final class TopologyUtils {
                     .map(Link1::getLinkType)
                     .orElse(null);
             switch (openroadmLinkType) {
-                case XPONDEROUTPUT:
-                    xponderOutLinkList.add(lk);
-                    break;
-                case XPONDERINPUT:
-                    xponderInLinkList.add(lk);
-                    break;
-                case null:
-                    LOG.warn("LinkType is null for link {}", lk.getLinkId().getValue());
-                    break;
-                default:
-                    break;
+                case XPONDEROUTPUT -> xponderOutLinkList.add(lk);
+                case XPONDERINPUT -> xponderInLinkList.add(lk);
+                case null -> LOG.warn("LinkType is null for link {}", lk.getLinkId().getValue());
+                default -> {
+                // do nothing, other links are not relevant for OTN topology
+                }
             }
         }
         // read otn-topology
