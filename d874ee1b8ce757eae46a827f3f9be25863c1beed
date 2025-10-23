@@ -53,6 +53,24 @@
       "parentUuid": "7549c4ac_14814a39",
       "revId": "d874ee1b8ce757eae46a827f3f9be25863c1beed",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fccc01_4e8f228a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TopologyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-23T07:55:36Z",
+      "side": 1,
+      "message": "Yes of course, everyone has their preferences. Generally, I try to keep the existing code style as much as possible when I make \"minor\" corrections. Personally, I\u0027m not a fan of ternary operators, except when the expression is very simple. I found here that it was still quite simple to read (I fought in the past to remove nested ternary operators!). Your new proposal is a good trade-off that will be easy for everyone to understand. And to migrate quietly to a more modern version, we\u0027ll keep your version just below!",
+      "parentUuid": "b7226445_d03b7dfb",
+      "revId": "d874ee1b8ce757eae46a827f3f9be25863c1beed",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
