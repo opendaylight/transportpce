@@ -154,20 +154,24 @@ public final class TopologyUtils {
         if (openroadmTopo == null) {
             return topoBdr.build();
         }
-        List<Link> linkList = openroadmTopo.augmentation(Network1.class) == null ? new ArrayList<>()
-            : new ArrayList<>(openroadmTopo.augmentation(Network1.class).getLink().values());
+        List<Link> linkList = new ArrayList<>();
+        Network1 network1 = openroadmTopo.augmentation(Network1.class);
+        if (network1 != null && network1.getLink() != null) {
+            linkList.addAll(network1.getLink().values());
+        }
         List<Link> xponderOutLinkList = new ArrayList<>();
         List<Link> xponderInLinkList = new ArrayList<>();
         for (Link lk : linkList) {
-            switch (lk.augmentation(Link1.class).getLinkType()) {
-                case XPONDEROUTPUT:
-                    xponderOutLinkList.add(lk);
-                    break;
-                case XPONDERINPUT:
-                    xponderInLinkList.add(lk);
-                    break;
-                default:
-                    break;
+            OpenroadmLinkType openroadmLinkType = Optional.ofNullable(lk.augmentation(Link1.class))
+                    .map(Link1::getLinkType)
+                    .orElse(null);
+            switch (openroadmLinkType) {
+                case XPONDEROUTPUT -> xponderOutLinkList.add(lk);
+                case XPONDERINPUT -> xponderInLinkList.add(lk);
+                case null -> LOG.warn("LinkType is null for link {}", lk.getLinkId().getValue());
+                default -> {
+                // do nothing, other links are not relevant for OTN topology
+                }
             }
         }
         // read otn-topology
