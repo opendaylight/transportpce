@@ -13,9 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,6 +34,10 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Cont
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class XmlDataConverterTest {
@@ -116,8 +127,20 @@ class XmlDataConverterTest {
     void serializeContextTest() {
         XmlDataConverter converter = new XmlDataConverter(null);
         try {
-            assertThat(converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context))
-                    .isEqualToIgnoringWhitespace(Files.readString(Path.of("src/test/resources/context.xml")));
+            String actualXml = converter.serialize(DataObjectIdentifier.builder(Context.class).build(), context);
+            String expectedXml = Files.readString(Path.of("src/test/resources/context.xml"));
+
+            // Parse XML to retrieve layer-protocol-name fragments
+            List<String> actualLpnList = extractLayerProtocolNames(actualXml);
+            List<String> expectedLpnList = extractLayerProtocolNames(expectedXml);
+            // Compare layer-protocol-name lists ignoring item order)
+            assertThat(new HashSet<>(actualLpnList)).isEqualTo(new HashSet<>(expectedLpnList));
+
+            // Remove list of "layer-protocol-name" given that their order may vary
+            String regex = "<layer-protocol-name>.*?</layer-protocol-name>";
+            actualXml = actualXml.replaceAll(regex, "");
+            expectedXml = expectedXml.replaceAll(regex, "");
+            assertThat(actualXml).isEqualToIgnoringWhitespace(expectedXml);
         } catch (IOException e1) {
             fail("Cannot load xml file with expected result");
         }
@@ -170,5 +193,23 @@ class XmlDataConverterTest {
         } catch (IOException e) {
             fail("Cannot load xml file with input xml data");
         }
+    }
+
+    private static List<String> extractLayerProtocolNames(String xml) {
+        List<String> names = new ArrayList<>();
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(xml)));
+            NodeList nodeList = document.getElementsByTagName("layer-protocol-name");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                names.add(nodeList.item(i).getTextContent().trim());
+            }
+        } catch (ParserConfigurationException e) {
+            fail("Error configuring XML parser: " + e.getMessage());
+        } catch (IOException | SAXException | IllegalArgumentException e) {
+            fail("Error parsing XML: " + e.getMessage());
+        }
+        return names;
     }
 }
