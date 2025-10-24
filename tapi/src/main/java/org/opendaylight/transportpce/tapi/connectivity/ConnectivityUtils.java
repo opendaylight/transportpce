@@ -461,79 +461,19 @@ public final class ConnectivityUtils {
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
         //  and XPDR NETWORK TTPs (if any). From the path description. This will help to build the uuid of the CEPs
         //  and the connections
-        String resourceType;
-        List<String> xpdrClientTplist = new ArrayList<>();
-        List<String> xpdrNetworkTplist = new ArrayList<>();
-        List<String> rdmAddDropTplist = new ArrayList<>();
-        List<String> rdmDegTplist = new ArrayList<>();
-        List<String> rdmNodelist = new ArrayList<>();
-        List<String> xpdrNodelist = new ArrayList<>();
-        for (AToZ elem:pathDescription.getAToZDirection().getAToZ().values().stream()
-                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId())))).collect(Collectors.toList())) {
-            resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
-            switch (resourceType) {
-                case TapiConstants.TP:
-                    TerminationPoint tp = (TerminationPoint) elem.getResource().getResource();
-                    String tpID = tp.getTpId();
-                    String tpNode;
-                    if (tpID == null || tpID.isBlank()) {
-                        // This the case for creation of Services that ends on Network ports (Och/OTU/ODU)
-                        break;
-                    }
-                    if (tpID.contains("CLIENT")) {
-                        tpNode = tp.getTpNodeId();
-                        if (!xpdrClientTplist.contains(String.join("+", tpNode, tpID))) {
-                            xpdrClientTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    if (tpID.contains("NETWORK")) {
-                        tpNode = tp.getTpNodeId();
-                        if (!xpdrNetworkTplist.contains(String.join("+", tpNode, tpID))) {
-                            xpdrNetworkTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    if (tpID.contains("PP")) {
-                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
-                        LOG.info("ROADM Node of tp = {}", tpNode);
-                        if (!rdmAddDropTplist.contains(String.join("+", tpNode, tpID))) {
-                            rdmAddDropTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    if (tpID.contains("TTP")) {
-                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
-                        LOG.info("ROADM Node of tp = {}", tpNode);
-                        if (!rdmDegTplist.contains(String.join("+", tpNode, tpID))) {
-                            rdmDegTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    break;
-                case TapiConstants.NODE:
-                    Node node = (Node) elem.getResource().getResource();
-                    String nodeId = node.getNodeId();
-                    if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
-                        LOG.info("Node id = {}", nodeId);
-                        if (!xpdrNodelist.contains(nodeId)) {
-                            xpdrNodelist.add(nodeId); // should contain only 2
-                        }
-                    }
-                    if (nodeId.contains("ROADM")) {
-                        nodeId = getIdBasedOnModelVersion(nodeId);
-                        LOG.info("Node id = {}", nodeId);
-                        if (!rdmNodelist.contains(nodeId)) {
-                            rdmNodelist.add(nodeId);
-                        }
-                    }
-                    break;
-                default:
-                    LOG.warn("Resource is a {}", resourceType);
-            }
-        }
-        LOG.info("ROADM node list = {}", rdmNodelist);
-        LOG.info("ROADM degree list = {}", rdmDegTplist);
-        LOG.info("ROADM addrop list = {}", rdmAddDropTplist);
-        LOG.info("XPDR node list = {}", xpdrNodelist);
-        LOG.info("XPDR network list = {}", xpdrNetworkTplist);
-        LOG.info("XPDR client list = {}", xpdrClientTplist);
+
+        //Process path description getting lists of nodes and tps
+        IDCollection idCollection = extractTPandNodeIds(pathDescription);
+
+        List<String> xpdrClientTplist = idCollection.xpdrClientTplist();
+        List<String> xpdrNetworkTplist = idCollection.xpdrNetworkTplist();
+        List<String> rdmAddDropTplist = idCollection.rdmAddDropTplist();
+        List<String> rdmDegTplist = idCollection.rdmDegTplist();
+        List<String> rdmNodelist = idCollection.rdmNodelist();
+        List<String> xpdrNodelist = idCollection.xpdrNodelist();
+
+        idCollection.log();
+
         // TODO -> for 10GB eth and ODU services there are no ROADMs in path description as they use the OTU link,
         //  but for 100GB eth all is created at once. Check if the roadm list is empty to determine whether we need
         //  to trigger all the steps or not
@@ -669,6 +609,84 @@ public final class ConnectivityUtils {
             .stream().map(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection::getName).collect(Collectors.toList()));
         return connectionServMap;
+    }
+
+    public IDCollection extractTPandNodeIds(PathDescription pathDescription) {
+
+        String resourceType;
+        List<String> xpdrClientTplist = new ArrayList<>();
+        List<String> xpdrNetworkTplist = new ArrayList<>();
+        List<String> rdmAddDropTplist = new ArrayList<>();
+        List<String> rdmDegTplist = new ArrayList<>();
+        List<String> rdmNodelist = new ArrayList<>();
+        List<String> xpdrNodelist = new ArrayList<>();
+
+        for (AToZ elem:pathDescription.getAToZDirection().getAToZ().values().stream()
+                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId()))))
+                .toList()) {
+            resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
+            switch (resourceType) {
+                case TapiConstants.TP:
+                    TerminationPoint tp = (TerminationPoint) elem.getResource().getResource();
+                    String tpID = tp.getTpId();
+                    String tpNode;
+                    if (tpID.contains("CLIENT")) {
+                        tpNode = tp.getTpNodeId();
+                        if (!xpdrClientTplist.contains(String.join("+", tpNode, tpID))) {
+                            xpdrClientTplist.add(String.join("+", tpNode, tpID));
+                        }
+                    }
+                    if (tpID.contains("NETWORK")) {
+                        tpNode = tp.getTpNodeId();
+                        if (!xpdrNetworkTplist.contains(String.join("+", tpNode, tpID))) {
+                            xpdrNetworkTplist.add(String.join("+", tpNode, tpID));
+                        }
+                    }
+                    if (tpID.contains("PP")) {
+                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
+                        LOG.info("ROADM Node of tp = {}", tpNode);
+                        if (!rdmAddDropTplist.contains(String.join("+", tpNode, tpID))) {
+                            rdmAddDropTplist.add(String.join("+", tpNode, tpID));
+                        }
+                    }
+                    if (tpID.contains("TTP")) {
+                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
+                        LOG.info("ROADM Node of tp = {}", tpNode);
+                        if (!rdmDegTplist.contains(String.join("+", tpNode, tpID))) {
+                            rdmDegTplist.add(String.join("+", tpNode, tpID));
+                        }
+                    }
+                    break;
+                case TapiConstants.NODE:
+                    Node node = (Node) elem.getResource().getResource();
+                    String nodeId = node.getNodeId();
+                    if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
+                        LOG.info("Node id = {}", nodeId);
+                        if (!xpdrNodelist.contains(nodeId)) {
+                            xpdrNodelist.add(nodeId); // should contain only 2
+                        }
+                    }
+                    if (nodeId.contains("ROADM")) {
+                        nodeId = getIdBasedOnModelVersion(nodeId);
+                        LOG.info("Node id = {}", nodeId);
+                        if (!rdmNodelist.contains(nodeId)) {
+                            rdmNodelist.add(nodeId);
+                        }
+                    }
+                    break;
+                default:
+                    LOG.warn("Resource is a {}", resourceType);
+            }
+        }
+
+        return new TPAndNodeCollection(
+                xpdrClientTplist,
+                xpdrNetworkTplist,
+                rdmAddDropTplist,
+                rdmDegTplist,
+                rdmNodelist,
+                xpdrNodelist
+        );
     }
 
     private void addNepToTopology(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep,
