@@ -13,13 +13,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
@@ -36,7 +44,6 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid
 
 class ConnectivityUtilsTest extends AbstractTest {
 
-    @Mock
     private NetworkTransactionService networkTransactionService;
 
     @Mock
@@ -45,8 +52,24 @@ class ConnectivityUtilsTest extends AbstractTest {
     @Mock
     private TapiContext tapiContext;
 
+    @Mock
+    private TapiLink tapiLink;
+
+    private TopologyUtils topologyUtils;
+
+    @BeforeEach
+    void setUp() throws InterruptedException, ExecutionException {
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
+
+        TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
+                "src/test/resources/connectivity-utils/openroadm-topology.xml",
+                InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLink);
+    }
+
     @Test
-    void testRoadmToRoadmConnectivity() {
+    void testRoadmToRoadmConnectivity() throws TapiTopologyException {
         Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap();
 
         // Build the AToZDirection and PathDescription
@@ -62,9 +85,11 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
         );
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
         assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
@@ -98,7 +123,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testXpdrToXpdrConnectivity() {
+    void testXpdrToXpdrConnectivity() throws TapiTopologyException {
         // --- Build the PathDescription for this scenario ---
         Map<AToZKey, AToZ> atoZMap = getXpdrToXpdrAtoZMap();
 
@@ -113,10 +138,12 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
         );
 
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         // Assertions
         List<String> expectedRoadmNodeList = List.of();
@@ -142,7 +169,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testXpdrToXpdrWithClientConnectivity() {
+    void testXpdrToXpdrWithClientConnectivity() throws TapiTopologyException {
         Map<AToZKey, AToZ> atoZMap = getXpdrToXpdrClienmtAtoZMap();
 
         // Build the AToZDirection and PathDescription
@@ -159,10 +186,12 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
         );
 
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         List<String> expectedRoadmNodeList = List.of();
         assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
