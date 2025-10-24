@@ -122,7 +122,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         topologyUtils = new TopologyUtils(networkTransactionService, getDataStoreContextUtil().getDataBroker(),
             tapiLink);
         connectivityUtils = new ConnectivityUtils(serviceDataStoreOperations, new HashMap<>(), tapiContext,
-            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID));
+            networkTransactionService, new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID), topologyUtils);
         tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
             tapiContext, serviceDataStoreOperations);
         tapiInitialORMapping.performTopoInitialMapping();
