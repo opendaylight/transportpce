@@ -394,9 +394,12 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils,
+                portMapping
         );
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
         assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
@@ -534,10 +537,13 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils,
+                portMapping
         );
 
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         // Assertions
         List<String> expectedRoadmNodeList = List.of();
