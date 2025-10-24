@@ -394,9 +394,12 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils,
+                portMapping
         );
-        Connectivity connectivity = connectivityUtils.connectivityMap(pathDescription);
+        Connectivity connectivity = connectivityUtils.connectivityMap(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
         ConnectivityMap connectivityMap = (ConnectivityMap) connectivity;
 
         List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
@@ -535,10 +538,13 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils,
+                portMapping
         );
 
-        Connectivity connectivity = connectivityUtils.connectivityMap(pathDescription);
+        Connectivity connectivity = connectivityUtils.connectivityMap(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
         ConnectivityMap connectivityMap = (ConnectivityMap) connectivity;
 
         // Assertions
