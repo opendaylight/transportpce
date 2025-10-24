@@ -130,7 +130,7 @@ public class TapiProvider {
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
-                tapiContext, this.networkTransactionService, TAPI_TOPO_UUID);
+                tapiContext, this.networkTransactionService, TAPI_TOPO_UUID, topologyUtils);
         TapiTopoContextInit tapiTopoContextInit = new TapiTopoContextInit(tapiContext);
         tapiTopoContextInit.initializeTopoContext();
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
