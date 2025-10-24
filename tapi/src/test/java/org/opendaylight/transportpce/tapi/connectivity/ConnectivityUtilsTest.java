@@ -10,16 +10,27 @@ package org.opendaylight.transportpce.tapi.connectivity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.tapi.TapiConstants;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
@@ -27,16 +38,20 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.NodeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 
 class ConnectivityUtilsTest extends AbstractTest {
 
-    @Mock
     private NetworkTransactionService networkTransactionService;
 
     @Mock
@@ -45,8 +60,20 @@ class ConnectivityUtilsTest extends AbstractTest {
     @Mock
     private TapiContext tapiContext;
 
+    @Mock
+    private TopologyUtils topologyUtils;
+
+    @BeforeEach
+    void setUp() throws InterruptedException, ExecutionException {
+        networkTransactionService = new NetworkTransactionImpl(getDataBroker());
+
+        TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
+                "src/test/resources/connectivity-utils/openroadm-topology.xml",
+                InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+    }
+
     @Test
-    void testRoadmToRoadmConnectivity() {
+    void testRoadmToRoadmConnectivity() throws TapiTopologyException {
         Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap();
 
         // Build the AToZDirection and PathDescription
@@ -62,9 +89,11 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
         );
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
         assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
@@ -98,7 +127,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testXpdrToXpdrConnectivity() {
+    void testXpdrToXpdrConnectivity() throws TapiTopologyException {
         // --- Build the PathDescription for this scenario ---
         Map<AToZKey, AToZ> atoZMap = getXpdrToXpdrAtoZMap();
 
@@ -113,10 +142,12 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new HashMap<>(),
                 tapiContext,
                 networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID)
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
         );
 
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
 
         // Assertions
         List<String> expectedRoadmNodeList = List.of();
@@ -141,8 +172,31 @@ class ConnectivityUtilsTest extends AbstractTest {
         assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
     }
 
+    private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
+        ListenableFuture<Optional<Network>> topologyFuture =
+                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
+        try {
+            return topologyFuture.get().orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException(
+                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
+                            .getValue(), e);
+        } catch (ExecutionException e) {
+            throw new TapiTopologyException(
+                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
+                            .getValue(), e);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
     private Map<AToZKey, AToZ> getAToZRoadmKeyAToZMap() {
         return buildAtoZMap(roadmPathElements());
+    }
+
+    private Map<ZToAKey, ZToA> getZToARoadmKeyZToAMap() {
+        return buildZtoAMap(roadmPathElements());
     }
 
     private Map<AToZKey, AToZ> getXpdrToXpdrAtoZMap() {
@@ -171,6 +225,15 @@ class ConnectivityUtilsTest extends AbstractTest {
         Map<AToZKey, AToZ> map = new HashMap<>();
         for (PathElement e : elements) {
             AToZ item = new AToZBuilder().setId(e.id).setResource(e.resource).build();
+            map.put(item.key(), item);
+        }
+        return map;
+    }
+
+    private Map<ZToAKey, ZToA> buildZtoAMap(List<PathElement> elements) {
+        Map<ZToAKey, ZToA> map = new HashMap<>();
+        for (PathElement e : elements) {
+            ZToA item = new ZToABuilder().setId(e.id).setResource(e.resource).build();
             map.put(item.key(), item);
         }
         return map;
