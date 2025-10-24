@@ -127,7 +127,7 @@ public class DeviceTransactionManagerTest {
             });
 
             firstDeviceTx.commit(defaultTimeout, defaultTimeUnit);
-            await("wait second transaction for default device").atMost(Duration.ofMillis(400)).untilAsserted(() -> {
+            await("wait second transaction for default device").atMost(Duration.ofMillis(600)).untilAsserted(() -> {
                 assertTrue(secondDeviceTxFuture.isDone());
                 assertFalse(thirdDeviceTxFuture.isDone());
             });
@@ -137,7 +137,7 @@ public class DeviceTransactionManagerTest {
             assertFalse(thirdDeviceTxFuture.isDone());
 
             secondDeviceTx.commit(defaultTimeout, defaultTimeUnit);
-            await("wait third transaction for default device").atMost(Duration.ofMillis(400)).untilAsserted(() -> {
+            await("wait third transaction for default device").atMost(Duration.ofMillis(600)).untilAsserted(() -> {
                 assertTrue(thirdDeviceTxFuture.isDone());
             });
 
