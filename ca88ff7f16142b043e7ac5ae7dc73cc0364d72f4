@@ -42,6 +42,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "699c2925_e4eaf5fa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f29af5fb_009374b8",
+      "range": {
+        "startLine": 541,
+        "startChar": 4,
+        "endLine": 541,
+        "endChar": 53
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94f2a35c_1c3065dd",
@@ -55,6 +79,30 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "on a new line to ease readability",
+      "range": {
+        "startLine": 553,
+        "startChar": 86,
+        "endLine": 553,
+        "endChar": 116
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4d4eea_d6785b17",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94f2a35c_1c3065dd",
       "range": {
         "startLine": 553,
         "startChar": 86,
@@ -88,6 +136,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8d2243_d7fc3c31",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5ad1b1a_2f7f0806",
+      "range": {
+        "startLine": 21,
+        "startChar": 3,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "913aab2e_a5dab624",
@@ -101,6 +173,30 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "TPAndNodeCollection",
+      "range": {
+        "startLine": 42,
+        "startChar": 52,
+        "endLine": 42,
+        "endChar": 68
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c433d654_8c763bbd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "913aab2e_a5dab624",
       "range": {
         "startLine": 42,
         "startChar": 52,
@@ -134,6 +230,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ebb547_403a80ed",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Not sure what you mean. But it creates an immutable copy, i.e. object containing the same IDs.",
+      "parentUuid": "735b1448_2504eb0c",
+      "range": {
+        "startLine": 54,
+        "startChar": 27,
+        "endLine": 54,
+        "endChar": 59
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "645202d1_0fbde8c9",
@@ -147,6 +267,30 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "Should be a @Mock",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 11
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a523d6_e8f1c393",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Thx, this should have been removed altogether.",
+      "parentUuid": "645202d1_0fbde8c9",
       "range": {
         "startLine": 55,
         "startChar": 4,
@@ -180,6 +324,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65f4e7ae_477c84ad",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c45ffdd4_e2ad4d77",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 11
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1bfb2f3_a888542f",
@@ -193,6 +361,30 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "If all ConnectivityUtils parameters are mocked, become useless and may be deleted.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 1
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ba8c45_6ce1f150",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Yes, this should have been removed in this commit.",
+      "parentUuid": "c1bfb2f3_a888542f",
       "range": {
         "startLine": 68,
         "startChar": 0,
@@ -226,6 +418,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc086a85_2a2e4c7e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27313b96_60fa62a1",
+      "range": {
+        "startLine": 565,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 5
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d9eed53_91b12486",
@@ -239,6 +455,24 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03794688_1c9b13f8",
+        "filename": "tapi/src/test/resources/connectivity-utils/openroadm-network.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d9eed53_91b12486",
       "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -260,6 +494,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d151756e_3162a570",
+        "filename": "tapi/src/test/resources/connectivity-utils/openroadm-topology.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aba5403_b49bf7c9",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddb09455_27e7bdd5",
@@ -277,6 +529,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf611154_4c1fb6f6",
+        "filename": "tapi/src/test/resources/connectivity-utils/otn-topology.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddb09455_27e7bdd5",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6be3c9ed_facd0a4b",
@@ -290,6 +560,24 @@
       "writtenOn": "2025-10-24T13:58:58Z",
       "side": 1,
       "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb613f5_2435127e",
+        "filename": "tapi/src/test/resources/connectivity-utils/portmapping.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-24T16:51:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6be3c9ed_facd0a4b",
       "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
