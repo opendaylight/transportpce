@@ -1,4 +1,297 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761307861 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761307861-EBC2202A00F4078EC50F14352E1C9756720C085D\n\n0000000000000000000000000000000000000000 b3897a231a155dbe3b57e14f9031a651ae7d9283 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmj7bNUACgkQX735uTFP\nrXE3BBAAs8bThjUvcxSxLPl6JlWra4ijJgzL4snsoFVTeLxFs6sxKe0TTalftSCz\noQvwtdPfQgQ6J4pR1G+5ovhkwLefX0vk0VET7Cgzh0tUWsPO9uUAoYDElV/WoVab\nQCfi178GRpWytxC/pn0AGJIsuVMKKDRzuT1p/cBtWrvxN5Gi+wY9xCwGQfCDpUOU\nluVC8/SvdOUCbhf47B//Rt7sBgcmrpDB3v6eW9jOSfkNmIS2EqpGkfBezpUSe7d5\nlyK6ez17Hi3W1LGzEzC03QM7OAjCsLDiyBvgB7/XHhnEowvM2dx2nxrLjgsvNTSf\nIT6JttS/R9bJaFkGTHW/xbJ/0bsJ851iwCIQwoKNSXQCRJrROBAljLkFVeM9jd/V\nRdg5XYaCBaeq928bwfD8Ox/dCdxfT2MEu0KLsAQ5xnCb4BWNUPdMx9u5fBoJK61c\nJmtwAZY5VnrKKAA3vux9kXUmfUh6Lf3bJwKSgAP4Jfmw9sQ+/Lfr2uJWrcZ7lIgo\n/vQnkcdaa/Zl+npt3OtxgakV0dmykyFB72Jtb4/aS03qxmR8iuIlKff42nf4JXBO\n7hehssoVSsdvvWup7ZsHMA7RC+6+ugqQUvEuxt3dt/aqM4cTrlv6/gsYvm+hkNjX\nUb0DGvSLC2bZIGxwpxMhRVfGWBGM0Yge8YOTZGqI9i4mF+6w1Rs\u003d\n\u003d0yK+\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5d9c591_a92c2338",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "Hello Joakim,\nThank you for this change which takes into account my comments made at the last TPCE code-review meeting. Here are my main comments on this change.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29af5fb_009374b8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "This annotation is obsolete. May be removed.",
+      "range": {
+        "startLine": 541,
+        "startChar": 4,
+        "endLine": 541,
+        "endChar": 53
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94f2a35c_1c3065dd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "on a new line to ease readability",
+      "range": {
+        "startLine": 553,
+        "startChar": 86,
+        "endLine": 553,
+        "endChar": 116
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5ad1b1a_2f7f0806",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "TPAndNodeCollection",
+      "range": {
+        "startLine": 21,
+        "startChar": 3,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "913aab2e_a5dab624",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "TPAndNodeCollection",
+      "range": {
+        "startLine": 42,
+        "startChar": 52,
+        "endLine": 42,
+        "endChar": 68
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735b1448_2504eb0c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/TPAndNodeCollection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "Collection of TP and Node ID implied in an existing ?",
+      "range": {
+        "startLine": 54,
+        "startChar": 27,
+        "endLine": 54,
+        "endChar": 59
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "645202d1_0fbde8c9",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "Should be a @Mock",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 11
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c45ffdd4_e2ad4d77",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "Should be a @Mock",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 11
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1bfb2f3_a888542f",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "If all ConnectivityUtils parameters are mocked, become useless and may be deleted.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 1
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27313b96_60fa62a1",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "not used, so may be deleted",
+      "range": {
+        "startLine": 565,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 5
+      },
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9eed53_91b12486",
+        "filename": "tapi/src/test/resources/connectivity-utils/openroadm-network.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aba5403_b49bf7c9",
+        "filename": "tapi/src/test/resources/connectivity-utils/openroadm-topology.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb09455_27e7bdd5",
+        "filename": "tapi/src/test/resources/connectivity-utils/otn-topology.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be3c9ed_facd0a4b",
+        "filename": "tapi/src/test/resources/connectivity-utils/portmapping.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-24T13:58:58Z",
+      "side": 1,
+      "message": "This file is not necessary to run Junit tests. To be removed.",
+      "revId": "ca88ff7f16142b043e7ac5ae7dc73cc0364d72f4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
