@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
@@ -36,6 +38,8 @@ import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.topology.ORtoTapiTopoConversionTools;
+import org.opendaylight.transportpce.tapi.topology.TapiTopologyException;
+import org.opendaylight.transportpce.tapi.topology.TopologyUtils;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;
 import org.opendaylight.transportpce.tapi.utils.ServiceEndpointType;
 import org.opendaylight.transportpce.tapi.utils.TapiContext;
@@ -55,6 +59,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.conn
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils.rev250207.connection.vs.service.services.SupportingServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils.rev250207.connection.vs.service.services.SupportingServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.equipment.types.rev191129.OpticTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.RpcActions;
@@ -70,6 +76,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev2
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.subrate.eth.sla.SubrateEthSlaBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
@@ -87,9 +94,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToAKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.Node;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
@@ -190,11 +202,17 @@ public final class ConnectivityUtils {
     private String serviceName;
     private Uuid serviceUuid;
     private final Factory frequencyFactory;
+    private final TopologyUtils topologyUtils;
 
     // TODO -> handle cases for which node id is ROADM-A1 and not ROADMA01 or XPDR-A1 and not XPDRA01
-    public ConnectivityUtils(ServiceDataStoreOperations serviceDataStoreOperations,
-                             Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap, TapiContext tapiContext,
-                             NetworkTransactionService networkTransactionService, Uuid tapiTopoUuid) {
+    public ConnectivityUtils(
+            ServiceDataStoreOperations serviceDataStoreOperations,
+            Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap,
+            TapiContext tapiContext,
+            NetworkTransactionService networkTransactionService,
+            Uuid tapiTopoUuid,
+            TopologyUtils topologyUtils) {
+
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.tapiContext = tapiContext;
         this.sipMap = sipMap;
@@ -208,6 +226,7 @@ public final class ConnectivityUtils {
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.servicesMap = new HashMap<>();
         this.frequencyFactory = new TeraHertzFactory();
+        this.topologyUtils = topologyUtils;
     }
 
     public static ServiceCreateInput buildServiceCreateInput(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
@@ -393,9 +412,16 @@ public final class ConnectivityUtils {
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
         //  and XPDR NETWORK TTPs (if any). From the path description. This will help to build the uuid of the CEPs
         //  and the connections
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            LOG.error("OpenROADM topology could not be retrieved from datastore: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
 
         //Process path description getting lists of nodes and tps
-        IDCollection idCollection = extractTPandNodeIds(pathDescription);
+        IDCollection idCollection = extractTPandNodeIds(pathDescription, openroadmTopo);
 
         List<String> xpdrClientTplist = idCollection.xpdrClientTplist();
         List<String> xpdrNetworkTplist = idCollection.xpdrNetworkTplist();
@@ -538,82 +564,180 @@ public final class ConnectivityUtils {
         return connectionServMap;
     }
 
-    public IDCollection extractTPandNodeIds(PathDescription pathDescription) {
+    /**
+     * Uses topology and portmapping to determine termination point and node types.
+     */
+    public IDCollection extractTPandNodeIds(
+            PathDescription pathDescription,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
 
+        if (openroadmTopo == null) {
+            LOG.warn("OpenROADM topology is null, no termination point and node ids processed.");
+            return new TPAndNodeCollection();
+        }
+        Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.network.NodeKey,
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.Node> topologyNodes = openroadmTopo.getNode();
+
+        //Mutable connectivity map to be populated with termination points.
+        IDCollection idCollection = new TPAndNodeCollection();
         String resourceType;
-        List<String> xpdrClientTplist = new ArrayList<>();
-        List<String> xpdrNetworkTplist = new ArrayList<>();
-        List<String> rdmAddDropTplist = new ArrayList<>();
-        List<String> rdmDegTplist = new ArrayList<>();
-        List<String> rdmNodelist = new ArrayList<>();
-        List<String> xpdrNodelist = new ArrayList<>();
 
-        for (AToZ elem:pathDescription.getAToZDirection().getAToZ().values().stream()
+        for (AToZ atoz: Objects.requireNonNull(pathDescription.getAToZDirection().getAToZ()).values().stream()
                 .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId()))))
                 .toList()) {
-            resourceType = elem.getResource().getResource().implementedInterface().getSimpleName();
+
+            resourceType = atoz.getResource().getResource().implementedInterface().getSimpleName();
+
             switch (resourceType) {
                 case TapiConstants.TP:
-                    TerminationPoint tp = (TerminationPoint) elem.getResource().getResource();
-                    String tpID = tp.getTpId();
-                    String tpNode;
-                    if (tpID.contains("CLIENT")) {
-                        tpNode = tp.getTpNodeId();
-                        if (!xpdrClientTplist.contains(String.join("+", tpNode, tpID))) {
-                            xpdrClientTplist.add(String.join("+", tpNode, tpID));
-                        }
+                    TerminationPoint tp = (TerminationPoint) atoz.getResource().getResource();
+                    Node networkNode = Objects.requireNonNull(topologyNodes).get(
+                                    new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                                                    .networks.network.NodeKey(
+                                            NodeId.getDefaultInstance(tp.getTpNodeId())));
+
+                    Node1 nodeAugmentation = networkNode.augmentation(Node1.class);
+
+                    if (nodeAugmentation == null) {
+                        LOG.warn("Node {} does not have OpenROADM augmentation", networkNode.getNodeId());
+                        continue;
                     }
-                    if (tpID.contains("NETWORK")) {
-                        tpNode = tp.getTpNodeId();
-                        if (!xpdrNetworkTplist.contains(String.join("+", tpNode, tpID))) {
-                            xpdrNetworkTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    if (tpID.contains("PP")) {
-                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
-                        LOG.info("ROADM Node of tp = {}", tpNode);
-                        if (!rdmAddDropTplist.contains(String.join("+", tpNode, tpID))) {
-                            rdmAddDropTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
-                    if (tpID.contains("TTP")) {
-                        tpNode = getIdBasedOnModelVersion(tp.getTpNodeId());
-                        LOG.info("ROADM Node of tp = {}", tpNode);
-                        if (!rdmDegTplist.contains(String.join("+", tpNode, tpID))) {
-                            rdmDegTplist.add(String.join("+", tpNode, tpID));
-                        }
-                    }
+
+                    //Termination point processing, the result is saved in the idCollection object.
+                    terminationPoints(idCollection, tp, networkNode, nodeAugmentation);
                     break;
                 case TapiConstants.NODE:
-                    Node node = (Node) elem.getResource().getResource();
-                    String nodeId = node.getNodeId();
-                    if (nodeId.contains("XPDR") || nodeId.contains("SPDR") || nodeId.contains("MXPDR")) {
-                        LOG.info("Node id = {}", nodeId);
-                        if (!xpdrNodelist.contains(nodeId)) {
-                            xpdrNodelist.add(nodeId); // should contain only 2
-                        }
-                    }
-                    if (nodeId.contains("ROADM")) {
-                        nodeId = getIdBasedOnModelVersion(nodeId);
-                        LOG.info("Node id = {}", nodeId);
-                        if (!rdmNodelist.contains(nodeId)) {
-                            rdmNodelist.add(nodeId);
-                        }
-                    }
                     break;
                 default:
-                    LOG.warn("Resource is a {}", resourceType);
+                    LOG.warn("Unsupported resource type: {}, resource type is ignored.", resourceType);
             }
         }
 
-        return new TPAndNodeCollection(
-                xpdrClientTplist,
-                xpdrNetworkTplist,
-                rdmAddDropTplist,
-                rdmDegTplist,
-                rdmNodelist,
-                xpdrNodelist
+        //Return an immutable copy of the connectivity map.
+        return new TPAndNodeCollection(idCollection);
+    }
+
+    /**
+     * Processes termination points to identify their type.
+     * The result is saved in the idCollection object.
+     */
+    private void terminationPoints(
+            IDCollection idCollection,
+            TerminationPoint tp,
+            Node networkNode,
+            Node1 nodeAugmentation) {
+
+        String tpID = tp.getTpId();
+        if (tp.getTpNodeId().isEmpty() || tpID.isEmpty()) {
+            LOG.warn("Ignoring TP with empty tpId and/or tpNodeId: {}", tp);
+            return;
+        }
+
+        //Node-type
+        OpenroadmNodeType nodeType = nodeAugmentation.getNodeType();
+        LOG.info("Node {} is of type: {}", networkNode.getNodeId().getValue(), nodeType.getName());
+
+        //Supporting node
+        Map<SupportingNodeKey, SupportingNode> supportingNodeKeySupportingNodeMap = networkNode.nonnullSupportingNode();
+        SupportingNode supportingNode = supportingNodeKeySupportingNodeMap
+                .entrySet()
+                .stream()
+                .filter(
+                        s -> s.getValue()
+                                .getNetworkRef()
+                                .equals(NetworkId.getDefaultInstance("openroadm-network")))
+                .findFirst().orElseThrow().getValue();
+        String supportingNodeId = supportingNode.getNodeRef().getValue();
+
+        LOG.info("Node {} has supporting node: {}", networkNode.getNodeId().getValue(), supportingNodeId);
+
+        switch (nodeType) {
+            case SRG -> {
+                LOG.info("ROADM SRG node tp: {}", tp.getTpId());
+                if (isSrgPpTpType(networkNode, tpID)) {
+                    idCollection.addRdmAddDropTp(String.join("+", supportingNodeId, tpID));
+                    idCollection.addRdmNode(supportingNodeId);
+                }
+            }
+
+            case DEGREE -> {
+                LOG.info("ROADM DEGREE node tp: {}", tp.getTpId());
+                if (isDegTTPType(networkNode, tpID)) {
+                    idCollection.addRdmDegTp(String.join("+", supportingNodeId, tpID));
+                    idCollection.addRdmNode(supportingNodeId);
+                }
+            }
+
+            case XPONDER -> {
+                if (isType(networkNode, tpID, Set.of(OpenroadmTpType.XPONDERCLIENT))) {
+                    idCollection.addXpdrClientTp(String.join("+", tp.getTpNodeId(), tpID));
+                } else if (isType(networkNode, tpID, Set.of(OpenroadmTpType.XPONDERNETWORK))) {
+                    idCollection.addXpdrNetworkTp(String.join("+", tp.getTpNodeId(), tpID));
+                }
+                idCollection.addXpdrNode(tp.getTpNodeId());
+            }
+
+            default ->
+                LOG.warn("Ignoring unsupported TP id: {} for node: {}", tpID, tp.getTpNodeId());
+        }
+    }
+
+    /**
+     * Uses the topology to determine whether the TP is of SRG PP type.
+     */
+    private boolean isSrgPpTpType(Node networkNode, String tpId) {
+        Set<OpenroadmTpType> srgPpTypes = Set.of(
+                OpenroadmTpType.SRGTXPP,
+                OpenroadmTpType.SRGRXPP,
+                OpenroadmTpType.SRGTXRXPP
         );
+
+        return isType(networkNode, tpId, srgPpTypes);
+    }
+
+    /**
+     * Uses the topology to determine whether the TP is of DEG TTP type.
+     */
+    private boolean isDegTTPType(Node networkNode, String tpId) {
+        Set<OpenroadmTpType> degreeTpTypes = Set.of(
+                OpenroadmTpType.DEGREERXTTP,
+                OpenroadmTpType.DEGREETXTTP,
+                OpenroadmTpType.DEGREETXRXTTP
+        );
+
+        return isType(networkNode, tpId, degreeTpTypes);
+    }
+
+    /**
+     * Find the termination point type on the node and check if it matches any of the provided types.
+     * e.g. Searches for SRG1-PP1-TXRX on ROADM-A1-SRG1 node to determine if it is of
+     * type "SRGTXPP" or "SRGRXPP" or "SRGTXRXPP".
+     */
+    private boolean isType(Node networkNode, String tpId, Set<OpenroadmTpType> tpTypes) {
+        if (networkNode == null || tpId == null) {
+            return false;
+        }
+        LOG.info("Searching for TP {} on {} checking if it's one of type(s) {}",
+                tpId, networkNode.getNodeId().getValue(), tpTypes);
+
+        return Optional.ofNullable(
+                        networkNode.augmentation(
+                                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                        .Node1.class))
+                .map(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                                .Node1::getTerminationPoint)
+                .map(Map::values)
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(tp -> TpId.getDefaultInstance(tpId).equals(tp.getTpId()))
+                .map(tp -> Optional.ofNullable(tp.augmentation(TerminationPoint1.class))
+                        .map(TerminationPoint1::getTpType)
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .anyMatch(tpTypes::contains);
     }
 
     private void addNepToTopology(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid, OwnedNodeEdgePoint onep,
@@ -2147,12 +2271,6 @@ public final class ConnectivityUtils {
             //nepUuid,
             new Uuid(UUID.nameUUIDFromBytes(nepId.getBytes(StandardCharsets.UTF_8)).toString()),
             onep, true);
-    }
-
-    private String getIdBasedOnModelVersion(String nodeid) {
-        return nodeid.matches("[A-Z]{5}-[A-Z0-9]{2}-.*")
-            ? String.join("-", nodeid.split("-")[0], nodeid.split("-")[1])
-            : nodeid.substring(0, nodeid.lastIndexOf("-"));
     }
 
     private ServiceZEnd tapiEndPointToServiceZPoint(
