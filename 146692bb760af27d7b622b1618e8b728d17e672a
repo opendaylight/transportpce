@@ -1,4 +1,56 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761217859 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761217859-777546428763A6DF6A294C5D164CF2819C933E24\n\n0000000000000000000000000000000000000000 b57e0933d2047a58b7a57780f3e0b6e0516ea584 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmj6DUMACgkQX735uTFP\nrXGNdA//Z9gKdpzAOkmQPNSDm+gMlrU3tPB+AIyWzMkY8reNIg5CiO2RtYVDKc0H\n7hd0x2UpeakwEWJNGu5n9VrStutzXcLqoMShChuG8piH1gqD/JgeVSHi5oaAbsdY\nLi1YHgxIQxCLvRfOTNEGiUhI/289F2MqIdijTEQ8fWA5ygpSKyClfu0bg2VgcUV0\n3DmRyhoGiE/ulDhDZ7QmS1D+xL/1ccMpl+Zzx5HauBpCpsGXfkPTP/uQAgIfY7jm\nGh3z9gw1RvNbkm4ifXBb5uevuZUXWm7Qtn45lqGgldLxvJjUn1z/yWMOA6mBnmrw\nzzQy1FcW9E5AmBrtdV59UoC8/UN4aoOfnXVzH5KvyZmQYxD/keULfWfAJhr6U7uO\nICkOGf13GPpj7mmqy/d+te6OnCa3ZFJt3YLDrevTyHnrn4kBygB+HdP6VlrkoXQc\n2jwCcb1hjpAMzh7UPpoWZIX26gpiXaaxfMDohVCQrLydInja8AxJMuVFCKemK5Ud\n8XPS5JKpomj9qXkln+R5+5qWMMV7iVs1qP2EiJ5v4OSDWveRx13tkXGIv3gM2v/p\nGLoPcJfh9XwKYdjx6x6t4ORsE4k3BgMb8BSGpcZNRdlApYLQNBRBgCHTAEVA/MdA\noR0p84wpkIqtu4gSUPyB/dTaJW0zS6uaHXfxKXoXK2TcfEk5S28\u003d\n\u003dsFp9\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213181ae_1b738907",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-10-26T21:52:24Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64aed87c_40a2fe57",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-10-26T21:52:24Z",
+      "side": 1,
+      "message": "Should the changes in this file also be reverted?",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fe9c4e9_5f86518d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiServiceNotificationHandler.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-10-26T21:52:24Z",
+      "side": 1,
+      "message": "Maybe we can define a boolean TAPIServiceCreate (or something like that) that is set to true in TAPI CreateConnectivityServiceImpl. Then we only copy service to TAPI here if TAPIServiceCreate is false to avoid adding it twice when using TAPI service create API. It would also need to be reset to false here if true.",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
