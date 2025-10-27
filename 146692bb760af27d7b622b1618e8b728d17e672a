@@ -21,6 +21,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "175cd0af_ec306452",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:50:32Z",
+      "side": 1,
+      "message": "When a service is created using TAPI API, TAPI generates a UUID and responds to the client with that UUID. TAPI is wired to first setup a service in OpenROADM and the TAPI UUID is used as the OpenROADM service name (i.e. in service-create). These lines will ensure the UUID on the service in TAPI will have the same UUID sent to the client.\n\nIf memory serves me right, there was a functional test in TAPI that broke without this fix.\n\nHowever, as I\u0027m writing this text, I\u0027m starting to wonder whether I unintentionally broke the already established relationship between OpenROADM service-name and TAPI UUID.\n\nPerhaps the better option would be to...\n1. Generate a random UUID (e.g. UUID#1) in TAPI and use that as service-name in OpenROADM\n2. Respond the client by creating a new UUID based on UUID#1, e.g. \n\n    UUID.nameUUIDFromBytes(UUID#1.getBytes(StandardCharsets.UTF_8)).toString());\n\nIf so, these lines won\u0027t be necessary and the relationship between OpenROADM service-name and TAPI UUID remains the same.\n\nI need to look into this before knowing for sure.",
+      "parentUuid": "213181ae_1b738907",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64aed87c_40a2fe57",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
         "patchSetId": 33
@@ -38,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28218d5c_4034894d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:50:32Z",
+      "side": 1,
+      "message": "Alright, then we need another way of preventing duplicate services in TAPI. These changes disabled the direct creation of a TAPI service and instead relied on creating one indirectly. i.e. by first creating the service in OpenROADM and then using a listener to copy the service to TAPI.",
+      "parentUuid": "64aed87c_40a2fe57",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fe9c4e9_5f86518d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiServiceNotificationHandler.java",
         "patchSetId": 33
@@ -49,6 +85,24 @@
       "writtenOn": "2025-10-26T21:52:24Z",
       "side": 1,
       "message": "Maybe we can define a boolean TAPIServiceCreate (or something like that) that is set to true in TAPI CreateConnectivityServiceImpl. Then we only copy service to TAPI here if TAPIServiceCreate is false to avoid adding it twice when using TAPI service create API. It would also need to be reset to false here if true.",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41af1c5f_178615ad",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiServiceNotificationHandler.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:50:32Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of juggling magic booleans. Oftentimes they tend to make things more complicated than they have to be. I\u0027d like to find another solution. \n\nPerhaps we can simply search for the service in the TAPI datastore, and if it exists, then don\u0027t do anything.",
+      "parentUuid": "5fe9c4e9_5f86518d",
       "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
