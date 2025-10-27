@@ -36,6 +36,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8404c1a1_9fe3d3b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Thx Gilles, I appreciate your suggestions!",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "748bb970_4295953c",
@@ -49,6 +66,30 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "Please use the LF after the .revxx to allow for fast grep searching on the code",
+      "range": {
+        "startLine": 577,
+        "startChar": 20,
+        "endLine": 577,
+        "endChar": 31
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b1e219_5ef0a33a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "748bb970_4295953c",
       "range": {
         "startLine": 577,
         "startChar": 20,
@@ -82,6 +123,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06f3f8cb_39a507b8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb86f4e8_b4d93055",
+      "range": {
+        "startLine": 584,
+        "startChar": 16,
+        "endLine": 584,
+        "endChar": 26
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2106783_db40a758",
@@ -95,6 +160,30 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "It would be better to name it idCollection for example.",
+      "range": {
+        "startLine": 589,
+        "startChar": 21,
+        "endLine": 589,
+        "endChar": 36
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d09cc5bf_cf2ea9ee",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Yes, obviously. I missed refactoring this one. Thx.",
+      "parentUuid": "f2106783_db40a758",
       "range": {
         "startLine": 589,
         "startChar": 21,
@@ -128,6 +217,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f2992b6_ec4d85f5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bf17de7_49c7259f",
+      "range": {
+        "startLine": 601,
+        "startChar": 19,
+        "endLine": 602,
+        "endChar": 60
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a23ad10d_3942252e",
@@ -141,6 +254,30 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "idem, etc...",
+      "range": {
+        "startLine": 635,
+        "startChar": 12,
+        "endLine": 636,
+        "endChar": 52
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fee03aa_0c2601cc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a23ad10d_3942252e",
       "range": {
         "startLine": 635,
         "startChar": 12,
@@ -174,6 +311,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff5aacf_bfce1eec",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f99c9bc6_daf3fb14",
+      "range": {
+        "startLine": 661,
+        "startChar": 16,
+        "endLine": 661,
+        "endChar": 54
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5c60753_dbc50fed",
@@ -197,6 +358,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f9964e0_08b0ac2e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5c60753_dbc50fed",
+      "range": {
+        "startLine": 665,
+        "startChar": 8,
+        "endLine": 665,
+        "endChar": 11
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78c43361_cf7cb88f",
@@ -210,6 +395,30 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "Why not use the same logic as above here?\n     if (isType(networkNode, tpID, Set.of(OpenroadmTpType.XPONDERCLIENT)))\nAdditionally, it has the advantage of removing the dependency on portmapping.",
+      "range": {
+        "startLine": 682,
+        "startChar": 12,
+        "endLine": 682,
+        "endChar": 63
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ba06aca_95c4b2d5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78c43361_cf7cb88f",
       "range": {
         "startLine": 682,
         "startChar": 12,
@@ -245,6 +454,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ead5523_dbceb2cf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Hmm, is there another way to read NodeTypes besides portmapping? The reason I\u0027m using portmapping here is to get the NodeType of the supporting node.\n\nAs an example, I\u0027m trying to get the NodeType for `SPDR-SA1`, which isn\u0027t available in `openroadm-topology.xml`, but is available in `portmapping.xml`.",
+      "parentUuid": "5fc93d91_b894f93f",
+      "range": {
+        "startLine": 693,
+        "startChar": 0,
+        "endLine": 699,
+        "endChar": 55
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af796d1e_ea8d1f67",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 18
@@ -256,6 +489,30 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "idem, qualified name should not be necessary.",
+      "range": {
+        "startLine": 710,
+        "startChar": 12,
+        "endLine": 711,
+        "endChar": 52
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "884830f7_a26900ee",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af796d1e_ea8d1f67",
       "range": {
         "startLine": 710,
         "startChar": 12,
@@ -442,6 +699,24 @@
       "writtenOn": "2025-10-27T12:36:15Z",
       "side": 1,
       "message": "We can delete this empty line 71 and the following ones as well...",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "612bbe92_b885a6b2",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T13:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf204740_3737b544",
       "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
