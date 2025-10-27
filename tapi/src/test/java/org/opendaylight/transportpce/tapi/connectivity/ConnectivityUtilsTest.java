@@ -33,6 +33,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
@@ -70,7 +71,234 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
+    void testMe() throws TapiTopologyException {
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        Optional<OpenroadmNodeType> type = connectivityUtils.atozOpenRoadmType(
+                getAToZKeyAToZMap(),
+                "SPDR-SA1",
+                openroadmTopo);
+        System.out.println(type.get());
+    }
+
+    @Test
     void testRoadmToRoadmConnectivity() throws TapiTopologyException {
+        Map<AToZKey, AToZ> atoZMap = getAToZKeyAToZMap();
+
+        // Build the AToZDirection and PathDescription
+        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder()
+                .setAToZ(atoZMap);
+
+        PathDescription pathDescription = new PathDescriptionBuilder()
+                .setAToZDirection(atoZDirectionBuilder.build())
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
+
+        List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
+        assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
+
+        List<String> expectedRoadmDegreeList = List.of(
+                "ROADM-A1+DEG2-TTP-TXRX",
+                "ROADM-C1+DEG1-TTP-TXRX"
+        );
+        assertEquals(expectedRoadmDegreeList, idCollection.rdmDegTplist(), "ROADM degree list mismatch");
+
+        List<String> expectedRoadmAddDropList = List.of(
+                "ROADM-A1+SRG1-PP1-TXRX",
+                "ROADM-C1+SRG1-PP1-TXRX"
+        );
+        assertEquals(expectedRoadmAddDropList, idCollection.rdmAddDropTplist(), "ROADM add/drop list mismatch");
+
+        List<String> expectedXpdrNodeList = List.of(
+                "SPDR-SA1-XPDR1",
+                "SPDR-SC1-XPDR1"
+        );
+        assertEquals(expectedXpdrNodeList, idCollection.xpdrNodelist(), "XPDR node list mismatch");
+
+        List<String> expectedXpdrNetworkList = List.of(
+                "SPDR-SA1-XPDR1+XPDR1-NETWORK1",
+                "SPDR-SC1-XPDR1+XPDR1-NETWORK1"
+        );
+        assertEquals(expectedXpdrNetworkList, idCollection.xpdrNetworkTplist(), "XPDR network list mismatch");
+
+        List<String> expectedXpdrClientList = List.of(); // empty
+        assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
+
+    }
+
+    @Test
+    void testXpdrToXpdrConnectivity() throws TapiTopologyException {
+        // --- Build the PathDescription for this scenario ---
+        Map<AToZKey, AToZ> atoZMap = new HashMap<>();
+
+        // ID 0 – XPDR-SA1 TerminationPoint
+        AToZ atoZItem0 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new TerminationPointBuilder()
+                                .setTpId("")
+                                .setTpNodeId("SPDR-SA1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("0")
+                .build();
+        atoZMap.put(atoZItem0.key(), atoZItem0);
+
+        // ID 1 – Node SPDR-SA1-XPDR1
+        AToZ atoZItem1 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new NodeBuilder()
+                                .setNodeId("SPDR-SA1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("1")
+                .build();
+        atoZMap.put(atoZItem1.key(), atoZItem1);
+
+        // ID 2 – XPDR-SA1 TerminationPoint (NETWORK)
+        AToZ atoZItem2 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new TerminationPointBuilder()
+                                .setTpId("XPDR1-NETWORK1")
+                                .setTpNodeId("SPDR-SA1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("2")
+                .build();
+        atoZMap.put(atoZItem2.key(), atoZItem2);
+
+        // ID 3 – Link between transponders
+        AToZ atoZItem3 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new LinkBuilder()
+                                .setLinkId("OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("3")
+                .build();
+        atoZMap.put(atoZItem3.key(), atoZItem3);
+
+        // ID 4 – XPDR-SC1 TerminationPoint (NETWORK)
+        AToZ atoZItem4 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new TerminationPointBuilder()
+                                .setTpId("XPDR1-NETWORK1")
+                                .setTpNodeId("SPDR-SC1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("4")
+                .build();
+        atoZMap.put(atoZItem4.key(), atoZItem4);
+
+        // ID 5 – Node SPDR-SC1-XPDR1
+        AToZ atoZItem5 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new NodeBuilder()
+                                .setNodeId("SPDR-SC1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("5")
+                .build();
+        atoZMap.put(atoZItem5.key(), atoZItem5);
+
+        // ID 6 – XPDR-SC1 TerminationPoint
+        AToZ atoZItem6 = new AToZBuilder()
+                .setResource(new ResourceBuilder()
+                        .setResource(new TerminationPointBuilder()
+                                .setTpId("")
+                                .setTpNodeId("SPDR-SC1-XPDR1")
+                                .build())
+                        .setState(State.InService)
+                        .build())
+                .setId("6")
+                .build();
+        atoZMap.put(atoZItem6.key(), atoZItem6);
+
+        // Build PathDescription
+        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder().setAToZ(atoZMap);
+        PathDescription pathDescription = new PathDescriptionBuilder()
+                .setAToZDirection(atoZDirectionBuilder.build())
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
+
+        // Assertions
+        List<String> expectedRoadmNodeList = List.of();
+        assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
+
+        List<String> expectedRoadmDegreeList = List.of();
+        assertEquals(expectedRoadmDegreeList, idCollection.rdmDegTplist(), "ROADM degree list mismatch");
+
+        List<String> expectedRoadmAddDropList = List.of();
+        assertEquals(expectedRoadmAddDropList, idCollection.rdmAddDropTplist(), "ROADM add/drop list mismatch");
+
+        List<String> expectedXpdrNodeList = List.of("SPDR-SA1-XPDR1", "SPDR-SC1-XPDR1");
+        assertEquals(expectedXpdrNodeList, idCollection.xpdrNodelist(), "XPDR node list mismatch");
+
+        List<String> expectedXpdrNetworkList = List.of(
+                "SPDR-SA1-XPDR1+XPDR1-NETWORK1",
+                "SPDR-SC1-XPDR1+XPDR1-NETWORK1"
+        );
+        assertEquals(expectedXpdrNetworkList, idCollection.xpdrNetworkTplist(), "XPDR network list mismatch");
+
+        List<String> expectedXpdrClientList = List.of();
+        assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
+    }
+
+    public Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
+        ListenableFuture<Optional<Network>> topologyFuture =
+                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
+        try {
+            return topologyFuture.get().orElseThrow();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException(
+                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
+                            .getValue(), e);
+        } catch (ExecutionException e) {
+            throw new TapiTopologyException(
+                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
+                            .getValue(), e);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+
+    private static Map<AToZKey, AToZ> getAToZKeyAToZMap() {
         Map<AToZKey, AToZ> atoZMap = new HashMap<>();
 
         // ID 0 – TerminationPoint
@@ -360,208 +588,6 @@ class ConnectivityUtilsTest extends AbstractTest {
                 .setId("22")
                 .build();
         atoZMap.put(atoZItem22.key(), atoZItem22);
-
-        // Build the AToZDirection and PathDescription
-        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder()
-                .setAToZ(atoZMap);
-
-        PathDescription pathDescription = new PathDescriptionBuilder()
-                .setAToZDirection(atoZDirectionBuilder.build())
-                .build();
-
-        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
-                serviceDataStoreOperations,
-                new HashMap<>(),
-                tapiContext,
-                networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
-                topologyUtils
-        );
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
-                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
-
-        List<String> expectedRoadmNodeList = List.of("ROADM-A1", "ROADM-C1");
-        assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
-
-        List<String> expectedRoadmDegreeList = List.of(
-                "ROADM-A1+DEG2-TTP-TXRX",
-                "ROADM-C1+DEG1-TTP-TXRX"
-        );
-        assertEquals(expectedRoadmDegreeList, idCollection.rdmDegTplist(), "ROADM degree list mismatch");
-
-        List<String> expectedRoadmAddDropList = List.of(
-                "ROADM-A1+SRG1-PP1-TXRX",
-                "ROADM-C1+SRG1-PP1-TXRX"
-        );
-        assertEquals(expectedRoadmAddDropList, idCollection.rdmAddDropTplist(), "ROADM add/drop list mismatch");
-
-        List<String> expectedXpdrNodeList = List.of(
-                "SPDR-SA1-XPDR1",
-                "SPDR-SC1-XPDR1"
-        );
-        assertEquals(expectedXpdrNodeList, idCollection.xpdrNodelist(), "XPDR node list mismatch");
-
-        List<String> expectedXpdrNetworkList = List.of(
-                "SPDR-SA1-XPDR1+XPDR1-NETWORK1",
-                "SPDR-SC1-XPDR1+XPDR1-NETWORK1"
-        );
-        assertEquals(expectedXpdrNetworkList, idCollection.xpdrNetworkTplist(), "XPDR network list mismatch");
-
-        List<String> expectedXpdrClientList = List.of(); // empty
-        assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
-
-    }
-
-    @Test
-    void testXpdrToXpdrConnectivity() throws TapiTopologyException {
-        // --- Build the PathDescription for this scenario ---
-        Map<AToZKey, AToZ> atoZMap = new HashMap<>();
-
-        // ID 0 – XPDR-SA1 TerminationPoint
-        AToZ atoZItem0 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new TerminationPointBuilder()
-                                .setTpId("")
-                                .setTpNodeId("SPDR-SA1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("0")
-                .build();
-        atoZMap.put(atoZItem0.key(), atoZItem0);
-
-        // ID 1 – Node SPDR-SA1-XPDR1
-        AToZ atoZItem1 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new NodeBuilder()
-                                .setNodeId("SPDR-SA1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("1")
-                .build();
-        atoZMap.put(atoZItem1.key(), atoZItem1);
-
-        // ID 2 – XPDR-SA1 TerminationPoint (NETWORK)
-        AToZ atoZItem2 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new TerminationPointBuilder()
-                                .setTpId("XPDR1-NETWORK1")
-                                .setTpNodeId("SPDR-SA1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("2")
-                .build();
-        atoZMap.put(atoZItem2.key(), atoZItem2);
-
-        // ID 3 – Link between transponders
-        AToZ atoZItem3 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new LinkBuilder()
-                                .setLinkId("OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("3")
-                .build();
-        atoZMap.put(atoZItem3.key(), atoZItem3);
-
-        // ID 4 – XPDR-SC1 TerminationPoint (NETWORK)
-        AToZ atoZItem4 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new TerminationPointBuilder()
-                                .setTpId("XPDR1-NETWORK1")
-                                .setTpNodeId("SPDR-SC1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("4")
-                .build();
-        atoZMap.put(atoZItem4.key(), atoZItem4);
-
-        // ID 5 – Node SPDR-SC1-XPDR1
-        AToZ atoZItem5 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new NodeBuilder()
-                                .setNodeId("SPDR-SC1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("5")
-                .build();
-        atoZMap.put(atoZItem5.key(), atoZItem5);
-
-        // ID 6 – XPDR-SC1 TerminationPoint
-        AToZ atoZItem6 = new AToZBuilder()
-                .setResource(new ResourceBuilder()
-                        .setResource(new TerminationPointBuilder()
-                                .setTpId("")
-                                .setTpNodeId("SPDR-SC1-XPDR1")
-                                .build())
-                        .setState(State.InService)
-                        .build())
-                .setId("6")
-                .build();
-        atoZMap.put(atoZItem6.key(), atoZItem6);
-
-        // Build PathDescription
-        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder().setAToZ(atoZMap);
-        PathDescription pathDescription = new PathDescriptionBuilder()
-                .setAToZDirection(atoZDirectionBuilder.build())
-                .build();
-
-        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
-                serviceDataStoreOperations,
-                new HashMap<>(),
-                tapiContext,
-                networkTransactionService,
-                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
-                topologyUtils
-        );
-
-        IDCollection idCollection = connectivityUtils.extractTPandNodeIds(pathDescription,
-                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II));
-
-        // Assertions
-        List<String> expectedRoadmNodeList = List.of();
-        assertEquals(expectedRoadmNodeList, idCollection.rdmNodelist(), "ROADM node list mismatch");
-
-        List<String> expectedRoadmDegreeList = List.of();
-        assertEquals(expectedRoadmDegreeList, idCollection.rdmDegTplist(), "ROADM degree list mismatch");
-
-        List<String> expectedRoadmAddDropList = List.of();
-        assertEquals(expectedRoadmAddDropList, idCollection.rdmAddDropTplist(), "ROADM add/drop list mismatch");
-
-        List<String> expectedXpdrNodeList = List.of("SPDR-SA1-XPDR1", "SPDR-SC1-XPDR1");
-        assertEquals(expectedXpdrNodeList, idCollection.xpdrNodelist(), "XPDR node list mismatch");
-
-        List<String> expectedXpdrNetworkList = List.of(
-                "SPDR-SA1-XPDR1+XPDR1-NETWORK1",
-                "SPDR-SC1-XPDR1+XPDR1-NETWORK1"
-        );
-        assertEquals(expectedXpdrNetworkList, idCollection.xpdrNetworkTplist(), "XPDR network list mismatch");
-
-        List<String> expectedXpdrClientList = List.of();
-        assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
-    }
-
-    public Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
-        ListenableFuture<Optional<Network>> topologyFuture =
-                this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, networkIID);
-        try {
-            return topologyFuture.get().orElseThrow();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new TapiTopologyException(
-                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
-                            .getValue(), e);
-        } catch (ExecutionException e) {
-            throw new TapiTopologyException(
-                    "Unable to get from mdsal topology: " + networkIID.firstKeyOf(Network.class).getNetworkId()
-                            .getValue(), e);
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+        return atoZMap;
     }
 }
