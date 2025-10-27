@@ -2,6 +2,23 @@
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761326496 +0200\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761326496-83EB680D2F6F22EAC5F91211F5B505FC495C4D50\n\n0000000000000000000000000000000000000000 460e989114dd2ff77a77604e0a36b0f8ad65a491 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmj7taAACgkQX735uTFP\nrXEwcBAAgBRbytnqfAgBWWN3jVmWY1+k/kQn0yy4y0fc+Ihk5+MvaFRlE96jtuW+\nzavBeP60kuxoT75ImZEuouBNqasNd93pLzBGBh/ysNM5Re28OOtnhucmT+wEAlB7\n/KPAiWsXt03y1IEcG6oGdQMiejqzhUKwGQzwXbtxTq8Xgqe+slX0c1vghO0N38Ii\n/pcRDcxsqEiYx3wj6DUssAimV0KR/EOLtcK2ufbWkMIwtXCJzEsnIFt9sHEq2WJ+\ngoWzWGOpyQMixSzlRrc9i5t8/PQMGO+FO84r6jdfx/HBY+QRANoIs6vSFmIdbTbk\nNpPIuRJO3T2sD+eEWw4xrpey03pyXjlAS2OJ/9lozAatGE4ynOsJBRQiEoiYpjDN\nzfK1ec9G7HBWWrjV5SQVKbiR+6IJRbqX5Bv3E+D3HoYVCmeuT/7jg6WQtvocZ845\npiTwX8O4W1zOL4Sn7bznuiikwo527plkqx9iDnUmpNMF5NsIKnWdfMWMltdOmyvr\nJAIn3e2Xgz/Soig8TTST27CzS/nmcGWmSWGurEO3vh7dstYG8JdfpMgFhAanql9M\nbxz5oiSazFy7pk3Ed4EeOziVEskbWa77ZvfTOEgq3mTgu4xlHysbuuwaHxYgdGTx\n3nqjhbfpyrKLRirs7m5b52hc7M4ylOlh8q/Fqwwjr5z/IZh69L8\u003d\n\u003dmVJp\n-----END PGP SIGNATURE-----\n",
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817a1f02_fbfeffff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:53:23Z",
+      "side": 1,
+      "message": "Thx Jonas, for pointing out these issues. I guess I got tunnel vision solving this issue and overlooked them.",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ff3d7ae_b6abdd58",
@@ -15,6 +32,24 @@
       "writtenOn": "2025-10-26T14:28:24Z",
       "side": 1,
       "message": "What about here?",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "064fc1ab_2d43b1c0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0ff3d7ae_b6abdd58",
       "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -38,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9bba6b65_192dc444",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2185,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fcc9b738_87a306f2",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "980aef3a_d9e4cc07",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 18
@@ -55,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fdc4cea_09b1efab",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2537,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "980aef3a_d9e4cc07",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91b5ba4e_29370341",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 18
@@ -66,6 +137,24 @@
       "writtenOn": "2025-10-26T14:28:24Z",
       "side": 1,
       "message": "What about here?",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581a731f_714b481a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2548,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-27T07:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "91b5ba4e_29370341",
       "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
