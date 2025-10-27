@@ -34,7 +34,7 @@ public class AssignSpectrumHighToLow implements Assign {
         int lowerFrequencyIndex;
         int upperFrequencyIndex;
 
-        for (int i = lastCenterFrequencyIndex; i > 0; i -= centerFrequencyGranularity) {
+        for (int i = lastCenterFrequencyIndex; i >= bandWidth; i -= centerFrequencyGranularity) {
             lowerFrequencyIndex = i - bandWidth;
             upperFrequencyIndex = i + bandWidth;
 
