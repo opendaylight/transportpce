@@ -478,6 +478,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d305f86_e25234b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-27T16:16:46Z",
+      "side": 1,
+      "message": "in openroadm-topology you get the node-type which can be \u0027SRG\u0027, \u0027DEGREE\u0027 or \u0027XPONDER\u0027.\nThe supporting node type of a SRG and DEGREE will be a ROADM, and the supporting node type of XPONDER is for sure an XPONDER also. So, I don\u0027t think we need to use portmapping just for that.",
+      "parentUuid": "7ead5523_dbceb2cf",
+      "range": {
+        "startLine": 693,
+        "startChar": 0,
+        "endLine": 699,
+        "endChar": 55
+      },
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af796d1e_ea8d1f67",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 18
