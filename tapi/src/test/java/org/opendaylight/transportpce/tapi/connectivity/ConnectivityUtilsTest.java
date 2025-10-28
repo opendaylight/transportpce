@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,16 +31,22 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.NodeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
 
 
 class ConnectivityUtilsTest extends AbstractTest {
@@ -66,6 +73,90 @@ class ConnectivityUtilsTest extends AbstractTest {
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLink);
+    }
+
+    @Test
+    void testAtoZXponderType() {
+        ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
+                .setUuid(Uuid.getDefaultInstance("5efda776-f8de-3e0b-9bbd-2c702e210946"))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                Map.of(serviceInterfacePoint.key(), serviceInterfacePoint),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertNotNull(connectivityUtils.getSipIdFromAend(
+                getAToZRoadmKeyAToZMap(),
+                "SPDR-SA1",
+                ServiceFormat.ODU));
+    }
+
+    @Test
+    void testZtoAXponderType() {
+        ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
+                .setUuid(Uuid.getDefaultInstance("5efda776-f8de-3e0b-9bbd-2c702e210946"))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                Map.of(serviceInterfacePoint.key(), serviceInterfacePoint),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertNotNull(connectivityUtils.getSipIdFromZend(
+                getZToARoadmKeyZToAMap(),
+                "SPDR-SA1",
+                ServiceFormat.ODU));
+    }
+
+    @Test
+    void testAtoZRoadmType() {
+        ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
+                .setUuid(Uuid.getDefaultInstance("abbf1503-11aa-3618-8bbd-e33916678dd3"))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                Map.of(serviceInterfacePoint.key(), serviceInterfacePoint),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertNotNull(connectivityUtils.getSipIdFromAend(
+                getAToZRoadmKeyAToZMap(),
+                "ROADM-A1",
+                ServiceFormat.ODU));
+    }
+
+    @Test
+    void testZtoARoadmType() {
+        ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
+                .setUuid(Uuid.getDefaultInstance("abbf1503-11aa-3618-8bbd-e33916678dd3"))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                Map.of(serviceInterfacePoint.key(), serviceInterfacePoint),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertNotNull(connectivityUtils.getSipIdFromZend(
+                getZToARoadmKeyZToAMap(),
+                "ROADM-A1",
+                ServiceFormat.ODU));
     }
 
     @Test
@@ -220,6 +311,10 @@ class ConnectivityUtilsTest extends AbstractTest {
         return buildAtoZMap(roadmPathElements());
     }
 
+    private Map<ZToAKey, ZToA> getZToARoadmKeyZToAMap() {
+        return buildZtoAMap(roadmPathElements());
+    }
+
     private Map<AToZKey, AToZ> getXpdrToXpdrAtoZMap() {
         List<PathElement> elements = List.of(
                 tp("0", "", "SPDR-SA1-XPDR1"),
@@ -260,6 +355,15 @@ class ConnectivityUtilsTest extends AbstractTest {
         Map<AToZKey, AToZ> map = new HashMap<>();
         for (PathElement e : elements) {
             AToZ item = new AToZBuilder().setId(e.id).setResource(e.resource).build();
+            map.put(item.key(), item);
+        }
+        return map;
+    }
+
+    private Map<ZToAKey, ZToA> buildZtoAMap(List<PathElement> elements) {
+        Map<ZToAKey, ZToA> map = new HashMap<>();
+        for (PathElement e : elements) {
+            ZToA item = new ZToABuilder().setId(e.id).setResource(e.resource).build();
             map.put(item.key(), item);
         }
         return map;
