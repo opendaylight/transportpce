@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import org.opendaylight.transportpce.tapi.utils.TapiContext;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev240205.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.PathDescription;
@@ -49,8 +51,12 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.local._class.NameBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ServiceInterfacePointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.create.connectivity.service.input.EndPointBuilder;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 
 
@@ -74,6 +80,142 @@ class ConnectivityUtilsTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 "src/test/resources/connectivity-utils/openroadm-topology.xml",
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+    }
+
+    @Test
+    public void getConnectionTypePhtncXponder() {
+        Name nameOne = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("SPDR-SA1-XPDR1")
+                .build();
+        EndPoint endPointOne = new EndPointBuilder()
+                .setLocalId("SPDR-SA1-XPDR1")
+                .setName(Map.of(nameOne.key(), nameOne))
+                .build();
+
+        Name nameTwo = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("SPDR-SC1-XPDR1")
+                .build();
+        EndPoint endPointTwo = new EndPointBuilder()
+                .setLocalId("SPDR-SC1-XPDR1")
+                .setName(Map.of(nameTwo.key(), nameTwo))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertEquals(ConnectionType.Infrastructure, connectivityUtils.getConnectionTypePhtnc(
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+        ));
+    }
+
+    @Test
+    public void getServiceFormatPhtncXponder() {
+        Name nameOne = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("SPDR-SA1-XPDR1")
+                .build();
+        EndPoint endPointOne = new EndPointBuilder()
+                .setLocalId("SPDR-SA1-XPDR1")
+                .setName(Map.of(nameOne.key(), nameOne))
+                .build();
+
+        Name nameTwo = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("SPDR-SC1-XPDR1")
+                .build();
+        EndPoint endPointTwo = new EndPointBuilder()
+                .setLocalId("SPDR-SC1-XPDR1")
+                .setName(Map.of(nameTwo.key(), nameTwo))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertEquals(ServiceFormat.OTU, connectivityUtils.getServiceFormatPhtnc(
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+        ));
+    }
+
+    @Test
+    public void getConnectionTypePhtncRoadm() {
+        Name nameOne = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("ROADM-A1-SRG1")
+                .build();
+        EndPoint endPointOne = new EndPointBuilder()
+                .setLocalId("ROADM-A1-SRG1")
+                .setName(Map.of(nameOne.key(), nameOne))
+                .build();
+
+        Name nameTwo = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("ROADM-C1-SRG1")
+                .build();
+        EndPoint endPointTwo = new EndPointBuilder()
+                .setLocalId("ROADM-C1-SRG1")
+                .setName(Map.of(nameTwo.key(), nameTwo))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertEquals(ConnectionType.RoadmLine, connectivityUtils.getConnectionTypePhtnc(
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+        ));
+    }
+
+    @Test
+    public void getServiceFormatPhtncRoadm() {
+        Name nameOne = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("ROADM-A1-SRG1")
+                .build();
+        EndPoint endPointOne = new EndPointBuilder()
+                .setLocalId("ROADM-A1-SRG1")
+                .setName(Map.of(nameOne.key(), nameOne))
+                .build();
+
+        Name nameTwo = new NameBuilder()
+                .setValueName("OpenROADM node id")
+                .setValue("ROADM-C1-SRG1")
+                .build();
+        EndPoint endPointTwo = new EndPointBuilder()
+                .setLocalId("ROADM-C1-SRG1")
+                .setName(Map.of(nameTwo.key(), nameTwo))
+                .build();
+
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertEquals(ServiceFormat.OC, connectivityUtils.getServiceFormatPhtnc(
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+        ));
     }
 
     @Test
