@@ -965,8 +965,16 @@ public final class ConnectivityUtils {
                 break;
             case 3:
                 LOG.info("PHOTONIC");
-                connType = getConnectionTypePhtnc(endPointMap.values());
-                serviceFormat = getServiceFormatPhtnc(endPointMap.values());
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.Network network;
+                try {
+                    network = topologyUtils.readTopology(
+                                    InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+                } catch (TapiTopologyException e) {
+                    throw new RuntimeException(e);
+                }
+                connType = getConnectionTypePhtnc(endPointMap.values(), network);
+                serviceFormat = getServiceFormatPhtnc(endPointMap.values(), network);
                 LOG.debug("Node a photonic = {}", nodeAid);
                 LOG.debug("Node z photonic = {}", nodeZid);
                 break;
@@ -2536,9 +2544,13 @@ public final class ConnectivityUtils {
 
     public ConnectionType getConnectionTypePhtnc(
             Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                .create.connectivity.service.input.EndPoint> endPoints) {
+                .create.connectivity.service.input.EndPoint> endPoints,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
+
         return endPoints.stream()
-                .anyMatch(ep -> ep.getName().values().stream().anyMatch(name -> name.getValue().contains("ROADM")))
+                .anyMatch(ep -> Set.of(OpenroadmNodeType.SRG, OpenroadmNodeType.DEGREE)
+                        .contains(getOpenroadmNodeTypeForEndpoint(ep, openroadmTopo.getNode()).orElseThrow()))
             // EndPoints are ROADMs
             ? ConnectionType.RoadmLine
             // EndPoints are not ROADMs -> XPDR, MUXPDR, SWTICHPDR
@@ -2547,9 +2559,13 @@ public final class ConnectivityUtils {
 
     public ServiceFormat getServiceFormatPhtnc(
             Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
-                .create.connectivity.service.input.EndPoint> endPoints) {
+                .create.connectivity.service.input.EndPoint> endPoints,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
+
         return endPoints.stream()
-                .anyMatch(ep -> ep.getName().values().stream().anyMatch(name -> name.getValue().contains("ROADM")))
+                .anyMatch(ep -> Set.of(OpenroadmNodeType.SRG, OpenroadmNodeType.DEGREE)
+                        .contains(getOpenroadmNodeTypeForEndpoint(ep, openroadmTopo.getNode()).orElseThrow()))
             // EndPoints are ROADMs
             ? ServiceFormat.OC
             // EndPoints ar not ROADMs -> XPDR, MUXPDR, SWTICHPDR
@@ -2789,6 +2805,26 @@ public final class ConnectivityUtils {
         LOG.warn("Unable to determine OpenroadmNodeType for ZtoA service node: {}", serviceNodeId);
 
         return Optional.empty();
+    }
+
+    private Optional<OpenroadmNodeType> getOpenroadmNodeTypeForEndpoint(
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
+                    .create.connectivity.service.input.EndPoint endPoint,
+            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.NodeKey, Node> topologyNodes) {
+
+        Node networkNode = Objects.requireNonNull(topologyNodes).get(
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.NodeKey(
+                        NodeId.getDefaultInstance(endPoint.getLocalId())));
+
+        Node1 nodeAugmentation = networkNode.augmentation(Node1.class);
+
+        if (nodeAugmentation == null) {
+            LOG.warn("Node {} does not have OpenROADM augmentation", networkNode.getNodeId());
+            return Optional.empty();
+        }
+        return Optional.ofNullable(nodeAugmentation.getNodeType());
     }
 
     private Optional<OpenroadmNodeType> getOpenroadmNodeType(
