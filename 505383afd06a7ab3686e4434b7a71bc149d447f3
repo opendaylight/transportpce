@@ -1,4 +1,28 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761591521 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761591521-9F7BF8F8A5C55098C085EC89C8851188F1AFF812\n\n0000000000000000000000000000000000000000 6129f18c777ea573df2dbb6706b8ea53ca31b276 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmj/wOEACgkQX735uTFP\nrXHK1BAAlGtluZsXUABE8CX7SxJxjSPTfinuhlYX795jzSzyNCBKuBFrNNvy7mdn\n8pbwkrZaGP9NgA4QYU7kSB047lvx/5ySr2X6WX+FMfxtpBO6XORWh3ZJjQAp1WS+\n2MdKTlH4/PMDYa9rpGAc64gJwJSabEgd5grtrl013utekYHgfolI/ot6nWGqaRF+\nTm+aFxN93lqKQlncP1KIBekLW+Yb5uJxA0ajHdAbsRKb3QFuTFj4xPFRPajXx02P\nyNKd91SU9m0UHtgQxrkphEyTJozHO5/pnCuV039mL1k/6xJQ0iutKm+j4YwZ8y1w\nClLiZyVOFhCI2Z2sHaTOBkSzBnHkFSf3ug7wCeeTfSwiDeAwMJZ/8G3Ec9OZcrk/\naGxJ7k+a30TfmwoZjex7/vbwHVh31ONbN0ZaCxjF71hGFASXpytMh6wu0YOjwQs5\nepMiljPrN8c2GVm0dqBSiq7BxWHIs+HQwt94vKym+WSNlhAaiJFu/O7Z4JOCY13J\nFMtKnFQmnD1gUpEQFPfTNNC/+KbVuvBlJ0PgavE/8dH6RVOUDVKE3G+XQB1fboli\nq7mm+Pdx5/OwqBaWvKvfeeSANYPTAkHOlXVuSdjSU2aLrlR3xWFkDKUpug1+ph7g\nuFyYIWcJv+w3WsR6yRR+gbjvhhjq9VdbIw5YoY45M1jf5m6b7lU\u003d\n\u003dekQU\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c2740e_78762707",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-28T09:32:02Z",
+      "side": 1,
+      "message": "This one should probably also be refactored. As far as I can tell, this if-statement always evaluates to true, since `getId()` returns a numeric value such as 14.\nUnless there is a path of the code I\u0027m unaware of creating a different id (not impossible, I haven\u0027t looked for it yet). Regardless, I believe this if-statement is looking at the wrong piece of information.",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 45
+      },
+      "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
