@@ -606,6 +606,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70198cea_e99fb39a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-28T20:41:33Z",
+      "side": 1,
+      "message": "Resolved in this change:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/118900",
+      "parentUuid": "064fc1ab_2d43b1c0",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcc9b738_87a306f2",
@@ -637,6 +655,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "fcc9b738_87a306f2",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8614ce9e_f4172a59",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2185,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-28T20:41:33Z",
+      "side": 1,
+      "message": "Resolved in this change:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/118900",
+      "parentUuid": "9bba6b65_192dc444",
       "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -676,6 +712,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b530bc_bee27cfb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2537,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-28T20:41:33Z",
+      "side": 1,
+      "message": "Resolved in this change:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/118902",
+      "parentUuid": "2fdc4cea_09b1efab",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91b5ba4e_29370341",
@@ -707,6 +761,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "91b5ba4e_29370341",
+      "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1d1f72a_d5255cdf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2548,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-28T20:41:33Z",
+      "side": 1,
+      "message": "Resolved in this change:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/118902",
+      "parentUuid": "581a731f_714b481a",
       "revId": "460e989114dd2ff77a77604e0a36b0f8ad65a491",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
