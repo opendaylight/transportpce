@@ -2822,7 +2822,7 @@ public final class ConnectivityUtils {
         return serviceAEndBuilder.build();
     }
 
-    private ConnectionType getConnectionTypePhtnc(
+    public ConnectionType getConnectionTypePhtnc(
             Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint> endPoints) {
         return endPoints.stream()
@@ -2833,7 +2833,7 @@ public final class ConnectivityUtils {
             : ConnectionType.Infrastructure;
     }
 
-    private ServiceFormat getServiceFormatPhtnc(
+    public ServiceFormat getServiceFormatPhtnc(
             Collection<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .create.connectivity.service.input.EndPoint> endPoints) {
         return endPoints.stream()
