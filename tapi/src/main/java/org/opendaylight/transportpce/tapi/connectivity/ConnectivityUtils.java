@@ -2082,7 +2082,7 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    private Uuid getSipIdFromZend(Map<ZToAKey, ZToA> mapztoa, String serviceNodeId, ServiceFormat serviceFormat) {
+    public Uuid getSipIdFromZend(Map<ZToAKey, ZToA> mapztoa, String serviceNodeId, ServiceFormat serviceFormat) {
         if (serviceNodeId.contains("ROADM")) {
             // Service from ROADM to ROADM
             // AddDrop-AddDrop ports --> MC layer SIPs
@@ -2150,7 +2150,7 @@ public final class ConnectivityUtils {
         return null;
     }
 
-    private Uuid getSipIdFromAend(Map<AToZKey, AToZ> mapatoz, String serviceNodeId, ServiceFormat serviceFormat) {
+    public Uuid getSipIdFromAend(Map<AToZKey, AToZ> mapatoz, String serviceNodeId, ServiceFormat serviceFormat) {
         LOG.info("ServiceNode = {} and ServiceFormat = {}", serviceNodeId, serviceFormat.getName());
         LOG.info("Map a to z = {}", mapatoz);
         if (serviceNodeId.contains("ROADM")) {
