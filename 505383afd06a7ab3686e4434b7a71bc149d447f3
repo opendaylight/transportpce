@@ -23,6 +23,30 @@
       },
       "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81b607f3_a1c6114f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-28T13:50:47Z",
+      "side": 1,
+      "message": "I agree with you, this if-statement always seems true. I don\u0027t see neither any place in the TPCE code where this identifier, although specified in yang as a string, could be anything other than an integer index.\nWorse still: the code for the PCePAthDescription (place where this id is set) can be confusing, as we sometimes define this identifier with a tpname or a link source name, but in reality, the identifier takes the value of the index through the use of the withKey() method...\nSo we should probably simplify the code for the PcePathDescription as well.\nIf we have to touch this, it would be better to do it in a separate change, dedicated to this modification.",
+      "parentUuid": "b9c2740e_78762707",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 45
+      },
+      "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
