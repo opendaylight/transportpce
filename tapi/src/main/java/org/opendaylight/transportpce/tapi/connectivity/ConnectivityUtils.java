@@ -420,8 +420,14 @@ public final class ConnectivityUtils {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.ServiceAEnd serviceAEnd =
             service.getServiceAEnd();
         // Endpoint creation
-        EndPoint endPoint1 = mapServiceAEndPoint(serviceAEnd, pathDescription);
-        EndPoint endPoint2 = mapServiceZEndPoint(service.getServiceZEnd(), pathDescription);
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            throw new RuntimeException(e);
+        }
+        EndPoint endPoint1 = mapServiceAEndPoint(serviceAEnd, pathDescription, openroadmTopo);
+        EndPoint endPoint2 = mapServiceZEndPoint(service.getServiceZEnd(), pathDescription, openroadmTopo);
         Map<EndPointKey, EndPoint> endPointMap = new HashMap<>(Map.of(
                 endPoint1.key(), endPoint1,
                 endPoint2.key(), endPoint2));
@@ -2171,13 +2177,17 @@ public final class ConnectivityUtils {
 
     private EndPoint mapServiceZEndPoint(
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110
-                .service.ServiceZEnd serviceZEnd, PathDescription pathDescription) {
+                .service.ServiceZEnd serviceZEnd,
+            PathDescription pathDescription,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
+                           openroadmTopo) {
         EndPointBuilder endPointBuilder = new EndPointBuilder();
         // 1. Service Format: ODU, OTU, ETH
         ServiceFormat serviceFormat = serviceZEnd.getServiceFormat();
         String serviceNodeId = serviceZEnd.getNodeId().getValue();
         // Identify SIP name
-        Uuid sipUuid = getSipIdFromZend(pathDescription.getZToADirection().getZToA(), serviceNodeId, serviceFormat);
+        Uuid sipUuid = getSipIdFromZend(pathDescription.getZToADirection().getZToA(), serviceNodeId, serviceFormat,
+                        openroadmTopo);
         LOG.info("Uuid of z end {}", sipUuid);
         LayerProtocolName layerProtocols = null;
         // Layer protocol name
@@ -2225,14 +2235,22 @@ public final class ConnectivityUtils {
     }
 
     private EndPoint mapServiceAEndPoint(
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.ServiceAEnd
-            serviceAEnd, PathDescription pathDescription) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev250110.service.ServiceAEnd
+                    serviceAEnd,
+            PathDescription pathDescription,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
+                    openroadmTopo) {
+
         EndPointBuilder endPointBuilder = new EndPointBuilder();
         // 1. Service Format: ODU, OTU, ETH
         ServiceFormat serviceFormat = serviceAEnd.getServiceFormat();
         String serviceNodeId = serviceAEnd.getNodeId().getValue();
         // Identify SIP name
-        Uuid sipUuid = getSipIdFromAend(pathDescription.getAToZDirection().getAToZ(), serviceNodeId, serviceFormat);
+        Uuid sipUuid = getSipIdFromAend(
+                pathDescription.getAToZDirection().getAToZ(),
+                serviceNodeId,
+                serviceFormat,
+                openroadmTopo);
         LOG.info("Uuid of a end {}", sipUuid);
         LayerProtocolName layerProtocols = null;
         // Layer protocol name
@@ -2280,8 +2298,16 @@ public final class ConnectivityUtils {
             .build();
     }
 
-    public Uuid getSipIdFromZend(Map<ZToAKey, ZToA> mapztoa, String serviceNodeId, ServiceFormat serviceFormat) {
-        if (serviceNodeId.contains("ROADM")) {
+    public Uuid getSipIdFromZend(
+            Map<ZToAKey, ZToA> mapztoa,
+            String serviceNodeId,
+            ServiceFormat serviceFormat,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
+                    openroadmTopo) {
+
+        Optional<OpenroadmNodeType> type = ztoaOpenRoadmType(mapztoa, serviceNodeId, openroadmTopo);
+
+        if (type.isPresent() && Set.of(OpenroadmNodeType.DEGREE, OpenroadmNodeType.SRG).contains(type.orElseThrow())) {
             // Service from ROADM to ROADM
             // AddDrop-AddDrop ports --> MC layer SIPs
             ZToA firstElement =
@@ -2348,10 +2374,19 @@ public final class ConnectivityUtils {
         return null;
     }
 
-    public Uuid getSipIdFromAend(Map<AToZKey, AToZ> mapatoz, String serviceNodeId, ServiceFormat serviceFormat) {
+    public Uuid getSipIdFromAend(
+            Map<AToZKey, AToZ> mapatoz,
+            String serviceNodeId,
+            ServiceFormat serviceFormat,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
+                    openroadmTopo) {
+
         LOG.info("ServiceNode = {} and ServiceFormat = {}", serviceNodeId, serviceFormat.getName());
         LOG.info("Map a to z = {}", mapatoz);
-        if (serviceNodeId.contains("ROADM")) {
+
+        Optional<OpenroadmNodeType> type = atozOpenRoadmType(mapatoz, serviceNodeId, openroadmTopo);
+
+        if (type.isPresent() && Set.of(OpenroadmNodeType.DEGREE, OpenroadmNodeType.SRG).contains(type.orElseThrow())) {
             // Service from ROADM to ROADM
             // AddDrop-AddDrop ports --> MC layer SIPs
             AToZ firstElement =
@@ -2989,5 +3024,113 @@ public final class ConnectivityUtils {
 
     public void setConnectionCreationModeToActive(boolean isActive) {
         this.conCreationModeActive = isActive;
+    }
+
+    private Optional<OpenroadmNodeType> atozOpenRoadmType(
+            Map<AToZKey, AToZ> mapatoz,
+            String serviceNodeId,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
+
+        Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.network.NodeKey,
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.Node> topologyNodes = openroadmTopo.getNode();
+
+        String resourceType;
+
+        for (AToZ atoz: mapatoz.values().stream()
+                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId()))))
+                .toList()) {
+
+            resourceType = atoz.getResource().getResource().implementedInterface().getSimpleName();
+
+            if (resourceType.equals(TapiConstants.TP)) {
+                Optional<OpenroadmNodeType> type = getOpenroadmNodeType(
+                        serviceNodeId,
+                        (TerminationPoint) atoz.getResource().getResource(),
+                        topologyNodes
+                );
+                if (type.isPresent()) {
+                    return type;
+                }
+            }
+        }
+
+        LOG.warn("Unable to determine OpenroadmNodeType for AtoZ service node: {}", serviceNodeId);
+
+        return Optional.empty();
+    }
+
+    private Optional<OpenroadmNodeType> ztoaOpenRoadmType(
+            Map<ZToAKey, ZToA> mapztoa,
+            String serviceNodeId,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
+
+        Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.network.NodeKey,
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.Node> topologyNodes = openroadmTopo.getNode();
+
+        String resourceType;
+
+        for (ZToA ztoa: mapztoa.values().stream()
+                .sorted((Comparator.comparing(atoz -> Integer.valueOf(atoz.getId()))))
+                .toList()) {
+
+            resourceType = ztoa.getResource().getResource().implementedInterface().getSimpleName();
+
+            if (resourceType.equals(TapiConstants.TP)) {
+                Optional<OpenroadmNodeType> type = getOpenroadmNodeType(
+                        serviceNodeId,
+                        (TerminationPoint) ztoa.getResource().getResource(),
+                        topologyNodes
+                );
+                if (type.isPresent()) {
+                    return type;
+                }
+            }
+        }
+
+        LOG.warn("Unable to determine OpenroadmNodeType for ZtoA service node: {}", serviceNodeId);
+
+        return Optional.empty();
+    }
+
+    private Optional<OpenroadmNodeType> getOpenroadmNodeType(
+            String serviceNodeId,
+            TerminationPoint tp,
+            Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.network.NodeKey, Node> topologyNodes) {
+
+        Node networkNode = Objects.requireNonNull(topologyNodes).get(
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                        .networks.network.NodeKey(
+                        NodeId.getDefaultInstance(tp.getTpNodeId())));
+
+        //Supporting node
+        Map<SupportingNodeKey, SupportingNode> supportingNodeKeySupportingNodeMap = networkNode.nonnullSupportingNode();
+        SupportingNode supportingNode = supportingNodeKeySupportingNodeMap
+                .entrySet()
+                .stream()
+                .filter(
+                        s -> s.getValue()
+                                .getNetworkRef()
+                                .equals(NetworkId.getDefaultInstance("openroadm-network")))
+                .findFirst().orElseThrow().getValue();
+
+        String supportingNodeId = supportingNode.getNodeRef().getValue();
+
+        if (supportingNodeId.equals(serviceNodeId)) {
+            Node1 nodeAugmentation = networkNode.augmentation(Node1.class);
+
+            if (nodeAugmentation == null) {
+                LOG.warn("Node {} does not have OpenROADM augmentation", networkNode.getNodeId());
+                return Optional.empty();
+            }
+            return Optional.ofNullable(nodeAugmentation.getNodeType());
+        }
+        return Optional.empty();
     }
 }
