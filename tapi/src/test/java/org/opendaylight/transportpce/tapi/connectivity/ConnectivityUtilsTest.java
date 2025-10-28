@@ -76,7 +76,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testAtoZXponderType() {
+    void testAtoZXponderType() throws TapiTopologyException {
         ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
                 .setUuid(Uuid.getDefaultInstance("5efda776-f8de-3e0b-9bbd-2c702e210946"))
                 .build();
@@ -90,14 +90,17 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
         assertNotNull(connectivityUtils.getSipIdFromAend(
                 getAToZRoadmKeyAToZMap(),
                 "SPDR-SA1",
-                ServiceFormat.ODU));
+                ServiceFormat.ODU,
+                openroadmTopo));
     }
 
     @Test
-    void testZtoAXponderType() {
+    void testZtoAXponderType() throws TapiTopologyException {
         ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
                 .setUuid(Uuid.getDefaultInstance("5efda776-f8de-3e0b-9bbd-2c702e210946"))
                 .build();
@@ -111,14 +114,17 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
         assertNotNull(connectivityUtils.getSipIdFromZend(
                 getZToARoadmKeyZToAMap(),
                 "SPDR-SA1",
-                ServiceFormat.ODU));
+                ServiceFormat.ODU,
+                openroadmTopo));
     }
 
     @Test
-    void testAtoZRoadmType() {
+    void testAtoZRoadmType() throws TapiTopologyException {
         ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
                 .setUuid(Uuid.getDefaultInstance("abbf1503-11aa-3618-8bbd-e33916678dd3"))
                 .build();
@@ -131,15 +137,18 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
                 topologyUtils
         );
+
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertNotNull(connectivityUtils.getSipIdFromAend(
                 getAToZRoadmKeyAToZMap(),
                 "ROADM-A1",
-                ServiceFormat.ODU));
+                ServiceFormat.ODU,
+                openroadmTopo));
     }
 
     @Test
-    void testZtoARoadmType() {
+    void testZtoARoadmType() throws TapiTopologyException {
         ServiceInterfacePoint serviceInterfacePoint = new ServiceInterfacePointBuilder()
                 .setUuid(Uuid.getDefaultInstance("abbf1503-11aa-3618-8bbd-e33916678dd3"))
                 .build();
@@ -153,10 +162,13 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
         assertNotNull(connectivityUtils.getSipIdFromZend(
                 getZToARoadmKeyZToAMap(),
                 "ROADM-A1",
-                ServiceFormat.ODU));
+                ServiceFormat.ODU,
+                openroadmTopo));
     }
 
     @Test
