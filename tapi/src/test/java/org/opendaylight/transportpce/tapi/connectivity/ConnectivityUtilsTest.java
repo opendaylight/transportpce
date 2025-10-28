@@ -83,7 +83,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    public void getConnectionTypePhtncXponder() {
+    public void getConnectionTypePhtncXponder() throws TapiTopologyException {
         Name nameOne = new NameBuilder()
                 .setValueName("OpenROADM node id")
                 .setValue("SPDR-SA1-XPDR1")
@@ -110,14 +110,17 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
                 topologyUtils
         );
+
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ConnectionType.Infrastructure, connectivityUtils.getConnectionTypePhtnc(
-                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
+                openroadmTopo
         ));
     }
 
     @Test
-    public void getServiceFormatPhtncXponder() {
+    public void getServiceFormatPhtncXponder() throws TapiTopologyException {
         Name nameOne = new NameBuilder()
                 .setValueName("OpenROADM node id")
                 .setValue("SPDR-SA1-XPDR1")
@@ -145,13 +148,16 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
         assertEquals(ServiceFormat.OTU, connectivityUtils.getServiceFormatPhtnc(
-                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
+                openroadmTopo
         ));
     }
 
     @Test
-    public void getConnectionTypePhtncRoadm() {
+    public void getConnectionTypePhtncRoadm() throws TapiTopologyException {
         Name nameOne = new NameBuilder()
                 .setValueName("OpenROADM node id")
                 .setValue("ROADM-A1-SRG1")
@@ -178,14 +184,17 @@ class ConnectivityUtilsTest extends AbstractTest {
                 new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
                 topologyUtils
         );
+
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ConnectionType.RoadmLine, connectivityUtils.getConnectionTypePhtnc(
-                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
+                openroadmTopo
         ));
     }
 
     @Test
-    public void getServiceFormatPhtncRoadm() {
+    public void getServiceFormatPhtncRoadm() throws TapiTopologyException {
         Name nameOne = new NameBuilder()
                 .setValueName("OpenROADM node id")
                 .setValue("ROADM-A1-SRG1")
@@ -213,8 +222,11 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
         assertEquals(ServiceFormat.OC, connectivityUtils.getServiceFormatPhtnc(
-                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class)
+                Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
+                openroadmTopo
         ));
     }
 
