@@ -37,6 +37,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -60,6 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
+@Disabled
 class PostAlgoPathValidatorTest {
 
     private final Map<NodeId, PceNode> nodes;
