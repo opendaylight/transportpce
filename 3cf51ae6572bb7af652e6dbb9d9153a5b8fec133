@@ -1,4 +1,51 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1761747363 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1761747363-357370E3F848302CC151CEAF235DAB8707516FED\n\n0000000000000000000000000000000000000000 d54a2db4db064fa29b3ea93aeed092807d6c51c0 refs/for/master%wip\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmkCIaMACgkQX735uTFP\nrXHSCQ/+N/jAg6njRyqVU/RS5AO93AgGFMT8J4dGpBgNqsHzkhollq18Xf0SrjC7\nlvQDsgOHaugLEy3coCd49HC9mXiIpCwknXEslOtS6yH/t2stQn6T54oOmPM6k8KR\nESoMjVeUIy+yZzv37yXgkAR/fa59rzk5X2oyn073aZHgXA9NdRhfqmZzd4yhAWHE\nR9B9MR6IHimMi8bYtaFfkWvGcXB6z6iRVAUmhBO7MpOJwSyWEOBKqfRDqYCL7AX6\nKu+/QIpYeTHd2oMIP/0RtBCSft/7jmaQ06+8at2Mwi9EMd2Y2Ostky2iCfd/8+/2\nDnXectW3QkmisegrLwAV+TDxzIVnwy7aYZf3bUZhxxtrBXCjrjeVChVNVm03/m5d\nzFJbFVEQ5Tyng8LQtWFN86/zJuMvuXufjNNm6w6TqsYDOJSa3CIoeqLKukg/09RS\n8fjGdSU/uT1GsmBfXbEmRyu8NlEkjAD/LMt98LDViKWoV/X0S/YXLAmx3uhUI6m5\nJAyROnlE70P4+rSbJZpPEj8u22k1z6XtEjoyGQv0BLsccQb1CKyhCUTbBg/Bkz1d\nO2LWySX9HNPuEmlwUlX9DLWQ2y92uXpdVS7Mjpz2q5SLLLME77WVCEUOWOLMpBMm\nfRBbt2YXWxkUbkYBnLbq+1mkWMN6JVSxrOQhf8p9tCp23zPrG+E\u003d\n\u003dFZRG\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29501716_40ec93cd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-29T16:11:22Z",
+      "side": 1,
+      "message": "to be removed",
+      "range": {
+        "startLine": 568,
+        "startChar": 21,
+        "endLine": 568,
+        "endChar": 37
+      },
+      "revId": "3cf51ae6572bb7af652e6dbb9d9153a5b8fec133",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03ec4b8_24d8ba7a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-29T16:11:22Z",
+      "side": 1,
+      "message": "You could use nonnullNode() instead of getNode() and thus remove the Objects.requireNonNull() at line 597",
+      "range": {
+        "startLine": 582,
+        "startChar": 78,
+        "endLine": 582,
+        "endChar": 87
+      },
+      "revId": "3cf51ae6572bb7af652e6dbb9d9153a5b8fec133",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
