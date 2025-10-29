@@ -95,6 +95,30 @@
       },
       "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5e5d0a_875ebfb4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T17:00:54Z",
+      "side": 1,
+      "message": "\u003e I also suggest removing this condition, as it\u0027s currently unnecessary...\n\nI created a JIRA-ticket for this and created this stand alone review:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/118930\n\nI\u0027ll consider this topic resolved in this relation chain.",
+      "parentUuid": "5ff6b2b5_45384157",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 45
+      },
+      "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

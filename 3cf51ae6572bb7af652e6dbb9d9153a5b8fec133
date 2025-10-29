@@ -25,6 +25,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "feba56e1_f2d239c2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T17:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29501716_40ec93cd",
+      "range": {
+        "startLine": 568,
+        "startChar": 21,
+        "endLine": 568,
+        "endChar": 37
+      },
+      "revId": "3cf51ae6572bb7af652e6dbb9d9153a5b8fec133",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f03ec4b8_24d8ba7a",
@@ -38,6 +62,30 @@
       "writtenOn": "2025-10-29T16:11:22Z",
       "side": 1,
       "message": "You could use nonnullNode() instead of getNode() and thus remove the Objects.requireNonNull() at line 597",
+      "range": {
+        "startLine": 582,
+        "startChar": 78,
+        "endLine": 582,
+        "endChar": 87
+      },
+      "revId": "3cf51ae6572bb7af652e6dbb9d9153a5b8fec133",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52465a9e_dcbd6d08",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T17:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f03ec4b8_24d8ba7a",
       "range": {
         "startLine": 582,
         "startChar": 78,
