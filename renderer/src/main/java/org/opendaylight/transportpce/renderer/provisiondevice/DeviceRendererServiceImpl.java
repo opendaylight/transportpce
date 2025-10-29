@@ -218,7 +218,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                     nodeId, destTp, spectrumInformation);
                             crossConnectFlag++;
                             String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                    nodeId, destTp, spectrumInformation);
+                                    nodeId, destTp, spectrumInformation, input.getOperationalMode());
                             transactionHistory.add(new DeviceInterface(nodeId, supportingOchInterface));
 
                             // Split the string based on # pass the last element as the supported Interface
@@ -277,7 +277,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             crossConnectFlag++;
                             // create OpenRoadm Xponder Line Interfaces
                             String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                    nodeId, srcTp, spectrumInformation);
+                                    nodeId, srcTp, spectrumInformation, input.getOperationalMode());
                             transactionHistory.add(new DeviceInterface(nodeId, supportingOchInterface));
 
                             // createdOchInterfaces.add(supportingOchInterface);

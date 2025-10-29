@@ -56,6 +56,17 @@ module transportpce-device-renderer {
     }
   }
 
+  typedef operational-mode-type {
+    description
+      "This is the typedef to support the operational-mode for
+      for OpenConfig and OpenROADM. Former one is integer and later
+      is string";
+    type union {
+      type uint16;
+      type string;
+    }
+  }
+
   grouping az-api-info {
     container a-end-api-info {
       leaf node-id {
@@ -80,7 +91,9 @@ module transportpce-device-renderer {
         type action;
       }
       leaf operational-mode {
-        type uint16;
+        description
+          "operational-mode for both openconfig and/or OpenROADM";
+        type operational-mode-type;
       }
       leaf target-output-power {
         type decimal64 {

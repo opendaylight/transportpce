@@ -25,6 +25,7 @@ import org.opendaylight.transportpce.common.fixedflex.SpectrumInformation;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OperationalModeType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
@@ -272,19 +273,28 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmOtsiInterface(String nodeId, String logicalConnPoint,
-            SpectrumInformation spectrumInformation)
+                                               SpectrumInformation spectrumInformation, OperationalModeType
+                                               operationalMode)
             throws OpenRoadmInterfaceException {
         ModulationFormat modulationFormat = ModulationFormat.forName(spectrumInformation.getModulationFormat());
         if (modulationFormat == null) {
             throw new OpenRoadmInterfaceException(MODULATION_FMT_EXCEPTION_MESSAGE);
         }
+        ProvisionModeType provisionModeType = ProvisionModeType.Explicit;
         // OTSI interface specific data
         OtsiBuilder otsiBuilder = new OtsiBuilder()
             .setFrequency(new FrequencyTHz(Decimal64.valueOf(spectrumInformation.getCenterFrequency())))
-            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")))
-            .setProvisionMode(ProvisionModeType.Explicit)
-            .setFec(Ofec.VALUE)
-            .setModulationFormat(modulationFormat);
+            .setTransmitPower(new PowerDBm(Decimal64.valueOf("-5")));
+        if (operationalMode != null) {
+            provisionModeType = ProvisionModeType.Profile;
+            otsiBuilder.setOpticalOperationalMode(operationalMode.getString())
+                    .setProvisionMode(provisionModeType);
+        } else {
+            //This means it an Explicit mode.
+            otsiBuilder.setFec(Ofec.VALUE)
+                    .setModulationFormat(modulationFormat)
+                    .setProvisionMode(provisionModeType);
+        }
         // Use the rate to switch rather than modulation format
         int serviceRate = getServiceRate(modulationFormat, spectrumInformation);
         switch (serviceRate) {
@@ -293,8 +303,10 @@ public class OpenRoadmInterface710 {
                     modulationFormat);
                 // TODO check if FOIC and Gbaud logs could not be rationalized
                 LOG.info("FOIC is 1.4 for 31.6 Gbaud and rate is 100");
+                if (provisionModeType == ProvisionModeType.Explicit) {
+                    otsiBuilder.setOtsiRate(R100GOtsi.VALUE);
+                }
                 otsiBuilder
-                    .setOtsiRate(R100GOtsi.VALUE)
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic14.VALUE)
                         .setIid(new ArrayList<>(Arrays.asList(Uint8.ONE)))
@@ -302,6 +314,9 @@ public class OpenRoadmInterface710 {
                 break;
             case 200:
                 LOG.info("Given modulation format is {} and thus rate is 200G", modulationFormat);
+                if (provisionModeType == ProvisionModeType.Explicit) {
+                    otsiBuilder.setOtsiRate(R200GOtsi.VALUE);
+                }
                 FlexoBuilder flexoBuilder = new FlexoBuilder()
                     .setIid(new ArrayList<>(List.of(Uint8.ONE, Uint8.TWO)));
                 if (modulationFormat == ModulationFormat.DpQam16) {
@@ -313,12 +328,14 @@ public class OpenRoadmInterface710 {
                     flexoBuilder.setFoicType(Foic24.VALUE);
                 }
                 otsiBuilder
-                    .setOtsiRate(R200GOtsi.VALUE)
                     .setFlexo(flexoBuilder.build());
                 break;
             case 300:
                 LOG.info("Given modulation format is {} and thus rate is 300G", modulationFormat);
-                otsiBuilder.setOtsiRate(R300GOtsi.VALUE)
+                if (provisionModeType == ProvisionModeType.Explicit) {
+                    otsiBuilder.setOtsiRate(R300GOtsi.VALUE);
+                }
+                otsiBuilder
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic36.VALUE)
                         .setIid(new ArrayList<>(List.of(Uint8.ONE, Uint8.TWO, Uint8.valueOf(3))))
@@ -327,9 +344,11 @@ public class OpenRoadmInterface710 {
             case 400:
                 // Default baud-rate is 63.1 Gbaud
                 LOG.info("Given modulation format is {} and thus rate is 400G", modulationFormat);
+                if (provisionModeType == ProvisionModeType.Explicit) {
+                    otsiBuilder.setModulationFormat(modulationFormat)
+                            .setOtsiRate(R400GOtsi.VALUE);
+                }
                 otsiBuilder
-                    .setModulationFormat(modulationFormat)
-                    .setOtsiRate(R400GOtsi.VALUE)
                     .setFlexo(new FlexoBuilder()
                         .setFoicType(Foic48.VALUE)
                         .setIid(new ArrayList<>(
@@ -421,7 +440,7 @@ public class OpenRoadmInterface710 {
     }
 
     public String createOpenRoadmOchOtsiOtsigroupInterface(String nodeId, String logicalConnPoint,
-            SpectrumInformation spectrumInformation)
+            SpectrumInformation spectrumInformation, OperationalModeType operationalMOde)
             throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
@@ -434,7 +453,8 @@ public class OpenRoadmInterface710 {
         }
         if (portMap.getSupportedInterfaceCapability().contains(IfOtsiOtsigroup.VALUE)) {
             // Create OTSi and OTSi-group and concat the names of the interface
-            String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation);
+            String interfaceOtsiName = createOpenRoadmOtsiInterface(nodeId, logicalConnPoint, spectrumInformation,
+                    operationalMOde);
             // And Concat the two names for this interface
             return interfaceOtsiName + "#"
                 + createOpenRoadmOtsiGroupInterface(nodeId, logicalConnPoint, interfaceOtsiName, spectrumInformation);

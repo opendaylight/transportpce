@@ -17,6 +17,7 @@ import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OperationalModeType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.AEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.az.api.info.ZEndApiInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
@@ -87,11 +88,13 @@ public class OpenRoadmInterfaceFactory {
      * @param nodeId           node ID
      * @param logicalConnPoint logical connection point
      * @param spectrumInformation spectrum information.
+     * @param operationalMode operational mode name for the OCH/OTSI interface
      * @return Name of the interface if successful, otherwise return null.
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
-            SpectrumInformation spectrumInformation) throws OpenRoadmInterfaceException {
+            SpectrumInformation spectrumInformation, OperationalModeType operationalMode)
+            throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
@@ -101,7 +104,7 @@ public class OpenRoadmInterfaceFactory {
                         spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 return openRoadmInterface710.createOpenRoadmOchOtsiOtsigroupInterface(nodeId, logicalConnPoint,
-                    spectrumInformation);
+                    spectrumInformation, operationalMode);
             default:
                 return null;
         }
