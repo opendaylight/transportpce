@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18420c56_a2f30421",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-10-29T18:20:47Z",
+      "side": 1,
+      "message": "Answers Jonas\u0027 comment",
+      "revId": "7f0e9ef1d23bacc7972ec198b2f3e157990e1f07",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36a07b99_b70dad46",
@@ -14,6 +31,24 @@
       "writtenOn": "2025-10-29T08:25:09Z",
       "side": 1,
       "message": "I\u0027d like to understand the thinking behind this design to use one PCE with different modes (OpenROADM vs TAPI). Before, TAPI has been an optional feature that is not installed by default but can be installed using \"feature:install odl-transportpce-tapi\". Now you are starting to mix TAPI into other parts of the TPCE code. Does it mean that TAPI will not be optional anymore but instead a required dependency? Is the intention for TPCE to become a mixed OpenROADM and TAPI controller or will it be used in one mode at a time? Do you have some description of the TAPI use cases you have in mind? You have probably discussed these things but for us as \"outsiders\" it\u0027s not very clear what the direction is and we are worried that things are starting to get a bit \"messy\".",
+      "revId": "7f0e9ef1d23bacc7972ec198b2f3e157990e1f07",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47c7cd2_596529fc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-10-29T18:20:47Z",
+      "side": 1,
+      "message": "TAPI will remain optional. But there are some functions for which it is very difficult to dissociate TAPI and OR management. Especially if we consider that at the target, the goal is to handle hybrid use cases and service creation through different domains. \nTPCE will become a mixed of OpenROADM / OpenConfig and TAPI controller. The orchestration function (To be developped) and the PCE will be hybrid.\nBut it will still be possible not to activate the tapi features using extensively the DATA store and thus, having an impact on the scalability.\nYes we have some descriptions of the Use cases we try to implement. At that time only powerpoint. If you will , we could make a presentation in one of our standup meetings. It does not need to be very long, and a few slides can describe the use case.",
+      "parentUuid": "36a07b99_b70dad46",
       "revId": "7f0e9ef1d23bacc7972ec198b2f3e157990e1f07",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
