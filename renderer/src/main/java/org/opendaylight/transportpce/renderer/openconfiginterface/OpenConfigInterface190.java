@@ -242,7 +242,7 @@ public class OpenConfigInterface190 {
                 .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.optical
                 .channel.ConfigBuilder();
         configBuilder.setTargetOutputPower(input.getTargetOutputPower());
-        configBuilder.setOperationalMode(input.getOperationalMode());
+        configBuilder.setOperationalMode(input.getOperationalMode().getUint16());
         if (input.getCenterFreq() != null) { //input.getCenterFreq().getValue().intValue()
             configBuilder.setFrequency(FrequencyType
                     .getDefaultInstance(String.valueOf((long) (input.getCenterFreq().getValue()

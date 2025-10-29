@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.mapping.PortMappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.Action;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OperationalModeType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev250325.ServicePathInput;
@@ -194,7 +195,8 @@ public final class ModelMappingUtils {
             }
         }
         if (atoZDirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(atoZDirection.getOpticalOperationalMode()));
+            servicePathInputBuilder.setOperationalMode(
+                    new OperationalModeType(Uint16.valueOf(atoZDirection.getOpticalOperationalMode())));
         }
         servicePathInputBuilder.setModulationFormat(atoZDirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
@@ -272,7 +274,8 @@ public final class ModelMappingUtils {
             }
         }
         if (ztoADirection.getOpticalOperationalMode() != null) {
-            servicePathInputBuilder.setOperationalMode(Uint16.valueOf(ztoADirection.getOpticalOperationalMode()));
+            servicePathInputBuilder.setOperationalMode(
+                    new OperationalModeType(Uint16.valueOf(ztoADirection.getOpticalOperationalMode())));
         }
         servicePathInputBuilder.setModulationFormat(ztoADirection.getModulationFormat())
             .setAEndApiInfo(createAendApiInfo(pathDescription, false))
