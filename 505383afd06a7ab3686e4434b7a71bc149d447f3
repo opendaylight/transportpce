@@ -47,6 +47,30 @@
       },
       "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4c4542e_966d0fb4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-10-29T12:47:42Z",
+      "side": 1,
+      "message": "I guess the intention with this if-statement was to check if the source node is a ROADM, right? So it should be fixed in this change together with not using contains(\"ROADM\"), right? Do you mean the simplifying PcePathDescription part should be done in a separate change?",
+      "parentUuid": "81b607f3_a1c6114f",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 45
+      },
+      "revId": "505383afd06a7ab3686e4434b7a71bc149d447f3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
