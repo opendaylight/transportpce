@@ -261,7 +261,7 @@ public final class TPCEUtils {
                     .INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.tapinetworkutils.rev230728
                     .YangModuleInfoImpl.INSTANCE,
-            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.device.renderer.rev251001
+            org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.device.renderer.rev260212
                     .YangModuleInfoImpl.INSTANCE,
             org.opendaylight.yang.svc.v1.http.org.opendaylight.transportpce.networkmodel.rev201116
                     .YangModuleInfoImpl.INSTANCE,
