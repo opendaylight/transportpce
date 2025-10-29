@@ -62,6 +62,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Subscriber;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.NonStickHistoryMemory;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.network.instance.types.rev210714.DEFAULTINSTANCE;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.NodelistBuilder;
@@ -217,8 +218,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             LOG.info("Adding supporting OCH interface for node {}, dest tp {}, spectrumInformation {}",
                                     nodeId, destTp, spectrumInformation);
                             crossConnectFlag++;
+                            LOG.info("This is the default value of the provision mode {}", input.getProvisionMode());
                             String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                    nodeId, destTp, spectrumInformation);
+                                    nodeId, destTp, spectrumInformation, input.getZendOperationalMode(),
+                                    input.getProvisionMode());
                             transactionHistory.add(new DeviceInterface(nodeId, supportingOchInterface));
 
                             // Split the string based on # pass the last element as the supported Interface
@@ -277,9 +280,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             crossConnectFlag++;
                             // create OpenRoadm Xponder Line Interfaces
                             String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                    nodeId, srcTp, spectrumInformation);
+                                    nodeId, srcTp, spectrumInformation, input.getAendOperationalMode(),
+                                    input.getProvisionMode());
                             transactionHistory.add(new DeviceInterface(nodeId, supportingOchInterface));
-
                             // createdOchInterfaces.add(supportingOchInterface);
                             // Split the string based on # pass the last element as the supported Interface
                             // This is needed for 7.1 device models with B100G,we have OTSI, OTSI-group combined as OCH
