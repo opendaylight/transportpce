@@ -87,11 +87,14 @@ public class OpenRoadmInterfaceFactory {
      * @param nodeId           node ID
      * @param logicalConnPoint logical connection point
      * @param spectrumInformation spectrum information.
+     * @param operationalMode operational mode name for the OCH/OTSI interface
+     * @param  provisionMode is used specify if the operational mode is standard or proprietary
      * @return Name of the interface if successful, otherwise return null.
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint,
-            SpectrumInformation spectrumInformation) throws OpenRoadmInterfaceException {
+            SpectrumInformation spectrumInformation, String operationalMode, String provisionMode)
+            throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint,
@@ -101,7 +104,7 @@ public class OpenRoadmInterfaceFactory {
                         spectrumInformation);
             case StringConstants.OPENROADM_DEVICE_VERSION_7_1:
                 return openRoadmInterface710.createOpenRoadmOchOtsiOtsigroupInterface(nodeId, logicalConnPoint,
-                    spectrumInformation);
+                    spectrumInformation, operationalMode, provisionMode);
             default:
                 return null;
         }
