@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6d2ccd_35f562a2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T11:56:22Z",
+      "side": 1,
+      "message": "The functional test `test_23_get_tapi_node_details_at_DSR_Service_creation` fails (test02_full_topology.py).\n\nUpon further inspection, it is probably due to this method (`isType(...)`) never finding the OpenroadmTpType for an xponder client (e.g. \"XPDR1-CLIENT1\").\n\nThe unit test I wrote is missing one scenario: where pathdescription contains a tp such as `TerminationPoint{tpId\u003dXPDR1-CLIENT1, tpNodeId\u003dSPDR-SA1-XPDR1}` Adding the scenario reveals `idCollection.xpdrClientTplist()` is empty, when it should contain :\n\n    List.of(\n        \"SPDR-SA1-XPDR1+XPDR1-CLIENT1\",\n        \"SPDR-SC1-XPDR1+XPDR1-CLIENT1\"\n    )\n    \nThe question is how to proceed, since the openroadm-topology doesn\u0027t contain the xponder client information. I believe the otn topology do. Maybe I could read that instead? The other option would be to use portmapping.",
+      "revId": "a538c5ece333741697fddca74a851620ed3724ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
