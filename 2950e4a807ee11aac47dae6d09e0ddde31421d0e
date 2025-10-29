@@ -33,6 +33,23 @@
       "message": "recheck",
       "revId": "2950e4a807ee11aac47dae6d09e0ddde31421d0e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3212222e_970a3d65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-10-29T12:22:06Z",
+      "side": 1,
+      "message": "This change cannot pass the gate because, in the renderer module (ModelMappingUtils), the `atoZDirection.getOpticalOperationalMode()` method does no longer return null. Consequently, an attempt is made to assign a string (which is not a number) to a `Uint16` object, which generates a `NumberFormatException` that is hidden somewhere and blocks the rendering action.\nTherefore, this change needs to be merged with the following one.",
+      "revId": "2950e4a807ee11aac47dae6d09e0ddde31421d0e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
