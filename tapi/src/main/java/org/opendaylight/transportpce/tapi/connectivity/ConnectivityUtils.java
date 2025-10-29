@@ -502,34 +502,32 @@ public final class ConnectivityUtils {
                             .getAToZMaxFrequency().getValue()),
                         rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
                 LOG.debug("CONNECTIVITYUTILS 434 Connservmap = {}", connectionServMap);
-                if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
-                        .contains("ROADM")) {
-                    // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
-                    // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
-                    connectionServMap.putAll(createXpdrCepsAndConnectionsPht(
-                        GridUtils.getLowerSpectralIndexFromFrequency(pathDescription.getAToZDirection()
-                            .getAToZMinFrequency().getValue()),
-                        GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()
-                            .getAToZMaxFrequency().getValue()),
-                        xpdrNetworkTplist, xpdrNodelist));
-                    LOG.debug("CONNECTIVITYUTILS 445 Connservmap = {}", connectionServMap);
-                    // - Create E_ODU and DSR CEPs on all client ports connected to the activated Network Port
-                    createXpdrCepsOnNwPortActivation(xpdrNetworkTplist, xpdrNodelist);
-                    // - Update spectrum information on the activated Network Ports
-                    for (String xpdr:xpdrNodelist) {
-                        String spcXpdrNetwork =
-                            xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
-                        updateXpdrNepSpectrum(
-                            pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
-                            pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
-                            spcXpdrNetwork,
-                            TapiConstants.OTSI_MC);
-                        updateXpdrNepSpectrum(
-                            pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
-                            pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
-                            spcXpdrNetwork,
-                            TapiConstants.PHTNC_MEDIA_OTS);
-                    }
+
+                // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
+                // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
+                connectionServMap.putAll(createXpdrCepsAndConnectionsPht(
+                    GridUtils.getLowerSpectralIndexFromFrequency(pathDescription.getAToZDirection()
+                        .getAToZMinFrequency().getValue()),
+                    GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()
+                        .getAToZMaxFrequency().getValue()),
+                    xpdrNetworkTplist, xpdrNodelist));
+                LOG.debug("CONNECTIVITYUTILS 445 Connservmap = {}", connectionServMap);
+                // - Create E_ODU and DSR CEPs on all client ports connected to the activated Network Port
+                createXpdrCepsOnNwPortActivation(xpdrNetworkTplist, xpdrNodelist);
+                // - Update spectrum information on the activated Network Ports
+                for (String xpdr:xpdrNodelist) {
+                    String spcXpdrNetwork =
+                        xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
+                    updateXpdrNepSpectrum(
+                        pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
+                        pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
+                        spcXpdrNetwork,
+                        TapiConstants.OTSI_MC);
+                    updateXpdrNepSpectrum(
+                        pathDescription.getAToZDirection().getAToZMinFrequency().getValue(),
+                        pathDescription.getAToZDirection().getAToZMaxFrequency().getValue(),
+                        spcXpdrNetwork,
+                        TapiConstants.PHTNC_MEDIA_OTS);
                 }
                 this.topConnRdmRdm = null;
                 break;
