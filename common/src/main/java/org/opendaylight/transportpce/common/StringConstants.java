@@ -94,7 +94,7 @@ public final class StringConstants {
     public static final String TX = "TX";
     public static final String RX = "RX";
     public static final String TXRX = "TXRX";
-
+    public static final String OPENROADM_MODE_PREFIX = "OR";
     /**
      * Defining string constants required for supporting Openconfig XPDRS.
      */
