@@ -123,6 +123,24 @@
       "parentUuid": "d51db8a7_8690e6cc",
       "revId": "ec8db199c01848120d0832e5257104a263a6d18d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01a15ac9_537233a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T19:28:46Z",
+      "side": 1,
+      "message": "`TapiPceNotificationHandler` has been rolled back.",
+      "parentUuid": "39fa46e4_42ad8420",
+      "revId": "ec8db199c01848120d0832e5257104a263a6d18d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }

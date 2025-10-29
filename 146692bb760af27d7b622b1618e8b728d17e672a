@@ -37,6 +37,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "393253e8_24de3040",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T19:28:46Z",
+      "side": 1,
+      "message": "This change has been rolled back.",
+      "parentUuid": "175cd0af_ec306452",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64aed87c_40a2fe57",
@@ -72,6 +90,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21c14c6_edc221f4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/rpc/CreateConnectivityServiceImpl.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T19:28:46Z",
+      "side": 1,
+      "message": "This has been rolled back.",
+      "parentUuid": "28218d5c_4034894d",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fe9c4e9_5f86518d",
@@ -103,6 +139,24 @@
       "side": 1,
       "message": "I\u0027m not a big fan of juggling magic booleans. Oftentimes they tend to make things more complicated than they have to be. I\u0027d like to find another solution. \n\nPerhaps we can simply search for the service in the TAPI datastore, and if it exists, then don\u0027t do anything.",
       "parentUuid": "5fe9c4e9_5f86518d",
+      "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87f470d1_1b3a16b3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiServiceNotificationHandler.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T19:28:46Z",
+      "side": 1,
+      "message": "Ended up trying to determine whether the service already exists in TAPI. Added the check in `OpenRoadmService.copyServiceToTAPI()`.\n\nThat check resolved some of the functional tests started to fail after another rollback (can\u0027t remember which one off the top of my head though).\n\nCould probably use some more testing, so this review will remain as WIP for the time being.",
+      "parentUuid": "41af1c5f_178615ad",
       "revId": "146692bb760af27d7b622b1618e8b728d17e672a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
