@@ -11,12 +11,12 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.CreateOtsOmsInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.CreateOtsOmsOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.RendererRollbackInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.RendererRollbackOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.CreateOtsOmsOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.RendererRollbackInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.RendererRollbackOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev260212.ServicePathOutput;
 
 
 public interface DeviceRendererService {
