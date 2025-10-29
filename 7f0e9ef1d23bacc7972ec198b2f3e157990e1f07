@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36a07b99_b70dad46",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-10-29T08:25:09Z",
+      "side": 1,
+      "message": "I\u0027d like to understand the thinking behind this design to use one PCE with different modes (OpenROADM vs TAPI). Before, TAPI has been an optional feature that is not installed by default but can be installed using \"feature:install odl-transportpce-tapi\". Now you are starting to mix TAPI into other parts of the TPCE code. Does it mean that TAPI will not be optional anymore but instead a required dependency? Is the intention for TPCE to become a mixed OpenROADM and TAPI controller or will it be used in one mode at a time? Do you have some description of the TAPI use cases you have in mind? You have probably discussed these things but for us as \"outsiders\" it\u0027s not very clear what the direction is and we are worried that things are starting to get a bit \"messy\".",
+      "revId": "7f0e9ef1d23bacc7972ec198b2f3e157990e1f07",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
