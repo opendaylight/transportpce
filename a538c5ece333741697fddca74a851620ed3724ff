@@ -34,6 +34,24 @@
       "parentUuid": "ca6d2ccd_35f562a2",
       "revId": "a538c5ece333741697fddca74a851620ed3724ff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d25948e4_5b47d486",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-10-29T14:37:49Z",
+      "side": 1,
+      "message": "For now, I opted to go with assuming it\u0027s a client if it\u0027s not a network. Row 674 in this change:\n\n```\ncase XPONDER -\u003e {\n    if (isType(networkNode, tpID, Set.of(OpenroadmTpType.XPONDERNETWORK))) {\n        idCollection.addXpdrNetworkTp(\n                String.join(\"+\", tp.getTpNodeId(), tpID));\n    } else {\n        idCollection.addXpdrClientTp(\n                String.join(\"+\", tp.getTpNodeId(), tpID));\n    }\n    idCollection.addXpdrNode(tp.getTpNodeId());\n}\n```",
+      "parentUuid": "83eba9bf_889f772b",
+      "revId": "a538c5ece333741697fddca74a851620ed3724ff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
