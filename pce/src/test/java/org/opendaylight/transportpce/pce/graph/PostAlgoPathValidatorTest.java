@@ -37,7 +37,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.common.device.observer.Subscriber;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -61,7 +60,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yangtools.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
-@Disabled
 class PostAlgoPathValidatorTest {
 
     private final Map<NodeId, PceNode> nodes;
@@ -605,6 +603,11 @@ class PostAlgoPathValidatorTest {
         xstream.alias("PceOpticalNode", PceOpticalNode.class);
         xstream.omitField(PceOpticalNode.class, "availableSrgPp");
         xstream.omitField(PceOpticalNode.class, "availableSrgCp");
+
+        xstream.addDefaultImplementation(
+                org.opendaylight.transportpce.pce.networkanalyzer.PceORLink.class,
+                org.opendaylight.transportpce.pce.networkanalyzer.PceLink.class);
+
         xstream.allowTypesByWildcard(new String[] {
             "org.opendaylight.transportpce.pce.**"
         });
@@ -653,6 +656,11 @@ class PostAlgoPathValidatorTest {
 
         XStream xstream = new XStream(new DomDriver());
         xstream.alias("edge", Edge.class);
+
+        xstream.addDefaultImplementation(
+                org.opendaylight.transportpce.pce.networkanalyzer.PceORLink.class,
+                org.opendaylight.transportpce.pce.networkanalyzer.PceLink.class);
+
         xstream.allowTypesByWildcard(new String[] {
             "org.opendaylight.transportpce.pce.**"
         });
