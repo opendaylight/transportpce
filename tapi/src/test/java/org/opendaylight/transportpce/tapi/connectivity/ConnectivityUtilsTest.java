@@ -476,7 +476,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testPathDescriptionStartsWithXponder() {
+    void testPathDescriptionStartsWithXponder() throws TapiTopologyException {
         Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap();
 
         // Build the AToZDirection and PathDescription
@@ -496,7 +496,8 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
+        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription,
+                readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II)));
     }
 
     private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
