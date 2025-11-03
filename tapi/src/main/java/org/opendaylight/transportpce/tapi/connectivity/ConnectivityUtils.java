@@ -478,8 +478,7 @@ public final class ConnectivityUtils {
                             .getAToZMaxFrequency().getValue()),
                         rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
                 LOG.debug("CONNECTIVITYUTILS 434 Connservmap = {}", connectionServMap);
-                if (!pathDescription.getAToZDirection().getAToZ().values().stream().findFirst().orElseThrow().getId()
-                        .contains("ROADM")) {
+                if (!pathStartsWithROADM(pathDescription)) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(
@@ -568,6 +567,16 @@ public final class ConnectivityUtils {
         }
         LOG.debug("CONNSERVERMAP 508 = {}", connectionServMap);
         return connectionServMap;
+    }
+
+    public boolean pathStartsWithROADM(PathDescription pathDescription) {
+        return pathDescription
+                .getAToZDirection()
+                .getAToZ().values().stream()
+                .findFirst()
+                .orElseThrow()
+                .getId()
+                .contains("ROADM");
     }
 
     /**

@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -472,6 +473,30 @@ class ConnectivityUtilsTest extends AbstractTest {
                 "SPDR-SA1-XPDR1+XPDR1-CLIENT1",
                 "SPDR-SC1-XPDR1+XPDR1-CLIENT1");
         assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
+    }
+
+    @Test
+    void testPathDescriptionStartsWithXponder() {
+        Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap();
+
+        // Build the AToZDirection and PathDescription
+        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder().setAToZ(atoZMap);
+
+        PathDescription pathDescription = new PathDescriptionBuilder()
+                .setAToZDirection(atoZDirectionBuilder.build())
+                .build();
+
+        // --- Create ConnectivityUtils instance ---
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
     }
 
     private Network readTopology(DataObjectIdentifier<Network> networkIID) throws TapiTopologyException {
