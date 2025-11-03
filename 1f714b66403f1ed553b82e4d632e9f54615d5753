@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d945f0a2_74313e00",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-11-03T17:21:27Z",
+      "side": 1,
+      "message": "Maybe instead of sorting the whole list and taking the first element, it\u0027s more efficient to just find the element with id\u003d0.",
+      "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
