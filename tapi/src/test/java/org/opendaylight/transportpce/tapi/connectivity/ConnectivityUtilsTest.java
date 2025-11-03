@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.tapi.connectivity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -476,7 +477,7 @@ class ConnectivityUtilsTest extends AbstractTest {
     }
 
     @Test
-    void testPathDescriptionStartsWithXponder() {
+    void testPathDescriptionStartsWithXponder() throws TapiTopologyException {
         Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap(roadmPathElements());
 
         // Build the AToZDirection and PathDescription
@@ -496,7 +497,8 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
+        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II)));
     }
 
     @Test
@@ -520,8 +522,8 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        //@todo This should actually be true, since the first node in the path description is a ROADM in this scenario.
-        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
+        assertTrue(connectivityUtils.pathStartsWithROADM(pathDescription,
+                topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II)));
     }
 
     private Map<AToZKey, AToZ> getAToZRoadmKeyAToZMap(List<PathElement> elements) {
