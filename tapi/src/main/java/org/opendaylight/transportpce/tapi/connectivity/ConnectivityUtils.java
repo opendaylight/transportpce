@@ -478,7 +478,7 @@ public final class ConnectivityUtils {
                             .getAToZMaxFrequency().getValue()),
                         rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
                 LOG.debug("CONNECTIVITYUTILS 434 Connservmap = {}", connectionServMap);
-                if (!pathStartsWithROADM(pathDescription)) {
+                if (!pathStartsWithROADM(pathDescription, openroadmTopo)) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
                     connectionServMap.putAll(createXpdrCepsAndConnectionsPht(
@@ -569,14 +569,49 @@ public final class ConnectivityUtils {
         return connectionServMap;
     }
 
-    public boolean pathStartsWithROADM(PathDescription pathDescription) {
-        return pathDescription
-                .getAToZDirection()
-                .getAToZ().values().stream()
-                .findFirst()
-                .orElseThrow()
-                .getId()
-                .contains("ROADM");
+    /**
+     * Determine whether a path starts with a ROADM.
+     */
+    public boolean pathStartsWithROADM(
+            PathDescription pathDescription,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                    .networks.Network openroadmTopo) {
+
+        if (openroadmTopo == null) {
+            LOG.warn("OpenROADM topology is null, cannot determine path starts with ROADM.");
+            return false;
+        }
+
+        AToZ atoz = Objects.requireNonNull(pathDescription
+                        .getAToZDirection()
+                        .getAToZ())
+                .values().stream()
+                .min(Comparator.comparing(AToZ::getId))
+                .orElseThrow();
+
+        Map<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.network.NodeKey,
+                Node> topologyNodes = openroadmTopo.nonnullNode();
+
+        String resourceType = atoz.getResource().getResource().implementedInterface().getSimpleName();
+
+        if (resourceType.equals(TapiConstants.TP)) {
+            TerminationPoint tp = (TerminationPoint) atoz.getResource().getResource();
+            Node networkNode = topologyNodes.get(
+                    new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                            .networks.network.NodeKey(
+                            NodeId.getDefaultInstance(tp.getTpNodeId())));
+
+            Node1 nodeAugmentation = networkNode.augmentation(Node1.class);
+            if (nodeAugmentation == null) {
+                LOG.warn("Node {} does not have OpenROADM augmentation", networkNode.getNodeId());
+                return false;
+            }
+
+            return Set.of(OpenroadmNodeType.DEGREE, OpenroadmNodeType.SRG).contains(nodeAugmentation.getNodeType());
+        }
+
+        return false;
     }
 
     /**
