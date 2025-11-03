@@ -34,6 +34,24 @@
       "parentUuid": "d945f0a2_74313e00",
       "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2ddff1c_f6bd4b8c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-03T18:21:46Z",
+      "side": 1,
+      "message": "I did entertain the idea of having TPAndNodeCollection keep track\nof the first (and potentially last) node — it might help us avoid sorting PathDescription again.",
+      "parentUuid": "e25e6067_0c106d79",
+      "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
