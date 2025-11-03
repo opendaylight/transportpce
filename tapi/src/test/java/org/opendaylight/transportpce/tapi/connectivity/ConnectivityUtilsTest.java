@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.tapi.connectivity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collections;
@@ -111,7 +112,7 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ConnectionType.Infrastructure, connectivityUtils.getConnectionTypePhtnc(
                 Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
@@ -148,7 +149,7 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ServiceFormat.OTU, connectivityUtils.getServiceFormatPhtnc(
                 Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
@@ -185,7 +186,7 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ConnectionType.RoadmLine, connectivityUtils.getConnectionTypePhtnc(
                 Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
@@ -222,7 +223,7 @@ class ConnectivityUtilsTest extends AbstractTest {
                 topologyUtils
         );
 
-        Network openroadmTopo = readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertEquals(ServiceFormat.OC, connectivityUtils.getServiceFormatPhtnc(
                 Collections.checkedList(List.of(endPointOne, endPointTwo), EndPoint.class),
@@ -248,7 +249,7 @@ class ConnectivityUtilsTest extends AbstractTest {
         Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertNotNull(connectivityUtils.getSipIdFromAend(
-                getAToZRoadmKeyAToZMap(),
+                getAToZRoadmKeyAToZMap(roadmPathElements()),
                 "SPDR-SA1",
                 ServiceFormat.ODU,
                 openroadmTopo));
@@ -296,7 +297,7 @@ class ConnectivityUtilsTest extends AbstractTest {
         Network openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
 
         assertNotNull(connectivityUtils.getSipIdFromAend(
-                getAToZRoadmKeyAToZMap(),
+                getAToZRoadmKeyAToZMap(roadmPathElements()),
                 "ROADM-A1",
                 ServiceFormat.ODU,
                 openroadmTopo));
@@ -328,7 +329,7 @@ class ConnectivityUtilsTest extends AbstractTest {
 
     @Test
     void testRoadmToRoadmConnectivity() throws TapiTopologyException {
-        Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap();
+        Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap(roadmPathElements());
 
         // Build the AToZDirection and PathDescription
         AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder()
@@ -474,8 +475,57 @@ class ConnectivityUtilsTest extends AbstractTest {
         assertEquals(expectedXpdrClientList, idCollection.xpdrClientTplist(), "XPDR client list mismatch");
     }
 
-    private Map<AToZKey, AToZ> getAToZRoadmKeyAToZMap() {
-        return buildAtoZMap(roadmPathElements());
+    @Test
+    void testPathDescriptionStartsWithXponder() {
+        Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap(roadmPathElements());
+
+        // Build the AToZDirection and PathDescription
+        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder().setAToZ(atoZMap);
+
+        PathDescription pathDescription = new PathDescriptionBuilder()
+                .setAToZDirection(atoZDirectionBuilder.build())
+                .build();
+
+        // --- Create ConnectivityUtils instance ---
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
+    }
+
+    @Test
+    void testPathDescriptionStartsWithRoadm() throws TapiTopologyException {
+        Map<AToZKey, AToZ> atoZMap = getAToZRoadmKeyAToZMap(startsWithRoadm());
+
+        // Build the AToZDirection and PathDescription
+        AToZDirectionBuilder atoZDirectionBuilder = new AToZDirectionBuilder().setAToZ(atoZMap);
+
+        PathDescription pathDescription = new PathDescriptionBuilder()
+                .setAToZDirection(atoZDirectionBuilder.build())
+                .build();
+
+        // --- Create ConnectivityUtils instance ---
+        ConnectivityUtils connectivityUtils = new ConnectivityUtils(
+                serviceDataStoreOperations,
+                new HashMap<>(),
+                tapiContext,
+                networkTransactionService,
+                new Uuid(TapiConstants.T0_FULL_MULTILAYER_UUID),
+                topologyUtils
+        );
+
+        //@todo This should actually be true, since the first node in the path description is a ROADM in this scenario.
+        assertFalse(connectivityUtils.pathStartsWithROADM(pathDescription));
+    }
+
+    private Map<AToZKey, AToZ> getAToZRoadmKeyAToZMap(List<PathElement> elements) {
+        return buildAtoZMap(elements);
     }
 
     private Map<ZToAKey, ZToA> getZToARoadmKeyZToAMap() {
@@ -547,6 +597,30 @@ class ConnectivityUtilsTest extends AbstractTest {
                 node("1", "SPDR-SA1-XPDR1"),
                 tp("2", "XPDR1-NETWORK1", "SPDR-SA1-XPDR1"),
                 link("3", "SPDR-SA1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX"),
+                tp("4", "SRG1-PP1-TXRX", "ROADM-A1-SRG1"),
+                node("5", "ROADM-A1-SRG1"),
+                tp("6", "SRG1-CP-TXRX", "ROADM-A1-SRG1"),
+                link("7", "ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX"),
+                tp("8", "DEG2-CTP-TXRX", "ROADM-A1-DEG2"),
+                node("9", "ROADM-A1-DEG2"),
+                tp("10", "DEG2-TTP-TXRX", "ROADM-A1-DEG2"),
+                link("11", "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"),
+                tp("12", "DEG1-TTP-TXRX", "ROADM-C1-DEG1"),
+                node("13", "ROADM-C1-DEG1"),
+                tp("14", "DEG1-CTP-TXRX", "ROADM-C1-DEG1"),
+                link("15", "ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX"),
+                tp("16", "SRG1-CP-TXRX", "ROADM-C1-SRG1"),
+                node("17", "ROADM-C1-SRG1"),
+                tp("18", "SRG1-PP1-TXRX", "ROADM-C1-SRG1"),
+                link("19", "ROADM-C1-SRG1-SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1"),
+                tp("20", "XPDR1-NETWORK1", "SPDR-SC1-XPDR1"),
+                node("21", "SPDR-SC1-XPDR1"),
+                tp("22", "", "SPDR-SC1-XPDR1")
+        );
+    }
+
+    private List<PathElement> startsWithRoadm() {
+        return List.of(
                 tp("4", "SRG1-PP1-TXRX", "ROADM-A1-SRG1"),
                 node("5", "ROADM-A1-SRG1"),
                 tp("6", "SRG1-CP-TXRX", "ROADM-A1-SRG1"),
