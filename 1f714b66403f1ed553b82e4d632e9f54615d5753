@@ -52,6 +52,29 @@
       "parentUuid": "e25e6067_0c106d79",
       "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd7a1376_2ed08aff",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-04T06:28:23Z",
+      "side": 1,
+      "message": "Ouch. The method says `pathStartsWithROADM`, and here I\u0027m checking fro XPonder. A case of refactoring gone wrong coupled with only one unit test when there are two scenarios.",
+      "range": {
+        "startLine": 612,
+        "startChar": 12,
+        "endLine": 612,
+        "endChar": 84
+      },
+      "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
