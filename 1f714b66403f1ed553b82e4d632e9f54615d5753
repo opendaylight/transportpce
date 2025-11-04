@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9d25914_34a368b3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 8358
+      },
+      "writtenOn": "2025-11-04T09:03:11Z",
+      "side": 1,
+      "message": "I don\u0027t know if it can happen that id\u003d0 don\u0027t exist but in that case it would at least be more efficient to just use min() to get the lowest value of id instead of sorting the whole list.",
+      "parentUuid": "f2ddff1c_f6bd4b8c",
+      "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd7a1376_2ed08aff",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
         "patchSetId": 1
