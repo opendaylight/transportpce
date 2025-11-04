@@ -72,6 +72,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a53a5011_aca6b21a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-04T10:25:12Z",
+      "side": 1,
+      "message": "Fair enough—I overlooked using `min()`. Updated the code accordingly.",
+      "parentUuid": "f9d25914_34a368b3",
+      "revId": "1f714b66403f1ed553b82e4d632e9f54615d5753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd7a1376_2ed08aff",
