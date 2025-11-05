@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "963b99be_c09cc063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "Hi Olivier! I dropped a few comments and ideas.",
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dada3d1d_27be45a5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "This class seems to lack a clear definition of what it represents or what makes an instance “valid.”\n\nIn the constructor, we have another validation clause, but it’s not consistent with the one in the method `public boolean isValid()`. For comparison:\n\n```\n// Constructor\nif (node \u003d\u003d null\n        || deviceNodeId \u003d\u003d null\n        || nodeType \u003d\u003d null\n        || !VALID_NODETYPES_LIST.contains(nodeType)) {\n    LOG.error(...);\n    this.valid \u003d false;\n}\n```\nversus:\n```\npublic boolean isValid() {\n    if (nodeId \u003d\u003d null\n            || nodeType \u003d\u003d null\n            || this.getSupNetworkNodeId() \u003d\u003d null\n            || this.getSupClliNodeId() \u003d\u003d null) {\n        LOG.error(...);\n        valid \u003d false;\n    }\n    return valid;\n}\n```\n\nThe constructor and `isValid()` clearly have different opinions about what constitutes a valid object.\n\nAdditionally, the constructor introduces yet another validation rule that isn’t reflected anywhere else, from what I can see:\n```\nif (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)\n        \u0026\u0026 !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {\n    LOG.error(\"PceOtnNode: unsupported OTN Service Type {}\", serviceType);\n    this.valid \u003d false;\n}\n```\nThis inconsistency makes it difficult to know where “truth” about object validity lives. It might be worth consolidating the validation logic into a single, authoritative place — for example, a `validate()` method that’s called both during construction and explicitly when needed.\n\nPreferably, the class should be refactored to be immutable and validated at instantiation time, removing the need for later validation and strengthening the class’s internal consistency and sense of what it represents.\n\nComplex validators may need to be extracted into factory methods or dedicated factory classes, allowing validation to occur outside the constructor while keeping object creation predictable and controlled.\n\nAn additional option would be to introduce a dedicated validator class responsible for validating `PceTapiOtnNode` instances. However, it seems the existing validators in this class are primarily concerned with ensuring the object’s own internal consistency rather than performing external validation.",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 9
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c4988a_4d228310",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "This method suggests that the object’s internal state is mutable after instantiation, since this method actively clears and reinitializes several fields.\n\nIn many cases, it’s safer and simpler to avoid mutating an object’s internal state after creation. Instead, the state can be fully defined at instantiation time, removing the need to reset or clear it later.\n\nDoing so typically makes the code more predictable, easier to maintain, and less prone to subtle lifecycle or concurrency issues.",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 0
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697d72dd_ccc602ba",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "Although this is a private method, it could still benefit from a short Javadoc comment describing its purpose.\n\nThe method signature suggests that the argument is being validated, but it’s not clear what it’s validated _against_. After reading the implementation, it becomes evident that the comparison is made against an instance variable.\n\nIncluding that detail in the method signature and documentation would make the intent clearer and reduce the need to inspect the method body to understand its behaviour.",
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01f733c9_8b161799",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "The method name suggests that it validates a Xponder, but it’s declared as `void`. From a client’s perspective, it would be reasonable to expect this method to return a `boolean` indicating whether the validation succeeded.\n\nIf the validation result is stored elsewhere, adding that information in a Javadoc comment would help clarify how the outcome is meant to be consumed.\n\nOn closer inspection, this method appears to do more than just validation — it also performs initialization by calling `initXndrTps(...)`. Overall, it seems to have mixed responsibilities, which can make its purpose and side effects harder to understand.",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c34159a0_c8b073eb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "The logic here is a bit surprising — bpn is considered valid if clientPortId is null, regardless of its own state. That’s an unexpected twist for a validation method and makes the intent harder to follow.\n\nIf this behavior is intentional, a short comment or a clearer method name could help communicate why a missing clientPortId automatically implies validity.\n\nAnother idea would be to reverse the validation order — try validating bpn first before checking clientPortId, if that’s feasible.\n\nIt might also help to include clientPortId in the method signature so the dependency becomes explicit rather than hidden in the instance state.",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 0
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af5fcc9d_b96eeff6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "This is an excellent example of why it’s preferable for methods to return their own results.\n\nIn this case, the call to `initXndrTps(INTERMEDIATE_MODETYPE)` doesn’t return a value, so we’re forced to rely on a separate field (`this.valid`) to determine success. If that value ever becomes out of sync, we’d have to trace through the code to find where it was last set — which can be difficult in a large class.\n\nThe dependency between `initXndrTps(INTERMEDIATE_MODETYPE)` and `this.valid` is also implicit rather than explicit. Compare this with a more direct and self-explanatory approach:\n```java\nif (initXndrTps(INTERMEDIATE_MODETYPE)) {\n    LOG.debug(...);\n} else {\n    LOG.debug(...);\n}\n\n//--- Alternate version in case we really need to save result for later use:\n\nthis.valid \u003d initXndrTps(INTERMEDIATE_MODETYPE);\nif (this.valid) {\n    LOG.debug(...);\n} else {\n    LOG.debug(...);\n}\n\n```\nThis removes ambiguity and makes the relationship between the call and its result immediately clear. Even if the change seems minor and “only” affects logging in this case, the principle of explicit return values still improves clarity and maintainability over time.",
+      "range": {
+        "startLine": 610,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 9
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb9c5ca_0e47f6e7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "The logic in this method is a bit unclear. Based on the name, one would expect it to simply return the result of a previous validation — for example, the value of the `valid` field.\n\nHowever, this implementation may perform its own validation and then overwrites any existing value of `valid`. That means calling `isValid()` doesn’t just check validity, it _changes it_ — which can easily lead to confusing or inconsistent state.\n\nEssentially, the client may expect a read operation, but in practice a write operation happens behind the scenes.\n\nIt might be worth separating the validation logic into a dedicated `validate()` method that updates the state, and letting `isValid()` only report the current (i.e. last) validation result.\n\n```java\nif (nodeId \u003d\u003d null\n    || nodeType \u003d\u003d null\n    || this.getSupNetworkNodeId() \u003d\u003d null\n    || this.getSupClliNodeId() \u003d\u003d null) {\n        LOG.error(\"PceNode: one of parameters is not populated : nodeId, node\n                   type, supporting nodeId\");\n}\n```\r\n\nThis condition suggests that the class has a set of minimum required properties.\nWhy allow an instance to be created without them, only to validate afterward?\n\nIt might be cleaner to enforce these requirements at construction time — for example, by passing the necessary parameters into the constructor or a factory method.\nThat way, a `PceTapiOtnNode` object is guaranteed to be valid once instantiated, and there’s no need for a separate validation step just to ensure it’s usable.",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a568fba_0b0160ab",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T20:04:39Z",
+      "side": 1,
+      "message": "This method is quite difficult to read in its current form. It might be worth refactoring it into something more readable.\n\nUsing intermediate variables and small helper methods can make a big difference — each line should ideally do just one thing. Here’s an example of a possible refactoring.\n\n```\nprivate boolean isValidBpn(BasePceNep bpn, Uuid aaPortId, Uuid zzPortId) {\n    // If neither port ID is provided, treat as valid\n    if (aaPortId \u003d\u003d null \u0026\u0026 zzPortId \u003d\u003d null) {\n        return true;\n    }\n\n    if (bpn.getSipUuid() \u003d\u003d null) {\n        LOG.debug(\"null SIP for BPN {}\", bpn.getName());\n    }\n\n    // Validate against NEP, SIP, or parent CEP\n    return matchesAnyPort(bpn, aaPortId, zzPortId);\n}\n\nprivate boolean matchesAnyPort(BasePceNep bpn, Uuid aaPortId, Uuid zzPortId) {\n    Uuid nepUuid \u003d bpn.getNepCepUuid();\n    Uuid sipUuid \u003d bpn.getSipUuid();\n    Uuid cepFromParent \u003d getCepUuidFromParentNepUuid(nepUuid);\n\n    return matchesPort(nepUuid, aaPortId, zzPortId)\n        || matchesPort(sipUuid, aaPortId, zzPortId)\n        || matchesPort(cepFromParent, aaPortId, zzPortId);\n}\n\nprivate boolean matchesPort(Uuid candidate, Uuid aaPortId, Uuid zzPortId) {\n    if (candidate \u003d\u003d null) {\n        return false;\n    }\n    return (aaPortId !\u003d null \u0026\u0026 candidate.equals(aaPortId))\n        || (zzPortId !\u003d null \u0026\u0026 candidate.equals(zzPortId));\n}\n```\nOne might also consider changing one or more of these helper methods from private to public, to make them easier to unit test individually.\n\nOne caveat though — I’m not entirely sure about this part:\n```\n    if (aaPortId \u003d\u003d null \u0026\u0026 zzPortId \u003d\u003d null) {\n        return true;\n    }\n```\n\nThe method’s name suggests it validates bpn, yet here we determine that bpn is valid without actually inspecting it. That feels a bit inconsistent with the method’s intent.\n\nOverall, refactoring with clearer responsibilities — and possibly reconsidering this default true case — could make the method easier to understand and more semantically accurate.",
+      "range": {
+        "startLine": 1034,
+        "startChar": 0,
+        "endLine": 1057,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
