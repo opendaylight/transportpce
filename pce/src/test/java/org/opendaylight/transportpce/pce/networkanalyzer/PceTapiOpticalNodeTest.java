@@ -60,8 +60,6 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
     private static Context tapiContext;
 //    private TapiOpticalNode tapiONroadmA;
     private static String version = "2.4.0";
-    private static BigDecimal slotWidthGranularity = BigDecimal.valueOf(6.25E09);
-    private static BigDecimal centralFreqGranularity = BigDecimal.valueOf(12.0E09);
     private static McCapability mcCapability = new NodeMcCapability(
         BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
     private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
@@ -470,8 +468,7 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         } catch (NoSuchElementException e) {
             return null;
         }
-        return new TapiOpticalNode(this.serviceType, portMapping, node, version,slotWidthGranularity,
-            centralFreqGranularity, anodeId, znodeId, aportId, zportId, serviceFormat, mcCapability);
+        return new TapiOpticalNode(this.serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
     }
 
 
