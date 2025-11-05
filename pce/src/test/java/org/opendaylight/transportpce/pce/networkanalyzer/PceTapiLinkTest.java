@@ -66,8 +66,6 @@ public class PceTapiLinkTest  extends AbstractTest {
     private static Context tapiContext;
     private String serviceType;
     private static String version = "2.4.0";
-    private static BigDecimal slotWidthGranularity = BigDecimal.valueOf(6.25E09);
-    private static BigDecimal centralFreqGranularity = BigDecimal.valueOf(12.0E09);
     private static McCapability mcCapability = new NodeMcCapability(
         BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
     private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
@@ -748,7 +746,6 @@ public class PceTapiLinkTest  extends AbstractTest {
             LOG.info("PceTapiLInkTest Line 496, null node");
         } else {
             LOG.info("PceTapiLInkTest Line 498, link is {}", link.getName());
-            LOG.info("PceTapiLInkTest Line 499, slotwidthGranularity is  {}", slotWidthGranularity);
         }
 
         TapiOpticalNode ton = getTapiOpticalNodeFromId(nodeXuuid);
@@ -822,7 +819,6 @@ public class PceTapiLinkTest  extends AbstractTest {
             LOG.info("PceTapiLInkTest Line 573, null node");
         } else {
             LOG.info("PceTapiLInkTest Line 575, connection is {}", conn.getName());
-            LOG.info("PceTapiLInkTest Line 576, slotwidthGranularity is  {}", slotWidthGranularity);
         }
 
 
@@ -868,8 +864,8 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (NoSuchElementException e) {
             return null;
         }
-        TapiOpticalNode ton = new TapiOpticalNode(serviceType, portMapping, node, version, slotWidthGranularity,
-            centralFreqGranularity, anodeId, znodeId, aportId, zportId, serviceFormat, mcCapability);
+        TapiOpticalNode ton = new TapiOpticalNode(serviceType, node, version, anodeId, znodeId, aportId, zportId,
+                mcCapability);
         return ton;
     }
 
