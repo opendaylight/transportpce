@@ -27,7 +27,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -208,10 +207,8 @@ public class PceTapiOpticalNode implements PceNode {
      *   List clientOtsNep is filled only with Client NEPs that are in visibility of Network through valid Network NEPs.
      *   Internal connectivity is checked using BasePceNep getNodeRuleGroupUuid and checking Node IRGs for switch and
      *   Muxponders.
-     * @param serviceFormat Service Format, not used for optical Node, included to have common signatures of the method
-     *                      towards the different kind of nodes.
      */
-    public void initXndrTps(ServiceFormat serviceFormat) {
+    public void initXndrTps() {
         LOG.debug("PTONLine 215: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
         LOG.debug("PTONLine216: initXndrTps for node : {}, ListOfNep : {}", this.nodeName,
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
