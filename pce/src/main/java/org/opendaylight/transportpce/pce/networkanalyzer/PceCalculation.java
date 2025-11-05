@@ -979,16 +979,13 @@ public class PceCalculation {
                 .getName());
             return;
         }
-        var ton = new TapiOpticalNode(serviceType, portMapping, node, null,
-            BigDecimal.valueOf(12.5), BigDecimal.valueOf(6.25),
-            new Uuid(anodeId), new Uuid(znodeId),
-            new Uuid(input.getServiceAEnd().getTxDirection().getPort().getPortName()),
-            new Uuid(input.getServiceZEnd().getTxDirection().getPort().getPortName()),
-            input.getServiceAEnd().getServiceFormat(),
-            new NodeMcCapability(new McCapabilitiesBuilder()
-            .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25))))
-            .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5))))
-            .build()));
+        var ton = new TapiOpticalNode(serviceType, node, null, new Uuid(anodeId), new Uuid(znodeId),
+                new Uuid(input.getServiceAEnd().getTxDirection().getPort().getPortName()),
+                new Uuid(input.getServiceZEnd().getTxDirection().getPort().getPortName()),
+                new NodeMcCapability(new McCapabilitiesBuilder()
+                    .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25))))
+                    .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5))))
+                    .build()));
         ton.initialize();
         Map<Uuid, PceTapiOpticalNode> ptonMap = new HashMap<>();
         for (Map.Entry<Uuid, PceTapiOpticalNode> pton : ton.getPceNodeMap().entrySet()) {
@@ -1125,16 +1122,13 @@ public class PceCalculation {
 //                && input.getServiceZEnd().getRxDirection().getPort().getPortName() != null) {
 //            clientPort = input.getServiceZEnd().getRxDirection().getPort().getPortName();
 //        }
-        var ton = new TapiOpticalNode(serviceType, portMapping, node, null,
-            BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.0),
-            new Uuid(anodeId), new Uuid(znodeId),
-            new Uuid(input.getServiceAEnd().getTxDirection().getPort().getPortName()),
-            new Uuid(input.getServiceZEnd().getTxDirection().getPort().getPortName()),
-            input.getServiceAEnd().getServiceFormat(),
-            new NodeMcCapability(new McCapabilitiesBuilder()
-                .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
-                .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
-                .build()));
+        var ton = new TapiOpticalNode(serviceType, node, null, new Uuid(anodeId), new Uuid(znodeId),
+                new Uuid(input.getServiceAEnd().getTxDirection().getPort().getPortName()),
+                new Uuid(input.getServiceZEnd().getTxDirection().getPort().getPortName()),
+                new NodeMcCapability(new McCapabilitiesBuilder()
+                        .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
+                        .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
+                        .build()));
         ton.initialize();
         PceTapiOtnNode otnNode = ton.getXpdrOtnNode();
         if (otnNode == null) {

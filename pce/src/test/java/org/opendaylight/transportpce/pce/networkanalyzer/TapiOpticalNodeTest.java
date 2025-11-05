@@ -23,17 +23,16 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
@@ -43,12 +42,12 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
@@ -68,11 +67,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
     private static Context tapiContext;
     private String serviceType;
     private static String version = "2.4.0";
-    private static BigDecimal slotWidthGranularity = BigDecimal.valueOf(6.25E09);
-    private static BigDecimal centralFreqGranularity = BigDecimal.valueOf(12.0E09);
     private static McCapability mcCapability = new NodeMcCapability(
         BigDecimal.valueOf(6.25E09), BigDecimal.valueOf(12.0E09), 1, 768);
-    private static ServiceFormat serviceFormat = ServiceFormat.Ethernet;
     private Uuid anodeId;
     private Uuid znodeId;
     //SPDR-SA1-XPDR2+XPONDER
@@ -110,8 +106,6 @@ public class TapiOpticalNodeTest extends AbstractTest {
     private TapiOpticalNode tapiONxpdrCx1;
     private TapiOpticalNode tapiONxpdrAx1;
 
-    @Mock
-    private static PortMapping portMapping;
 
     @BeforeAll
     static void setUp() throws ExecutionException, InterruptedException {
@@ -153,6 +147,80 @@ public class TapiOpticalNodeTest extends AbstractTest {
     }
 
     @Test
+    void testQualifyNode() {
+        String servType = "100GE";
+        Node roadmA = tapiContext.augmentation(Context1.class)
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(roadmAId));
+        TapiOpticalNode ton = new TapiOpticalNode(servType, roadmA, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Rdm, ton.getCommonNodeType());
+
+        Node roadmC = tapiContext.augmentation(Context1.class)
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(roadmCId));
+        ton = new TapiOpticalNode(servType, roadmC, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Rdm, ton.getCommonNodeType());
+
+        Node spdrAx2 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSA1xpdr2Id));
+        ton = new TapiOpticalNode(servType, spdrAx2, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node spdrCx2 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSC1xpdr2Id));
+        ton = new TapiOpticalNode(servType, spdrCx2, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node spdrAx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSA1xpdr1Id));
+        ton = new TapiOpticalNode(servType, spdrAx1, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node spdrCx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSC1xpdr1Id));
+        ton = new TapiOpticalNode(servType, spdrCx1, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node spdrAx3 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSA1xpdr3Id));
+        ton = new TapiOpticalNode(servType, spdrAx3, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node spdrCx3 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSC1xpdr3Id));
+        ton = new TapiOpticalNode(servType, spdrCx3, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node xpdrAx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(xpdrA1xpdr1Id));
+        ton = new TapiOpticalNode(servType, xpdrAx1, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+
+        Node xpdrCx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(xpdrC1xpdr1Id));
+        ton = new TapiOpticalNode(servType, xpdrCx1, null, null, null, null, null, null);
+        ton.qualifyNode();
+        assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+    }
+
+    @Test
     void isValidTest() {
         this.anodeId = spdrSA1xpdr1Id;
         this.znodeId = spdrSC1xpdr1Id;
@@ -191,34 +259,6 @@ public class TapiOpticalNodeTest extends AbstractTest {
         assertTrue(tapiONspdrAx3.isValid());
         assertTrue(tapiONspdrCx3.isValid());
         LOG.info("TESTPERFORMED:1");
-    }
-
-    @Test
-    void testQualifyNode() {
-        //Testing private method qualifyNode()
-        this.anodeId = spdrSA1xpdr1Id;
-        this.znodeId = spdrSC1xpdr1Id;
-        //SPDR-SA1-XPDR1+DSR+XPDR1-CLIENT2
-        this.aportId = new Uuid("82998ece-51cd-3c07-8b68-59d5ad5ff39e");
-        //SPDR-SC1-XPDR1+DSR+XPDR1-CLIENT2"
-        this.zportId = new Uuid("b877533a-99ce-3128-bfb2-dc7e0a2122dd");
-        this.serviceType = "10GE";
-        try {
-            generalSetUp();
-        } catch (ExecutionException e) {
-            LOG.error("Unable to get node from mdsal: ", e);
-        }
-
-        initializeAll();
-        assertTrue(tapiONroadmA.getCommonNodeType().equals(NodeTypes.Rdm));
-        assertTrue(tapiONroadmC.getCommonNodeType().equals(NodeTypes.Rdm));
-        assertTrue(tapiONspdrAx2.getCommonNodeType().equals(NodeTypes.Xpdr));
-        assertTrue(tapiONspdrCx2.getCommonNodeType().equals(NodeTypes.Xpdr));
-        assertTrue(tapiONspdrAx1.getCommonNodeType().equals(NodeTypes.Xpdr));
-        assertTrue(tapiONspdrCx1.getCommonNodeType().equals(NodeTypes.Xpdr));
-        assertTrue(tapiONspdrAx3.getCommonNodeType().equals(NodeTypes.Xpdr));
-        assertTrue(tapiONspdrCx3.getCommonNodeType().equals(NodeTypes.Xpdr));
-        LOG.info("TESTPERFORMED:2");
     }
 
     @Test
@@ -948,10 +988,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
             LOG.info("Line554, null node");
         } else {
             LOG.info("Line559, node is {}", node.getName());
-            LOG.info("Line560, slotwidthGranularity is  {}", slotWidthGranularity);
         }
-        return new TapiOpticalNode(serviceType, portMapping, node, version, slotWidthGranularity,
-            centralFreqGranularity, anodeId, znodeId, aportId, zportId, serviceFormat, mcCapability);
+        return new TapiOpticalNode(serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
     }
 
     private void generalSetUp() throws ExecutionException {

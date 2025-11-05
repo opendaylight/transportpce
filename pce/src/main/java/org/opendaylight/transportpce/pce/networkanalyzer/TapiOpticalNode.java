@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
-import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -21,12 +20,10 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev210528.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -83,7 +80,7 @@ public class TapiOpticalNode {
     private Uuid nodeUuid;
     private String deviceNodeId;
     private Name nodeName;
-    private NodeTypes commonNodeType;
+    private NodeTypes commonNodeType = null;
     private AdministrativeState adminState;
     private OperationalState operationalState;
     private String serviceType;
@@ -92,7 +89,6 @@ public class TapiOpticalNode {
     private Uuid aaPortId;
     private Uuid zzPortId;
     private Uuid topoUuid;
-    private ServiceFormat servFormat;
     private String version;
     private McCapability mcCapability;
 
@@ -158,33 +154,26 @@ public class TapiOpticalNode {
      */
 
     /**
-     Intermediate class used to process T-API NEP, before instantiating one or several (for ROADMs) TapiPceOpticalNodes.
+     * Intermediate class used to process T-API NEP, before instantiating one or several (for ROADMs)
+     * PceTapiOpticalNode(s).
      * @param serviceType Type of service is used to determine which type (Optical/Otn) of PceNode is created and which
      *                    BasePceNep NEPs shall be created and validated
-     * @param portMapping Pormapping of Nodes discovered through NETCONF SBI (only concerns Alien Transponders)
+     *                    See StringConstants SERVICE_TYPE_XXXX.
      * @param node        Node as present in the T-API topology
      * @param version     Node version passed to PceTapiOpticalNode
-     * @param slotWidthGranularity     Granularity of the slot width to be used when enforcing new Grid implementation
-     * @param centralFreqGranularity   Grid resolution to be used when enforcing new Grid implementation
      * @param anodeId     A Node Id as provided in service creation/reroute... request exercised through NBI (mandatory)
      * @param znodeId     Z Node Id as provided in service creation/reroute... request exercised through NBI (mandatory)
      * @param aportId     A Port Id as provided in service creation/reroute... request exercised through NBI (optional)
      * @param zportId     A Port Id as provided in service creation/reroute... request exercised through NBI (optional)
-     * @param serviceFormat            OpenROADM Service Format (OCH, OTU...)
      * @param mcCapability             MediaChannel capability to be used when enforcing new Grid implementation
      */
-    public TapiOpticalNode(String serviceType, PortMapping portMapping, Node node,
-        String version, BigDecimal slotWidthGranularity, BigDecimal centralFreqGranularity,
-        Uuid anodeId, Uuid znodeId, Uuid aportId, Uuid zportId, ServiceFormat serviceFormat,
-        McCapability mcCapability) {
+    public TapiOpticalNode(String serviceType, Node node, String version, Uuid anodeId, Uuid znodeId, Uuid aportId,
+               Uuid zportId, McCapability mcCapability) {
         // For T-API topology, all nodes in the OLS do not have any portmapping which may be
         // available only for OpenConfig Transponder : try to avoid relying on PortMapping
-        if (serviceType == null
-            || node == null
-            || slotWidthGranularity == null) {
-            LOG.error("TapiOpticalNode: one of parameters is not populated : slot width granularity  {} or"
-                + "service type {} or node {}", slotWidthGranularity, serviceType,
-                node == null ? "NULL" : node.getName());
+        if (serviceType == null || node == null) {
+            LOG.error("TapiOpticalNode: one of parameters is not populated : service type {} or node {}",
+                    serviceType, node == null ? "NULL" : node.getName());
             this.valid = false;
         } else if (!(OperationalState.ENABLED.equals(node.getOperationalState()))) {
             LOG.error("TapiOpticalNode: Node {} ignored since its operational state {} differs from ENABLED",
@@ -219,7 +208,6 @@ public class TapiOpticalNode {
             this.zzNodeId = znodeId;
             this.aaPortId = aportId;
             this.zzPortId = zportId;
-            this.servFormat = serviceFormat;
             this.mcCapability = mcCapability;
             // First step is to qualify the node, determining its type
             LOG.info("TapiOpticalNode : Node {} admin state is {}, operational state is {}, Valid = {}",
@@ -234,8 +222,12 @@ public class TapiOpticalNode {
      */
     public void initialize() {
         qualifyNode();
+        if (commonNodeType == null) {
+            LOG.error("initialization of Node {} aborted: could not be qualified", this.nodeUuid);
+            return;
+        }
         switch (commonNodeType) {
-            case Rdm:
+            case Rdm -> {
                 initRoadmTps();
                 buildVirtualCpsAndCtps();
                 buildDefaultVirtualCtps();
@@ -243,21 +235,21 @@ public class TapiOpticalNode {
                 this.pceNodeMap = splitDegNodes();
                 this.pceNodeMap.putAll(splitSrgNodes());
                 createLinksFromIlMap();
-                break;
-            case Xpdr:
+            }
+            case Xpdr ->
                 // for Xponder, PceNode are created and handled through validateAZxponder as for the OpenROADM PCE
                 validateAZxponder();
-                break;
-            case Ila:
+            case Ila -> {
                 initIlaTps();
                 Map<Uuid, Name> ilaNodeId = new HashMap<>();
                 ilaNodeId.put(nodeUuid, nodeName);
                 // In case of ILA as this type of node is not defined at that time in OpenROADM, we use ORNodeType ROADM
                 this.pceNodeMap.put(nodeUuid, new PceTapiOpticalNode(serviceType, node, OpenroadmNodeType.ROADM,
-                    version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability));
-                break;
-            default:
-                break;
+                        version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability));
+            }
+            default -> {
+                // Should not happen since a null commonNodeType have been filtered before
+            }
         }
     }
 
@@ -267,47 +259,39 @@ public class TapiOpticalNode {
      * supported by the Node's NEPs : Only Xponders support DSR layer, ROADM includes OMS NEPs, whereas ILA only
      * include OTS NEPs (no OMS). Sets commonNodeType to Rdm/Ila/Xpdr.
      */
-    private void qualifyNode() {
+    void qualifyNode() {
         LOG.debug("qualifyNode: calculates node type of {} from CEP characteristics", this.nodeUuid);
         if (!this.node.getLayerProtocolName().contains(LayerProtocolName.PHOTONICMEDIA)) {
             LOG.debug("qualifyNode: Node {} is not assimilated to a Photonic Media Node", this.nodeUuid);
             this.valid = false;
             return;
         }
-        boolean otsFound = false;
-        boolean omsFound = false;
         if (this.node.getLayerProtocolName().contains(LayerProtocolName.DSR)
             || this.node.getLayerProtocolName().contains(LayerProtocolName.ODU)
             || this.node.getLayerProtocolName().contains(LayerProtocolName.DIGITALOTN)
             || this.node.getLayerProtocolName().contains(LayerProtocolName.ETH)) {
             this.commonNodeType = NodeTypes.Xpdr;
         } else {
-            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNepList = this.node.getOwnedNodeEdgePoint();
+            Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNepList = this.node.nonnullOwnedNodeEdgePoint();
             for (Map.Entry<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNep : ownedNepList.entrySet()) {
-                if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
-                    .filter(sclpqi -> PHOTONICLAYERQUALIFIEROMS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
-                    .findAny() != null) {
-                    omsFound = true;
+                if (ownedNep.getValue().nonnullSupportedCepLayerProtocolQualifierInstances().stream()
+                        .anyMatch(sclpqi ->
+                                PHOTONICLAYERQUALIFIEROMS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))) {
+                    this.commonNodeType = NodeTypes.Rdm;
                     break;
-                } else if (ownedNep.getValue().getSupportedCepLayerProtocolQualifierInstances().stream()
-                    .filter(sclpqi -> PHOTONICLAYERQUALIFIEROMS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))
-                    .findAny() != null) {
-                    otsFound = true;
+                } else if (ownedNep.getValue().nonnullSupportedCepLayerProtocolQualifierInstances().stream()
+                        .anyMatch(sclpqi ->
+                                PHOTONICLAYERQUALIFIEROTS.VALUE.equals(sclpqi.getLayerProtocolQualifier()))) {
+                    this.commonNodeType = NodeTypes.Ila;
                 }
             }
-            if (omsFound) {
-                this.commonNodeType = NodeTypes.Rdm;
-            } else if (otsFound) {
-                this.commonNodeType = NodeTypes.Ila;
-            } else {
-                LOG.debug("qualifyNode: Unidentified type for Node {} ", this.nodeUuid);
+            if (this.commonNodeType == null) {
+                LOG.debug("qualifyNode: Node {} is not assimilated to a Photonic Media Node", this.nodeUuid);
                 this.valid = false;
                 return;
             }
         }
-        this.valid = true;
         LOG.debug("identifyNodeType: node type of {} is {}", this.nodeUuid, this.commonNodeType.getName());
-        return;
     }
 
     /**
@@ -1496,7 +1480,7 @@ public class TapiOpticalNode {
                 for (Uuid invalidNepUuid : this.invalidNwNepList) {
                     xpdr.setUsedXpndrNWTps(List.of(invalidNepUuid.getValue()));
                 }
-                xpdr.initXndrTps(servFormat);
+                xpdr.initXndrTps();
                 xpdr.initFrequenciesBitSet();
                 LOG.info("TapiOpticalNode: Node Id: {}, Name : {} has been created and validated",
                     node.getUuid().toString(), node.getName().toString());
