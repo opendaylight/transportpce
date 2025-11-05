@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121a2ce8_e1c0f7b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "I know this is still a work in progress, but I wanted to share a few thoughts and observations that might be useful as it develops.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4141a43_5df7ebab",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/StringConstants.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Nice to see we’re covering lots of naming variants. Over time though, this table might become hard to maintain. Maybe we could simplify it by normalising the input format instead — e.g., convert to uppercase and strip punctuation before lookup?\n\ne.g.\n```java\nMap.of(\n    \"SMF\", FiberType.Smf,\n    \"G652\", FiberType.Smf,\n    \"G653\", FiberType.Dsf,\n    \"G655\", FiberType.NzDsf,\n    \"ELEAF\", FiberType.Eleaf,\n    \"OLEAF\", FiberType.Oleaf,\n    \"TRUEWAVE\", FiberType.Truewave,\n    \"TRUEWAVECLASSIC\", FiberType.Truewavec,\n    \"G654\", FiberType.Ull\n);\n```\n\nThen when resolving the fiber type, we could normalise the input first:\n\n```java\nString normalized \u003d input.trim().toUpperCase(Locale.ROOT)\n    .replace(\".\", \"\")\n    .replace(\"-\", \"\");\nFiberType type \u003d FIBER_TYPES_TABLE.get(normalized);```\n\nTo keep things clean, it might also make sense to move the normalization logic into a small helper class or utility method (e.g. FiberTypeNormalizer.normalize(input)), so this logic is reusable and the lookup code stays easy to read.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ecbbc2a_37fc281e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridConstant.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "It could improve readability to include the unit in the constant name (for example, `ANCHOR_FREQUENCY_THz`). That way, it’s immediately clear what unit this value is expressed in when it’s used elsewhere.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "789add5e_008ad815",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/BasePceNep.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "This class seems to carry a lot of nullable state and behaves more like a data container than a cohesive model.\n\nBecause most fields are optional and mutable, it’s hard to reason about what a valid instance looks like, and client code needs to add lots of defensive null checks. Over time, that could make it difficult to maintain and test.\n\nIt might help to give this class a clearer lifecycle — e.g., define required fields through a constructor or builder, make fields final where possible, and encapsulate any domain logic it’s responsible for.\n\nIn general, if the class represents a specific concept (like a network endpoint), it might make sense for it to own that behavior rather than just expose its internal state.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 1
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c177a206_5be2652e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceNode.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "It looks like this interface mixes OpenROADM and TAPI model types. That makes it easy for an implementer to accidentally combine or confuse data from the two models — for example, `OperationalState` and `AdministrativeState` come from TAPI, while `State` comes from OpenROADM. \n\n```\nimport ...openroadm.common.state.types.rev191129.State;\nimport ...tapi.common.rev221121.AdministrativeState;\nimport ...tapi.common.rev221121.OperationalState;\n```\n\nSince interfaces define a contract, any implementation would be required to handle both models at once — even when the use case would benefit from (or requires) working with only one. It might be worth considering separating these so implementations don’t need to mix both models by contract.\n\nIt would also prevent clients from accidentally mixing information from two different data models.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6085dab4_5d793cfa",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Adding the unit to the method name would improve readability. e.g. `getAvailableBandwidthTHz`.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17259b28_dbcbd399",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Is there another value this method could return other than `null`? Doing so, would remove the need for explicit null handling on the client side.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fb4b86f_79837208",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Adding the unit to the method name would improve readability. e.g. `getUsedBandwidthGHz`.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "100b9cbd_b9168ddc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Perhaps returning `0` rather than `null` could make this a bit easier to use, since it would remove the need for explicit null handling on the client side.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ddbc0d8_367d124f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "Instead of returning null here, maybe we could throw an exception to make the failure explicit.\n\nFor example, an UnsupportedOperationException would clearly indicate that this method isn’t yet implemented \"outside the generic analyseNW code\" path.\n\nThat would help prevent silent null handling and make it easier to detect when this path is used unexpectedly.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 5
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ace9126_6397241d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T08:24:06Z",
+      "side": 1,
+      "message": "I notice this class (TapiOpticalNode) is part of the pce.networkanalyzer package but imports and references a lot from the tapi yang model package. Since the intent has been to keep pce and tapi separate, this might blur the boundary between the two modules.\n\nIt may be worth reviewing whether this logic really belongs under pce, or if parts of it could be moved to tapi (or to a neutral common package). If left as is, it could easily evolve into a circular dependency, which would make future refactoring and testing more difficult.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
