@@ -1,0 +1,437 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689cf3ce_00dc3d27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Thanks for sharing this — I’ve added a few comments and suggestions. Looking forward to seeing how it evolves.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdda8435_53317e99",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "It may not be immediately clear what the tp parameter represents or what kind of values it typically contains. I assume it stands for _termination point_, but not every string would be valid in that context.\n\nThis is one of those occasions where Javadoc could make a big difference — especially if it includes example values or a brief explanation of expected formats.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 42
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f3ebeff_1e9edaf0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "I suggest removing the hard-coded line references from the log messages. Over time they’ll inevitably stop matching the actual line numbers, as they already have here (two say 167 and the third says 173 but on line 171).\n\nThe message will still be useful without them, and it’ll be easier to keep consistent.",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 0
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d880d6_03953267",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "This use of iterator().next() suggests there may be more than one entry in the map. If so, we’re implicitly taking the first one without knowing which it is — the iteration order may not be consistent across runs.\n\nIs there a way to make this selection more explicit or deterministic? For example, by selecting a specific key, validating that only one entry exists, or using a defined ordering to ensure consistent results.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b3b8d3_f4f53bba",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "A subtle but potentially important change — we’re shifting from a defensive default to a more permissive one. Previously, this object was considered invalid until proven otherwise; now it’s valid by default. Personally, I tend to prefer the more defensive posture, as it helps surface initialization or validation issues earlier.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed655af_eb6120d1",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "It looks like the logic in case SRG, case DEGREE, and case XPONDER is mostly duplicated — the only difference is the set of TpType values used in the filter.\n\nThis might be a good opportunity to simplify or consolidate the code. For example, you could extract the common logic into a small helper method that takes a set of OpenroadmTpType values as input and applies the same stream/filter/bitset combination logic.\n\nThat would make the method easier to read and maintain while reducing the risk of inconsistencies between the cases.\n\n```java\nprivate BitSet computeFrequencies(Set\u003cOpenroadmTpType\u003e types) {\n    List\u003cBitSet\u003e bitsetList \u003d listOfNep.stream()\n        .filter(bpn -\u003e types.contains(bpn.getTpType()))\n        .map(BasePceNep::getFrequenciesBitSet)\n        .filter(Objects::nonNull)\n        .collect(Collectors.toList());\n\n    BitSet freqBitSet \u003d new BitSet();\n    bitsetList.forEach(freqBitSet::and);\n    return freqBitSet;\n}\n```\nThen each case becomes\n```java\ncase SRG:\n    this.frequenciesBitSet.and(computeFrequencies(Set.of(\n        SRGRXCP, SRGTXCP, SRGTXRXCP)));\n    break;\ncase DEGREE:\n    this.frequenciesBitSet.and(computeFrequencies(Set.of(\n        DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP)));\n    break;\ncase XPONDER:\n    this.frequenciesBitSet.and(computeFrequencies(Set.of(\n        XPONDERNETWORK)));\n    break;\n```\n\nI wonder if these three cases could be combined, since they all perform the same logic apart from the nodeType filter. For example, something like:\n\n```java\ncase SRG:\ncase DEGREE:\ncase XPONDER:\n    this.frequenciesBitSet \u003d computeFrequencies(Set.of(\n        SRGRXCP, SRGTXCP, SRGTXRXCP,\n        DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP,\n        XPONDERNETWORK));\n    break;\n```",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 9
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c497eb_43a6f98a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e53e7a65_c3994126",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea5cf67_963958ea",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e73ee9cd_9eba5953",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5e11d4_e7c66659",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64552e0f_7d06aad7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ef10ed2_b02c3a6d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Superfluous line reference.",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 415,
+        "endChar": 77
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb6dd68_24b5f8e7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "This instance variable makes the class difficult to follow as a reader. It appears to be updated in multiple places throughout the class, which makes it hard to tell what state it holds at any given time, in what order it’s modified, or from where.\n\nBecause the class is several thousand lines long and no method seems to explicitly return this object, the only way to understand its lifecycle is to read through the entire class to track its mutations.\n\nGoing forward, it might be worth refactoring the methods so they don’t directly modify this variable. Instead, consider having them return an updated object that can then be assigned to this field at a higher level.\n\nThe same principle applies to methods that process this object’s contents. Rather than accessing the instance variable directly, consider passing it in as a method argument.\n\nHaving methods explicitly _accept_ and _return_ objects—rather than reaching into shared state—typically reveals execution flow and makes dependencies more visible, reducing hidden coupling.\n\nIn smaller classes, shared mutable state like this is manageable, but in a class of this size, it behaves much like a global variable — hard to track, difficult to determine its state at any given time during runtime, easy to misuse, and difficult to test or refactor safely.\n\nThere are likely other variables in this class with similar characteristics, though I haven’t verified. The number of instance variables instantiated to an empty list makes me wonder though.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e032b5ac_f91d5ce6",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "This log statement is a bit hard to read due to the inline concatenation and ternary. It might be clearer to extract the nodeName beforehand and use parameter placeholders consistently:\n\n```java\nString nodeName \u003d (node \u003d\u003d null) ? \"NULL\" : node.getName();\nLOG.error(\n    \"TapiOpticalNode: one of the parameters is not populated: \"\n    + \"slot width granularity {}, service type {}, node {}\",\n    slotWidthGranularity, serviceType, nodeName);\n```\n... or with each parameter on its own line:\n\n```java\nString nodeName \u003d (node \u003d\u003d null) ? \"NULL\" : node.getName();\nLOG.error(\n    \"TapiOpticalNode: one of the parameters is not populated: \"\n    + \"slot width granularity {}, service type {}, node {}\",\n    slotWidthGranularity,\n    serviceType,\n    nodeName);\n```",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 56
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2257fb1c_cd773b3c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "This method looks quite large and seems to handle several distinct responsibilities — collecting NEPs, building OTS/OMS structures, determining directions, updating bitsets, and logging detailed state.\n\nBreaking it up into smaller methods with explicit arguments and return types would make it easier to test, document, and reuse — and would reduce the risk of subtle bugs when maintaining such a large control flow.\n\nAs it is right now, it\u0027s difficult—without reading the whole thing—to determine what this method processes and where the result is stored.",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 5
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa3694b_18571fae",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "This is an example of a void method whose name implies it builds something, but it’s not clear what or where the result goes without reading the full body.\n\nIt might be clearer to refactor this into methods that take explicit inputs and return results, e.g.:\n```java\nMap\u003cUuid, IntLinkObj\u003e \n    buildLinkMap(Map\u003cNodeRuleGroupKey, NodeRuleGroup\u003e nrgList){...}\n\nMap\u003cInteger, Map\u003cNodeEdgePointKey, NodeEdgePoint\u003e\u003e \n    buildEdgeMap(Map\u003cInterRuleGroupKey, InterRuleGroup\u003e irgList){...}\n```\nThis makes dependencies and outputs explicit instead of hiding them behind shared mutable state.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76fbce3d_ddf62b30",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "One generally expects a method that returns and accepts nothing to be trivial. However, since this one is around 300 lines long, it’s clearly doing far more than its signature suggests.\n\nThe name implies that something is being initialized, but initialization typically belongs in a constructor. This method behaves more like a factory — it builds or configures an object rather than simply setting up state.\n\nI’d strongly recommend avoiding designs where a class must be instantiated in an incomplete state, requiring clients to call additional “magic” methods before it becomes usable. Once an instance is created, it should be ready to perform its responsibilities.\n\nIt might be worth moving this method into a dedicated factory class. If TapiOpticalNode depends on the outcome, the factory could return a fully prepared object that’s passed into the TapiOpticalNode constructor.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aebd03f_eda3e1cb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "Another example of a method that neither accepts nor returns anything, even though its name suggests that something is being populated. While the method is relatively small, it’s still a good practice to make explicit what a method needs and what it returns.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a5e56aa_d062e3e4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1547a8b_6edeaaeb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4484fd4a_417fb9b3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 2198,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "There are several log messages in this class that include hard-coded line number references. I’d suggest removing those, since they’re likely to get out of sync over time and don’t add lasting value to the logs.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753dce38_57070ec4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-05T13:31:28Z",
+      "side": 1,
+      "message": "The hard-coded \"OTSi\" string here may be cause for concern. It makes this method depend on external assumptions about the ´key` value that it can’t control. Over time, that kind of coupling can make the code harder to maintain and more error-prone.\n\nIs there a way to remove this string check? It looks like we’re making a decision based on the `key` variable instead of letting `sclpqiList` speak for itself — in other words, relying on the actual state of `sclpqiList`.\n\nSince `sclpqiList` is built within this method, it might be cleaner to let its contents determine the outcome rather than consulting an external “magic” flag.\n\n```java\nList\u003cSupportedCepLayerProtocolQualifierInstances\u003e sclpqiList \u003d new ArrayList\u003c\u003e();\n...\nfor (LAYERPROTOCOLQUALIFIER qualifier: ifCapTypeMap.get(ifCapType).keySet()) {\n    sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()\n        .setLayerProtocolQualifier(qualifier)\n        .setNumberOfCepInstances(Uint64.ONE)\n        .build());\n}\n```",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 9
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
