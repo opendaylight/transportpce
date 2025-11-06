@@ -1,0 +1,198 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27967cea_0175f639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "Hi Olivier! Thanks for your hard work on this! I’ve left a few comments and suggestions.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003d0ac3_78f88553",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "This constructor feels a bit overloaded with logic. It might be worth extracting some of the initialization into a dedicated factory or builder method.\n\nThat would make the construction flow easier to follow, clarify intent, and reduce the risk of hidden side effects during the object\u0027s construction.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef707e4_41be1b3f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "Consider removing the dependency on the external static utility call inside the constructor such as this one:\n\n`this.length \u003d NetworkUtils.calcLength(link);`\n\nThe constructor signature suggests this class only depends on the provided arguments:\n\n`public PceORLink(Link link, PceNode source, PceNode dest) { ... }`\n\nHowever, it implicitly reaches out to global state through static methods. That makes the class less transparent about its actual dependencies and harder to predict or test. When seemingly unrelated code suddenly breaks, it is sometimes due to hidden dependencies such as these.\n\nIdeally, classes should be explicit about what they depend on — for example, by receiving required collaborators or data through constructor arguments. Hidden dependencies can also be a sign that the class has taken on too much responsibility and needs to be refactored.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 62
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b89e5ba8_b9f7b187",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "This switch block is needlessly difficult to maintain and read. The order of variable assignments differs from case to case, which makes it hard to compare them.\n\nSeveral assignments also repeat across cases, so it might be beneficial to extract the common ones and initialize them once before the switch.\n\nOverall, the logic could perhaps be simplified to something like this (untested example):\n\n```\n// Step 1: Set default values\nthis.omsAttributesSpan \u003d null;\nthis.srlgList \u003d null;\nthis.latency \u003d 0L;\nthis.length \u003d 0.0;\nthis.availableBandwidth \u003d 0L;\nthis.usedBandwidth \u003d 0L;\nthis.spanLoss \u003d 0.0;\nthis.powerCorrection \u003d 0.0;\nthis.cd \u003d 0.0;\nthis.pmd2 \u003d 0.0;\n\nswitch (this.linkType) {\n    case ROADMTOROADM:\n        this.omsAttributesSpan \u003d MapUtils.getOmsAttributesSpan(link);\n        this.length \u003d NetworkUtils.calcLength(link);\n        this.srlgList \u003d MapUtils.getSRLG(link);\n        this.latency \u003d NetworkUtils.calcLatency(link);\n        Map\u003cString, Double\u003e spanLossMap \u003d NetworkUtils.calcSpanLoss(link);\n        this.spanLoss \u003d spanLossMap.get(\"SpanLoss\");\n        this.powerCorrection \u003d spanLossMap.get(\"PoutCorrection\");\n        Map\u003cString, Double\u003e cdAndPmdMap \u003d NetworkUtils.calcCDandPMD(link);\n        this.cd \u003d cdAndPmdMap.get(\"CD\");\n        this.pmd2 \u003d cdAndPmdMap.get(\"PMD2\");\n        break;\n\n    case OTNLINK:\n        this.availableBandwidth \u003d MapUtils.getAvailableBandwidth(link);\n        this.usedBandwidth \u003d MapUtils.getUsedBandwidth(link);\n        this.srlgList \u003d MapUtils.getSRLGfromLink(link);\n        break;\n\n    default:\n        // Nothing else to do — defaults already set\n        break;\n}\n```\n\nAnother option would be to put default values in the variable declaration:\n`private Double length \u003d 0.0;`",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667c6721_83c29aaf",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "Would it be possible to return a default value instead of null?\nThat could help avoid unnecessary null checks on the client side.\n\nQuite a few methods return null as opposed to a meaningful implementation.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b849e50_b9d2828d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "This method also looks like a good candidate for extraction into a dedicated validator class.\n\nIt’s quite common for a class to require multiple validators, each responsible for verifying different aspects of an object\u0027s state. In such cases, a chain or collection of validators can be applied, where validation only passes if all validators succeed.\n\nAs it stands, this method seems to mix internal consistency checks (object invariants) with external validation logic.\n\nFor example, this check appears to belong to the “who am I?” category — internal identity or data consistency:\n```\nif (this.linkId \u003d\u003d null || this.linkType \u003d\u003d null || this.oppositeLink \u003d\u003d null) {}\n```\nwhereas this one seems more of an external constraint — a question of what the surrounding system expects or can tolerate:\n```\nthis.omsAttributesSpan.getSpanlossCurrent() \u003d\u003d null\n```\nAn undefined span loss might be something the client or service layer should decide how to handle, rather than the model itself.\n\nMoving this logic into a separate validator would make the validation process clearer, easier to extend, and more consistent with a single-responsibility design.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928168a4_b245dc17",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "This validator feels like a good candidate for extraction into a dedicated validation class — one responsible for verifying PceORLink instances.\n\nThe primary role of this class should likely be to model a link. Determining whether that link is valid or eligible for a particular service type seems like a separate concern.\n\nMoving the validation logic elsewhere would make this class cleaner and more focused, while also making validation easier to extend or test independently.\n\nIf there’s a strong reason for this class to validate itself, you could consider delegating validation instead — for example, by passing a validator into a method:\n\n```\nboolean isValid(Validator validator) {\n    return validator.isValid(this);\n}\n```\nThis approach keeps responsibilities clearly separated while still allowing for convenient self-validation with minimal coupling.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f22596_87d304de",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "This seems related to constructor validation logic and should probably also be refactored together with the constructor.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abf29856_5ca5dfc4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "There are quite a few methods in this class returning null instead of meaningful implementations.\n\nThat could be a sign that the interface it implements is too broad — possibly mixing unrelated responsibilities. When a class can only partially fulfill an interface, it’s often an indication that the interface might need to be split into smaller, more focused ones.\n\nFor example:\n\n```\n@Override\npublic AdminStates getAdminStates() { return null; }\n\n@Override\npublic OperationalState getOperationalState() { return opState; }\n\n@Override\npublic State getState() { return null; }\n```\n\nRefactoring the interface into narrower, role-specific variants would allow implementing classes to only commit to the methods they actually support — and would make null fallbacks unnecessary.",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 950,
+        "endChar": 0
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e748bec_047544b8",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-06T07:58:14Z",
+      "side": 1,
+      "message": "Consider passing clientTp as a constructor argument instead of setting it through a separate setter.\n\nRelying on setters to mutate an object’s internal state can make behavior harder to predict and the class more fragile over time.\n\nIf you find the constructor starting to require too many parameters, that may be a sign the class has taken on too many responsibilities. In that case, you could consider delegating some of the data to other, more focused helper or domain classes.",
+      "range": {
+        "startLine": 1288,
+        "startChar": 0,
+        "endLine": 1292,
+        "endChar": 0
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
