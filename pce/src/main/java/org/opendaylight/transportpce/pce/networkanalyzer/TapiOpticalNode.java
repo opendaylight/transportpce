@@ -1532,12 +1532,7 @@ public class TapiOpticalNode {
         if (!this.valid) {
             return;
         }
-        Double serviceRate;
-        if (("ODU4").equals(this.serviceType)) {
-            serviceRate = 100.0;
-        } else {
-            serviceRate = StringConstants.SERVICE_TYPE_RATE.get(this.serviceType).doubleValue();
-        }
+        Double serviceRate = StringConstants.SERVICE_TYPE_RATE.get(this.serviceType).doubleValue();
         Map<DirectionType, OpenroadmTpType> direction;
         LOG.debug("initTapiXndrTps: service rate is {}", serviceRate);
         LOG.debug("initTapiXndrTps: getting tps from TSP node {}", this.nodeUuid);

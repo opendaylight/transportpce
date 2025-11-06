@@ -104,18 +104,18 @@ public final class StringConstants {
     public static final String LOGICAL_CHANNEL = "logical-channel-";
     public static final String OPTICALCHANNEL = "OPTICAL_CHANNEL";
 
-    public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.of(
-
-        StringConstants.SERVICE_TYPE_1GE, Uint64.valueOf(1),
-        StringConstants.SERVICE_TYPE_10GE, Uint64.valueOf(10),
-        StringConstants.SERVICE_TYPE_100GE_T, Uint64.valueOf(100),
-        StringConstants.SERVICE_TYPE_100GE_S, Uint64.valueOf(100),
-        StringConstants.SERVICE_TYPE_100GE_M, Uint64.valueOf(100),
-        StringConstants.SERVICE_TYPE_OTU4, Uint64.valueOf(100),
-        StringConstants.SERVICE_TYPE_400GE, Uint64.valueOf(400),
-        StringConstants.SERVICE_TYPE_OTUC4, Uint64.valueOf(400),
-        StringConstants.SERVICE_TYPE_OTUC3, Uint64.valueOf(300),
-        StringConstants.SERVICE_TYPE_OTUC2, Uint64.valueOf(200));
+    public static final Map<String, Uint64> SERVICE_TYPE_RATE = Map.ofEntries(
+        entry(StringConstants.SERVICE_TYPE_1GE, Uint64.valueOf(1)),
+        entry(StringConstants.SERVICE_TYPE_10GE, Uint64.valueOf(10)),
+        entry(StringConstants.SERVICE_TYPE_100GE_T, Uint64.valueOf(100)),
+        entry(StringConstants.SERVICE_TYPE_100GE_S, Uint64.valueOf(100)),
+        entry(StringConstants.SERVICE_TYPE_100GE_M, Uint64.valueOf(100)),
+        entry(StringConstants.SERVICE_TYPE_OTU4, Uint64.valueOf(100)),
+        entry(StringConstants.SERVICE_TYPE_ODU4, Uint64.valueOf(100)),
+        entry(StringConstants.SERVICE_TYPE_400GE, Uint64.valueOf(400)),
+        entry(StringConstants.SERVICE_TYPE_OTUC4, Uint64.valueOf(400)),
+        entry(StringConstants.SERVICE_TYPE_OTUC3, Uint64.valueOf(300)),
+        entry(StringConstants.SERVICE_TYPE_OTUC2, Uint64.valueOf(200)));
 
     public static final Map<String, FiberType> FIBER_TYPES_TABLE = Map.ofEntries(
         entry("SMF", FiberType.Smf),
