@@ -35,7 +35,6 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.transportpce.pce.node.mccapabilities.McCapability;
 import org.opendaylight.transportpce.pce.node.mccapabilities.NodeMcCapability;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -44,6 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev2105
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
@@ -319,7 +319,7 @@ public class TapiOpticalNodeTest extends AbstractTest {
             "All ROADM A Degrees OTS Neps of TTP shall be enabled");
         //Testing private method calculateDirection()
         assertEquals(4, rdmAdegOTSNep.stream()
-            .filter(bpn -> bpn.getDirection().equals(DirectionType.BIDIRECTIONAL))
+            .filter(bpn -> bpn.getDirection().equals(Direction.BIDIRECTIONAL))
             .collect(Collectors.toList()).size(),
             "All ROADM A Degrees OTS Neps of TTP shall be bidirectional");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
@@ -380,7 +380,7 @@ public class TapiOpticalNodeTest extends AbstractTest {
             "All ROADM A SRG's OTS Neps of TTP shall be enabled");
         //Testing private method calculateDirection()
         assertEquals(10, rdmAsrgOTSNep.stream()
-            .filter(bpn -> bpn.getDirection().equals(DirectionType.BIDIRECTIONAL))
+            .filter(bpn -> bpn.getDirection().equals(Direction.BIDIRECTIONAL))
             .collect(Collectors.toList()).size(),
             "All ROADM A SRG's OTS Neps of TTP shall be bidirectional");
         assertEquals(10, rdmAsrgOTSNep.stream()
@@ -946,7 +946,7 @@ public class TapiOpticalNodeTest extends AbstractTest {
             "Each SPDR NW/client port/nep operational state shall be enabled)");
         // Client NEP present even if no service for NW port. CEP present for OTS NW port,
         //  and for higher layers, CEP present only if service provisioned
-        assertTrue(bpnNep.getDirection().equals(TapiOpticalNode.DirectionType.BIDIRECTIONAL),
+        assertTrue(bpnNep.getDirection().equals(Direction.BIDIRECTIONAL),
             "Each SPDR port/nep shall be bidirectional");
         assertTrue(bpnNep.getNodeRuleGroupUuid() != null,
             "Each SPDR port/nep shall have an associated referenced Node Rule group");
