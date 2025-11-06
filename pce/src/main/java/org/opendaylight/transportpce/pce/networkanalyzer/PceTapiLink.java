@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902.OtnLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
@@ -28,6 +27,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ForwardingDirection;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
@@ -496,8 +496,8 @@ public class PceTapiLink implements Serializable, PceLink {
         int sourceindex;
         Uuid srcTpUuid = null;
         Uuid destTpUuid = null;
-        DirectionType nepDirectionX = null;
-        DirectionType nepDirectionY = null;
+        Direction nepDirectionX = null;
+        Direction nepDirectionY = null;
         String node0 = "";
         Uuid tpUuid0;
         Uuid tpUuid1;
@@ -554,17 +554,17 @@ public class PceTapiLink implements Serializable, PceLink {
         } else {
             // Unidirectional or undefined case
             if (node0.equals("X") && nepDirectionX != null
-                && (DirectionType.SOURCE.equals(nepDirectionX) || DirectionType.BIDIRECTIONAL.equals(nepDirectionX))) {
+                && (Direction.SOURCE.equals(nepDirectionX) || Direction.BIDIRECTIONAL.equals(nepDirectionX))) {
                 // sourceindex = 0, and we keep it as is as nothing needs to be changed
-            } else if (node0.equals("X") && nepDirectionX != null && DirectionType.SINK.equals(nepDirectionX)) {
+            } else if (node0.equals("X") && nepDirectionX != null && Direction.SINK.equals(nepDirectionX)) {
                 // Need to change source index because first tp found is the one of Node0 = X, but the tp is RX
                 sourceindex = 1;
                 srcTpUuid = tpUuid1;
                 destTpUuid = tpUuid0;
             } else if (node0.equals("Y") && nepDirectionY != null
-                && (DirectionType.SOURCE.equals(nepDirectionY) || DirectionType.BIDIRECTIONAL.equals(nepDirectionY))) {
+                && (Direction.SOURCE.equals(nepDirectionY) || Direction.BIDIRECTIONAL.equals(nepDirectionY))) {
                // sourceindex = 1, and we keep it as is as nothing needs to be changed
-            } else if (node0.equals("Y") && nepDirectionY != null && DirectionType.SINK.equals(nepDirectionY)) {
+            } else if (node0.equals("Y") && nepDirectionY != null && Direction.SINK.equals(nepDirectionY)) {
               // Need to change source index because first tp found is the one of Node0 = Y, but the tp is RX
                 sourceindex = 0;
                 srcTpUuid = tpUuid1;

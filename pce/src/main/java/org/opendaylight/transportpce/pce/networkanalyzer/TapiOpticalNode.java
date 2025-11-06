@@ -123,9 +123,6 @@ public class TapiOpticalNode {
         StringConstants.SERVICE_TYPE_400GE,
         StringConstants.SERVICE_TYPE_100GE_T);
 
-
-    public enum DirectionType { SINK, SOURCE, BIDIRECTIONAL, UNIDIRECTIONAL, UNDEFINED }
-
     public enum TpType { PP, CP, CTP, TTP, NW, CLIENT }
 
     /*
@@ -315,7 +312,7 @@ public class TapiOpticalNode {
         // NEP with OTS, no OMS are PPS --> if InService and no MC (occupancy) --> put it in srgOtsNep
         // NEP with OTS and OMS are TTPs --> In service --> Put them in mmDegOtsNep
         // Relies on checkOtsNepAvailable
-        Map<DirectionType, OpenroadmTpType> direction;
+        Map<Direction, OpenroadmTpType> direction;
         LOG.debug("TONline328: initRoadmIlaTps: getting tps from ROADM node {}", this.nodeName);
         // for each of the photonic OwnedNEP which Operational state is enable
         // and spectrum is not fully used
@@ -615,7 +612,7 @@ public class TapiOpticalNode {
                 vnepNameMap.put(vnepId.entrySet().iterator().next().getValue().key(),
                     vnepId.entrySet().iterator().next().getValue());
                 BasePceNep virtualNep = new BasePceNep(vnepId.entrySet().iterator().next().getKey(), vnepNameMap);
-                virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
+                virtualNep.setDirection(Direction.BIDIRECTIONAL);
                 virtualNep.setFrequencyBitset(otsNep.getValue().getFrequenciesBitSet());
                 virtualNep.setOperationalState(OperationalState.ENABLED);
                 virtualNep.setAdminState(AdministrativeState.UNLOCKED);
@@ -712,7 +709,7 @@ public class TapiOpticalNode {
                             vnepId1.entrySet().iterator().next().getValue());
                         BasePceNep virtualNep = new BasePceNep(vnepId1.entrySet().iterator().next().getKey(),
                             vnepNameMap1);
-                        virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
+                        virtualNep.setDirection(Direction.BIDIRECTIONAL);
                         virtualNep.setOperationalState(OperationalState.ENABLED);
                         virtualNep.setAdminState(AdministrativeState.UNLOCKED);
                         virtualNep.setTpType(OpenroadmTpType.SRGTXRXCP);
@@ -776,7 +773,7 @@ public class TapiOpticalNode {
                                     vnepId2.entrySet().iterator().next().getValue());
                                 BasePceNep virtualNep = new BasePceNep(vnepId2.entrySet().iterator().next().getKey(),
                                     vnepNameMap2);
-                                virtualNep.setDirection(DirectionType.BIDIRECTIONAL);
+                                virtualNep.setDirection(Direction.BIDIRECTIONAL);
                                 virtualNep.setOperationalState(OperationalState.ENABLED);
                                 virtualNep.setAdminState(AdministrativeState.UNLOCKED);
                                 virtualNep.setTpType(OpenroadmTpType.DEGREETXRXCTP);
@@ -1372,7 +1369,7 @@ public class TapiOpticalNode {
      * @param tpType    Termination Point type (PP, CP, CTP, TTP, NW, CLIENT)
      * @return          A dictionary with OpenROADM tp Type, and the Tapi directionType as key.
      */
-    private Map<DirectionType, OpenroadmTpType> calculateDirection(
+    private Map<Direction, OpenroadmTpType> calculateDirection(
         OwnedNodeEdgePoint ownedNep, ConnectionEndPoint cep, TpType tpType) {
         String nodeType;
         String finalTpType = tpType.toString();
@@ -1433,8 +1430,8 @@ public class TapiOpticalNode {
                 directionCode = "TXRX";
         }
         directionCode = nodeType.equals("XPONDER") ? "" : directionCode;
-        Map<DirectionType, OpenroadmTpType> dirTpType = new HashMap<>();
-        dirTpType.put(DirectionType.valueOf(directionEnum.toString()),
+        Map<Direction, OpenroadmTpType> dirTpType = new HashMap<>();
+        dirTpType.put(Direction.valueOf(directionEnum.toString()),
             //OpenroadmTpType.
             OpenroadmTpType.valueOf(nodeType + directionCode + finalTpType));
         return dirTpType;
@@ -1533,7 +1530,7 @@ public class TapiOpticalNode {
             return;
         }
         Double serviceRate = StringConstants.SERVICE_TYPE_RATE.get(this.serviceType).doubleValue();
-        Map<DirectionType, OpenroadmTpType> direction;
+        Map<Direction, OpenroadmTpType> direction;
         LOG.debug("initTapiXndrTps: service rate is {}", serviceRate);
         LOG.debug("initTapiXndrTps: getting tps from TSP node {}", this.nodeUuid);
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> ownedNepList = this.node.getOwnedNodeEdgePoint();
