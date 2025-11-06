@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.opendaylight.transportpce.pce.networkanalyzer.TapiOpticalNode.DirectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
@@ -29,7 +29,7 @@ public class BasePceNep {
 
     private Uuid nepCepUuid;
     private Map<NameKey, Name> nepCepName;
-    private DirectionType nepDirection;
+    private Direction nepDirection;
     private BitSet frequenciesBitSet;
     private LayerProtocolName lpn;
     private LAYERPROTOCOLQUALIFIER lpq;
@@ -210,7 +210,7 @@ public class BasePceNep {
      * Sets the DirectionType (as defined in TransportPCE/TapiOpticalNode) of the BasePceNep.
      * @param direction   DirectionType { SINK, SOURCE, BIDIRECTIONAL, UNIDIRECTIONAL, UNDEFINED }.
      */
-    public void setDirection(DirectionType direction) {
+    public void setDirection(Direction direction) {
         this.nepDirection = direction;
     }
 
@@ -243,7 +243,7 @@ public class BasePceNep {
      * Retrieves the DirectionType (as defined in TransportPCE/TapiOpticalNode) of the BasePceNep.
      * @return DirectionType { SINK, SOURCE, BIDIRECTIONAL, UNIDIRECTIONAL, UNDEFINED }.
      */
-    public DirectionType getDirection() {
+    public Direction getDirection() {
         return this.nepDirection;
     }
 
