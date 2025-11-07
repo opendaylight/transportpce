@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -47,8 +48,12 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Dire
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.OwnedNodeEdgePoint1;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.node.OwnedNodeEdgePointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
@@ -218,6 +223,48 @@ public class TapiOpticalNodeTest extends AbstractTest {
         ton = new TapiOpticalNode(servType, xpdrCx1, null, null, null, null, null, null);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
+    }
+
+    @Test
+    void getTpQualifierTest() {
+        Node roadmA = tapiContext.augmentation(Context1.class)
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(roadmAId));
+        OwnedNodeEdgePoint onep = roadmA.getOwnedNodeEdgePoint()
+                .get(new OwnedNodeEdgePointKey(new Uuid("07f44317-cb76-3e9e-9a70-fe90e73b6259")));
+
+        TapiOpticalNode.TpQualifier result = TapiOpticalNode.getTpQualifier(onep, TapiOpticalNode.TpType.TTP);
+        assertInstanceOf(Direction.class, result.direction());
+        assertInstanceOf(OpenroadmTpType.class, result.type());
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("DEGREETXRXTTP", result.type().name());
+
+        result = TapiOpticalNode.getTpQualifier(onep, TapiOpticalNode.TpType.PP);
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("SRGTXRXPP", result.type().name());
+
+        result = TapiOpticalNode.getTpQualifier(onep, TapiOpticalNode.TpType.CLIENT);
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("XPONDERCLIENT", result.type().name());
+
+        result = TapiOpticalNode.getTpQualifier(onep, TapiOpticalNode.TpType.NW);
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("XPONDERNETWORK", result.type().name());
+
+        Node spdrAx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
+                .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
+                .getNode().get(new NodeKey(spdrSA1xpdr1Id));
+        ConnectionEndPoint cep = spdrAx1.getOwnedNodeEdgePoint()
+                .get(new OwnedNodeEdgePointKey(new Uuid("7d2a0549-63e3-3c7f-b4dc-5653e8a81dbe")))
+                .augmentation(OwnedNodeEdgePoint1.class)
+                .getCepList().nonnullConnectionEndPoint().values().stream().findFirst().orElseThrow();
+        result = TapiOpticalNode.getTpQualifier(cep, TapiOpticalNode.TpType.CLIENT);
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("XPONDER-CLIENT", result.type().getName());
+
+        result = TapiOpticalNode.getTpQualifier(cep, TapiOpticalNode.TpType.NW);
+        assertEquals("BIDIRECTIONAL", result.direction().name());
+        assertEquals("XPONDER-NETWORK", result.type().getName());
     }
 
     @Test
