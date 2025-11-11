@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRenderingResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251111.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251111.OtnServicePathOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

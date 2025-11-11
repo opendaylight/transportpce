@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.Collection;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.renderer.rollback.output.FailedToRollback;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251111.renderer.rollback.output.FailedToRollback;
 
 public interface ResultMessage {
 
