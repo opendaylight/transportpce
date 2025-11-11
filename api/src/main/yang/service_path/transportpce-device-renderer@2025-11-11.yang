@@ -19,6 +19,10 @@ module transportpce-device-renderer {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2025-11-11 {
+    description
+      "Add provision mode in the service-path to accomodate for proprietary optical operational modes";
+  }
   revision 2025-10-01 {
     description
       "Change operational-mode type from Uint16 to String in service-path";
@@ -88,6 +92,15 @@ module transportpce-device-renderer {
       }
       leaf zend-operational-mode {
         type string;
+      }
+      leaf provision-mode {
+        description
+          "This mode used for provisioning OCH interfaces on transponders; If the operational mode is
+          outside the OpenROADM modes, then the provision-mode should be profile. This value should
+          be provided after PCE picks the best operational-mode or in the service-request, when a user
+          specifies a proprietary operational mode to be used";
+        type string;
+        default "explicit";
       }
       leaf target-output-power {
         type decimal64 {
