@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -647,7 +646,6 @@ public class PortMappingVersion121Test {
         assertEquals(testMappings, mappings, "test mapping are equals to mapping");
     }
 
-    @NonNull
     private DataObjectIdentifier<Ports> getChild(String c4, String p5) {
         return DataObjectIdentifier
             .builderOfInherited(OrgOpenroadmDeviceData.class, OrgOpenroadmDevice.class)
