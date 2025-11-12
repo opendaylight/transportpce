@@ -39,8 +39,8 @@ public class PceResult {
 
     private LocalCause localCause = LocalCause.NONE;
 
-    private AToZDirection atozdirection = null;
-    private ZToADirection ztoadirection = null;
+    private AToZDirection atozDirection = null;
+    private ZToADirection ztoaDirection = null;
 
     /**
      * Set the state of this object to "Success".
@@ -114,19 +114,19 @@ public class PceResult {
     }
 
     public AToZDirection getAtoZDirection() {
-        return atozdirection;
+        return atozDirection;
     }
 
     public ZToADirection getZtoADirection() {
-        return ztoadirection;
+        return ztoaDirection;
     }
 
-    public void setAtoZDirection(AToZDirection atozDirection) {
-        this.atozdirection = atozDirection;
+    public void setAtoZDirection(AToZDirection atozDirect) {
+        this.atozDirection = atozDirect;
     }
 
-    public void setZtoADirection(ZToADirection ztoaDirection) {
-        this.ztoadirection = ztoaDirection;
+    public void setZtoADirection(ZToADirection ztoaDirect) {
+        this.ztoaDirection = ztoaDirect;
     }
 
     public long getRate() {

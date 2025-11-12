@@ -28,7 +28,7 @@ public class OtnTopoNode {
     /**
      * Instantiate the OtnTopoNode.
      *
-     * @param nodeid Node name
+     * @param nodeId Node name
      * @param clli CLLI
      * @param xpdrNb XPDR number
      * @param xpdrNodeTypes Type of XPDR (TPDR, MxPDR, Switch...)
@@ -37,11 +37,11 @@ public class OtnTopoNode {
      * @param xpdrNetMaps List of mappings for network ports
      * @param xpdrClMaps List of mapping for client ports
      */
-    public OtnTopoNode(String nodeid, String clli, int xpdrNb, XpdrNodeTypes xpdrNodeTypes,
+    public OtnTopoNode(String nodeId, String clli, int xpdrNb, XpdrNodeTypes xpdrNodeTypes,
         Map<String, String> xpdrNetConnectionMap, Map<String, String> xpdrCliConnectionMap, List<Mapping> xpdrNetMaps,
         List<Mapping> xpdrClMaps) {
         super();
-        this.nodeId = nodeid;
+        this.nodeId = nodeId;
         this.clli = clli;
         this.nodeType = xpdrNodeTypes;
         this.xpdrNb = xpdrNb;

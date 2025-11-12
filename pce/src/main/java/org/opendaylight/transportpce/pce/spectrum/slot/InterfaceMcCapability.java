@@ -106,15 +106,15 @@ public class InterfaceMcCapability implements McCapability {
         return Objects.hash(slotWidthGranularity, minSlots, maxSlots);
     }
 
-    private String slotWidthRange(long minslots, long maxslots, BigDecimal slotWidthGran) {
-        BigDecimal minSlotWidth = slotWidthGran.multiply(BigDecimal.valueOf(minslots))
+    private String slotWidthRange(long minSlotNb, long maxSlotNb, BigDecimal slotWidthGran) {
+        BigDecimal minSlotWidth = slotWidthGran.multiply(BigDecimal.valueOf(minSlotNb))
                 .stripTrailingZeros();
 
-        if (minslots == maxslots) {
+        if (minSlotNb == maxSlotNb) {
             return String.format("%sGHz", minSlotWidth.toPlainString());
         }
 
         return String.format("%sGHz to %sGHz", minSlotWidth.toPlainString(),
-                this.slotWidthGranularity.multiply(BigDecimal.valueOf(maxslots)).stripTrailingZeros().toPlainString());
+                this.slotWidthGranularity.multiply(BigDecimal.valueOf(maxSlotNb)).stripTrailingZeros().toPlainString());
     }
 }
