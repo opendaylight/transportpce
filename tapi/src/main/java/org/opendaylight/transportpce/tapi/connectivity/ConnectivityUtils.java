@@ -2489,7 +2489,6 @@ public final class ConnectivityUtils {
                         }
                     }
                 }
-                connectedPorts.stream().distinct().collect(Collectors.toList());
                 // If network Port was found in a Switching Pool don't need to investigate on other switchig pools
                 if (nwPortFound) {
                     break;

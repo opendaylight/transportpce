@@ -30,7 +30,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -59,7 +58,6 @@ class PowerMgmtTest {
 
     @BeforeEach
     void setUp() {
-        mock(DataBroker.class);
         this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
         this.crossConnect = mock((CrossConnectImpl.class));
         this.deviceTransactionManager = mock(DeviceTransactionManager.class);
