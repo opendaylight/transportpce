@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d85bf3f_b795c5fe",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2025-10-01.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2025-11-12T07:46:05Z",
+      "side": 1,
+      "message": "This file should be renamed with the extension @2025-11-11",
+      "revId": "d1c42cde051a00a816fb5faf74e2b1caabe1a56f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
