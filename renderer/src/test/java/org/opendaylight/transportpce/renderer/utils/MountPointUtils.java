@@ -39,7 +39,7 @@ public final class MountPointUtils {
         getConnectionPortTrailOutputBldr.setPorts(ports);
         ListenableFuture<RpcResult<GetConnectionPortTrailOutput>> rpcResultFuture =
                 RpcResultBuilder.success(getConnectionPortTrailOutputBldr.build()).buildFuture();
-        doReturn(rpcResultFuture).when(getConnectionPortTrail.invoke(any()));
+        doReturn(rpcResultFuture).when(getConnectionPortTrail).invoke(any());
         doReturn(getConnectionPortTrail).when(rpcService).getRpc(any());
         MountPointStub mountPoint = new MountPointStub(dataBroker);
         mountPoint.setRpcService(rpcService);

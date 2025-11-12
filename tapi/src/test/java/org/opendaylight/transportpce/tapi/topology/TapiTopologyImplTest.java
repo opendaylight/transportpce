@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.MoreExecutors;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +20,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.BeforeAll;
@@ -105,7 +103,6 @@ public class TapiTopologyImplTest extends AbstractTest {
 
     @BeforeAll
     static void setUp() throws InterruptedException, ExecutionException {
-        MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUM_THREADS));
         new CountDownLatch(1);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TapiTopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OPENROADM_TOPOLOGY_II);

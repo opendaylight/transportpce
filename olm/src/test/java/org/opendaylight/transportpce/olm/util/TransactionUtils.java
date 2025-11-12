@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -84,20 +83,18 @@ public final class TransactionUtils {
         DataObject object) {
         ReadWriteTransaction transaction = dataBroker.newReadWriteTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
-        transaction.commit();// submit(Timeouts.DATASTORE_WRITE, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT).get();
+        var unused = transaction.commit();// submit(Timeouts.DATASTORE_WRITE, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT).get();
         return true;
     }
 
     public static Network1 getNullNetwork() {
         Map<LinkKey, Link> nullMap = null;
         Network1 network = new Network1Builder().setLink(nullMap).build();
-        Optional.of(network);
         return network;
     }
 
     public static Network1 getEmptyNetwork() {
         Network1 network = new Network1Builder().setLink(Map.of()).build();
-        Optional.of(network);
         return network;
     }
 
@@ -152,7 +149,6 @@ public final class TransactionUtils {
                 .setNetworkId(new NetworkId(StringConstants.OPENROADM_TOPOLOGY));
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network network =
             networkBuilder.build();
-        Optional.of(network);
         return network;
     }
 
@@ -200,7 +196,6 @@ public final class TransactionUtils {
         links.put(link1.key(),link1);
         links.put(link2.key(),link2);
         Network1 network = new Network1Builder().setLink(links).build();
-        Optional.of(network);
         return network;
     }
 
@@ -303,7 +298,6 @@ public final class TransactionUtils {
         links.put(link1.key(),link1);
         links.put(link2.key(),link2);
         Network1 network = new Network1Builder().setLink(links).build();
-        Optional.of(network);
         return network;
     }
 

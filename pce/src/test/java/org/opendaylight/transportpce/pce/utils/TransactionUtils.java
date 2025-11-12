@@ -95,7 +95,7 @@ public final class TransactionUtils {
         @NonNull
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
-        transaction.commit();
+        var unused = transaction.commit();
     }
 
     public static org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
