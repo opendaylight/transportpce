@@ -8,8 +8,8 @@
 package org.opendaylight.transportpce.tapi.topology;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -757,7 +757,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
                         .collect(Collectors.toList())
                         .containsAll(List.of(clientNepUuid, networkNepUuid)))
                 .findFirst().orElseThrow();
-        assertNotNull("One node-rule-group shall contains client and network Neps", nrgCltAndNet);
+        assertNotNull(nrgCltAndNet, "One node-rule-group shall contains client and network Neps");
         List<NodeEdgePoint> nodeEdgePointList;
         if (nodeType.equals("Switch")) {
             assertEquals(8, nrgCltAndNet.getNodeEdgePoint().size(), "Switch-DSR nrg should contain 8 NEP");
