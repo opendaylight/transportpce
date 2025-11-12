@@ -31,6 +31,6 @@ public class OpenRoadmInterfaceException extends Exception {
 
     public static final String mapping_xpdrtype_err(String node, String port) {
         return String.format(
-                "Unable to get XpdrType from PortMapping for node % and logical connection port %s", node, port);
+                "Unable to get XpdrType from PortMapping for node %s and logical connection port %s", node, port);
     }
 }
