@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class OpenRoadmOtnInterface221 {
 
     private static final String MAPPING_ERROR_EXCEPTION_MESSAGE =
-        "Unable to get mapping from PortMapping for node % and logical connection port %s";
+        "Unable to get mapping from PortMapping for node %s and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private static final Logger LOG = LoggerFactory
@@ -87,7 +87,7 @@ public class OpenRoadmOtnInterface221 {
     private void throwException(String nodeId, String logicalConnPoint)
             throws OpenRoadmInterfaceException {
         throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
                 nodeId, logicalConnPoint));
     }
 

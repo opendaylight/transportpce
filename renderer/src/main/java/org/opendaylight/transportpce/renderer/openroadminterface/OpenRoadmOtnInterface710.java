@@ -82,7 +82,7 @@ public class OpenRoadmOtnInterface710 {
         throws OpenRoadmInterfaceException {
 
         throw new OpenRoadmInterfaceException(String.format(
-            "Unable to get mapping from PortMapping for node % and logical connection port %s",
+            "Unable to get mapping from PortMapping for node %s and logical connection port %s",
             nodeId, logicalConnPoint));
     }
 
