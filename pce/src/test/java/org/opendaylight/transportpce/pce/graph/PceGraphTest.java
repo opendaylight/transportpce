@@ -253,7 +253,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.0919881995992924));
     }
 
     @Test
@@ -267,7 +267,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC2, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.1559963686478447));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.1559963686478447));
     }
 
     @Test
@@ -281,7 +281,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC3, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.3351048800367167));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(0.3351048800367167));
     }
 
     @Test
@@ -295,7 +295,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), false);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(0.0));
     }
 
     @Test
@@ -309,7 +309,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_400GE, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.4432381874659086));
     }
 
     @Test
@@ -323,7 +323,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(1.4432381874659086));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(1.4432381874659086));
     }
 
     @Test
@@ -337,7 +337,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_OTUC4, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(0.0));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(0.0));
     }
 
     @Test
@@ -351,7 +351,7 @@ public class PceGraphTest extends AbstractTest {
             rc, StringConstants.SERVICE_TYPE_100GE_T, netTransServ, PceConstraintMode.Loose, null,
             clientInput);
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.ofNullable(3.0919881995992924));
+        assertEquals(Optional.ofNullable(pceGraph.getmargin()), Optional.of(3.0919881995992924));
     }
 
     @Test
@@ -368,8 +368,7 @@ public class PceGraphTest extends AbstractTest {
         pceGraph.setConstrains(pceHardConstraints);
 
         assertEquals(pceGraph.calcPath(), true);
-        assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(2).getLatency()),
-            Optional.ofNullable(1.0));
+        assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(2).getLatency()), Optional.of(1.0));
         assertEquals(pceGraph.getReturnStructure().getRate(), 100);
     }
 
