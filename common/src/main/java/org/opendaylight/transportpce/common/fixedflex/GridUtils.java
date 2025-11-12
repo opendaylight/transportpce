@@ -62,7 +62,7 @@ public final class GridUtils {
      * @param index int
      * @return the wavelength number.
      */
-    public static long getWaveLengthIndexFromSpectrumAssigment(int index) {
+    public static int getWaveLengthIndexFromSpectrumAssigment(int index) {
         return (GridConstant.EFFECTIVE_BITS - index) / GridConstant.NB_SLOTS_100G;
     }
 
