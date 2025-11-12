@@ -8,7 +8,8 @@
 
 package org.opendaylight.transportpce.olm.power;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -70,7 +71,7 @@ class PowerMgmtTest {
     void testSetPowerWhenMappingReturnNull() {
         when(this.portMapping.getNode(anyString())).thenReturn(null);
         boolean output = this.powerMgmt.setPower(OlmPowerServiceRpcImplUtil.getServicePowerSetupInput());
-        assertEquals(false, output);
+        assertFalse(output);
     }
 
     @Test
@@ -111,7 +112,7 @@ class PowerMgmtTest {
 
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
@@ -123,7 +124,7 @@ class PowerMgmtTest {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("xpdr-C", "network-C", "client-C");
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
@@ -149,7 +150,7 @@ class PowerMgmtTest {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("roadm-A", "srg1-A", "deg2-A");
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(true, result);
+        assertTrue(result);
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.Power.getName()),
                     eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
@@ -170,7 +171,7 @@ class PowerMgmtTest {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("roadm-C", "deg1-C", "srg1-C");
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(true, result);
+        assertTrue(result);
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-C"), matches(OpticalControlMode.Power.getName()), isNull(),
                     matches("deg1-C-srg1-C-761:768"));
@@ -217,7 +218,7 @@ class PowerMgmtTest {
 
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
-            assertEquals(true, result);
+            assertTrue(result);
             pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
                     anyString(), eq(new BigDecimal("-5")), any(), any()));
             verify(this.crossConnect, times(1))
@@ -271,7 +272,7 @@ class PowerMgmtTest {
 
             ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputForTransponder();
             boolean result = this.powerMgmt.setPower(input);
-            assertEquals(true, result);
+            assertTrue(result);
             pmv121.verify(() -> PowerMgmtVersion121.setTransponderPower(matches("xpdr-A"),
                     anyString(), eq(new BigDecimal("-4.20000000000000017763568394002504646778106689453125")),
                     any(), any()));
@@ -282,7 +283,7 @@ class PowerMgmtTest {
     void testSetPowerWithoutNode() {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInputWthoutNode();
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(false, result);
+        assertFalse(result);
         verifyNoInteractions(this.crossConnect);
     }
 
@@ -293,7 +294,7 @@ class PowerMgmtTest {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
                 .getServicePowerSetupInputForOneNode("ila node", "rx-port", "tx-port");
         boolean result = this.powerMgmt.setPower(input);
-        assertEquals(true, result);
+        assertTrue(result);
         verifyNoInteractions(this.crossConnect);
         verifyNoInteractions(this.openRoadmInterfaces);
     }
@@ -306,7 +307,7 @@ class PowerMgmtTest {
             .thenReturn(true);
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
         boolean result = this.powerMgmt.powerTurnDown(input);
-        assertEquals(true, result);
+        assertTrue(result);
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-C"), matches(OpticalControlMode.Off.getName()), isNull(), anyString());
         verify(this.crossConnect, times(1))
@@ -321,7 +322,7 @@ class PowerMgmtTest {
         when(this.crossConnect.setPowerLevel(anyString(), anyString(), any(), anyString())).thenReturn(false);
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
         boolean result = this.powerMgmt.powerTurnDown(input);
-        assertEquals(false, result);
+        assertFalse(result);
         verify(this.crossConnect, times(2))
                 .setPowerLevel(anyString(), any(), any(), anyString());
     }
@@ -359,7 +360,7 @@ class PowerMgmtTest {
         verify(this.crossConnect, times(1))
             .setPowerLevel(matches("roadm-A"), matches(OpticalControlMode.GainLoss.getName()),
                     eq(Decimal64.valueOf("-3.00")), matches("srg1-A-deg2-A-761:768"));
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
 

@@ -914,8 +914,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
             "node-rule-group nb 4 should be between nep-client1 and nep-network1 of the same node");
         List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
         assertEquals(1, rule.size(), "node-rule-group nb 1 should contain a single rule");
-        assertEquals(true, rule.get(0).getLocalId().startsWith("forward"),
-            "local-id of the rule should be 'forward'");
+        assertTrue(rule.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().iterator().next(),
@@ -933,8 +932,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
                 "each node-rule-group should contain 2 NEP for muxponder DSR");
             List<Rule> rule = new ArrayList<>(nrg.nonnullRule().values());
             assertEquals(1, rule.size(), "node-rule-group nb" + indexnrg + "should contain a single rule");
-            assertEquals(true, rule.get(0).getLocalId().startsWith("forward"),
-                "local-id of the rule should be 'forward'");
+            assertTrue(rule.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
             assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
                 "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
             assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().iterator().next(),
@@ -979,8 +977,7 @@ public class ConvertTopoORtoTapiNbiTest extends AbstractTest {
         @Nullable
         List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
         assertEquals(1, ruleList.size(), "node-rule-group should contain a single rule");
-        assertEquals(true, ruleList.get(0).getLocalId().startsWith("forward"),
-            "local-id of the rule should be 'forward'");
+        assertTrue(ruleList.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, ruleList.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, ruleList.get(0).getRuleType().iterator().next(),

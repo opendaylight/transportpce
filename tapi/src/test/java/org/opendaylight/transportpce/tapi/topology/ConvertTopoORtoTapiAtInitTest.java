@@ -795,7 +795,7 @@ public class ConvertTopoORtoTapiAtInitTest extends AbstractTest {
         }
         List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
         assertEquals(1, rule.size(), "node-rule-group should contain a single rule");
-        assertEquals(true, rule.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
+        assertTrue(rule.get(0).getLocalId().startsWith("forward"), "local-id of the rule should be 'forward'");
         assertEquals(FORWARDINGRULEMAYFORWARDACROSSGROUP.VALUE, rule.get(0).getForwardingRule(),
             "the forwarding rule should be 'MAYFORWARDACROSSGROUP'");
         assertEquals(RuleType.FORWARDING, rule.get(0).getRuleType().stream().findFirst().orElseThrow(),

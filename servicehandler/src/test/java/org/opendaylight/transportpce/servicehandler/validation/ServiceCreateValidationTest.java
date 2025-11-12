@@ -7,7 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class ServiceCreateValidationTest {
             .setCommonId(null).build();
         OperationResult result = ServiceCreateValidation
             .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        assertEquals(true, result.isSuccess());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -60,7 +61,7 @@ public class ServiceCreateValidationTest {
                 .build()).build();
         OperationResult result = ServiceCreateValidation
             .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        assertEquals(false, result.isSuccess());
+        assertFalse(result.isSuccess());
     }
 
     @Test
@@ -69,7 +70,7 @@ public class ServiceCreateValidationTest {
             .setSoftConstraints(null).setHardConstraints(null).build();
         OperationResult result = ServiceCreateValidation
             .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        assertEquals(true, result.isSuccess());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -87,7 +88,7 @@ public class ServiceCreateValidationTest {
                 .build()).setHardConstraints(null).build();
         OperationResult result = ServiceCreateValidation
             .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        assertEquals(true, result.isSuccess());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -105,6 +106,6 @@ public class ServiceCreateValidationTest {
                 .build()).build();
         OperationResult result = ServiceCreateValidation
             .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceCreate);
-        assertEquals(true, result.isSuccess());
+        assertTrue(result.isSuccess());
     }
 }
