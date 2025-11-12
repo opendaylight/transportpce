@@ -65,13 +65,13 @@ public class ConvertTopoTapiToTapiNbi {
      * All methods will used Nodes/Link/SIPs that have been populated externally through setters.
      * Thus the constituting elements of the topology do not depend on refTopoUuid which is used as
      * the target topoUuid.
-     * @param reftopoUuid Reference Topology Uuid provided in the input of GetTopologyDetails used in Builders.
+     * @param refTopoUuid Reference Topology Uuid provided in the input of GetTopologyDetails used in Builders.
      */
-    public ConvertTopoTapiToTapiNbi(Uuid reftopoUuid) {
+    public ConvertTopoTapiToTapiNbi(Uuid refTopoUuid) {
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
         this.tapiSips = new HashMap<>();
-        this.refTopoUuid = reftopoUuid;
+        this.refTopoUuid = refTopoUuid;
     }
 
     /**
