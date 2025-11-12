@@ -252,12 +252,11 @@ public final class ModelMappingUtils {
                         ztoADirection.getZToAMaxFrequency().getValue().decimalValue(),
                         scale));
             }
-        } else if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMinFrequency() != null) {
-            FrequencyTHz centralFrequencyWithPrecision = GridUtils.getCentralFrequencyWithPrecisionForOpenConfig(
+        } else if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
+            servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecisionForOpenConfig(
                     ztoADirection.getZToAMinFrequency().getValue().decimalValue(),
-                    ztoADirection.getZToAMinFrequency().getValue().decimalValue(),
-                    GridConstant.FLEX_GRID_FREQUENCY_PRECISION);
-            servicePathInputBuilder.setCenterFreq(centralFrequencyWithPrecision);
+                    ztoADirection.getZToAMaxFrequency().getValue().decimalValue(),
+                    GridConstant.FLEX_GRID_FREQUENCY_PRECISION));
         }
         if (ztoADirection.getWidth() != null) {
             servicePathInputBuilder.setNmcWidth(
