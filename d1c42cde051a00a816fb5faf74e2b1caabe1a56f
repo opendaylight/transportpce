@@ -16,6 +16,24 @@
       "message": "This file should be renamed with the extension @2025-11-11",
       "revId": "d1c42cde051a00a816fb5faf74e2b1caabe1a56f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55724c75_0ac7d18e",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2025-10-01.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2025-11-17T22:01:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d85bf3f_b795c5fe",
+      "revId": "d1c42cde051a00a816fb5faf74e2b1caabe1a56f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
