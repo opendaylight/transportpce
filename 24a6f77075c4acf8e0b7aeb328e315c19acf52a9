@@ -35,6 +35,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50bd1a32_01691c09",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-19T20:31:52Z",
+      "side": 1,
+      "message": "`TapiTopologyException` is a checked exception. So in this case I have two options:\n \n1 - Add exception to method signature \n2 - Catch the exception and throw a runtime exception\n\nOption 1 effectively forces me to modify method signatures all the way up the call stack, which is less than ideal, imho. Hence I chose option 2 and decided to log it as well.\n\nI\u0027m also not a big fan of returning `null`, so I agree that `readTopology()` should be refactored. But as you mentioned, that\u0027s outside the scope of this commit.\n\nI\u0027ve refactored this to use a method. Also, to make it more consistent, a `null` topology also throws an exception.",
+      "parentUuid": "afd4e2dc_70733aaa",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bddbf189_2dab0dc5",
@@ -52,6 +70,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9850cc47_a6296659",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-19T20:31:52Z",
+      "side": 1,
+      "message": "Implemented your suggestion. \n\nAlthough, I have to say I’m not entirely convinced about the necessity. The method in question is going to be wired to return either null or a value. To me, it seems like just another method setup with a NPE trap.\n\nAlso, if it weren\u0027t for the FQN, the line would read\n\n    Optional.ofNullable(networkNode.augmentation(Node1.class))\n\nI agree these FQN makes the code look messy. But does that really justify a method that would look something like this, if the FQN was removed:\n\n    private Node1 node1Augmentation(Node networkNode) {\n        return networkNode.augmentation(Node1.class);\n    }\n\nAnyway, I\u0027m on the fence regarding this one. On a side note, I think this class could be refactored into smaller classes. It seems to me it has way to much responsibility. That may resolve a lot of FQN all over the place. But that\u0027s outside the scope of this commit.",
+      "parentUuid": "bddbf189_2dab0dc5",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "913fa4a9_e0a3d6d8",
@@ -65,6 +101,24 @@
       "writtenOn": "2025-11-19T15:14:46Z",
       "side": 1,
       "message": "Is this a copy of the code in topologyUtils? Why not use that code here?",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65d0c2bd_619d0b8a",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-11-19T20:31:52Z",
+      "side": 1,
+      "message": "Good catch! Yes, that was a copy. A temporary solution during development that became permanent by mistake. Thx!",
+      "parentUuid": "913fa4a9_e0a3d6d8",
       "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
