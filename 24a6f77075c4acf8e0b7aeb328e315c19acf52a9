@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e509bfc_3d0e5b05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-11-19T15:14:46Z",
+      "side": 1,
+      "message": "All in all it looks ok, but I had some comments.",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afd4e2dc_70733aaa",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-11-19T15:14:46Z",
+      "side": 1,
+      "message": "I don\u0027t like the looks of this. First impression is that we are catching just to log, which I think is a bad practice. If we need logging here (error or debug) I think it should go into the readTopology method. However, after looking at that method as well I see that it at least partially logs when it fails.\n\nHowever in that case it returns null, and not an exception, which seems contradictory.\n\nI would either always throw an exception if we cannot find what we are looking for, or log and always return null. This is consistent.\n\nBut this is outside of the scope of this PR. So I guess this is ok. But maybe we should create a ticket to fix consistent error handling in TopologyUtils.readTopology()? (Or maybe the entire topologyUtils?)\n\nJust to make the code read easier, maybe you could do a little wrapper so:\n\nopenroadmTopo \u003d getOpenRoadmTopo();\n\nWhere:\n\nprivate org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network getOpenRoadmTopo() {\n        try {\n            return topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);\n        } catch (TapiTopologyException e) {\n            LOG.error(\"OpenROADM topology could not be retrieved from datastore: {}\", e.getMessage());\n            throw new RuntimeException(e);\n        }\n    }",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bddbf189_2dab0dc5",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-11-19T15:14:46Z",
+      "side": 1,
+      "message": "Maybe the code inside the Optional.ofNullable(\u003ccode\u003e) can be extracted to its own method?\n\nSo we get a clean return Optional.ofNullable(someMethod(netWorkNode)); ?",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "913fa4a9_e0a3d6d8",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtilsTest.java",
+        "patchSetId": 32
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-11-19T15:14:46Z",
+      "side": 1,
+      "message": "Is this a copy of the code in topologyUtils? Why not use that code here?",
+      "revId": "24a6f77075c4acf8e0b7aeb328e315c19acf52a9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
