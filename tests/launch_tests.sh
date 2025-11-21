@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "$USE_ODL_ALT_KARAF_ENV"
 if [ -n "$USE_ODL_ALT_KARAF_ENV" ]; then
     echo "using environment variables from $USE_ODL_ALT_KARAF_ENV"
     . $USE_ODL_ALT_KARAF_ENV

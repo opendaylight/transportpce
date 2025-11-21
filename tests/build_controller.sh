@@ -19,11 +19,12 @@ fi
 
 #build controller, source JDK_JAVA_OPTIONS to remove illegal reflective acces warnings introduced by Java11
 . "$current_dir"/reflectwarn.sh
-if [ $# -eq 0 ]; then
+if [ -z "$ODL_SETTING" ]; then
+    # No environment variable is set and uses default odl setting file
     mvn clean install -B -q -s tests/odl_settings.xml -Pq
 else
-    echo "Path for ODL setting file " $1
-    mvn clean install -B -q -s $1 -Pq
+    echo "Path for ODL setting file " $ODL_SETTING
+    mvn clean install -B -q -s $ODL_SETTING -Pq
 fi
 #patch Karaf exec for the same reason at runtime and also to have the possibility to use alternative ports
 ./karaf/target/assembly/ressources/post_install_for_tests.sh
