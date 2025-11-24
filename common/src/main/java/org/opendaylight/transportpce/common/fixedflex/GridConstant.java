@@ -28,11 +28,11 @@ public final class GridConstant {
     public static final int USED_SLOT_VALUE = 0;
     public static final double GRANULARITY = 6.25;
     public static final int EFFECTIVE_BITS = 768;
-    public static final double START_EDGE_FREQUENCY = 191.325;
-    public static final double ANCHOR_FREQUENCY = 193.100;
+    public static final double START_EDGE_FREQUENCY_THZ = 191.325;
+    public static final double ANCHOR_FREQUENCY_THZ = 193.100;
     public static final double HZ_TO_THZ = 1.0E12;
     public static final int NB_OCTECTS = 96;
-    public static final double CENTRAL_FREQUENCY = 193.1;
+    public static final double CENTRAL_FREQUENCY_THZ = 193.1;
     public static final int NB_SLOTS_100G = 8;
     public static final int NB_SLOTS_400G = 14;
     public static final double OUTPUT_POWER_100GB_DBM = 2;

@@ -2068,9 +2068,9 @@ public final class ConnectivityUtils {
         spectrumPac.setOccupiedSpectrum(
             new HashMap<OccupiedSpectrumKey, OccupiedSpectrum>(Map.of(
                 new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec)));
-        Frequency gridLowSupFreq = new TeraHertz(GridConstant.START_EDGE_FREQUENCY);
+        Frequency gridLowSupFreq = new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ);
         Frequency gridUpSupFreq =  frequencyFactory.frequency(
-                GridConstant.START_EDGE_FREQUENCY,
+                GridConstant.START_EDGE_FREQUENCY_THZ,
                 GridConstant.GRANULARITY,
                 GridConstant.EFFECTIVE_BITS
         );

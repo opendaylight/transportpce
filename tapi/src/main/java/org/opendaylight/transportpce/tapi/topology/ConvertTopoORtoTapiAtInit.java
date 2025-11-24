@@ -568,9 +568,9 @@ public class ConvertTopoORtoTapiAtInit {
                         usedFreqMap = tapiFactory.getPPUsedWavelength(tp);
                         if (usedFreqMap == null || usedFreqMap.isEmpty()) {
                             availableFreqMap.put(
-                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
+                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ),
                                     frequencyFactory.frequency(
-                                            GridConstant.START_EDGE_FREQUENCY,
+                                            GridConstant.START_EDGE_FREQUENCY_THZ,
                                             GridConstant.GRANULARITY,
                                             GridConstant.EFFECTIVE_BITS)
                             );
