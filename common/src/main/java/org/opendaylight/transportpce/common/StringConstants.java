@@ -11,9 +11,16 @@ package org.opendaylight.transportpce.common;
 import static java.util.Map.entry;
 
 import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev250110.span.attributes.LinkConcatenation1.FiberType;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNIT;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITBPS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITGBPS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITKBPS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITMBPS;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.CAPACITYUNITTBPS;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.opendaylight.yangtools.yang.common.Uint64;
 
@@ -118,47 +125,44 @@ public final class StringConstants {
         entry(StringConstants.SERVICE_TYPE_OTUC3, Uint64.valueOf(300)),
         entry(StringConstants.SERVICE_TYPE_OTUC2, Uint64.valueOf(200)));
 
-    public static final Map<String, FiberType> FIBER_TYPES_TABLE = Map.ofEntries(
+    private static final Map<String, FiberType> FIBER_TYPES_TABLE = Map.ofEntries(
         entry("SMF", FiberType.Smf),
-        entry("smf", FiberType.Smf),
-        entry("Smf", FiberType.Smf),
         entry("G652", FiberType.Smf),
-        entry("G.652", FiberType.Smf),
-        entry("G-652", FiberType.Smf),
-        entry("Standard", FiberType.Smf),
-        entry("G.653", FiberType.Dsf),
+        entry("STANDARD", FiberType.Smf),
         entry("G653", FiberType.Dsf),
-        entry("G-653", FiberType.Dsf),
-        entry("dsf", FiberType.Dsf),
-        entry("Dsf", FiberType.Dsf),
         entry("DSF", FiberType.Dsf),
         entry("G655", FiberType.NzDsf),
-        entry("G.655", FiberType.NzDsf),
-        entry("G-655", FiberType.NzDsf),
         entry("ELEAF", FiberType.Eleaf),
-        entry("Eleaf", FiberType.Eleaf),
-        entry("eleaf", FiberType.Eleaf),
-        entry("Oleaf", FiberType.Oleaf),
-        entry("oLeaf", FiberType.Oleaf),
         entry("OLEAF", FiberType.Oleaf),
         entry("TW", FiberType.Truewave),
-        entry("tw", FiberType.Truewave),
-        entry("TrueWave", FiberType.Truewave),
-        entry("Truewave", FiberType.Truewave),
-        entry("truewave", FiberType.Truewave),
-        entry("TrueWaveClassic", FiberType.Truewavec),
-        entry("Truewaveclassic", FiberType.Truewavec),
-        entry("truewaveclassic", FiberType.Truewavec),
-        entry("twc", FiberType.Truewavec),
+        entry("TRUEWAVE", FiberType.Truewave),
+        entry("TRUEWAVECLASSIC", FiberType.Truewavec),
         entry("TWC", FiberType.Truewavec),
-        entry("G.654", FiberType.Ull),
         entry("G654", FiberType.Ull),
-        entry("G-654", FiberType.Ull),
-        entry("ull", FiberType.Ull),
-        entry("Ull", FiberType.Ull));
+        entry("ULL", FiberType.Ull));
+
+    private static final Map<CAPACITYUNIT, Double> CAPICITY_UNIT_MULTIPLIER_TO_GBPS = Map.ofEntries(
+        entry(CAPACITYUNITBPS.VALUE, Double.valueOf(1E-9)),
+        entry(CAPACITYUNITKBPS.VALUE, Double.valueOf(1E-6)),
+        entry(CAPACITYUNITMBPS.VALUE, Double.valueOf(1E-3)),
+        entry(CAPACITYUNITGBPS.VALUE, Double.valueOf(1)),
+        entry(CAPACITYUNITTBPS.VALUE, Double.valueOf(1E3))
+        );
 
     private StringConstants() {
         // hiding the default constructor
     }
 
+    public static FiberType getNormalizedFiberType(String fiberType) {
+        String normalizedFiberType = fiberType.trim().toUpperCase(Locale.ENGLISH)
+            .replace(".","")
+            .replace("-","");
+        return FIBER_TYPES_TABLE.get(normalizedFiberType);
+    }
+
+
+    public static Double getCapacityUnitGbpsMultiplier(CAPACITYUNIT unit) {
+        // In case unit is null consider GBPS as the default unit
+        return unit == null ? Double.valueOf(1) : CAPICITY_UNIT_MULTIPLIER_TO_GBPS.get(unit);
+    }
 }

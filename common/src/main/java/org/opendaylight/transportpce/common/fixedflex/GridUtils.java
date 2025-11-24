@@ -48,7 +48,7 @@ public final class GridUtils {
                 .setFreqMapGranularity(
                     new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.GRANULARITY))))
                 .setStartEdgeFreq(
-                    new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY))))
+                    new FrequencyTHz(Decimal64.valueOf(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY_THZ))))
                 .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();
@@ -74,7 +74,7 @@ public final class GridUtils {
     public static BigDecimal getStartFrequencyFromIndex(int index) {
         int nvalue = index - 284;
 
-        return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY).add(
+        return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY_THZ).add(
                         BigDecimal.valueOf(GridConstant.GRANULARITY)
                                 .multiply(BigDecimal.valueOf(nvalue))
                                 .divide(BigDecimal.valueOf(1000))
@@ -101,7 +101,7 @@ public final class GridUtils {
     public static int getIndexFromFrequency(Decimal64 atozMinFrequency) {
 
         BigDecimal nvalue = (BigDecimal.valueOf(atozMinFrequency.doubleValue())
-                                .subtract(BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY))
+                                .subtract(BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY_THZ))
                             ).multiply(
                                     BigDecimal.valueOf(1000)
                                     .divide(BigDecimal.valueOf(GridConstant.GRANULARITY))

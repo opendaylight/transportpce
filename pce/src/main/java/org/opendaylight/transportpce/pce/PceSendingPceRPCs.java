@@ -154,7 +154,7 @@ public class PceSendingPceRPCs {
                 ),
                 new FrequencySpectrum(
                         new SpectrumIndex(
-                                GridConstant.START_EDGE_FREQUENCY,
+                                GridConstant.START_EDGE_FREQUENCY_THZ,
                                 GridConstant.GRANULARITY,
                                 GridConstant.EFFECTIVE_BITS
                         ),
