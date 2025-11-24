@@ -286,6 +286,15 @@
       <operational-state xmlns="http://org/openroadm/common/network">inService</operational-state>
       <administrative-state xmlns="http://org/openroadm/common/network">inService</administrative-state>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
+      <pp-attributes xmlns="http://org/openroadm/network/topology">
+        <avail-freq-maps>
+          <map-name>cband</map-name>
+          <freq-map-granularity>6.25</freq-map-granularity>
+          <start-edge-freq>191.325</start-edge-freq>
+          <effective-bits>768</effective-bits>
+          <freq-map>//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8A</freq-map>
+        </avail-freq-maps>
+      </pp-attributes>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG1-PP2-TXRX</tp-id>
