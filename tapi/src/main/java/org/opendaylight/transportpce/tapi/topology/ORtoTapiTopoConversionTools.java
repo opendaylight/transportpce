@@ -1259,6 +1259,73 @@ public class ORtoTapiTopoConversionTools {
     }
 
     /**
+     * Retrieves from OpenROADM tp (ROADM SRG-PP) the information on the wavelength available on the tp.
+     * Done directly from TerminationPoint1 Augmentation.
+     * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
+    public Map<Frequency, Frequency> getPP11AvailableFrequencies(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        if (tp == null) {
+            return Map.of();
+        }
+
+        PpAttributes ppAtt = tp.getPpAttributes();
+        if (ppAtt == null) {
+            return Map.of();
+        }
+
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = ppAtt.getAvailFreqMaps();
+        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
+
+        return new SortedRange(availableRanges(availFreqMaps, cband)).ranges();
+    }
+
+    /**
+     * Computes the available frequency ranges for a given band.
+     *
+     * <p>The method expects a map of available frequency maps (typically keyed by band),
+     * retrieves the {@link AvailFreqMaps} entry for {@code bandKey} and converts
+     * it into numeric ranges.
+     *
+     * <p>If the input map is {@code null}, the key is missing, or the entry/frequency map
+     * is {@code null}, this method returns an empty map.
+     *
+     * @param avlFreqMaps map containing available frequency maps per band; may be {@code null}
+     * @param bandKey the key representing the band to extract
+     * @return a map of numeric frequency ranges (e.g., start → end), or an empty map if unavailable
+     */
+    private Map<Double, Double> availableRanges(
+            Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps,
+            AvailFreqMapsKey bandKey) {
+
+        if (!hasBand(avlFreqMaps, bandKey)) {
+            return Map.of();
+        }
+
+        AvailFreqMaps afm = avlFreqMaps.get(bandKey);
+        byte[] freqByteSet = Arrays.copyOf(afm.getFreqMap(), GridConstant.NB_OCTECTS);
+        return numericFrequency.availableFrequency(new AvailableGrid(freqByteSet));
+    }
+
+    /**
+     * Checks whether the provided map contains a non-null entry for {@code bandKey}
+     * and that the entry has a non-null frequency bitmap.
+     *
+     * @param avlFreqMaps map containing available frequency maps per band; may be {@code null}
+     * @param bandKey the key representing the band to validate
+     * @return {@code true} if {@code avlFreqMaps} contains a non-null {@link AvailFreqMaps}
+     */
+    private static boolean hasBand(Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps, AvailFreqMapsKey bandKey) {
+        if (avlFreqMaps == null) {
+            return false;
+        }
+
+        AvailFreqMaps afm = avlFreqMaps.get(bandKey);
+        return afm != null && afm.getFreqMap() != null;
+    }
+
+    /**
      * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
      * Done directly from TerminationPoint1 Augmentation.
      * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
@@ -1283,7 +1350,10 @@ public class ORtoTapiTopoConversionTools {
             AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
             freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
                     .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                    .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);
+                    .findFirst()
+                    .orElseThrow()
+                    .getValue()
+                    .getFreqMap(), freqByteSet.length);
             LOG.debug("Available frequency byte set: {}", freqByteSet);
 
             Map<Double, Double> ranges = numericFrequency.assignedFrequency(new AvailableGrid(freqByteSet));
