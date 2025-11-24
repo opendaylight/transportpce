@@ -2009,7 +2009,7 @@ public class TapiOpticalNode {
      *              N being an integer varying from -284 to 484 for C band as defined by IETF.
      */
     private int convertFreqToAdjacentSlotNumber(long frequency) {
-        return (int) Math.round((frequency / GridConstant.HZ_TO_THZ - GridConstant.ANCHOR_FREQUENCY)
+        return (int) Math.round((frequency / GridConstant.HZ_TO_THZ - GridConstant.ANCHOR_FREQUENCY_THZ)
             / (GridConstant.GRANULARITY / 1000.0) + 285);
     }
 
