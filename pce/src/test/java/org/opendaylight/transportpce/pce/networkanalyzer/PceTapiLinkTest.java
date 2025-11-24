@@ -287,8 +287,6 @@ public class PceTapiLinkTest  extends AbstractTest {
             "RDM to TSP Link operational state shall be enabled)");
         assertTrue(rdm2tspLink.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
             "RDM to TSP Link admin state shall be Unlock)");
-        assertTrue(rdm2tspLink.getAvailableBandwidth().equals(Long.valueOf(100)),
-            "RDM to TSP Link available bandwidth shall be 100)");
         assertTrue(rdm2tspLink.getpmd2().equals(0.0),"RDM to TSP LinkPMD shall be 0.0)");
         assertTrue(rdm2tspLink.getcd().equals(0.0),"RDM to TSP Link Chromatic dispersion shall be 0.0)");
         assertTrue(rdm2tspLink.getspanLoss().equals(0.0),"RDM to TSP Link span loss shall be 0.0)");
@@ -316,8 +314,8 @@ public class PceTapiLinkTest  extends AbstractTest {
         assertTrue(rdm2tspLink.getdestNetworkSupNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
             "RDM to TSP Destination Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
         assertTrue(rdm2tspLink.getUsedBandwidth().equals(Long.valueOf(0)), "RDM to TSP Link Used bandwidth shall be 0");
-        assertTrue(rdm2tspLink.getAvailableBandwidth().equals(Long.valueOf(100)),
-            "RDM to TSP Link Available bandwidth shall be 0.0");
+        assertTrue(rdm2tspLink.getAvailableBandwidth().equals(Long.valueOf(1600)),
+            "RDM to TSP Link Available bandwidth shall be 1600.0");
         assertTrue(rdm2tspLink.getpowerCorrection().equals(0.0),
             "RDM to TSP Link being by default G.652, Power correction shall be 0.0");
         assertTrue(rdm2tspLink.getOppositeLinkUuid().getValue().equals("0f58cca7-87ac-368e-a526-49e47227b917"),

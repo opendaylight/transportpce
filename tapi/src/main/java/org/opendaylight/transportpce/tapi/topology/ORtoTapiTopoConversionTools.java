@@ -280,7 +280,7 @@ public class ORtoTapiTopoConversionTools {
         this(
                 tapiTopoUuid,
                 new NumericFrequency(
-                        GridConstant.START_EDGE_FREQUENCY,
+                        GridConstant.START_EDGE_FREQUENCY_THZ,
                         GridConstant.EFFECTIVE_BITS,
                         new FrequencyMath()
                 ),
@@ -1385,9 +1385,9 @@ public class ORtoTapiTopoConversionTools {
                 createTotalSizeForCommonNeps(Double.valueOf(rate))).build());
         SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
         OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
-        Frequency lowSupFreq = new TeraHertz(GridConstant.START_EDGE_FREQUENCY);
+        Frequency lowSupFreq = new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ);
         Frequency upSupFreq =  frequencyFactory.frequency(
-                GridConstant.START_EDGE_FREQUENCY,
+                GridConstant.START_EDGE_FREQUENCY_THZ,
                 GridConstant.GRANULARITY,
                 GridConstant.EFFECTIVE_BITS
         );
@@ -1463,10 +1463,10 @@ public class ORtoTapiTopoConversionTools {
             if ((usedFreqMap == null || usedFreqMap.isEmpty())
                     && (availableFreqMap == null || availableFreqMap.isEmpty())) {
                 AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
-                    .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY).hertz())
+                    .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
                     .setUpperFrequency(
                             frequencyFactory.frequency(
-                                    GridConstant.START_EDGE_FREQUENCY,
+                                    GridConstant.START_EDGE_FREQUENCY_THZ,
                                     GridConstant.GRANULARITY,
                                     GridConstant.EFFECTIVE_BITS).hertz()
                     ).build();
@@ -1503,9 +1503,9 @@ public class ORtoTapiTopoConversionTools {
                 }
             }
             SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
-                .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY).hertz())
+                .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
                 .setUpperFrequency(frequencyFactory.frequency(
-                        GridConstant.START_EDGE_FREQUENCY,
+                        GridConstant.START_EDGE_FREQUENCY_THZ,
                         GridConstant.GRANULARITY,
                         GridConstant.EFFECTIVE_BITS).hertz()
                 ).build();

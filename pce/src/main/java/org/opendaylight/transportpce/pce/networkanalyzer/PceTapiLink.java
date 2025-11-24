@@ -154,8 +154,16 @@ public class PceTapiLink implements Serializable, PceLink {
             this.srlgList = null;
             this.latency = 0L;
             this.length = 0.0;
-            this.availableBandwidth = TapiMapUtils.getAvailableBandwidth(link);
-            this.usedBandwidth = TapiMapUtils.getUsedBandwidth(link);
+            if (this.linkType != OpenroadmLinkType.OTNLINK) {
+                // Set availableBandwidth value to unlimited
+                // (max(available-WDM-link-BW-#Channels, available-Single-Wave-BW-Gbps)
+                this.availableBandwidth = 1600.0;
+                this.usedBandwidth = 0.0;
+            } else {
+                // For OTN Link, BW is calculated from values in topology
+                this.availableBandwidth = TapiMapUtils.getAvailableBandwidthGbps(link);
+                this.usedBandwidth = TapiMapUtils.getUsedBandwidthGbps(link);
+            }
             this.spanLoss = 0.0;
             this.powerCorrection = 0.0;
             this.cd = 0.0;
@@ -727,7 +735,7 @@ public class PceTapiLink implements Serializable, PceLink {
             fiberType = efiberType;
         }
 
-        FiberType orFiberType = StringConstants.FIBER_TYPES_TABLE.get(fiberType);
+        FiberType orFiberType = StringConstants.getNormalizedFiberType(fiberType);
         if (orFiberType == null) {
             orFiberType = FiberType.Smf;
             LOG.warn("In PceTapiLink[qualifyLineLink], no information retrieved on link {} named {} about fiber "
