@@ -425,7 +425,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
                 .setFreqMapGranularity(new FrequencyGHz(Decimal64.valueOf(String.valueOf(GridConstant.GRANULARITY))))
                 .setStartEdgeFreq(
-                    new FrequencyTHz(Decimal64.valueOf(String.valueOf(GridConstant.START_EDGE_FREQUENCY))))
+                    new FrequencyTHz(Decimal64.valueOf(String.valueOf(GridConstant.START_EDGE_FREQUENCY_THZ))))
                 .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();

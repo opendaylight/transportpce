@@ -1196,8 +1196,8 @@ public class PostAlgoPathValidator {
         Range range = assignSpectrum.range(
                 GridConstant.EFFECTIVE_BITS,
                 baseFrequency.referenceFrequencySpectrumIndex(
-                        GridConstant.CENTRAL_FREQUENCY,
-                        GridConstant.START_EDGE_FREQUENCY,
+                        GridConstant.CENTRAL_FREQUENCY_THZ,
+                        GridConstant.START_EDGE_FREQUENCY_THZ,
                         GridConstant.GRANULARITY
                 ),
                 spectrumOccupation,

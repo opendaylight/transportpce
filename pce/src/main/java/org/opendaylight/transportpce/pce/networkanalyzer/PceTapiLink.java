@@ -154,8 +154,8 @@ public class PceTapiLink implements Serializable, PceLink {
             this.srlgList = null;
             this.latency = 0L;
             this.length = 0.0;
-            this.availableBandwidth = TapiMapUtils.getAvailableBandwidth(link);
-            this.usedBandwidth = TapiMapUtils.getUsedBandwidth(link);
+            this.availableBandwidth = TapiMapUtils.getAvailableBandwidthGHz(link);
+            this.usedBandwidth = TapiMapUtils.getUsedBandwidthGHz(link);
             this.spanLoss = 0.0;
             this.powerCorrection = 0.0;
             this.cd = 0.0;
@@ -727,7 +727,7 @@ public class PceTapiLink implements Serializable, PceLink {
             fiberType = efiberType;
         }
 
-        FiberType orFiberType = StringConstants.FIBER_TYPES_TABLE.get(fiberType);
+        FiberType orFiberType = StringConstants.getNormalizedFiberType(fiberType);
         if (orFiberType == null) {
             orFiberType = FiberType.Smf;
             LOG.warn("In PceTapiLink[qualifyLineLink], no information retrieved on link {} named {} about fiber "

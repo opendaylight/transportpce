@@ -108,24 +108,26 @@ public final class TapiMapUtils {
         return riskIdList;
     }
 
-    public static Double getAvailableBandwidth(Link link) {
+    public static Double getAvailableBandwidthGHz(Link link) {
         if (link.getAvailableCapacity().getTotalSize().getValue() == null) {
             LOG.warn("TapiMapUtils: no Available Bandwidth available for link {{} named {}", link.getUuid().toString(),
                 link.getName().toString());
             return null;
         }
-        return link.getAvailableCapacity().getTotalSize().getValue().doubleValue();
+        return link.getAvailableCapacity().getTotalSize().getValue().doubleValue()
+            * StringConstants.getCapacityUnitGbpsMultiplier(link.getAvailableCapacity().getTotalSize().getUnit());
     }
 
-    public static Double getUsedBandwidth(Link link) {
+    public static Double getUsedBandwidthGHz(Link link) {
         if (link.getTotalPotentialCapacity().getTotalSize().getValue() == null
             || link.getAvailableCapacity().getTotalSize().getValue() == null) {
             LOG.warn("TapiMapUtils: incomplete Bandwidth information for link {{} named {}", link.getUuid().toString(),
                 link.getName().toString());
             return null;
         }
-        return ((link.getTotalPotentialCapacity().getTotalSize().getValue().doubleValue()
-            - link.getAvailableCapacity().getTotalSize().getValue().doubleValue()));
+        return (link.getTotalPotentialCapacity().getTotalSize().getValue().doubleValue()
+            - link.getAvailableCapacity().getTotalSize().getValue().doubleValue())
+            * StringConstants.getCapacityUnitGbpsMultiplier(link.getTotalPotentialCapacity().getTotalSize().getUnit());
     }
 
     public Uuid extractOppositeLink(Uuid tapiTopoUuid, String linkName, String srcNepCepName, String destNepCepName,

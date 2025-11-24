@@ -20,7 +20,7 @@ class TeraHertzFactoryTest {
     void testFirstBitEqualsStartEdgeFrequency() {
         Factory lightFactory = new TeraHertzFactory();
 
-        Frequency light = lightFactory.frequency(GridConstant.START_EDGE_FREQUENCY, GridConstant.GRANULARITY, 0);
+        Frequency light = lightFactory.frequency(GridConstant.START_EDGE_FREQUENCY_THZ, GridConstant.GRANULARITY, 0);
 
         assertTrue(BigDecimal.valueOf(191.325).equals(light.teraHertz()));
     }
@@ -29,7 +29,7 @@ class TeraHertzFactoryTest {
     void testLastBitEqualsEndFrequency() {
         Factory lightFactory = new TeraHertzFactory();
 
-        Frequency light = lightFactory.frequency(GridConstant.START_EDGE_FREQUENCY, GridConstant.GRANULARITY, 768);
+        Frequency light = lightFactory.frequency(GridConstant.START_EDGE_FREQUENCY_THZ, GridConstant.GRANULARITY, 768);
 
         assertTrue(BigDecimal.valueOf(196.125).equals(light.teraHertz()));
     }
