@@ -1259,6 +1259,43 @@ public class ORtoTapiTopoConversionTools {
     }
 
     /**
+     * Retrieves from OpenROADM tp (ROADM SRG-PP) the information on the wavelength available on the tp.
+     * Done directly from TerminationPoint1 Augmentation.
+     * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
+     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
+     */
+    public Map<Frequency, Frequency> getPP11AvailableFrequencies(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        SortedRange sortedRange = new SortedRange();
+        if (tp == null) {
+            return new HashMap<>();
+        }
+
+        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = new HashMap<>();
+        PpAttributes ppAtt = tp.getPpAttributes();
+        if (ppAtt != null) {
+            avlFreqMaps = ppAtt.getAvailFreqMaps();
+        }
+
+        if (avlFreqMaps != null && avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
+            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+
+            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+            freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
+                    .filter(afm -> afm.getKey().equals(availFreqMapsKey))
+                    .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);
+            LOG.debug("Available frequency byte set: {}", freqByteSet);
+
+            Map<Double, Double> ranges = numericFrequency.availableFrequency(new AvailableGrid(freqByteSet));
+            LOG.debug("Available frequency ranges: {}", ranges);
+
+            sortedRange.add(new SortedRange(ranges));
+        }
+
+        return sortedRange.ranges();
+    }
+
+    /**
      * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
      * Done directly from TerminationPoint1 Augmentation.
      * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.

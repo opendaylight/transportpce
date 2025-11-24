@@ -28,14 +28,10 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiConstants;
-import org.opendaylight.transportpce.tapi.frequency.Factory;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
-import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
-import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
@@ -1976,11 +1972,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
     }
 
-    private Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
             String nodeId, Map<String, TerminationPoint1> tpMap, boolean withSip, String nepPhotonicSublayer) {
         // create neps for MC and and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-        Factory frequencyFactory = new TeraHertzFactory();
         for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
             // Admin and oper state common for all tps
             // PHOTONIC MEDIA nep
@@ -2009,38 +2004,42 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
                 Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
                 Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
+                String terminationPointId = entry.getKey();
+                String nodeIdInTopology = "%s-%s".formatted(nodeId, terminationPointId.split("-")[0]);
                 switch (entry.getValue().getTpType()) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
                     case SRGRXPP:
                     case SRGTXPP:
                     case SRGTXRXPP:
-                        usedFreqMap = tapiFactory.getPP11UsedFrequencies(
-                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey()));
-                        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(
-                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY),
-                                    frequencyFactory.frequency(
-                                            GridConstant.START_EDGE_FREQUENCY,
-                                            GridConstant.GRANULARITY,
-                                            GridConstant.EFFECTIVE_BITS)
-                            );
-                        } else {
-                            LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} for Node {}, tp {}",
-                                usedFreqMap, nodeId, tpMap);
-                            onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
-                                new HashMap<>(Map.of(entry.getKey(), entry.getValue())), true, TapiConstants.MC));
-                            onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
-                                new HashMap<>(Map.of(entry.getKey(), entry.getValue())), true, TapiConstants.OTSI_MC));
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+                                .TerminationPoint1 networkTerminationPoint11FromDatastore =
+                                getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, terminationPointId);
+                        if (networkTerminationPoint11FromDatastore != null) {
+                            usedFreqMap = tapiFactory.getPP11UsedFrequencies(networkTerminationPoint11FromDatastore);
+                            availableFreqMap = tapiFactory
+                                    .getPP11AvailableFrequencies(networkTerminationPoint11FromDatastore);
+
+                            if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
+                                onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
+                                        new HashMap<>(Map.of(entry.getKey(), entry.getValue())),
+                                        true, TapiConstants.MC));
+                                onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
+                                        new HashMap<>(Map.of(entry.getKey(), entry.getValue())),
+                                        true, TapiConstants.OTSI_MC));
+                            }
                         }
                         break;
                     case DEGREERXTTP:
                     case DEGREETXTTP:
                     case DEGREETXRXTTP:
-                        usedFreqMap = tapiFactory.getTTP11UsedFreqMap(
-                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey())).ranges();
-                        availableFreqMap = tapiFactory.getTTP11AvailableFreqMap(
-                            getNetworkTerminationPoint11FromDatastore(nodeId, entry.getKey())).ranges();
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+                                .TerminationPoint1 usedTp = getNetworkTerminationPoint11FromDatastore(
+                                nodeIdInTopology, terminationPointId);
+                        if (usedTp != null) {
+                            usedFreqMap = tapiFactory.getTTP11UsedFreqMap(usedTp).ranges();
+                            availableFreqMap = tapiFactory.getTTP11AvailableFreqMap(usedTp).ranges();
+                        }
                         break;
                     default:
                         break;
