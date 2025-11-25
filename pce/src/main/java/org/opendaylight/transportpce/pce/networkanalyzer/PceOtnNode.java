@@ -140,12 +140,12 @@ public class PceOtnNode implements PceNode {
                 || nodeId == null
                 || nodeType == null
                 || !VALID_NODETYPES_LIST.contains(nodeType)) {
-            LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
+            LOG.debug("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
         if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
                 && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
-            LOG.error("PceOtnNode: unsupported OTN Service Type {}", serviceType);
+            LOG.debug("PceOtnNode: unsupported OTN Service Type {}", serviceType);
             this.valid = false;
         }
     }
@@ -163,7 +163,7 @@ public class PceOtnNode implements PceNode {
                 .values());
         this.valid = false;
         if (allTps.isEmpty()) {
-            LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
+            LOG.error("PceOtnNode:initXndrTps : initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
         }
         for (TerminationPoint tp : allTps) {
@@ -213,7 +213,7 @@ public class PceOtnNode implements PceNode {
                     break;
 
                 default:
-                    LOG.debug("unsupported ocn TP type {}", ocnTp1.getTpType());
+                    LOG.debug("PceOtnNode:initXndrTps : unsupported ocn TP type {}", ocnTp1.getTpType());
             }
         }
         this.valid = checkSwPool(availableXpdrNWTps, availableXpdrClientTps);
@@ -322,7 +322,7 @@ public class PceOtnNode implements PceNode {
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
         for (SupportedInterfaceCapability sic :
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
-            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            LOG.debug("PceOtnNode:checkTpForOduTermination : - sic = {}", sic.getIfCapType());
             if ((sic.getIfCapType().equals(IfOCHOTU4ODU4.VALUE)
                     || sic.getIfCapType().equals(IfOtsiOtsigroup.VALUE))
                     && (ontTp1.getXpdrTpPortConnectionAttributes() == null
@@ -353,7 +353,7 @@ public class PceOtnNode implements PceNode {
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
         for (SupportedInterfaceCapability sic :
                 ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability().values()) {
-            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            LOG.debug("PceOtnNode:checkTpForOduTermination : - sic = {}", sic.getIfCapType());
             // we could also check the administrative status of the tp
             if (SERVICE_TYPE_ETH_CLASS_MAP.get(otnServiceType).equals(sic.getIfCapType())) {
                 return true;
@@ -390,13 +390,13 @@ public class PceOtnNode implements PceNode {
                         && nbll.getTpList() != null
                         && nbll.getTpList().contains(tp1.getTpId())
                         && nbll.getTpList().contains(tp2.getTpId())) {
-                    LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
-                        tp1.getTpId(), tp2.getTpId());
+                    LOG.debug("PceOtnNode:validateSwitchingPoolBandwidth : couple  of tp {} x {} valid for cross-"
+                        + "connection", tp1.getTpId(), tp2.getTpId());
                     return true;
                 }
             }
         }
-        LOG.debug("validateSwitchingPoolBandwidth: No valid Switching pool for crossconnecting tp {} and {}",
+        LOG.debug("PceOtnNode:validateSwitchingPoolBandwidth: No valid Switching pool for crossconnecting tp {} and {}",
             tp1.getTpId(), tp2.getTpId());
         return false;
     }
@@ -411,9 +411,9 @@ public class PceOtnNode implements PceNode {
         // Validate switch for use as an intermediate XPONDER on the path
         initXndrTps(INTERMEDIATE_MODETYPE);
         if (this.valid) {
-            LOG.debug("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
+            LOG.debug("PceOtnNode:validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
         } else {
-            LOG.debug("validateIntermediateSwitch: Switch unusable for transit == {}", nodeId.getValue());
+            LOG.debug("PceOtnNode:validateIntermediateSwitch: Switch unusable for transit == {}", nodeId.getValue());
         }
     }
 
@@ -475,7 +475,7 @@ public class PceOtnNode implements PceNode {
                 || nodeType == null
                 || this.getSupNetworkNodeId() == null
                 || this.getSupClliNodeId() == null) {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
+            LOG.error("PceOtnNode:isValid: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
         return valid;

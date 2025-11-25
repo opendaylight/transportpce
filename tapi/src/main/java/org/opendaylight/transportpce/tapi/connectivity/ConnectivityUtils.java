@@ -88,23 +88,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev25011
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODU3;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODUCn;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODUflexCbr;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODUflexFlexe;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODUflexGfp;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.ODUflexImp;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU0;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU2;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU2e;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU3;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTUCn;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OTUflex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OduRateIdentity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev250110.OtuRateIdentity;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOCH;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.IfOTUCnODUCn;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.ServiceCreateInputBuilder;
@@ -405,7 +393,7 @@ public final class ConnectivityUtils {
     }
 
     public ConnectivityService mapORServiceToTapiConnectivity(Service service) {
-        LOG.debug("CU Line 306 getLowerConnectionMap: Service Name = {}, Service Map = {}",
+        LOG.debug("CU:mapORServiceToTapiConnectivity : getLowerConnectionMap: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
         // Get service path with the description in OR based models.
         LOG.info("Service = {}", service);
@@ -431,7 +419,7 @@ public final class ConnectivityUtils {
         Map<EndPointKey, EndPoint> endPointMap = new HashMap<>(Map.of(
                 endPoint1.key(), endPoint1,
                 endPoint2.key(), endPoint2));
-        LOG.info("EndPoints of connectivity services = {}", endPointMap);
+        LOG.info("CU : EndPoints of connectivity services = {}", endPointMap);
         // Services Names
         this.serviceName = service.getServiceName();
         this.serviceUuid =
@@ -444,7 +432,7 @@ public final class ConnectivityUtils {
         setConnectionCreationModeToActive(true);
         Map<ConnectionKey, Connection> connMap =
             createConnectionsFromService(pathDescription, mapServiceLayerToAend(serviceAEnd), serviceName, serviceUuid);
-        LOG.debug("connectionMap for service {} = {} ", name, connMap);
+        LOG.debug("CU:mapORServiceToTapiConnectivity : connectionMap for service {} = {} ", name, connMap);
         ConnectivityConstraint conConstr =
             new ConnectivityConstraintBuilder().setServiceType(ServiceType.POINTTOPOINTCONNECTIVITY).build();
         // Service state is for Tapi from begining to UNLOCKED/ENABLED as it made one shot. in case of cranckback
@@ -476,11 +464,11 @@ public final class ConnectivityUtils {
         if (servicesMap == null || servicesMap.isEmpty()
                 || servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
                     .collect(Collectors.toList()).isEmpty()) {
-            LOG.debug("CU Line 364 createConnectionsFromService: call populate Service in CvsS Map Service Name = {},"
+            LOG.debug("CU:createConnectionsFromService: call populate Service in CvsS Map Service Name = {},"
                 + " Service Map = {}",
                 serviceName, this.servicesMap);
             populateServiceInConnectionVsService(servName, servUuid);
-            LOG.info("CU Line 367 createConnectionsFromService: Service Name = {}, Service Map = {}",
+            LOG.info("CU:createConnectionsFromService: Service Name = {}, Service Map = {}",
                 serviceName, this.servicesMap);
         }
         // build lists with ROADM nodes, XPDR/MUX/SWITCH nodes, ROADM DEG TTPs, ROADM SRG TTPs, XPDR CLIENT TTPs
@@ -528,7 +516,7 @@ public final class ConnectivityUtils {
                 // - OTSiMC and MC Ceps to be attached to the same NEP and support all related connections (1/Lambda)
                 // - Top Connection MC between MC CEPs of different roadms
                 // - Top Connection OTSiMC between OTSiMC CEPs of extreme roadms
-                LOG.debug("CONNECTIVITYUTILS 422 SpectralIndexLow = {}, High = {}",
+                LOG.debug("CU:createConnectionsFromService : SpectralIndexLow = {}, High = {}",
                     GridUtils.getLowerSpectralIndexFromFrequency(pathDescription.getAToZDirection()
                         .getAToZMinFrequency().getValue()),
                     GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()
@@ -540,7 +528,7 @@ public final class ConnectivityUtils {
                         GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()
                             .getAToZMaxFrequency().getValue()),
                         rdmAddDropTplist, rdmDegTplist, rdmNodelist, edgeRoadm1, edgeRoadm2));
-                LOG.debug("CONNECTIVITYUTILS 434 Connservmap = {}", connectionServMap);
+                LOG.debug("CU:createConnectionsFromService : Connservmap = {}", connectionServMap);
                 if (!pathStartsWithROADM(pathDescription, openroadmTopo)) {
                     // - XC Connection OTSi betwwen iOTSi y eOTSi of xpdr
                     // - Top connection OTSi between network ports of xpdrs in the Photonic media layer -> i_OTSi
@@ -550,7 +538,7 @@ public final class ConnectivityUtils {
                         GridUtils.getHigherSpectralIndexFromFrequency(pathDescription.getAToZDirection()
                             .getAToZMaxFrequency().getValue()),
                         xpdrNetworkTplist, xpdrNodelist));
-                    LOG.debug("CONNECTIVITYUTILS 445 Connservmap = {}", connectionServMap);
+                    LOG.debug("CU:createConnectionsFromService : Connservmap = {}", connectionServMap);
                     // - Create E_ODU and DSR CEPs on all client ports connected to the activated Network Port
                     createXpdrCepsOnNwPortActivation(xpdrNetworkTplist, xpdrNodelist);
                     // - Update spectrum information on the activated Network Ports
@@ -629,8 +617,8 @@ public final class ConnectivityUtils {
             default:
                 LOG.error("Service type format not supported");
         }
-        LOG.info("CONNSERVICEMAP 508 = {}", connectionServMap);
-        LOG.info("CU Line509 Full ConnectionMap = {}", this.connectionFullMap.entrySet()
+        LOG.debug("CU:createConnectionsFromService : ConnectionServMap  = {}", connectionServMap);
+        LOG.info("CU:createConnectionsFromService :  Full ConnectionMap = {}", this.connectionFullMap.entrySet()
             .stream().map(Map.Entry::getValue).collect(Collectors.toList())
             .stream().map(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection::getName).collect(Collectors.toList()));
@@ -913,8 +901,8 @@ public final class ConnectivityUtils {
                 .map(set -> set.stream().sorted().collect(Collectors.toList()))
                 .orElseGet(Collections::emptyList);
         if (supServiceList == null) {
-            LOG.debug("ConnectivityUtils Line 572 : End of population of ConnectionVsServices, List of Services = {}",
-                this.servicesMap);
+            LOG.debug("CU:populateServiceInConnectionVsServiceAtInit : Population of ConnectionVsServices for service "
+                + "{}, Initial list of Services = {}", serviceName, this.servicesMap);
             return;
         }
         Map<String, Integer> supServiceMap = new HashMap<>();
@@ -928,8 +916,6 @@ public final class ConnectivityUtils {
         }
         var servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
             .rev250207.connection.vs.service.ServicesBuilder();
-        LOG.debug("CU Line 593 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
-            serviceName, this.servicesMap);
         if (!servicesMap.isEmpty()
                 && this.servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
                     .findFirst().orElseThrow().getValue() != null) {
@@ -958,8 +944,8 @@ public final class ConnectivityUtils {
         //  After we have Updated the list of supporting Services in connVsServices we make a recursive call of the same
         //  method to complement the list of supporting services and associated connections until we don't find any
         //  supporting service meaning we are at the lowest service layer
-        LOG.debug("CU Line 622 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
-            serviceName, this.servicesMap);
+        LOG.debug("CU:populateServiceInConnectionVsServiceAtInit: Population of ConnectionVsServices for service {},"
+            + "  updated serviceMap = {}", serviceName, this.servicesMap);
         if (!supServiceMap.isEmpty()) {
             String serviName = supServiceMap.entrySet().stream()
                     .sorted((ssm1, ssm2) -> ssm2.getValue().compareTo(ssm1.getValue()))
@@ -974,8 +960,8 @@ public final class ConnectivityUtils {
 
         var servBldr = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.tapi.connectivityutils
             .rev250207.connection.vs.service.ServicesBuilder();
-        LOG.debug("CU Line 640 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
-            serviceName, this.servicesMap);
+        LOG.debug("CU:populateServiceInConnectionVsService : Population of ConnectionVsServices for service "
+            + "{}, Initial list of Services = {}", serviceName, this.servicesMap);
         if (!servicesMap.isEmpty()
                 && !this.servicesMap.entrySet().stream().filter(serv -> serv.getKey().getServiceName().equals(servName))
                 .collect(Collectors.toList()).isEmpty()) {
@@ -988,14 +974,14 @@ public final class ConnectivityUtils {
         }
         servBldr.setServiceUuid(servUuid);
         this.servicesMap.put(servBldr.build().key(), servBldr.build());
-        LOG.debug("CU Line 654 populateServiceInConnectionVsService: Service Name = {}, Service Map = {}",
-            serviceName, this.servicesMap);
+        LOG.debug("CU:populateServiceInConnectionVsService: Population of ConnectionVsServices for service {}, updated"
+            + " serviceMap = {}", serviceName, this.servicesMap);
     }
 
     private void populateConnectionInConnectionVsService(String servName, Uuid servUuid,
         String connectionName, Uuid connectionUuid, String lpq) {
 
-        LOG.debug("CU Line 671 populateConnectionInConnectionVsService: supporting Connection {}, for Service {}",
+        LOG.debug("CU:populateConnectionInConnectionVsService: supporting Connection {}, for Service {}",
             connectionName, serviceName);
         SupportingConnectionsBuilder sconBldr = new SupportingConnectionsBuilder()
             .setConnectionName(connectionName)
@@ -1019,7 +1005,7 @@ public final class ConnectivityUtils {
             .setSupportingConnections(supConnectionMap);
 
         this.servicesMap.put(servBldr.build().key(), servBldr.build());
-        LOG.debug("CU Line 695 populateConnectionInConnectionVsService: updated supConnections {}, for Service {}",
+        LOG.debug("CU:populateConnectionInConnectionVsService: updated supConnections {}, for Service {}",
             supConnectionMap, serviceName);
     }
 
@@ -1119,8 +1105,8 @@ public final class ConnectivityUtils {
                 }
                 connType = getConnectionTypePhtnc(endPointMap.values(), network);
                 serviceFormat = getServiceFormatPhtnc(endPointMap.values(), network);
-                LOG.debug("Node a photonic = {}", nodeAid);
-                LOG.debug("Node z photonic = {}", nodeZid);
+                LOG.debug("CU:createORServiceInput : Node a photonic = {}", nodeAid);
+                LOG.debug("CU:createORServiceInput : Node z photonic = {}", nodeZid);
                 break;
             case 4:
                 LOG.info("DIGITAL_OTN");
@@ -1341,7 +1327,7 @@ public final class ConnectivityUtils {
         Double rate = (getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU) < 100.0)
             ? getClientRateFromNep(spcXpdr1, TapiConstants.E_ODU)
             : getClientRateFromNep(spcXpdr2, TapiConstants.E_ODU);
-        LOG.debug("CU Line 1026 : get rate from E_ODU Nep of {} = {} for decrementation on IODU Nep",
+        LOG.debug("CU:createXpdrCepsAndConnectionsDsr: get rate from E_ODUNep of {} = {} for decrementation on IODUNep",
             spcXpdr1, rate);
         if (rate > 100.0) {
             rate = 100.0;
@@ -1401,8 +1387,8 @@ public final class ConnectivityUtils {
             String spcXpdrNw =
                 xpdrNetworkTplist.stream().filter(netp -> netp.contains(xpdr)).findFirst().orElseThrow();
             List<String> clientConnectedPortList = getNwConnectedClientsPortForSW(spcXpdrNw);
-            LOG.debug("Con.Utils Line 830 : Creating client ceps E_ODU and DSR for ports {} connected to {} in xpdr {}",
-                clientConnectedPortList, spcXpdrNw, xpdr);
+            LOG.debug("CU:createXpdrCepsOnNwPortActivation : Creating client ceps E_ODU and DSR for ports {} connected"
+                + " to {} in xpdr {}", clientConnectedPortList, spcXpdrNw, xpdr);
             for (String clientPort : clientConnectedPortList) {
                 ConnectionEndPoint clientCep2 = createCepXpdr(0, 0, clientPort, TapiConstants.E_ODU,
                         TapiConstants.XPDR, LayerProtocolName.ODU);
@@ -1463,7 +1449,7 @@ public final class ConnectivityUtils {
         Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.cep.list.ConnectionEndPointKey,
             ConnectionEndPoint> cepMapOTU = new HashMap<>();
         // create ceps and x connections within xpdr
-        LOG.debug("CONNECTIVITYUTILS 866 CreateXpdrCep1ConnPht");
+        LOG.debug("CU:createXpdrCepsAndConnectionsPht: entering createXpdrCepsAndConnectionsPht");
         if (xpdrNodelist.isEmpty()) {
             LOG.warn("Xpdr nodes not found, skipping XPDR CEP connection");
             return new HashMap<>();
@@ -1494,7 +1480,6 @@ public final class ConnectivityUtils {
             cepMapOTU.put(netCep3.key(), netCep3);
 
         }
-        LOG.debug("CONNECTIVITYUTILS 894 CreateXpdrCep1ConnPht");
         // OTSi top connection between edge OTSI_MC Xpdr
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection =
@@ -1542,7 +1527,7 @@ public final class ConnectivityUtils {
         conServMap.put(conOtu.key(), conOtu);
         this.topConnXpdrXpdrOtu = conOtu;
 
-        LOG.debug("ReturnedMap904 {}", new HashMap<>(Map.of(conn.key(), conn)));
+        LOG.debug("CU:createXpdrCepsAndConnectionsPht : ReturnedMap = {}", new HashMap<>(Map.of(conn.key(), conn)));
         return conServMap;
     }
 
@@ -1620,20 +1605,20 @@ public final class ConnectivityUtils {
                 ConnectionEndPoint adCepOTSiMC = intermediateCepMap.entrySet().stream().filter(
                         cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTSiMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("adCepOTSiMC is {}", adCepOTSiMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : adCepOTSiMC is {}", adCepOTSiMC);
                 cepMap.putAll(intermediateCepMap);
                 String spcRdmDEG = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().orElseThrow();
-                LOG.info("Degree port of ROADm {} = {}", roadm, spcRdmDEG);
+                LOG.info("Degree port of ROADM {} = {}", roadm, spcRdmDEG);
                 intermediateCepMap = createRoadmCepsAndClientNeps(
                     roadm, lowerFreqIndex, higherFreqIndex, spcRdmDEG, true);
                 ConnectionEndPoint degCepMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIERMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("degCepMC is {}", degCepMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : degCepMC is {}", degCepMC);
                 ConnectionEndPoint degCepOTSiMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTSiMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("degCepOTSiMC is {}", degCepOTSiMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : degCepOTSiMC is {}", degCepOTSiMC);
                 cepMap.putAll(intermediateCepMap);
                 LOG.info("Going to create cross connections for ROADM {}", roadm);
                 // Create X connections between MC and OTSi_MC for full map
@@ -1667,11 +1652,11 @@ public final class ConnectivityUtils {
                 ConnectionEndPoint deg1CepMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIERMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("deg1CepMC is {}", deg1CepMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : deg1CepMC is {}", deg1CepMC);
                 ConnectionEndPoint deg1CepOTSiMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTSiMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("deg1CepOTSiMC is {}", deg1CepOTSiMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : deg1CepOTSiMC is {}", deg1CepOTSiMC);
                 cepMap.putAll(intermediateCepMap);
 
                 String spcRdmDEG2 =
@@ -1682,11 +1667,11 @@ public final class ConnectivityUtils {
                 ConnectionEndPoint deg2CepMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIERMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("deg2CepMC is {}", deg2CepMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : deg2CepMC is {}", deg2CepMC);
                 ConnectionEndPoint deg2CepOTSiMC = intermediateCepMap.entrySet().stream().filter(
                     cep -> cep.getValue().getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTSiMC.VALUE))
                     .findFirst().orElseThrow().getValue();
-                LOG.debug("deg2CepOTSiMC is {}", deg2CepOTSiMC);
+                LOG.debug("CU:createRoadmCepsAndConnections : deg2CepOTSiMC is {}", deg2CepOTSiMC);
                 cepMap.putAll(intermediateCepMap);
 
                 LOG.info("Going to create cross connections for ROADM {}", roadm);
@@ -1728,7 +1713,7 @@ public final class ConnectivityUtils {
 
         LowerConnection conn1 = new LowerConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         // OTSiMC top connection between edge roadms
-        LOG.debug("Going to created top connection between OTSiMC");
+        LOG.info("Going to created top connection between OTSiMC");
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection1 =
             createTopConnection(String.join("-", spcRdmAD1, slotFreqExtension),
@@ -1739,13 +1724,14 @@ public final class ConnectivityUtils {
                 null);
         this.connectionFullMap.put(connection1.key(), connection1);
         LOG.info("Top connection OTSiMC created = {}", connection1);
-        LOG.debug("Map of All connections = {}", this.connectionFullMap);
+        LOG.debug("CU:createRoadmCepsAndConnections : Map of All connections = {}", this.connectionFullMap);
 
         // OTSiMC top connections that will be added to the service object
         Connection conn = new ConnectionBuilder().setConnectionUuid(connection.getUuid()).build();
         Connection conn2 = new ConnectionBuilder().setConnectionUuid(connection1.getUuid()).build();
         this.topConnRdmRdm = conn2;
-        LOG.debug("ReturnedMap1102 {}", new HashMap<>(Map.of(conn.key(), conn, conn2.key(), conn2)));
+        LOG.debug("CU:createRoadmCepsAndConnections : ReturnedMap {}",
+            new HashMap<>(Map.of(conn.key(), conn, conn2.key(), conn2)));
         return new HashMap<>(Map.of(conn.key(), conn, conn2.key(), conn2));
     }
 
@@ -1767,7 +1753,7 @@ public final class ConnectivityUtils {
                         .cep.list.ConnectionEndPointKey(new Uuid(UUID.nameUUIDFromBytes(
                     (String.join("+", "CEP", tp1.split("\\+")[0], qual, tp1.split("\\+")[1]))
                         .getBytes(StandardCharsets.UTF_8)).toString())));
-        LOG.debug("ADCEP1 = {}", adCep1);
+        LOG.debug("CU:createTopConnection : Cep corresponding to first end of the connection = {}", adCep1);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connection.ConnectionEndPoint cep1 =
             new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -1784,7 +1770,7 @@ public final class ConnectivityUtils {
                     new Uuid(UUID.nameUUIDFromBytes(
                         (String.join("+", "CEP", tp2.split("\\+")[0], qual, tp2.split("\\+")[1]))
                             .getBytes(StandardCharsets.UTF_8)).toString())));
-        LOG.debug("ADCEP2 = {}", adCep2);
+        LOG.debug("CU:createTopConnection : Cep corresponding to second end of the connection {}", adCep2);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connection.ConnectionEndPoint cep2 =
             new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -1855,9 +1841,9 @@ public final class ConnectivityUtils {
         String crossConnName = String.join("+", "XC", cep1.getName().entrySet().iterator().next().getValue().getValue(),
             cep2.getName().entrySet().iterator().next().getValue().getValue());
         LOG.info("Creation cross connection between: {} and {}", tp1, tp2);
-        LOG.info("CONNECTIVITYUTILS 1145 : Cross connection name = {}", crossConnName);
-        LOG.debug("Parent NEP of CEP1 = {}", cep1.getParentNodeEdgePoint());
-        LOG.debug("Parent NEP CEP2 = {}", cep2.getParentNodeEdgePoint());
+        LOG.info("Cross connection name = {}", crossConnName);
+        LOG.debug("CU:createXCBetweenCeps : Parent NEP of CEP1 = {}", cep1.getParentNodeEdgePoint());
+        LOG.debug("CU:createXCBetweenCeps : Parent NEP CEP2 = {}", cep2.getParentNodeEdgePoint());
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connection.ConnectionEndPoint cepServ1 =
             new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -1902,7 +1888,7 @@ public final class ConnectivityUtils {
         String extendedNepId = (lowerFreqIndex == 0 && higherFreqIndex == 0)
             ? nepId
             : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
-        LOG.debug("CONNECTIVITYUTILS 1307 CreateCepXpdr {}", extendedNepId);
+        LOG.debug("CU:createCepXpdr : Extended NEPId {}", extendedNepId);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
             .setValue(String.join("+", "CEP", extendedNepId))
@@ -1988,7 +1974,7 @@ public final class ConnectivityUtils {
                 break;
         }
 
-        LOG.debug("CU Line 1538 getLowerConnectionMap: Service Name = {}, Service Map = {}",
+        LOG.debug("CU:getLowerConnectionMap: Service Name = {}, Service Map = {}",
             serviceName, this.servicesMap);
         var conVsServService = this.servicesMap.entrySet().stream()
             .filter(serv -> serv.getKey().getServiceName().equals(serviceName))
@@ -2000,7 +1986,7 @@ public final class ConnectivityUtils {
                 .collect(Collectors.toList()).stream().map(Map.Entry::getValue).collect(Collectors.toList()).stream()
                 .map(SupportingConnections::getUuid)
                 .collect(Collectors.toList());
-            LOG.debug("CU Line 1586 getLowerConnectionMap: Supporting connections for Service Name = {}, are {}",
+            LOG.debug("CU:getLowerConnectionMap : Supporting connections for Service Name = {}, are {}",
                 serviceName, connectionsUuid);
         }
         Map<LowerConnectionKey, LowerConnection> lowConMap = new HashMap<>();
@@ -2149,7 +2135,7 @@ public final class ConnectivityUtils {
             LOG.info("Unable to access Nep {} while trying to update its capacity", nepId);
             return;
         }
-        LOG.info("CU line 1762 updating payload for Nep {}, decreasing capacity of {}", nepId, capacityDecrement);
+        LOG.info("Updating payload for Nep {}, decreasing capacity of {}", nepId, capacityDecrement);
         //create a new onepBuilder set with current settings
         OwnedNodeEdgePointBuilder onepBdr = new OwnedNodeEdgePointBuilder(onep);
         // Compute the new spectrum Pac (no AvailableSpectrum as the TP is provisonned with a wavelength)
@@ -2197,16 +2183,18 @@ public final class ConnectivityUtils {
         if (onep.getAvailableCapacity() != null && onep.getAvailableCapacity().getTotalSize() != null
                 && onep.getAvailableCapacity().getTotalSize().getValue() != null) {
             double initialCapa = onep.getAvailableCapacity().getTotalSize().getValue().doubleValue();
-            LOG.debug("CU line 1800 updating Available Capacity for Nep {}, nonNullAvailableCapa and TotalSize", nepId);
+            LOG.debug("CU:updateXpdrNepPayloadStructure :  updating Available Capacity for Nep {}, nonNullAvailableCapa"
+                + " and TotalSize", nepId);
             if (initialCapa >= capacityDecrement) {
                 tsbBldr.setValue(Decimal64.valueOf((initialCapa - capacityDecrement), RoundingMode.DOWN));
-                LOG.debug("CU line 1801 updating Available Capacity for Nep {}, from {} to {}",
+                LOG.debug("CU:updateXpdrNepPayloadStructure:  updating Available Capacity for Nep {}, from {} to {}",
                     nepId, initialCapa, initialCapa - capacityDecrement);
             } else {
                 tsbBldr.setValue(Decimal64.valueOf(0.0, RoundingMode.DOWN));
             }
         } else {
-            LOG.debug("CU line 1802 updating Available Capacity for Nep {}, NullAvailableCapa or TotalSize", nepId);
+            LOG.debug("CU:updateXpdrNepPayloadStructure : updating Available Capacity for Nep {}, NullAvailableCapa "
+                + "or TotalSize", nepId);
             tsbBldr.setValue(Decimal64.valueOf(0.0, RoundingMode.DOWN));
         }
         // As addNepToTopology is based on Put (depending on the context, we sometimes need to remove some attributes)
@@ -2373,7 +2361,8 @@ public final class ConnectivityUtils {
                 if (sip.getUuid().equals(sipUuid)) {
                     return sip.getUuid();
                 }
-                LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+                LOG.debug("CU:getSipIdFromZend : SIP {} does not match sipname {}",
+                    sip.getUuid().getValue(), sipUuid.getValue());
             }
             return null;
         }
@@ -2421,7 +2410,8 @@ public final class ConnectivityUtils {
             if (sip.getUuid().equals(sipUuid)) {
                 return sip.getUuid();
             }
-            LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+            LOG.debug("CU:getSipIdFromZend : SIP {} does not match sipname {}",
+                sip.getUuid().getValue(), sipUuid.getValue());
         }
         return null;
     }
@@ -2505,7 +2495,8 @@ public final class ConnectivityUtils {
             if (sip.getUuid().equals(sipUuid)) {
                 return sip.getUuid();
             }
-            LOG.debug("SIP {} does not match sipname {}", sip.getUuid().getValue(), sipUuid.getValue());
+            LOG.debug("CU:getSipIdFromAend :SIP {} does not match sipname {}",
+                sip.getUuid().getValue(), sipUuid.getValue());
         }
         return null;
     }
@@ -2649,7 +2640,7 @@ public final class ConnectivityUtils {
         LOG.info("Node z id = {}, txportDeviceName = {}, txPortName = {}", nodeid, txPortDeviceName, txPortName);
         LOG.info("Node z id = {}, rxportDeviceName = {}, rxPortName = {}", nodeid, rxPortDeviceName, rxPortName);
         ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder();
-        LOG.info("tapiEndPointToServiceZPoint Line2306 NodeZId = {}", nodeid);
+        LOG.debug("CU:tapiEndPointToServiceZPoint : NodeZId = {}", nodeid);
         serviceZEndBuilder
             .setClli(nodeName)
             .setNodeId(new NodeIdType(nodeZZid))
