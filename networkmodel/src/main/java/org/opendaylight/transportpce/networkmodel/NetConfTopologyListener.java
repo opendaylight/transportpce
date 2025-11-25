@@ -12,11 +12,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModification.WithDataAfter;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -70,11 +73,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
      * @param deviceTransactionManager Manages data transactions with the netconf devices
      * @param portMapping Store the abstraction view of the netconf device
      */
-    public NetConfTopologyListener(
-            final NetworkModelService networkModelService,
-            final DataBroker dataBroker,
-            DeviceTransactionManager deviceTransactionManager,
-            PortMapping portMapping) {
+    public NetConfTopologyListener(final NetworkModelService networkModelService, final DataBroker dataBroker,
+            DeviceTransactionManager deviceTransactionManager, PortMapping portMapping) {
         this.networkModelService = networkModelService;
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
@@ -88,14 +88,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();
-            if (rootNode.dataBefore() == null) {
-                continue;
-            }
-            String nodeId = rootNode.dataBefore().key().getNodeId().getValue();
-            NetconfNode netconfNodeBefore = rootNode.dataBefore().augmentation(NetconfNodeAugment.class)
-                    .getNetconfNode();
-            switch (rootNode.modificationType()) {
-                case DELETE:
+            switch (rootNode) {
+                case DataObjectDeleted<Node> deleted -> {
+                    String nodeId = deleted.dataBefore().getNodeId().getValue();
                     NodeDatamodelType type = portMapping.getNode(nodeId).getDatamodelType();
                     if (type != null && type.getName().equalsIgnoreCase("OPENCONFIG")) {
                         if (this.networkModelService.deleteOpenConfignode(nodeId)) {
@@ -108,28 +103,31 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                             LOG.info("Device {} correctly disconnected from controller", nodeId);
                         }
                     }
-                    break;
-                case SUBTREE_MODIFIED:
-                    NetconfNode netconfNodeAfter = rootNode.dataAfter().augmentation(NetconfNodeAugment.class)
-                            .getNetconfNode();
-                    if (ConnectionStatus.Connecting.equals(netconfNodeBefore.getConnectionStatus())
-                            && ConnectionStatus.Connected.equals(netconfNodeAfter.getConnectionStatus())) {
+                }
+                case WithDataAfter<Node> present -> {
+                    NetconfNode nodeAfter = Objects.requireNonNull(
+                            present.dataAfter().augmentation(NetconfNodeAugment.class))
+                        .getNetconfNode();
+                    NetconfNode nodeBefore = Objects.requireNonNull(
+                            present.dataBefore().augmentation(NetconfNodeAugment.class))
+                        .getNetconfNode();
+                    String nodeId = present.dataAfter().getNodeId().getValue();
+                    if (ConnectionStatus.Connecting.equals(nodeBefore.getConnectionStatus())
+                            && ConnectionStatus.Connected.equals(nodeAfter.getConnectionStatus())) {
                         LOG.info("Connecting Node: {}", nodeId);
-                        Optional<AvailableCapability> deviceCapability = null;
-                        deviceCapability =
-                              netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                        Optional<AvailableCapability> deviceCapability;
+                        deviceCapability = nodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
                                 .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)
-                                && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
+                                    && getOpenRoadmDeviceCapabilities().contains(cp.getCapability()))
                                 .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
                                 .findFirst();
-                        if (!deviceCapability.isEmpty()) {
-                            this.networkModelService
-                                    .createOpenRoadmNode(nodeId, deviceCapability.orElseThrow().getCapability());
+                        if (deviceCapability.isPresent()) {
+                            this.networkModelService.createOpenRoadmNode(nodeId,
+                                    deviceCapability.orElseThrow().getCapability());
                             onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
                             LOG.info("OpenRoadm device {} correctly connected to controller", nodeId);
                         } else {
-                            deviceCapability =
-                                    netconfNodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
+                            deviceCapability = nodeAfter.getAvailableCapabilities().getAvailableCapability().stream()
                                             .filter(cp -> cp.getCapability()
                                                     .matches("(.*)" + StringConstants.OPENCONFIG_XPDR_DEVICE_MODEL))
                                             .sorted((c1, c2) -> c2.getCapability().compareTo(c1.getCapability()))
@@ -138,22 +136,18 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                                 LOG.error("Unable to get openroadm-device-capability or openconfig-device-capability");
                                 return;
                             }
-                            IpAddress ipAddress = netconfNodeAfter.getHost().getIpAddress();
-                            this.networkModelService
-                                    .createOpenConfigNode(nodeId, deviceCapability.orElseThrow().getCapability(),
-                                            ipAddress);
+                            IpAddress ipAddress = nodeAfter.getHost().getIpAddress();
+                            this.networkModelService.createOpenConfigNode(nodeId,
+                                    deviceCapability.orElseThrow().getCapability(), ipAddress);
                             onDeviceConnected(nodeId, deviceCapability.orElseThrow().getCapability());
                             LOG.info("OpenConfig device {} correctly connected to controller", nodeId);
                         }
                     }
-                    if (ConnectionStatus.Connected.equals(netconfNodeBefore.getConnectionStatus())
-                            && ConnectionStatus.Connecting.equals(netconfNodeAfter.getConnectionStatus())) {
+                    if (ConnectionStatus.Connected.equals(nodeBefore.getConnectionStatus())
+                            && ConnectionStatus.Connecting.equals(nodeAfter.getConnectionStatus())) {
                         LOG.warn("Node: {} is being disconnected", nodeId);
                     }
-                    break;
-                default:
-                    LOG.debug("Unknown modification type {}", rootNode.modificationType().name());
-                    break;
+                }
             }
         }
     }

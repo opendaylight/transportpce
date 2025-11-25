@@ -14,9 +14,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.DELETE;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.SUBTREE_MODIFIED;
-import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.WRITE;
 import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
@@ -91,18 +88,18 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
             OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
         when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
         when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
         when(portMapping.getNode("netconfNode1").getDatamodelType()).thenReturn(NodeDatamodelType
                 .valueOf("OPENROADM"));
+        when(networkModelService.deleteOpenRoadmnode(anyString())).thenReturn(true);
+
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping, registrations);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).modificationType();
-        verify(node, times(3)).dataBefore();
+        verify(node, times(1)).dataBefore();
         verify(networkModelService, times(1)).deleteOpenRoadmnode(anyString());
         verify(nodeRegistration, times(0)).unregisterListeners();
     }
@@ -118,18 +115,18 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
                 OPENCONFIG_DEVICE_VERSION_1_9_0);
-        when(node.modificationType()).thenReturn(DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
         when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
         when(nodes.getDatamodelType()).thenReturn(nodeDatamodelType);
         when(portMapping.getNode("netconfNode1").getDatamodelType()).thenReturn(NodeDatamodelType
                 .valueOf("OPENCONFIG"));
+        when(networkModelService.deleteOpenConfignode(anyString())).thenReturn(true);
+
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
                 deviceTransactionManager, portMapping, registrations);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).modificationType();
-        verify(node, times(3)).dataBefore();
+        verify(node, times(1)).dataBefore();
         verify(networkModelService, times(1)).deleteOpenConfignode(anyString());
         verify(nodeRegistration, times(0)).unregisterListeners();
     }
@@ -146,7 +143,6 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(SUBTREE_MODIFIED);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
@@ -154,9 +150,8 @@ public class NetConfTopologyListenerTest {
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).modificationType();
-        verify(node, times(3)).dataBefore();
-        verify(node, times(1)).dataAfter();
+        verify(node, times(1)).dataBefore();
+        verify(node, times(2)).dataAfter();
         verify(networkModelService, times(1)).createOpenRoadmNode(anyString(), anyString());
     }
 
@@ -172,7 +167,6 @@ public class NetConfTopologyListenerTest {
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
         final Node netconfNodeAfter = getNetconfNode("netconfNode1",
             ConnectionStatus.Connecting, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(SUBTREE_MODIFIED);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
         when(node.dataAfter()).thenReturn(netconfNodeAfter);
 
@@ -180,9 +174,8 @@ public class NetConfTopologyListenerTest {
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(1)).modificationType();
-        verify(node, times(3)).dataBefore();
-        verify(node, times(1)).dataAfter();
+        verify(node, times(1)).dataBefore();
+        verify(node, times(2)).dataAfter();
         verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }
@@ -197,16 +190,15 @@ public class NetConfTopologyListenerTest {
 
         final Node netconfNodeBefore = getNetconfNode("netconfNode1",
             ConnectionStatus.Connected, OPENROADM_DEVICE_VERSION_2_2_1);
-        when(node.modificationType()).thenReturn(WRITE);
         when(node.dataBefore()).thenReturn(netconfNodeBefore);
+        when(node.dataAfter()).thenReturn(netconfNodeBefore);
 
         NetConfTopologyListener listener = new NetConfTopologyListener(networkModelService, dataBroker,
             deviceTransactionManager, portMapping);
         listener.onDataTreeChanged(changes);
         verify(ch, times(1)).getRootNode();
-        verify(node, times(2)).modificationType();
-        verify(node, times(3)).dataBefore();
-        verify(node, never()).dataAfter();
+        verify(node, times(1)).dataBefore();
+        verify(node, times(2)).dataAfter();
         verify(networkModelService, never()).createOpenRoadmNode(anyString(), anyString());
         verify(networkModelService, never()).deleteOpenRoadmnode(anyString());
     }

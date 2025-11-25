@@ -8,12 +8,16 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.util.List;
+import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.ServiceInterfacePoints;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.service._interface.points.ServiceEndPoint;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.service._interface.points.ServiceEndPointKey;
 import org.opendaylight.yangtools.binding.DataObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,44 +34,41 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
         LOG.info("onDataTreeChanged in TapiListener");
         for (DataTreeModification<ServiceInterfacePoints> change : changes) {
             DataObjectModification<ServiceInterfacePoints> rootSIP = change.getRootNode();
-            switch (rootSIP.modificationType()) {
-                case WRITE:
+            switch (rootSIP) {
+                case DataObjectWritten<ServiceInterfacePoints> written -> {
                     LOG.info("onDataTreeChanged in TapiListener : WRITE");
                     MappingUtils.deleteMap();
-                    for (ServiceEndPoint sep : rootSIP.dataAfter().getServiceEndPoint().values()) {
+                    for (ServiceEndPoint sep : written.dataAfter().getServiceEndPoint().values()) {
                         MappingUtils.addMapSEP(sep);
                     }
                     MappingUtils.afficheMap();
-                    break;
-                case SUBTREE_MODIFIED:
+                }
+                case DataObjectModification.WithDataAfter<ServiceInterfacePoints> present -> {
                     LOG.info("onDataTreeChanged in TapiListener : SUBTREE_MODIFIED");
-                    for (DataObjectModification<? extends DataObject> dom :
+
+                    Map<ServiceEndPointKey, ServiceEndPoint> sepBefore = present.dataBefore().nonnullServiceEndPoint();
+                    Map<ServiceEndPointKey, ServiceEndPoint> sepAfter = present.dataAfter().nonnullServiceEndPoint();
+                    for (DataObjectModification<? extends DataObject> sep :
                             rootSIP.getModifiedChildren(ServiceEndPoint.class)) {
+                        ServiceEndPointKey sepUuid = sep.coerceKeyStep(ServiceEndPoint.class).key();
                         // to delete existing child entry
-                        DataObject dataAfter = dom.dataAfter();
-                        if (dataAfter == null) {
-                            MappingUtils.deleteMapEntry(((ServiceEndPoint) dom.dataBefore()).getUuid());
+                        if (sepBefore.containsKey(sepUuid) && !sepAfter.containsKey(sepUuid)) {
+                            MappingUtils.deleteMapEntry(sepUuid.getUuid());
                             MappingUtils.afficheMap();
                             continue;
                         }
                         // to add new child entry
-                        if (dom.dataBefore() != null || dom.dataType().toString().compareTo(SE_JAVA_INTF) != 0) {
-                            LOG.error("data input type is not a valid 'service-end-point'");
-                            continue;
+                        if (!sepBefore.containsKey(sepUuid) && sepAfter.containsKey(sepUuid)) {
+                            MappingUtils.addMapSEP((ServiceEndPoint) sep);
+                            MappingUtils.afficheMap();
                         }
-                        MappingUtils.addMapSEP((ServiceEndPoint) dataAfter);
-                        MappingUtils.afficheMap();
                     }
-                    break;
-                case DELETE:
+                }
+                case DataObjectDeleted<ServiceInterfacePoints> ignored -> {
                     LOG.info("onDataTreeChanged in TapiListener : DELETE");
                     MappingUtils.deleteMap();
-                    break;
-                default:
-                    LOG.error("Error of API REST modification type");
-                    break;
+                }
             }
-
         }
     }
 

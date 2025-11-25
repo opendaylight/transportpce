@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.tapi.topology;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataObjectModification.WithDataAfter;
+import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
@@ -32,43 +34,48 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Nodes>> changes) {
         for (DataTreeModification<Nodes> change : changes) {
             LOG.debug("TAPI module: Change in Node = {}", change.getRootNode());
-            // Data before needs to be not null
-            if (change.getRootNode().dataAfter() != null && change.getRootNode().dataBefore() != null) {
-                Nodes nodesAft = change.getRootNode().dataAfter();
-                Nodes nodesBef = change.getRootNode().dataBefore();
-                // TODO -> need to filter out the ones that are not after creation.
-                //  (Mapping before = null & Mapping after != null) is the rule for a first time connected device
-                String nodeId = nodesAft.getNodeId();
-                Map<MappingKey, Mapping> mappingAft = nodesAft.getMapping();
-                Map<MappingKey, Mapping> mappingBef = nodesBef.getMapping();
-                LOG.info("Change in node {} with OR version = {}", nodeId,
-                    nodesAft.getNodeInfo().getOpenroadmVersion().getName());
-                if (mappingAft == null) {
-                    LOG.warn("Mapping already existed in the datastore, which means that node {} already existed "
-                        + "in TAPI topology. The action to take will be different", nodeId);
-                    continue;
+            switch (change.getRootNode()) {
+                case DataObjectWritten<Nodes> written -> {
+                    Nodes nodeAfter = written.dataAfter();
+                    this.tapiNetworkModelService.createTapiNode(nodeAfter.getNodeId(), nodeAfter);
                 }
-                if (mappingBef == null) {
-                    LOG.debug("New mapping for node {} = {}", nodeId, mappingAft);
-                    LOG.info("As the mapping is now created for the first time, "
-                        + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
-                    this.tapiNetworkModelService.createTapiNode(nodeId, nodesAft);
-                } else {
-                    for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
-                        Mapping oldMapping = mappingBef.get(entry.getKey());
-                        Mapping newMapping = mappingAft.get(entry.getKey());
-                        if (oldMapping == null || newMapping == null) {
-                            continue;
-                        }
-                        if (!oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
-                                || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
-                            this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());
+                case WithDataAfter<Nodes> present -> {
+                    Nodes nodesAft = present.dataAfter();
+                    Nodes nodesBef = present.dataBefore();
+                    // TODO -> need to filter out the ones that are not after creation.
+                    //  (Mapping before = null & Mapping after != null) is the rule for a first time connected device
+                    String nodeId = nodesAft.getNodeId();
+                    Map<MappingKey, Mapping> mappingAft = nodesAft.getMapping();
+                    Map<MappingKey, Mapping> mappingBef = nodesBef.getMapping();
+                    LOG.info("Change in node {} with OR version = {}", nodeId,
+                            nodesAft.getNodeInfo().getOpenroadmVersion().getName());
+                    if (mappingAft == null) {
+                        LOG.warn("Mapping already existed in the datastore, which means that node {} already existed "
+                                + "in TAPI topology. The action to take will be different", nodeId);
+                        continue;
+                    }
+                    if (mappingBef == null) {
+                        LOG.debug("New mapping for node {} = {}", nodeId, mappingAft);
+                        LOG.info("As the mapping is now created for the first time, "
+                                + "we can proceed with the creation of the node {} in the TAPI topology", nodeId);
+                        this.tapiNetworkModelService.createTapiNode(nodeId, nodesAft);
+                    } else {
+                        for (Map.Entry<MappingKey, Mapping> entry : mappingAft.entrySet()) {
+                            Mapping oldMapping = mappingBef.get(entry.getKey());
+                            Mapping newMapping = mappingAft.get(entry.getKey());
+                            if (oldMapping == null || newMapping == null) {
+                                continue;
+                            }
+                            if (!oldMapping.getPortAdminState().equals(newMapping.getPortAdminState())
+                                    || !oldMapping.getPortOperState().equals(newMapping.getPortOperState())) {
+                                this.tapiNetworkModelService.updateTapiTopology(nodeId, entry.getValue());
+                            }
                         }
                     }
                 }
-            } else if (change.getRootNode().dataAfter() != null && change.getRootNode().dataBefore() == null) {
-                Nodes nodesAft = change.getRootNode().dataAfter();
-                this.tapiNetworkModelService.createTapiNode(nodesAft.getNodeId(), nodesAft);
+                default -> {
+                    // No action on delete
+                }
             }
         }
     }

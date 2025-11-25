@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.opendaylight.mdsal.binding.api.DataObjectDeleted;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
@@ -83,81 +84,74 @@ public class ServiceListener implements DataTreeChangeListener<Services> {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Services> change : changes) {
             DataObjectModification<Services> rootService = change.getRootNode();
-            if (rootService.dataBefore() == null) {
-                continue;
-            }
-            String serviceInputName = rootService.dataBefore().key().getServiceName();
-            switch (rootService.modificationType()) {
-                case DELETE:
-                    LOG.info("Service {} correctly deleted from controller", serviceInputName);
-                    if (mapServiceInputReroute.get(serviceInputName) != null) {
-                        serviceRerouteStep2(serviceInputName);
+            switch (rootService) {
+                case DataObjectDeleted<Services> deleted -> {
+                    String serviceName = deleted.dataBefore().getServiceName();
+                    LOG.info("Service {} correctly deleted from controller", serviceName);
+                    if (mapServiceInputReroute.get(serviceName) != null) {
+                        serviceRerouteStep2(serviceName);
                     }
-                    break;
-                case WRITE:
-                    Services inputBefore = rootService.dataBefore();
-                    Services inputAfter = rootService.dataAfter();
-                    if (inputBefore.getOperationalState() == State.InService
-                            && inputAfter.getOperationalState() == State.OutOfService) {
-                        LOG.info("Service {} is becoming outOfService", serviceInputName);
+                }
+                case DataObjectModification.WithDataAfter<Services> present -> {
+                    Services serviceBefore = present.dataBefore();
+                    Services serviceAfter = present.dataAfter();
+                    String serviceName = serviceAfter.getServiceName();
+                    if (serviceBefore.getOperationalState() == State.InService
+                            && serviceAfter.getOperationalState() == State.OutOfService) {
+                        LOG.info("Service {} is becoming outOfService", serviceName);
                         sendNbiNotification(new PublishNotificationAlarmServiceBuilder()
-                                .setServiceName(inputAfter.getServiceName())
-                                .setConnectionType(inputAfter.getConnectionType())
+                                .setServiceName(serviceAfter.getServiceName())
+                                .setConnectionType(serviceAfter.getConnectionType())
                                 .setMessage("The service is now outOfService")
                                 .setOperationalState(State.OutOfService)
                                 .setPublisherName(PUBLISHER)
                                 .build());
-                        if (inputAfter.getAdministrativeState() == AdminStates.InService
-                                && inputAfter.getServiceResiliency() != null
-                                && inputAfter.getServiceResiliency().getResiliency() != null
-                                && inputAfter.getServiceResiliency().getResiliency().equals(Restorable.VALUE)) {
-                            LOG.info("Attempting to reroute the service '{}'...", serviceInputName);
-                            if (!serviceRerouteCheck(serviceInputName, inputAfter.getServiceResiliency(),
-                                    inputAfter.getRoutingMetric())) {
+                        if (serviceAfter.getAdministrativeState() == AdminStates.InService
+                                && serviceAfter.getServiceResiliency() != null
+                                && serviceAfter.getServiceResiliency().getResiliency() != null
+                                && serviceAfter.getServiceResiliency().getResiliency().equals(Restorable.VALUE)) {
+                            LOG.info("Attempting to reroute the service '{}'...", serviceName);
+                            if (!serviceRerouteCheck(serviceName, serviceAfter.getServiceResiliency(),
+                                    serviceAfter.getRoutingMetric())) {
                                 LOG.info("No other path available, cancelling reroute process of service '{}'...",
-                                        serviceInputName);
+                                        serviceName);
                                 continue;
                             }
-                            mapServiceInputReroute.put(serviceInputName, null);
-                            if (inputAfter.getServiceResiliency().getHoldoffTime() != null) {
+                            mapServiceInputReroute.put(serviceName, null);
+                            if (serviceAfter.getServiceResiliency().getHoldoffTime() != null) {
                                 LOG.info("Waiting hold off time before rerouting...");
-                                executor.schedule(
-                                        () -> {
-                                            if (mapServiceInputReroute.containsKey(serviceInputName)
-                                                    && mapServiceInputReroute.get(serviceInputName) == null) {
-                                                serviceRerouteStep1(serviceInputName);
-                                            } else {
-                                                LOG.info("Cancelling reroute process of service '{}'...",
-                                                        serviceInputName);
-                                            }
-                                        },
-                                        Long.parseLong(String.valueOf(inputAfter.getServiceResiliency()
-                                                .getHoldoffTime())),
-                                        TimeUnit.MILLISECONDS);
+                                executor.schedule(() -> {
+                                    if (mapServiceInputReroute.containsKey(serviceName)
+                                            && mapServiceInputReroute.get(serviceName) == null) {
+                                        serviceRerouteStep1(serviceName);
+                                    } else {
+                                        LOG.info("Cancelling reroute process of service '{}'...", serviceName);
+                                    }
+                                },
+                                    Long.parseLong(
+                                            String.valueOf(serviceAfter.getServiceResiliency().getHoldoffTime())),
+                                            TimeUnit.MILLISECONDS);
                             } else {
-                                serviceRerouteStep1(serviceInputName);
+                                serviceRerouteStep1(serviceName);
                             }
                         }
-                    } else if (inputAfter.getAdministrativeState() == AdminStates.InService
-                            && inputBefore.getOperationalState() == State.OutOfService
-                            && inputAfter.getOperationalState() == State.InService) {
-                        LOG.info("Service {} is becoming InService", serviceInputName);
+                    } else if (serviceAfter.getAdministrativeState() == AdminStates.InService
+                            && serviceBefore.getOperationalState() == State.OutOfService
+                            && serviceAfter.getOperationalState() == State.InService) {
+                        LOG.info("Service {} is becoming InService", serviceName);
                         sendNbiNotification(new PublishNotificationAlarmServiceBuilder()
-                                .setServiceName(inputAfter.getServiceName())
-                                .setConnectionType(inputAfter.getConnectionType())
+                                .setServiceName(serviceAfter.getServiceName())
+                                .setConnectionType(serviceAfter.getConnectionType())
                                 .setMessage("The service is now inService")
                                 .setOperationalState(State.InService)
                                 .setPublisherName(PUBLISHER)
                                 .build());
-                        if (mapServiceInputReroute.containsKey(serviceInputName)
-                                && mapServiceInputReroute.get(serviceInputName) == null) {
-                            mapServiceInputReroute.remove(serviceInputName);
+                        if (mapServiceInputReroute.containsKey(serviceName)
+                                && mapServiceInputReroute.get(serviceName) == null) {
+                            mapServiceInputReroute.remove(serviceName);
                         }
                     }
-                    break;
-                default:
-                    LOG.debug("Unknown modification type {}", rootService.modificationType().name());
-                    break;
+                }
             }
         }
     }

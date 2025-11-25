@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataObjectModification.WithDataAfter;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -61,75 +62,79 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Link>> changes) {
         LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
         for (DataTreeModification<Link> change : changes) {
+            switch (change.getRootNode()) {
+                case WithDataAfter<Link> present -> {
+                    Link link = present.dataAfter();
+                    LOG.info("New link in openroadm topology");
+                    // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
+                    //  the opposite one. But first check the type
+                    Link1 link1 = link.augmentation(Link1.class);
+                    if (link1 == null) {
+                        LOG.error("No type in link. We cannot trigger the TAPI link creation");
+                        return;
+                    }
 
-            Link link = change.getRootNode().dataAfter();
-            if (link == null) {
-                continue;
-            }
-            LOG.info("New link in openroadm topology");
-            // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
-            //  the opposite one. But first check the type
-            Link1 link1 = link.augmentation(Link1.class);
-            if (link1 == null) {
-                LOG.error("No type in link. We cannot trigger the TAPI link creation");
-                return;
-            }
+                    if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
+                            || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)
+                            || link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))) {
+                        // No creation of link for ADD/DROP/EXPRESS links
+                        LOG.debug("TapiORLinkListener Line 82 Not triggering creation of link for type = {}, RtoR = {}",
+                                link1.getLinkType().getName(),
+                                link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM));
+                        continue;
+                    }
 
-            if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                        || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT)
-                        || link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM))) {
-                // No creation of link for ADD/DROP/EXPRESS links
-                LOG.debug("TapiORLinkListener Line 82 Not triggering creation of link for type = {}, RtoR = {}",
-                    link1.getLinkType().getName(), link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM));
-                continue;
-            }
+                    if (link1.getOppositeLink() != null && !oppositeLinkExists(link1.getOppositeLink())) {
+                        LOG.debug("Opposite link doesn't exist. Not creating TAPI link");
+                        return;
+                    }
+                    LOG.info("Opposite link already in datastore. Creating TAPI bidirectional link");
+                    var link11 = link.augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1.class);
+                    if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
+                            && link11.getOMSAttributes() != null) {
+                        LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());
+                    }
+                    String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
+                    String srcTp = link.getSource().getSourceTp().getValue();
+                    String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
+                    String destTp = link.getDestination().getDestTp().getValue();
+                    //Configuring link type to default OMS_XPDR-RDM
+                    String linkType = TapiConstants.OMS_XPDR_RDM_LINK;
 
-            if (link1.getOppositeLink() != null && !oppositeLinkExists(link1.getOppositeLink())) {
-                LOG.debug("Opposite link doesn't exist. Not creating TAPI link");
-                return;
-            }
-            LOG.info("Opposite link already in datastore. Creating TAPI bidirectional link");
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1 link11 = link
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1.class);
-            if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
-                && link11.getOMSAttributes() != null) {
-                LOG.debug("TapiORLinkListener line 96 for link {} found an OMS attributes ", link.getLinkId());
-            }
-            String srcNode = getRoadmOrXpdr(link.getSource().getSourceNode().getValue());
-            String srcTp = link.getSource().getSourceTp().getValue();
-            String destNode = getRoadmOrXpdr(link.getDestination().getDestNode().getValue());
-            String destTp = link.getDestination().getDestTp().getValue();
-            //Configuring link type to default OMS_XPDR-RDM
-            String linkType = TapiConstants.OMS_XPDR_RDM_LINK;
-
-            if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
+                    if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM)) {
                 // For ROADM to ROADM link, only capture change on existing links to track change in OMS
                 // Avoid creating 2 unidirectional links since these links are bidirectional in TAPI :
                 // Links are created at initialization through a process that guarantees the creation of a unique link
                 // Thus check that the link already exist in Datastore to upgrade it rather than creating an additional
                 // unidirectional link
-                if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp, getQual(srcNode), getQual(destNode),
-                        TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS))) {
-                    continue;
-                }
-                LOG.warn("Now triggering creation of link for type = {} to account for OMS change",
-                    link1.getLinkType().getName());
-                linkType = TapiConstants.OMS_RDM_RDM_LINK;
-            }
+                        if (!(linkExistInTopology(srcNode, srcTp, destNode, destTp, getQual(srcNode), getQual(destNode),
+                                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS))) {
+                            continue;
+                        }
+                        LOG.warn("Now triggering creation of link for type = {} to account for OMS change",
+                                link1.getLinkType().getName());
+                        linkType = TapiConstants.OMS_RDM_RDM_LINK;
+                    }
 
-            // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
-            // through rpcs and do not contain characteristics subject to potential updates
-            if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
-                || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
-                && change.getRootNode().dataBefore() != null) {
-                continue;
+                // for Xpdr to roadm link, create Link only if it was not before in datastore since links are created
+                // through rpcs and do not contain characteristics subject to potential updates
+                    if ((link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
+                            || link1.getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
+                            && change.getRootNode().dataBefore() != null) {
+                        continue;
+                    }
+                    putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
+                            linkType, getQual(srcNode), getQual(destNode),
+                            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+                            link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
+                            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                            tapiTopoUuid));
+                }
+                default -> {
+                    // Do nothing for deleted links
+                }
             }
-            putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
-                linkType, getQual(srcNode), getQual(destNode),
-                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-                link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                tapiTopoUuid));
         }
     }
 

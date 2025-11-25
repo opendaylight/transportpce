@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 import java.util.List;
 import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataObjectModification.WithDataAfter;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
@@ -38,12 +39,16 @@ public class PortMappingListener implements DataTreeChangeListener<Mapping> {
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Mapping>> changes) {
         for (DataTreeModification<Mapping> change : changes) {
-            Mapping oldMapping = change.getRootNode().dataBefore();
-            Mapping newMapping = change.getRootNode().dataAfter();
-            if (oldMapping != null && newMapping != null) {
-                if (isMappingChanged(oldMapping, newMapping)) {
-                    networkModelService.updateOpenRoadmTopologies(
-                            getNodeIdFromMappingDataTreeIdentifier(change.path()), newMapping);
+            switch (change.getRootNode()) {
+                case WithDataAfter<Mapping> present -> {
+                    if (isMappingChanged(present.dataBefore(), present.dataAfter())) {
+                        networkModelService.updateOpenRoadmTopologies(
+                                getNodeIdFromMappingDataTreeIdentifier(change.path()), present.dataAfter());
+                    }
+
+                }
+                default -> {
+                    // No action on delete
                 }
             }
         }
