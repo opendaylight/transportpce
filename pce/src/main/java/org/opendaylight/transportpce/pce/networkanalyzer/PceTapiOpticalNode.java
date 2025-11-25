@@ -108,10 +108,10 @@ public class PceTapiOpticalNode implements PceNode {
         if (!isValid()) {
             return;
         }
-        LOG.debug("initSrgTpList for Tapi: getting SRG tps from ROADM for node : {}, Uuid : {}",
+        LOG.debug("PTON:initSrgTpList for Tapi: getting SRG tps from ROADM for node : {}, Uuid : {}",
             this.nodeName, this.nodeUuid);
         if (listOfNep.isEmpty()) {
-            LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node : {}, Uuid : {}",
+            LOG.debug("PTON:initSrgTpList: ROADM TerminationPoint list is empty for node : {}, Uuid : {}",
                  this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
@@ -132,12 +132,12 @@ public class PceTapiOpticalNode implements PceNode {
         }
 
         if (this.availableSrgPp.isEmpty() || this.availableSrgCp.isEmpty()) {
-            LOG.error("initSrgTpList: ROADM SRG TerminationPoint list is empty for node : {}, Uuid : {}",
+            LOG.debug("PTON:initSrgTpList: ROADM SRG TerminationPoint list is empty for node : {}, Uuid : {}",
                 this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
-        LOG.debug("initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}",
+        LOG.debug("PTON:initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}",
             this.availableSrgPp.size(), this.availableSrgCp.size(), this);
     }
 
@@ -149,7 +149,7 @@ public class PceTapiOpticalNode implements PceNode {
         // to set all bits to 0 (used/false) or 1 (available/true)
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
         List<BitSet> bitsetList;
-        LOG.debug("PTONLine153 Entering InitFreqBitset, for Node {}, nodeType {}", deviceNodeId, nodeType);
+        LOG.debug("PTON:initFrequenciesBitSet : Analyzing Node {}, nodeType {}", deviceNodeId, nodeType);
         switch (this.nodeType) {
             case SRG :
                 bitsetList = listOfNep.stream()
@@ -195,10 +195,10 @@ public class PceTapiOpticalNode implements PceNode {
                 this.frequenciesBitSet = freqBitSet;
                 break;
             default:
-                LOG.error("initFrequenciesBitSet: unsupported node type {} in node {}", this.nodeType, this);
+                LOG.debug("PTON:initFrequenciesBitSet : unsupported node type {} in node {}", this.nodeType, this);
                 break;
         }
-        LOG.debug("PTONLine202 InitFreqBitset, for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
+        LOG.debug("PTON:initFrequenciesBitSet : for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
     }
 
     /**
@@ -209,20 +209,20 @@ public class PceTapiOpticalNode implements PceNode {
      *   Muxponders.
      */
     public void initXndrTps() {
-        LOG.debug("PTONLine 215: initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
-        LOG.debug("PTONLine216: initXndrTps for node : {}, ListOfNep : {}", this.nodeName,
+        LOG.debug("PTON:initXndrTps : initXndrTps for node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+        LOG.debug("PTON:initXndrTps : for node : {}, ListOfNep : {}", this.nodeName,
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
         if (!isValid()) {
-            LOG.debug("PTONLine 219: initXndrTps Non valid node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
+            LOG.debug("PTON:initXndrTps : Non valid node : {}, Uuid : {}", this.nodeName, this.nodeUuid);
             return;
         }
         if (listOfNep.isEmpty()) {
-            LOG.error("PceTapiOpticalNode initXndrTps: Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
+            LOG.debug("PTON:initXndrTps : Xponder TerminationPoint list is empty for node : {}, Uuid : {}",
                  this.nodeName, this.nodeUuid);
             this.valid = false;
             return;
         }
-        LOG.debug("PTONLine 228: nwOtsNep Protocols : {}", listOfNep.stream()
+        LOG.debug("PTON:initXndrTps : nwOtsNep Protocols : {}", listOfNep.stream()
             .map(BasePceNep::getLpn).collect(Collectors.toList()));
         List<BasePceNep> nwOtsNep = listOfNep.stream()
             .filter(bpn -> ((bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
@@ -240,7 +240,7 @@ public class PceTapiOpticalNode implements PceNode {
         }
         for (BasePceNep cbpn : clientOtsNep) {
             List<Uuid> clientNrgUuidList = cbpn.getNodeRuleGroupUuid();
-            LOG.debug("PTONLine 244: clientNrgUuidList for bpn {} is : {}", cbpn.getName(), clientNrgUuidList);
+            LOG.debug("PTON:initXndrTps : clientNrgUuidList for bpn {} is : {}", cbpn.getName(), clientNrgUuidList);
             if (clientNrgUuidList == null || clientNrgUuidList.isEmpty()) {
                 continue;
             }
@@ -285,7 +285,7 @@ public class PceTapiOpticalNode implements PceNode {
                         //interconnects their respective NRGs
                         for (BasePceNep nwbpn : nwOtsNep) {
                             List<Uuid> nwNrgUuidList = nwbpn.getNodeRuleGroupUuid();
-                            LOG.debug("PTONLine 289: nwNrgUuidList : {}", nwNrgUuidList);
+                            LOG.debug("PTON:initXndrTps : nwNrgUuidList : {}", nwNrgUuidList);
                             if (nwNrgUuidList == null || nwNrgUuidList.isEmpty()) {
                                 continue;
                             }
@@ -320,20 +320,22 @@ public class PceTapiOpticalNode implements PceNode {
                 }
                 if (nwConnectedNepUuid != null) {
                     this.clientPerNwTp.put(cbpn.getNepCepUuid().getValue(), nwConnectedNepUuid.getValue());
-                    LOG.info("Found NW Nep {} connected to Client NEP {}", nwConnectedNepUuid, cbpn.getNepCepUuid());
+                    LOG.info("PTON:initXndrTps : Found NW Nep {} connected to Client NEP {}",
+                        nwConnectedNepUuid, cbpn.getNepCepUuid());
                 } else {
-                    LOG.info("Did not succed finding a NW Nep connected to Client NEP {}", cbpn.getNepCepUuid());
+                    LOG.debug("PTON:initXndrTps :Did not succed finding a NW Nep connected to Client NEP {}",
+                        cbpn.getNepCepUuid());
                 }
             }
         }
-        LOG.debug("PTONLine330/initXndrTps: ListOfNep {}",
+        LOG.debug("PTON:initXndrTps : ListOfNep {}",
             listOfNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.debug("PTONLine332/initXndrTps: clientOtsNep {}",
+        LOG.debug("PTON:initXndrTps : clientOtsNep {}",
             clientOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.debug("PTONLine334/initXndrTps: nwOtsNep {}",
+        LOG.debug("PTON:initXndrTps : nwOtsNep {}",
             nwOtsNep.stream().map(BasePceNep::getName).collect(Collectors.toList()));
-        LOG.debug("PTONLine336/initXndrTps: availableXpndrNWTps {}", availableXpndrNWTps);
-        LOG.debug("PTONLine337/initXndrTps: clientPerNwTp {}", clientPerNwTp);
+        LOG.debug("PTON:initXndrTps : availableXpndrNWTps {}", availableXpndrNWTps);
+        LOG.debug("PTON:initXndrTps : clientPerNwTp {}", clientPerNwTp);
 
 
     }
@@ -344,11 +346,11 @@ public class PceTapiOpticalNode implements PceNode {
      */
     @Override
     public String getRdmSrgClient(String tp, String direction) {
-        LOG.debug("TapiOpticalNode/getRdmSrgClient: Getting PP client for tp '{}' on node : {}, Uuid : {}",
+        LOG.debug("PTON:getRdmSrgClient : Getting PP client for tp '{}' on node : {}, Uuid : {}",
             tp, this.nodeName, this.nodeUuid);
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
-            LOG.error("getRdmSrgClient: tp {} not found in SRG CPterminationPoint list", tp);
+            LOG.debug("PTON:getRdmSrgClient : tp {} not found in SRG CPterminationPoint list", tp);
             return null;
         }
         List<BasePceNep> ppList = listOfNep.stream()
@@ -356,16 +358,16 @@ public class PceTapiOpticalNode implements PceNode {
                 && (bpn.getTpType().equals(OpenroadmTpType.SRGRXPP) || bpn.getTpType().equals(OpenroadmTpType.SRGTXPP)
                 || bpn.getTpType().equals(OpenroadmTpType.SRGTXRXPP)))
             .collect(Collectors.toList());
-        LOG.debug("TapiOpticalNode/getRdmSrgClient:  Getting client PP for CP '{}'", tp);
+        LOG.debug("PTON:getRdmSrgClient :  Getting client PP for CP '{}'", tp);
         if (ppList.isEmpty()) {
-            LOG.error("TapiOpticalNode/getRdmSrgClient: SRG TerminationPoint PP list is not available for node : {},"
+            LOG.debug("PTON:getRdmSrgClient : SRG TerminationPoint PP list is not available for node : {},"
                 + " Uuid : {}", this.nodeName, this.nodeUuid);
             return null;
         }
         OpenroadmTpType srgType = null;
         switch (cpType) {
             case SRGTXRXCP:
-                LOG.debug("TapiOpticalNode/getRdmSrgClient: Getting BI Directional PP port ...");
+                LOG.debug("PTON:getRdmSrgClient : Getting BI Directional PP port ...");
                 // Take the first-element in the available PP key set
                 if (ppList.iterator().next().getTpType().equals(OpenroadmTpType.SRGTXRXPP)) {
                     srgType = OpenroadmTpType.SRGTXRXPP;
@@ -376,11 +378,11 @@ public class PceTapiOpticalNode implements PceNode {
                 }
                 break;
             case SRGTXCP:
-                LOG.debug("getRdmSrgClient: Getting UNI Rx PP port ...");
+                LOG.debug("PTON:getRdmSrgClient : Getting UNI Rx PP port ...");
                 srgType = OpenroadmTpType.SRGRXPP;
                 break;
             case SRGRXCP:
-                LOG.debug("getRdmSrgClient: Getting UNI Tx PP port ...");
+                LOG.debug("PTON:getRdmSrgClient : Getting UNI Tx PP port ...");
                 srgType = OpenroadmTpType.SRGTXPP;
                 break;
             default:
@@ -391,10 +393,10 @@ public class PceTapiOpticalNode implements PceNode {
             .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
             .map(Map.Entry::getKey).min(new SortPortsByName());
         if (client.isEmpty()) {
-            LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this, tp);
+            LOG.debug("PTON:getRdmSrgClient : ROADM {} doesn't have PP Client for CP {}", this, tp);
             return null;
         }
-        LOG.debug("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
+        LOG.debug("PTON:getRdmSrgClient : client PP {} for CP {} found !", client, tp);
         return client.orElseThrow();
     }
 
@@ -410,8 +412,8 @@ public class PceTapiOpticalNode implements PceNode {
             nodeNName = node.getName().toString();
         }
         if (node == null || nodeUuid == null || nodeType == null || adminState == null || operationalState == null) {
-            LOG.error("TapiPceNode {},   nodeUuid {}  NodeType {} : one of parameters is not populated : nodeId, "
-                + "node type, administrative state, operational state", nodeNName, nodeUuid, nodeType);
+            LOG.debug("PTON:isValid :TapiPceNode {},   nodeUuid {}  NodeType {} : one of parameters is not populated :"
+                + " nodeId, node type, administrative state, operational state", nodeNName, nodeUuid, nodeType);
             valid = false;
         }
         return valid;
@@ -463,19 +465,19 @@ public class PceTapiOpticalNode implements PceNode {
                 .stream().map(Uuid::getValue).collect(Collectors.toList()));
         }
         if (supportedOM == null || supportedOM.isEmpty()) {
-            LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared ",
+            LOG.warn("PTON:getXpdrOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no opmode declared ",
                 nepUuid, this.nodeName, this.nodeUuid);
             return StringConstants.UNKNOWN_MODE;
         }
         for (String operationalMode : supportedOM) {
             if (operationalMode.contains(StringConstants.SERVICE_TYPE_RATE
                 .get(this.serviceType).toCanonicalString())) {
-                LOG.debug("TONLine2185: NetworkPort {} of Node {}  with Uuid {}  has {} operational mode declared",
+                LOG.debug("PTON:getXpdrOperationalMode: NetworkPort {} of Node {} with Uuid {}  has {} opmode declared",
                     nepUuid, this.nodeName, this.nodeUuid, operationalMode);
                 return operationalMode;
             }
         }
-        LOG.warn("getOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared"
+        LOG.warn("PTON:getXpdrOperationalMode: NetworkPort {} of Node {}  with Uuid {} has no operational mode declared"
             + "compatible with service type {}. Supported modes are : {} ",
             nepUuid, this.nodeName, this.nodeUuid, this.serviceType, supportedOM.toString());
         return StringConstants.UNKNOWN_MODE;
