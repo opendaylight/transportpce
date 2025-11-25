@@ -142,7 +142,8 @@ public class PceORLink implements Serializable, PceLink {
     private LinkId calcOpposite(Link link) {
         LinkId tmpoppositeLink = MapUtils.extractOppositeLink(link);
         if (tmpoppositeLink == null) {
-            LOG.error("PceLink: Error calcOpposite. Link is ignored {}", link.getLinkId().getValue());
+            LOG.error("PceLink:calcOpposite: No opposite link found for {} -> link will be ignored",
+                link.getLinkId().getValue());
             isValid = false;
         }
         return tmpoppositeLink;
@@ -532,7 +533,7 @@ public class PceORLink implements Serializable, PceLink {
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM && (this.length == null || this.length == 0.0)) {
             if (this.omsAttributesSpan == null) {
                 isValid = false;
-                LOG.error("PceLink: Error reading Span for OMS link, and no available generic link information."
+                LOG.error("PceLinkisValid: Error reading Span for OMS link, and no available generic link information."
                     + " Link is ignored {}", linkId);
             } else if (this.omsAttributesSpan.getSpanlossCurrent() == null) {
                 isValid = false;
@@ -542,7 +543,7 @@ public class PceORLink implements Serializable, PceLink {
         }
         if (this.srlgList != null && this.srlgList.isEmpty()) {
             isValid = false;
-            LOG.error("PceLink: Empty srlgList for OMS link. Link is ignored {}", linkId);
+            LOG.debug("PceLink:isValid: Empty srlgList for OMS link. Link is ignored {}", linkId);
         }
         return isValid;
     }
@@ -550,12 +551,12 @@ public class PceORLink implements Serializable, PceLink {
     public boolean isOtnValid(Link link, String serviceType) {
 
         if (this.linkType != OpenroadmLinkType.OTNLINK) {
-            LOG.error("PceLink: Not an OTN link. Link is ignored {}", linkId);
+            LOG.debug("PceLink:isOtnValid : Not an OTN link. Link is ignored {}", linkId);
             return false;
         }
 
         if (this.availableBandwidth == 0L) {
-            LOG.error("PceLink: No bandwidth available for OTN Link, link {}  is ignored ", linkId);
+            LOG.debug("PceLink:isOtnValid : No bandwidth available for OTN Link, link {}  is ignored ", linkId);
             return false;
         }
 
@@ -627,7 +628,7 @@ public class PceORLink implements Serializable, PceLink {
                                 org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev250902
                                     .Link1.class)
                             .getOtnLinkType()))) {
-            LOG.debug("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
+            LOG.debug("PceLink:isOtnValid : Selected Link {} has available bandwidth and is eligible for {} creation ",
                 linkId, serviceType);
         }
         return checkParams();
@@ -635,24 +636,25 @@ public class PceORLink implements Serializable, PceLink {
 
     private boolean checkParams() {
         if (this.linkId == null || this.linkType == null || this.oppositeLink == null) {
-            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
+            LOG.debug("PceLink:checkParams : No Link type or opposite link is available. Link is ignored {}", linkId);
             return false;
         }
         if (this.adminStates == null || this.state == null) {
-            LOG.error("PceLink: Link is not available. Link is ignored {}", linkId);
+            LOG.debug("PceLink:checkParams : Link is not available. Link is ignored {}", linkId);
             return false;
         }
         if (this.sourceId == null || this.destId == null || this.sourceTP == null || this.destTP == null) {
-            LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);
+            LOG.debug("PceLink:checkParams : No Link source or destination is available. Link is ignored {}", linkId);
             return false;
         }
         if (this.sourceNetworkSupNodeId.equals("") || this.destNetworkSupNodeId.equals("")) {
-            LOG.error("PceLink: No Link source SuppNodeID or destination SuppNodeID is available. Link is ignored {}",
-                linkId);
+            LOG.debug("PceLink:checkParams : No Link source SuppNodeID or destination SuppNodeID is available. Link is"
+                + " ignored {}", linkId);
             return false;
         }
         if (this.sourceCLLI.equals("") || this.destCLLI.equals("")) {
-            LOG.error("PceLink: No Link source CLLI or destination CLLI is available. Link is ignored {}", linkId);
+            LOG.debug("PceLink:checkParams: No Link source CLLI or destination CLLI is available. Link is ignored {}",
+                linkId);
             return false;
         }
 
