@@ -90,7 +90,6 @@ public final class TapiMapUtils {
     }
 
     public static Set<String> getSRLG(Link link) {
-        // List<RiskCharacteristic> rc = new ArrayList<>();
         Set<String> riskIdList = null;
         if (link.getRiskCharacteristic() != null && !link.getRiskCharacteristic().values().stream()
                 .filter(rc -> rc.getRiskCharacteristicName().equalsIgnoreCase("SRLG")).collect(Collectors.toList())
@@ -102,7 +101,7 @@ public final class TapiMapUtils {
                 .filter(rc -> rc.getRiskCharacteristicName().equalsIgnoreCase("SRLG")).findFirst().orElseThrow()
                 .getRiskIdentifierList();
         } else {
-            LOG.debug("TapiMapUtils : No SRLG available in the risk-characteristic of the link {} named {}",
+            LOG.debug("TapiMapUtils:getSRLG : No SRLG available in the risk-characteristic of the link {} named {}",
                 link.getUuid().toString(), link.getName().toString());
         }
         return riskIdList;
@@ -110,8 +109,8 @@ public final class TapiMapUtils {
 
     public static Double getAvailableBandwidthGHz(Link link) {
         if (link.getAvailableCapacity().getTotalSize().getValue() == null) {
-            LOG.warn("TapiMapUtils: no Available Bandwidth available for link {{} named {}", link.getUuid().toString(),
-                link.getName().toString());
+            LOG.warn("TapiMapUtils:getAvailableBandwidthGHz : no Available Bandwidth available for link {{} named {}",
+                link.getUuid().toString(), link.getName().toString());
             return null;
         }
         return link.getAvailableCapacity().getTotalSize().getValue().doubleValue()
@@ -121,8 +120,8 @@ public final class TapiMapUtils {
     public static Double getUsedBandwidthGHz(Link link) {
         if (link.getTotalPotentialCapacity().getTotalSize().getValue() == null
             || link.getAvailableCapacity().getTotalSize().getValue() == null) {
-            LOG.warn("TapiMapUtils: incomplete Bandwidth information for link {{} named {}", link.getUuid().toString(),
-                link.getName().toString());
+            LOG.warn("TapiMapUtils:getUsedBandwidthGHz: incomplete Bandwidth information for link {{} named {}",
+                link.getUuid().toString(), link.getName().toString());
             return null;
         }
         return (link.getTotalPotentialCapacity().getTotalSize().getValue().doubleValue()
@@ -172,11 +171,13 @@ public final class TapiMapUtils {
                             .build())
                     .get();
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Failed to find in Tapi Context/connectivity-context opposite connection {}", oppLinkName, e);
+                LOG.error("TapiMapUtils:extractOppositeLink : Failed to find in Tapi Context/connectivity-context"
+                    + " opposite connection {}", oppLinkName, e);
                 return null;
             }
             if (!optConn.isPresent()) {
-                LOG.error("Failed to find in Tapi Context/connectivity-context opposite connection {}", oppLinkName);
+                LOG.error("TapiMapUtils:extractOppositeLink :Failed to find in Tapi Context/connectivity-context"
+                    + " opposite connection {}", oppLinkName);
                 return null;
             } else {
                 return linkOppositeUuid;
@@ -198,11 +199,13 @@ public final class TapiMapUtils {
                             .build())
                     .get();
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Failed to find in Topology {} opposite link {}", tapiTopoUuid, oppLinkName, e);
+                LOG.error("TapiMapUtils:extractOppositeLink :Failed to find in Topology {} opposite link {}",
+                    tapiTopoUuid, oppLinkName, e);
                 return null;
             }
             if (!optLink.isPresent()) {
-                LOG.error("Failed to find in Topology {} opposite link {}", tapiTopoUuid, oppLinkName);
+                LOG.error("TapiMapUtils:extractOppositeLink :Failed to find in Topology {} opposite link {}",
+                    tapiTopoUuid, oppLinkName);
                 return null;
             } else {
                 return linkOppositeUuid;
