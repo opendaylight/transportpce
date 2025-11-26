@@ -1067,7 +1067,7 @@ public class ORtoTapiTopoConversionTools {
                     .build());
             }
         }
-        if (key.contains("OTSi")) {
+        if (key.contains(TapiConstants.OTSI_MC)) {
             sclpqiList = sclpqiList.stream()
                 .filter(sclpqi -> !sclpqi.getLayerProtocolQualifier().equals(PHOTONICLAYERQUALIFIEROTS.VALUE))
                 .collect(Collectors.toList());
