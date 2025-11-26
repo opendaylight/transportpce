@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ac5927_ce2da7b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Thanks Joakim for your review. Tried to address your comments, but please note that for all what concerns the structure of the code (Class length, shared variable, factories creation...) I have not solved it, but only proposed to handle this through a deep refactoring and created the associated JIRA Ticket TRNSPRTPCE-897. Please also note that corrections that are proposed are provided in a separate change to avoid overloading the gate \"Refactor TON \u0026 PTON to address Joakim\u0027s 113567 comments\"",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdda8435_53317e99",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "It may not be immediately clear what the tp parameter represents or what kind of values it typically contains. I assume it stands for _termination point_, but not every string would be valid in that context.\n\nThis is one of those occasions where Javadoc could make a big difference — especially if it includes example values or a brief explanation of expected formats.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 42
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5745e912_f9b82031",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "You are right. In fact we are too low in the change hierarchy. The javadoc were added at a later step.\nIt is now as follows \n   /**\n     * Provides the Id of a NW Port in visibility of a client Tp.\n     * @return String  The Id of the port\n     */\n    String getXpdrNWfromClient(String tp);",
+      "parentUuid": "bdda8435_53317e99",
       "range": {
         "startLine": 36,
         "startChar": 4,
@@ -64,6 +105,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d0c0ca_a362157c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "You are right. My mistake, forgot to correct it. I use this for intermediate debug. This shall be corrected in change 119457 : CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils. I will open a Jira Ticket so that we can record all ones I may have missed...",
+      "parentUuid": "2f3ebeff_1e9edaf0",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 0
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3d880d6_03953267",
@@ -83,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5da2b906_eebada28",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "I use a map here to associate a Uuid which is a unique identifier to a Name. So we have only one couple Uuid-Name in this map. It is deterministic, as we just take the first, and unique element of this map.",
+      "parentUuid": "d3d880d6_03953267",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13b3b8d3_f4f53bba",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
         "patchSetId": 30
@@ -94,6 +177,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "A subtle but potentially important change — we’re shifting from a defensive default to a more permissive one. Previously, this object was considered invalid until proven otherwise; now it’s valid by default. Personally, I tend to prefer the more defensive posture, as it helps surface initialization or validation issues earlier.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c596888_eb4180ae",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Get your point. You see it as a change, I see it as a consolidation/correction of the implementation as I tested it, having some test and running the PCE.\nReally depends on how you define defensive (I am not trying to play on word...).\nDefensive for you is : I may consider a node that is invalid as valid\nDefensive for me is : I may miss a valid node and being unable to calculate a path. \nSo my approach is : potentially any node shall be a good candidate, and then according to the result of tp initialization, we prune node, if we see that no port is available : for RDMs means fully loaded, of for Transponder means that ports are already used, or not connected to network side.\nSo before we check tps, all nodes are potentially good candidate. The result of the port check may invalidate them.",
+      "parentUuid": "13b3b8d3_f4f53bba",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -121,6 +222,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fe96748_c2a70bbc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "This is a very good suggestion, and as the type of TP at this stage shall be exclusive, the second option should work. Will go for this option and provides the optimization you suggest in change \"Refactor TON \u0026 PTON to address Joakim\u0027s 113567 review\"",
+      "parentUuid": "6ed655af_eb6120d1",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 9
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0c497eb_43a6f98a",
@@ -134,6 +259,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ffd6484_4bf3eaa7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "d0c497eb_43a6f98a",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -155,6 +298,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9b2e2e_a0743ece",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "e53e7a65_c3994126",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cea5cf67_963958ea",
@@ -168,6 +329,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee57e96_a03929ab",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "cea5cf67_963958ea",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -189,6 +368,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "117a90aa_d777ad03",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "e73ee9cd_9eba5953",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e5e11d4_e7c66659",
@@ -202,6 +399,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "Superfluous line reference.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f649dbd_0c672bde",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "8e5e11d4_e7c66659",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -223,6 +438,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a278572_e01dafcc",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Corrected in change 119457 : \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "64552e0f_7d06aad7",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ef10ed2_b02c3a6d",
@@ -236,6 +469,30 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "Superfluous line reference.",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 415,
+        "endChar": 77
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56daccee_3a7a3438",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change 119457 \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "5ef10ed2_b02c3a6d",
       "range": {
         "startLine": 408,
         "startChar": 0,
@@ -265,6 +522,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25746bf2_ce8d5cbf",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Agree. Gilles had the same comment (discussing together). This class is definitely too long, and the flow not easy to understand. Opened a JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "8fb6dd68_24b5f8e7",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e032b5ac_f91d5ce6",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
         "patchSetId": 30
@@ -276,6 +551,30 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "This log statement is a bit hard to read due to the inline concatenation and ternary. It might be clearer to extract the nodeName beforehand and use parameter placeholders consistently:\n\n```java\nString nodeName \u003d (node \u003d\u003d null) ? \"NULL\" : node.getName();\nLOG.error(\n    \"TapiOpticalNode: one of the parameters is not populated: \"\n    + \"slot width granularity {}, service type {}, node {}\",\n    slotWidthGranularity, serviceType, nodeName);\n```\n... or with each parameter on its own line:\n\n```java\nString nodeName \u003d (node \u003d\u003d null) ? \"NULL\" : node.getName();\nLOG.error(\n    \"TapiOpticalNode: one of the parameters is not populated: \"\n    + \"slot width granularity {}, service type {}, node {}\",\n    slotWidthGranularity,\n    serviceType,\n    nodeName);\n```",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 56
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61b92da7_16ec2dcf",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Done in change to come \"Refactor TON \u0026 PTON to address Joakim\u0027s 113567 comments\"",
+      "parentUuid": "e032b5ac_f91d5ce6",
       "range": {
         "startLine": 155,
         "startChar": 0,
@@ -309,6 +608,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e29f5f_db2dc90f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "See previous reply : addressed in JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "2257fb1c_cd773b3c",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 5
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffa3694b_18571fae",
@@ -322,6 +645,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "This is an example of a void method whose name implies it builds something, but it’s not clear what or where the result goes without reading the full body.\n\nIt might be clearer to refactor this into methods that take explicit inputs and return results, e.g.:\n```java\nMap\u003cUuid, IntLinkObj\u003e \n    buildLinkMap(Map\u003cNodeRuleGroupKey, NodeRuleGroup\u003e nrgList){...}\n\nMap\u003cInteger, Map\u003cNodeEdgePointKey, NodeEdgePoint\u003e\u003e \n    buildEdgeMap(Map\u003cInterRuleGroupKey, InterRuleGroup\u003e irgList){...}\n```\nThis makes dependencies and outputs explicit instead of hiding them behind shared mutable state.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22dd26f_568a9f12",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Got it. Propose to address it through the the planned refacto (TRNSPRTPCE-897) since this follow the same rationale as for your other comment on this class.",
+      "parentUuid": "ffa3694b_18571fae",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -343,6 +684,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15099bc2_866ab3de",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "See previous reply : addressed in JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "76fbce3d_ddf62b30",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aebd03f_eda3e1cb",
@@ -356,6 +715,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "Another example of a method that neither accepts nor returns anything, even though its name suggests that something is being populated. While the method is relatively small, it’s still a good practice to make explicit what a method needs and what it returns.",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5352be4c_10d07808",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "See previous reply : addressed in JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "8aebd03f_eda3e1cb",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -377,6 +754,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "884cf804_850a65e2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "See previous reply : addressed in JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "9a5e56aa_d062e3e4",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1547a8b_6edeaaeb",
@@ -390,6 +785,24 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "idem",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f654751d_f626268d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "See previous reply : addressed in JIRA Ticket TRNSPRTPCE-897: propose to let it for now but consider further refactoring.",
+      "parentUuid": "a1547a8b_6edeaaeb",
       "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -411,6 +824,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5efb60c_17aa502c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 2198,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Agree --\u003e Corrected in change 119457 : \"CleanUp LOGs in TAPI PCE \u0026 ConnectivityUtils\"",
+      "parentUuid": "4484fd4a_417fb9b3",
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "753dce38_57070ec4",
@@ -424,6 +855,30 @@
       "writtenOn": "2025-11-05T13:31:28Z",
       "side": 1,
       "message": "The hard-coded \"OTSi\" string here may be cause for concern. It makes this method depend on external assumptions about the ´key` value that it can’t control. Over time, that kind of coupling can make the code harder to maintain and more error-prone.\n\nIs there a way to remove this string check? It looks like we’re making a decision based on the `key` variable instead of letting `sclpqiList` speak for itself — in other words, relying on the actual state of `sclpqiList`.\n\nSince `sclpqiList` is built within this method, it might be cleaner to let its contents determine the outcome rather than consulting an external “magic” flag.\n\n```java\nList\u003cSupportedCepLayerProtocolQualifierInstances\u003e sclpqiList \u003d new ArrayList\u003c\u003e();\n...\nfor (LAYERPROTOCOLQUALIFIER qualifier: ifCapTypeMap.get(ifCapType).keySet()) {\n    sclpqiList.add(new SupportedCepLayerProtocolQualifierInstancesBuilder()\n        .setLayerProtocolQualifier(qualifier)\n        .setNumberOfCepInstances(Uint64.ONE)\n        .build());\n}\n```",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 9
+      },
+      "revId": "e801e3899d38b3dcb7dacb7e12d4033793041b93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7be6730d_2af0e0f4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T18:13:24Z",
+      "side": 1,
+      "message": "Not sure that I fully got your point, but changed \"OTSi\" to TapiConstants.OTSI_MC in the coming change \"Refactor TON \u0026 PTON to address Joakim\u0027s 113567 review\". Please tell me if this addresses your point.",
+      "parentUuid": "753dce38_57070ec4",
       "range": {
         "startLine": 1068,
         "startChar": 0,
