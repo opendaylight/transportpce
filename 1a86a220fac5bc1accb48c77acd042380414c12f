@@ -35,6 +35,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90d28536_52d9e76b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:51:41Z",
+      "side": 1,
+      "message": "Changed some status for addressed comments",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4141a43_5df7ebab",
@@ -82,6 +99,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71664d24_ec409c1d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/StringConstants.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f5d686a_a33c7232",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ecbbc2a_37fc281e",
@@ -113,6 +154,24 @@
       "side": 1,
       "message": "OK, Corrected in change 119439",
       "parentUuid": "1ecbbc2a_37fc281e",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe1761f_c580355a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridConstant.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccaa837f_1e8c79c2",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -246,6 +305,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa2edd58_be5d9c69",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3daaed83_02be0dda",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17259b28_dbcbd399",
@@ -312,6 +389,24 @@
       "side": 1,
       "message": "Sure. done in change 119439",
       "parentUuid": "4fb4b86f_79837208",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e287a4bf_b41a95d4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c3b83c6_3d5fd548",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
