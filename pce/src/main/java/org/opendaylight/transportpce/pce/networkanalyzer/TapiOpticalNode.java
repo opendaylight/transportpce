@@ -169,9 +169,10 @@ public class TapiOpticalNode {
                Uuid zportId, McCapability mcCapability) {
         // For T-API topology, all nodes in the OLS do not have any portmapping which may be
         // available only for OpenConfig Transponder : try to avoid relying on PortMapping
+        String nodename = (node == null) ? "NULL" : node.getName().toString();
         if (serviceType == null || node == null) {
             LOG.debug("TapiOpticalNode: one of parameters is not populated : service type {} or node {}",
-                    serviceType, node == null ? "NULL" : node.getName());
+                    serviceType, nodename);
             this.valid = false;
         } else if (!(OperationalState.ENABLED.equals(node.getOperationalState()))) {
             LOG.debug("TapiOpticalNode: Node {} ignored since its operational state {} differs from ENABLED",
@@ -1336,7 +1337,7 @@ public class TapiOpticalNode {
                 indexList.add(index);
                 nodeId = createNodeOrVnepId(String.valueOf(index), "SRG", true);
             }
-            // Creates a new PceTapiOpticalNode corresponding to the degree defined by this VirtualNep
+            // Creates a new PceTapiOpticalNode corresponding to the SRG defined by this VirtualNep
             var srgNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.SRG,
                 version, srgXOtsNep, nodeId, nodeName.getValue(), mcCapability);
             srgNode.setParentNodeUuid(this.node.getUuid());
