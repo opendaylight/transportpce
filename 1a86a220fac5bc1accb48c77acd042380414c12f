@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "221a0652_4bfec7e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Thanks for your review/feedback Joakim. Answered your comments. We decided internally to address some of the comments in dedicated changes on top of the relation chain. This does not simplify the reviewing job, but avoids relaunching test for all the suite, and allows appreciating the impact of related changes on the full suite of tests.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4141a43_5df7ebab",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-11-05T08:24:06Z",
       "side": 1,
       "message": "Nice to see we’re covering lots of naming variants. Over time though, this table might become hard to maintain. Maybe we could simplify it by normalising the input format instead — e.g., convert to uppercase and strip punctuation before lookup?\n\ne.g.\n```java\nMap.of(\n    \"SMF\", FiberType.Smf,\n    \"G652\", FiberType.Smf,\n    \"G653\", FiberType.Dsf,\n    \"G655\", FiberType.NzDsf,\n    \"ELEAF\", FiberType.Eleaf,\n    \"OLEAF\", FiberType.Oleaf,\n    \"TRUEWAVE\", FiberType.Truewave,\n    \"TRUEWAVECLASSIC\", FiberType.Truewavec,\n    \"G654\", FiberType.Ull\n);\n```\n\nThen when resolving the fiber type, we could normalise the input first:\n\n```java\nString normalized \u003d input.trim().toUpperCase(Locale.ROOT)\n    .replace(\".\", \"\")\n    .replace(\"-\", \"\");\nFiberType type \u003d FIBER_TYPES_TABLE.get(normalized);```\n\nTo keep things clean, it might also make sense to move the normalization logic into a small helper class or utility method (e.g. FiberTypeNormalizer.normalize(input)), so this logic is reusable and the lookup code stays easy to read.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f5d686a_a33c7232",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/StringConstants.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Right. that makes sense. Corrected in change 119439",
+      "parentUuid": "b4141a43_5df7ebab",
       "range": {
         "startLine": 94,
         "startChar": 0,
@@ -60,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccaa837f_1e8c79c2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/fixedflex/GridConstant.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "OK, Corrected in change 119439",
+      "parentUuid": "1ecbbc2a_37fc281e",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "789add5e_008ad815",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/BasePceNep.java",
         "patchSetId": 26
@@ -71,6 +130,30 @@
       "writtenOn": "2025-11-05T08:24:06Z",
       "side": 1,
       "message": "This class seems to carry a lot of nullable state and behaves more like a data container than a cohesive model.\n\nBecause most fields are optional and mutable, it’s hard to reason about what a valid instance looks like, and client code needs to add lots of defensive null checks. Over time, that could make it difficult to maintain and test.\n\nIt might help to give this class a clearer lifecycle — e.g., define required fields through a constructor or builder, make fields final where possible, and encapsulate any domain logic it’s responsible for.\n\nIn general, if the class represents a specific concept (like a network endpoint), it might make sense for it to own that behavior rather than just expose its internal state.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 1
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75d0883_347b90bb",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/BasePceNep.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "The idea of BasePceNep is to have an object that can be used to model either a NEP or a CEP and gathers all information required to build PceNodes (either photonic or OTN, either aggregated such as Xponders or disagregated such as ROADMs) and allows for path computation. We do not create new information we just gather information that comes from different attributes in different objects so that the access to it can be simplified. \n\nThe fact that TAPI community decided to remove some informations from NEP model, considering the information was redundant with the information in CEP model does not simplify the process.\n\nSo yes, BasePceNep can bee seen more as a Data container than a cohesive model.\n\nYes some information are relevant only for specific kind of NEP or CEP, and yes some fields are mutable, and some of them can only be populated after some others have been processed.\nThe important thing is to have a container where we can populate relevant and required information, so that when needed we can find it in the right place.\nFor sure, if you try to retrieve something that is not relevant for a specific object, you will get a null. But this is internal cooking.\nSo not to say that it can not be improved, but considering it will not be visible and accessed through external API, I think we can keep it as it is. It could be improved in the future, but may require a deep refactoring.",
+      "parentUuid": "789add5e_008ad815",
       "range": {
         "startLine": 26,
         "startChar": 0,
@@ -104,6 +187,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6baa81c7_c989d17f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceNode.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Because the TAPI models are different from OR models, and because we want to leverage existing legacy PCE to avoid reinventing the wheel and building a separate new PCE for TAPI, we need to gather information required to have at the end some equivalent Pce Node and links whether we work in the TAPI  or the OR domain.\n\nUsing the same interface for TAPI and OR Nodes and links, allowed to easily migrate the PCE from a pure OR operation to a mixed operation. \nSome parameters are relevant for TAPI only, some others for OR. this concerns the ones your highlighting, but also a few others.\nThere might certainly be more clever implementation, but that would imply some quite important refactoring that we may consider at a later time, after everything is integrated with the relevant tests. Also not sure that the abstraction needed to build this will ease code readability.",
+      "parentUuid": "c177a206_5be2652e",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6085dab4_5d793cfa",
@@ -117,6 +224,24 @@
       "writtenOn": "2025-11-05T08:24:06Z",
       "side": 1,
       "message": "Adding the unit to the method name would improve readability. e.g. `getAvailableBandwidthTHz`.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3daaed83_02be0dda",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Sure. done in change 119439",
+      "parentUuid": "6085dab4_5d793cfa",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -140,6 +265,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7123df0_731d10e9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "As at the end we will retrieve some topologies from the SBI (to OEM NMS), it could be that the parameter is not populated because of a gap in the implementation, or because of a specific choice in the implementation. In other cases we should get the real bandwidth available on the link (O if the link is fully loaded)",
+      "parentUuid": "17259b28_dbcbd399",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fb4b86f_79837208",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
         "patchSetId": 26
@@ -157,6 +300,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c3b83c6_3d5fd548",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Sure. done in change 119439",
+      "parentUuid": "4fb4b86f_79837208",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "100b9cbd_b9168ddc",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
         "patchSetId": 26
@@ -168,6 +329,24 @@
       "writtenOn": "2025-11-05T08:24:06Z",
       "side": 1,
       "message": "Perhaps returning `0` rather than `null` could make this a bit easier to use, since it would remove the need for explicit null handling on the client side.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab532f10_66365369",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "0 has not the same significance of a null. It could be equivalent because of some specific implementation choice, but I prefer to keep trace on the fact the parameter was null to condition the type of LOG (which may also depends on some conditions that are not visible to the method).",
+      "parentUuid": "100b9cbd_b9168ddc",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -197,6 +376,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b02582a_0c7b63e3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "Right now the PCE works even having null returned by this method. We plan future correct implementation. I am not really in favor of raising exception with standard operation. Exception can be easily tracked in the LOG even if it is catch. And that really helps debugging. If we raise exception with standard behavior, this may pollute the LOG trace...",
+      "parentUuid": "5ddbc0d8_367d124f",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 5
+      },
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ace9126_6397241d",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
         "patchSetId": 26
@@ -208,6 +411,24 @@
       "writtenOn": "2025-11-05T08:24:06Z",
       "side": 1,
       "message": "I notice this class (TapiOpticalNode) is part of the pce.networkanalyzer package but imports and references a lot from the tapi yang model package. Since the intent has been to keep pce and tapi separate, this might blur the boundary between the two modules.\n\nIt may be worth reviewing whether this logic really belongs under pce, or if parts of it could be moved to tapi (or to a neutral common package). If left as is, it could easily evolve into a circular dependency, which would make future refactoring and testing more difficult.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b29931a_2756e0b3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-26T10:49:11Z",
+      "side": 1,
+      "message": "To me, moving it to TAPI is not an option. We are building abstracted object  to be used by the PCE. Thus it shall be there. Handling cross dependencies between module may also be somewhat complex. \nI don\u0027t see as an issue the import of tapi yang model in the PCE. Trying to build an agnostic PCE which works both with tapi and OR, this looks somewhat rational. \n\nYou focus on the fact that tapi feature is optional and may not be installed. We made this feature optional, because for the topology, tapi feature has a huge impact on data stored in the controller, thus, on scalability. For the PCE, it has a limited impact. Currently TAPI PCE is only triggered if we use an uuid as the service name through tapi-connectivity-service creation. If you feel this is not enough, we could envisage in a next step blocking TAPI-PCE triggering when the tapi feature is not installed.",
+      "parentUuid": "0ace9126_6397241d",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
