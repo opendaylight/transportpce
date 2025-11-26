@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -145,60 +147,25 @@ public class PceTapiOpticalNode implements PceNode {
      * Initialize the binaries coding spectrum use for the different WDM Optical ports of a PceNode.
      */
     public void initFrequenciesBitSet() {
-        var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
-        // to set all bits to 0 (used/false) or 1 (available/true)
-        freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        List<BitSet> bitsetList;
-        LOG.debug("PTON:initFrequenciesBitSet : Analyzing Node {}, nodeType {}", deviceNodeId, nodeType);
+        this.frequenciesBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
+        this.frequenciesBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
+        List<BitSet> bitsetList = this.listOfNep.stream()
+            .filter(bpn -> Set.of(OpenroadmTpType.SRGRXCP, OpenroadmTpType.SRGTXCP, OpenroadmTpType.SRGTXRXCP,
+                OpenroadmTpType.DEGREERXTTP, OpenroadmTpType.DEGREETXTTP, OpenroadmTpType.DEGREETXRXTTP,
+                OpenroadmTpType.XPONDERNETWORK)
+                    .contains(bpn.getTpType()))
+            .map(BasePceNep::getFrequenciesBitSet)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
         switch (this.nodeType) {
-            case SRG :
-                bitsetList = listOfNep.stream()
-                    .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.SRGRXCP)
-                        || bpn.getTpType().equals(OpenroadmTpType.SRGTXCP)
-                        || bpn.getTpType().equals(OpenroadmTpType.SRGTXRXCP))
-                .map(BasePceNep::getFrequenciesBitSet)
-                .collect(Collectors.toList());
-                for (BitSet bitSet : bitsetList) {
-                    if (bitSet == null) {
-                        continue;
-                    }
-                    freqBitSet.and(bitSet);
-                }
-                this.frequenciesBitSet = freqBitSet;
-                break;
-            case DEGREE :
-                bitsetList = listOfNep.stream()
-                .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.DEGREERXTTP)
-                    || bpn.getTpType().equals(OpenroadmTpType.DEGREETXTTP)
-                    || bpn.getTpType().equals(OpenroadmTpType.DEGREETXRXTTP))
-                .map(BasePceNep::getFrequenciesBitSet)
-                .collect(Collectors.toList());
-                for (BitSet bitSet : bitsetList) {
-                    if (bitSet == null) {
-                        continue;
-                    }
-                    freqBitSet.and(bitSet);
-                }
-                this.frequenciesBitSet = freqBitSet;
-                break;
-            case XPONDER :
-                bitsetList = listOfNep.stream()
-                .filter(bpn -> bpn.getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
-                .map(BasePceNep::getFrequenciesBitSet)
-                .collect(Collectors.toList());
-                for (BitSet bitSet : bitsetList) {
-                    if (bitSet == null) {
-                        continue;
-                    }
-                    freqBitSet.and(bitSet);
-                }
-                this.frequenciesBitSet = freqBitSet;
-                break;
-            default:
-                LOG.debug("PTON:initFrequenciesBitSet : unsupported node type {} in node {}", this.nodeType, this);
-                break;
+            case SRG, DEGREE, XPONDER -> bitsetList.forEach(this.frequenciesBitSet::and);
+            default -> {
+                this.frequenciesBitSet.set(0, GridConstant.EFFECTIVE_BITS, false);
+                LOG.debug("PTON:initFrequenciesBitSet : unsupported node type {} in node {}",
+                    this.nodeType, this);
+            }
         }
-        LOG.debug("PTON:initFrequenciesBitSet : for Node {}, FreqBitset = {}",deviceNodeId, freqBitSet);
+        LOG.debug("PTON:initFrequenciesBitSet : for Node {}, FreqBitset = {}",deviceNodeId, frequenciesBitSet);
     }
 
     /**
@@ -737,5 +704,4 @@ public class PceTapiOpticalNode implements PceNode {
     public void setParentNodeUuid(Uuid pnodeUuid) {
         this.parentNodeUuid = pnodeUuid;
     }
-
 }
