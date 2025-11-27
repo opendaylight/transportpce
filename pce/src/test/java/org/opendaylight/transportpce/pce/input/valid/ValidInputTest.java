@@ -41,7 +41,7 @@ class ValidInputTest {
     @Test
     void assertEmptyPCRIisValid() {
         ValidInput validateInput = new ValidInput(mock(Slot.class), mock(Format.class));
-        assertTrue(validateInput.isValid(mock(PathComputationRequestInput.class)));
+        assertTrue(validateInput.checkXpdrisGoodCandidate(mock(PathComputationRequestInput.class)));
     }
 
     @Test
