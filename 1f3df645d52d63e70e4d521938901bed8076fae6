@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e65ce3_95336fd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Thanks Joakim for your review. Address some of the comments in change 119461 : \"Address comments of change 115942\". \nFor comments related to the general structure, propose to address them in a deeper refactoring : your proposals have been added to the description of the associated Jira Ticket TRNSPRTPCE-897",
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dada3d1d_27be45a5",
@@ -31,6 +48,30 @@
       "writtenOn": "2025-11-05T20:04:39Z",
       "side": 1,
       "message": "This class seems to lack a clear definition of what it represents or what makes an instance “valid.”\n\nIn the constructor, we have another validation clause, but it’s not consistent with the one in the method `public boolean isValid()`. For comparison:\n\n```\n// Constructor\nif (node \u003d\u003d null\n        || deviceNodeId \u003d\u003d null\n        || nodeType \u003d\u003d null\n        || !VALID_NODETYPES_LIST.contains(nodeType)) {\n    LOG.error(...);\n    this.valid \u003d false;\n}\n```\nversus:\n```\npublic boolean isValid() {\n    if (nodeId \u003d\u003d null\n            || nodeType \u003d\u003d null\n            || this.getSupNetworkNodeId() \u003d\u003d null\n            || this.getSupClliNodeId() \u003d\u003d null) {\n        LOG.error(...);\n        valid \u003d false;\n    }\n    return valid;\n}\n```\n\nThe constructor and `isValid()` clearly have different opinions about what constitutes a valid object.\n\nAdditionally, the constructor introduces yet another validation rule that isn’t reflected anywhere else, from what I can see:\n```\nif (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)\n        \u0026\u0026 !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {\n    LOG.error(\"PceOtnNode: unsupported OTN Service Type {}\", serviceType);\n    this.valid \u003d false;\n}\n```\nThis inconsistency makes it difficult to know where “truth” about object validity lives. It might be worth consolidating the validation logic into a single, authoritative place — for example, a `validate()` method that’s called both during construction and explicitly when needed.\n\nPreferably, the class should be refactored to be immutable and validated at instantiation time, removing the need for later validation and strengthening the class’s internal consistency and sense of what it represents.\n\nComplex validators may need to be extracted into factory methods or dedicated factory classes, allowing validation to occur outside the constructor while keeping object creation predictable and controlled.\n\nAn additional option would be to introduce a dedicated validator class responsible for validating `PceTapiOtnNode` instances. However, it seems the existing validators in this class are primarily concerned with ensuring the object’s own internal consistency rather than performing external validation.",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 9
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e636512_1772763f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "You are right. Validation process is not clear. Refactored PceTapiOtNode in change 119461 : \"Address comments of change 115942\"\nWhat it does is : \n-Centralize validation checks in checkXpdrisGoodCandidate which is a synthesis of the different checks you highlight.\n-IsValid is a new method that just returns this.valid\n-this.isValid is just set according to the result of checkXpdrisGoodCandidate at instantiation (in the constructor)\nFor what concerns immutability, propose to address this in the planned refactoring and add your comment to the description of the Jira Ticket TRNSPRTPCE-897.",
+      "parentUuid": "dada3d1d_27be45a5",
       "range": {
         "startLine": 218,
         "startChar": 0,
@@ -66,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18609bfb_752e0378",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Propose to address this in the planned refactoring and add your comment to the description of the Jira Ticket TRNSPRTPCE-897.",
+      "parentUuid": "f8c4988a_4d228310",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 0
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "697d72dd_ccc602ba",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
         "patchSetId": 19
@@ -77,6 +142,24 @@
       "writtenOn": "2025-11-05T20:04:39Z",
       "side": 1,
       "message": "Although this is a private method, it could still benefit from a short Javadoc comment describing its purpose.\n\nThe method signature suggests that the argument is being validated, but it’s not clear what it’s validated _against_. After reading the implementation, it becomes evident that the comparison is made against an instance variable.\n\nIncluding that detail in the method signature and documentation would make the intent clearer and reduce the need to inspect the method body to understand its behaviour.",
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11e75eb9_e8cc3555",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Right. Javadoc and comments have been introduced in the meanwhile during consolidation: \n    /**\n     * Checks the validity of a NEP/CEP, according to its LayerProtocolQualifier and its AvailablePayloadStructure.\n     * @param bpn           The input BasePceNep to check.\n     * @param isHighOrder   Boolean indicating whether the nEP/CEP is is of high or low Order.\n     * @param isDSR         Boolean indicating if a NEP/CEP is a Client DRS NEP.\n     * @return              Boolean : true if the NEP/CEP is valid.\n     */\n    private boolean isValidTp(BasePceNep bpn, boolean isHighOrder, boolean isDSR) {\n        // We find the Onep that either correspond to the bpn, or if the bpn is a cep, the Onep that contains in its\n        // cepList the Cep, and check that the Onep is valid. If the Onep is valid the associated CEP is also considered\n        // valid",
+      "parentUuid": "697d72dd_ccc602ba",
       "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -94,6 +177,30 @@
       "writtenOn": "2025-11-05T20:04:39Z",
       "side": 1,
       "message": "The method name suggests that it validates a Xponder, but it’s declared as `void`. From a client’s perspective, it would be reasonable to expect this method to return a `boolean` indicating whether the validation succeeded.\n\nIf the validation result is stored elsewhere, adding that information in a Javadoc comment would help clarify how the outcome is meant to be consumed.\n\nOn closer inspection, this method appears to do more than just validation — it also performs initialization by calling `initXndrTps(...)`. Overall, it seems to have mixed responsibilities, which can make its purpose and side effects harder to understand.",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e9729c_b5abe1ce",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Refactored PceTapiOtNode in change 119461 : \"Address comments of change 115942\".\n    public boolean validateXponder(String endNodeId) {\n        boolean validationStatus \u003d true;\n        ....\n        return validationStatus\n    }\nIt does not call anymore isValid and does not change anymore this.valid\n\nJava doc has been added in the meanwhile and modified according to last changes :\n     * Validates/invalidates a XPONDER node calling initXndrTp() that checks the presence of required NEPs.\n     * @param endNodeId   NodeId of the service end potentially associated with the XPONDER (if the XPONDER is not used\n     *                    as a regenerator.\n     * @return            Boolean corresponding to the status of the validation.\n     */",
+      "parentUuid": "01f733c9_8b161799",
       "range": {
         "startLine": 323,
         "startChar": 0,
@@ -127,6 +234,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "171c4403_ec6c4f3a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Right. The Javadoc and a few comments have been added in the meanwhile. \nChanged the name of the method in  change 119461 : \"Address comments of change 115942\" : \n\n\n    /**\n     * Allows checking the validity of a NEP whether the service end correspond to the NEP or has kindred relationships.\n     * @param bpn   The BasePceNep to check.\n     * @return      Boolean : true if the NEP/CEP has some kindred relationship with the service end that could be\n     *              either a SIP, CEP or NEP.\n     */\n    private boolean isBpnGoodClientPortCandidate(BasePceNep bpn) {\n        // If ClientPort has not been specified in service creation request, potentially any client port is eligible\n        if (clientPortId \u003d\u003d null) {\n            return true;\n         }\n            ....\n     }",
+      "parentUuid": "c34159a0_c8b073eb",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 0
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af5fcc9d_b96eeff6",
@@ -140,6 +271,30 @@
       "writtenOn": "2025-11-05T20:04:39Z",
       "side": 1,
       "message": "This is an excellent example of why it’s preferable for methods to return their own results.\n\nIn this case, the call to `initXndrTps(INTERMEDIATE_MODETYPE)` doesn’t return a value, so we’re forced to rely on a separate field (`this.valid`) to determine success. If that value ever becomes out of sync, we’d have to trace through the code to find where it was last set — which can be difficult in a large class.\n\nThe dependency between `initXndrTps(INTERMEDIATE_MODETYPE)` and `this.valid` is also implicit rather than explicit. Compare this with a more direct and self-explanatory approach:\n```java\nif (initXndrTps(INTERMEDIATE_MODETYPE)) {\n    LOG.debug(...);\n} else {\n    LOG.debug(...);\n}\n\n//--- Alternate version in case we really need to save result for later use:\n\nthis.valid \u003d initXndrTps(INTERMEDIATE_MODETYPE);\nif (this.valid) {\n    LOG.debug(...);\n} else {\n    LOG.debug(...);\n}\n\n```\nThis removes ambiguity and makes the relationship between the call and its result immediately clear. Even if the change seems minor and “only” affects logging in this case, the principle of explicit return values still improves clarity and maintainability over time.",
+      "range": {
+        "startLine": 610,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 9
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "691146e9_6660e2ce",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Agree. But realized that this method is no more active. It was there historically because I kept the same structure as PceOtnNode, but the behavior is not exactly the same with TAPI, and I forgot to remove it. \n\ninitXndrTps(INTERMEDIATE_MODETYPE) is called directly from validateXponder.\n\nAt the end removed the method that is no more active in change 119461 : \"Address comments of change 115942\"",
+      "parentUuid": "af5fcc9d_b96eeff6",
       "range": {
         "startLine": 610,
         "startChar": 0,
@@ -173,6 +328,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f8a34dd_85b7cbad",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "Please see previous answer to your comments : isValid is refactored in change 119461 : \"Address comments of change 115942\".",
+      "parentUuid": "2eb9c5ca_0e47f6e7",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a568fba_0b0160ab",
@@ -186,6 +365,30 @@
       "writtenOn": "2025-11-05T20:04:39Z",
       "side": 1,
       "message": "This method is quite difficult to read in its current form. It might be worth refactoring it into something more readable.\n\nUsing intermediate variables and small helper methods can make a big difference — each line should ideally do just one thing. Here’s an example of a possible refactoring.\n\n```\nprivate boolean isValidBpn(BasePceNep bpn, Uuid aaPortId, Uuid zzPortId) {\n    // If neither port ID is provided, treat as valid\n    if (aaPortId \u003d\u003d null \u0026\u0026 zzPortId \u003d\u003d null) {\n        return true;\n    }\n\n    if (bpn.getSipUuid() \u003d\u003d null) {\n        LOG.debug(\"null SIP for BPN {}\", bpn.getName());\n    }\n\n    // Validate against NEP, SIP, or parent CEP\n    return matchesAnyPort(bpn, aaPortId, zzPortId);\n}\n\nprivate boolean matchesAnyPort(BasePceNep bpn, Uuid aaPortId, Uuid zzPortId) {\n    Uuid nepUuid \u003d bpn.getNepCepUuid();\n    Uuid sipUuid \u003d bpn.getSipUuid();\n    Uuid cepFromParent \u003d getCepUuidFromParentNepUuid(nepUuid);\n\n    return matchesPort(nepUuid, aaPortId, zzPortId)\n        || matchesPort(sipUuid, aaPortId, zzPortId)\n        || matchesPort(cepFromParent, aaPortId, zzPortId);\n}\n\nprivate boolean matchesPort(Uuid candidate, Uuid aaPortId, Uuid zzPortId) {\n    if (candidate \u003d\u003d null) {\n        return false;\n    }\n    return (aaPortId !\u003d null \u0026\u0026 candidate.equals(aaPortId))\n        || (zzPortId !\u003d null \u0026\u0026 candidate.equals(zzPortId));\n}\n```\nOne might also consider changing one or more of these helper methods from private to public, to make them easier to unit test individually.\n\nOne caveat though — I’m not entirely sure about this part:\n```\n    if (aaPortId \u003d\u003d null \u0026\u0026 zzPortId \u003d\u003d null) {\n        return true;\n    }\n```\n\nThe method’s name suggests it validates bpn, yet here we determine that bpn is valid without actually inspecting it. That feels a bit inconsistent with the method’s intent.\n\nOverall, refactoring with clearer responsibilities — and possibly reconsidering this default true case — could make the method easier to understand and more semantically accurate.",
+      "range": {
+        "startLine": 1034,
+        "startChar": 0,
+        "endLine": 1057,
+        "endChar": 5
+      },
+      "revId": "1f3df645d52d63e70e4d521938901bed8076fae6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27195e9b_a6aaf6f7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiOpticalNode.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-11-27T13:51:00Z",
+      "side": 1,
+      "message": "To be honest, (considering it has been further simplified using a unique portId in the meanwhile) I find it on my side much easier to understand the way I wrote it. \nThis is somewhat direct (the condition, is easy to read, since it is only a OR between several conditions), rather than relying on another method that itsef call another one... Each line corresponds to one criteria, and the comment on top of it is rather explicit...\nIt now looks like : \n\n    /**\n     * Allows checking the validity of a NEP whether the service end correspond to the NEP or has kindred relationships.\n     * @param bpn   The BasePceNep to check.\n     * @return      Boolean : true if the NEP/CEP has some kindred relationship with the service end that could be\n     *              either a SIP, CEP or NEP.\n     */\n    private boolean isBpnGoodClientPortCandidate(BasePceNep bpn) {\n        // If ClientPort has not been specified in service creation request, potentially any client port is eligible\n        if (clientPortId \u003d\u003d null) {\n            return true;\n        }\n        if (bpn.getSipUuid() \u003d\u003d null) {\n            LOG.debug(\"PTON:isBpnGoodClientPortCandidate : null SIP for BPN {}\", bpn.getName());\n        }\n        // Allows to qualify node validity whatever is the portId used : NEP Uuid, CEP Uuid or SIP Uuid. If CEP Uuid\n        // or SIP Uuid is used, Bpn that has CEP/SIP corresponding to the PortId provided in the request will be\n        // validated and PCE can later rely on NEP rather than CEP/SIP (Easier to handle notably since SIP model in\n        //  the context does not include any reference to the NEP it is attached to!\n        if ((clientPortId !\u003d null \u0026\u0026 bpn.getNepCepUuid().equals(clientPortId))\n                || (clientPortId !\u003d null \u0026\u0026 bpn.getSipUuid() !\u003d null \u0026\u0026 bpn.getSipUuid().equals(clientPortId))\n                || (clientPortId !\u003d null \u0026\u0026 getCepUuidFromParentNepUuid(bpn.getNepCepUuid()) !\u003d null\n                    \u0026\u0026 getCepUuidFromParentNepUuid(bpn.getNepCepUuid()).equals(clientPortId))) {\n            return true;\n        } else {\n            return false;\n        }\n    }",
+      "parentUuid": "0a568fba_0b0160ab",
       "range": {
         "startLine": 1034,
         "startChar": 0,
