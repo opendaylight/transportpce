@@ -1418,10 +1418,11 @@ public class TapiOpticalNode {
                     (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaPortId : zzPortId),
                     this);
                 otnXpdr.setParentNodeUuid(nodeUuid);
-                otnXpdr.validateXponder(
-                    (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue());
-                this.pceTapiOtnNodeXpdr = otnXpdr;
-                LOG.info("TON:validateAZxponder : pceTapiOtnNode created {}", this.pceTapiOtnNodeXpdr.getNodeId());
+                if (otnXpdr.validateXponder(
+                    (aaNodeId.getValue().equals(node.getUuid().getValue()) ? aaNodeId : zzNodeId).getValue())) {
+                    this.pceTapiOtnNodeXpdr = otnXpdr;
+                    LOG.info("TON:validateAZxponder : pceTapiOtnNode created {}", this.pceTapiOtnNodeXpdr.getNodeId());
+                }
                 return;
             }
 
