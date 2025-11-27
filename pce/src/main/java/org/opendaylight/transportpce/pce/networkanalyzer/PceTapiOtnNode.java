@@ -174,7 +174,7 @@ public class PceTapiOtnNode implements PceNode {
     private static final String INTERMEDIATE_MODETYPE = "intermediate";
     private static final String AZ_MODETYPE = "AZ";
 
-    private boolean valid = true;
+    private boolean valid;
 
     private final Node node;
     private final String nodeId;
@@ -233,24 +233,8 @@ public class PceTapiOtnNode implements PceNode {
         this.operState = node.getOperationalState();
         this.modeType = null;
         this.clientPortId = clientPort;
-        if (node == null
-                || deviceNodeId == null
-                || nodeType == null
-                || !VALID_NODETYPES_LIST.contains(nodeType)) {
-            LOG.debug("PceTapiOtnNode: one of parameters is not populated : nodeId, node type");
-            this.valid = false;
-        }
-        if (valid) {
-            LOG.debug("PceTapiOtnNode : Node {} passed first step of validation", node.getName());
-        }
-        if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
-                && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
-            LOG.debug("PceTapiOtnNode: unsupported OTN Service Type {}", serviceType);
-            this.valid = false;
-        }
-        if (valid) {
-            LOG.info("PceTapiOtnNode: Node {} passed 2nd step of validation", node.getName());
-        }
+        this.valid = checkXpdrisGoodCandidate(serviceType);
+
     }
 
     /**
@@ -318,13 +302,14 @@ public class PceTapiOtnNode implements PceNode {
         LOG.debug("PTON:initXndrTps : clientPortId is {}", clientPortId);
         // Purge availableXpder-NW/Client-Tps from ports that are not directly or undirectly connected to clientPort
         LOG.debug("PTON:initXndrTps : availableXpdrClientTps validbpn {}", availableXpdrClientTps.stream()
-            .filter(bpn -> isValidBpn(bpn)).collect(Collectors.toList())
+            .filter(bpn -> isBpnGoodClientPortCandidate(bpn)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
         LOG.debug("PTON:initXndrTps : availableXpdrClientTps vertNep is POrt {}", availableXpdrClientTps.stream()
             .filter(bpn -> bpn.getVerticallyConnectedNep().contains(clientPortId)).collect(Collectors.toList())
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
         availableXpdrClientTps.removeAll(availableXpdrClientTps.stream()
-            .filter(bpn -> (!(isValidBpn(bpn) || (bpn.getVerticallyConnectedNep().contains(clientPortId)))))
+            .filter(bpn -> (!(isBpnGoodClientPortCandidate(bpn)
+                    || (bpn.getVerticallyConnectedNep().contains(clientPortId)))))
             .collect(Collectors.toList()));
         LOG.debug("PTON:initXndrTps : 1st purge step availableXpdrClientTps contains {}", availableXpdrClientTps
             .stream().map(BasePceNep::getName).collect(Collectors.toList()));
@@ -413,7 +398,7 @@ public class PceTapiOtnNode implements PceNode {
             boolean result = isHighOrder ? true
                 : onep.getAvailablePayloadStructure().get(0).getMultiplexingSequence().contains(expectedLpn)
                 && (onep.getAvailablePayloadStructure().get(0).getCapacity().getValue().doubleValue() > 0.0);
-            LOG.debug("PTONisValidTp : isValidBpn ExpectedLPN is {} and is ValidTp {}", expectedLpn,
+            LOG.debug("PTONisValidTp:isValidTp : ExpectedLPN is {} and is TP eligibilty = {}", expectedLpn,
                 result);
             // If checked TP is a Nw TP of higher order that expected LPN (Multiplexing function)
             // We don't check that the multiplexing sequence of the bpn includes expected lpn
@@ -428,27 +413,25 @@ public class PceTapiOtnNode implements PceNode {
 
     /**
      * Validates/invalidates a XPONDER node calling initXndrTp() that checks the presence of required NEPs.
-     * @param anodeId   NodeId of the service end potentially associated with the XPONDER (if the XPONDER is not used
-     *                  as a regenerator.
+     * @param endNodeId   NodeId of the service end potentially associated with the XPONDER (if the XPONDER is not used
+     *                    as a regenerator.
+     * @return            Boolean corresponding to the status of the validation.
      */
-    public void validateXponder(String anodeId) {
-        if (!isValid()) {
-            LOG.debug("PTON:validateXponder : No Tp Initialization as node not valid {} for aNodeId {}",
-                this.nodeId, anodeId);
-            return;
-        }
-        if (this.nodeId.equals(anodeId)) {
+    public boolean validateXponder(String endNodeId) {
+        boolean validationStatus = true;
+        if (this.nodeId.equals(endNodeId)) {
             LOG.debug("PTON:validateXponder : Initializing PCeTapiOTnNode Tps in AZ Mode for node {} for aNodeId {}",
-                this.nodeId, anodeId);
+                this.nodeId, endNodeId);
             initXndrTps(AZ_MODETYPE);
         } else if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
             LOG.debug("PTON:validateXponder : Initializing PCeTapiOTnNode Tps in int-Mode for node {} & aNodeId {}",
-                this.nodeId, anodeId);
+                this.nodeId, endNodeId);
             initXndrTps(INTERMEDIATE_MODETYPE);
         } else {
             LOG.debug("PTON:validateXponder : XPONDER is ignored == {}", nodeId);
-            valid = false;
+            validationStatus = false;
         }
+        return validationStatus;
     }
 
     /**
@@ -457,20 +440,21 @@ public class PceTapiOtnNode implements PceNode {
      * @return      Boolean : true if the NEP/CEP has some kindred relationship with the service end that could be
      *              either a SIP, CEP or NEP.
      */
-    private boolean isValidBpn(BasePceNep bpn) {
+    private boolean isBpnGoodClientPortCandidate(BasePceNep bpn) {
+        // If ClientPort has not been specified in service creation request, potentially any client port is eligible
         if (clientPortId == null) {
             return true;
         }
         if (bpn.getSipUuid() == null) {
-            LOG.debug("PTON:isValidBpn : null SIP for BPN {}", bpn.getName());
+            LOG.debug("PTON:isBpnGoodClientPortCandidate : null SIP for BPN {}", bpn.getName());
         }
         // Allows to qualify node validity whatever is the portId used : NEP Uuid, CEP Uuid or SIP Uuid. If CEP Uuid
         // or SIP Uuid is used, Bpn that has CEP/SIP corresponding to the PortId provided in the request will be
         // validated and PCE can later rely on NEP rather than CEP/SIP (Easier to handle notably since SIP model in
         //  the context does not include any reference to the NEP it is attached to!
-        if ((clientPortId != null && bpn.getNepCepUuid().equals(clientPortId))
-                || (clientPortId != null && bpn.getSipUuid() != null && bpn.getSipUuid().equals(clientPortId))
-                || (clientPortId != null && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()) != null
+        if (bpn.getNepCepUuid().equals(clientPortId)
+                || (bpn.getSipUuid() != null && bpn.getSipUuid().equals(clientPortId))
+                || (getCepUuidFromParentNepUuid(bpn.getNepCepUuid()) != null
                     && getCepUuidFromParentNepUuid(bpn.getNepCepUuid()).equals(clientPortId))) {
             return true;
         } else {
@@ -821,37 +805,28 @@ public class PceTapiOtnNode implements PceNode {
     }
 
     /**
-     * Validates a SWITCH node used as a regenerator on a path calling initXndrTps.
-     */
-    public void validateIntermediateSwitch() {
-        if (!isValid()) {
-            return;
-        }
-        if (this.nodeType != OpenroadmNodeType.SWITCH) {
-            return;
-        }
-        // Validate switch for use as an intermediate XPONDER on the path
-        initXndrTps(INTERMEDIATE_MODETYPE);
-        if (this.valid) {
-            LOG.debug("PTON:validateIntermediateSwitch : Switch usable for transit == {}", nodeId);
-        } else {
-            LOG.debug("PTON:validateIntermediateSwitch : Switch unusable for transit == {}", nodeId);
-        }
-    }
-
-    /**
      * Checks basic parameter of a node (NodeType, presence of Supporting Node and Clli Node).
+     * @param serviceType The type of service which shall correspond to either a DSR or an OTN service type for the node
+     *                    to be declared as Valid
      * @return Boolean set to true if the Node basic parameters are valid.
      */
-    public boolean isValid() {
-        if (nodeId == null
+    public boolean checkXpdrisGoodCandidate(String serviceType) {
+        boolean nodeIsValid = true;
+        if (node == null
+                || nodeId == null
                 || nodeType == null
+                || !VALID_NODETYPES_LIST.contains(nodeType)
                 || this.getSupNetworkNodeId() == null
                 || this.getSupClliNodeId() == null) {
-            LOG.debug("PTON:isValid: one of parameters is not populated : nodeId, node type, supporting nodeId");
-            valid = false;
+            LOG.debug("PTON:isValid : one of parameters is not populated : nodeId, node type, supporting nodeId");
+            nodeIsValid = false;
         }
-        return valid;
+        if (!SERVICE_TYPE_ETH_CLASS_MAP.containsKey(serviceType)
+                && !SERVICE_TYPE_ODU_LIST.contains(serviceType)) {
+            LOG.debug("PTON:isValid : unsupported OTN Service Type {}", serviceType);
+            nodeIsValid = false;
+        }
+        return nodeIsValid;
     }
 
     public List<BasePceNep> getTotalListOfNep() {
@@ -1059,5 +1034,8 @@ public class PceTapiOtnNode implements PceNode {
         this.parentNodeUuid = pnodeUuid;
     }
 
+    public boolean isValid() {
+        return this.valid;
+    }
 
 }
