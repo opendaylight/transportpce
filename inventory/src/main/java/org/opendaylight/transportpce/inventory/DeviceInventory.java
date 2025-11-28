@@ -34,16 +34,11 @@ public class DeviceInventory {
         this.inode = inode;
     }
 
-    public void init() {
-        LOG.info("Initializing {}", DeviceInventory.class.getName());
-    }
-
-    public void initializeDevice(String deviceId, String openRoadmVersion) {
-
-        LOG.info("Creating Device Inventory for device {} with version {}", deviceId, openRoadmVersion);
+    public void initializeDevice(String deviceId) {
+        LOG.info("Creating Device Inventory for device {}", deviceId);
         if (!inode.dataExists("inv_dev_info", " node_id = '" + deviceId + "'")) {
             LOG.info("Adding node {} to inventory", deviceId);
-            inode.addNode(deviceId, openRoadmVersion);
+            inode.addNode(deviceId);
         }
     }
 

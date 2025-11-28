@@ -42,7 +42,6 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
 
     @Override
     public void onDataTreeChanged(List<DataTreeModification<Node>> changes) {
-        String openROADMversion = "";
         for (DataTreeModification<Node> change : changes) {
             String nodeId = change.getRootNode().coerceKeyStep(Node.class).key().getNodeId().getValue();
             switch (change.getRootNode()) {
@@ -50,7 +49,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
                     NetconfNode netconfNode = present.dataAfter().augmentation(NetconfNodeAugment.class)
                             .getNetconfNode();
                     LOG.info("Node {} was created", nodeId);
-                    processModifiedSubtree(nodeId, netconfNode, openROADMversion);
+                    processModifiedSubtree(nodeId, netconfNode);
                 }
                 case DataObjectDeleted<Node> deleted -> {
                     LOG.info("Node {} was deleted", nodeId);
@@ -65,20 +64,15 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      * @param nodeId      device id
      * @param netconfNode netconf node
      */
-    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode, String openROADMversion) {
+    private void processModifiedSubtree(String nodeId, NetconfNode netconfNode) {
         ConnectionStatus connectionStatus = netconfNode.getConnectionStatus();
         if (netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                 .noneMatch(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))) {
             return;
         }
+        LOG.info("DL The device is in {} state", connectionStatus);
         if (ConnectionStatus.Connected.equals(connectionStatus)) {
-            LOG.info("DL The device is in {} state", connectionStatus);
-            deviceInventory.initializeDevice(nodeId, openROADMversion);
-        } else if (ConnectionStatus.Connecting.equals(connectionStatus)
-                || ConnectionStatus.UnableToConnect.equals(connectionStatus)) {
-            LOG.info("DL The device is in {} state", connectionStatus);
-        } else {
-            LOG.warn("DL Invalid connection status {}", connectionStatus);
+            deviceInventory.initializeDevice(nodeId);
         }
     }
 }

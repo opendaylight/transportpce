@@ -24,19 +24,15 @@ public class INode {
     private static final Logger LOG = LoggerFactory.getLogger(INode.class);
 
     private final DataSource dataSource;
-    //private final INode221 inode221;
     private final INode121 inode121;
 
     public INode(DataSource dataSource, INode121 inode121
-        //, INode221 inode221
     ) {
         this.dataSource = dataSource;
         this.inode121 = inode121;
-        //this.inode221 = inode221;
     }
 
-    public boolean addNode(String deviceId, String openROADMversion) {
-        //boolean sqlResult = false;
+    public boolean addNode(String deviceId) {
         return inode121.addNode(deviceId);
 
     }
