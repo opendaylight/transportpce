@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8a977da_8ebc71f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T07:01:44Z",
+      "side": 1,
+      "message": "About the commit message: providing a clearer description of the actual\nchanges would make the history more informative. Since references to\ncomments in another change offer little context later on, a clearer\nalternative could be something along these lines:\n\n```\nRefactor XPONDER validation and port checks\n\nThis change restructures how PceTapiOtnNode determines XPONDER validity.\n\nThe old inline validation logic in the constructor is replaced by a\ndedicated checkXpdrisGoodCandidate() method. The valid flag is no longer\ninitialized to true but instead reflects the outcome of \ncheckXpdrisGoodCandidate().\n\nClient-port eligibility logic is improved by replacing isValidBpn() with\nisBpnGoodClientPortCandidate(). Filtering operations in initXndrTps() now\nuse the updated method.\n\nvalidateXponder() is refactored to return a boolean instead of mutating\nvalid implicitly, and the obsolete validateIntermediateSwitch() method\nhas been removed.\n\nA simplified public isValid() accessor is added to expose the validity\nstate.\n```",
+      "revId": "1ac07b257921d3d88dea3052ece30c5a25a21040",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
