@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "645918a0_23b0dc19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T13:56:07Z",
+      "side": 1,
+      "message": "Thanks Joakim for your review. Integrated all your comments and tried to make highlighted log message more significant.",
+      "revId": "80645bb7908785a321659087fe7175bb6c10c34c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
