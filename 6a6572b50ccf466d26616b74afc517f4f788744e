@@ -18,6 +18,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d74df122_0cc8b867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "Thanks Joakim for your review. For these link classes, It is not so clear to me, and I am not sure I understood all your comments. Please see answers. Please note there are still comments for which I did not provide any answers. I am still investigating on a way to refactor without too many side effects....",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "003d0ac3_78f88553",
@@ -37,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ce50dc7_80f08921",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "Even if it looks like I created it, I only changed a few thing in that class (this is the old Pcelink which I changed to \"PceORLink\" to keep \"PceLink\" for  the interface).\nBasically what I made is creating an interface that respect both OR and TapiLink. Not to say that it shouldn\u0027t be improved, but just to explain that I tried to follow what was done. The newly created code concerns the Tapi Link and the definition of the interface.\nIs this constructor overloaded ? Probably. To be honest, I find it quite straight forward. Considering that we handle both physical and OTN links, we have 2 cases to handle in the constructor depending on the type of link,because soe of the parameters do not make sense in the case of OTN link and reversely for a physical one. The beauty of it, is that we just need to use a single interface which simplifies a lot the PceCalculation algorithm.",
+      "parentUuid": "003d0ac3_78f88553",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ef707e4_41be1b3f",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
         "patchSetId": 12
@@ -48,6 +83,30 @@
       "writtenOn": "2025-11-06T07:58:14Z",
       "side": 1,
       "message": "Consider removing the dependency on the external static utility call inside the constructor such as this one:\n\n`this.length \u003d NetworkUtils.calcLength(link);`\n\nThe constructor signature suggests this class only depends on the provided arguments:\n\n`public PceORLink(Link link, PceNode source, PceNode dest) { ... }`\n\nHowever, it implicitly reaches out to global state through static methods. That makes the class less transparent about its actual dependencies and harder to predict or test. When seemingly unrelated code suddenly breaks, it is sometimes due to hidden dependencies such as these.\n\nIdeally, classes should be explicit about what they depend on — for example, by receiving required collaborators or data through constructor arguments. Hidden dependencies can also be a sign that the class has taken on too much responsibility and needs to be refactored.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 62
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae9a9a94_52089cf0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "Sorry, but I think I don\u0027t get the essence of your comment. In other changes (dedicated to nodes) you recommend to put aside some methods in a Factory, to keep the class size limited, which is basically what we do here. \nYou say \"The constructor signature suggests this class only depends on the provided arguments\". Is that not the case?\nThe link has its own characteristics. It includes some information about length, SRLGs, latency... Then I don\u0027t see the issue in relying on method that belongs to a specific class (like MapUtils or NetworkUtils that can be considered has \"factories\") to retrieve from the link passed to the method the parameter we want to extract.\nCould you clarify? I feel this is in contradiction with some of your other comments, and don\u0027t understand where I am mistaken.",
+      "parentUuid": "2ef707e4_41be1b3f",
       "range": {
         "startLine": 100,
         "startChar": 0,
@@ -83,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0a964cf_3b75fc5b",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "I did not write this class myself. Your point makes sense to me. But on the other hand, this does not work here as variable are declared as final. One way could be not to declare the variables as final.\nBut this is the way it was done : I guess the coder had its reasons to make it this way (to make it clear, I have a limited experience, I am no so familiar with some basic concepts and not able to say who is right). \nHowever I see it also in contradiction with the comments you provided on other changes asking to use immutable objects to guaranty we manage the states of the object.",
+      "parentUuid": "b89e5ba8_b9f7b187",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "667c6721_83c29aaf",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
         "patchSetId": 12
@@ -94,6 +177,24 @@
       "writtenOn": "2025-11-06T07:58:14Z",
       "side": 1,
       "message": "Would it be possible to return a default value instead of null?\nThat could help avoid unnecessary null checks on the client side.\n\nQuite a few methods return null as opposed to a meaningful implementation.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e439594_f8d74eb3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "You are right. Anyway, and also to better account your different comments, I m a going to work on a deeper refactoring to avoid having separate states for tapi and OR (maybe also a refactoring of the nodeId...). Not sure of the result. We will see. If I have to much impact I may delay it a bit through a JiraTicket",
+      "parentUuid": "667c6721_83c29aaf",
       "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -117,6 +218,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f39ea73c_728a5b5d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "I am not really in favor of multiplying class. To me this looks quite simple. We have 2 different types of validation, one fitting with physical link, the other with Otn link. And the validation takes into account all what it can consider to have a full validation. The span-loss is not specifically an external constraint. This is one of the parameter of the link which needs not be be null, because it would exclude to make the impairment aware path computation.",
+      "parentUuid": "2b849e50_b9d2828d",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "928168a4_b245dc17",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
         "patchSetId": 12
@@ -128,6 +247,24 @@
       "writtenOn": "2025-11-06T07:58:14Z",
       "side": 1,
       "message": "This validator feels like a good candidate for extraction into a dedicated validation class — one responsible for verifying PceORLink instances.\n\nThe primary role of this class should likely be to model a link. Determining whether that link is valid or eligible for a particular service type seems like a separate concern.\n\nMoving the validation logic elsewhere would make this class cleaner and more focused, while also making validation easier to extend or test independently.\n\nIf there’s a strong reason for this class to validate itself, you could consider delegating validation instead — for example, by passing a validator into a method:\n\n```\nboolean isValid(Validator validator) {\n    return validator.isValid(this);\n}\n```\nThis approach keeps responsibilities clearly separated while still allowing for convenient self-validation with minimal coupling.",
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa759681_a1e5b810",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "Please see answer top previous comment.",
+      "parentUuid": "928168a4_b245dc17",
       "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -162,6 +299,30 @@
       "writtenOn": "2025-11-06T07:58:14Z",
       "side": 1,
       "message": "There are quite a few methods in this class returning null instead of meaningful implementations.\n\nThat could be a sign that the interface it implements is too broad — possibly mixing unrelated responsibilities. When a class can only partially fulfill an interface, it’s often an indication that the interface might need to be split into smaller, more focused ones.\n\nFor example:\n\n```\n@Override\npublic AdminStates getAdminStates() { return null; }\n\n@Override\npublic OperationalState getOperationalState() { return opState; }\n\n@Override\npublic State getState() { return null; }\n```\n\nRefactoring the interface into narrower, role-specific variants would allow implementing classes to only commit to the methods they actually support — and would make null fallbacks unnecessary.",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 950,
+        "endChar": 0
+      },
+      "revId": "6a6572b50ccf466d26616b74afc517f4f788744e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "618180dc_748a5e85",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T16:21:56Z",
+      "side": 1,
+      "message": "I am not in favor of multiplying classes, which to me does not improve readability. This could make sense for huge class, but this one is somewhat simple.\n\nIt has been made this way intentionally. We have a single interface for both PceLink (OpenRoadm) and PceTapiLinks. And we use the same interface for physical links and OTN links in both OR and TAPI implementation. For TAPI, physical links are retrieved from the topology, and OTN links are retrieved from Connectivity context. \nThe beauty of it is that implementing an agnostic PCE (which is the goal), it simplifies the implementation in the main PCE algo, because potentially 4 different (OR/TAPI, Physical/OTN-links) kind of links are managed in the same way through a single interface. So it may look somewhat complex in the PCE links Classes, but really simplifies the algo that calls them.",
+      "parentUuid": "abf29856_5ca5dfc4",
       "range": {
         "startLine": 941,
         "startChar": 0,
