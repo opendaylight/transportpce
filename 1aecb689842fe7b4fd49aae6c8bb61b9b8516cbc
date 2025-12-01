@@ -33,6 +33,24 @@
       "message": "This commit message also refers to comments in other commits and thus doesn’t reflect the actual changes. How about:\n\n```\nSimplify spectrum handling and fix OTSi filtering\n\nRefactors PceTapiOpticalNode to compute the frequenciesBitSet using a\nunified NEP stream instead of separate per-type logic. This removes code\nduplication, avoids null bitsets, and ensures unsupported node types\nproduce an empty spectrum.\n\nAlso replaces the hard-coded \"OTSi\" string in\nORtoTapiTopoConversionTools with TapiConstants.OTSI_MC.\n```",
       "revId": "1aecb689842fe7b4fd49aae6c8bb61b9b8516cbc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "667406cb_b4817916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T13:52:40Z",
+      "side": 1,
+      "message": "Thanks Joakim for your suggestion. I have integrated them.",
+      "parentUuid": "9bab58b4_a5dcb615",
+      "revId": "1aecb689842fe7b4fd49aae6c8bb61b9b8516cbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
