@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "993edb55_bf70ed2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "Added a few suggestions for tweaking log messages.",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "993d8b7e_10b8ed9f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceORLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "I think this log message could be improved. Perhaps something like\n```\nLOG.error(\n    \"PceLink:calcOpposite: No opposite link found for {} — \"\n        + \"link will be ignored\",\n    link.getLinkId().getValue());\n```",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9dd1d21_c8a55ee0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "This log message is identical to the one on line 348. Could we adjust them so they can be distinguished?\n\nIf I understand the comments correctly, this PceTapiLink instance is created by joining two PceNodes, whereas the other corresponds to the reverse unidirectional link of a bidirectional link. Including this distinction in the log message might be useful for debugging.",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2fd16a1_0f974557",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceTapiOtnNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "These debug messages refer to nwNRGUuid, nwBpn, and clientBpn, which seem to be leftovers from older variable names. Could we rename them to something more descriptive of the values being logged? This seems to be a recurring pattern in this method.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 562,
+        "endChar": 90
+      },
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "196069af_7f6c17c4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "This line appears identical to the one on 949. You could improve them by adding information that clarifies the context—for example, whether it is before or after a certain event. Perhaps including the number of entries would make it easier to see how the contents changed at a glance?",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee969a46_d422a51e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "This log line seems identical to the one on line 979. You could improve them by adding information that clarifies the context—for example, whether it is before or after a certain event. Perhaps including the number of entries would make it easier to see how the contents changed at a glance?",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0ae7c87_fc0af898",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "Perhaps provide more context to the log message.",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90cf90f6_cdf2190a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T09:11:33Z",
+      "side": 1,
+      "message": "Perhaps provide more context to the log message.",
+      "revId": "e0760a632fe02d0665b923d0814cc3d48d129bd2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
