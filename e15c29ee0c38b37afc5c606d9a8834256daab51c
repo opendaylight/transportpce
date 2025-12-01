@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2072cec8_15783a10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-01T13:49:19Z",
+      "side": 1,
+      "message": "Thanks Joakim for your review and your suggestion which I have integrated.",
+      "revId": "e15c29ee0c38b37afc5c606d9a8834256daab51c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
