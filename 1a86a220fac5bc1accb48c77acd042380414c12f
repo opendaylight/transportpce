@@ -52,6 +52,23 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a28d07ad_004dfdfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T10:44:19Z",
+      "side": 1,
+      "message": "Hi Olivier! I found a method with a potential NPE problem.",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4141a43_5df7ebab",
@@ -442,6 +459,24 @@
       "side": 1,
       "message": "0 has not the same significance of a null. It could be equivalent because of some specific implementation choice, but I prefer to keep trace on the fact the parameter was null to condition the type of LOG (which may also depends on some conditions that are not visible to the method).",
       "parentUuid": "100b9cbd_b9168ddc",
+      "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c1be198_c752ca86",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/TapiMapUtils.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-01T10:44:19Z",
+      "side": 1,
+      "message": "Agreed — 0 is not the same as null. My point is more about the responsibility of the method.\n\nAny method generally has two possible outcomes:\n\t1.\tIt successfully completes its task, or\n\t2.\tIt cannot complete the task and needs to signal that clearly.\n\nThrowing a custom exception reflects the second case and makes the failure explicit. Returning null, however, shifts the responsibility outward without clearly indicating the issue. In practice, this often results in an unexpected NPE if none of the callers perform the necessary checks.\n\nIn this case, I’m wondering whether this method could assume more responsibility than it currently does—for example, deciding that no spectrum is in use when the required information is missing. Ultimately, some part of the code needs to make that decision anyway, so why not this method?\n\n## Potential NPE\n\nAside from returning null, I did some unit testing on this method, and it doesn\u0027t seem to work for all implementations of `CAPACITYUNIT`:\n\n```\n✓ CAPACITYUNITTBPS          : OK\n✓ CAPACITYUNITMBPS          : OK\n✓ CAPACITYUNITGBPS          : OK\n✗ CAPACITYUNITTHz           : Threw NullPointerException\n✗ CAPACITYUNITMHz           : Threw NullPointerException\n✗ CAPACITYUNITGHz           : Threw NullPointerException\n```\n\nHere is an example of how I tested the method, this particular example will throw a NPE:\n\n    @Test\n    void getAvailableBandwidthGHzTwo() {\n        TotalSize totalSize \u003d new TotalSizeBuilder()\n                .setUnit(CAPACITYUNITGBPS.VALUE)\n                .setValue(Decimal64.valueOf(\"100\"))\n                .build();\n        Link link \u003d new LinkBuilder()\n                .setAvailableCapacity(\n                        new AvailableCapacityBuilder()\n                                .setTotalSize(totalSize)\n                                .build()\n                ).build();\n        assertEquals(100.0, TapiMapUtils.getAvailableBandwidthGHz(link));\n    }",
+      "parentUuid": "ab532f10_66365369",
       "revId": "1a86a220fac5bc1accb48c77acd042380414c12f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
