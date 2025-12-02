@@ -17,6 +17,109 @@
       "message": "recheck",
       "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "343f3893_083c2158",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-02T13:18:05Z",
+      "side": 1,
+      "message": "Looks ok!\nI had some comments for readability improvements.",
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20017bd2_fdc29a25",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-02T13:18:05Z",
+      "side": 1,
+      "message": "Proposing to refactor to:\n\n```\npublic Map\u003cFrequency, Frequency\u003e getPP11AvailableFrequencies(\n            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {\n        SortedRange sortedRange \u003d new SortedRange();\n\n        if (!hasCband(tp)) {\n            return new HashMap\u003c\u003e();\n        }\n\n        sortedRange.add(new SortedRange(getRanges(tp.getPpAttributes().getAvailFreqMaps())));\n\n        return sortedRange.ranges();\n    }\n\n    private static boolean hasCband(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {\n        return tp !\u003d null\n        \u0026\u0026 tp.getPpAttributes().getAvailFreqMaps() !\u003d null\n        \u0026\u0026 tp.getPpAttributes().getAvailFreqMaps().keySet().toString().contains(GridConstant.C_BAND);\n    }\n\n    private Map\u003cDouble, Double\u003e getRanges(Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e avlFreqMaps) {\n        byte[] freqByteSet \u003d new byte[GridConstant.NB_OCTECTS];\n\n        AvailFreqMapsKey availFreqMapsKey \u003d new AvailFreqMapsKey(GridConstant.C_BAND);\n        freqByteSet \u003d Arrays.copyOf(avlFreqMaps.entrySet().stream()\n                .filter(afm -\u003e afm.getKey().equals(availFreqMapsKey))\n                .findFirst().orElseThrow().getValue().getFreqMap(), freqByteSet.length);\n        LOG.debug(\"Available frequency byte set: {}\", freqByteSet);\n\n        Map\u003cDouble, Double\u003e ranges \u003d numericFrequency.availableFrequency(new AvailableGrid(freqByteSet));\n        LOG.debug(\"Available frequency ranges: {}\", ranges);\n        return ranges;\n    }\n```",
+      "range": {
+        "startLine": 1267,
+        "startChar": 4,
+        "endLine": 1296,
+        "endChar": 5
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9785dea_cd3540a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-02T13:18:05Z",
+      "side": 1,
+      "message": "This seems like a generation of a string key.\nThis should be handled the same way everywhere. I think it is not only this place in the entire code this is done? I think we should make a method and use this method everywhere where this is done?",
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7921fc0e_acc4cfbb",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-02T13:18:05Z",
+      "side": 1,
+      "message": "Suggest renaming:\n```\nnetworkTerminationPoint11FromDatastore -\u003e tp\ngetNetworkTerminationPoint11FromDatastore -\u003e getTpFromStore\n```\nFor easier to read code.",
+      "range": {
+        "startLine": 2015,
+        "startChar": 22,
+        "endLine": 2021,
+        "endChar": 105
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1e0d4ab_bb739ff1",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-02T13:18:05Z",
+      "side": 1,
+      "message": "Very nice comments in the test. Easy to follow!",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 236,
+        "endChar": 5
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
