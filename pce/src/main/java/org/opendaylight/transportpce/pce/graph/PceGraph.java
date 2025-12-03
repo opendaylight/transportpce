@@ -232,8 +232,8 @@ public class PceGraph {
 
     private boolean validateLinkforGraph(PceLink pcelink) {
 
-        PceNode source = allPceNodes.get(pcelink.getSourceId());
-        PceNode dest = allPceNodes.get(pcelink.getDestId());
+        PceNode source = allPceNodes.get(new NodeId(pcelink.getSourceId()));
+        PceNode dest = allPceNodes.get(new NodeId(pcelink.getDestId()));
 
         if (source == null) {
             LOG.error("In addLinkToGraph link source node is null : {}", pcelink);
@@ -244,7 +244,7 @@ public class PceGraph {
             return false;
         }
         LOG.info("In addLinkToGraphLine 237 validated link between nodes : {} & {} of type {} and Uuid {}",
-            source.getNodeId(), dest.getNodeId(), pcelink.getlinkType(), pcelink.getLinkUuid());
+            source.getNodeId(), dest.getNodeId(), pcelink.getlinkType(), pcelink.getLinkId());
         return true;
     }
 
@@ -290,16 +290,11 @@ public class PceGraph {
                     continue;
                 }
                 PceGraphEdge graphLink = new PceGraphEdge(link);
-                if (link.getState() != null && State.InService.equals(link.getState())) {
-                    weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
 
-                    weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
-                    LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
-                } else {
-                    weightedGraph.addEdge(link.getSourceUuid().getValue(), link.getDestUuid().getValue(), graphLink);
-                    weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
-                    LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
-                }
+                weightedGraph.addEdge(link.getSourceId(), link.getDestId(), graphLink);
+
+                weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                LOG.info("In Graph populateWithLinks added Edge :  {}", link.getLinkId());
             }
         }
         return true;

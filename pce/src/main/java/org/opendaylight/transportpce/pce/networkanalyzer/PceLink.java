@@ -12,20 +12,16 @@ import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 
 public interface PceLink {
 
     /**
      * Sets the opposite linkId.
-     * @param oppositeLinkId  Uuid of the opposite link.
+     * @param oppositeLinkId  String value of the of the opposite link Id .
      */
-    void setOppositeLinkUuid(Uuid oppositeLinkId);
+    void setOppositeLinkId(String oppositeLinkId);
 
     /**
      * Provides the result of the validity check for any kind of PceLinks.
@@ -34,17 +30,10 @@ public interface PceLink {
     boolean isValid();
 
     /**
-     * Provides the Uuid of the opposite Link.
-     * @return  Uuid of the opposite ink.
+     * Provides the String value of the opposite Link Id.
+     * @return  String value of the opposite Link Id.
      */
-    Uuid getOppositeLinkUuid();
-
-
-    /**
-     * Provides the LinkId of the opposite Link.
-     * @return  LinkId of the opposite Link.
-     */
-    LinkId getOppositeLink();
+    String getOppositeLinkId();
 
     /**
      * Provides the administrative state of the T-API Pcelink.
@@ -71,28 +60,16 @@ public interface PceLink {
     State getState();
 
     /**
-     * Provides the OR sourceTpId.
-     * @return  TpId of the source .
+     * Provides the source Tp Id.
+     * @return  String value of TpId of the source .
      */
-    TpId getSourceTP();
+    String getSourceTP();
 
     /**
-     * Provides the T-API sourceTpId.
-     * @return  Uuid of the source .
+     * Provides the destination TpId.
+     * @return  String value of the the destination Tp Id.
      */
-    Uuid getSourceTPUuid();
-
-    /**
-     * Provides the OR destTpId.
-     * @return  Uuid of the destination Tp.
-     */
-    TpId getDestTP();
-
-    /**
-     * Provides the T-API destTpId.
-     * @return  Uuid of the destination Tp.
-     */
-    Uuid getDestTPUuid();
+    String getDestTP();
 
     /**
      * Provides the linkType as defined by the corresponding OpenROADM enumeration.
@@ -102,40 +79,22 @@ public interface PceLink {
     OpenroadmLinkType getlinkType();
 
     /**
-     * Provides the Uuid corresponding to the LinkId.
-     * @return      Uuid of the link.
+     * Provides the String value of the link Id.
+     * @return      String value of the link Id.
      */
-    Uuid getLinkUuid();
+    String getLinkId();
 
     /**
-     * Provides the LinkID corresponding to the OR link.
-     * @return      LinkId of the link.
+     * Provides the String value of the Source NodeId of the link.
+     * @return      String value of the source Tp NodeId.
      */
-    LinkId getLinkId();
+    String getSourceId();
 
     /**
-     * Provides the NodeId corresponding to the Source Node of the link.
-     * @return      NodeId of the source Tp.
+     * Provides the String value corresponding to the destination NodeId of the link.
+     * @return      String value of the destination Tp NodeId.
      */
-    NodeId getSourceId();
-
-    /**
-     * Provides the Uuid corresponding to the Source Node of the link.
-     * @return      Uuid of the source Tp.
-     */
-    Uuid getSourceUuid();
-
-    /**
-     * Provides the NodeId corresponding to the destination Node of the link.
-     * @return      NodeId of the destination Tp.
-     */
-    NodeId getDestId();
-
-    /**
-     * Provides the Uuid corresponding to the destination Node of the link.
-     * @return      Uuid of the destination Tp.
-     */
-    Uuid getDestUuid();
+    String getDestId();
 
     /**
      * Provides link length for physical optical links.
