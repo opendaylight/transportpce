@@ -19,13 +19,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,15 +48,15 @@ public class PceORLink implements Serializable, PceLink {
     private String clientZ = "";
     private final LinkId linkId;
     private final OpenroadmLinkType linkType;
-    private final NodeId sourceId;
-    private final NodeId destId;
+    private final String sourceId;
+    private final String destId;
     private final TpId sourceTP;
     private final TpId destTP;
     private final String sourceNetworkSupNodeId;
     private final String destNetworkSupNodeId;
     private final String sourceCLLI;
     private final String destCLLI;
-    private final LinkId oppositeLink;
+    private final String oppositeLink;
     private final AdminStates adminStates;
     private final State state;
     private final Long latency;
@@ -77,8 +75,8 @@ public class PceORLink implements Serializable, PceLink {
 
         this.linkId = link.getLinkId();
 
-        this.sourceId = link.getSource().getSourceNode();
-        this.destId = link.getDestination().getDestNode();
+        this.sourceId = link.getSource().getSourceNode().getValue();
+        this.destId = link.getDestination().getDestNode().getValue();
 
         this.sourceTP = link.getSource().getSourceTp();
         this.destTP = link.getDestination().getDestTp();
@@ -139,14 +137,15 @@ public class PceORLink implements Serializable, PceLink {
     }
 
     //Retrieve the opposite link
-    private LinkId calcOpposite(Link link) {
+    private String calcOpposite(Link link) {
         LinkId tmpoppositeLink = MapUtils.extractOppositeLink(link);
         if (tmpoppositeLink == null) {
             LOG.error("PceLink:calcOpposite: No opposite link found for {} -> link will be ignored",
                 link.getLinkId().getValue());
             isValid = false;
+            return null;
         }
-        return tmpoppositeLink;
+        return tmpoppositeLink.getValue();
     }
 
     /*
@@ -175,7 +174,7 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getOppositeLink()
     */
     @Override
-    public LinkId getOppositeLink() {
+    public String getOppositeLinkId() {
         return oppositeLink;
     }
 
@@ -185,17 +184,7 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#setOppositeLinkUuid()
     */
     @Override
-    public void setOppositeLinkUuid(Uuid oppLinkUuid) {
-    }
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getOppositeLinkUuid()
-    */
-
-    @Override
-    public Uuid getOppositeLinkUuid() {
-        return null;
+    public void setOppositeLinkId(String oppLinkId) {
     }
 
     /*
@@ -244,18 +233,8 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceTP()
     */
     @Override
-    public TpId getSourceTP() {
-        return sourceTP;
-    }
-
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceTPUuid()
-    */
-    @Override
-    public Uuid getSourceTPUuid() {
-        return null;
+    public String getSourceTP() {
+        return sourceTP.getValue();
     }
 
     /*
@@ -264,18 +243,8 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestTP()
     */
     @Override
-    public TpId getDestTP() {
-        return destTP;
-    }
-
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestTPUuid()
-    */
-    @Override
-    public Uuid getDestTPUuid() {
-        return null;
+    public String getDestTP() {
+        return destTP.getValue();
     }
 
     /*
@@ -294,18 +263,8 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLinkId()
     */
     @Override
-    public LinkId getLinkId() {
-        return linkId;
-    }
-
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getLinkUuid()
-    */
-    @Override
-    public Uuid getLinkUuid() {
-        return null;
+    public String getLinkId() {
+        return linkId.getValue();
     }
 
     /*
@@ -314,38 +273,18 @@ public class PceORLink implements Serializable, PceLink {
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceId()
     */
     @Override
-    public NodeId getSourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 
     /*
     * (non-Javadoc)
     *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getSourceUuid()
-    */
-    @Override
-    public Uuid getSourceUuid() {
-        return null;
-    }
-
-    /*
-    * (non-Javadoc)
-    *
     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestId()
     */
     @Override
-    public NodeId getDestId() {
+    public String getDestId() {
         return destId;
-    }
-
-    /*
-    * (non-Javadoc)
-    *
-    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceLink#getDestId()
-    */
-    @Override
-    public Uuid getDestUuid() {
-        return null;
     }
 
     /*

@@ -240,12 +240,11 @@ public class PostAlgoPathValidator {
         double latency = 0;
         for (PceGraphEdge edge : path.getEdgeList()) {
             if (edge.link() == null || edge.link().getLatency() == null) {
-                LOG.warn("- In checkLatency: the link {} does not contain latency field",
-                    edge.link().getLinkId().getValue());
+                LOG.warn("- In checkLatency: the link {} does not contain latency field", edge.link().getLinkId());
                 return false;
             }
             latency += edge.link().getLatency();
-            LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId().getValue(), latency);
+            LOG.debug("- In checkLatency: latency of {} = {} units", edge.link().getLinkId(), latency);
         }
         return (latency < maxLatency);
     }
@@ -344,14 +343,14 @@ public class PostAlgoPathValidator {
         for (PceGraphEdge edge : path.getEdgeList()) {
             List<Uint16> srcTpnPool =
                 allPceNodes
-                    .get(edge.link().getSourceId())
+                    .get(new NodeId(edge.link().getSourceId()))
                     .getAvailableTribPorts()
-                    .get(edge.link().getSourceTP().getValue());
+                    .get(edge.link().getSourceTP());
             List<Uint16> destTpnPool =
                 allPceNodes
-                    .get(edge.link().getDestId())
+                    .get(new NodeId(edge.link().getDestId()))
                     .getAvailableTribPorts()
-                    .get(edge.link().getDestTP().getValue());
+                    .get(edge.link().getDestTP());
             List<Uint16> commonEdgeTpnPool = new ArrayList<>();
             if (srcTpnPool == null || destTpnPool == null) {
                 LOG.warn("Analysing Edges, did not succeed retrieving Trib port Pool for either Src {} and/or Dest {}",
@@ -370,7 +369,7 @@ public class PostAlgoPathValidator {
             Integer tribPort = (int) Math.ceil((double)startTribSlot / nbSlot);
             for (Uint16 commonTribPort : commonEdgeTpnPool) {
                 if (tribPort.equals(commonTribPort.toJava())) {
-                    tribPortMap.put(edge.link().getLinkId().getValue(), commonTribPort);
+                    tribPortMap.put(edge.link().getLinkId(), commonTribPort);
                 }
             }
         }
@@ -385,14 +384,14 @@ public class PostAlgoPathValidator {
         for (PceGraphEdge edge : path.getEdgeList()) {
             List<Uint16> srcTsPool =
                 allPceNodes
-                    .get(edge.link().getSourceId())
+                    .get(new NodeId(edge.link().getSourceId()))
                     .getAvailableTribSlots()
-                    .get(edge.link().getSourceTP().getValue());
+                    .get(edge.link().getSourceTP());
             List<Uint16> destTsPool =
                 allPceNodes
-                    .get(edge.link().getDestId())
+                    .get(new NodeId(edge.link().getDestId()))
                     .getAvailableTribSlots()
-                    .get(edge.link().getDestTP().getValue());
+                    .get(edge.link().getDestTP());
             List<Uint16> commonEdgeTsPoolList = new ArrayList<>();
             if (srcTsPool == null || destTsPool == null) {
                 LOG.warn("Analysing Edges, did not succeed retrieving Time Slot Pool for either Src {} and/or Dest {}",
@@ -429,7 +428,7 @@ public class PostAlgoPathValidator {
                     }
                 }
             }
-            tribSlotMap.put(edge.link().getLinkId().getValue(), tribSlotList);
+            tribSlotMap.put(edge.link().getLinkId(), tribSlotList);
         }
         tribSlotMap.forEach((k,v) -> LOG.info("TribSlotMap : k = {}, v = {}", k, v));
         return tribSlotMap;
@@ -498,8 +497,8 @@ public class PostAlgoPathValidator {
                     calcXpdrOSNR(cu, signal,
                         pathElement == 0
                             // First transponder on the Path (TX side) / Last Xponder of the path (RX side)
-                            ? edges.get(pathElement).link().getSourceTP().getValue()
-                            : edges.get(pathElement - 1).link().getDestTP().getValue(),
+                            ? edges.get(pathElement).link().getSourceTP()
+                            : edges.get(pathElement - 1).link().getDestTP(),
                         serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement,
                         pathElement == 0 ? true : false);
                     break;
@@ -603,7 +602,7 @@ public class PostAlgoPathValidator {
                 LOG.debug("loop of check OSNR direction AZ: XPDR, Path Element = {}", vertices.size() - 1);
                 transponderPresent = true;
                 // TSP is the last of the path
-                margin = getLastXpdrMargin(cu, signal, edges.get(vertices.size() - 2).link().getDestTP().getValue(),
+                margin = getLastXpdrMargin(cu, signal, edges.get(vertices.size() - 2).link().getDestTP(),
                     serviceType, currentNode, vertices.get(vertices.size() - 1), vertices.size() - 1);
                 break;
             case SRG:
@@ -703,8 +702,8 @@ public class PostAlgoPathValidator {
                     calcXpdrOSNR(cu, signal,
                         pathElement == vertices.size() - 1
                             // First transponder on the Path (TX side) / Last Xponder of the path (RX side)
-                            ? getOppPceLink(pathElement - 1, edges, allPceLinks).getSourceTP().getValue()
-                            : getOppPceLink((pathElement), edges, allPceLinks).getDestTP().getValue(),
+                            ? getOppPceLink(pathElement - 1, edges, allPceLinks).getSourceTP()
+                            : getOppPceLink((pathElement), edges, allPceLinks).getDestTP(),
                         serviceType, currentNode, nextNode, vertices.get(pathElement), pathElement,
                         pathElement == vertices.size() - 1 ? false : true);
                     break;
@@ -806,7 +805,7 @@ public class PostAlgoPathValidator {
                 LOG.debug("loop of check OSNR direction ZA: XPDR, Path Element = 0");
                 transponderPresent = true;
                 // TSP is the last of the path
-                margin = getLastXpdrMargin(cu, signal, getOppPceLink(0, edges, allPceLinks).getDestTP().getValue(),
+                margin = getLastXpdrMargin(cu, signal, getOppPceLink(0, edges, allPceLinks).getDestTP(),
                     serviceType, currentNode, vertices.get(0), 0);
                 break;
             case SRG:
@@ -872,7 +871,7 @@ public class PostAlgoPathValidator {
 
     private PceLink getOppPceLink(Integer pathEltNber, List<PceGraphEdge> edges,
             Map<LinkId, PceLink> allPceLinks) {
-        return allPceLinks.get(new LinkId(edges.get(pathEltNber).link().getOppositeLink()));
+        return allPceLinks.get(new LinkId(edges.get(pathEltNber).link().getOppositeLinkId()));
     }
 
     private String getXpdrOpMode(String nwTpId, String vertice, int pathElement, PceNode currentNode,
@@ -1085,8 +1084,8 @@ public class PostAlgoPathValidator {
         Set<PceNode> pceNodes = new LinkedHashSet<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
-            NodeId srcId = edge.link().getSourceId();
-            NodeId dstId = edge.link().getDestId();
+            NodeId srcId = new NodeId(edge.link().getSourceId());
+            NodeId dstId = new NodeId(edge.link().getDestId());
             LOG.debug("Processing {} to {}", srcId.getValue(), dstId.getValue());
             if (allPceNodes.containsKey(srcId)) {
                 pceNodes.add(allPceNodes.get(srcId));
