@@ -8,29 +8,17 @@
       <isValid>true</isValid>
       <clientA></clientA>
       <clientZ>SRG3-PP2-TXRX</clientZ>
-      <linkId>
-        <__value>ROADM-B-DEG1-DEG1-CTP-TXRXtoROADM-B-SRG3-SRG3-CP-TXRX</__value>
-      </linkId>
+      <linkId>ROADM-B-DEG1-DEG1-CTP-TXRXtoROADM-B-SRG3-SRG3-CP-TXRX</linkId>
       <linkType>DROPLINK</linkType>
-      <sourceId>
-        <__value>ROADM-B-DEG1</__value>
-      </sourceId>
-      <destId>
-        <__value>ROADM-B-SRG3</__value>
-      </destId>
-      <sourceTP>
-        <__value>DEG1-CTP-TXRX</__value>
-      </sourceTP>
-      <destTP>
-        <__value>SRG3-CP-TXRX</__value>
-      </destTP>
+      <sourceId>ROADM-B-DEG1</sourceId>
+      <destId>ROADM-B-SRG3</destId>
+      <sourceTP>DEG1-CTP-TXRX</sourceTP>
+      <destTP>SRG3-CP-TXRX</destTP>
       <sourceNetworkSupNodeId>ROADM-B</sourceNetworkSupNodeId>
       <destNetworkSupNodeId>ROADM-B</destNetworkSupNodeId>
       <sourceCLLI>NodeB</sourceCLLI>
       <destCLLI>NodeB</destCLLI>
-      <oppositeLink>
-        <__value>ROADM-B-SRG3-SRG3-CP-TXRXtoROADM-B-DEG1-DEG1-CTP-TXRX</__value>
-      </oppositeLink>
+      <oppositeLink>ROADM-B-SRG3-SRG3-CP-TXRXtoROADM-B-DEG1-DEG1-CTP-TXRX</oppositeLink>
       <adminStates>InService</adminStates>
       <state>InService</state>
       <latency>0</latency>

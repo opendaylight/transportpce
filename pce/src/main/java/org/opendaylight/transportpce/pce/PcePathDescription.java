@@ -237,7 +237,7 @@ public class PcePathDescription {
 //            tpName = path.get(0).getSourceTP().getValue();
 //            LOG.info("PcePathDescription Line230 build AtoZ : link0 ClientA is null, retrieve sourceTp = {}", tpName);
 //        }
-        String xname = path.get(0).getSourceId().getValue();
+        String xname = path.get(0).getSourceId();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpId(tpName).setTpNodeId(xname)
                 .build();
@@ -250,7 +250,7 @@ public class PcePathDescription {
         AToZ lastResource = null;
         PceLink lastLink = null;
         for (PceLink pcelink : path) {
-            String srcName = pcelink.getSourceId().getValue();
+            String srcName = pcelink.getSourceId();
             // Nodes
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
                     .pce.resource.resource.resource.Node sourceNode = new NodeBuilder()
@@ -265,7 +265,7 @@ public class PcePathDescription {
             atozMap.put(srcResource.key(),srcResource);
 
             // source TP
-            tpName = pcelink.getSourceTP().getValue();
+            tpName = pcelink.getSourceTP();
             stp = new TerminationPointBuilder()
                     .setTpNodeId(srcName).setTpId(tpName)
                     .build();
@@ -277,7 +277,7 @@ public class PcePathDescription {
             index += 1;
             atozMap.put(stpResource.key(),stpResource);
 
-            String linkName = pcelink.getLinkId().getValue();
+            String linkName = pcelink.getLinkId();
             // Link
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501
                     .pce.resource.resource.resource.Link atozLink = new LinkBuilder()
@@ -299,9 +299,9 @@ public class PcePathDescription {
             index += 1;
             atozMap.put(linkResource.key(),linkResource);
 
-            String destName = pcelink.getDestId().getValue();
+            String destName = pcelink.getDestId();
             // target TP
-            tpName = pcelink.getDestTP().getValue();
+            tpName = pcelink.getDestTP();
             TerminationPoint dtp = new TerminationPointBuilder()
                 .setTpNodeId(destName).setTpId(tpName)
                 .build();
@@ -337,7 +337,7 @@ public class PcePathDescription {
 //            tpName = lastLink.getDestTP().getValue();
 //            LOG.info("PcePathDescription Line319 build AtoZ : lastlink ClientZ null, retrieve sourceTp = {}", tpName);
 //        }
-        xname = lastLink.getDestId().getValue();
+        xname = lastLink.getDestId();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
                 .build();
@@ -356,12 +356,12 @@ public class PcePathDescription {
         ZToA lastResource = null;
 
         // build Z size Client TP
-        PceLink pcelink = this.allPceLinks.get(path.get(0).getOppositeLink());
+        PceLink pcelink = this.allPceLinks.get(new LinkId(path.get(0).getOppositeLinkId()));
         String tpName = pcelink.getClientA();
 //        if (tpName == null || tpName.isBlank()) {
 //            tpName = pcelink.getSourceTP().getValue();
 //        }
-        String xname = pcelink.getSourceId().getValue();
+        String xname = pcelink.getSourceId();
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName)
                 .build();
@@ -374,10 +374,10 @@ public class PcePathDescription {
 
         for (PceLink pcelinkAtoZ : path) {
 
-            pcelink = this.allPceLinks.get(pcelinkAtoZ.getOppositeLink());
+            pcelink = this.allPceLinks.get(new LinkId(pcelinkAtoZ.getOppositeLinkId()));
             LOG.debug("link to opposite: {} to {}", pcelinkAtoZ, pcelink);
 
-            String srcName = pcelink.getSourceId().getValue();
+            String srcName = pcelink.getSourceId();
 
 
             // Nodes
@@ -394,7 +394,7 @@ public class PcePathDescription {
             ztoaList.put(srcResource.key(),srcResource);
 
             // source TP
-            tpName = pcelink.getSourceTP().getValue();
+            tpName = pcelink.getSourceTP();
             stp = new TerminationPointBuilder()
                     .setTpNodeId(srcName).setTpId(tpName)
                     .build();
@@ -406,7 +406,7 @@ public class PcePathDescription {
             index += 1;
             ztoaList.put(stpResource.key(),stpResource);
 
-            String linkName = pcelink.getLinkId().getValue();
+            String linkName = pcelink.getLinkId();
             // Link
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev230501.pce
                 .resource.resource.resource.Link ztoaLink = new LinkBuilder()
@@ -427,9 +427,9 @@ public class PcePathDescription {
             index += 1;
             ztoaList.put(linkResource.key(),linkResource);
 
-            String destName = pcelink.getDestId().getValue();
+            String destName = pcelink.getDestId();
             // target TP
-            tpName = pcelink.getDestTP().getValue();
+            tpName = pcelink.getDestTP();
             TerminationPoint ttp = new TerminationPointBuilder()
                     .setTpNodeId(destName).setTpId(tpName).build();
 
@@ -460,7 +460,7 @@ public class PcePathDescription {
 //        if (tpName == null || tpName.isBlank()) {
 //            tpName = lastLink.getDestTP().getValue();
 //        }
-        xname = lastLink.getDestId().getValue();
+        xname = lastLink.getDestId();
         stp = new TerminationPointBuilder()
                 .setTpNodeId(xname).setTpId(tpName).build();
 

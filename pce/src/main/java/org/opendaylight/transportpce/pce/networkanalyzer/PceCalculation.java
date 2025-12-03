@@ -702,10 +702,10 @@ public class PceCalculation {
 
     private boolean filteraddLinks(PceORLink pcelink) {
 
-        NodeId nodeId = pcelink.getSourceId();
+        NodeId nodeId = new NodeId(pcelink.getSourceId());
 
         if (azSrgs.contains(nodeId)) {
-            allPceLinks.put(pcelink.getLinkId(), pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
             LOG.debug("PceCalculation:filteraddLinks : Add_LINK added to source and to allPceLinks {}",
                 pcelink.getLinkId());
@@ -720,11 +720,11 @@ public class PceCalculation {
     }
 
     private boolean filteraddTapiLinks(PceTapiLink pcelink) {
-        NodeId sourceNodeId = pcelink.getSourceId();
+        NodeId sourceNodeId = new NodeId(pcelink.getSourceId());
         // In TAPI, source & destination are not clearly identified. However they are processed to form PceTapiLink
         // that should have identified Source and Dest.
         if (azSrgs.contains(sourceNodeId)) {
-            allPceLinks.put(new LinkId(pcelink.getLinkUuid().getValue()), pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
             allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
             LOG.debug("PceCalculation:filteraddTapiLinks : Add_LINK added to source and to allPceLinks {} w state {}",
                 pcelink.getLinkId(), pcelink.getOperationalState());
@@ -745,10 +745,10 @@ public class PceCalculation {
 
     private boolean filterdropLinks(PceORLink pcelink) {
 
-        NodeId nodeId = pcelink.getDestId();
+        NodeId nodeId = new NodeId(pcelink.getDestId());
 
         if (azSrgs.contains(nodeId)) {
-            allPceLinks.put(pcelink.getLinkId(), pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
             LOG.debug("PceCalculation:filterdropLinks : Drop_LINK added to source and to allPceLinks {} w state {}",
                 pcelink.getLinkId(), pcelink.getOperationalState());
@@ -756,19 +756,19 @@ public class PceCalculation {
         }
 
         // remove the SRG from PceNodes, as it is not directly connected to A/Z
-        allPceNodes.remove(pcelink.getDestId());
+        allPceNodes.remove(new NodeId(pcelink.getDestId()));
         LOG.debug("PceCalculation:filterdropTapiLinks : SRG removed {}", nodeId.getValue());
 
         return false;
     }
 
     private boolean filterdropTapiLinks(PceTapiLink pcelink) {
-        NodeId sourceNodeId = pcelink.getSourceId();
-        NodeId destNodeId = pcelink.getDestId();
+        NodeId sourceNodeId = new NodeId(pcelink.getSourceId());
+        NodeId destNodeId = new NodeId(pcelink.getDestId());
         // In TAPI, source & destination are not clearly identified. However they are processed to form PceTapiLink
         // that should have identified Source and Dest.
         if (azSrgs.contains(destNodeId)) {
-            allPceLinks.put(pcelink.getLinkId(), pcelink);
+            allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
             // Before as for OR added Outgoing link to dest nose but seems it should be on Source
             //allPceNodes.get(destNodeId).addOutgoingLink(pcelink);
             allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
@@ -791,10 +791,10 @@ public class PceCalculation {
     }
 
     private boolean filterExpressTapiLinks(PceTapiLink pcelink) {
-        NodeId sourceNodeId = pcelink.getSourceId();
+        NodeId sourceNodeId = new NodeId(pcelink.getSourceId());
         // In TAPI, source & destination are not clearly identified. However they are processed to form PceTapiLink
         // that should have identified Source and Dest.
-        allPceLinks.put(pcelink.getLinkId(), pcelink);
+        allPceLinks.put(new LinkId(pcelink.getLinkId()), pcelink);
         allPceNodes.get(sourceNodeId).addOutgoingLink(pcelink);
         LOG.info("analyzeTapiNw828: Express_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
         return true;
@@ -1295,7 +1295,7 @@ public class PceCalculation {
         List<Long> constraints = new ArrayList<>(pceHardConstraints.getExcludeSRLG());
         constraints.retainAll(link.getsrlgList());
         if (!constraints.isEmpty()) {
-            LOG.debug("PceCalculation:validateLinkConstraints : {}", link.getLinkId().getValue());
+            LOG.debug("PceCalculation:validateLinkConstraints : {}", link.getLinkId());
             return ConstraintTypes.HARD_EXCLUDE;
         }
         return ConstraintTypes.NONE;
@@ -1331,7 +1331,7 @@ public class PceCalculation {
     }
 
     private void dropOppositeTapiLink(PceTapiLink link) {
-        LinkId opplinkUuid = new LinkId(link.getOppositeLinkUuid().getValue());
+        LinkId opplinkUuid = new LinkId(link.getOppositeLinkId());
         if (allPceLinks.containsKey(opplinkUuid)) {
             allPceLinks.remove(opplinkUuid);
         } else {
@@ -1341,11 +1341,10 @@ public class PceCalculation {
 
 
     private void dropOppositeTapiConnection(PceTapiLink link) {
-        Uuid opplinkUuid = link.getOppositeLinkUuid();
-        if (opplinkUuid == null) {
-            return;
+        if (link.getOppositeLinkId() != null) {
+            Uuid opplinkUuid = getUuidFromInput(link.getOppositeLinkId());
+            linksToExclude.add(new LinkId(opplinkUuid.getValue()));
         }
-        linksToExclude.add(new LinkId(opplinkUuid.getValue()));
 //        if (allCons.get(opplinkUuid) != null) {
 //            allCons.remove(opplinkUuid);
 //        } else {
@@ -1508,7 +1507,7 @@ public class PceCalculation {
             LOG.debug("PceCalculation:processPceLink : Link is ignored due errors in network data or in opposite link");
             return false;
         }
-        LinkId linkId = pcelink.getLinkId();
+        LinkId linkId = new LinkId(pcelink.getLinkId());
         if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             dropOppositeLink(link);
             LOG.debug("PceCalculation:processPceLink : constraints : link is ignored == {}", linkId.getValue());
@@ -1525,14 +1524,12 @@ public class PceCalculation {
                     pcelink.getlinkType(), pcelink);
                 break;
             case ADDLINK:
-                pcelink.setClientA(
-                    source.getRdmSrgClient(pcelink.getSourceTP().getValue(), StringConstants.SERVICE_DIRECTION_AZ));
+                pcelink.setClientA(source.getRdmSrgClient(pcelink.getSourceTP(), StringConstants.SERVICE_DIRECTION_AZ));
                 addLinks.add(pcelink);
                 LOG.debug("PceCalculation:processPceLink : ADD-LINK saved  {}", pcelink);
                 break;
             case DROPLINK:
-                pcelink.setClientZ(
-                    dest.getRdmSrgClient(pcelink.getDestTP().getValue(), StringConstants.SERVICE_DIRECTION_ZA));
+                pcelink.setClientZ(dest.getRdmSrgClient(pcelink.getDestTP(), StringConstants.SERVICE_DIRECTION_ZA));
                 dropLinks.add(pcelink);
                 LOG.debug("PceCalculation:processPceLink : DROP-LINK saved  {}", pcelink);
                 break;
@@ -1540,13 +1537,13 @@ public class PceCalculation {
                 // store separately all SRG links directly
                 azSrgs.add(sourceId);
                 // connected to A/Z
-                if (!dest.checkTP(pcelink.getDestTP().getValue())) {
+                if (!dest.checkTP(pcelink.getDestTP())) {
                     LOG.debug(
                         "PceCalculation:processPceLink : XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()) != null) {
-                    pcelink.setClientZ(dest.getXpdrNWfromClient(pcelink.getDestTP().getValue()));
+                if (dest.getXpdrNWfromClient(pcelink.getDestTP()) != null) {
+                    pcelink.setClientZ(dest.getXpdrNWfromClient(pcelink.getDestTP()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -1557,13 +1554,13 @@ public class PceCalculation {
                 // store separately all SRG links directly
                 azSrgs.add(destId);
                 // connected to A/Z
-                if (!source.checkTP(pcelink.getSourceTP().getValue())) {
+                if (!source.checkTP(pcelink.getSourceTP())) {
                     LOG.debug(
                         "PceCalculation:processPceLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
                     return false;
                 }
-                if (source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()) != null) {
-                    pcelink.setClientA(source.getXpdrNWfromClient(pcelink.getSourceTP().getValue()));
+                if (source.getXpdrNWfromClient(pcelink.getSourceTP()) != null) {
+                    pcelink.setClientA(source.getXpdrNWfromClient(pcelink.getSourceTP()));
                 }
                 allPceLinks.put(linkId, pcelink);
                 source.addOutgoingLink(pcelink);
@@ -1651,7 +1648,7 @@ public class PceCalculation {
             LOG.debug(" PceCalculation:processPceTapiLink: Link ignored (errors in network data or in opposite link)");
             return false;
         }
-        LinkId linkid = new LinkId(pceTapiLink.getLinkUuid().getValue());
+        LinkId linkid = new LinkId(pceTapiLink.getLinkId());
         if (validateTapiLinkConstraints(pceTapiLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             // Will not go through this loop : TAPI SRLG handled as string currently not handled (OR SRLG are longs)
             dropOppositeTapiLink(pceTapiLink);
@@ -1665,7 +1662,7 @@ public class PceCalculation {
     }
 
     private boolean processTapiLinkBasics(PceTapiLink pceTapiLink, PceNode source, PceNode dest) {
-        LinkId linkid = new LinkId(pceTapiLink.getLinkUuid().getValue());
+        LinkId linkid = new LinkId(pceTapiLink.getLinkId());
         switch (pceTapiLink.getlinkType()) {
             case ROADMTOROADM:
             case EXPRESSLINK:
@@ -1676,13 +1673,12 @@ public class PceCalculation {
                     pceTapiLink.getlinkType(), pceTapiLink);
                 break;
             case ADDLINK:
-                if (source.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(), StringConstants.SERVICE_DIRECTION_AZ)
-                        != null) {
-                    pceTapiLink.setClientA(source.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
+                if (source.getRdmSrgClient(pceTapiLink.getSourceTP(), StringConstants.SERVICE_DIRECTION_AZ) != null) {
+                    pceTapiLink.setClientA(source.getRdmSrgClient(pceTapiLink.getSourceTP(),
                         StringConstants.SERVICE_DIRECTION_AZ));
-                } else if (dest.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
-                        StringConstants.SERVICE_DIRECTION_AZ) != null) {
-                    pceTapiLink.setClientA(dest.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
+                } else if (dest.getRdmSrgClient(pceTapiLink.getSourceTP(),
+                    StringConstants.SERVICE_DIRECTION_AZ) != null) {
+                    pceTapiLink.setClientA(dest.getRdmSrgClient(pceTapiLink.getSourceTP(),
                         StringConstants.SERVICE_DIRECTION_AZ));
                 } else {
                     LOG.error("For ADD Link {}, no PP identified", pceTapiLink.getLinkName());
@@ -1692,13 +1688,13 @@ public class PceCalculation {
                 LOG.debug("PceCalculation:processTapiLinkBasics: ADD-LINK saved  {}", pceTapiLink);
                 break;
             case DROPLINK:
-                if (dest.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(), StringConstants.SERVICE_DIRECTION_ZA)
+                if (dest.getRdmSrgClient(pceTapiLink.getSourceTP(), StringConstants.SERVICE_DIRECTION_ZA)
                         != null) {
-                    pceTapiLink.setClientZ(dest.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
+                    pceTapiLink.setClientZ(dest.getRdmSrgClient(pceTapiLink.getSourceTP(),
                         StringConstants.SERVICE_DIRECTION_ZA));
-                } else if (source.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
+                } else if (source.getRdmSrgClient(pceTapiLink.getSourceTP(),
                         StringConstants.SERVICE_DIRECTION_ZA) != null) {
-                    pceTapiLink.setClientZ(source.getRdmSrgClient(pceTapiLink.getSourceTP().getValue(),
+                    pceTapiLink.setClientZ(source.getRdmSrgClient(pceTapiLink.getSourceTP(),
                         StringConstants.SERVICE_DIRECTION_ZA));
                 } else {
                     LOG.error("For DROP Link {}, no PP identified", pceTapiLink.getLinkName());
@@ -1710,17 +1706,16 @@ public class PceCalculation {
             case XPONDERINPUT:
                 LOG.info("PceCalculationLine1695, handling XPDRinputlink {}, with sourceTP {} and destTp {}",
                     pceTapiLink.getLinkName(), pceTapiLink.getSourceTP(), pceTapiLink.getDestTP());
-                if (!dest.checkTP(pceTapiLink.getDestTPUuid().getValue())) {
-                    if (!source.checkTP(pceTapiLink.getSourceTPUuid().getValue())) {
+                if (!dest.checkTP(pceTapiLink.getDestTP())) {
+                    if (!source.checkTP(pceTapiLink.getSourceTP())) {
                         LOG.debug("PceCalculation:processTapiLinkBasics: XPDRR-INPUT rejected as NW port is busy {} ",
                             pceTapiLink);
                         return false;
                     } else {
                         // store separately all SRG links directly connected to A/Z
                         azSrgs.add(new NodeId(dest.getNodeUuid().getValue()));
-                        if (source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid().getValue()) != null) {
-                            pceTapiLink.setClientZ(source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid()
-                                .getValue()));
+                        if (source.getXpdrNWfromClient(pceTapiLink.getSourceTP()) != null) {
+                            pceTapiLink.setClientZ(source.getXpdrNWfromClient(pceTapiLink.getSourceTP()));
                         }
                         allPceLinks.put(linkid, pceTapiLink);
                         dest.addOutgoingLink(pceTapiLink);
@@ -1730,8 +1725,8 @@ public class PceCalculation {
                 } else {
                     // store separately all SRG links directly connected to A/Z
                     azSrgs.add(new NodeId(source.getNodeUuid().getValue()));
-                    if (dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid().getValue()) != null) {
-                        pceTapiLink.setClientZ(dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid().getValue()));
+                    if (dest.getXpdrNWfromClient(pceTapiLink.getDestTP()) != null) {
+                        pceTapiLink.setClientZ(dest.getXpdrNWfromClient(pceTapiLink.getDestTP()));
                     }
                     allPceLinks.put(linkid, pceTapiLink);
                     source.addOutgoingLink(pceTapiLink);
@@ -1742,17 +1737,16 @@ public class PceCalculation {
             case XPONDEROUTPUT:
                 LOG.debug("PceCalculation:processTapiLinkBasics: handling XPDRoutputlink {}, with srcTP {} & destTp {}",
                     pceTapiLink.getLinkName(), pceTapiLink.getSourceTP(), pceTapiLink.getDestTP());
-                if (!source.checkTP(pceTapiLink.getSourceTPUuid().getValue())) {
-                    if (!dest.checkTP(pceTapiLink.getDestTPUuid().getValue())) {
+                if (!source.checkTP(pceTapiLink.getSourceTP())) {
+                    if (!dest.checkTP(pceTapiLink.getDestTP())) {
                         LOG.debug("PceCalculation:processTapiLinkBasics: XPDR-OUTPUT rejected as NW port is busy - {} ",
                             pceTapiLink);
                         return false;
                     } else {
                         // store separately all SRG links directly connected to A/Z
                         azSrgs.add(new NodeId(source.getNodeUuid().getValue()));
-                        if (dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid().getValue()) != null) {
-                            pceTapiLink.setClientA(dest.getXpdrNWfromClient(pceTapiLink.getDestTPUuid()
-                                .getValue()));
+                        if (dest.getXpdrNWfromClient(pceTapiLink.getDestTP()) != null) {
+                            pceTapiLink.setClientA(dest.getXpdrNWfromClient(pceTapiLink.getDestTP()));
                         }
                         allPceLinks.put(linkid, pceTapiLink);
                         dest.addOutgoingLink(pceTapiLink);
@@ -1761,8 +1755,8 @@ public class PceCalculation {
                 } else {
                     // store separately all SRG links directly connected to A/Z
                     azSrgs.add(new NodeId(dest.getNodeUuid().getValue()));
-                    if (source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid().getValue()) != null) {
-                        pceTapiLink.setClientA(source.getXpdrNWfromClient(pceTapiLink.getSourceTPUuid().getValue()));
+                    if (source.getXpdrNWfromClient(pceTapiLink.getSourceTP()) != null) {
+                        pceTapiLink.setClientA(source.getXpdrNWfromClient(pceTapiLink.getSourceTP()));
                     }
                     allPceLinks.put(linkid, pceTapiLink);
                     source.addOutgoingLink(pceTapiLink);
@@ -1786,7 +1780,7 @@ public class PceCalculation {
             return false;
         }
 
-        LinkId linkId = pceOtnLink.getLinkId();
+        LinkId linkId = new LinkId(pceOtnLink.getLinkId());
         if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             dropOppositeLink(link);
             LOG.debug("PceCalculation:processOtnLink: constraints : link is ignored == {}", linkId.getValue());
@@ -1795,11 +1789,11 @@ public class PceCalculation {
 
         switch (pceOtnLink.getlinkType()) {
             case OTNLINK:
-                if (source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()) != null) {
-                    pceOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()));
+                if (source.getXpdrNWfromClient(pceOtnLink.getSourceTP()) != null) {
+                    pceOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP()));
                 }
-                if (dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()) != null) {
-                    pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()));
+                if (dest.getXpdrNWfromClient(pceOtnLink.getDestTP()) != null) {
+                    pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP()));
                 }
                 allPceLinks.put(linkId, pceOtnLink);
                 source.addOutgoingLink(pceOtnLink);
@@ -1821,7 +1815,7 @@ public class PceCalculation {
             return false;
         }
 
-        LinkId linkId = new LinkId(pceOtnLink.getLinkUuid().getValue());
+        LinkId linkId = new LinkId(pceOtnLink.getLinkId());
         if (validateTapiLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
             // Will not go through this loop : TAPI SRLG handled as string whereas OpenRoadm SRLG are longs)
             // Currently not handled, but kept to enable potential implementation when completing other part of the code
@@ -1845,24 +1839,24 @@ public class PceCalculation {
         }
         switch (pceOtnLink.getlinkType()) {
             case OTNLINK:
-                if (source.getXpdrNWfromClient(pceOtnLink.getSourceTPUuid().getValue()) != null) {
-                    pceOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()));
+                if (source.getXpdrNWfromClient(pceOtnLink.getSourceTP()) != null) {
+                    pceOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP()));
                 }
-                if (dest.getXpdrNWfromClient(pceOtnLink.getDestTPUuid().getValue()) != null) {
-                    pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()));
+                if (dest.getXpdrNWfromClient(pceOtnLink.getDestTP()) != null) {
+                    pceOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP()));
                 }
                 allPceLinks.put(linkId, pceOtnLink);
                 source.addOutgoingLink(pceOtnLink);
                 //dest.addOutgoingLink(pceOtnLink);
                 LOG.debug("PceCalculation:processPceTapiOtnLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
                 if (pceRevertOtnLink != null) {
-                    if (source.getXpdrNWfromClient(pceRevertOtnLink.getSourceTPUuid().getValue()) != null) {
-                        pceRevertOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP().getValue()));
+                    if (source.getXpdrNWfromClient(pceRevertOtnLink.getSourceTP()) != null) {
+                        pceRevertOtnLink.setClientA(source.getXpdrNWfromClient(pceOtnLink.getSourceTP()));
                     }
-                    if (dest.getXpdrNWfromClient(pceRevertOtnLink.getDestTPUuid().getValue()) != null) {
-                        pceRevertOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP().getValue()));
+                    if (dest.getXpdrNWfromClient(pceRevertOtnLink.getDestTP()) != null) {
+                        pceRevertOtnLink.setClientZ(dest.getXpdrNWfromClient(pceOtnLink.getDestTP()));
                     }
-                    allPceLinks.put(new LinkId(pceRevertOtnLink.getLinkUuid().getValue()), pceRevertOtnLink);
+                    allPceLinks.put(new LinkId(pceRevertOtnLink.getLinkId()), pceRevertOtnLink);
                     //source.addOutgoingLink(pceOtnLink);
                     dest.addOutgoingLink(pceRevertOtnLink);
                     LOG.debug("PceCalculation:processPceTapiOtnLink: OTN-LINK added to allPceLinks {}",
