@@ -36,6 +36,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ea80de_4037d3d5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "442cf34d_78c3f44f",
+      "revId": "2d01552c9f25da9a5d0318d8e172757d78564540",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d620d50_84b6c4a0",
@@ -49,6 +67,24 @@
       "writtenOn": "2025-12-03T08:02:37Z",
       "side": 1,
       "message": "This is not a builder, maybe remove builder from the variable name?",
+      "revId": "2d01552c9f25da9a5d0318d8e172757d78564540",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9531a60_3fe5bcc5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/FrequenciesServiceImpl.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6d620d50_84b6c4a0",
       "revId": "2d01552c9f25da9a5d0318d8e172757d78564540",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
