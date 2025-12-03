@@ -42,6 +42,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2224d957_12c292ac",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3a32fe12_bdb48fb4",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2e66180_6932deb6",
@@ -55,6 +79,30 @@
       "writtenOn": "2025-12-03T07:49:01Z",
       "side": 1,
       "message": "Maybe refactor this double for loop into one or two methods with descriptive names.\n\nso the call becomes:\n```\nif(serviceExistsInTapi(connectivityServices)) {\n    LOG.info(\"Service {} already exists in TAPI\", openRoadmServiceName);\n    return false;\n}\n```",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 0
+      },
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2f3806f_6486d9e8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2e66180_6932deb6",
       "range": {
         "startLine": 65,
         "startChar": 8,
@@ -82,6 +130,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5fa7b4_8c3837b2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "No reason, mistake on my part.",
+      "parentUuid": "5d1e8e8e_fbad1edc",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd081515_1a431f50",
@@ -95,6 +161,24 @@
       "writtenOn": "2025-12-03T07:49:01Z",
       "side": 1,
       "message": "Very nonspecific name, as Service is widely used for different things. \nMaybe rename this into something more specific for this?\nMaybe OpenROADMServiceCopier?",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99dc75bb_3b92540d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/Service.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "After our last discussion, I opted to remove the interface altogether.",
+      "parentUuid": "bd081515_1a431f50",
       "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -116,6 +200,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b910eeae_c74f0997",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7836b5fb_b0720168",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "addf56e7_90c7780d",
@@ -133,6 +235,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "418a158c_625658d6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "Won\u0027t happen, if no service is found, `null` is returned in this case. Question is, does this method actually \"know\" that? Anyway, I\u0027ll leave it as is for now.",
+      "parentUuid": "addf56e7_90c7780d",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5514f03_bafa05a9",
@@ -146,6 +266,24 @@
       "writtenOn": "2025-12-03T07:49:01Z",
       "side": 1,
       "message": "Nice removal of the commented out code.",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeebd426_efaca624",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-03T09:26:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5514f03_bafa05a9",
       "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
