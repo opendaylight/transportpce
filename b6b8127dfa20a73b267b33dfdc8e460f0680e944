@@ -1,4 +1,153 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1764247831 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1764247831-46BCF3BE705BB17D83A8DC10BD36A880463CEE34\n\n0000000000000000000000000000000000000000 e62224cd48138110232ef1bbed1b077ca01b926e refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmkoSRcACgkQX735uTFP\nrXHMFg//be1LRJizkQs7uTjaspVLN4dXkvGdilgY53TZUFwTqYUXZq59TC90WvTl\nDfU4jGZbDyBAGk9J924eZMYCVD3NPY83Q0HBg9ZOV4Ccy+OJGRE8cW58czl4i43g\nJevSg3PXp5txpoAKt0U7ZaD37JnDCVX0MOehtpcaGghPqgpmZYgkh/6wzc2gNfKM\njzVKcbF2uA74mc4mlhahfmk4BMDSd9hZPDTxdAiSKmtAHvYWX5RilBdLBn0EVKm/\nT+dyuHq/GXMbZdR6dPY9decF1aZNnJzL4hTNRt27I6vWWWf0rIw8YqtGKHmrQPZB\nBJsEBJHIJKnd44myc+V+jyEchG+vftTDTzWRgUh7MuCpwhO4kTL74MWOC2mMCdNy\n40r1cu960KjKG8ILXk9+L1QxgNutZI0OHmTIfxBXOUkBmsNdRpD4FmZFE5WVh87t\nWZt9Eamdook/ayyngIOapydMd5oCZKYbVV1gzra7MxwuCJvqxd8cSJ3uv8sQNZ7r\nJviViO3Oig/7/J+ahGSczb0/aP3C9Y/nBOwx27fFgZE5XIHA0hSMGKDUvcUnlD8R\n93yQBRNfpHw1y0aY1f2/GzIZzp510RAoazutfCq5qFW5dYOQcy/fqwbgiIBODEAs\nKPwdw8hEjMWPsJ9Pr5zdj3yOM2FvoreBfdqq6nODeCHO1yUJ5RY\u003d\n\u003dQuer\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "486ea964_ab93b5f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Looks ok, had some comments.",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a32fe12_bdb48fb4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Maybe add a javadoc description of why this class exists, and what it does?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2e66180_6932deb6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Maybe refactor this double for loop into one or two methods with descriptive names.\n\nso the call becomes:\n```\nif(serviceExistsInTapi(connectivityServices)) {\n    LOG.info(\"Service {} already exists in TAPI\", openRoadmServiceName);\n    return false;\n}\n```",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 0
+      },
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d1e8e8e_fbad1edc",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/OpenRoadmService.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Any reason this is not private?",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd081515_1a431f50",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/service/Service.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Very nonspecific name, as Service is widely used for different things. \nMaybe rename this into something more specific for this?\nMaybe OpenROADMServiceCopier?",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7836b5fb_b0720168",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Nice refactoring!",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "addf56e7_90c7780d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "This cannot return empty Map as well?",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5514f03_bafa05a9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/utils/TapiInitialORMapping.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-03T07:49:01Z",
+      "side": 1,
+      "message": "Nice removal of the commented out code.",
+      "revId": "b6b8127dfa20a73b267b33dfdc8e460f0680e944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
