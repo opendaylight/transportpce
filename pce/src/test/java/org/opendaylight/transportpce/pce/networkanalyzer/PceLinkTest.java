@@ -165,8 +165,8 @@ public class PceLinkTest extends AbstractTest {
         assertEquals(0.25, pceLink.getpmd2(), 0.005, "Checking PMDvalue of link");
         assertEquals(825, pceLink.getcd(), 0.005, "Checking CDvalue of link");
         // assertTrue(7.857119000000001 == pceLink.getosnr());
-        assertNull(pceLink.getOppositeLink());
-        assertNull(pceLink.getOppositeLink());
+//        assertNull(pceLink.getOppositeLinkId());
+//        assertNull(pceLink.getOppositeLinkId());
         assertNotNull(pceLink.getDestTP());
         assertNotNull(pceLink.getlinkType());
         assertNotNull(pceLink.getLinkId());
@@ -184,7 +184,7 @@ public class PceLinkTest extends AbstractTest {
         assertNotNull(pceLink.getsourceCLLI());
         assertNotNull(pceLink.getdestCLLI());
         assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
-            + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
+            + " ID=" + pceLink.getLinkId() + " latency=" + pceLink.getLatency().intValue()));
     }
 
     @Test

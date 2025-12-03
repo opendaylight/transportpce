@@ -1996,13 +1996,13 @@ public class TapiOpticalNode {
                 linkTBC.getKey(), linkTBC.getValue().getOrgTpUuid(), linkTBC.getValue().getDestTpUuid(),
                 orgPceNode, destPceNode);
             if (linkTBC.getValue().getOppositeLinkId() != null && !linkTBC.getValue().getOppositeLinkId().isEmpty()) {
-                pceTapiLinkTBC.setOppositeLinkUuid(linkTBC.getValue().getOppositeLinkId().entrySet().stream()
-                    .findFirst().orElseThrow().getKey());
+                pceTapiLinkTBC.setOppositeLinkId(linkTBC.getValue().getOppositeLinkId().entrySet().stream()
+                    .findFirst().orElseThrow().getKey().getValue());
             }
 
             LOG.debug("TON:createLinksFromIlMap : for TapiOptical Node, Link Name {}, from {} to {}",
                 pceTapiLinkTBC.getLinkName(), orgPceNode.getNodeId(), destPceNode.getNodeId());
-            this.pceInternalLinkMap.put(pceTapiLinkTBC.getLinkUuid(), pceTapiLinkTBC);
+            this.pceInternalLinkMap.put(new Uuid(pceTapiLinkTBC.getLinkId()), pceTapiLinkTBC);
         }
         LOG.debug("TON:createLinksFromIlMap : pceInternalLinkMap = {} ",
             pceInternalLinkMap.values().stream().map(PceTapiLink::getLinkName).collect(Collectors.toList()));
