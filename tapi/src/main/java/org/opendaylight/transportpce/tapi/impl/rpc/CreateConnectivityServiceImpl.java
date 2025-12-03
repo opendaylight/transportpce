@@ -94,6 +94,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         OperationResult validationResult =
             CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(input);
         if (!validationResult.isSuccess()) {
+            reset();
             return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                 .withError(ErrorType.RPC, "Failed to create service")
                 .buildFuture();
@@ -103,6 +104,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap =
                 this.tapiContext.getTapiContext().getServiceInterfacePoint();
         if (sipMap == null) {
+            reset();
             return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                 .withError(ErrorType.RPC, "SIP list is empty")
                 .buildFuture();
@@ -112,6 +114,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
                 || !sipMap.containsKey(new ServiceInterfacePointKey(input.getEndPoint().values().stream().skip(1)
                     .findFirst().orElseThrow().getServiceInterfacePoint().getServiceInterfacePointUuid()))) {
             LOG.error("Unknown UUID");
+            reset();
             return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                 .withError(ErrorType.RPC, "SIPs do not exist in tapi context")
                 .buildFuture();
@@ -128,6 +131,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         LOG.info("Service Create input = {}", sci);
         ListenableFuture<RpcResult<ServiceCreateOutput>> output = rpcService.getRpc(ServiceCreate.class).invoke(sci);
         if (!output.isDone()) {
+            reset();
             return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                 .withError(ErrorType.RPC, "Service create RPC failed")
                 .buildFuture();
@@ -136,6 +140,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         try {
             if (output.get().getResult().getConfigurationResponseCommon().getResponseCode()
                     .equals(ResponseCodes.RESPONSE_FAILED)) {
+                reset();
                 return RpcResultBuilder.<CreateConnectivityServiceOutput>failed()
                     .withError(ErrorType.RPC, "Failed to create service")
                     .buildFuture();
@@ -171,6 +176,7 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         this.tapiContext.updateConnectivityContext(Map.of(service.key(), service), new HashMap<>());
         LOG.info("Created locked service in Datastore. Waiting for PCE and Renderer to complete tasks...");
         // return ConnectivityServiceCreateOutput
+        reset();
         return RpcResultBuilder.success(
                 new CreateConnectivityServiceOutputBuilder()
                     .setService(new ServiceBuilder(service).build())
@@ -210,4 +216,14 @@ public class CreateConnectivityServiceImpl implements CreateConnectivityService 
         return endPointMap;
     }
 
+    /**
+     * Resets the current input and service UUIDs.
+     * Useful when this instance is kept around and invoked multiple times, so each invocation
+     * starts from a clean state and behaves consistently.
+     */
+    private void reset() {
+        this.pceListenerImpl.setInput(null);
+        this.pceListenerImpl.setServiceUuid(null);
+        this.rendererListenerImpl.setServiceUuid(null);
+    }
 }
