@@ -28,7 +28,9 @@ import org.opendaylight.transportpce.tapi.frequency.Factory;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
 import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
-import org.opendaylight.transportpce.tapi.frequency.grid.Available;
+import org.opendaylight.transportpce.tapi.frequency.adapter.AvailableFrequencyRange;
+import org.opendaylight.transportpce.tapi.frequency.adapter.FrequencyRange;
+import org.opendaylight.transportpce.tapi.frequency.adapter.UsedFrequencyRange;
 import org.opendaylight.transportpce.tapi.frequency.grid.AvailableGrid;
 import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
 import org.opendaylight.transportpce.tapi.frequency.grid.Numeric;
@@ -1135,32 +1137,11 @@ public class ORtoTapiTopoConversionTools {
         }
         var txttpAttUsedWvl = txttpAtt.getUsedWavelengths();
         if (txttpAttUsedWvl == null || txttpAttUsedWvl.isEmpty()) {
-            var txttpAttAvlFreqMaps = txttpAtt.getAvailFreqMaps();
-            if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-                return new SortedRange();
-            }
-            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
-            LOG.debug("Creation of Bitset {}", freqByteSet);
-            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-            freqByteSet = txttpAttAvlFreqMaps.entrySet().stream()
-                .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                .findFirst().orElseThrow().getValue().getFreqMap();
+            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = txttpAtt.getAvailFreqMaps();
+            AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-            LOG.debug("TTP used frequency byte set ({} bytes, 0 represents 8 used frequencies): {} ",
-                    freqByteSet.length,
-                    freqByteSet
-            );
-            Available bitMap = new AvailableGrid(freqByteSet);
-
-            LOG.debug("TTP used frequency bit set (min=0, max={}, each number represents a used frequency): {} ",
-                    GridConstant.EFFECTIVE_BITS,
-                    bitMap.assignedFrequencies()
-            );
-            Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
-            LOG.info("TTP used frequency map {}", assignedFrequencyRanges);
-
-            return new SortedRange(assignedFrequencyRanges);
-
+            FrequencyRange usedFrequencyRangeAdapter = new UsedFrequencyRange(numericFrequency);
+            return new SortedRange(ranges(availFreqMaps, cband, usedFrequencyRangeAdapter));
         }
         Range range = new SortedRange();
         for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
@@ -1203,7 +1184,8 @@ public class ORtoTapiTopoConversionTools {
         Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = txttpAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        return new SortedRange(availableRanges(avlFreqMaps, cband));
+        FrequencyRange availableFrequencyRangeAdapter = new AvailableFrequencyRange(numericFrequency);
+        return new SortedRange(ranges(avlFreqMaps, cband, availableFrequencyRangeAdapter));
     }
 
     /**
@@ -1226,7 +1208,8 @@ public class ORtoTapiTopoConversionTools {
         Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = ppAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        return new SortedRange(availableRanges(availFreqMaps, cband)).ranges();
+        FrequencyRange availableFrequencyRangeAdapter = new AvailableFrequencyRange(numericFrequency);
+        return new SortedRange(ranges(availFreqMaps, cband, availableFrequencyRangeAdapter)).ranges();
     }
 
     /**
@@ -1243,9 +1226,10 @@ public class ORtoTapiTopoConversionTools {
      * @param bandKey the key representing the band to extract
      * @return a map of numeric frequency ranges (e.g., start → end), or an empty map if unavailable
      */
-    private Map<Double, Double> availableRanges(
+    private Map<Double, Double> ranges(
             Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps,
-            AvailFreqMapsKey bandKey) {
+            AvailFreqMapsKey bandKey,
+            FrequencyRange frequencyRange) {
 
         if (!hasBand(avlFreqMaps, bandKey)) {
             return Map.of();
@@ -1253,7 +1237,7 @@ public class ORtoTapiTopoConversionTools {
 
         AvailFreqMaps afm = avlFreqMaps.get(bandKey);
         byte[] freqByteSet = Arrays.copyOf(afm.getFreqMap(), GridConstant.NB_OCTECTS);
-        return numericFrequency.availableFrequency(new AvailableGrid(freqByteSet));
+        return frequencyRange.frequency(new AvailableGrid(freqByteSet));
     }
 
     /**
@@ -1281,36 +1265,20 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPP11UsedFrequencies(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-        SortedRange sortedRange = new SortedRange();
         if (tp == null) {
             return new HashMap<>();
         }
 
-        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = new HashMap<>();
         PpAttributes ppAtt = tp.getPpAttributes();
-        if (ppAtt != null) {
-            avlFreqMaps = ppAtt.getAvailFreqMaps();
+        if (ppAtt == null) {
+            return Map.of();
         }
 
-        if (avlFreqMaps != null && avlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = ppAtt.getAvailFreqMaps();
+        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-            freqByteSet = Arrays.copyOf(avlFreqMaps.entrySet().stream()
-                    .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                    .findFirst()
-                    .orElseThrow()
-                    .getValue()
-                    .getFreqMap(), freqByteSet.length);
-            LOG.debug("Available frequency byte set: {}", freqByteSet);
-
-            Map<Double, Double> ranges = numericFrequency.assignedFrequency(new AvailableGrid(freqByteSet));
-            LOG.debug("Used frequency ranges: {}", ranges);
-
-            sortedRange.add(new SortedRange(ranges));
-        }
-
-        return sortedRange.ranges();
+        FrequencyRange usedFrequencyRangeAdapter = new UsedFrequencyRange(numericFrequency);
+        return new SortedRange(ranges(availFreqMaps, cband, usedFrequencyRangeAdapter)).ranges();
     }
 
     /**
@@ -1330,46 +1298,12 @@ public class ORtoTapiTopoConversionTools {
         if (txttpAtt == null) {
             return new SortedRange();
         }
-        var txttpAttUsedWvl = txttpAtt.getUsedWavelengths();
-        if (txttpAttUsedWvl == null || txttpAttUsedWvl.isEmpty()) {
-            var txttpAttAvlFreqMaps = txttpAtt.getAvailFreqMaps();
-            if (txttpAttAvlFreqMaps == null || !txttpAttAvlFreqMaps.keySet().toString().contains(GridConstant.C_BAND)) {
-                return new SortedRange();
-            }
-            byte[] freqByteSet = new byte[GridConstant.NB_OCTECTS];
-            LOG.debug("Creation of Bitset {}", freqByteSet);
-            AvailFreqMapsKey availFreqMapsKey = new AvailFreqMapsKey(GridConstant.C_BAND);
-            freqByteSet = txttpAttAvlFreqMaps.entrySet().stream()
-                .filter(afm -> afm.getKey().equals(availFreqMapsKey))
-                .findFirst().orElseThrow().getValue().getFreqMap();
 
-            LOG.debug("TTP11 used frequency byte set ({} bytes, 0 represents 8 used frequencies): {} ",
-                    freqByteSet.length,
-                    freqByteSet
-            );
-            Available bitMap = new AvailableGrid(freqByteSet);
+        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = txttpAtt.getAvailFreqMaps();
+        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-            LOG.debug("TTP11 used frequency bit set (min=0, max={}, each number represents a used frequency): {}",
-                    GridConstant.EFFECTIVE_BITS,
-                    bitMap.assignedFrequencies()
-            );
-            Map<Double, Double> assignedFrequencyRanges = numericFrequency.assignedFrequency(bitMap);
-
-            LOG.info("TTP11 used frequency map {}", assignedFrequencyRanges);
-            return new SortedRange(assignedFrequencyRanges);
-        }
-        return getRange(txttpAttUsedWvl);
-    }
-
-    private Range getRange(Map<UsedWavelengthsKey, UsedWavelengths> txttpAttUsedWvl) {
-        Range range = new SortedRange();
-        for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
-            var usedLambdasValue = usedLambdas.getValue();
-            Double centFreq = usedLambdasValue.getFrequency().getValue().doubleValue();
-            Double width = usedLambdasValue.getWidth().getValue().doubleValue();
-            range.add(centFreq, width, frequencyFactory);
-        }
-        return range;
+        FrequencyRange usedFrequencyRangeAdapter = new UsedFrequencyRange(numericFrequency);
+        return new SortedRange(ranges(availFreqMaps, cband, usedFrequencyRangeAdapter));
     }
 
     /**
