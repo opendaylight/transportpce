@@ -116,6 +116,28 @@ class ORtoTapiTopoConversionToolsTest {
     }
 
     @Test
+    void getPP11AvailableFrequencies() {
+        byte[] availableFrequencyMap = new byte[96];
+        Arrays.fill(availableFrequencyMap, (byte) 255);
+        availableFrequencyMap[96 - 1] = (byte) 0;
+
+        AvailFreqMaps freqMap = new AvailFreqMapsBuilder()
+                .setMapName(new AvailFreqMapsKey("cband").getMapName())
+                .setFreqMap(availableFrequencyMap)
+                .build();
+
+        TerminationPoint1 terminationPoint1pp = new TerminationPoint1Builder()
+                .setPpAttributes(
+                        new PpAttributesBuilder()
+                                .setAvailFreqMaps(Map.of(freqMap.key(), freqMap))
+                                .build())
+                .build();
+
+        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(191.325), new TeraHertz(196.075));
+        assertEquals(expected, convertORToTapiTopology.getPP11AvailableFrequencies(terminationPoint1pp));
+    }
+
+    @Test
     void getPP11UsedFrequencies() {
         //Only available frequency map is used. Used wavelength is not used.
         UsedWavelengthBuilder usedWavelengthBuilder = new UsedWavelengthBuilder();
