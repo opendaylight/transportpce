@@ -59,6 +59,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c9a065_f85c63a4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-05T15:29:56Z",
+      "side": 1,
+      "message": "IntelliJ has an issue with `tp.getPpAttributes().getAvailFreqMaps()` in `getPP11AvailableFrequencies()`. It believes there is a NPE trap. At first I though adding `\u0026\u0026 tp.getPpAttributes() !\u003d null` in the `hasCband()` method would help, but it didn\u0027t.\n\nI believe the problem stems from nullability checks not always crossing method calls. Doing a `Objects.requireNonNull()` or something similar would work, but that reduces the benefit of `hasCband()` as a null-guard. The `null`-checks probably need to be more up front. \n\nAlso...\n\n1. there is a rather strong dependency between hasBand and getRanges, both use `GridConstant.C_BAND`, however the constant is used independently. I\u0027m thinking this constant should probably not be used independently.\n2. The stream/filter seems somewhat convoluted as well. I\u0027d like to get rid of it. I just copied from another method without giving it much thought, to be honest.\n3. The use of SortedRange could also be simplified, now that I\u0027m giving the method a closer look.\n\nAnyway, I\u0027ve taken you input and refactored the code, trying to stay clear of any NULL-warnings in IntelliJ in the process.",
+      "parentUuid": "20017bd2_fdc29a25",
+      "range": {
+        "startLine": 1267,
+        "startChar": 4,
+        "endLine": 1296,
+        "endChar": 5
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9785dea_cd3540a4",
@@ -72,6 +96,24 @@
       "writtenOn": "2025-12-02T13:18:05Z",
       "side": 1,
       "message": "This seems like a generation of a string key.\nThis should be handled the same way everywhere. I think it is not only this place in the entire code this is done? I think we should make a method and use this method everywhere where this is done?",
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cafcb73b_57359bd0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-05T15:29:56Z",
+      "side": 1,
+      "message": "I like the idea. I searched for the string `.split(\"-\")[0]` and at a glance it appeared the same logic pops up elsewhere in the project. I didn\u0027t do a full analysis though.\n\nAnyway, I took a stab at it in this commit:\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/119656/1",
+      "parentUuid": "e9785dea_cd3540a4",
       "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -99,6 +141,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99df0e5d_241fe9d6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-05T15:29:56Z",
+      "side": 1,
+      "message": "I kinda took the liberty of going full-on bananas and refactored the entire method into something I think is a lot more readable.\n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/119654/2",
+      "parentUuid": "7921fc0e_acc4cfbb",
+      "range": {
+        "startLine": 2015,
+        "startChar": 22,
+        "endLine": 2021,
+        "endChar": 105
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1e0d4ab_bb739ff1",
@@ -112,6 +178,30 @@
       "writtenOn": "2025-12-02T13:18:05Z",
       "side": 1,
       "message": "Very nice comments in the test. Easy to follow!",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 236,
+        "endChar": 5
+      },
+      "revId": "1a0177f916289bb474b02ce634b72bb34e7b2ada",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "171899ec_d102c18d",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-05T15:29:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c1e0d4ab_bb739ff1",
       "range": {
         "startLine": 236,
         "startChar": 0,
