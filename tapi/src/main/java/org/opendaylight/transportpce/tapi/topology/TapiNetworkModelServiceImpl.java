@@ -1984,17 +1984,64 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         }
     }
 
-    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
-            String nodeId, Map<String, TerminationPoint1> tpMap, boolean withSip, String nepPhotonicSublayer) {
-        // create neps for MC and and Photonic Media OTS/OMS
+    /**
+     * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
+     *
+     * <p>For each {@link TerminationPoint1} entry in {@code tpMap}, this method:
+     * <ul>
+     *   <li>Builds a Photonic Media NEP with a deterministic UUID derived from
+     *       {@code nodeId + nepPhotonicSublayer + tpId}.</li>
+     *   <li>Sets common attributes such as administrative/operational state, lifecycle state,
+     *       direction, and supported CEP layer protocol qualifier instances based on {@code nepPhotonicSublayer}.</li>
+     *   <li>If {@code nepPhotonicSublayer} is not {@code MC} nor {@code OTSI_MC}, retrieves used/available frequency
+     *       information from the datastore (depending on TP type) and attaches the corresponding photonic spec
+     *       via {@code tapiFactory.addPhotSpecToRoadmOnep(...)}.</li>
+     *   <li>For SRG-related TPs, if used frequencies are found, recursively creates additional NEPs for the
+     *       {@code MC} and {@code OTSI_MC} sublayers for the same TP.</li>
+     *   <li>If {@code withSip} is {@code true}, creates a CEP for the NEP (typically for SRG OTS) using
+     *       {@code tapiFactory.createCepRoadm(...)} and stores it in {@code srgOtsCepMap} under a deterministic
+     *       UUID-key mapping.</li>
+     * </ul>
+     *
+     * <p>Deterministic UUIDs are generated using {@link #nameUuid(String...)} which relies on
+     * {@link UUID#nameUUIDFromBytes(byte[])} over the UTF-8 bytes of the {@code '+'}-joined parts.
+     *
+     * @param srg
+     *     Indicates whether the processing context is SRG-related; forwarded to CEP creation.
+     * @param nodeId
+     *     The ROADM node identifier used to compose NEP names and UUIDs.
+     * @param tpMap
+     *     Map of termination point identifiers to their corresponding {@link TerminationPoint1} objects.
+     * @param withSip
+     *     When {@code true}, creates and augments the NEP with a CEP and stores it into {@code srgOtsCepMap}.
+     * @param nepPhotonicSublayer
+     *     The photonic sublayer to build NEPs for (e.g. {@code PHTNC_MEDIA_OTS}, {@code PHTNC_MEDIA_OMS},
+     *     {@code MC}, {@code OTSI_MC}). Affects qualifiers and whether photonic specs are added.
+     * @return
+     *     A map keyed by {@link OwnedNodeEdgePointKey} containing the constructed {@link OwnedNodeEdgePoint}s.
+     */
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+            boolean srg,
+            String nodeId,
+            Map<String, TerminationPoint1> tpMap,
+            boolean withSip,
+            String nepPhotonicSublayer) {
+
+        // Create NEPs for MC and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
+
         for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
-            // Admin and oper state common for all tps
-            // PHOTONIC MEDIA nep
-            String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, entry.getKey());
+            final String tpId = entry.getKey();
+            final TerminationPoint1 tp = entry.getValue();
+
+            // PHOTONIC MEDIA NEP
+            final String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, tpId);
             LOG.debug("TNMSI:populateNepsForRdmNode : PHOTO NEP = {}", nepNameValue);
+
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
-                new SupportedCepLayerProtocolQualifierInstancesBuilder().setNumberOfCepInstances(Uint64.ONE);
+                    new SupportedCepLayerProtocolQualifierInstancesBuilder()
+                            .setNumberOfCepInstances(Uint64.ONE);
+
             switch (nepPhotonicSublayer) {
                 case TapiConstants.PHTNC_MEDIA_OMS:
                     sclpqiBd.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROMS.VALUE);
@@ -2011,38 +2058,50 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 default:
                     break;
             }
+
             List<SupportedCepLayerProtocolQualifierInstances> sclpqiList = new ArrayList<>(List.of(sclpqiBd.build()));
+
             OwnedNodeEdgePointBuilder onepBd = new OwnedNodeEdgePointBuilder();
+
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
+
                 Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
                 Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
-                String terminationPointId = entry.getKey();
-                String nodeIdInTopology = "%s-%s".formatted(nodeId, terminationPointId.split("-")[0]);
-                switch (entry.getValue().getTpType()) {
+
+                final String nodeIdInTopology = "%s-%s".formatted(nodeId, tpId.split("-")[0]);
+
+                switch (tp.getTpType()) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
                     // same wavelength(s) used in both direction.
                     case SRGRXPP:
                     case SRGTXPP:
                     case SRGTXRXPP:
                         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1
-                                terminationPoint1 = getNetworkTerminationPoint11FromDatastore(
-                                        nodeIdInTopology,
-                                        terminationPointId);
+                                tp11 = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
-                        if (terminationPoint1 != null) {
-                            usedFreqMap = tapiFactory.getPP11UsedFrequencies(terminationPoint1);
-                            availableFreqMap = tapiFactory.getPP11AvailableFrequencies(terminationPoint1);
+                        if (tp11 != null) {
+                            usedFreqMap = tapiFactory.getPP11UsedFrequencies(tp11);
+                            availableFreqMap = tapiFactory.getPP11AvailableFrequencies(tp11);
 
                             if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
                                 LOG.debug("TNMSI:populateNepsForRdmNode : Entering LOOP creating OTSiMC & MC with "
                                         + "usedFreqMap non empty {} for Node {}, tp {}", usedFreqMap, nodeId, tpMap);
 
-                                onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
-                                        new HashMap<>(Map.of(entry.getKey(), entry.getValue())),
-                                        true, TapiConstants.MC));
-                                onepMap.putAll(populateNepsForRdmNode(srg, nodeId,
-                                        new HashMap<>(Map.of(entry.getKey(), entry.getValue())),
-                                        true, TapiConstants.OTSI_MC));
+                                onepMap.putAll(
+                                        populateNepsForRdmNode(
+                                                srg,
+                                                nodeId,
+                                                new HashMap<>(Map.of(tpId, tp)),
+                                                true,
+                                                TapiConstants.MC));
+
+                                onepMap.putAll(
+                                        populateNepsForRdmNode(
+                                                srg,
+                                                nodeId,
+                                                new HashMap<>(Map.of(tpId, tp)),
+                                                true,
+                                                TapiConstants.OTSI_MC));
                             }
                         }
                         break;
@@ -2050,9 +2109,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     case DEGREETXTTP:
                     case DEGREETXRXTTP:
                         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1
-                                usedTp = getNetworkTerminationPoint11FromDatastore(
-                                        nodeIdInTopology,
-                                        terminationPointId);
+                                usedTp = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
                         if (usedTp != null) {
                             usedFreqMap = tapiFactory.getTTP11UsedFreqMap(usedTp).ranges();
@@ -2062,57 +2119,99 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     default:
                         break;
                 }
+
                 LOG.debug("TNMSI:populateNepsForRdmNode : calling add Photonic NEP spec for Roadm");
-                onepBd = tapiFactory.addPhotSpecToRoadmOnep(nodeId, usedFreqMap, availableFreqMap, onepBd,
-                    String.join("+", nodeId, nepPhotonicSublayer));
+                onepBd = tapiFactory.addPhotSpecToRoadmOnep(
+                        nodeId,
+                        usedFreqMap,
+                        availableFreqMap,
+                        onepBd,
+                        String.join("+", nodeId, nepPhotonicSublayer));
             }
-            Name nepName =
-                new NameBuilder().setValueName(nepPhotonicSublayer + "NodeEdgePoint").setValue(nepNameValue).build();
+
+            Name nepName = new NameBuilder()
+                    .setValueName(nepPhotonicSublayer + "NodeEdgePoint")
+                    .setValue(nepNameValue)
+                    .build();
+
             onepBd
-                .setUuid(new Uuid(UUID.nameUUIDFromBytes(nepNameValue.getBytes(StandardCharsets.UTF_8)).toString()))
-                .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
-                .setName(Map.of(nepName.key(), nepName))
-                .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
-                .setDirection(Direction.BIDIRECTIONAL)
-                .setLinkPortRole(PortRole.SYMMETRIC)
-                .setAdministrativeState(
-                    this.tapiLink.setTapiAdminState(entry.getValue().getAdministrativeState().getName()))
-                .setOperationalState(
-                    this.tapiLink.setTapiOperationalState(entry.getValue().getOperationalState().getName()))
-                .setLifecycleState(LifecycleState.INSTALLED);
-//                .build();
-                // Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
-                // Map<Map<String nepId, String NodeId>, ConnectionEndPoint>
-                // Identify that we have an SRG through withSip set to true only for SRG
+                    .setUuid(new Uuid(nameUuid(nodeId, nepPhotonicSublayer, tpId)))
+                    .setLayerProtocolName(LayerProtocolName.PHOTONICMEDIA)
+                    .setName(Map.of(nepName.key(), nepName))
+                    .setSupportedCepLayerProtocolQualifierInstances(sclpqiList)
+                    .setDirection(Direction.BIDIRECTIONAL)
+                    .setLinkPortRole(PortRole.SYMMETRIC)
+                    .setAdministrativeState(this.tapiLink.setTapiAdminState(tp.getAdministrativeState().getName()))
+                    .setOperationalState(this.tapiLink.setTapiOperationalState(tp.getOperationalState().getName()))
+                    .setLifecycleState(LifecycleState.INSTALLED);
+
+            //Create CEP for OTS Nep in SRG (For degree cep are created with OTS link) and add it to srgOtsCepMap:
+            //Identify that we have an SRG through withSip set to true only for SRG
             if (withSip) {
                 //TODO: currently do not add extension corresponding to channel to OTSiMC/MC CEP on OTS CEP. Although
                 //not really required (One CEP per Tp) could complete with extension affecting High/lowFrequencyIndex
                 //This affection would be done in the switch case on nepPhotonicSublayer
                 int highFrequencyIndex = 0;
                 int lowFrequencyIndex = 0;
-                var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
-                    String.join("+", nodeId, entry.getKey()), nepPhotonicSublayer, null, srg);
+
+                ConnectionEndPoint cep = tapiFactory.createCepRoadm(
+                        lowFrequencyIndex,
+                        highFrequencyIndex,
+                        String.join("+", nodeId, tpId),
+                        nepPhotonicSublayer,
+                        null,
+                        srg);
+
                 LOG.debug("TNMSI:populateNepsForRdmNode : TopoInitialMapping, creating CEP for SRG");
-                var uuidMap = new HashMap<>(Map.of(
-                    new Uuid(UUID.nameUUIDFromBytes(String.join("+", "CEP", nodeId, nepPhotonicSublayer,
-                        entry.getKey()).getBytes(StandardCharsets.UTF_8)).toString()).toString(),
-                    new Uuid(UUID.nameUUIDFromBytes(String.join("+", nodeId, TapiConstants.PHTNC_MEDIA)
-                        .getBytes(StandardCharsets.UTF_8)).toString()).toString()));
+
+                Map<String, String> uuidMap = Map.of(
+                        new Uuid(nameUuid("CEP", nodeId, nepPhotonicSublayer, tpId)).toString(),
+                        new Uuid(nameUuid(nodeId, TapiConstants.PHTNC_MEDIA)).toString()
+                );
+
                 this.srgOtsCepMap.put(uuidMap, cep);
-                CepList cepList = new CepListBuilder()
-                    .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
+
+                CepList cepList = new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build();
+
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+
                 LOG.info("TapiNetworkModelServiceImpl populateNepFor Rdm, Node {} SRG tp {}, building Cep for"
-                    + " corresponding NEP {}", nodeId, entry.getKey(), cep);
+                                + " corresponding CEP {}",
+                        nodeId,
+                        tpId,
+                        cep);
+
                 onepBd.addAugmentation(onep1Bldr);
             }
+
             OwnedNodeEdgePoint onep = onepBd.build();
+
             LOG.info("ROADMNEPPopulation TapiNetworkModelServiceImpl populate NEP {} for Node {}",
-                onep.getName().entrySet(), nodeId);
+                    Optional.ofNullable(onep.getName())
+                            .orElse(Map.of())
+                            .entrySet(),
+                    nodeId);
+
             onepMap.put(onep.key(), onep);
         }
+
         LOG.info("ROADMNEPPopulation FINISH for Node {}", nodeId);
         return onepMap;
+    }
+
+    /**
+     * Creates a deterministic, name-based UUID string from the provided parts.
+     *
+     * <p>The UUID is computed by joining {@code parts} with {@code '+'}.
+     *
+     * @param parts
+     *     The components to join (with {@code '+'}) into the name used for UUID generation.
+     * @return
+     *     A UUID string (canonical textual representation) deterministically derived from {@code parts}.
+     */
+    private static String nameUuid(String... parts) {
+        String joined = String.join("+", parts);
+        return UUID.nameUUIDFromBytes(joined.getBytes(StandardCharsets.UTF_8)).toString();
     }
 
     /**
