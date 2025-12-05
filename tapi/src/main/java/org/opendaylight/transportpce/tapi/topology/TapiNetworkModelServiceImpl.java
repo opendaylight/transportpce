@@ -33,6 +33,7 @@ import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
@@ -650,7 +651,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             // For each srg node. Loop through the LCPs and create neps and sips for PP
             for (Mapping m : entry.getValue()) {
                 String tpId = m.getLogicalConnectionPoint();
-                String overlayNodeId = String.join("-", orNodeId, tpId.split("\\-")[0]);
+                TopologyNodeId overlayNodeId = TopologyNodeId.fromNodeAndTpId(orNodeId, tpId);
                 if (!tpId.contains("PP")) {
                     LOG.info("LCP {} is not an external TP of SRG node", tpId);
                     continue;
@@ -704,7 +705,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                     LOG.info("LCP {} is not an external TP of DEGREE node", tpId);
                     continue;
                 }
-                String overlayNodeId = String.join("-", orNodeId, tpId.split("\\-")[0]);
+                TopologyNodeId overlayNodeId = TopologyNodeId.fromNodeAndTpId(orNodeId, tpId);
                 var netTP1fromDS = getNetworkTerminationPoint1FromDatastore(overlayNodeId, tpId);
                 if (netTP1fromDS == null) {
                     LOG.error("CREATENEP transformDegToOnep, No Tp found in topology for LCP {}, of NodeId {} ",
@@ -2068,7 +2069,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
                 Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
 
-                final String nodeIdInTopology = "%s-%s".formatted(nodeId, tpId.split("-")[0]);
+                final TopologyNodeId nodeIdInTopology = TopologyNodeId.fromNodeAndTpId(nodeId, tpId);
 
                 switch (tp.getTpType()) {
                     // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
@@ -2259,14 +2260,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param tpId String
      * @return network termination point, null otherwise
      */
-    private TerminationPoint1 getNetworkTerminationPoint1FromDatastore(String nodeId, String tpId) {
+    private TerminationPoint1 getNetworkTerminationPoint1FromDatastore(TopologyNodeId nodeId, String tpId) {
         DataObjectIdentifier<TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.NodeKey(new NodeId(nodeId)))
+                    .networks.network.NodeKey(new NodeId(nodeId.toString())))
             .augmentation(Node1.class)
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -2295,7 +2296,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     }
 
     private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
-            .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(String nodeId, String tpId) {
+            .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(TopologyNodeId nodeId, String tpId) {
         DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
                 .TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
@@ -2303,7 +2304,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
                     .networks.network.Node.class,
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.NodeKey(new NodeId(nodeId)))
+                    .networks.network.NodeKey(new NodeId(nodeId.toString())))
             .augmentation(Node1.class)
             .child(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
