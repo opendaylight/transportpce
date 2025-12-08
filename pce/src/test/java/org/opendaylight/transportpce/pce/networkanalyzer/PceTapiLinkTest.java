@@ -8,6 +8,10 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -57,7 +61,6 @@ import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class PceTapiLinkTest  extends AbstractTest {
 
@@ -150,7 +153,6 @@ public class PceTapiLinkTest  extends AbstractTest {
 
     @Test
     void roadm2roadmLinkTest() {
-        LOG.info("PceTapiLInkTest Line 151 Entering Test1");
         //ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX Uuid
         Uuid linkUuid = new Uuid("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef");
         //Generic settings required to get source and dest node
@@ -176,51 +178,52 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get link {} from mdsal: ", linkUuid, e);
         }
-        assertTrue(rdm2rdmLink.isValid() == true, "RDM to RDM Link shall be valid)");
-        assertTrue(rdm2rdmLink.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "RDM to RDM Link admin state shall be Unlock)");
-        assertTrue(rdm2rdmLink.getOperationalState().equals(OperationalState.ENABLED),
-            "RDM to RDM Link operational state shall be enabled)");
-        assertTrue(rdm2rdmLink.getAvailableBandwidth().equals(Double.valueOf(96.0).longValue()),
-            "RDM to RDM Link available bandwidth shall be 96.0, based on a 50 GHz Grid (Not used)");
-        assertTrue(rdm2rdmLink.getpmd2().equals(16.0),"RDM to RDM LinkPMD2 shall be 16.0 ps/km)");
-        assertTrue(rdm2rdmLink.getcd().equals(1650.0),"RDM to RDM Link Chromatic dispersion shall be 1600 ps)");
-        assertTrue(rdm2rdmLink.getspanLoss().equals(12.0),"RDM to RDM link span loss shall be 12.0 dB)");
-        assertTrue(rdm2rdmLink.getLength().equals(100.0),"RDM to RDM Link Length shall be 100.0 km)");
-        assertTrue(rdm2rdmLink.getLatency().equals(501.0),"RDM to RDM Link Latency shall be 501.0 micro seconds)");
-        assertTrue(rdm2rdmLink.getsrlgList() == null,"No SRLG declared for RDM to RDM )");
-        assertTrue(rdm2rdmLink.getlinkType().equals(OpenroadmLinkType.ROADMTOROADM),
-            "RDM to RDM Link link type shall be ROADMTOROADM)");
-        assertTrue(rdm2rdmLink.getLinkName().getValueName().equals("OMS link name"),"RDM to RDM Link Name (Value-name)"
-            + "shall be OMS link name)");
-        assertTrue(rdm2rdmLink.getLinkName().getValue()
-            .equals("ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX"),
-            "RDM to RDM Link Name (value-name) shall be ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX"
-            + "toROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX");
-        assertTrue(rdm2rdmLink.getLinkId().equals("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef"),
-            "RDM to RDM Link Id shall be 2f9d34e5-de00-3992-b6fd-6ba5c0e46bef)");
-        assertTrue(rdm2rdmLink.getSourceId().equals("9830675c-71a5-33a3-8c5c-1730dee9f4f0"),
-            "RDM to RDM Source NodeId shall be 9830675c-71a5-33a3-8c5c-1730dee9f4f0)");
-        assertTrue(rdm2rdmLink.getsourceNetworkSupNodeId().equals("ROADM-C1+PHOTONIC_MEDIA"),
-            "RDM to RDM Source Supporting Node Id shall be ROADM-C1+PHOTONIC_MEDIA");
-        assertTrue(rdm2rdmLink.getSourceTP().equals("15a1c5e3-b9bb-38e1-aac0-c28f554fa433"),
-            "RDM to RDM Destination TPId shall be 15a1c5e3-b9bb-38e1-aac0-c28f554fa433");
-        assertTrue(rdm2rdmLink.getDestId().equals("b3e98baf-ef7d-3814-8fd2-5c89d06214a7"),
-            "RDM to RDM Destination NodeId shall be b3e98baf-ef7d-3814-8fd2-5c89d06214a7");
-        assertTrue(rdm2rdmLink.getdestNetworkSupNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"),
-            "RDM to RDM Destination Supporting Node Id shall be ROADM-A1+PHOTONIC_MEDIA");
-        assertTrue(rdm2rdmLink.getUsedBandwidth().equals(Long.valueOf(0)), "RDM to RDM Link Used bandwidth shall be 0");
-        assertTrue(rdm2rdmLink.getpowerCorrection().equals(0.0),
-            "RDM to RDM Link being by default G.652, Power correction shall be 0.0");
-        assertTrue(rdm2rdmLink.getOppositeLinkId().equals("984c8390-962d-392f-9a3f-9d5da3d37666"),
-            "RDM to RDM Link opposite Link shall be 984c8390-962d-392f-9a3f-9d5da3d37666");
+        assertNotNull(rdm2rdmLink);
+        assertTrue(rdm2rdmLink.isValid(), "RDM to RDM Link shall be valid)");
+        assertEquals(AdministrativeState.UNLOCKED, rdm2rdmLink.getAdministrativeState(),
+                "RDM to RDM Link admin state shall be Unlock)");
+        assertEquals(OperationalState.ENABLED, rdm2rdmLink.getOperationalState(),
+                "RDM to RDM Link operational state shall be enabled)");
+        assertEquals((long) rdm2rdmLink.getAvailableBandwidth(), Double.valueOf(96.0).longValue(),
+                "RDM to RDM Link available bandwidth shall be 96.0, based on a 50 GHz Grid (Not used)");
+        assertEquals(16.0, rdm2rdmLink.getpmd2(), "RDM to RDM LinkPMD2 shall be 16.0 ps/km)");
+        assertEquals(1650.0, rdm2rdmLink.getcd(), "RDM to RDM Link Chromatic dispersion shall be 1600 ps)");
+        assertEquals(12.0, rdm2rdmLink.getspanLoss(), "RDM to RDM link span loss shall be 12.0 dB)");
+        assertEquals(100.0, rdm2rdmLink.getLength(), "RDM to RDM Link Length shall be 100.0 km)");
+        assertEquals(501.0, rdm2rdmLink.getLatency(), "RDM to RDM Link Latency shall be 501.0 micro seconds)");
+        assertNull(rdm2rdmLink.getsrlgList(), "No SRLG declared for RDM to RDM )");
+        assertEquals(OpenroadmLinkType.ROADMTOROADM, rdm2rdmLink.getlinkType(),
+                "RDM to RDM Link link type shall be ROADMTOROADM)");
+        assertEquals("OMS link name", rdm2rdmLink.getLinkName().getValueName(),
+                "RDM to RDM Link Name (Value-name) shall be OMS link name)");
+        assertEquals(
+                "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRXtoROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                rdm2rdmLink.getLinkName().getValue(),
+                "RDM to RDM Link Name (value-name) shall be ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX"
+                + "toROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX");
+        assertEquals("2f9d34e5-de00-3992-b6fd-6ba5c0e46bef", rdm2rdmLink.getLinkId(),
+                "RDM to RDM Link Id shall be 2f9d34e5-de00-3992-b6fd-6ba5c0e46bef)");
+        assertEquals("9830675c-71a5-33a3-8c5c-1730dee9f4f0", rdm2rdmLink.getSourceId(),
+                "RDM to RDM Source NodeId shall be 9830675c-71a5-33a3-8c5c-1730dee9f4f0)");
+        assertEquals("ROADM-C1+PHOTONIC_MEDIA", rdm2rdmLink.getsourceNetworkSupNodeId(),
+                "RDM to RDM Source Supporting Node Id shall be ROADM-C1+PHOTONIC_MEDIA");
+        assertEquals("15a1c5e3-b9bb-38e1-aac0-c28f554fa433", rdm2rdmLink.getSourceTP(),
+                "RDM to RDM Destination TPId shall be 15a1c5e3-b9bb-38e1-aac0-c28f554fa433");
+        assertEquals("b3e98baf-ef7d-3814-8fd2-5c89d06214a7", rdm2rdmLink.getDestId(),
+                "RDM to RDM Destination NodeId shall be b3e98baf-ef7d-3814-8fd2-5c89d06214a7");
+        assertEquals("ROADM-A1+PHOTONIC_MEDIA", rdm2rdmLink.getdestNetworkSupNodeId(),
+                "RDM to RDM Destination Supporting Node Id shall be ROADM-A1+PHOTONIC_MEDIA");
+        assertEquals(rdm2rdmLink.getUsedBandwidth(), Long.valueOf(0), "RDM to RDM Link Used bandwidth shall be 0");
+        assertEquals(0.0, rdm2rdmLink.getpowerCorrection(),
+                "RDM to RDM Link being by default G.652, Power correction shall be 0.0");
+        assertEquals("984c8390-962d-392f-9a3f-9d5da3d37666", rdm2rdmLink.getOppositeLinkId(),
+                "RDM to RDM Link opposite Link shall be 984c8390-962d-392f-9a3f-9d5da3d37666");
     }
 
 
 
     @Test
     void roadm2TspLinkTest() {
-        LOG.info("PceTapiLInkTest Line 207 Entering Test2");
         //ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRXtoSPDR-SA1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1 Uuid
         Uuid linkUuid = new Uuid("c72c7995-8f3a-30ee-940f-309880898d57");
         //Generic settings required to get source and dest node
@@ -249,13 +252,12 @@ public class PceTapiLinkTest  extends AbstractTest {
         // As port NETWORK1 already used on SPDR-SA1, it is not available for WDM service creation. As a result
         // The corresponding OTS NEP does not appear as a valid port in SPDR-SA1 and the Link from it to
         // the ROADM A-SRG can not be validated because.
-        assertTrue(rdm2tspLink.isValid() == false, "RDM to RDM Link shall not be valid)");
-
+        assertNotNull(rdm2tspLink);
+        assertFalse(rdm2tspLink.isValid(), "RDM to RDM Link shall not be valid)");
     }
 
     @Test
     void roadm2TspLink2Test() {
-        LOG.info("PceTapiLInkTest Line 264 Entering Test3");
         //ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2 Uuid
         Uuid linkUuid = new Uuid("79b23827-48eb-33ed-b110-fbeca32c4125");
         //Generic settings required to get source and dest node
@@ -281,54 +283,52 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (ExecutionException e) {
             LOG.error("Unable to get link {} from mdsal: ", linkUuid, e);
         }
-        assertTrue(rdm2tspLink.isValid() == true,
-            "RDM to TSP Link shall be valid)");
-        assertTrue(rdm2tspLink.getOperationalState().equals(OperationalState.ENABLED),
-            "RDM to TSP Link operational state shall be enabled)");
-        assertTrue(rdm2tspLink.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "RDM to TSP Link admin state shall be Unlock)");
-        assertTrue(rdm2tspLink.getpmd2().equals(0.0),"RDM to TSP LinkPMD shall be 0.0)");
-        assertTrue(rdm2tspLink.getcd().equals(0.0),"RDM to TSP Link Chromatic dispersion shall be 0.0)");
-        assertTrue(rdm2tspLink.getspanLoss().equals(0.0),"RDM to TSP Link span loss shall be 0.0)");
-        assertTrue(rdm2tspLink.getLength().equals(0.0),"RDM to TSP Link Length shall be 0.0)");
-        assertTrue(rdm2tspLink.getLatency().equals(0.0),"RDM to TSP Link Latency shall be 0.0)");
-        assertTrue(rdm2tspLink.getsrlgList() == null,"No SRLG declared for RDM to RDM )");
-        assertTrue(rdm2tspLink.getlinkType().equals(OpenroadmLinkType.XPONDERINPUT),
-            "RDM to TSP Link link type shall be XPONDERINPUT)");
-        assertTrue(rdm2tspLink.getLinkName().getValueName().equals("XPDR-RDM link name"),"RDM to TSP Link Name"
-            + "(Value-name) shall be XPDR-RDM link name)");
-        assertTrue(rdm2tspLink.getLinkName().getValue()
-            .equals("ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2"),
-            "RDM to TSP Link Name (value-name) shall be ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXto"
-            + "SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2");
-        assertTrue(rdm2tspLink.getLinkId().equals("79b23827-48eb-33ed-b110-fbeca32c4125"),
-            "RDM to TSP Link Id shall be 79b23827-48eb-33ed-b110-fbeca32c4125)");
-        assertTrue(rdm2tspLink.getSourceId().equals("63a5b34b-02da-390f-835b-177e7bc7e1a8"),
-            "RDM to TSP Source NodeId shall be 63a5b34b-02da-390f-835b-177e7bc7e1a8");
-        assertTrue(rdm2tspLink.getsourceNetworkSupNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"),
-            "RDM to TSP Source Supporting Node Id shall be ROADM-A1+PHOTONIC_MEDIA");
-        assertTrue(rdm2tspLink.getSourceTP().equals("cd2619fb-1ae0-3785-a6fd-2b71f468cb6c"),
-            "RDM to TSP Destination TPId shall be cd2619fb-1ae0-3785-a6fd-2b71f468cb6c");
-        assertTrue(rdm2tspLink.getDestId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "RDM to TSP Destination NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b7");
-        assertTrue(rdm2tspLink.getdestNetworkSupNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "RDM to TSP Destination Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertTrue(rdm2tspLink.getUsedBandwidth().equals(Long.valueOf(0)), "RDM to TSP Link Used bandwidth shall be 0");
-        assertTrue(rdm2tspLink.getAvailableBandwidth().equals(Long.valueOf(1600)),
-            "RDM to TSP Link Available bandwidth shall be 1600.0");
-        assertTrue(rdm2tspLink.getpowerCorrection().equals(0.0),
-            "RDM to TSP Link being by default G.652, Power correction shall be 0.0");
-        assertTrue(rdm2tspLink.getOppositeLinkId().equals("0f58cca7-87ac-368e-a526-49e47227b917"),
-            "RDM to TSP Link opposite Link shall be 0f58cca7-87ac-368e-a526-49e47227b917");
+        assertNotNull(rdm2tspLink);
+        assertTrue(rdm2tspLink.isValid(), "RDM to TSP Link shall be valid)");
+        assertEquals(OperationalState.ENABLED, rdm2tspLink.getOperationalState(),
+                "RDM to TSP Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, rdm2tspLink.getAdministrativeState(),
+                "RDM to TSP Link admin state shall be Unlock)");
+        assertEquals(0.0, rdm2tspLink.getpmd2(), "RDM to TSP LinkPMD shall be 0.0)");
+        assertEquals(0.0, rdm2tspLink.getcd(), "RDM to TSP Link Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, rdm2tspLink.getspanLoss(), "RDM to TSP Link span loss shall be 0.0)");
+        assertEquals(0.0, rdm2tspLink.getLength(), "RDM to TSP Link Length shall be 0.0)");
+        assertEquals(0.0, rdm2tspLink.getLatency(), "RDM to TSP Link Latency shall be 0.0)");
+        assertNull(rdm2tspLink.getsrlgList(), "No SRLG declared for RDM to RDM )");
+        assertEquals(OpenroadmLinkType.XPONDERINPUT, rdm2tspLink.getlinkType(),
+                "RDM to TSP Link link type shall be XPONDERINPUT)");
+        assertEquals("XPDR-RDM link name", rdm2tspLink.getLinkName().getValueName(),
+                "RDM to TSP Link Name (Value-name) shall be XPDR-RDM link name)");
+        assertEquals(
+                "ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXtoSPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2",
+                rdm2tspLink.getLinkName().getValue(),
+                "RDM to TSP Link Name (value-name) shall be ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP4-TXRXto"
+                + "SPDR-SA1-XPDR2+PHOTONIC_MEDIA_OTS+XPDR2-NETWORK2");
+        assertEquals("79b23827-48eb-33ed-b110-fbeca32c4125", rdm2tspLink.getLinkId(),
+                "RDM to TSP Link Id shall be 79b23827-48eb-33ed-b110-fbeca32c4125)");
+        assertEquals("63a5b34b-02da-390f-835b-177e7bc7e1a8", rdm2tspLink.getSourceId(),
+                "RDM to TSP Source NodeId shall be 63a5b34b-02da-390f-835b-177e7bc7e1a8");
+        assertEquals("ROADM-A1+PHOTONIC_MEDIA", rdm2tspLink.getsourceNetworkSupNodeId(),
+                "RDM to TSP Source Supporting Node Id shall be ROADM-A1+PHOTONIC_MEDIA");
+        assertEquals("cd2619fb-1ae0-3785-a6fd-2b71f468cb6c", rdm2tspLink.getSourceTP(),
+                "RDM to TSP Destination TPId shall be cd2619fb-1ae0-3785-a6fd-2b71f468cb6c");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", rdm2tspLink.getDestId(),
+                "RDM to TSP Destination NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b7");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", rdm2tspLink.getdestNetworkSupNodeId(),
+                "RDM to TSP Destination Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+        assertEquals(rdm2tspLink.getUsedBandwidth(), Long.valueOf(0), "RDM to TSP Link Used bandwidth shall be 0");
+        assertEquals(rdm2tspLink.getAvailableBandwidth(), Long.valueOf(1600),
+                "RDM to TSP Link Available bandwidth shall be 1600.0");
+        assertEquals(0.0, rdm2tspLink.getpowerCorrection(),
+                "RDM to TSP Link being by default G.652, Power correction shall be 0.0");
+        assertEquals("0f58cca7-87ac-368e-a526-49e47227b917", rdm2tspLink.getOppositeLinkId(),
+                "RDM to TSP Link opposite Link shall be 0f58cca7-87ac-368e-a526-49e47227b917");
     }
 
     @Test
-    void otuX2toX2LinkTest() {
-        LOG.info("PceTapiLInkTest Line 352 Entering Test4");
+    void otuLinkBetweenXpdr2andXpdr2Test() {
         // TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU Uuid
         Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
-        Uuid iotucepSpdrSA1x2 = new Uuid("bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        Uuid iotucepSpdrSC1x2 = new Uuid("b9dbee10-faa9-3947-94c1-3c023646a2df");
         Uuid iodunepSpdrSA1x2 = new Uuid("6f4777d4-41f0-3833-b811-68b90903d8");
         Uuid iodunepSpdrSC1x2 = new Uuid("8b82dac3-646c-301d-b455-b7a4802774f7");
         //Generic settings required to get source and dest node
@@ -346,56 +346,55 @@ public class PceTapiLinkTest  extends AbstractTest {
         }
         PceTapiLink otu4Link = null;
         try {
-            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id, iotucepSpdrSA1x2,
-                iotucepSpdrSC1x2);
+            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
-        assertTrue(otu4Link.isValid() == true,
-            "OTU4 Link (connection) shall not be valid for ODU4 services)");
-        assertTrue(otu4Link.getOperationalState().equals(OperationalState.ENABLED),
-            "OTU4 Link (connection) Link operational state shall be enabled)");
-        assertTrue(otu4Link.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "OTU4 Link (connection) admin state shall be Unlock)");
-        assertTrue(otu4Link.getAvailableBandwidth().equals(Long.valueOf(100000)),
-            "OTU4 Link (connection) available bandwidth shall 100000 in Mbps)");
-        assertTrue(otu4Link.getpmd2().equals(0.0),"OTU4 Link (connection)PMD shall be 0.0)");
-        assertTrue(otu4Link.getcd().equals(0.0),"OTU4 Link (connection) Chromatic dispersion shall be 0.0)");
-        assertTrue(otu4Link.getspanLoss().equals(0.0),"OTU4 Link (connection) span loss shall be 0.0)");
-        assertTrue(otu4Link.getLength().equals(0.0),"OTU4 Link (connection) Length shall be 0.0)");
-        assertTrue(otu4Link.getLatency().equals(0.0),"OTU4 Link (connection) Latency shall be 0.0)");
-        assertTrue(otu4Link.getsrlgList() == null,"No SRLG declared for OTN Links )");
-        assertTrue(otu4Link.getlinkType().equals(OpenroadmLinkType.OTNLINK),
-            "OTU4 Link (connection) link type shall be OTN-LINK)");
-        assertTrue(otu4Link.getLinkName().getValueName().equals("Connection name"),"OTU4 Link (connection) Name"
-            + "(Value-name) shall be Connection name)");
-        assertTrue(otu4Link.getLinkName().getValue()
-            .equals("TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU"),
-            "OTU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2"
-            + "+XPDR2-NETWORK1+iOTU");
-        assertTrue(otu4Link.getLinkId().equals("07df4edd-4408-310d-a820-5f34b0524900"),
-            "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
-        assertTrue(otu4Link.getDestId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertTrue(otu4Link.getdestNetworkSupNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertTrue(otu4Link.getDestTP().equals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5"),
-            "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        assertTrue(otu4Link.getSourceId().equals("d852c340-77db-3f9a-96e8-cb4de8e1004a"),
-            "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertTrue(otu4Link.getsourceNetworkSupNodeId().equals("d852c340-77db-3f9a-96e8-cb4de8e1004a"),
-            "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertTrue(otu4Link.getSourceTP().equals("b9dbee10-faa9-3947-94c1-3c023646a2df"),
-            "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
-        assertTrue(otu4Link.getpowerCorrection().equals(0.0),
-            "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(otu4Link.getOppositeLinkId().equals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f"),
-            "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
+        assertNotNull(otu4Link);
+        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for ODU4 services)");
+        assertEquals(OperationalState.ENABLED, otu4Link.getOperationalState(),
+                "OTU4 Link (connection) Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, otu4Link.getAdministrativeState(),
+                "OTU4 Link (connection) admin state shall be Unlock)");
+        assertEquals(otu4Link.getAvailableBandwidth(), Long.valueOf(100000),
+                "OTU4 Link (connection) available bandwidth shall 100000 in Mbps)");
+        assertEquals(0.0, otu4Link.getpmd2(), "OTU4 Link (connection)PMD shall be 0.0)");
+        assertEquals(0.0, otu4Link.getcd(), "OTU4 Link (connection) Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, otu4Link.getspanLoss(), "OTU4 Link (connection) span loss shall be 0.0)");
+        assertEquals(0.0, otu4Link.getLength(), "OTU4 Link (connection) Length shall be 0.0)");
+        assertEquals(0.0, otu4Link.getLatency(), "OTU4 Link (connection) Latency shall be 0.0)");
+        assertNull(otu4Link.getsrlgList(), "No SRLG declared for OTN Links )");
+        assertEquals(OpenroadmLinkType.OTNLINK, otu4Link.getlinkType(),
+                "OTU4 Link (connection) link type shall be OTN-LINK)");
+        assertEquals("Connection name", otu4Link.getLinkName().getValueName(),
+                "OTU4 Link (connection) Name (Value-name) shall be Connection name)");
+        assertEquals(
+                "TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU",
+                otu4Link.getLinkName().getValue(),
+                "OTU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2"
+                + "+XPDR2-NETWORK1+iOTU");
+        assertEquals("07df4edd-4408-310d-a820-5f34b0524900", otu4Link.getLinkId(),
+                "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+                "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+                "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+                "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+                "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+                "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+                "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+        assertEquals(0.0, otu4Link.getpowerCorrection(),
+                "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
+        assertEquals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f", otu4Link.getOppositeLinkId(),
+                "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
     }
 
     @Test
-    void iOdu4LinkX1toX1Test() {
-        LOG.info("PceTapiLInkTest Line 435 Entering Test5");
+    void iOdu4LinkBetweenXpdr1andXpdr1Test() {
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iOTU Uuid
         Uuid linkOtu4Uuid = new Uuid("13b8ac31-56d7-36e9-814b-5d91f10ced16");
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU Uuid
@@ -403,15 +402,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         // TOP+SPDR-SA1-XPDR1+XPDR1-CLIENT1+SPDR-SC1-XPDR1+XPDR1-CLIENT1+eODU Uuid
         Uuid linkeOdu4Uuid = new Uuid("0fbf2cf1-4456-3271-af1f-32be6b3b4f40");
         // TOP+SPDR-SA1-XPDR1+XPDR1-CLIENT1+SPDR-SC1-XPDR1+XPDR1-CLIENT1+DSR Uuid
-        Uuid linkDsrUuid = new Uuid("902ef32e-2573-3a8d-b3e9-635926c38c38");
-        Uuid ioducepSpdrSA1x1 = new Uuid("d6e08276-b5a9-3960-a3e1-14f8f72c280b");
-        Uuid ioducepSpdrSC1x1 = new Uuid("a2f84255-2775-34c9-ab0a-7c17a4249703");
-        Uuid eoducepSpdrSA1x1 = new Uuid("de16e16e-eb69-3819-8f59-4378b12a36ec");
-        Uuid eoducepSpdrSC1x1 = new Uuid("2a7cd883-4017-3f69-b39a-12b81d57d955");
-        Uuid iotucepSpdrSA1x1 = new Uuid("a24840c1-a968-3e94-9689-0bc4e538528a");
-        Uuid iotucepSpdrSC1x1 = new Uuid("37b8a89d-6bcd-359f-9432-9dd06e4ff462");
-        Uuid dsrcepSpdrSA1x1 = new Uuid("12bc1201-bb84-3280-b4bf-df58b3cf057c");
-        Uuid dsrcepSpdrSC1x1 = new Uuid("a7ef6781-c149-394b-b21c-48b324f68c98");
+
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr1Id;
         this.znodeId = spdrSC1xpdr1Id;
@@ -428,90 +419,79 @@ public class PceTapiLinkTest  extends AbstractTest {
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
         PceTapiLink eodu4Link = null;
-        PceTapiLink dsrLink = null;
         try {
-            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id, iotucepSpdrSA1x1,
-                iotucepSpdrSC1x1);
+            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
         try {
-            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id, ioducepSpdrSA1x1,
-                ioducepSpdrSC1x1);
+            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkiOdu4Uuid, e);
         }
         try {
-            eodu4Link = getTapiOtnLinkFromId(linkeOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id, eoducepSpdrSA1x1,
-                eoducepSpdrSC1x1);
+            eodu4Link = getTapiOtnLinkFromId(linkeOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkeOdu4Uuid, e);
         }
-        try {
-            dsrLink = getTapiOtnLinkFromId(linkDsrUuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id, dsrcepSpdrSA1x1,
-                dsrcepSpdrSC1x1);
-        } catch (ExecutionException e) {
-            LOG.error("Unable to get connection {} from mdsal: ", linkDsrUuid, e);
-        }
-        assertTrue(otu4Link.isValid() == false,
-            "OTU4 Link (connection) shall not be valid for DSR/ODU2e services)");
-        assertTrue(eodu4Link.isValid() == false,
-            "eODU4 Link (connection) from Client C1 ports shall not be valid since used for DSR/ODU2e services)");
-        assertTrue(iodu4Link.isValid() == true,
-            "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
-        assertTrue(iodu4Link.getOperationalState().equals(OperationalState.ENABLED),
-            "ODU4 Link (connection) Link operational state shall be enabled)");
-        assertTrue(iodu4Link.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "ODU4 Link (connection) admin state shall be Unlock)");
-        assertTrue(iodu4Link.getAvailableBandwidth().equals(Long.valueOf(100000)),
-            "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
-        assertTrue(iodu4Link.getpmd2().equals(0.0),"ODU4 Link (connection)PMD shall be 0.0)");
-        assertTrue(iodu4Link.getcd().equals(0.0),"ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
-        assertTrue(iodu4Link.getspanLoss().equals(0.0),"ODU4 Link (connection) span loss shall be 0.0)");
-        assertTrue(iodu4Link.getLength().equals(0.0),"ODU4 Link (connection) Length shall be 0.0)");
-        assertTrue(iodu4Link.getLatency().equals(0.0),"ODU4 Link (connection) Latency shall be 0.0)");
-        assertTrue(iodu4Link.getsrlgList() == null,"No SRLG declared for OTN Links )");
-        assertTrue(iodu4Link.getlinkType().equals(OpenroadmLinkType.OTNLINK),
-            "ODU4 Link (connection) link type shall be OTN-LINK)");
-        assertTrue(iodu4Link.getLinkName().getValueName().equals("Connection name"),"ODU4 Link (connection) Name"
-            + "(Value-name) shall be Connection name)");
-        assertTrue(iodu4Link.getLinkName().getValue()
-            .equals("TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU"),
-            "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1"
-            + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
-        assertTrue(iodu4Link.getLinkId().equals("b90f7b96-4fe0-390c-8ef2-41942196f19e"),
-            "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
-        assertTrue(iodu4Link.getSourceId().equals("215ee18f-7869-3492-94d2-0f24ed0a3023"),
-            "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
-        assertTrue(iodu4Link.getsourceNetworkSupNodeId().equals("215ee18f-7869-3492-94d2-0f24ed0a3023"),
-            "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
-            + "(SPDR-SC1-XPDR1+XPONDER)");
-        assertTrue(iodu4Link.getSourceTP().equals("a2f84255-2775-34c9-ab0a-7c17a4249703"),
-            "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
-        assertTrue(iodu4Link.getDestId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
-        assertTrue(iodu4Link.getdestNetworkSupNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
-            + "(SPDR-SA1-XPDR1+XPONDER)");
-        assertTrue(iodu4Link.getDestTP().equals("d6e08276-b5a9-3960-a3e1-14f8f72c280b"),
-            "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
-        assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
-            "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkId().equals("606ade82-de21-3e95-b2cd-cdb2b03ef78b"),
-            "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
+
+        assertNotNull(otu4Link);
+        assertFalse(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for DSR/ODU2e services)");
+        assertNotNull(eodu4Link);
+        assertFalse(eodu4Link.isValid(),
+                "eODU4 Link (connection) from Client C1 ports shall not be valid since used for DSR/ODU2e services)");
+        assertNotNull(iodu4Link);
+        assertTrue(iodu4Link.isValid(), "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
+        assertEquals(OperationalState.ENABLED, iodu4Link.getOperationalState(),
+                "ODU4 Link (connection) Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, iodu4Link.getAdministrativeState(),
+                "ODU4 Link (connection) admin state shall be Unlock)");
+        assertEquals(iodu4Link.getAvailableBandwidth(), Long.valueOf(100000),
+                "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
+        assertEquals(0.0, iodu4Link.getpmd2(), "ODU4 Link (connection)PMD shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getcd(), "ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getspanLoss(), "ODU4 Link (connection) span loss shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLength(), "ODU4 Link (connection) Length shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLatency(), "ODU4 Link (connection) Latency shall be 0.0)");
+        assertNull(iodu4Link.getsrlgList(), "No SRLG declared for OTN Links )");
+        assertEquals(OpenroadmLinkType.OTNLINK, iodu4Link.getlinkType(),
+                "ODU4 Link (connection) link type shall be OTN-LINK)");
+        assertEquals("Connection name", iodu4Link.getLinkName().getValueName(),
+                "ODU4 Link (connection) Name (Value-name) shall be Connection name)");
+        assertEquals(
+                "TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU",
+                iodu4Link.getLinkName().getValue(),
+                "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1"
+                + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
+        assertEquals("b90f7b96-4fe0-390c-8ef2-41942196f19e", iodu4Link.getLinkId(),
+                "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+                "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+                "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
+                + "(SPDR-SC1-XPDR1+XPONDER)");
+        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+                "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+                "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+                "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
+                + "(SPDR-SA1-XPDR1+XPONDER)");
+        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+                "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+        assertEquals(0.0, iodu4Link.getpowerCorrection(),
+                "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
+        assertEquals("606ade82-de21-3e95-b2cd-cdb2b03ef78b", iodu4Link.getOppositeLinkId(),
+                "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
     }
 
     @Test
-    void iOdu4LinkX3toX3Test() {
-        LOG.info("PceTapiLInkTest Line 561 Entering Test6");
+    void iOdu4LinkBetweenXpdr3andXpdr3Test() {
         // TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iOTU Uuid
         Uuid linkOtu4Uuid = new Uuid("29b6a4ac-b5d3-33aa-aba1-52763259b838");
         // TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iODU Uuid
         Uuid linkiOdu4Uuid = new Uuid("9e237eea-ce80-3490-9a66-34f7cbdac55f");
-        Uuid ioducepSpdrSA1x3 = new Uuid("ced2adb2-e1fd-338c-8b64-a02106d48b45");
-        Uuid ioducepSpdrSC1x3 = new Uuid("74b4b605-379f-3700-bb46-97b578cb2c7d");
-        Uuid iotucepSpdrSA1x3 = new Uuid("7c72d50f-d830-3e29-928d-4fdbb6e1b9a1");
-        Uuid iotucepSpdrSC1x3 = new Uuid("7e241215-6bbe-37eb-8729-bdefc909b97d");
+
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr3Id;
         this.znodeId = spdrSC1xpdr3Id;
@@ -528,59 +508,58 @@ public class PceTapiLinkTest  extends AbstractTest {
         PceTapiLink otu4Link = null;
         PceTapiLink iodu4Link = null;
         try {
-            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id, iotucepSpdrSA1x3,
-                iotucepSpdrSC1x3);
+            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
         try {
-            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id, ioducepSpdrSA1x3,
-                ioducepSpdrSC1x3);
+            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr3Id, spdrSC1xpdr3Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkiOdu4Uuid, e);
         }
-        assertTrue(otu4Link.isValid() == false,
-            "OTU4 Link (connection) shall not be valid for DSR/ODU2e services)");
-        assertTrue(iodu4Link.isValid() == true,
-            "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
-        assertTrue(iodu4Link.getOperationalState().equals(OperationalState.ENABLED),
-            "ODU4 Link (connection) Link operational state shall be enabled)");
-        assertTrue(iodu4Link.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "ODU4 Link (connection) admin state shall be Unlock)");
-        assertTrue(iodu4Link.getAvailableBandwidth().equals(Long.valueOf(100000)),
-            "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
-        assertTrue(iodu4Link.getpmd2().equals(0.0),"ODU4 Link (connection) PMD shall be 0.0)");
-        assertTrue(iodu4Link.getcd().equals(0.0),"ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
-        assertTrue(iodu4Link.getspanLoss().equals(0.0),"ODU4 Link (connection) span loss shall be 0.0)");
-        assertTrue(iodu4Link.getLength().equals(0.0),"ODU4 Link (connection) Length shall be 0.0)");
-        assertTrue(iodu4Link.getLatency().equals(0.0),"ODU4 Link (connection) Latency shall be 0.0)");
-        assertTrue(iodu4Link.getsrlgList() == null,"No SRLG declared for OTN Links )");
-        assertTrue(iodu4Link.getlinkType().equals(OpenroadmLinkType.OTNLINK),
-            "ODU4 Link (connection) link type shall be OTN-LINK)");
-        assertTrue(iodu4Link.getLinkName().getValueName().equals("Connection name"),"ODU4 Link (connection) Name"
-            + "(Value-name) shall be Connection name)");
-        assertTrue(iodu4Link.getLinkName().getValue()
-            .equals("TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iODU"),
-            "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3"
-            + "+XPDR3-NETWORK1+iODU");
-        assertTrue(iodu4Link.getLinkId().equals("9e237eea-ce80-3490-9a66-34f7cbdac55f"),
-            "ODU4 Link (connection) Id shall be 9e237eea-ce80-3490-9a66-34f7cbdac55f)");
-        assertTrue(iodu4Link.getDestId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "TSP Destination NodeId shall be 4582e51f-2b2d-3b70-b374-86c463062710");
-        assertTrue(iodu4Link.getdestNetworkSupNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "TSP Destination Supporting Node Id shall be 4582e51f-2b2d-3b70-b374-86c463062710");
-        assertTrue(iodu4Link.getDestTP().equals("ced2adb2-e1fd-338c-8b64-a02106d48b45"),
-            "TSP Destination TPId shall be ced2adb2-e1fd-338c-8b64-a02106d48b45");
-        assertTrue(iodu4Link.getSourceId().equals("c1f06957-c0b9-32be-8492-e278b2d4a3aa"),
-            "TSP Source NodeId shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
-        assertTrue(iodu4Link.getsourceNetworkSupNodeId().equals("c1f06957-c0b9-32be-8492-e278b2d4a3aa"),
-            "TSP Source Supporting Node Id shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
-        assertTrue(iodu4Link.getSourceTP().equals("74b4b605-379f-3700-bb46-97b578cb2c7d"),
-            "TSP Source TPId shall be 74b4b605-379f-3700-bb46-97b578cb2c7d");
-        assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
-            "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkId().equals("1a9dea0a-0e90-3a72-98b7-2dc04d2ea115"),
-            "ODU4 Link (connection) opposite Link shall be 1a9dea0a-0e90-3a72-98b7-2dc04d2ea115");
+        assertNotNull(otu4Link);
+        assertFalse(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for DSR/ODU2e services)");
+        assertNotNull(iodu4Link);
+        assertTrue(iodu4Link.isValid(), "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
+        assertEquals(OperationalState.ENABLED, iodu4Link.getOperationalState(),
+                "ODU4 Link (connection) Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, iodu4Link.getAdministrativeState(),
+                "ODU4 Link (connection) admin state shall be Unlock)");
+        assertEquals(iodu4Link.getAvailableBandwidth(), Long.valueOf(100000),
+                "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
+        assertEquals(0.0, iodu4Link.getpmd2(), "ODU4 Link (connection) PMD shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getcd(), "ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getspanLoss(), "ODU4 Link (connection) span loss shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLength(), "ODU4 Link (connection) Length shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLatency(), "ODU4 Link (connection) Latency shall be 0.0)");
+        assertNull(iodu4Link.getsrlgList(), "No SRLG declared for OTN Links )");
+        assertEquals(OpenroadmLinkType.OTNLINK, iodu4Link.getlinkType(),
+                "ODU4 Link (connection) link type shall be OTN-LINK)");
+        assertEquals("Connection name", iodu4Link.getLinkName().getValueName(),
+                "ODU4 Link (connection) Name (Value-name) shall be Connection name)");
+        assertEquals(
+                "TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3+XPDR3-NETWORK1+iODU",
+                iodu4Link.getLinkName().getValue(),
+                "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR3+XPDR3-NETWORK1+SPDR-SC1-XPDR3"
+                + "+XPDR3-NETWORK1+iODU");
+        assertEquals("9e237eea-ce80-3490-9a66-34f7cbdac55f", iodu4Link.getLinkId(),
+                "ODU4 Link (connection) Id shall be 9e237eea-ce80-3490-9a66-34f7cbdac55f)");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getDestId(),
+                "TSP Destination NodeId shall be 4582e51f-2b2d-3b70-b374-86c463062710");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", iodu4Link.getdestNetworkSupNodeId(),
+                "TSP Destination Supporting Node Id shall be 4582e51f-2b2d-3b70-b374-86c463062710");
+        assertEquals("ced2adb2-e1fd-338c-8b64-a02106d48b45", iodu4Link.getDestTP(),
+                "TSP Destination TPId shall be ced2adb2-e1fd-338c-8b64-a02106d48b45");
+        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getSourceId(),
+                "TSP Source NodeId shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
+        assertEquals("c1f06957-c0b9-32be-8492-e278b2d4a3aa", iodu4Link.getsourceNetworkSupNodeId(),
+                "TSP Source Supporting Node Id shall be c1f06957-c0b9-32be-8492-e278b2d4a3aa");
+        assertEquals("74b4b605-379f-3700-bb46-97b578cb2c7d", iodu4Link.getSourceTP(),
+                "TSP Source TPId shall be 74b4b605-379f-3700-bb46-97b578cb2c7d");
+        assertEquals(0.0, iodu4Link.getpowerCorrection(),
+                "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
+        assertEquals("1a9dea0a-0e90-3a72-98b7-2dc04d2ea115", iodu4Link.getOppositeLinkId(),
+                "ODU4 Link (connection) opposite Link shall be 1a9dea0a-0e90-3a72-98b7-2dc04d2ea115");
     }
 
     @Test
@@ -588,8 +567,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         LOG.info("PceTapiLInkTest Line 684 Entering Test6");
         // TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU Uuid
         Uuid linkiOdu4Uuid = new Uuid("b90f7b96-4fe0-390c-8ef2-41942196f19e");
-        Uuid ioducepSpdrSA1x1 = new Uuid("d6e08276-b5a9-3960-a3e1-14f8f72c280b");
-        Uuid ioducepSpdrSC1x1 = new Uuid("a2f84255-2775-34c9-ab0a-7c17a4249703");
+
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr1Id;
         this.znodeId = spdrSC1xpdr1Id;
@@ -601,54 +579,54 @@ public class PceTapiLinkTest  extends AbstractTest {
         }
         PceTapiLink iodu4Link = null;
         try {
-            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id, ioducepSpdrSA1x1,
-                ioducepSpdrSC1x1);
+            iodu4Link = getTapiOtnLinkFromId(linkiOdu4Uuid, spdrSA1xpdr1Id, spdrSC1xpdr1Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkiOdu4Uuid, e);
         }
 
-        assertTrue(iodu4Link.isValid() == true,
-            "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
-        assertTrue(iodu4Link.getOperationalState().equals(OperationalState.ENABLED),
-            "ODU4 Link (connection) Link operational state shall be enabled)");
-        assertTrue(iodu4Link.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "ODU4 Link (connection) admin state shall be Unlock)");
-        assertTrue(iodu4Link.getAvailableBandwidth().equals(Long.valueOf(100000)),
-            "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
-        assertTrue(iodu4Link.getpmd2().equals(0.0),"ODU4 Link (connection)PMD shall be 0.0)");
-        assertTrue(iodu4Link.getcd().equals(0.0),"ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
-        assertTrue(iodu4Link.getspanLoss().equals(0.0),"ODU4 Link (connection) span loss shall be 0.0)");
-        assertTrue(iodu4Link.getLength().equals(0.0),"ODU4 Link (connection) Length shall be 0.0)");
-        assertTrue(iodu4Link.getLatency().equals(0.0),"ODU4 Link (connection) Latency shall be 0.0)");
-        assertTrue(iodu4Link.getsrlgList() == null,"No SRLG declared for OTN Links )");
-        assertTrue(iodu4Link.getlinkType().equals(OpenroadmLinkType.OTNLINK),
-            "ODU4 Link (connection) link type shall be OTN-LINK)");
-        assertTrue(iodu4Link.getLinkName().getValueName().equals("Connection name"),"ODU4 Link (connection) Name"
-            + "(Value-name) shall be Connection name)");
-        assertTrue(iodu4Link.getLinkName().getValue()
-            .equals("TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU"),
-            "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1"
-            + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
-        assertTrue(iodu4Link.getLinkId().equals("b90f7b96-4fe0-390c-8ef2-41942196f19e"),
-            "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
-        assertTrue(iodu4Link.getSourceId().equals("215ee18f-7869-3492-94d2-0f24ed0a3023"),
-            "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
-        assertTrue(iodu4Link.getsourceNetworkSupNodeId().equals("215ee18f-7869-3492-94d2-0f24ed0a3023"),
-            "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
-            + "(SPDR-SC1-XPDR1+XPONDER)");
-        assertTrue(iodu4Link.getSourceTP().equals("a2f84255-2775-34c9-ab0a-7c17a4249703"),
-            "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
-        assertTrue(iodu4Link.getDestId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
-        assertTrue(iodu4Link.getdestNetworkSupNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
-            + "(SPDR-SA1-XPDR1+XPONDER)");
-        assertTrue(iodu4Link.getDestTP().equals("d6e08276-b5a9-3960-a3e1-14f8f72c280b"),
-            "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
-        assertTrue(iodu4Link.getpowerCorrection().equals(0.0),
-            "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(iodu4Link.getOppositeLinkId().equals("606ade82-de21-3e95-b2cd-cdb2b03ef78b"),
-            "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
+        assertNotNull(iodu4Link);
+        assertTrue(iodu4Link.isValid(), "iODU4 Link (connection) shall be valid for DSR/ODU2e services)");
+        assertEquals(OperationalState.ENABLED, iodu4Link.getOperationalState(),
+                "ODU4 Link (connection) Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, iodu4Link.getAdministrativeState(),
+                "ODU4 Link (connection) admin state shall be Unlock)");
+        assertEquals(iodu4Link.getAvailableBandwidth(), Long.valueOf(100000),
+                "ODU4 Link (connection) available bandwidth shall 100000 Mbps)");
+        assertEquals(0.0, iodu4Link.getpmd2(), "ODU4 Link (connection)PMD shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getcd(), "ODU4 Link (connection) Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getspanLoss(), "ODU4 Link (connection) span loss shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLength(), "ODU4 Link (connection) Length shall be 0.0)");
+        assertEquals(0.0, iodu4Link.getLatency(), "ODU4 Link (connection) Latency shall be 0.0)");
+        assertNull(iodu4Link.getsrlgList(), "No SRLG declared for OTN Links )");
+        assertEquals(OpenroadmLinkType.OTNLINK, iodu4Link.getlinkType(),
+                "ODU4 Link (connection) link type shall be OTN-LINK)");
+        assertEquals("Connection name", iodu4Link.getLinkName().getValueName(),
+                "ODU4 Link (connection) Name (Value-name) shall be Connection name)");
+        assertEquals(
+                "TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU",
+                iodu4Link.getLinkName().getValue(),
+                "ODU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR1+XPDR1-NETWORK1"
+                + "+SPDR-SC1-XPDR1+XPDR1-NETWORK1+iODU");
+        assertEquals("b90f7b96-4fe0-390c-8ef2-41942196f19e", iodu4Link.getLinkId(),
+                "ODU4 Link (connection) Id shall be b90f7b96-4fe0-390c-8ef2-41942196f19e)");
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getSourceId(),
+                "TSP Source NodeId shall be 215ee18f-7869-3492-94d2-0f24ed0a3023");
+        assertEquals("215ee18f-7869-3492-94d2-0f24ed0a3023", iodu4Link.getsourceNetworkSupNodeId(),
+                "TSP Source Supporting Node Id shall be 215ee18f-7869-3492-94d2-0f24ed0a3023"
+                + "(SPDR-SC1-XPDR1+XPONDER)");
+        assertEquals("a2f84255-2775-34c9-ab0a-7c17a4249703", iodu4Link.getSourceTP(),
+                "TSP Destination TPId shall be a2f84255-2775-34c9-ab0a-7c17a4249703");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getDestId(),
+                "TSP Destination NodeId shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", iodu4Link.getdestNetworkSupNodeId(),
+                "TSP Destination Supporting Node Id shall be 4e44bcc5-08d3-3fee-8fac-f021489e5a61"
+                + "(SPDR-SA1-XPDR1+XPONDER)");
+        assertEquals("d6e08276-b5a9-3960-a3e1-14f8f72c280b", iodu4Link.getDestTP(),
+                "TSP Destination TPId shall be d6e08276-b5a9-3960-a3e1-14f8f72c280b");
+        assertEquals(0.0, iodu4Link.getpowerCorrection(),
+                "ODU4 Link (connection) being by default G.652, Power correction shall be 0.0");
+        assertEquals("606ade82-de21-3e95-b2cd-cdb2b03ef78b", iodu4Link.getOppositeLinkId(),
+                "ODU4 Link (connection) opposite Link shall be 606ade82-de21-3e95-b2cd-cdb2b03ef78b");
     }
 
     @Test
@@ -656,8 +634,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         LOG.info("PceTapiLInkTest Line 814 Entering Test7");
         // TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU Uuid
         Uuid linkOtu4Uuid = new Uuid("07df4edd-4408-310d-a820-5f34b0524900");
-        Uuid iotucepSpdrSA1x2 = new Uuid("bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        Uuid iotucepSpdrSC1x2 = new Uuid("b9dbee10-faa9-3947-94c1-3c023646a2df");
+
         //Generic settings required to get source and dest node
         this.anodeId = spdrSA1xpdr2Id;
         this.znodeId = spdrSC1xpdr2Id;
@@ -669,51 +646,51 @@ public class PceTapiLinkTest  extends AbstractTest {
         }
         PceTapiLink otu4Link = null;
         try {
-            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id, iotucepSpdrSA1x2,
-                iotucepSpdrSC1x2);
+            otu4Link = getTapiOtnLinkFromId(linkOtu4Uuid, spdrSA1xpdr2Id, spdrSC1xpdr2Id);
         } catch (ExecutionException e) {
             LOG.error("Unable to get connection {} from mdsal: ", linkOtu4Uuid, e);
         }
-        assertTrue(otu4Link.isValid() == true,
-            "OTU4 Link (connection) shall not be valid for ODU4 services)");
-        assertTrue(otu4Link.getOperationalState().equals(OperationalState.ENABLED),
-            "OTU4 Link (connection) Link operational state shall be enabled)");
-        assertTrue(otu4Link.getAdministrativeState().equals(AdministrativeState.UNLOCKED),
-            "OTU4 Link (connection) admin state shall be Unlock)");
-        assertTrue(otu4Link.getAvailableBandwidth().equals(Long.valueOf(100000)),
-            "OTU4 Link (connection) available bandwidth shall 100000 in Mbps)");
-        assertTrue(otu4Link.getpmd2().equals(0.0),"OTU4 Link (connection)PMD shall be 0.0)");
-        assertTrue(otu4Link.getcd().equals(0.0),"OTU4 Link (connection) Chromatic dispersion shall be 0.0)");
-        assertTrue(otu4Link.getspanLoss().equals(0.0),"OTU4 Link (connection) span loss shall be 0.0)");
-        assertTrue(otu4Link.getLength().equals(0.0),"OTU4 Link (connection) Length shall be 0.0)");
-        assertTrue(otu4Link.getLatency().equals(0.0),"OTU4 Link (connection) Latency shall be 0.0)");
-        assertTrue(otu4Link.getsrlgList() == null,"No SRLG declared for OTN Links )");
-        assertTrue(otu4Link.getlinkType().equals(OpenroadmLinkType.OTNLINK),
-            "OTU4 Link (connection) link type shall be OTN-LINK)");
-        assertTrue(otu4Link.getLinkName().getValueName().equals("Connection name"),"OTU4 Link (connection) Name"
-            + "(Value-name) shall be Connection name)");
-        assertTrue(otu4Link.getLinkName().getValue()
-            .equals("TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU"),
-            "OTU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2"
-            + "+XPDR2-NETWORK1+iOTU");
-        assertTrue(otu4Link.getLinkId().equals("07df4edd-4408-310d-a820-5f34b0524900"),
-            "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
-        assertTrue(otu4Link.getDestId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertTrue(otu4Link.getdestNetworkSupNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
-        assertTrue(otu4Link.getDestTP().equals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5"),
-            "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
-        assertTrue(otu4Link.getSourceId().equals("d852c340-77db-3f9a-96e8-cb4de8e1004a"),
-            "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertTrue(otu4Link.getsourceNetworkSupNodeId().equals("d852c340-77db-3f9a-96e8-cb4de8e1004a"),
-            "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
-        assertTrue(otu4Link.getSourceTP().equals("b9dbee10-faa9-3947-94c1-3c023646a2df"),
-            "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
-        assertTrue(otu4Link.getpowerCorrection().equals(0.0),
-            "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
-        assertTrue(otu4Link.getOppositeLinkId().equals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f"),
-            "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
+        assertNotNull(otu4Link);
+        assertTrue(otu4Link.isValid(), "OTU4 Link (connection) shall not be valid for ODU4 services)");
+        assertEquals(OperationalState.ENABLED, otu4Link.getOperationalState(),
+                "OTU4 Link (connection) Link operational state shall be enabled)");
+        assertEquals(AdministrativeState.UNLOCKED, otu4Link.getAdministrativeState(),
+                "OTU4 Link (connection) admin state shall be Unlock)");
+        assertEquals(otu4Link.getAvailableBandwidth(), Long.valueOf(100000),
+                "OTU4 Link (connection) available bandwidth shall 100000 in Mbps)");
+        assertEquals(0.0, otu4Link.getpmd2(), "OTU4 Link (connection)PMD shall be 0.0)");
+        assertEquals(0.0, otu4Link.getcd(), "OTU4 Link (connection) Chromatic dispersion shall be 0.0)");
+        assertEquals(0.0, otu4Link.getspanLoss(), "OTU4 Link (connection) span loss shall be 0.0)");
+        assertEquals(0.0, otu4Link.getLength(), "OTU4 Link (connection) Length shall be 0.0)");
+        assertEquals(0.0, otu4Link.getLatency(), "OTU4 Link (connection) Latency shall be 0.0)");
+        assertNull(otu4Link.getsrlgList(), "No SRLG declared for OTN Links )");
+        assertEquals(OpenroadmLinkType.OTNLINK, otu4Link.getlinkType(),
+                "OTU4 Link (connection) link type shall be OTN-LINK)");
+        assertEquals("Connection name", otu4Link.getLinkName().getValueName(),
+                "OTU4 Link (connection) Name (Value-name) shall be Connection name)");
+        assertEquals(
+                "TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2+XPDR2-NETWORK1+iOTU",
+                otu4Link.getLinkName().getValue(),
+                "OTU4 Link (connection) Name (value-name) shall be TOP+SPDR-SA1-XPDR2+XPDR2-NETWORK1+SPDR-SC1-XPDR2"
+                + "+XPDR2-NETWORK1+iOTU");
+        assertEquals("07df4edd-4408-310d-a820-5f34b0524900", otu4Link.getLinkId(),
+                "OTU4 Link (connection) Id shall be 07df4edd-4408-310d-a820-5f34b0524900)");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getDestId(),
+                "TSP Source NodeId shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", otu4Link.getdestNetworkSupNodeId(),
+                "TSP Source Supporting Node Id shall be 38c114ae-9c0e-3068-bb27-db2dbd81220b");
+        assertEquals("bb58ebb0-ca7c-3518-8ffd-808abfca54e5", otu4Link.getDestTP(),
+                "TSP Source TPId shall be bb58ebb0-ca7c-3518-8ffd-808abfca54e5");
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getSourceId(),
+                "TSP Destination NodeId shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+        assertEquals("d852c340-77db-3f9a-96e8-cb4de8e1004a", otu4Link.getsourceNetworkSupNodeId(),
+                "TSP Destination Supporting Node Id shall be d852c340-77db-3f9a-96e8-cb4de8e1004a");
+        assertEquals("b9dbee10-faa9-3947-94c1-3c023646a2df", otu4Link.getSourceTP(),
+                "TSP Destination TPId shall be b9dbee10-faa9-3947-94c1-3c023646a2df");
+        assertEquals(0.0, otu4Link.getpowerCorrection(),
+                "OTU4 Link (connection) being by default G.652, Power correction shall be 0.0");
+        assertEquals("37475213-26ca-3bcd-a9f6-f2f4d8deec5f", otu4Link.getOppositeLinkId(),
+                "OTU4 Link (connection) opposite Link shall be 37475213-26ca-3bcd-a9f6-f2f4d8deec5f");
     }
 
     private PceTapiLink getTapiOpticalLinkFromId(Uuid linkId, Uuid nodeXuuid, Uuid nodeYuuid,
@@ -740,11 +717,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (NoSuchElementException e) {
             return null;
         }
-        if (link == null) {
-            LOG.info("PceTapiLInkTest Line 496, null node");
-        } else {
-            LOG.info("PceTapiLInkTest Line 498, link is {}", link.getName());
-        }
+        LOG.info("PceTapiLInkTest: getTapiOpticalLinkFromId, link is {}", link.getName());
 
         TapiOpticalNode ton = getTapiOpticalNodeFromId(nodeXuuid);
         Map<Uuid, PceTapiOpticalNode> nodeXpceNodeMap = getPceTapiOpticalNodeFromId(nodeXuuid, ton);
@@ -754,8 +727,10 @@ public class PceTapiLinkTest  extends AbstractTest {
             disagNodeXUuid = nodeXpceNodeMap.entrySet().iterator().next().getKey();
         } else {
             for (Map.Entry<Uuid, PceTapiOpticalNode> entry : nodeXpceNodeMap.entrySet()) {
-                if (entry.getValue().getListOfNep().stream().map(BasePceNep:: getNepCepUuid)
-                        .collect(Collectors.toList()).contains(nepXUuid)) {
+                if (entry.getValue().getListOfNep().stream()
+                        .map(BasePceNep:: getNepCepUuid)
+                        .toList()
+                        .contains(nepXUuid)) {
                     LOG.info("PceTapiLInkTest Line 293, PTON is  {}", entry.getValue().getNodeId());
                     disagNodeXUuid = entry.getKey();
                 }
@@ -770,8 +745,10 @@ public class PceTapiLinkTest  extends AbstractTest {
             disagNodeYUuid = nodeYpceNodeMap.entrySet().iterator().next().getKey();
         } else {
             for (Map.Entry<Uuid, PceTapiOpticalNode> entry : nodeYpceNodeMap.entrySet()) {
-                if (entry.getValue().getListOfNep().stream().map(BasePceNep:: getNepCepUuid)
-                    .collect(Collectors.toList()).contains(nepYUuid)) {
+                if (entry.getValue().getListOfNep().stream()
+                        .map(BasePceNep:: getNepCepUuid)
+                        .toList()
+                        .contains(nepYUuid)) {
                     LOG.info("PceTapiLInkTest Line 301, PTON is  {}", entry.getValue().getNodeId());
                     disagNodeYUuid = entry.getKey();
                 }
@@ -790,8 +767,7 @@ public class PceTapiLinkTest  extends AbstractTest {
             nodeYpceNodeMap.get(disagNodeYUuid));
     }
 
-    private PceTapiLink getTapiOtnLinkFromId(Uuid linkId, Uuid nodeXuuid, Uuid nodeYuuid,
-            Uuid nepXUuid, Uuid nepYUuid)
+    private PceTapiLink getTapiOtnLinkFromId(Uuid linkId, Uuid nodeXuuid, Uuid nodeYuuid)
             throws ExecutionException {
         Connection conn = null;
 
@@ -813,12 +789,7 @@ public class PceTapiLinkTest  extends AbstractTest {
         } catch (NoSuchElementException e) {
             return null;
         }
-        if (conn == null) {
-            LOG.info("PceTapiLInkTest Line 573, null node");
-        } else {
-            LOG.info("PceTapiLInkTest Line 575, connection is {}", conn.getName());
-        }
-
+        LOG.info("PceTapiLInkTest: getTapiOtnLinkFromId, connection is {}", conn.getName());
 
         TapiOpticalNode ton = getTapiOpticalNodeFromId(nodeXuuid);
         LOG.info("TapiLinkTest Line 886 TON  for NodeX is {} ", ton == null ? null : nodeXuuid);
@@ -829,14 +800,12 @@ public class PceTapiLinkTest  extends AbstractTest {
         PceTapiOtnNode nodeY = getPceTapiOtnNodeXpdrFromId(nodeYuuid, ton);
         LOG.info("TapiLinkTest Line 892 PceOtnNode  for NodeY is {} ", nodeY == null ? null : nodeY.getNodeId());
 
-
         if (nodeX == null || nodeY == null) {
             LOG.info("TapiLinkTest getTapiOtnLinkFromId Line 587, unable to find PceOtnNode for Node X {} or Node Y {}",
                 nodeX == null ? null : nodeX.getNodeId(),
                 nodeY == null ? null : nodeY.getNodeId());
             return null;
         }
-
         return new PceTapiLink(new TopologyKey(topoUuid), conn, nodeX, nodeY, serviceType);
     }
 

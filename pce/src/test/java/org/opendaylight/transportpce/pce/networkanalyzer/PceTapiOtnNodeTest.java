@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -20,7 +21,6 @@ import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -109,14 +109,14 @@ public class PceTapiOtnNodeTest extends AbstractTest {
             try (InputStream targetStream = Files.newInputStream(topoFilePath)) {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(getDataStoreContextUtil()).transformIntoNormalizedNode(targetStream);
-                if (!transformIntoNormalizedNode.isPresent()) {
+                if (transformIntoNormalizedNode.isEmpty()) {
                     throw new IllegalStateException(String.format(
                         "Could not transform the input %s into normalized nodes", fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter
                     .createWithDataStoreUtil(getDataStoreContextUtil())
                     .getDataObject(transformIntoNormalizedNode.orElseThrow(), Context.QNAME);
-                if (!dataObject.isPresent()) {
+                if (dataObject.isEmpty()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
                     tapiContext = (Context) dataObject.orElseThrow();
@@ -143,7 +143,6 @@ public class PceTapiOtnNodeTest extends AbstractTest {
     @Test
     void testvalidateAZxponderForSPDRA1X1() {
         // SPDR-XPDR1 already supports One wavelength, One ODU4, and one DSR/ETh service
-        LOG.info("Entering Test1 ");
         serviceType = "10GE";
         anodeId = spdrSA1xpdr1Id;
         znodeId = spdrSC1xpdr1Id;
@@ -161,72 +160,85 @@ public class PceTapiOtnNodeTest extends AbstractTest {
 
         assertTrue(pceONspdrSA1.isValid(),
             "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR1+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
-        assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
-        assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA1.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA1.getAdminStates() == null,
-            "SPDR-SA1 Node AdminStates shall be null");
-        assertTrue(pceONspdrSA1.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
-        assertTrue(pceONspdrSA1.getState() == null,
-            "SPDR-SA1 Node State shall be null");
-        LOG.info("TEST OTN Line 184 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        assertEquals("SPDR-SA1-XPDR1+XPONDER", pceONspdrSA1.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", pceONspdrSA1.getSupNetworkNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", pceONspdrSA1.getSupClliNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA1.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertNull(pceONspdrSA1.getAdminStates(), "SPDR-SA1 Node AdminStates shall be null");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA1.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
+        assertNull(pceONspdrSA1.getState(), "SPDR-SA1 Node State shall be null");
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+            pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
         assertEquals(10, pceONspdrSA1.getTotalListOfNep().size(),
             "SPDR-SA1 has 10 NEPs prefiltered NEP : 1 OTS, 2 (CEP+NEP)iODU, 3x2 (CEP+NEP) eODU, 1DSR");
-        assertEquals(6, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 6 (CEP +NEP) eODU NEPs C1 eODU being already provisioned");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
-        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
+        assertEquals(6, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 6 (CEP +NEP) eODU NEPs C1 eODU being already provisioned");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
+        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
             "SPDR-SA1 has 2 (CEP+NEP) iODU NEPs (Network1)");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 OTS NEPs");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 OTS NEPs");
         // Check Valid (of Interest) NEP of the current Node
-        LOG.info("TEST OTN Line 202 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+                pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).toList());
         assertEquals(8, pceONspdrSA1.getListOfNep().size(),
-            "SPDR-SA1 includes 8 NEp and Ceps at ODU/OTU level /OTU : 2x3eODU, 2 iODU");
-        assertEquals(6, pceONspdrSA1.getListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 6 eODU NEPs/CEP C1 eODU being already provisioned");
-        assertEquals(1, pceONspdrSA1.getUsableXpdrClientTps().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
-        assertEquals(2, pceONspdrSA1.getUsableXpdrNWTps().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 2 iODU NEPs/CEP (Network1)");
+                "SPDR-SA1 includes 8 NEp and Ceps at ODU/OTU level /OTU : 2x3eODU, 2 iODU");
+        assertEquals(6, pceONspdrSA1.getListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 6 eODU NEPs/CEP C1 eODU being already provisioned");
+        assertEquals(1, pceONspdrSA1.getUsableXpdrClientTps().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
+        assertEquals(2, pceONspdrSA1.getUsableXpdrNWTps().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 2 iODU NEPs/CEP (Network1)");
         assertEquals(2, pceONspdrSA1.getUsableXpdrClientTps().size(),
             "SPDR-SA1 has 2 selectable NEP (eODU NEP never considered as potential service endpoint)  at ODU/DSR level"
             + "after Nep have been pruned : 1 DSR, 1eODU");
         assertEquals(2, pceONspdrSA1.getUsableXpdrNWTps().size(),
                 "SPDR-SA1 has 2 selectable NEP/CEP at iODU level after Cep/Nep have been pruned : 2 iODU");
-        assertTrue(pceONspdrSA1.getSlotWidthGranularity() == null,
-            "An Otn Node returns null slotWidth Granularity");
-        assertTrue(pceONspdrSA1.getCentralFreqGranularity() == null,
-            "An Otn Node returns null Central Frequency Granularity");
-        assertTrue(pceONspdrSA1.getBitSetData() == null, "Spectrum is not defined at OTN level");
-
+        assertNull(pceONspdrSA1.getSlotWidthGranularity(), "An Otn Node returns null slotWidth Granularity");
+        assertNull(pceONspdrSA1.getCentralFreqGranularity(), "An Otn Node returns null Central Frequency Granularity");
+        assertNull(pceONspdrSA1.getBitSetData(), "Spectrum is not defined at OTN level");
     }
 
     @Test
     void testvalidateAZxponderForSPDRA1X1NoPortSpecified() {
         // SPDR-XPDR1 already supports One wavelength, One ODU4, and one DSR/ETh service
-        LOG.info("Entering Test2 ");
         serviceType = "10GE";
         anodeId = spdrSA1xpdr1Id;
         znodeId = spdrSC1xpdr1Id;
@@ -238,49 +250,57 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeAll();
 
         PceTapiOtnNode pceONspdrSA1 = tapiONspdrAx1.getXpdrOtnNode();
-        assertTrue(pceONspdrSA1.isValid(),
-            "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR1+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
-        assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA1.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA1.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
-        LOG.info("TEST OTN Line 250 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        assertTrue(pceONspdrSA1.isValid(), "SPDR-SA1 Node shall be a valid OTN node");
+        assertEquals("SPDR-SA1-XPDR1+XPONDER", pceONspdrSA1.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA1.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA1.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+                pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
-        assertEquals(12, pceONspdrSA1.getTotalListOfNep().size(),
-            "SPDR-SA1 has 12 NEPs prefiltered NEP");
-        assertEquals(6, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 3x2 eODU NEPs/CEPs C1 eODU being already provisioned");
-        assertEquals(3, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 3 DSR NEPs which corresponds to aPortId");
-        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 2 iODU NEPs/CEPs (Network1)");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 OTS NEPs");
+        assertEquals(12, pceONspdrSA1.getTotalListOfNep().size(), "SPDR-SA1 has 12 NEPs prefiltered NEP");
+        assertEquals(6, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 3x2 eODU NEPs/CEPs C1 eODU being already provisioned");
+        assertEquals(3, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                    .findFirst().orElseThrow().getValue().getValue().contains("DSR")).toList().size(),
+                "SPDR-SA1 has 3 DSR NEPs which corresponds to aPortId");
+        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 2 iODU NEPs/CEPs (Network1)");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 OTS NEPs");
         // Check Valid (of Interest) NEP of the current Node
-        LOG.info("TEST OTN Line 283 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {}",
+                pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).toList());
         assertEquals(8, pceONspdrSA1.getListOfNep().size(),
-            "SPDR-SA1 has 8 selectable NEP/CEP at ODU level after Nep have been pruned : 3x2 eODU, 1x2 iODU");
-        assertEquals(3, pceONspdrSA1.getUsableXpdrClientTps().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "3 DSR ports are eligible");
+                "SPDR-SA1 has 8 selectable NEP/CEP at ODU level after Nep have been pruned : 3x2 eODU, 1x2 iODU");
+        assertEquals(3, pceONspdrSA1.getUsableXpdrClientTps().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "3 DSR ports are eligible");
     }
 
     @Test
     void testvalidateAZxponderForSPDRA1X2NetworkService() {
         // SPDR-XPDR2 already supports One wavelength + One OTU4 services. ODU4 not created
-        LOG.info("Entering Test3 ");
         //Reinitializing Xponders according to new anodeId, znodeId, aportId, zportId
         anodeId = spdrSA1xpdr2Id;
         znodeId = spdrSC1xpdr2Id;
@@ -297,52 +317,63 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeAll();
 
         PceTapiOtnNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOtnNode();
-        assertTrue(pceONspdrSA2.isValid(),
-            "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR2+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
-        assertTrue(pceONspdrSA2.getSupNetworkNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting Network NodeId");
-        assertTrue(pceONspdrSA2.getSupClliNodeId().equals("38c114ae-9c0e-3068-bb27-db2dbd81220b"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONspdrSA2.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA2.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA2.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA2.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
-        LOG.info("TEST OTN Line 313 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        assertTrue(pceONspdrSA2.isValid(), "SPDR-SA1 Node shall be a valid OTN node");
+        assertEquals("SPDR-SA1-XPDR2+XPONDER", pceONspdrSA2.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", pceONspdrSA2.getSupNetworkNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting Network NodeId");
+        assertEquals("38c114ae-9c0e-3068-bb27-db2dbd81220b", pceONspdrSA2.getSupClliNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR2 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA2.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA2.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA2.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA2.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+                pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
         assertEquals(10, pceONspdrSA2.getTotalListOfNep().size(),
-            "SPDR-SA1 has 9 NEPs (4 iODU + 4 iOTU + 1 OTS) and 1 CEP (iOTU N1) available");
-        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 iODU NEPs (Network1/2/3/4)");
-        assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iOTU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 iODU NEPs (Network1/2/3/4) + 1 iOTU CEP (N1)");
-        assertEquals(1, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 OTS NEPs, only one wavelength being provisioned");
-        assertEquals("ff69716d-325d-35fc-baa9-0c4bcd992bbd",
-            pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-                .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList())
-                .stream().findFirst().orElseThrow().getNepCepUuid().getValue(),
-            "SPDR-SA1 has 1 OTS NEPs, only one wavelength being provisioned");
+                "SPDR-SA1 has 9 NEPs (4 iODU + 4 iOTU + 1 OTS) and 1 CEP (iOTU N1) available");
+        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 iODU NEPs (Network1/2/3/4)");
+        assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iOTU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 iODU NEPs (Network1/2/3/4) + 1 iOTU CEP (N1)");
+        assertEquals(1, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 OTS NEPs, only one wavelength being provisioned");
+        assertEquals("ff69716d-325d-35fc-baa9-0c4bcd992bbd", pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList().stream()
+                .findFirst().orElseThrow()
+                .getNepCepUuid().getValue(),
+                "SPDR-SA1 has 1 OTS NEPs, only one wavelength being provisioned");
         // Check Valid (of Interest) NEP of the current Node
-        LOG.info("TEST OTN Line 348 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA2.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+                pceONspdrSA2.getListOfNep().stream().map(BasePceNep::getName).toList());
         assertEquals(0, pceONspdrSA2.getUsableXpdrNWTps().size(),
             "SPDR-SA1 as a switch has 1 selectable NEP at iODU level after Nep have been pruned : the specified iODU"
             + "which is, for switchPonder, considered as client and not included in AvailableNWPorts");
         assertEquals(1, pceONspdrSA2.getUsableXpdrClientTps().size(),
-            "SPDR-SA1 as a switch has 1 selectable NEP at iODU level wich also appears in ClientXpdrAvailable tps");
-        assertEquals(0, pceONspdrSA2.getListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "Only One DSR from 3 was kept, selecting the first available port");
+                "SPDR-SA1 as a switch has 1 selectable NEP at iODU level wich also appears in ClientXpdrAvailable tps");
+        assertEquals(0, pceONspdrSA2.getListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "Only One DSR from 3 was kept, selecting the first available port");
     }
 
 
@@ -362,46 +393,53 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeAll();
 
         PceTapiOtnNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOtnNode();
-        assertTrue(pceONspdrSA2.isValid(),
-            "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA2.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR2+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
-        assertTrue(pceONspdrSA2.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA2.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA2.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA2.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
+        assertTrue(pceONspdrSA2.isValid(), "SPDR-SA1 Node shall be a valid OTN node");
+        assertEquals("SPDR-SA1-XPDR2+XPONDER", pceONspdrSA2.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR2+XPONDER NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA2.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA2.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA2.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA2.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
         LOG.info("TEST OTN Line 384 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+                pceONspdrSA2.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
-        assertEquals(17, pceONspdrSA2.getTotalListOfNep().size(),
-            "SPDR-SA1 has 17 NEPs prefiltered NEP");
-        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 iODU NEP (Network1/2/3/4)");
-        assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iOTU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 iOTU NEPs and 1 iOTU CEP (Network1)");
-        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 DSR NEPs, (Client  1/2/3/4");
-        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 OTS NEPs, only one wavelength being provisioned");
+        assertEquals(17, pceONspdrSA2.getTotalListOfNep().size(), "SPDR-SA1 has 17 NEPs prefiltered NEP");
+        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 iODU NEP (Network1/2/3/4)");
+        assertEquals(5, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iOTU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 iOTU NEPs and 1 iOTU CEP (Network1)");
+        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 DSR NEPs, (Client  1/2/3/4");
+        assertEquals(4, pceONspdrSA2.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 OTS NEPs, only one wavelength being provisioned");
         // Check Valid (of Interest) NEP of the current Node
         LOG.info("TEST OTN Line 399 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA2.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+                pceONspdrSA2.getListOfNep().stream().map(BasePceNep::getName).toList());
         assertEquals(9, pceONspdrSA2.getListOfNep().size(),
-            "SPDR-SA1 has 8 NEP (4 OTS + 4 iOTU) and 1 NEP (1 iOTU) at OTN level after Nep have been pruned");
+                "SPDR-SA1 has 8 NEP (4 OTS + 4 iOTU) and 1 NEP (1 iOTU) at OTN level after Nep have been pruned");
     }
 
     @Test
     void testvalidateAZxponderForSPDRA1X3() {
         // SPDR-XPDR1 already supports One wavelength, One ODU4, but no DSR/ETh service
-        LOG.info("Entering Test5 ");
         serviceType = "1GE";
         anodeId = spdrSA1xpdr3Id;
         znodeId = spdrSC1xpdr3Id;
@@ -417,66 +455,79 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeAll();
         PceTapiOtnNode pceONspdrSA1 = tapiONspdrAx3.getXpdrOtnNode();
 
-        assertTrue(pceONspdrSA1.isValid(),
-            "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR3+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
-        assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
-        assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA1.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA1.getAdminStates() == null,
-            "SPDR-SA1 Node AdminStates shall be null");
-        assertTrue(pceONspdrSA1.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
-        assertTrue(pceONspdrSA1.getState() == null,
-            "SPDR-SA1 Node State shall be null");
+        assertTrue(pceONspdrSA1.isValid(), "SPDR-SA1 Node shall be a valid OTN node");
+        assertEquals("SPDR-SA1-XPDR3+XPONDER", pceONspdrSA1.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", pceONspdrSA1.getSupNetworkNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", pceONspdrSA1.getSupClliNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA1.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertNull(pceONspdrSA1.getAdminStates(), "SPDR-SA1 Node AdminStates shall be null");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA1.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
+        assertNull(pceONspdrSA1.getState(), "SPDR-SA1 Node State shall be null");
         LOG.info("TEST OTN Line 429 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+                pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
         assertEquals(12, pceONspdrSA1.getTotalListOfNep().size(),
-            "SPDR-SA1 has 12 NEPs prefiltered NEP : 1 OTS, 1x2 (CEP+NEP)iODU, 4x2 (CEP+NEP) eODU, 1DSR");
-        assertEquals(8, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4X2 eODU NEP/CEPs eODU available");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
-        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 2x1 iODU NEP/CEPs (Network1)");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 OTS NEPs");
+                "SPDR-SA1 has 12 NEPs prefiltered NEP : 1 OTS, 1x2 (CEP+NEP)iODU, 4x2 (CEP+NEP) eODU, 1DSR");
+        assertEquals(8, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4X2 eODU NEP/CEPs eODU available");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
+        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 2x1 iODU NEP/CEPs (Network1)");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 OTS NEPs");
         // Check Valid (of Interest) NEP of the current Node
         assertEquals(10, pceONspdrSA1.getListOfNep().size(),
-            "SPDR-SA1 has 10 selectable NEP/CEP at ODU level after Nep have been pruned : 2x 4 eODU, 2x1 iODU");
-        assertEquals(8, pceONspdrSA1.getListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 eODU NEP/CEPs available");
-        assertEquals(2, pceONspdrSA1.getListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 2x1 iODU NEP/CEP (Network1)");
-        assertEquals(1, pceONspdrSA1.getUsableXpdrClientTps().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
-        assertTrue(pceONspdrSA1.getSlotWidthGranularity() == null,
-            "An Otn Node returns null slotWidth Granularity");
-        assertTrue(pceONspdrSA1.getCentralFreqGranularity() == null,
-            "An Otn Node returns null Central Frequency Granularity");
-        assertTrue(pceONspdrSA1.getBitSetData() == null, "Spectrum is not defined at OTN level");
+                "SPDR-SA1 has 10 selectable NEP/CEP at ODU level after Nep have been pruned : 2x 4 eODU, 2x1 iODU");
+        assertEquals(8, pceONspdrSA1.getListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 eODU NEP/CEPs available");
+        assertEquals(2, pceONspdrSA1.getListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 2x1 iODU NEP/CEP (Network1)");
+        assertEquals(1, pceONspdrSA1.getUsableXpdrClientTps().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 DSR NEPs which corresponds to aPortId");
+        assertNull(pceONspdrSA1.getSlotWidthGranularity(), "An Otn Node returns null slotWidth Granularity");
+        assertNull(pceONspdrSA1.getCentralFreqGranularity(), "An Otn Node returns null Central Frequency Granularity");
+        assertNull(pceONspdrSA1.getBitSetData(), "Spectrum is not defined at OTN level");
     }
 
     @Test
     void testvalidateAZxponderForSPDRA1X3NoPortSpecified() {
         // SPDR-XPDR1 already supports One wavelength, One ODU4, and one DSR/ETh service
-        LOG.info("Entering Test6 ");
         serviceType = "1GE";
         anodeId = spdrSA1xpdr3Id;
         znodeId = spdrSC1xpdr3Id;
@@ -488,51 +539,60 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeAll();
         PceTapiOtnNode pceONspdrSA1 = tapiONspdrAx3.getXpdrOtnNode();
 
-        assertTrue(pceONspdrSA1.isValid(),
-            "SPDR-SA1 Node shall be a valid OTN node");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR3+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
-        assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
-        assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4582e51f-2b2d-3b70-b374-86c463062710"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of Xponder Type");
-        assertTrue(pceONspdrSA1.getPceNodeType().equals("otn"),
-            "SPDR-SA1 Node shall be of PceNodeType otn");
-        assertTrue(pceONspdrSA1.getAdminState().equals(AdministrativeState.UNLOCKED),
-            "SPDR-SA1 Node AdminState shall be UNLOCKED");
-        assertTrue(pceONspdrSA1.getAdminStates() == null,
-            "SPDR-SA1 Node AdminStates shall be null");
-        assertTrue(pceONspdrSA1.getOperationalState().equals(OperationalState.ENABLED),
-            "SPDR-SA1 Node Operational State shall be ENABLED");
-        assertTrue(pceONspdrSA1.getState() == null,
-            "SPDR-SA1 Node State shall be null");
-        LOG.info("TEST OTN Line 545 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+        assertTrue(pceONspdrSA1.isValid(), "SPDR-SA1 Node shall be a valid OTN node");
+        assertEquals("SPDR-SA1-XPDR3+XPONDER", pceONspdrSA1.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3+XPONDER NodeId");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", pceONspdrSA1.getSupNetworkNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting Network NodeId");
+        assertEquals("4582e51f-2b2d-3b70-b374-86c463062710", pceONspdrSA1.getSupClliNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR3 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(), "SPDR-SA1 Node shall be of Xponder Type");
+        assertEquals("otn", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType otn");
+        assertEquals(AdministrativeState.UNLOCKED, pceONspdrSA1.getAdminState(),
+                "SPDR-SA1 Node AdminState shall be UNLOCKED");
+        assertNull(pceONspdrSA1.getAdminStates(), "SPDR-SA1 Node AdminStates shall be null");
+        assertEquals(OperationalState.ENABLED, pceONspdrSA1.getOperationalState(),
+                "SPDR-SA1 Node Operational State shall be ENABLED");
+        assertNull(pceONspdrSA1.getState(), "SPDR-SA1 Node State shall be null");
+        LOG.info("SPDR-SA1 has the following NEPS in list of NEp {} ",
+                pceONspdrSA1.getTotalListOfNep().stream().map(BasePceNep::getName).toList());
         // Check NEP of the current Node
-        assertEquals(15, pceONspdrSA1.getTotalListOfNep().size(),
-            "SPDR-SA1 has 15 NEPs prefiltered NEP");
-        assertEquals(8, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("eODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4x2 eODU NEP/CEPs available");
-        assertEquals(4, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 4 DSR NEPs which corresponds to aPortId");
-        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("iODU")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 iODU NEPs + 1 iODU CEP (Network1)");
-        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("OTS")).collect(Collectors.toList()).size(),
-            "SPDR-SA1 has 1 OTS NEPs");
+        assertEquals(15, pceONspdrSA1.getTotalListOfNep().size(), "SPDR-SA1 has 15 NEPs prefiltered NEP");
+        assertEquals(8, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("eODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4x2 eODU NEP/CEPs available");
+        assertEquals(4, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 4 DSR NEPs which corresponds to aPortId");
+        assertEquals(2, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("iODU"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 iODU NEPs + 1 iODU CEP (Network1)");
+        assertEquals(1, pceONspdrSA1.getTotalListOfNep().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("OTS"))
+                .toList()
+                .size(),
+                "SPDR-SA1 has 1 OTS NEPs");
         // Check Valid (of Interest) NEP of the current Node
         LOG.info("TEST OTN Line 563 SPDR-SA1 has the following NEPS in list of NEp {} ",
-            pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).collect(Collectors.toList()));
+                pceONspdrSA1.getListOfNep().stream().map(BasePceNep::getName).toList());
         assertEquals(10, pceONspdrSA1.getListOfNep().size(),
-            "SPDR-SA1 has 10 selectable NEP/CEP at ODU level after Nep have been pruned : 4x2 eODU, 2x1 iODU");
-        assertEquals(4, pceONspdrSA1.getUsableXpdrClientTps().stream().filter(bpn -> bpn.getName().entrySet().stream()
-            .findFirst().orElseThrow().getValue().getValue().contains("DSR")).collect(Collectors.toList()).size(),
-            "4 DSR were kept, no port being specified");
+                "SPDR-SA1 has 10 selectable NEP/CEP at ODU level after Nep have been pruned : 4x2 eODU, 2x1 iODU");
+        assertEquals(4, pceONspdrSA1.getUsableXpdrClientTps().stream()
+                .filter(bpn -> bpn.getName().entrySet().stream()
+                        .findFirst().orElseThrow().getValue().getValue().contains("DSR"))
+                .toList()
+                .size(),
+                "4 DSR were kept, no port being specified");
     }
 
     private TapiOpticalNode getTapiOpticalNodeFromId(Uuid nodeId) throws ExecutionException {
@@ -558,7 +618,6 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         }
         return new TapiOpticalNode(this.serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
     }
-
 
     private void generalSetUp() throws ExecutionException {
         try {
@@ -591,7 +650,6 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         initializeXpdrs();
     }
 
-
     private void initializeXpdrs() {
         tapiONspdrAx1.initialize();
         tapiONspdrCx1.initialize();
@@ -602,5 +660,4 @@ public class PceTapiOtnNodeTest extends AbstractTest {
         tapiONspdrAx3.initialize();
         tapiONspdrCx3.initialize();
     }
-
 }
