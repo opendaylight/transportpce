@@ -9,7 +9,8 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
@@ -23,7 +24,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -110,14 +110,14 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
             try (InputStream targetStream = Files.newInputStream(topoFilePath)) {
                 Optional<NormalizedNode> transformIntoNormalizedNode = XMLDataObjectConverter
                         .createWithDataStoreUtil(getDataStoreContextUtil()).transformIntoNormalizedNode(targetStream);
-                if (!transformIntoNormalizedNode.isPresent()) {
+                if (transformIntoNormalizedNode.isEmpty()) {
                     throw new IllegalStateException(String.format(
                         "Could not transform the input %s into normalized nodes", fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter
                     .createWithDataStoreUtil(getDataStoreContextUtil())
                     .getDataObject(transformIntoNormalizedNode.orElseThrow(), Context.QNAME);
-                if (!dataObject.isPresent()) {
+                if (dataObject.isEmpty()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
                     tapiContext = (Context) dataObject.orElseThrow();
@@ -138,7 +138,6 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         if (tapiContext == null) {
             throw new IllegalStateException("tapiContext is null cannot write it to datastore");
         }
-
     }
 
     @Test
@@ -160,90 +159,102 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         List<PceTapiOpticalNode> pceTapiDegNodes = tapiONroadmA.getPceNodeMap().entrySet().stream()
             .map(Map.Entry::getValue)
             .filter(pton -> pton.getORNodeType().equals(OpenroadmNodeType.DEGREE))
-            .collect(Collectors.toList());
+            .toList();
         assertEquals(2, pceTapiDegNodes.size(),
             "ROADM A shall includes 2 degree Nodes (DEG1&DEG2) part of the PceNodeMap");
-        LOG.info("pceTON-Line159 : pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
-            .map(PceTapiOpticalNode::getNodeId).collect(Collectors.toList()));
-        assertTrue(pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+DEG1"))
-            .findFirst().orElseThrow() != null,
-            "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+DEG1");
-        assertTrue(pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+DEG2"))
-            .findFirst().orElseThrow() != null,
-            "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+DEG2");
+        LOG.info("pceTapiDegNodesMap include {}", pceTapiDegNodes.stream().map(PceTapiOpticalNode::getNodeId).toList());
+        assertNotNull(pceTapiDegNodes.stream()
+                .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+DEG1"))
+                .findFirst().orElseThrow(),
+                "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+DEG1");
+        assertNotNull(pceTapiDegNodes.stream()
+                .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+DEG2"))
+                .findFirst().orElseThrow(),
+                "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+DEG2");
         assertEquals(2, pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getSupNetworkNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
+                .filter(rdm -> rdm.getSupNetworkNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
         assertEquals(2, pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getSupClliNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
+                .filter(rdm -> rdm.getSupClliNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
         assertEquals(2, pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getORNodeType().equals(OpenroadmNodeType.DEGREE))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall both be of DEGREE type");
-        LOG.info("pceTON-Line181 : pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
-            .map(PceTapiOpticalNode::getSlotWidthGranularity).collect(Collectors.toList()));
+                .filter(rdm -> rdm.getORNodeType().equals(OpenroadmNodeType.DEGREE))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall both be of DEGREE type");
+        LOG.info("pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
+                .map(PceTapiOpticalNode::getSlotWidthGranularity)
+                .toList());
         assertEquals(2, pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
-        LOG.info("pceTON-Line187 : pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
-            .map(PceTapiOpticalNode::getCentralFreqGranularity).collect(Collectors.toList()));
+                .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
+        LOG.info("pceTapiDegNodesMap include {}", pceTapiDegNodes.stream()
+                .map(PceTapiOpticalNode::getCentralFreqGranularity)
+                .toList());
         assertEquals(2, pceTapiDegNodes.stream()
-            .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
+                .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
         //Testing private method splitSrgNodes()
         List<PceTapiOpticalNode> pceTapiSrgNodes = tapiONroadmA.getPceNodeMap().entrySet().stream()
             .map(Map.Entry::getValue)
             .filter(pton -> pton.getORNodeType().equals(OpenroadmNodeType.SRG))
-            .collect(Collectors.toList());
+            .toList();
         assertEquals(2, pceTapiSrgNodes.size(),
             "ROADM A shall includes 2 SRG Nodes (SRG1&SRG3) part of the PceNodeMap");
-        LOG.info("pceTON-Line200 : pceTapiDegNodesMap include {}", pceTapiSrgNodes.stream()
-            .map(PceTapiOpticalNode::getNodeId).collect(Collectors.toList()));
-        assertTrue(pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+SRG1"))
-            .findFirst().orElseThrow() != null,
-            "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+SRG1");
-        assertTrue(pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+SRG3"))
-            .findFirst().orElseThrow() != null,
-            "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+SRG2");
+        LOG.info("pceTapiDegNodesMap include {}", pceTapiSrgNodes.stream().map(PceTapiOpticalNode::getNodeId).toList());
+        assertNotNull(pceTapiSrgNodes.stream()
+                .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+SRG1"))
+                .findFirst().orElseThrow(),
+                "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+SRG1");
+        assertNotNull(pceTapiSrgNodes.stream()
+                .filter(rdm -> rdm.getNodeId().getValue().equals("ROADM-A1+PHOTONIC_MEDIA+SRG3"))
+                .findFirst().orElseThrow(),
+                "ROADM A shall includes ROADM-A1+PHOTONIC_MEDIA+SRG2");
         assertEquals(2, pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getSupNetworkNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
+                .filter(rdm -> rdm.getSupNetworkNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
         assertEquals(2, pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getSupClliNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
+                .filter(rdm -> rdm.getSupClliNodeId().equals("ROADM-A1+PHOTONIC_MEDIA"))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall have the supported TapiOpticalNode name as device Id: ROADM-A1+PHOTONIC_MEDIA");
         assertEquals(2, pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getORNodeType().equals(OpenroadmNodeType.SRG))
-            .collect(Collectors.toList()).size(),
-            "ROADM A SRGs shall both be of SRG type");
+                .filter(rdm -> rdm.getORNodeType().equals(OpenroadmNodeType.SRG))
+                .toList()
+                .size(),
+                "ROADM A SRGs shall both be of SRG type");
         assertEquals(2, pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
+                .filter(rdm -> rdm.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall both have a 6.25 GHz slotWidth Granularity");
         assertEquals(2, pceTapiSrgNodes.stream()
-            .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
-            .collect(Collectors.toList()).size(),
-            "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
+                .filter(rdm -> rdm.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)))
+                .toList()
+                .size(),
+                "ROADM A Degrees shall both have a 12.5 GHz slotWidth Granularity");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        assertEquals(2, pceTapiSrgNodes.stream().filter(rdm -> rdm.getBitSetData().equals(freqBitSet))
-            .collect(Collectors.toList()).size(),
-            "Spectrum shall be fully available for both SRG nodes");
-        assertEquals(2, pceTapiDegNodes.stream().filter(rdm -> rdm.getBitSetData().equals(freqBitSet))
-            .collect(Collectors.toList()).size(),
-            "Spectrum shall be fully available for both DEG nodes");
-        LOG.info("TESTPERFORMED:1");
-
+        assertEquals(2, pceTapiSrgNodes.stream()
+                .filter(rdm -> rdm.getBitSetData().equals(freqBitSet))
+                .toList()
+                .size(),
+                "Spectrum shall be fully available for both SRG nodes");
+        assertEquals(2, pceTapiDegNodes.stream()
+                .filter(rdm -> rdm.getBitSetData().equals(freqBitSet))
+                .toList()
+                .size(),
+                "Spectrum shall be fully available for both DEG nodes");
     }
 
 
@@ -264,9 +275,7 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         initializeAll();
         // For OTn Service no Optical Node generated
         PceTapiOpticalNode pceONspdrSA1 = tapiONspdrAx1.getXpdrOpticalNode();
-        assertTrue(pceONspdrSA1 == null,
-            "SPDR-SA1 Node is not a PceTapiOpticalNode, but a PceTapiOtnNode");
-        LOG.info("TESTPERFORMED:2");
+        assertNull(pceONspdrSA1, "SPDR-SA1 Node is not a PceTapiOpticalNode, but a PceTapiOtnNode");
     }
 
     @Test
@@ -286,27 +295,24 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         initializeAll();
         // For OTn Service no Optical Node generated
         PceTapiOpticalNode pceONspdrSA1 = tapiONspdrAx1.getXpdrOpticalNode();
-        assertTrue(pceONspdrSA1 != null,
-            "with OTU4 service, SPDR-SA1 Node is a PceTapiOpticalNode");
-        assertTrue(pceONspdrSA1.getNodeId().getValue().toString().equals("SPDR-SA1-XPDR1+XPONDER"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
-        assertTrue(pceONspdrSA1.getSupNetworkNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
-        assertTrue(pceONspdrSA1.getSupClliNodeId().equals("4e44bcc5-08d3-3fee-8fac-f021489e5a61"),
-            "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONspdrSA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "SPDR-SA1 Node shall be of xponder OR Node Type");
-        assertTrue(pceONspdrSA1.getPceNodeType().equals("optical"),
-            "SPDR-SA1 Node shall be of PceNodeType optical");
-        assertTrue(pceONspdrSA1.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)),
-            "SPDR-SA1 Node shall have a 6.25 GHz slotWidth Granularity");
-        assertTrue(pceONspdrSA1.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)),
-            "SPDR-SA1 Node shall have a 12.5 GHz slotWidth Granularity");
+        assertNotNull(pceONspdrSA1, "with OTU4 service, SPDR-SA1 Node is a PceTapiOpticalNode");
+        assertEquals("SPDR-SA1-XPDR1+XPONDER", pceONspdrSA1.getNodeId().getValue(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1+XPONDER NodeId");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", pceONspdrSA1.getSupNetworkNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting Network NodeId");
+        assertEquals("4e44bcc5-08d3-3fee-8fac-f021489e5a61", pceONspdrSA1.getSupClliNodeId(),
+                "SPDR-SA1 Node shall have SPDR-SA1-XPDR1 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONspdrSA1.getORNodeType(),
+                "SPDR-SA1 Node shall be of xponder OR Node Type");
+        assertEquals("optical", pceONspdrSA1.getPceNodeType(), "SPDR-SA1 Node shall be of PceNodeType optical");
+        assertEquals(BigDecimal.valueOf(6.25E+9), pceONspdrSA1.getSlotWidthGranularity(),
+                "SPDR-SA1 Node shall have a 6.25 GHz slotWidth Granularity");
+        assertEquals(BigDecimal.valueOf(1.2E+10), pceONspdrSA1.getCentralFreqGranularity(),
+                "SPDR-SA1 Node shall have a 12.5 GHz slotWidth Granularity");
         assertEquals(0, pceONspdrSA1.getXpdrAvailNW().size(),
-            "SPDR A Muxponder shall have no OTS network Port available");
-        assertTrue(pceONspdrSA1.getAvailableTribPorts() == null, "PceTapiOpticalNode does not return trib ports");
-        assertTrue(pceONspdrSA1.getAvailableTribSlots() == null, "PceTapiOpticalNode does not return trib slots");
-        LOG.info("TESTPERFORMED:3");
+                "SPDR A Muxponder shall have no OTS network Port available");
+        assertNull(pceONspdrSA1.getAvailableTribPorts(), "PceTapiOpticalNode does not return trib ports");
+        assertNull(pceONspdrSA1.getAvailableTribSlots(), "PceTapiOpticalNode does not return trib slots");
     }
 
     @Test
@@ -326,11 +332,8 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         initializeAll();
 
         PceTapiOpticalNode pceONspdrSA1 = tapiONspdrAx1.getXpdrOpticalNode();
-        assertTrue(pceONspdrSA1 == null,
-            "SPDR-SA1 Node is not a PceTapiOpticalNode, but a PceTapiOtnNode");
-        LOG.info("TESTPERFORMED:4");
+        assertNull(pceONspdrSA1, "SPDR-SA1 Node is not a PceTapiOpticalNode, but a PceTapiOtnNode");
     }
-
 
     @Test
     void testvalidateAZxponderForXPDR1() {
@@ -355,34 +358,34 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
             pceONxpdrA1.getORNodeType(), pceONxpdrA1.getSlotWidthGranularity(), pceONxpdrA1.getPceNodeType(),
             pceONxpdrA1.getCentralFreqGranularity(), pceONxpdrA1.getAvailableTribPorts(),
             pceONxpdrA1.getAvailableTribSlots());
-        assertTrue(pceONxpdrA1.getNodeId().getValue().toString().equals("XPDR-A1-XPDR1+XPONDER"),
-            "XPDR-A1 Node shall have XPDR-A1-XPDR1+XPONDER NodeId");
-        assertTrue(pceONxpdrA1.getSupNetworkNodeId().equals("4378fc29-6408-39ec-8737-5008c3dc49e5"),
-            "XPDR-A1 Node shall have XPDR-A1-XPDR1 Uuid as supporting Network NodeId");
-        assertTrue(pceONxpdrA1.getSupClliNodeId().equals("4378fc29-6408-39ec-8737-5008c3dc49e5"),
-            "XPDR-A1 Node shall have XPDR-A1-XPDR1 Uuid as supporting CLLI NodeId");
-        assertTrue(pceONxpdrA1.getORNodeType().equals(OpenroadmNodeType.XPONDER),
-            "XPDR-A1 Node shall be of Xponder Type");
-        assertTrue(pceONxpdrA1.getPceNodeType().equals("optical"),
-            "XPDR-A1 Node shall be of PceNodeType optical");
-        assertTrue(pceONxpdrA1.getSlotWidthGranularity().equals(BigDecimal.valueOf(6.25E+9)),
-            "XPDR-A1 Node shall both have a 6.25 GHz slotWidth Granularity");
-        assertTrue(pceONxpdrA1.getCentralFreqGranularity().equals(BigDecimal.valueOf(1.2E+10)),
-            "XPDR-A1 Node shall both have a 12.5 GHz slotWidth Granularity");
+        assertEquals("XPDR-A1-XPDR1+XPONDER", pceONxpdrA1.getNodeId().getValue(),
+                "XPDR-A1 Node shall have XPDR-A1-XPDR1+XPONDER NodeId");
+        assertEquals("4378fc29-6408-39ec-8737-5008c3dc49e5", pceONxpdrA1.getSupNetworkNodeId(),
+                "XPDR-A1 Node shall have XPDR-A1-XPDR1 Uuid as supporting Network NodeId");
+        assertEquals("4378fc29-6408-39ec-8737-5008c3dc49e5", pceONxpdrA1.getSupClliNodeId(),
+                "XPDR-A1 Node shall have XPDR-A1-XPDR1 Uuid as supporting CLLI NodeId");
+        assertEquals(OpenroadmNodeType.XPONDER, pceONxpdrA1.getORNodeType(), "XPDR-A1 Node shall be of Xponder Type");
+        assertEquals("optical", pceONxpdrA1.getPceNodeType(), "XPDR-A1 Node shall be of PceNodeType optical");
+        assertEquals(BigDecimal.valueOf(6.25E+9), pceONxpdrA1.getSlotWidthGranularity(),
+                "XPDR-A1 Node shall both have a 6.25 GHz slotWidth Granularity");
+        assertEquals(BigDecimal.valueOf(1.2E+10), pceONxpdrA1.getCentralFreqGranularity(),
+                "XPDR-A1 Node shall both have a 12.5 GHz slotWidth Granularity");
         assertEquals(2, pceONxpdrA1.getXpdrAvailNW().size(),
-            "XPDR A Transponder shall have 2 OTS network Port available N1 & N2");
-        assertEquals(List.of("a1e0ffdf-3b42-3159-b66d-495aab187095", "082adca4-dfe8-3f52-b300-bea7112e1c2f"),
-            pceONxpdrA1.getXpdrAvailNW(), "XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1 & 2 shall be available");
-        assertEquals("082adca4-dfe8-3f52-b300-bea7112e1c2f", pceONxpdrA1
-            .getXpdrNWfromClient("5dc0f306-763d-34a7-9419-d15e23891edd"),
-            "XPDR A Transponder network port returned for the client Port C1 shall be NETWORK1 portId");
+                "XPDR A Transponder shall have 2 OTS network Port available N1 & N2");
+        assertEquals(
+                List.of("a1e0ffdf-3b42-3159-b66d-495aab187095", "082adca4-dfe8-3f52-b300-bea7112e1c2f"),
+                pceONxpdrA1.getXpdrAvailNW(),
+                "XPDR-A1-XPDR1+PHOTONIC_MEDIA_OTS+XPDR1-NETWORK1 & 2 shall be available");
+        assertEquals(
+                "082adca4-dfe8-3f52-b300-bea7112e1c2f",
+                pceONxpdrA1.getXpdrNWfromClient("5dc0f306-763d-34a7-9419-d15e23891edd"),
+                "XPDR A Transponder network port returned for the client Port C1 shall be NETWORK1 portId");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        assertTrue(pceONxpdrA1.getBitSetData().equals(freqBitSet),
-            "Spectrum shall be fully available on XPDRA1-XPDR1 network port");
-        assertTrue(pceONxpdrA1.getListOfNep().size() == 3,
-            "XPDR A Transponder List of NEP shall contains 2 Network Neps (N1+N2) and 1 client NEP (C1)");
-        LOG.info("TESTPERFORMED:5");
+        assertEquals(pceONxpdrA1.getBitSetData(), freqBitSet,
+                "Spectrum shall be fully available on XPDRA1-XPDR1 network port");
+        assertEquals(3, pceONxpdrA1.getListOfNep().size(),
+                "XPDR A Transponder List of NEP shall contains 2 Network Neps (N1+N2) and 1 client NEP (C1)");
     }
 
     @Test
@@ -402,18 +405,19 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         }
         initializeAll();
         PceTapiOpticalNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOpticalNode();
-        LOG.info("PTONTEST Line 407 : pceONspdrSA2 includes {} {} ", pceONspdrSA2.getXpdrAvailNW());
+        LOG.info("pceONspdrSA2 includes {}", pceONspdrSA2.getXpdrAvailNW());
         assertEquals(5, pceONspdrSA2.getXpdrAvailNW().size(),
-            "SPDR A Switchponder port OTS_N2 + All IODU port (N1/2/3/4) port shall be available");
-        assertEquals(List.of("4e4bf439-b457-3260-865c-db716e2647c2", "4cd7d50f-3e0b-3a4b-a140-475912d5de7b",
-            "6f4777d4-41f0-3833-b811-68b90903d834", "167043f5-0a0d-365b-ad81-5afdbcce29d5",
-            "63860973-f9fb-3e4c-acd9-9bbe6898c643"), pceONspdrSA2.getXpdrAvailNW(),
-            "SPDR A Switchponder port OTS_N2 + All IODU port (N1/2/3/4) port shall be available");
+                "SPDR A Switchponder port OTS_N2 + All IODU port (N1/2/3/4) port shall be available");
+        assertEquals(
+                List.of("4e4bf439-b457-3260-865c-db716e2647c2", "4cd7d50f-3e0b-3a4b-a140-475912d5de7b",
+                        "6f4777d4-41f0-3833-b811-68b90903d834", "167043f5-0a0d-365b-ad81-5afdbcce29d5",
+                        "63860973-f9fb-3e4c-acd9-9bbe6898c643"),
+                pceONspdrSA2.getXpdrAvailNW(),
+                "SPDR A Switchponder port OTS_N2 + All IODU port (N1/2/3/4) port shall be available");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        assertTrue(pceONspdrSA2.getBitSetData().equals(freqBitSet),
-            "Spectrum shall be fully available on SPDRSA1-XPDR2-NETWORK2 network port");
-        LOG.info("TESTPERFORMED:6");
+        assertEquals(pceONspdrSA2.getBitSetData(), freqBitSet,
+                "Spectrum shall be fully available on SPDRSA1-XPDR2-NETWORK2 network port");
     }
 
     @Test
@@ -429,22 +433,21 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         }
         initializeAll();
         PceTapiOpticalNode pceONspdrSA2 = tapiONspdrAx2.getXpdrOpticalNode();
-        LOG.info("PTONTEST Line 436 : pceONspdrSA2 includes {} ", pceONspdrSA2.getXpdrAvailNW());
-        assertEquals(7, pceONspdrSA2.getXpdrAvailNW().size(), "SPDR A Switchponder has 3 OTS network Ports available as"
-            + "far as no specific port is specified in the request and the OTS Network port N1 is used"
-            + " +  4 iODU port corresponding to the network ports ");
-        assertEquals(List.of(
-            "4e4bf439-b457-3260-865c-db716e2647c2", "310c8df1-c81a-3813-8da3-6b6fdd82c0c6",
-            "f87eda44-31ca-319a-be5c-3615216fb4b1",
-            "4cd7d50f-3e0b-3a4b-a140-475912d5de7b", "6f4777d4-41f0-3833-b811-68b90903d834",
-            "167043f5-0a0d-365b-ad81-5afdbcce29d5", "63860973-f9fb-3e4c-acd9-9bbe6898c643"),
-            pceONspdrSA2.getXpdrAvailNW(),
-            "3 OTS network Ports + 4 iODU NW ports shall be available");
+        LOG.info("pceONspdrSA2 includes {} ", pceONspdrSA2.getXpdrAvailNW());
+        assertEquals(7, pceONspdrSA2.getXpdrAvailNW().size(),
+                "SPDR A Switchponder has 3 OTS network Ports available as far as no specific port is specified in the"
+                + " request and the OTS Network port N1 is used + 4 iODU port corresponding to the network ports");
+        assertEquals(
+                List.of("4e4bf439-b457-3260-865c-db716e2647c2", "310c8df1-c81a-3813-8da3-6b6fdd82c0c6",
+                        "f87eda44-31ca-319a-be5c-3615216fb4b1", "4cd7d50f-3e0b-3a4b-a140-475912d5de7b",
+                        "6f4777d4-41f0-3833-b811-68b90903d834", "167043f5-0a0d-365b-ad81-5afdbcce29d5",
+                        "63860973-f9fb-3e4c-acd9-9bbe6898c643"),
+                pceONspdrSA2.getXpdrAvailNW(),
+                "3 OTS network Ports + 4 iODU NW ports shall be available");
         var freqBitSet = new BitSet(GridConstant.EFFECTIVE_BITS);
         freqBitSet.set(0, GridConstant.EFFECTIVE_BITS, true);
-        assertTrue(pceONspdrSA2.getBitSetData().equals(freqBitSet),
-            "Spectrum shall be fully available on valid SPDR-SA1-XPDR2 network ports");
-        LOG.info("TESTPERFORMED:7");
+        assertEquals(pceONspdrSA2.getBitSetData(), freqBitSet,
+                "Spectrum shall be fully available on valid SPDR-SA1-XPDR2 network ports");
     }
 
     private TapiOpticalNode getTapiOpticalNodeFromId(Uuid nodeId) throws ExecutionException {
@@ -470,7 +473,6 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         }
         return new TapiOpticalNode(this.serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
     }
-
 
     private void generalSetUp() throws ExecutionException {
         try {
@@ -501,7 +503,6 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         initializeXpdrs();
     }
 
-
     private void initializeXpdrs() {
         tapiONspdrAx1.initialize();
         tapiONspdrCx1.initialize();
@@ -510,5 +511,4 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         tapiONxpdrAx1.initialize();
         tapiONxpdrCx1.initialize();
     }
-
 }
