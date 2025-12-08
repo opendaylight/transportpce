@@ -17,6 +17,23 @@
       "message": "recheck",
       "revId": "1162e65662813a01f3d3c8933b77595f48e61424",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4a29e9_1a546474",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-08T09:32:06Z",
+      "side": 1,
+      "message": "I like the new formatting, and the variable renaming.\n\nIs it possible to break down the huge method into smaller ones?\nMaybe one method for the for loop, extract methods for the code inside the if statements, and maybe even one method for the code between the if statements?\n\nEven with your changes its not so easy to follow what this method does in detail.",
+      "revId": "1162e65662813a01f3d3c8933b77595f48e61424",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
