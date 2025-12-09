@@ -194,6 +194,13 @@ class ORtoTapiTopoConversionToolsTest {
                 new TeraHertz(195.925), new TeraHertz(195.975)
         );
         assertEquals(expected, convertORToTapiTopology.getPP11UsedFrequencies(tp));
-        assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedFrequencies(tp)));
+        assertEquals(expected, convertORToTapiTopology.getPP11UsedFrequencies(tp));
     }
+
+    @Test
+    void createEmptyAvailFreqMapsTest() {
+        AvailFreqMaps maps = convertORToTapiTopology.emptyFreqMap();
+        assert (maps.getFreqMap().length == 0);
+    }
+
 }
