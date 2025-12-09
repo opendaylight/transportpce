@@ -194,4 +194,11 @@ class ORtoTapiTopoConversionToolsTest {
         );
         assertEquals(expected, convertORToTapiTopology.getPP11UsedFrequencies(tp));
     }
+
+    @Test
+    void createEmptyAvailFreqMapsTest() {
+        AvailFreqMaps maps = convertORToTapiTopology.emptyFreqMap();
+        assert (maps.getFreqMap().length == 0);
+    }
+
 }
