@@ -17,6 +17,46 @@
       "message": "Thx, Jimmi!",
       "revId": "c2df724923f461ed2b0003ab74b3098b70a840ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c685f0_51772c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-09T15:52:38Z",
+      "side": 1,
+      "message": "Thanks Joakim for your contribution. \nIf the commit messages clearly exposes the bug that appears, it might also be usefull that you briefly introduce : \n- the context (explained during the standup meeting : installing tapi feature after some services hae been created), \n- the reason of the bug (and its location in the code)\n- and how you solve if it makes sense : if it is not related to too many issues in the code (not sure that everything in this patch is related to the bug you solve)\nThanks!",
+      "revId": "c2df724923f461ed2b0003ab74b3098b70a840ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "130dd019_4226d764",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-09T15:52:38Z",
+      "side": 1,
+      "message": "Is it the specific line (associated with line 2008) that solves the bug?",
+      "range": {
+        "startLine": 2039,
+        "startChar": 40,
+        "endLine": 2039,
+        "endChar": 56
+      },
+      "revId": "c2df724923f461ed2b0003ab74b3098b70a840ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
