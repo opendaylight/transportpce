@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Factory;
@@ -43,8 +44,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengths;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.PpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.TxTtpAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev250110.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
@@ -1127,23 +1126,16 @@ public class ORtoTapiTopoConversionTools {
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
             .TerminationPoint1.class);
-        if (termPoint1 == null) {
-            return new SortedRange();
-        }
-        TxTtpAttributes txttpAtt = termPoint1.getTxTtpAttributes();
-        if (txttpAtt  == null) {
-            return new SortedRange();
-        }
-        var txttpAttUsedWvl = txttpAtt.getUsedWavelengths();
-        if (txttpAttUsedWvl == null || txttpAttUsedWvl.isEmpty()) {
-            Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = txttpAtt.getAvailFreqMaps();
-            AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-            Map<Double, Double> usedRanges = usedRanges(availFreqMaps, cband);
+        if (!hasTxTtpUsedWavelengths(termPoint1)) {
+            AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
+            AvailFreqMaps availFreqMaps = getTxTtpAvailableFreqMaps(termPoint1, cband);
+            Map<Double, Double> usedRanges = usedRanges(availFreqMaps);
             return new SortedRange(usedRanges);
         }
         Range range = new SortedRange();
-        for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : txttpAttUsedWvl.entrySet()) {
+        Map<UsedWavelengthsKey, UsedWavelengths> waveLengths = getTxTtpUsedWavelengths(termPoint1);
+        for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : waveLengths.entrySet()) {
             Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
             Double width = usedLambdas.getValue().getWidth().getValue().doubleValue();
             range.add(centFreq, width, frequencyFactory);
@@ -1172,18 +1164,10 @@ public class ORtoTapiTopoConversionTools {
      */
     public Range getTTP11AvailableFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-        if (tp == null) {
-            return new SortedRange();
-        }
-        TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
-        if (txttpAtt == null) {
-            return new SortedRange();
-        }
 
-        Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps = txttpAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        Map<Double, Double> availableRanges = availableRanges(avlFreqMaps, cband);
+        Map<Double, Double> availableRanges = availableRanges(getTxTtpAvailableFreqMaps(tp, cband));
         return new SortedRange(availableRanges);
     }
 
@@ -1195,19 +1179,10 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPP11AvailableFrequencies(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-        if (tp == null) {
-            return Map.of();
-        }
 
-        PpAttributes ppAtt = tp.getPpAttributes();
-        if (ppAtt == null) {
-            return Map.of();
-        }
-
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = ppAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        Map<Double, Double> availableRanges = availableRanges(availFreqMaps, cband);
+        Map<Double, Double> availableRanges = availableRanges(getPpAvailableFreqMaps(tp, cband));
         return new SortedRange(availableRanges).ranges();
     }
 
@@ -1221,21 +1196,18 @@ public class ORtoTapiTopoConversionTools {
      * <p>If the input map is {@code null}, the key is missing, or the entry/frequency map
      * is {@code null}, this method returns an empty map.
      *
-     * @param avlFreqMaps map containing available frequency maps per band; may be {@code null}
-     * @param bandKey the key representing the band to extract
+     * @param afm map containing available frequency maps per band; may be {@code null}
      * @param frequencyRange function that converts the decoded {@link Available} grid into numeric ranges
      * @return a map of numeric frequency ranges (e.g., start → end), or an empty map if unavailable
      */
     private Map<Double, Double> ranges(
-            Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps,
-            AvailFreqMapsKey bandKey,
+            AvailFreqMaps afm,
             Function<Available, Map<Double, Double>> frequencyRange) {
 
-        if (!hasBand(avlFreqMaps, bandKey)) {
+        if (afm == null) {
             return Map.of();
         }
 
-        AvailFreqMaps afm = avlFreqMaps.get(bandKey);
         byte[] freqByteSet = Arrays.copyOf(afm.getFreqMap(), GridConstant.NB_OCTECTS);
         return frequencyRange.apply(new AvailableGrid(freqByteSet));
     }
@@ -1247,10 +1219,8 @@ public class ORtoTapiTopoConversionTools {
      * If the band is missing in {@code avlFreqMaps}, an empty map is returned.
      */
     private Map<Double, Double> availableRanges(
-            Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps,
-            AvailFreqMapsKey bandKey) {
-
-        return ranges(avlFreqMaps, bandKey, numericFrequency::availableFrequency);
+            AvailFreqMaps avlFreqMaps) {
+        return ranges(avlFreqMaps, numericFrequency::availableFrequency);
     }
 
     /**
@@ -1260,27 +1230,8 @@ public class ORtoTapiTopoConversionTools {
      * If the band is missing in {@code avlFreqMaps}, an empty map is returned.
      */
     private Map<Double, Double> usedRanges(
-            Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps,
-            AvailFreqMapsKey bandKey) {
-
-        return ranges(avlFreqMaps, bandKey, numericFrequency::assignedFrequency);
-    }
-
-    /**
-     * Checks whether the provided map contains a non-null entry for {@code bandKey}
-     * and that the entry has a non-null frequency bitmap.
-     *
-     * @param avlFreqMaps map containing available frequency maps per band; may be {@code null}
-     * @param bandKey the key representing the band to validate
-     * @return {@code true} if {@code avlFreqMaps} contains a non-null {@link AvailFreqMaps}
-     */
-    private static boolean hasBand(Map<AvailFreqMapsKey, AvailFreqMaps> avlFreqMaps, AvailFreqMapsKey bandKey) {
-        if (avlFreqMaps == null) {
-            return false;
-        }
-
-        AvailFreqMaps afm = avlFreqMaps.get(bandKey);
-        return afm != null && afm.getFreqMap() != null;
+            AvailFreqMaps avlFreqMaps) {
+        return ranges(avlFreqMaps, numericFrequency::assignedFrequency);
     }
 
     /**
@@ -1291,19 +1242,10 @@ public class ORtoTapiTopoConversionTools {
      */
     public Map<Frequency, Frequency> getPP11UsedFrequencies(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-        if (tp == null) {
-            return new HashMap<>();
-        }
 
-        PpAttributes ppAtt = tp.getPpAttributes();
-        if (ppAtt == null) {
-            return Map.of();
-        }
-
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = ppAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        Map<Double, Double> usedRanges = usedRanges(availFreqMaps, cband);
+        Map<Double, Double> usedRanges = usedRanges(getPpAvailableFreqMaps(tp, cband));
         return new SortedRange(usedRanges).ranges();
     }
 
@@ -1315,21 +1257,142 @@ public class ORtoTapiTopoConversionTools {
      */
     public Range getTTP11UsedFreqMap(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
-        Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
-        if (tp == null) {
-            return new SortedRange();
-        }
-        TxTtpAttributes txttpAtt = tp.getTxTtpAttributes();
-        if (txttpAtt == null) {
-            return new SortedRange();
-        }
 
-        Map<AvailFreqMapsKey, AvailFreqMaps> availFreqMaps = txttpAtt.getAvailFreqMaps();
         AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-        Map<Double, Double> usedRanges = usedRanges(availFreqMaps, cband);
+        Map<Double, Double> usedRanges = usedRanges(getTxTtpAvailableFreqMaps(tp, cband));
         return new SortedRange(usedRanges);
+    }
+
+    /**
+     * Checks whether the provided termination point contains a non-null and non-empty frequency map
+     * for the supplied bandKey argument in its PpAttributes object.
+     *
+     * @param tp, a termination point
+     * @param bandKey the key representing the band to validate
+     * @return {@code true} if it has, {@code false} otherwise
+     */
+    private boolean hasPpBand(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp,
+            AvailFreqMapsKey bandKey) {
+        return hasPpAttributes(tp)
+                && tp.getPpAttributes().getAvailFreqMaps() != null
+                && tp.getPpAttributes().getAvailFreqMaps().containsKey(bandKey)
+                && tp.getPpAttributes().getAvailFreqMaps().get(bandKey) != null
+                && tp.getPpAttributes().getAvailFreqMaps().get(bandKey).getFreqMap() != null
+                && tp.getPpAttributes().getAvailFreqMaps().get(bandKey).getFreqMap().length > 0;
+    }
+
+    /**
+     * Checks if the supplied termination point has a non-null PpAttributes object.
+     *
+     * @param tp a TerminationPoint1 object
+     * @return {@code true} if the supplied TerminationPoint1 object contains a non-null PpAttributes object
+     */
+    private boolean hasPpAttributes(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        return tp != null && tp.getPpAttributes() != null;
+    }
+
+    /**
+     * Retreives the AvailFreqMaps for the supplied AvailFreqMapsKey from the PpAttributes of the supplied.
+     * termination point.
+     *
+     * @param tp, the supplied TerminationPoint1 Object
+     * @param freqMapsKey, the key for the frequency map to be returned.
+     * @return {@AvailFreqMaps} from the supplied termination point, or an empty {@AvailFreqMaps} if it didn't exist.
+     */
+    private AvailFreqMaps getPpAvailableFreqMaps(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp,
+            AvailFreqMapsKey freqMapsKey) {
+        if (hasPpBand(tp, freqMapsKey)) {
+            return tp.getPpAttributes().getAvailFreqMaps().get(freqMapsKey);
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Checks if the provided termination point contains a non-null and non-empty frequency map
+     * for the supplied bandKey argument in its TxTtpAttributes object.
+     *
+     * @param tp, a termination point
+     * @param bandKey the key representing the band to validate
+     * @return {@code true}
+     */
+    private boolean hasTxTtpBand(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp,
+            AvailFreqMapsKey bandKey) {
+        return hasTxTtpAttributes(tp)
+                && tp.getTxTtpAttributes().getAvailFreqMaps() != null
+                && tp.getTxTtpAttributes().getAvailFreqMaps().containsKey(bandKey)
+                && tp.getTxTtpAttributes().getAvailFreqMaps().get(bandKey) != null
+                && tp.getTxTtpAttributes().getAvailFreqMaps().get(bandKey).getFreqMap() != null
+                && tp.getTxTtpAttributes().getAvailFreqMaps().get(bandKey).getFreqMap().length > 0;
+    }
+
+    /**
+     * Checks whether the provided map contains a non-null entry for {@code bandKey}
+     * and that the entry has a non-null or empty frequency bitmap in the TxTpp attributes
+     * of the supplied termination point.
+     *
+     * @param tp, a termination point
+     * @return {@code true}
+     */
+    private boolean hasTxTtpUsedWavelengths(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        return hasTxTtpAttributes(tp)
+                && tp.getTxTtpAttributes().getUsedWavelengths() != null
+                && !tp.getTxTtpAttributes().getUsedWavelengths().isEmpty();
+    }
+
+    /**
+     * Fetches the used wave lengths map from the TxTtpAttributes of the supplied termination point.
+     *
+     * @param tp, the supplied TerminationPoint1
+     * @return {@code Map<UsedWavelengthsKey, UsedWavelengths>} for the given object,
+     *     or an empty map if the object did not contain usedWaveLengths.
+     */
+    @NonNull
+    private Map<UsedWavelengthsKey, UsedWavelengths> getTxTtpUsedWavelengths(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        if (hasTxTtpUsedWavelengths(tp)) {
+            return tp.getTxTtpAttributes().getUsedWavelengths();
+        }
+        else {
+            return Map.of();
+        }
+    }
+
+    /**
+     * Checks if the supplied termination point contains a non-null TxTtpAttributes object.
+     *
+     * @param tp the supplied TerminationPoint1 object
+     * @return {@code true} if it did, {@false} if it did not.
+     */
+    private boolean hasTxTtpAttributes(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
+        return tp != null && tp.getTxTtpAttributes() != null;
+    }
+
+    /**
+     * Fetches the AvailFreqMaps object from the supplied termination points TxTtpAttributes object.
+     *
+     * @param tp, the supplied TerminationPoint1 object
+     * @param freqMapsKey the key for the frequency map to fetch.
+     * @return {@code AvailFreqMaps} fetched from the TxTtpAttributes object, or an empty object if it didn't exist.
+     */
+    private AvailFreqMaps getTxTtpAvailableFreqMaps(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp,
+            AvailFreqMapsKey freqMapsKey) {
+
+        if (hasTxTtpBand(tp, freqMapsKey)) {
+            return tp.getTxTtpAttributes().getAvailFreqMaps().get(freqMapsKey);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
