@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6078e7d2_58e6084f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-09T10:49:07Z",
+      "side": 1,
+      "message": "I think the refactoring into smaller helpers may have gone a bit too far. Right now. `hasTxTtpBand(...)` is called multiple times in the same path:\n\n* `getTTP11UsedFreqMap()`: calls `hasTxTtpBand(tp, cband)` \n* then calls `getTxTtpAvailableFreqMaps(tp, cband)` which calls `hasTxTtpBand(tp, cband)` again\n\nSeems redundant to call the same method twice. Sure, each method is unaware of what other methods are doing, which is a good thing. In this case though, it seems splitting the methods up has introduced redundancy, with little benefit.",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5109b8e_561fb2e0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-09T10:49:07Z",
+      "side": 1,
+      "message": "There are multiple NPE traps lurking in this one:\n\n    return new AvailFreqMapsBuilder().build();\n\nFirst of all, running the above line will throw a NPE:\n\n`java.lang.NullPointerException: Key component \"mapName\" may not be null`.\n\nSecondly, the built object will probably have `.getFreqMap()` \u003d\u003d null, so `Arrays.copyOf(null, ...)` will throw NPE.\n\nIf this project compiles with this change, the tests most likely never take this scenario into account. So the unit tests would need to be updated.\n\nPutting these NPE problems aside, this method is doing almost the same thing as `getTxTtpAvailableFreqMaps(...)`. Overall, I don\u0027t see the need for having two long \"parallel tracks\".\n\nWouldn\u0027t all of these `has`-checks become obsolete if `ranges` instead could deal with a `null` value?\n\ne.g.\n\n```\nprivate Map\u003cDouble, Double\u003e ranges(\n        @Nullable AvailFreqMaps afm,\n        Function\u003cAvailable, Map\u003cDouble, Double\u003e\u003e frequencyRange) {\n    if (afm \u003d\u003d null\n            || afm.getFreqMap() \u003d\u003d null\n            || afm.getFreqMap().length \u003d\u003d 0) {\n        return Map.of();\n    }\n    byte[] freqByteSet \u003d Arrays.copyOf(\n            afm.getFreqMap(),\n            GridConstant.NB_OCTECTS);\n    return frequencyRange.apply(new AvailableGrid(freqByteSet));\n}\n```\n\nIn this case there is less need for \"two parallel tracks\".",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aedb8dc_616890f8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-09T10:49:07Z",
+      "side": 1,
+      "message": "I\u0027m not so sure about executing the same method over and over. In this case I\u0027d consider caching values so I don\u0027t have to call the same method again.\n\nAlso, I find caching values are slightly more readable. Using var in this example since I don\u0027t know the actual data type as I\u0027m writing this.\n\n```\nprivate boolean hasTxTtpBand(TerminationPoint1 tp, AvailFreqMapsKey bandKey) {\n    if (!hasTxTtpAttributes(tp)) {\n        return false;\n    }\n\n    var maps \u003d tp.getTxTtpAttributes().getAvailFreqMaps();\n    if (maps \u003d\u003d null) {\n        return false;\n    }\n\n    var band \u003d maps.get(bandKey);\n    if (band \u003d\u003d null) {\n        return false;\n    }\n\n    var freqMap \u003d band.getFreqMap();\n\n    return freqMap !\u003d null \u0026\u0026 freqMap.length \u003e 0;\n}\n```",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1351,
+        "endChar": 5
+      },
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
