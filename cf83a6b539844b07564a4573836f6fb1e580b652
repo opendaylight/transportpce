@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a22cb0c0_a2313d67",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-10T08:26:11Z",
+      "side": 1,
+      "message": "Hmm, I think you are right.\n\nI added the check for `has*Band()` into the `get*AvailableFreqMap()` because in that scope we need to be sure it has it, because we cannot rely on that it has already been checked.\n\nHowever with that check in place, we actually do not need to check it before we call `get*AvailableFreqMaps()` method, _IF_ we accept a possible empty maps repsonse.\n\nSo one solution could be to simply drop the `has*Band()` check higher up in the call chain and handle the map response instead?",
+      "parentUuid": "6078e7d2_58e6084f",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5109b8e_561fb2e0",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 1
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52ee93e2_1bd767c3",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-10T08:26:11Z",
+      "side": 1,
+      "message": "Aight, putting gthe NPE\u0027s aside (I will update the tests),\nI dont see how we can get around fetching things from Pp in one use case, and fetching from TxTtp in another case. We need to do the exact same things but for two cases.\n\nWith that said, with the NPE traps above mentioned, yes, handling of a null value here seems easier than having to deal with an instantiation of an empty `availFreqMaps` which seems to be alot more work that just doing a builder.build()\n\nI can change them to return null instead.\n\nAre you ok with this fix?",
+      "parentUuid": "a5109b8e_561fb2e0",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4aedb8dc_616890f8",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 1
@@ -48,6 +84,30 @@
       "writtenOn": "2025-12-09T10:49:07Z",
       "side": 1,
       "message": "I\u0027m not so sure about executing the same method over and over. In this case I\u0027d consider caching values so I don\u0027t have to call the same method again.\n\nAlso, I find caching values are slightly more readable. Using var in this example since I don\u0027t know the actual data type as I\u0027m writing this.\n\n```\nprivate boolean hasTxTtpBand(TerminationPoint1 tp, AvailFreqMapsKey bandKey) {\n    if (!hasTxTtpAttributes(tp)) {\n        return false;\n    }\n\n    var maps \u003d tp.getTxTtpAttributes().getAvailFreqMaps();\n    if (maps \u003d\u003d null) {\n        return false;\n    }\n\n    var band \u003d maps.get(bandKey);\n    if (band \u003d\u003d null) {\n        return false;\n    }\n\n    var freqMap \u003d band.getFreqMap();\n\n    return freqMap !\u003d null \u0026\u0026 freqMap.length \u003e 0;\n}\n```",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1351,
+        "endChar": 5
+      },
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6037d5b_e7466a00",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-10T08:26:11Z",
+      "side": 1,
+      "message": "Alright, this is just taste imho.\n\nWe can go either way, though I prefer my way. Its compact and I think very readable.\n\nBut I\u0027ll let you decide.",
+      "parentUuid": "4aedb8dc_616890f8",
       "range": {
         "startLine": 1342,
         "startChar": 0,
