@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa7ea43e_393cd926",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T11:10:27Z",
+      "side": 1,
+      "message": "I believe the overall problem stems from mixing two competing concerns:\n\n* “Does it exist?” (boolean check)\n* “Give me the object” (fetch)\n\nSince the existence check and the object retrieval are effectively the same decision point, splitting them into separate helpers doesn’t really pay off here, imho.\n\nIt might be simpler to just focus on retrieving something (or a safe default) and operate on that, rather than scattering existence checks across multiple methods.\n\ne.g. \n\n```\npublic Map\u003cFrequency, Frequency\u003e getPP11AvailableFrequencies(TerminationPoint1 tp) {\n\n    AvailFreqMapsKey cband \u003d new AvailFreqMapsKey(GridConstant.C_BAND);\n    Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e availFreqMaps \u003d getPpFrequencyMaps(tp);\n    Map\u003cDouble, Double\u003e availableRanges \u003d availableRanges(availFreqMaps, cband);\n\n    return new SortedRange(availableRanges).ranges();\n}\n\nprivate Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e getPpFrequencyMaps(TerminationPoint1 tp) {\n    if (tp \u003d\u003d null) {\n        return Map.of();\n    }\n\n    PpAttributes ppAtt \u003d tp.getPpAttributes();\n    if (ppAtt \u003d\u003d null) {\n        return Map.of();\n    }\n\n    if (ppAtt.getAvailFreqMaps() \u003d\u003d null) {\n        return Map.of();\n    }\n\n    return ppAtt.getAvailFreqMaps();\n}\n```\n\nSure, we\u0027re not returning early, but at the same time we\u0027re not scattering the responsibility of how to treat missing frequencies all over the place.",
+      "parentUuid": "a22cb0c0_a2313d67",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5109b8e_561fb2e0",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Aight, putting gthe NPE\u0027s aside (I will update the tests),\nI dont see how we can get around fetching things from Pp in one use case, and fetching from TxTtp in another case. We need to do the exact same things but for two cases.\n\nWith that said, with the NPE traps above mentioned, yes, handling of a null value here seems easier than having to deal with an instantiation of an empty `availFreqMaps` which seems to be alot more work that just doing a builder.build()\n\nI can change them to return null instead.\n\nAre you ok with this fix?",
       "parentUuid": "a5109b8e_561fb2e0",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee3bbde5_9f6a599f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T11:10:27Z",
+      "side": 1,
+      "message": "\u003e I dont see how we can get around fetching things from Pp in one use case, and fetching from TxTtp in another case.\n\nAgreed. That\u0027s why I chose to keep the methods as is regarding fetching e.g. `PpAttributes` and `Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e` and thus returning early.",
+      "parentUuid": "52ee93e2_1bd767c3",
       "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -108,6 +144,30 @@
       "side": 1,
       "message": "Alright, this is just taste imho.\n\nWe can go either way, though I prefer my way. Its compact and I think very readable.\n\nBut I\u0027ll let you decide.",
       "parentUuid": "4aedb8dc_616890f8",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1351,
+        "endChar": 5
+      },
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e3beda_de9bc421",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T11:10:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6037d5b_e7466a00",
       "range": {
         "startLine": 1342,
         "startChar": 0,
