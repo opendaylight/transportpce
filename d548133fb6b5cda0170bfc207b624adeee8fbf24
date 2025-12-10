@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "865b654f_b7db2027",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-10T14:48:37Z",
+      "side": 1,
+      "message": "Thanks Joakim for your comment which makes sense and which we have considered changing the commit message.",
+      "revId": "d548133fb6b5cda0170bfc207b624adeee8fbf24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
