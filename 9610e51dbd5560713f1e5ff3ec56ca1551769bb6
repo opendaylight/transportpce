@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "958055a2_7342c5ce",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T21:01:22Z",
+      "side": 1,
+      "message": "`.get(freqMapsKey)` may produce a NPE (according to IntelliJ).",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2b28d6_61829942",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T21:01:22Z",
+      "side": 1,
+      "message": "I would prefer if we could avoid creating methods returning `null`.",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acc7c5fc_ccb1b566",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T21:01:22Z",
+      "side": 1,
+      "message": "`.get(freqMapsKey)` may produce a NPE (according to IntelliJ).",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f354d1c7_325e277d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-10T21:01:22Z",
+      "side": 1,
+      "message": "I would prefer if we could avoid creating methods returning `null`.",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
