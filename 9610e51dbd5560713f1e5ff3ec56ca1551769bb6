@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a4b0a1_748fdc02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T07:32:14Z",
+      "side": 1,
+      "message": "I fixed the null returns by retuning an empty AvailFreqMaps (it wasnt actually hard to do)\n\nThe nullchecks are removed. The current ranges works with an empty AvailFreqMaps as well (The now second to last test failed if the map was not actually empty which I encountered when testing)\n\nAdded a small test to verify the empty map could be created without nullpointer exception.",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "958055a2_7342c5ce",
@@ -14,6 +31,24 @@
       "writtenOn": "2025-12-10T21:01:22Z",
       "side": 1,
       "message": "`.get(freqMapsKey)` may produce a NPE (according to IntelliJ).",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04385449_132bdc82",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T07:32:14Z",
+      "side": 1,
+      "message": "But it wont, and we know that.",
+      "parentUuid": "958055a2_7342c5ce",
       "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -37,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e9e4ef0_27685fb2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T07:32:14Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "0b2b28d6_61829942",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acc7c5fc_ccb1b566",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 5
@@ -54,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "794a2293_b0120b1d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T07:32:14Z",
+      "side": 1,
+      "message": "But it wont, and we know that.",
+      "parentUuid": "acc7c5fc_ccb1b566",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f354d1c7_325e277d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 5
@@ -65,6 +136,24 @@
       "writtenOn": "2025-12-10T21:01:22Z",
       "side": 1,
       "message": "I would prefer if we could avoid creating methods returning `null`.",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71b2ce5b_bd60c573",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T07:32:14Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "f354d1c7_325e277d",
       "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
