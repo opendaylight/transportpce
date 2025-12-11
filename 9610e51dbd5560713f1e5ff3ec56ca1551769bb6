@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1bcdab53_e7678baf",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-11T08:52:57Z",
+      "side": 1,
+      "message": "This method seems backwards to me. Why not have the method return a `Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e` object instead of `boolean` (perhaps rename it to `getPpBand()` to reflect the change)?\n\nAfter all, the actual object is what we\u0027re after. The boolean has no value for us.\n\nIf we need a boolean method, you could easily create such a method and have it call this one and check for an empty map, basically (in pseudocode):\n\n```\nboolean hasPpBand(tp, bandKey) {\n    return !getPpBand(tp, bandKey).isEmpty();\n}\n```\n\nAnother, potentially better, boolean alternative would be (in pseudocode):\n\n```\nboolean hasPpBand(Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e freqMaps, bandKey) {\n    return !freqMaps.isEmpty() \u0026\u0026 freqMaps.containsKey(bandKey) \u0026\u0026 ...;\n}\n```",
+      "range": {
+        "startLine": 1275,
+        "startChar": 0,
+        "endLine": 1284,
+        "endChar": 5
+      },
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "958055a2_7342c5ce",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 5
