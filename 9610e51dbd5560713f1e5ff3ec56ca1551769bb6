@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35760e56_f4d68427",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-11T10:58:35Z",
+      "side": 1,
+      "message": "You are right, with the recent change we do not need to validate the map (the last 2 entries in the boolean expression).\n\nBut I disagree that it is the `Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e` that we want. what we actually do want is the actual `AvailFreqMaps` object, because that is what is the actual data we want to fetch.\n\nBut we are nitpicking. Do what you feel is best.",
+      "parentUuid": "1bcdab53_e7678baf",
+      "range": {
+        "startLine": 1275,
+        "startChar": 0,
+        "endLine": 1284,
+        "endChar": 5
+      },
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "958055a2_7342c5ce",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
         "patchSetId": 5
