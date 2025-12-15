@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -246,9 +247,12 @@ public final class TopologyUtils {
                 tapiLinkList.putAll(tapiFullFactory.getTapiLinks());
                 // map roadm to roadm link
                 List<Link> rdmTordmLinkList = linkList.stream()
-                    .filter(lk -> lk.augmentation(Link1.class).getLinkType()
-                        .equals(OpenroadmLinkType.ROADMTOROADM))
-                    .collect(Collectors.toList());
+                        .filter(Objects::nonNull)
+                        .filter(lk -> Optional.ofNullable(lk.augmentation(Link1.class))
+                                .map(Link1::getLinkType)
+                                .filter(OpenroadmLinkType.ROADMTOROADM::equals)
+                                .isPresent())
+                        .collect(Collectors.toList());
                 tapiFullFactory.convertRdmToRdmLinks(rdmTordmLinkList);
             } else {
                 tapiFullFactory.convertRoadmNode(null, openroadmTopo, "Abstracted");
