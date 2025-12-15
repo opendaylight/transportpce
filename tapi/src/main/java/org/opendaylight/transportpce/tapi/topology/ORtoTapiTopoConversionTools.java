@@ -70,6 +70,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Dire
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.NameAndValue;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -105,6 +106,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
@@ -659,10 +661,11 @@ public class ORtoTapiTopoConversionTools {
             OperationalState operState, AdministrativeState adminState) {
         // add them to SIP context
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
+        LOG.info("Creating {} SIPs for node {}", nb + 1, nodeid);
         for (int i = 0; i < nb; i++) {
             String sipName = nb == 1 ? String.join("+", "SIP", nodeid, tpId)
                     : String.join("+", "SIP", nodeid, tpId, "Nber", String.valueOf(i));
-            LOG.info("SIP = {}", sipName);
+            LOG.info("Creating SIP {}/{} with name {}", i + 1, nb + 1, sipName);
             Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(sipName.getBytes(StandardCharsets.UTF_8)).toString());
             MappedServiceInterfacePoint msip =
                 new MappedServiceInterfacePointBuilder().setServiceInterfacePointUuid(sipUuid).build();
@@ -895,15 +898,18 @@ public class ORtoTapiTopoConversionTools {
      */
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec, boolean srg) {
+        LOG.info("Create CEP for id {}, Lower/Higher freq index: {}-{})", id, lowerFreqIndex, higherFreqIndex);
+
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
         String nodeNepId = String.join("+",id.split("\\+")[0], TapiConstants.PHTNC_MEDIA);
         String extendedNepId = lowerFreqIndex == 0 && higherFreqIndex == 0
             ? nepId
             : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
-        LOG.info("NEP = {}", nepId);
+        String cepNameValue = String.join("+", "CEP", extendedNepId);
+        LOG.debug("NEP id: {}, with CEP id: {}", nepId, cepNameValue);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(String.join("+", "CEP", extendedNepId))
+            .setValue(cepNameValue)
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -948,7 +954,7 @@ public class ORtoTapiTopoConversionTools {
         ConnectionEndPoint2Builder cep2builder = new ConnectionEndPoint2Builder();
         ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
             .setUuid(new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "CEP", extendedNepId)).getBytes(StandardCharsets.UTF_8))
+                    cepNameValue.getBytes(StandardCharsets.UTF_8))
                 .toString()))
             .setParentNodeEdgePoint(pnep)
             .setName(Map.of(cepName.key(), cepName))
@@ -961,8 +967,10 @@ public class ORtoTapiTopoConversionTools {
             case TapiConstants.PHTNC_MEDIA_OTS:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
                 if (omCepSpec != null) {
-                    cepBldr.addAugmentation(cep2builder.setOtsMediaConnectionEndPointSpec(omCepSpec).build());
-                    LOG.info("In ConverTORToTapiTopology LINE599, add Augment to cep {}", cepBldr.build());
+                    ConnectionEndPoint2 augmentation = cep2builder.setOtsMediaConnectionEndPointSpec(omCepSpec).build();
+                    LOG.debug("Connection endpoint OTS augmentation: {}", augmentation);
+                    cepBldr.addAugmentation(augmentation);
+                    LOG.info("Added OTS augmentation to CEP {}", connectionEndPointName(cepBldr.getName()));
                 }
                 break;
             case TapiConstants.PHTNC_MEDIA_OMS:
@@ -981,6 +989,22 @@ public class ORtoTapiTopoConversionTools {
         return TapiConstants.OTSI_MC.equals(qualifier)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+    }
+
+    /**
+     * Extracts all CEP name values from the provided TAPI name map.
+     *
+     * @param name map of {@link NameKey} to {@link Name}
+     * @return a String of comma separated names (may be empty)
+     */
+    String connectionEndPointName(Map<NameKey, Name> name) {
+        Set<String> names = name
+                .values()
+                .stream()
+                .map(NameAndValue::getValue)
+                .collect(Collectors.toSet());
+
+        return String.join(", ", names);
     }
 
     public ConnectionEndPoint createOTSCepXpdr(String nepId) {
