@@ -58,7 +58,7 @@ public class TapiDataStore implements TAPI {
             logTopologyUpdate(false, topologyKey, nodeKey, ownedNodeEdgePoint);
             LOG.error("Exception while updating TAPI topology: ", e);
         }
-
+        LOG.error("An unknow error occurred during tapi topology update");
         return false;
     }
 

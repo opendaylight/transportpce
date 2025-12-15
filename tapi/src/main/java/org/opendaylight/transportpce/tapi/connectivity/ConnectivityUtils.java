@@ -125,6 +125,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Forw
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.NameAndValue;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -762,7 +763,7 @@ public final class ConnectivityUtils {
 
         //Node-type
         OpenroadmNodeType nodeType = nodeAugmentation.getNodeType();
-        LOG.info("Node {} is of type: {}", networkNode.getNodeId().getValue(), nodeType.getName());
+        LOG.debug("Node {} is of type: {}", networkNode.getNodeId().getValue(), nodeType.getName());
 
         //Supporting node
         Map<SupportingNodeKey, SupportingNode> supportingNodeKeySupportingNodeMap = networkNode.nonnullSupportingNode();
@@ -776,11 +777,11 @@ public final class ConnectivityUtils {
                 .findFirst().orElseThrow().getValue();
         String supportingNodeId = supportingNode.getNodeRef().getValue();
 
-        LOG.info("Node {} has supporting node: {}", networkNode.getNodeId().getValue(), supportingNodeId);
+        LOG.debug("Node {} has supporting node: {}", networkNode.getNodeId().getValue(), supportingNodeId);
 
         switch (nodeType) {
             case SRG -> {
-                LOG.info("ROADM SRG node tp: {}", tp.getTpId());
+                LOG.debug("ROADM SRG node tp: {}", tp.getTpId());
                 if (isSrgPpTpType(networkNode, tpID)) {
                     idCollection.addRdmAddDropTp(String.join("+", supportingNodeId, tpID));
                     idCollection.addRdmNode(supportingNodeId);
@@ -788,7 +789,7 @@ public final class ConnectivityUtils {
             }
 
             case DEGREE -> {
-                LOG.info("ROADM DEGREE node tp: {}", tp.getTpId());
+                LOG.debug("ROADM DEGREE node tp: {}", tp.getTpId());
                 if (isDegTTPType(networkNode, tpID)) {
                     idCollection.addRdmDegTp(String.join("+", supportingNodeId, tpID));
                     idCollection.addRdmNode(supportingNodeId);
@@ -844,7 +845,7 @@ public final class ConnectivityUtils {
         if (networkNode == null || tpId == null) {
             return false;
         }
-        LOG.info("Searching for TP {} on {} checking if it's one of type(s) {}",
+        LOG.debug("Searching for TP {} on {} checking if it's one of type(s) {}",
                 tpId, networkNode.getNodeId().getValue(), tpTypes);
 
         return Optional.ofNullable(node1Augmentation(networkNode))
@@ -883,16 +884,26 @@ public final class ConnectivityUtils {
             Optional<OwnedNodeEdgePoint> optionalOnep =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (optionalOnep.isPresent() && newNep) {
-                LOG.error("ONEP is already present in datastore");
+                LOG.error("ONEP {} ({}) is already present in datastore for topology {}",
+                        nepName(onep),
+                        nepUuid,
+                        topoUuid);
                 return;
             }
             // put in datastore
             this.networkTransactionService.put(LogicalDatastoreType.OPERATIONAL, onepIID, onep);
             this.networkTransactionService.commit().get();
-            LOG.info("NEP {} added successfully.", onep.getName());
+            LOG.info("NEP {} successfully added to node {} topology {} datastore.", nepName(onep), nodeUuid, topoUuid);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Couldnt put NEP {} in topology, error = ", onep.getName(), e);
+            LOG.error("Couldn't save (i.e. PUT) NEP {} in topology {}, error = ", nepName(onep), topoUuid, e);
         }
+    }
+
+    private Set<String> nepName(OwnedNodeEdgePoint onep) {
+        return Optional.ofNullable(onep.getName())
+                .stream()
+                .flatMap(m -> m.values().stream().map(NameAndValue::getValue))
+                .collect(Collectors.toSet());
     }
 
     private void populateServiceInConnectionVsServiceAtInit(String servName, Uuid servUuid) {
@@ -1589,7 +1600,7 @@ public final class ConnectivityUtils {
         for (String roadm : rdmNodelist) {
             LOG.info("Creating ceps and xc for roadm {}", roadm);
             if (roadm.equals(edgeRoadm1) || roadm.equals(edgeRoadm2)) {
-                LOG.info("EDGE ROADM, cross connections needed between SRG and DEG");
+                LOG.info("Edge ROADM ({}), cross connections needed between SRG and DEG", roadm);
                 String spcRdmAD = rdmAddDropTplist.stream().filter(adp -> adp.contains(roadm))
                     .findFirst().orElseThrow();
                 LOG.info("AD port of ROADm {} = {}", roadm, spcRdmAD);
@@ -1627,13 +1638,13 @@ public final class ConnectivityUtils {
                     createXCBetweenCeps(
                         adCepMC, degCepMC, spcRdmAD, spcRdmDEG, TapiConstants.MC,
                         LayerProtocolName.PHOTONICMEDIA);
-                LOG.info("Cross connection 1 created = {}", connection1);
+                LOG.debug("Cross connection 1 created = {}", connection1);
                 org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                         .connectivity.context.Connection connection2 =
                     createXCBetweenCeps(
                         adCepOTSiMC, degCepOTSiMC, spcRdmAD, spcRdmDEG, TapiConstants.OTSI_MC,
                         LayerProtocolName.PHOTONICMEDIA);
-                LOG.info("Cross connection 2 created = {}", connection2);
+                LOG.debug("Cross connection 2 created = {}", connection2);
                 this.connectionFullMap.put(connection1.key(), connection1);
                 this.connectionFullMap.put(connection2.key(), connection2);
 
@@ -1644,7 +1655,7 @@ public final class ConnectivityUtils {
                 xcLowerMap.put(conn1.key(), conn1);
                 xcLowerMap.put(conn2.key(), conn2);
             } else {
-                LOG.info("MIDDLE ROADM, cross connections needed between DEG and DEG");
+                LOG.info("Middle ROADM ({}), cross connections needed between DEG and DEG", roadm);
                 String spcRdmDEG1 = rdmDegTplist.stream().filter(adp -> adp.contains(roadm)).findFirst().orElseThrow();
                 LOG.info("Degree 1 port of ROADm {} = {}", roadm, spcRdmDEG1);
                 intermediateCepMap = createRoadmCepsAndClientNeps(
@@ -1698,11 +1709,11 @@ public final class ConnectivityUtils {
                 xcLowerMap.put(conn2.key(), conn2);
             }
         }
-        LOG.info("Going to create top connections between roadms");
+        LOG.info("Create top connections between roadms {} - {}", edgeRoadm1, edgeRoadm2);
         String spcRdmAD1 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm1)).findFirst().orElseThrow();
         String spcRdmAD2 = rdmAddDropTplist.stream().filter(adp -> adp.contains(edgeRoadm2)).findFirst().orElseThrow();
         // MC top connection between edge roadms
-        LOG.info("Going to created top connection between MC");
+        LOG.debug("Create top connection between MC...");
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
                 .connectivity.context.Connection connection =
             createTopConnection(String.join("-", spcRdmAD1, slotFreqExtension),
@@ -1746,7 +1757,7 @@ public final class ConnectivityUtils {
             Connection additionalLowerConn) {
         // find cep for each AD MC of roadm 1 and 2
         String topConnName = String.join("+", "TOP", tp1, tp2, qual);
-        LOG.info("Creation of Top connection, name = {}", topConnName);
+        LOG.debug("Create top connection, name = {}", topConnName);
         org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121.ConnectionEndPoint adCep1 =
             cepMap.get(
                 new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev221121
@@ -2504,8 +2515,8 @@ public final class ConnectivityUtils {
     public void putRdmCepInTopologyContext(String node, String spcRdmAD, String qual, ConnectionEndPoint cep) {
         String nepId = String.join("+", node, qual, spcRdmAD.split("\\+")[1]);
         String nodeNepId = String.join("+", node, TapiConstants.PHTNC_MEDIA);
-        LOG.info("NEP id before Merge = {}", nepId);
-        LOG.info("Node of NEP id before Merge = {}", nodeNepId);
+        LOG.debug("NEP id before Merge = {}", nepId);
+        LOG.debug("Node of NEP id before Merge = {}", nodeNepId);
         // Give uuids so that it is easier to look for things: topology uuid, node uuid, nep uuid, cep
         this.tapiContext.updateTopologyWithCep(
             //topoUuid,
@@ -2537,8 +2548,8 @@ public final class ConnectivityUtils {
     public void putRdmNepInTopologyContext(String orNodeId, String orTpId, String qual, OwnedNodeEdgePoint onep) {
         String nepId = String.join("+", orNodeId, qual, orTpId);
         String nepNodeId = String.join("+", orNodeId, TapiConstants.PHTNC_MEDIA);
-        LOG.info("NEP id before Merge = {}", nepId);
-        LOG.info("Node of NEP id before Merge = {}", nepNodeId);
+        LOG.debug("NEP id before Merge = {}", nepId);
+        LOG.debug("Node of NEP id before Merge = {}", nepNodeId);
         // Give uuids putRdmNepInTopologyContextso that it is easier to look for things:
         //  topology uuid, node uuid, nep uuid, cep
         addNepToTopology(

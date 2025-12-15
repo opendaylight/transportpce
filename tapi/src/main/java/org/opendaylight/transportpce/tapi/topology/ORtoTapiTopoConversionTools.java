@@ -24,6 +24,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiConstants;
@@ -70,6 +71,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Dire
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.NameAndValue;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -105,6 +107,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.digital.otn.rev221121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE100GigE;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPE10GigELAN;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev221121.DIGITALSIGNALTYPEGigE;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.ConnectionEndPoint2Builder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIERMC;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.PHOTONICLAYERQUALIFIEROMS;
@@ -659,10 +662,11 @@ public class ORtoTapiTopoConversionTools {
             OperationalState operState, AdministrativeState adminState) {
         // add them to SIP context
         Map<MappedServiceInterfacePointKey, MappedServiceInterfacePoint> msipl = new HashMap<>();
+        LOG.info("Creating {} SIPs for node {}", nb + 1, nodeid);
         for (int i = 0; i < nb; i++) {
             String sipName = nb == 1 ? String.join("+", "SIP", nodeid, tpId)
                     : String.join("+", "SIP", nodeid, tpId, "Nber", String.valueOf(i));
-            LOG.info("SIP = {}", sipName);
+            LOG.info("Creating SIP {}/{} with name {}", i + 1, nb + 1, sipName);
             Uuid sipUuid = new Uuid(UUID.nameUUIDFromBytes(sipName.getBytes(StandardCharsets.UTF_8)).toString());
             MappedServiceInterfacePoint msip =
                 new MappedServiceInterfacePointBuilder().setServiceInterfacePointUuid(sipUuid).build();
@@ -895,15 +899,18 @@ public class ORtoTapiTopoConversionTools {
      */
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec, boolean srg) {
+        LOG.info("Create CEP for id {}, Lower/Higher freq index: {}-{})", id, lowerFreqIndex, higherFreqIndex);
+
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
         String nodeNepId = String.join("+",id.split("\\+")[0], TapiConstants.PHTNC_MEDIA);
         String extendedNepId = lowerFreqIndex == 0 && higherFreqIndex == 0
             ? nepId
             : String.join("-",nepId, ("[" + lowerFreqIndex + "-" + higherFreqIndex + "]"));
-        LOG.info("NEP = {}", nepId);
+        String cepNameValue = String.join("+", "CEP", extendedNepId);
+        LOG.debug("NEP id: {}, with CEP id: {}", nepId, cepNameValue);
         Name cepName = new NameBuilder()
             .setValueName("ConnectionEndPoint name")
-            .setValue(String.join("+", "CEP", extendedNepId))
+            .setValue(cepNameValue)
             .build();
         ParentNodeEdgePoint pnep = new ParentNodeEdgePointBuilder()
             .setNodeEdgePointUuid(new Uuid(UUID.nameUUIDFromBytes(
@@ -948,7 +955,7 @@ public class ORtoTapiTopoConversionTools {
         ConnectionEndPoint2Builder cep2builder = new ConnectionEndPoint2Builder();
         ConnectionEndPointBuilder cepBldr = new ConnectionEndPointBuilder()
             .setUuid(new Uuid(UUID.nameUUIDFromBytes(
-                    (String.join("+", "CEP", extendedNepId)).getBytes(StandardCharsets.UTF_8))
+                    cepNameValue.getBytes(StandardCharsets.UTF_8))
                 .toString()))
             .setParentNodeEdgePoint(pnep)
             .setName(Map.of(cepName.key(), cepName))
@@ -961,8 +968,13 @@ public class ORtoTapiTopoConversionTools {
             case TapiConstants.PHTNC_MEDIA_OTS:
                 cepBldr.setLayerProtocolQualifier(PHOTONICLAYERQUALIFIEROTS.VALUE);
                 if (omCepSpec != null) {
-                    cepBldr.addAugmentation(cep2builder.setOtsMediaConnectionEndPointSpec(omCepSpec).build());
-                    LOG.info("In ConverTORToTapiTopology LINE599, add Augment to cep {}", cepBldr.build());
+                    ConnectionEndPoint2 augmentation = cep2builder.setOtsMediaConnectionEndPointSpec(omCepSpec).build();
+                    cepBldr.addAugmentation(augmentation);
+                    LOG.info(
+                            "Added OTS augmentation to CEP {}: {}",
+                            connectionEndPointName(cepBldr.getName()),
+                            summarizeOtsAugmentation(augmentation)
+                    );
                 }
                 break;
             case TapiConstants.PHTNC_MEDIA_OMS:
@@ -981,6 +993,72 @@ public class ORtoTapiTopoConversionTools {
         return TapiConstants.OTSI_MC.equals(qualifier)
             ? cepBldr.build()
             : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+    }
+
+    /**
+     * Extracts all CEP name values from the provided TAPI name map.
+     *
+     * @param name map of {@link NameKey} to {@link Name}
+     * @return a set of name values (may be empty)
+     */
+    Set<String> connectionEndPointName(Map<NameKey, Name> name) {
+        return name
+                .values()
+                .stream()
+                .map(NameAndValue::getValue)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Returns a safe stream for the given collection.
+     *
+     * @param collection collection to stream (may be null)
+     * @return {@link Stream#empty()} if {@code collection} is null, otherwise {@code collection.stream()}
+     */
+    private static <T> Stream<T> streamOf(Collection<T> collection) {
+        return collection == null ? Stream.empty() : collection.stream();
+    }
+
+    /**
+     * Builds a compact, human-readable summary of an OTS CEP augmentation.
+     * Includes ingress/egress direction and (if present) fiber loss/length per route entry.
+     *
+     * @param aug CEP OTS augmentation (may be null)
+     * @return a summary string, or a placeholder if augmentation/spec is missing
+     */
+    private static String summarizeOtsAugmentation(ConnectionEndPoint2 aug) {
+        if (aug == null) {
+            return "<no augmentation>";
+        }
+
+        var spec = aug.getOtsMediaConnectionEndPointSpec();
+        if (spec == null) {
+            return "<no ots spec>";
+        }
+
+        return streamOf(spec.getOtsImpairments())
+                .map(imp -> {
+                    String dir = Boolean.TRUE.equals(imp.getIngressDirection())
+                            ? "ingress"
+                            : "egress";
+
+                    return streamOf(imp.getImpairmentRouteEntry())
+                            .map(e -> {
+                                var fiber = e.getOtsFiberSpanImpairments();
+                                if (fiber == null) {
+                                    return dir + "(no-fiber-data)";
+                                }
+
+                                return String.format(
+                                        "%s(loss=%s,len=%s)",
+                                        dir,
+                                        fiber.getTotalLoss(),  // Decimal64 safe
+                                        fiber.getLength()
+                                );
+                            })
+                            .collect(Collectors.joining(", "));
+                })
+                .collect(Collectors.joining(" | "));
     }
 
     public ConnectionEndPoint createOTSCepXpdr(String nepId) {
