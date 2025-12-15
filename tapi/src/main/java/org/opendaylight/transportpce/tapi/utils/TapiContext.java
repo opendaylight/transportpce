@@ -8,11 +8,17 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
@@ -183,7 +189,7 @@ public class TapiContext {
                 DataObjectIdentifier.builder(Context.class).build(),
                 new ContextBuilder().setServiceInterfacePoint(sipMap).build());
             this.networkTransactionService.commit().get();
-            LOG.info("TAPI SIPs merged successfully.");
+            LOG.info("{} TAPI SIPs merged successfully.", sipMap.size());
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Failed to merge TAPI SIPs", e);
         }
@@ -226,24 +232,26 @@ public class TapiContext {
                 .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
                 .build();
         try {
+            logSearchingForNep(topoUuid, nodeUuid, nepUuid);
             Optional<OwnedNodeEdgePoint> optionalOnep =
                 this.networkTransactionService.read(LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (optionalOnep.isEmpty()) {
-                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}", topoUuid, nodeUuid);
+                LOG.error("ONEP is not present in datastore for topoUuid {}, NodeUuid {}",
+                        topoUuid.getValue(),
+                        nodeUuid.getValue());
                 return;
             }
             OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();
-            LOG.info("ONEP found = {}", onep);
+            logNepFound(onep);
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
             Map<ConnectionEndPointKey, ConnectionEndPoint> existingCepMap = new HashMap<>();
             if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null
                     && onep1.getCepList().getConnectionEndPoint().containsKey(new ConnectionEndPointKey(cep.key()))) {
-                existingCepMap.putAll(onep1.getCepList().getConnectionEndPoint());
-                LOG.info("CEP already in topology, but may need to be updated with new OMS parameters");
-                LOG.debug("TAPICONTEXT254, Cep List is as follows {} ", existingCepMap);
-                //LOG.info("CEP already in topology, skipping merge");
-                LOG.debug("TAPICONTEXT256, passed cep for update is as follows {} ", cep);
+                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = onep1.getCepList().getConnectionEndPoint();
+                logExistingConnectionEndPoint(cep);
+                existingCepMap.putAll(cepMap);
+                logConnectionEndPointTopology(existingCepMap);
             }
             // Updated ONEP
             existingCepMap.put(cep.key(), cep);
@@ -254,14 +262,83 @@ public class TapiContext {
                         ? new OwnedNodeEdgePoint1Builder().setCepList(cepList).build()
                         : new OwnedNodeEdgePoint1Builder(onep1).setCepList(cepList).build())
                     .build();
-            LOG.info("New ONEP is {}", newOnep);
+            logNewNEPCreated(newOnep);
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID, newOnep);
             this.networkTransactionService.commit().get();
-            LOG.info("CEP added successfully.");
+            LOG.info("NEP {} with CEP {} together with {} other CEPS, successfully merged to the datastore.",
+                    nepName(newOnep),
+                    cepName(cep),
+                    Optional.ofNullable(cepList.getConnectionEndPoint()).orElse(Collections.emptyMap()).size());
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Couldnt update cep in topology", e);
+            LOG.error("Couldn't update cep in topology", e);
         }
+    }
+
+    private static Set<String> cepName(ConnectionEndPoint cep) {
+        return Optional.ofNullable(cep.getName())
+                .stream()
+                .flatMap(m -> m.values().stream())
+                .map(Name::getValue)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private void logExistingConnectionEndPoint(ConnectionEndPoint newCEP) {
+        LOG.info("Updating CEP {} already in topology, skipping merging it in datastore. "
+                        + "However, may need to be updated with new OMS parameters.",
+                cepName(newCEP));
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("CEP: {}", newCEP);
+        }
+    }
+
+    private void logConnectionEndPointTopology(Map<ConnectionEndPointKey, ConnectionEndPoint> cepTopology) {
+        Set<String> cepNames =
+                cepTopology.values().stream()
+                        .map(ConnectionEndPoint::getName)
+                        .filter(Objects::nonNull)
+                        .flatMap(m -> m.values().stream())
+                        .map(Name::getValue)
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        LOG.info("Topology CEP names: {}", String.join(", ", cepNames));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Topology: {}", cepTopology);
+        }
+    }
+
+    private static void logSearchingForNep(Uuid topoUuid, Uuid nodeUuid, Uuid nepUuid) {
+        LOG.info("Searching for ONEP where Node = {}, and OwnedNodeEdgePoint = {}, and topology = {} in datastore",
+                nodeUuid.getValue(),
+                nepUuid.getValue(),
+                topoUuid.getValue());
+    }
+
+    private void logNepFound(OwnedNodeEdgePoint ownedNodeEdgePoint) {
+        LOG.info("ONEP found  with name = {}", nepName(ownedNodeEdgePoint));
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ONEP: {}", ownedNodeEdgePoint);
+        }
+    }
+
+    private void logNewNEPCreated(OwnedNodeEdgePoint ownedNodeEdgePoint) {
+        LOG.info("New ONEP created with name: {}", nepName(ownedNodeEdgePoint));
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("New ONEP is {}", ownedNodeEdgePoint);
+        }
+    }
+
+    private String nepName(OwnedNodeEdgePoint ownedNodeEdgePoint) {
+        return Optional.ofNullable(ownedNodeEdgePoint.getName())
+                .map(Map::values)
+                .stream()
+                .flatMap(Collection::stream)
+                .findFirst()
+                .map(Name::getValue)
+                .orElse("<unnamed>");
     }
 
     public Node getTapiNode(Uuid topoUuid, Uuid nodeUuid) {

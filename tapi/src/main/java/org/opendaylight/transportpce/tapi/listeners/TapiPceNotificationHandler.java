@@ -208,7 +208,9 @@ public class TapiPceNotificationHandler {
                 new NodeKey(nodeUuid))
             .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(nepUuid))
             .build();
+        LOG.info("Updating ONEP with id {}", onepIID);
         try {
+            LOG.info("Searching for ONEP...");
             Optional<OwnedNodeEdgePoint> optionalOnep = this.networkTransactionService.read(
                 LogicalDatastoreType.OPERATIONAL, onepIID).get();
             if (!optionalOnep.isPresent()) {
@@ -216,7 +218,8 @@ public class TapiPceNotificationHandler {
                 return;
             }
             OwnedNodeEdgePoint onep = optionalOnep.orElseThrow();
-            LOG.info("ONEP found = {}", onep.toString());
+            LOG.info("Found ONEP with name = {}", onep.getName());
+            LOG.debug("ONEP = {}", onep.toString());
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
             if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null) {
@@ -227,13 +230,12 @@ public class TapiPceNotificationHandler {
                     return;
                 }
             }
-            // Updated ONEP
             CepList cepList = new CepListBuilder().setConnectionEndPoint(Map.of(cep.key(), cep)).build();
             OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
             OwnedNodeEdgePoint newOnep = new OwnedNodeEdgePointBuilder(onep)
                 .addAugmentation(onep1Bldr)
                 .build();
-            LOG.info("New ONEP is {}", newOnep.toString());
+            LOG.debug("New ONEP is {}", newOnep.toString());
             // merge in datastore
             this.networkTransactionService.merge(LogicalDatastoreType.OPERATIONAL, onepIID,
                 newOnep);

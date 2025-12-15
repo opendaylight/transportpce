@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology;
@@ -59,14 +60,14 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
 
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Link>> changes) {
-        LOG.info("onDataTreeChanged - {}", this.getClass().getSimpleName());
+        LOG.info("onDataTreeChanged - {} changes - {}", changes.size(), this.getClass().getSimpleName());
         for (DataTreeModification<Link> change : changes) {
 
             Link link = change.getRootNode().dataAfter();
             if (link == null) {
                 continue;
             }
-            LOG.info("New link in openroadm topology");
+            LOG.info("New link in openroadm topology: {}", link.getLinkId().getValue());
             // Todo: XPDR links are unidirectional, therefore we need to check for the current one and
             //  the opposite one. But first check the type
             Link1 link1 = link.augmentation(Link1.class);
@@ -85,10 +86,11 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             }
 
             if (link1.getOppositeLink() != null && !oppositeLinkExists(link1.getOppositeLink())) {
-                LOG.debug("Opposite link doesn't exist. Not creating TAPI link");
+                LOG.debug("Opposite link {} doesn't exist. Not creating TAPI link", link1.getOppositeLink());
                 return;
             }
-            LOG.info("Opposite link already in datastore. Creating TAPI bidirectional link");
+            LOG.info("Opposite link {} already in datastore. Creating TAPI bidirectional link.",
+                    link1.getOppositeLink().getValue());
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1 link11 = link
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.Link1.class);
             if (link1.getLinkType().equals(OpenroadmLinkType.ROADMTOROADM) && link11 != null
@@ -124,12 +126,31 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
                 && change.getRootNode().dataBefore() != null) {
                 continue;
             }
-            putTapiLinkInTopology(this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
-                linkType, getQual(srcNode), getQual(destNode),
-                TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-                link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
-                Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
-                tapiTopoUuid));
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiLink1 =
+                    this.tapiLink.createTapiLink(srcNode, srcTp, destNode, destTp,
+                            linkType, getQual(srcNode), getQual(destNode),
+                            TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
+                            link1.getAdministrativeState().getName(), link1.getOperationalState().getName(),
+                            Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
+                            tapiTopoUuid);
+
+            logNewTapiLink(tapiLink1);
+
+            putTapiLinkInTopology(tapiLink1);
+        }
+    }
+
+    private void logNewTapiLink(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link
+            tapiLink1) {
+
+        LOG.info("TAPI link {} created.", Optional
+                .ofNullable(tapiLink1.getName())
+                .flatMap(m -> m.values().stream().findFirst())
+                .map(Name::getValue)
+                .orElse("<unnamed>"));
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Link: {}", tapiLink1);
         }
     }
 

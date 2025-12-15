@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev251022
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.LinkKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
@@ -58,7 +59,7 @@ public class R2RTapiLinkDiscovery {
     }
 
     public Map<LinkKey, Link> readLLDP(NodeId nodeId, int nodeVersion, Uuid tapiTopoUuid) {
-        LOG.info("Tapi R2R Link Node version = {}", nodeVersion);
+        LOG.info("Read from device {} R2R Link Node version = {}", nodeId, nodeVersion);
         // TODO -> waiting for device 7.1 in network model to change this to a switch statement and include
         //  support for 7.1 devices
         switch (nodeVersion) {
@@ -246,19 +247,35 @@ public class R2RTapiLinkDiscovery {
         LOG.debug("Tapi R2R Link DstTPTx {}, DstTPRx {}", destTpTx, srcTpRx);
 
         // Create OMS Tapi Link
-        LOG.info("Tapi R2R Link Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , "
-            + "DestDegId: {}, DestTPId: {}", nodeId.getValue(), srcDegId, srcTpTx, destNodeId, destDegId, destTpRx);
+        LOG.debug("Tapi R2R Link Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , "
+            + "DestDegId: {}, DestTPId: {}",
+                nodeId.getValue(),
+                srcDegId,
+                srcTpTx,
+                destNodeId.getValue(),
+                destDegId,
+                destTpRx);
         Link omsLink = this.tapiLink.createTapiLink(nodeId.getValue(), srcTpTx, destNodeId.getValue(), destTpTx,
             TapiConstants.OMS_RDM_RDM_LINK, TapiConstants.PHTNC_MEDIA, TapiConstants.PHTNC_MEDIA,
             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()), tapiTopoUuid);
-        LOG.info("Tapi R2R Link OMS link created = {}", omsLink);
+        logNewR2RLink(omsLink);
         LOG.debug("inputAdminstate= {}, inputoperstate = {}",
             this.tapiLink.getAdminState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx),
             this.tapiLink.getOperState(nodeId.getValue(), destNodeId.getValue(), srcTpTx, destTpTx));
         return omsLink;
+    }
+
+    private void logNewR2RLink(Link link) {
+        String name = Optional.ofNullable(link.getName())
+                .flatMap(m -> m.values().stream().findFirst())
+                .map(Name::getValue)
+                .orElse("<unnamed>");
+
+        LOG.info("Tapi R2R Link OMS created link {}", name);
+        LOG.debug("Tapi R2R Link OMS link created = {}", link);
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {

@@ -23,7 +23,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -73,6 +75,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Dire
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LAYERPROTOCOLQUALIFIER;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.NameAndValue;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.OperationalState;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.PortRole;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -220,7 +223,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             return;
         }
         this.sipMap.clear();
-        LOG.info("Mapping of node {}: {}", orNodeId, node.getMapping().values());
+        LOG.info("Mapping of node {}...", orNodeId);
+        /*node.getMapping().values().forEach(mappingKey -> LOG.info("Mapping {}: {}",
+                orNodeId,
+                toLogFmtLine(mappingKey))
+        );*/
+        logMappings(LOG, orNodeId, node.getMapping().values());
         // check type of device, check version and create node mapping
         switch (node.getNodeInfo().getNodeType()) {
             case Rdm:
@@ -337,6 +345,69 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                 break;
         }
         // Device not managed yet
+    }
+
+
+    public static String toLogFmtLine(Mapping map) {
+        // stable key order; omit nulls
+        return Stream.of(
+                        kv("event", "mapping"),
+                        kv("lcp", map.getLogicalConnectionPoint()),
+                        kv("pack", map.getSupportingCircuitPackName()),
+                        kv("port", map.getSupportingPort()),
+                        kv("oms", map.getSupportingOms()),
+                        kv("ots", map.getSupportingOts())
+                )
+                .flatMap(Optional::stream)
+                .collect(Collectors.joining(" "));
+    }
+
+    public static String toLogFmtLines(Collection<Mapping> mappings) {
+        return mappings.stream()
+                .map(TapiNetworkModelServiceImpl::toLogFmtLine)
+                .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private static Optional<String> kv(String key, Object value) {
+        if (value == null) {
+            return Optional.empty();
+        }
+        String str = String.valueOf(value);
+
+        // If you ever get spaces/quotes, this makes it parse-safe.
+        // With your current values (no spaces), it'll just return raw.
+        if (str.isEmpty()) {
+            return Optional.empty();
+        }
+        if (str.indexOf(' ') >= 0 || str.indexOf('"') >= 0) {
+            str = "\"" + str.replace("\"", "\\\"") + "\"";
+        }
+        return Optional.of(key + "=" + str);
+    }
+
+    static void logMappings(Logger logger, String nodeId, Collection<Mapping> mappings) {
+        int total = mappings.size();
+        long withOms = mappings.stream().filter(m -> m.getSupportingOms() != null).count();
+        long withOts = mappings.stream().filter(m -> m.getSupportingOts() != null).count();
+
+        // Top packs (by count), limited to keep the line short
+        String topPacks = mappings.stream()
+                .map(Mapping::getSupportingCircuitPackName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                //.limit(5)
+                .map(e -> e.getKey() + ":" + e.getValue())
+                .collect(Collectors.joining(", "));
+
+        logger.info("Mapping summary for {}: total={} withOms={} withOts={} topPacks={}",
+                nodeId, total, withOms, withOts, topPacks);
+
+        // --- DEBUG: one mapping per line (logfmt) ---
+        if (logger.isDebugEnabled()) {
+            mappings.forEach(m -> logger.debug("Mapping {}: {}", nodeId, toLogFmtLine(m)));
+        }
     }
 
     @Override
@@ -726,12 +797,14 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         List<String> nodeShardList = new ArrayList<>();
         for (Mapping mapping : mappingList) {
             // TODO -> maybe we need to check the id based on the version
-            String str = mapping.getLogicalConnectionPoint().split("-")[0];
-            LOG.info("LCP = {}", str);
+            String logicalConnectionPoint = mapping.getLogicalConnectionPoint();
+            String str = logicalConnectionPoint.split("-")[0];
+            LOG.debug("LCP = {}", logicalConnectionPoint);
             if (!nodeShardList.contains(str)) {
                 nodeShardList.add(str);
             }
         }
+        LOG.info("LCPs: {}", nodeShardList);
         return nodeShardList;
     }
 
@@ -1766,7 +1839,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private void mergeNodeinTopology(Map<NodeKey, Node> nodeMap) {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
-        LOG.info("Creating tapi node in TAPI topology context");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Attempting to save: {}", nodeMap);
+        }
         // merge in datastore
         this.networkTransactionService.merge(
             LogicalDatastoreType.OPERATIONAL,
@@ -1781,9 +1856,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error populating TAPI topology: ", e);
         }
-        LOG.info("Node added succesfully.");
+        LOG.info("Saved {} tapi node(s) in TAPI topology context in the datastore: {}",
+                nodeMap.size(),
+                nodeNames(nodeMap));
     }
 
+    private Set<String> nodeNames(Map<NodeKey, Node> nodeMap) {
+        return nodeMap.values().stream()
+                        .flatMap(node ->
+                                Optional.ofNullable(node.getName())
+                                        .orElse(Collections.emptyMap())
+                                        .values()
+                                        .stream()
+                        ).map(NameAndValue::getValue)
+                        .collect(Collectors.toSet());
+    }
 
     private void mergeProfileInTapiContext(
             Map<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.tapi.context.ProfileKey,
@@ -2176,29 +2263,43 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
 
-                LOG.info("TapiNetworkModelServiceImpl populateNepFor Rdm, Node {} SRG tp {}, building Cep for"
-                                + " corresponding CEP {}",
-                        nodeId,
-                        tpId,
-                        cep);
+                logCep(nodeId, tpId, cep);
 
                 onepBd.addAugmentation(onep1Bldr);
             }
 
             OwnedNodeEdgePoint onep = onepBd.build();
 
-            LOG.info("ROADMNEPPopulation TapiNetworkModelServiceImpl populate NEP {} for Node {}",
+            LOG.info("NEP {} for ROADM node {}",
                     Optional.ofNullable(onep.getName())
-                            .orElse(Map.of())
-                            .entrySet(),
+                            .flatMap(m -> m.values().stream().findFirst())
+                            .map(Name::getValue)
+                            .orElse("<unnamed>"),
                     nodeId);
 
             onepMap.put(onep.key(), onep);
         }
 
-        LOG.info("ROADMNEPPopulation FINISH for Node {}", nodeId);
+        LOG.info("Done populating ROADM NEP for Node {}", nodeId);
         return onepMap;
     }
+
+    private void logCep(String nodeId, String tpId, ConnectionEndPoint cep) {
+        String name = Optional
+                .ofNullable(cep.getName())
+                .flatMap(m -> m.values().stream().findFirst())
+                .map(Name::getValue)
+                .orElse("<unnamed>");
+
+        LOG.info("Populate ONEP for ROADM node {} tp {} containing Cep with name {}",
+                nodeId,
+                tpId,
+                name);
+
+        LOG.debug("CEP {}", cep);
+    }
+
+
 
     /**
      * Creates a deterministic, name-based UUID string from the provided parts.

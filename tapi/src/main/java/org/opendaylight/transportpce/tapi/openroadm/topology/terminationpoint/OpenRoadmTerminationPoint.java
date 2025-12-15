@@ -168,7 +168,7 @@ public class OpenRoadmTerminationPoint implements ORTerminationPoint {
                             false,
                             entries.getKey(),
                             list,
-                            false,
+                            true,
                             TapiConstants.PHTNC_MEDIA_OMS,
                             entries.getKey()
                     )
