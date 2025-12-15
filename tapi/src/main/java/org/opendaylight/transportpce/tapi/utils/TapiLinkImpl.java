@@ -106,7 +106,7 @@ public class TapiLinkImpl implements TapiLink {
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
             Set<String> transLayerNameList, Uuid tapiTopoUuid) {
 
-        LOG.info("LINKIMPL111, entering create tapiLink from {} to {}", srcNodeId, dstNodeId);
+        LOG.info("Create tapiLink from {} to {}", srcNodeId, dstNodeId);
         String sourceNepKey = String.join("+", srcNodeId, srcTpQual, srcTpId);
         String destNepKey = String.join("+", dstNodeId, dstTpQual, dstTpId);
         String linkKey = String.join("to", sourceNepKey, destNepKey);
@@ -130,24 +130,22 @@ public class TapiLinkImpl implements TapiLink {
         // TODO: variables for each type
         switch (linkType) {
             case TapiConstants.OMS_RDM_RDM_LINK:
-                LOG.info("Roadm to roadm link");
-                LOG.info("TAPILinkImpl Building LinkId {}", buildORLinkId(
-                    String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
-                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId)
-                    .toString());
+                LOG.debug("Roadm to roadm link");
+                LinkId linkiid = buildORLinkId(
+                        String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
+                        String.join("-", dstNodeId, dstTpId.split("\\-")[0]), dstTpId);
+                LOG.info("Building OMS link id {}", linkiid.getValue());
                 linkName
                     .setValueName(TapiConstants.VALUE_NAME_OMS_RDM_RDM_LINK)
                     .setValue(linkKey);
-                LinkId linkiid = buildORLinkId(
-                    String.join("-", srcNodeId, srcTpId.split("\\-")[0]), srcTpId,
-                    String.join("-", dstNodeId, dstTpId.split("\\-")[0]),dstTpId);
-                LOG.info("createTapiLink141, OMS link, buildORLinkId builds link Id {}", linkiid);
-                LOG.info("createTapiLink144, OMS link, getORLinkFromLinkId returns {}", getORLinkFromLinkId(linkiid));
-                if (getORLinkFromLinkId(linkiid) == null) {
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                        .networks.network.Link orLinkFromLinkId = getORLinkFromLinkId(linkiid);
+                LOG.debug("createTapiLink144, OMS link, getORLinkFromLinkId returns {}", orLinkFromLinkId);
+                if (orLinkFromLinkId == null) {
                     LOG.error("unable to create Cep for link {} which was not found in OR Topology", linkiid);
                     break;
                 }
-                createCepForLink(getORLinkFromLinkId(linkiid));
+                createCepForLink(orLinkFromLinkId);
                 break;
             case TapiConstants.TRANSITIONAL_LINK:
                 LOG.info("Transitional link");
@@ -193,7 +191,7 @@ public class TapiLinkImpl implements TapiLink {
             .setValidationRobustness("validation robustness")
             .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
             .build();
-        LOG.info("LINKIMPL195, successfully created tapiLink {} of type {}", linkKey, linkType);
+        LOG.debug("Successfully created tapiLink {} of type {}", linkKey, linkType);
         return new LinkBuilder()
             .setUuid(new Uuid(
                 UUID.nameUUIDFromBytes(linkKey.getBytes(StandardCharsets.UTF_8)).toString()))
@@ -233,7 +231,7 @@ public class TapiLinkImpl implements TapiLink {
     }
 
     public LinkId buildORLinkId(String srcNode, String srcTp, String destNode, String destTp) {
-        LOG.info("InTapiLinkImpl, retrieves link ID {} from source and destination Nodes & tps",
+        LOG.debug("InTapiLinkImpl, retrieves link ID {} from source and destination Nodes & tps",
             LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp));
         return LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
     }
@@ -274,7 +272,7 @@ public class TapiLinkImpl implements TapiLink {
         //Retrieve OMS from OR link for both end
         //Build OTS media connection End Point spec
         //Build Cep and put them in DataStore
-        LOG.debug("In TapiLinkImpl, creating CEP");
+        LOG.info("Creating CEP from link {}", link.getLinkId().getValue());
         var omsAttributesSpan = NetworkUtils.getOmsAttributesSpan(link);
         LOG.debug("In TapiLinkImpl, omsAttributes of the span for link {} equals {}",
             link.getLinkId(), omsAttributesSpan);
@@ -347,7 +345,7 @@ public class TapiLinkImpl implements TapiLink {
                     .build();
             }
         }
-        LOG.info("In TapiLinkImpl, building Impairments for CEP");
+        LOG.info("Building Impairments for CEP");
         ImpairmentRouteEntry ire = new ImpairmentRouteEntryBuilder()
             .setOtsConcentratedLoss(new OtsConcentratedLossBuilder()
                 .setConcentratedLoss(linkLoss).build())
