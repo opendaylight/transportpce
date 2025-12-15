@@ -245,11 +245,10 @@ public class TapiContext {
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
             Map<ConnectionEndPointKey, ConnectionEndPoint> existingCepMap = new HashMap<>();
-            if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null
-                    && onep1.getCepList().getConnectionEndPoint().containsKey(new ConnectionEndPointKey(cep.key()))) {
-                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = onep1.getCepList().getConnectionEndPoint();
+            Map<ConnectionEndPointKey, ConnectionEndPoint> cetTopology = cepMap(onep1);
+            if (cepExistsInTopology(cetTopology, cep)) {
                 logExistingConnectionEndPoint(cep);
-                existingCepMap.putAll(cepMap);
+                existingCepMap.putAll(cetTopology);
                 logConnectionEndPointTopology(existingCepMap);
             }
             // Updated ONEP
@@ -272,6 +271,45 @@ public class TapiContext {
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldn't update cep in topology", e);
         }
+    }
+
+    /**
+     * Safely retrieves the CEP map from an ONEP augmentation.
+     * Returns an empty map if the augmentation, CEP list, or CEP map is missing.
+     *
+     * @param onep1 OwnedNodeEdgePoint1 augmentation (may be null)
+     * @return map of CEP keys to CEPs, or an empty map if unavailable
+     */
+    private Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap(OwnedNodeEdgePoint1 onep1) {
+        if (onep1 == null) {
+            return Collections.emptyMap();
+        }
+
+        CepList cepList = onep1.getCepList();
+        if (cepList == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<ConnectionEndPointKey, ConnectionEndPoint> connectionEndPoint = cepList.getConnectionEndPoint();
+        if (connectionEndPoint == null) {
+            return Collections.emptyMap();
+        }
+
+        return connectionEndPoint;
+    }
+
+    /**
+     * Checks whether the given CEP already exists in the provided topology CEP map.
+     *
+     * @param topology existing CEP map (keyed by {@link ConnectionEndPointKey})
+     * @param cep CEP to look up
+     * @return true if the topology contains the CEP key, otherwise false
+     */
+    private boolean cepExistsInTopology(
+            Map<ConnectionEndPointKey, ConnectionEndPoint> topology,
+            ConnectionEndPoint cep) {
+
+        return topology.containsKey(cep.key());
     }
 
     /**
