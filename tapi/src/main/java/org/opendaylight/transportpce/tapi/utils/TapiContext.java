@@ -246,11 +246,10 @@ public class TapiContext {
             // TODO -> If cep exists -> skip merging to datasore
             OwnedNodeEdgePoint1 onep1 = onep.augmentation(OwnedNodeEdgePoint1.class);
             Map<ConnectionEndPointKey, ConnectionEndPoint> existingCepMap = new HashMap<>();
-            if (onep1 != null && onep1.getCepList() != null && onep1.getCepList().getConnectionEndPoint() != null
-                    && onep1.getCepList().getConnectionEndPoint().containsKey(new ConnectionEndPointKey(cep.key()))) {
-                Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap = onep1.getCepList().getConnectionEndPoint();
+            Map<ConnectionEndPointKey, ConnectionEndPoint> cetTopology = cepMap(onep1);
+            if (cepExistsInTopology(cetTopology, cep)) {
                 logExistingConnectionEndPoint(cep);
-                existingCepMap.putAll(cepMap);
+                existingCepMap.putAll(cetTopology);
                 logConnectionEndPointTopology(existingCepMap);
             }
             // Updated ONEP
@@ -273,6 +272,27 @@ public class TapiContext {
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Couldn't update cep in topology", e);
         }
+    }
+
+    private Map<ConnectionEndPointKey, ConnectionEndPoint> cepMap(OwnedNodeEdgePoint1 onep1) {
+        if (onep1 == null) {
+            return Collections.emptyMap();
+        }
+
+        CepList cepList = onep1.getCepList();
+        if (cepList == null) {
+            return Collections.emptyMap();
+        }
+
+        if (cepList.getConnectionEndPoint() == null) {
+            return Collections.emptyMap();
+        }
+
+        return cepList.getConnectionEndPoint();
+    }
+
+    private boolean cepExistsInTopology(Map<ConnectionEndPointKey, ConnectionEndPoint> topology, ConnectionEndPoint cep) {
+        return topology.containsKey(cep.key());
     }
 
     private static Set<String> cepName(ConnectionEndPoint cep) {
