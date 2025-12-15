@@ -30,6 +30,7 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
 
     @Override
     public void onDataTreeChanged(@NonNull List<DataTreeModification<Nodes>> changes) {
+        LOG.info("TAPI - received {} changes in data tree", changes.size());
         for (DataTreeModification<Nodes> change : changes) {
             LOG.debug("TAPI module: Change in Node = {}", change.getRootNode());
             // Data before needs to be not null
@@ -71,5 +72,6 @@ public class TapiPortMappingListener implements DataTreeChangeListener<Nodes> {
                 this.tapiNetworkModelService.createTapiNode(nodesAft.getNodeId(), nodesAft);
             }
         }
+        LOG.info("TAPI - done processing {} changes in data tree", changes.size());
     }
 }
