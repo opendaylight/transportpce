@@ -1,4 +1,154 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1765910350 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1765910350-AC5DCCEE45456D39571A0AE85E6924751CD69E1C\n\n0000000000000000000000000000000000000000 d0c4fbb7941c0bda821d149c51b0f3bae67e0f09 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCgAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmlBp04ACgkQX735uTFP\nrXHjiRAAor0SRTBlubK6r0cZsUPPoJdEjACwC6vsm/DbClmrl8ceN19BexRQEP3w\n8pYUNz9/hExvKHhyEcncR+587yNwlg/55GZsHmhDTrtZLx0h2qFos1YYrceC0gDw\n9dDJ1R5E3pZXgj1oVNPhcXtMew3d3UKedHBviBCM47+ojQMPe0c+4xvor4vkyKNq\n/OOAjDVVxojE0zOomAhai1JMGG/lsopI+bXArrlq42NbEzOqp/bBP8lk+99YzLYT\nm0JV0J3JGFyA89XIoWxUa2dpja/01VhtnpFBAvCsYSKBgOFaHx1+J20gGfZLMouS\n7gYtR8vTfAQ+1o74voTQtjryGPi7pJ/9QWnxmU8FnFBVAu3ZpM4aOBk5LlX3kLuV\n33ci2rum1GGbEt3lewrcfHtsMOkJTTvZXFgUhmhKQS/SdWq4P6L33bvGuqxG2DL5\nTEkLrPYgj17LWOpPZNzjaURy0nTQYcM+jAlkC/QeAeFqiwS07CmLJ+2pbeo3+8WZ\nnwNSF1A3lGUMHps7KleJ59oDIt7A7K6WM4gBpdUs2RGDLetUkwP5e7l3nW+EZ5GT\nxLFxcLAZTGPlCtH+ZhGC3e6OzE0ihztCHWoOY7mt6brEpUvhhS+iaW3NoRHtVZy9\nzpbR8fmo8nvqYFlstBHgsh5NebUuecyFtURTA2cv1O6Zrxsln8E\u003d\n\u003dj/kZ\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc21b8c_ab3097b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Minor comments, can be ignored. Good work, we need to shape up the logging.",
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d034f0c_27638d73",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Nice!",
+      "range": {
+        "startLine": 902,
+        "startChar": 4,
+        "endLine": 916,
+        "endChar": 5
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c5baa5d_c3c40560",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Maybe these `LOG.info()` can also be `LOG.debug()`?",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 66
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1cd5eb_fa88dfed",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "No biggie, but why are we creating the `augmentation` variable, and then not use it?",
+      "range": {
+        "startLine": 970,
+        "startChar": 0,
+        "endLine": 972,
+        "endChar": 108
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beda950a_f1dba310",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Maybe put the the first logline inside the `logMappings()` method as well?",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 63
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73683c3d_691d4a18",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9d34c1_e4932052",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2025-12-18T08:11:09Z",
+      "side": 1,
+      "message": "Why not refactor this as well?",
+      "range": {
+        "startLine": 2292,
+        "startChar": 12,
+        "endLine": 2297,
+        "endChar": 28
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
