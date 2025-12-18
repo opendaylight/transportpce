@@ -42,6 +42,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fbd45c1_392310d2",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/connectivity/ConnectivityUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3d034f0c_27638d73",
+      "range": {
+        "startLine": 902,
+        "startChar": 4,
+        "endLine": 916,
+        "endChar": 5
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c5baa5d_c3c40560",
@@ -55,6 +79,30 @@
       "writtenOn": "2025-12-18T08:11:09Z",
       "side": 1,
       "message": "Maybe these `LOG.info()` can also be `LOG.debug()`?",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 66
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82def411_308cc944",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/listeners/TapiPceNotificationHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3c5baa5d_c3c40560",
       "range": {
         "startLine": 211,
         "startChar": 0,
@@ -88,6 +136,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ee37ba_7badde9f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ah, forgot to revert this one. In a previous commit, I wrote the augmentation to the log, but decided afterwards it wasn\u0027t interesting enough for the INFO-log, so I removed it. Should probably revert creating the variable, or write the augmentation to the DEBUG-log.",
+      "parentUuid": "1e1cd5eb_fa88dfed",
+      "range": {
+        "startLine": 970,
+        "startChar": 0,
+        "endLine": 972,
+        "endChar": 108
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "beda950a_f1dba310",
@@ -101,6 +173,30 @@
       "writtenOn": "2025-12-18T08:11:09Z",
       "side": 1,
       "message": "Maybe put the the first logline inside the `logMappings()` method as well?",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 63
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0665545_abb43232",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "beda950a_f1dba310",
       "range": {
         "startLine": 227,
         "startChar": 0,
@@ -128,6 +224,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5941c8_977776ae",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "73683c3d_691d4a18",
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f9d34c1_e4932052",
@@ -141,6 +255,30 @@
       "writtenOn": "2025-12-18T08:11:09Z",
       "side": 1,
       "message": "Why not refactor this as well?",
+      "range": {
+        "startLine": 2292,
+        "startChar": 12,
+        "endLine": 2297,
+        "endChar": 28
+      },
+      "revId": "404facad135416a1fdde68db032645091b84a066",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1e2d0a1_9a2a39f6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2025-12-18T13:08:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f9d34c1_e4932052",
       "range": {
         "startLine": 2292,
         "startChar": 12,
