@@ -1,4 +1,91 @@
 {
   "pushCert": "certificate version 0.1\npusher 5FBDF9B9314FAD71 1765470555 +0100\npushee ssh://git.opendaylight.org:29418/transportpce\nnonce 1765470555-B0CA8D6F8DEB2C7EAC7AE2FC2464A8A1CBA02E29\n\n0000000000000000000000000000000000000000 06792201100c651f30288d4f389c8fcca0ee3b70 refs/for/master\n-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEIKU9c2lqXpTzMWXlX735uTFPrXEFAmk68VsACgkQX735uTFP\nrXFkXw/+O/vcLG6zQnsC+aNQdja7OsvPsIkFT3Rsl7eyXExodP+bgar9IUKL1Y/5\nlKC9t26dhGkgUAbJb6dA9WGq8ZrAIT3VoaI+vYpogPcscDevrzgsHjWfIpMCoQzt\nGvzN1q3ZWgmrRS8obr2UMW5KodhOgdCenG0Kni0R9Wjnkx1GcfyFac71LYmiiWcM\n/S0omHQoS4wBPTPjcJEtC1xudkQYBmQIX6+78MPvUqQiRWPRpDiudQFVd5LJXtcn\nWmBL+A9SC0KAOxnIJ/AQAhWNUX4Kr9h0d8dDwOHQqeFII7MKviQTjHprd+MOuhS2\nkB3+fvfHFdi7/I1K001V97s5km2Ff06ZpDLeIJuOxpqBE5Vmg4juMNO40B6nqRIq\n8lVw4hgr5hpbJm7dIc4d5zTTm1ImQ5RZ1Rypbv8Abba9Z4AhAMAD4c/jVGZZj501\new0OY8VgUIYIF+g7xCjGbsqmCl4sCwgYwxPRCmnDYXXb8Pp8mP9ds67EIzu3pFJQ\nBCLEIMmEGL3S8KiN1HHekzkQC4LqFhuYs555DawCMU3mMw0ZDRjCz4+lsTiu2VFu\navIqMpRq7iStmdqyXoHDzFM82uOL/C0eXMXDvH6Wk2QDPdMMyON6HpEqFvaFy8vi\nxqLblTCNcGedX6wuFNsijnXK5S4qpKca33jF3a0oISKG2FSzwNA\u003d\n\u003d6dYF\n-----END PGP SIGNATURE-----\n",
-  "comments": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22f80121_3ba94ee9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 54
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:15:47Z",
+      "side": 1,
+      "message": "Thanks Joakim for this huge work. LGTM. \nThere is one thing that still disturbs me, and not coming from your change itself, but from the current structure of the code and the implementation you propose to fill the current gap : no information in portMapping about frequencies. \nYou use some method (populateNepsForRdmNodes) from convertTopoAtInit. Initially this class made what it is intended to through its name. Now, calling a method of this class to address a data-tree-change that came up through a listener can be to some extent confusing. \nWe may discuss this during regular standup meeting. Don\u0027t know what would be the best way to address this (create a new class that host kind of generic functions/tools shared between convertTopoAtInit and your new classes...).\nNot asking to address it in this change which is already huge, but I think some refactoring might be envisaged as a next step. \nThanks for having restored the methods associated with Path Computation Result in TapiPceNotificationHandler!",
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46971996_68131176",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/NodeTypeCollection.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:15:47Z",
+      "side": 1,
+      "message": "Wrong copy paste?",
+      "range": {
+        "startLine": 31,
+        "startChar": 70,
+        "endLine": 31,
+        "endChar": 89
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc5b4ee_56d14216",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:15:47Z",
+      "side": 1,
+      "message": "Since it is about tps, and you do not consider SRGs CPs (they may not appear in Tapi Topology (only in the pCE graph being recreated artificialy) , might make sense to rename it to isSrgPp? This will make clearer what we do : check the tp is a PP in srgOnwedNodeEdgePoints.",
+      "range": {
+        "startLine": 129,
+        "startChar": 12,
+        "endLine": 129,
+        "endChar": 17
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59a2c6d_fb1b74b4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:15:47Z",
+      "side": 1,
+      "message": "Since it is about tps, and you do not consider Degrees CTPs (they may not appear in Tapi Topology (only in the pCE graph being recreated artificialy) , might make sense to rename it to isDegreeTTP? This will make clearer what we do : check the tp is a TTP in degreeOnwedNodeEdgePoints.",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 28
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
 }
