@@ -19,6 +19,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa96b699_38362857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 54
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:39:14Z",
+      "side": 1,
+      "message": "Oups, made a confusion : last line of this comment applies to 116656...",
+      "parentUuid": "22f80121_3ba94ee9",
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46971996_68131176",
