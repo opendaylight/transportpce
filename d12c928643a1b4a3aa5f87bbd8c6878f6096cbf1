@@ -17,6 +17,23 @@
       "message": "Thanks for having restored the methods associated with Path Computation Result in TapiPceNotificationHandler! LGTM",
       "revId": "d12c928643a1b4a3aa5f87bbd8c6878f6096cbf1",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d858c2_2355e94a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 50
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2025-12-18T14:41:07Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d12c928643a1b4a3aa5f87bbd8c6878f6096cbf1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
