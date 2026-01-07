@@ -57,7 +57,7 @@ public class PceTapiLink implements Serializable, PceLink {
      * extension of Link to include constraints and Graph weight
      */
     private double weight = 0;
-    private boolean isValid = false;
+    private boolean valid = false;
 
     // this member is for XPONDER INPUT/OUTPUT links.
     // it keeps name of client corresponding to NETWORK TP
@@ -121,14 +121,15 @@ public class PceTapiLink implements Serializable, PceLink {
         this.topoId = topologyId;
         this.direction = link.getDirection();
         this.nepMap = link.getNodeEdgePoint();
-        retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
-        LOG.info("PceTapiLInk Line 107 : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {}",
-            link.getName(), sourceTpId, destTpId);
+        boolean goodCandidate = retrieveSrcDestNodeIds(topoId, link.getUuid(), link.getDirection(), nodeX, nodeY, true);
+        LOG.info("PceTapiLInk : Processing Link {}, SourceTp Uuid = {}, DestTpUuid = {} for which goodCandidate = {}",
+            link.getName(), sourceTpId, destTpId, goodCandidate);
 
         this.adminStates = link.getAdministrativeState();
         this.opState = link.getOperationalState();
-        if (!isValid) {
+        if (!goodCandidate) {
             this.srlgList = null;
+            this.valid = false;
             return;
         } else {
             qualifyLinkType(nodeX, nodeY);
@@ -138,13 +139,14 @@ public class PceTapiLink implements Serializable, PceLink {
             retrieveEndPointSpecs(nodeX, nodeY);
             LOG.info("PCETAPILINK line 116 Calling QualifyLineLink");
             qualifyLineLink(link);
-            this.isValid = isPhyValid();
+            this.valid = isPhyValid();
             this.srlgList = TapiMapUtils.getSRLG(link);
             this.lpn = LayerProtocolName.PHOTONICMEDIA;
             this.lpq = null;
             this.availableBandwidth = 96.0;
             this.usedBandwidth = 0.0;
         } else {
+            this.valid = true;
             this.sourceOtsSpec = null;
             this.destOtsSpec = null;
             this.srlgList = null;
@@ -152,7 +154,7 @@ public class PceTapiLink implements Serializable, PceLink {
             this.length = 0.0;
             if (this.linkType != OpenroadmLinkType.OTNLINK) {
                 // Set availableBandwidth value to unlimited
-                // (max(available-WDM-link-BW-#Channels, available-Single-Wave-BW-Gbps)
+                // (max(available-WDM-link-BW-#Channels, available-Single-Wave-BW-Gbps))
                 this.availableBandwidth = 1600.0;
                 this.usedBandwidth = 0.0;
             } else {
@@ -206,7 +208,7 @@ public class PceTapiLink implements Serializable, PceLink {
         }
         if (!conn.getLayerProtocolName().equals(LayerProtocolName.DIGITALOTN)
                 && !conn.getLayerProtocolName().equals(LayerProtocolName.ODU)) {
-            this.isValid = false;
+            this.valid = false;
             return;
         }
         this.lpn = LayerProtocolName.DIGITALOTN;
@@ -216,20 +218,22 @@ public class PceTapiLink implements Serializable, PceLink {
                 && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType)) != null
                 && TapiMapUtils.LPN_OR_TAPI.get(TapiMapUtils.SERV_TYPE_OTN_LINK_TYPE.get(serviceType))
                     .equals(this.lpq))) {
-            this.isValid = false;
+            this.valid = false;
             return;
         }
         this.cepMap = conn.getConnectionEndPoint();
         LOG.debug("PceTapiLink: serviceType {} line protocolqualifier of link {} is {}",
             serviceType, linkId, lpq);
         LOG.debug("PceTapiLink: calling  retrieveSrcDestNodeIds for PceLink OTN {} ", linkName);
-        retrieveSrcDestNodeIds(topoId, conn.getUuid(), conn.getDirection(), nodeX, nodeY, false);
-        if (!isValid) {
+        boolean goodCandidate = retrieveSrcDestNodeIds(
+            topoId, conn.getUuid(), conn.getDirection(), nodeX, nodeY, false);
+        if (!goodCandidate) {
+            this.valid = false;
             return;
         }
         calculateOtnBandwidth(nodeX, nodeY);
-        this.isValid = isOtnValid(serviceType);
-        if (!isValid) {
+        this.valid = isOtnValid(serviceType);
+        if (!valid) {
             return;
         }
 
@@ -289,6 +293,7 @@ public class PceTapiLink implements Serializable, PceLink {
         this.cd = 0.0;
         this.pmd2 = 0.0;
         qualifyLinkType(nodeX, nodeY);
+        this.valid = true;
 
         LOG.debug("Bidirectionnal PceTapiLink {} of Uuid {} has been created", linkName, linkId);
     }
@@ -321,8 +326,8 @@ public class PceTapiLink implements Serializable, PceLink {
         this.opState = pceLink.getOperationalState();
         this.lpn = pceLink.getLpn();
         this.srlgList = null;
+        this.valid = pceLink.valid;
         if (!orLinkType.equals(OpenroadmLinkType.OTNLINK)) {
-            this.isValid = pceLink.isValid;
             Set<String> srlglList = new HashSet<>();
             if (pceLink.getsrlgList() != null && !pceLink.getsrlgList().isEmpty()) {
                 for (Long srlg : pceLink.getsrlgList()) {
@@ -497,8 +502,9 @@ public class PceTapiLink implements Serializable, PceLink {
      * @param nodeY         A PceNode corresponding to the other end of the PceTapiLink,
      * @param isLink        Boolean which defines whether the input parameters correspond to a link (true) or a
      *                      connection (false).
+     * @return              boolean set to true if the link has required parameters set, false otherwise.
      */
-    private void retrieveSrcDestNodeIds(TopologyKey topoIid, Uuid linkUuid, ForwardingDirection dir,
+    private boolean retrieveSrcDestNodeIds(TopologyKey topoIid, Uuid linkUuid, ForwardingDirection dir,
             PceNode nodeX, PceNode nodeY, boolean isLink) {
         int sourceindex;
         Uuid srcTpUuid = null;
@@ -531,10 +537,9 @@ public class PceTapiLink implements Serializable, PceLink {
                 .filter(bpN -> bpN.getNepCepUuid().equals(tpUuid0)).findFirst().orElseThrow().getDirection();
             if (!nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
                 .contains(destTpUuid)) {
-                isValid = false;
                 LOG.info("PceTapiLink:retrieveSrcDestNodeIds : did not succeed finding Nep {} in Node Y Listof"
                     + " NEP for Bidir link {}", destTpUuid, linkUuid.getValue());
-                return;
+                return false;
             }
         } else {
             if (nodeY.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
@@ -547,16 +552,14 @@ public class PceTapiLink implements Serializable, PceLink {
                     .filter(bpN -> bpN.getNepCepUuid().equals(tpUuid0)).findFirst().orElseThrow().getDirection();
                 if (!nodeX.getListOfNep().stream().map(BasePceNep::getNepCepUuid).collect(Collectors.toList())
                     .contains(destTpUuid)) {
-                    isValid = false;
                     LOG.debug("TPceTapiLink:retrieveSrcDestNodeIds : did not succeed finding Nep {} in Node X Listof"
                         + " NEP for Bidir link {}", srcTpUuid, linkUuid.getValue());
-                    return;
+                    return false;
                 }
             } else {
-                isValid = false;
                 LOG.debug("PceTapiLink:retrieveSrcDestNodeIds : did not succeed finding Xep {} and {} in neither nodeX,"
                     + " or Node Y Listof XEP for Bidir link {}", tpUuid0, tpUuid1, linkUuid.getValue());
-                return;
+                return false;
             }
         }
         if (ForwardingDirection.BIDIRECTIONAL.equals(dir)) {
@@ -585,8 +588,7 @@ public class PceTapiLink implements Serializable, PceLink {
             } else {
                 LOG.error("PceTapiLink:retrieveSrcDestNodeIds : Error proceeding Link {} for which source and dest NEP"
                     + " can not be identified, set is valid to False ", linkUuid.getValue());
-                isValid = false;
-                return;
+                return false;
             }
         }
         // At the end sourceIndex = 0 <-> NodeX is the Source / sourceIndex = 1 <-> NodeY is the Source
@@ -624,9 +626,9 @@ public class PceTapiLink implements Serializable, PceLink {
             LOG.debug("PceTapiLink:retrieveSrcDestNodeIds : Handling link {} sourceTp and destTp {} compatible with"
                 + " sourceIndex", linkUuid.getValue(), sourceTpId);
         }
-        isValid = true;
         LOG.debug("PceTapiLink:retrieveSrcDestNodeIds: Handling link {} directions -> valid=True", linkUuid.getValue());
         setSrcDestIds(nodeX, nodeY);
+        return true;
     }
 
     /**
@@ -863,22 +865,20 @@ public class PceTapiLink implements Serializable, PceLink {
      * @return      Boolean set to true if the link is considered as valid, false otherwise.
      */
     private boolean isPhyValid() {
-        if ((this.linkId == null) || (this.linkType == null)
-        // || (this.oppositeLink == null)
-        ) {
-            isValid = false;
+        if ((this.linkId == null) || (this.linkType == null)) {
+                // || (this.oppositeLink == null)
             LOG.error("PceLink: No Link type or Link Id  or opposite link is available. Link is ignored {}", linkId);
         }
-        isValid = checkParams();
+        boolean isPhyValid = checkParams();
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             if ((this.length == null || this.length == 0.0)
                 || (this.sourceOtsSpec == null && this.destOtsSpec == null)) {
-                isValid = false;
+                isPhyValid = false;
                 LOG.error("PceTapiLink:isPhyValid : Error reading Span for OMS link, and no available generic link"
                     + "information. Link {} named {} is ignored ", linkId, linkName);
             }
         }
-        return isValid;
+        return isPhyValid;
     }
 
     /**
@@ -1038,7 +1038,7 @@ public class PceTapiLink implements Serializable, PceLink {
     */
     @Override
     public boolean isValid() {
-        return this.isValid;
+        return this.valid;
     }
 
     /*
