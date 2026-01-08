@@ -90,6 +90,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5caddb4_3e180575",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "Resolving.",
+      "parentUuid": "1b5b1806_9e5018cf",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5109b8e_561fb2e0",
@@ -139,6 +157,24 @@
       "side": 1,
       "message": "\u003e I dont see how we can get around fetching things from Pp in one use case, and fetching from TxTtp in another case.\n\nAgreed. That\u0027s why I chose to keep the methods as is regarding fetching e.g. `PpAttributes` and `Map\u003cAvailFreqMapsKey, AvailFreqMaps\u003e` and thus returning early.",
       "parentUuid": "52ee93e2_1bd767c3",
+      "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb61a292_0dcde48c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "Not relevant any more.",
+      "parentUuid": "ee3bbde5_9f6a599f",
       "revId": "cf83a6b539844b07564a4573836f6fb1e580b652",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },

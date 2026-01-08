@@ -65,6 +65,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3151eb43_9f0581bd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "I think the current solution is good.",
+      "parentUuid": "35760e56_f4d68427",
+      "range": {
+        "startLine": 1275,
+        "startChar": 0,
+        "endLine": 1284,
+        "endChar": 5
+      },
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "958055a2_7342c5ce",
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "But it wont, and we know that.",
       "parentUuid": "958055a2_7342c5ce",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "605570ca_c9c7884d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "I think this is ok.",
+      "parentUuid": "04385449_132bdc82",
       "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
@@ -135,6 +177,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b415e1c8_99ceeb0e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e9e4ef0_27685fb2",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acc7c5fc_ccb1b566",
@@ -170,6 +230,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d79d36_6d8dd87b",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "This is ok.",
+      "parentUuid": "794a2293_b0120b1d",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f354d1c7_325e277d",
@@ -201,6 +279,24 @@
       "side": 1,
       "message": "fixed",
       "parentUuid": "f354d1c7_325e277d",
+      "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "badaf402_160a8e9a",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71b2ce5b_bd60c573",
       "revId": "9610e51dbd5560713f1e5ff3ec56ca1551769bb6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }

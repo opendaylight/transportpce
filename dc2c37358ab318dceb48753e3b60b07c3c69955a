@@ -16,6 +16,24 @@
       "message": "I will change this to new byte[0]",
       "revId": "dc2c37358ab318dceb48753e3b60b07c3c69955a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70251793_e0bb1879",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionTools.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T11:25:16Z",
+      "side": 1,
+      "message": "Solved.",
+      "parentUuid": "3330286d_24d88709",
+      "revId": "dc2c37358ab318dceb48753e3b60b07c3c69955a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
