@@ -57,6 +57,30 @@
       },
       "revId": "c2df724923f461ed2b0003ab74b3098b70a840ee",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54221cbc_17cb0f7e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-01-08T08:46:51Z",
+      "side": 1,
+      "message": "Yes, if I remember correctly. Now that I read your comment, I realize I should\u0027ve probably split this commit in two, making the distinction between bug and refactor clear.",
+      "parentUuid": "130dd019_4226d764",
+      "range": {
+        "startLine": 2039,
+        "startChar": 40,
+        "endLine": 2039,
+        "endChar": 56
+      },
+      "revId": "c2df724923f461ed2b0003ab74b3098b70a840ee",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
