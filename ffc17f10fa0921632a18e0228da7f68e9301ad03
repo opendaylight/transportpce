@@ -87,6 +87,30 @@
       },
       "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f41626c_db861879",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertTopoORtoTapiAtInit.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-01-08T15:50:07Z",
+      "side": 1,
+      "message": "As we talked about today. I reviewed the change on this, and the current state does not support the scenarios above. I will fix this according to the new specifications.",
+      "parentUuid": "82fdced9_8c406c0f",
+      "range": {
+        "startLine": 582,
+        "startChar": 24,
+        "endLine": 582,
+        "endChar": 103
+      },
+      "revId": "ffc17f10fa0921632a18e0228da7f68e9301ad03",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
