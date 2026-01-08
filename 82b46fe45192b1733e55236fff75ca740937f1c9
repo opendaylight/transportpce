@@ -60,6 +60,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf26ddd_ad915e09",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/NodeTypeCollection.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-01-08T13:24:40Z",
+      "side": 1,
+      "message": "Not really. In essence, it does the same thing as the other `add(...)` method above, hence, the same Javadoc information seems appropriate.\n\nThe difference is this method allows the caller to use a `Node` object directly, as opposed to extracting the `OpenroadmNodeType` from the `Node` object and calling the other method.\n\ne.g. These two examples accomplishes the same thing:\n\n```\nNodeTypeCollection ntc \u003d ... //Create an instance of `NodeTypeCollection`\nNode node \u003d ... //get the node somehow\nOpenroadmNodeType nodeType \u003d \n        node.augmentationOrElseThrow(Node1.class).getNodeType();\nntc.add(nodeType, ...);\n```\n\nVS\n\n```\nNodeTypeCollection ntc \u003d ... //Create an instance of `NodeTypeCollection`\nNode node \u003d ... //get the node somehow\nntc.add(node, ...);\n```\n\nThe implementation in `TerminationPointCollection` looks like this:\n\n```\npublic boolean add(\n        Node node,\n        String supportingNodeName,\n        Set\u003cTerminationPoint\u003e terminationPoint) {\n\n    OpenroadmNodeType nodeType \u003d\n            node.augmentationOrElseThrow(Node1.class).getNodeType();\n\n    return add(nodeType, supportingNodeName, terminationPoint);\n}\n```\n\nWith that said, this method could use a `@see` tag though. I\u0027ll add that.",
+      "parentUuid": "46971996_68131176",
+      "range": {
+        "startLine": 31,
+        "startChar": 70,
+        "endLine": 31,
+        "endChar": 89
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcc5b4ee_56d14216",
@@ -83,6 +107,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "088ec73f_fd4e9757",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-01-08T13:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcc5b4ee_56d14216",
+      "range": {
+        "startLine": 129,
+        "startChar": 12,
+        "endLine": 129,
+        "endChar": 17
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c59a2c6d_fb1b74b4",
@@ -96,6 +144,30 @@
       "writtenOn": "2025-12-18T14:15:47Z",
       "side": 1,
       "message": "Since it is about tps, and you do not consider Degrees CTPs (they may not appear in Tapi Topology (only in the pCE graph being recreated artificialy) , might make sense to rename it to isDegreeTTP? This will make clearer what we do : check the tp is a TTP in degreeOnwedNodeEdgePoints.",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 28
+      },
+      "revId": "82b46fe45192b1733e55236fff75ca740937f1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eedb2d48_885ffbe4",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/topology/terminationpoint/OpenRoadmTerminationPoint.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-01-08T13:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c59a2c6d_fb1b74b4",
       "range": {
         "startLine": 183,
         "startChar": 20,
