@@ -471,7 +471,8 @@ public class PceTapiOpticalNodeTest extends AbstractTest {
         } catch (NoSuchElementException e) {
             return null;
         }
-        return new TapiOpticalNode(this.serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
+        return new TapiOpticalNode(this.serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability,
+            topoUuid);
     }
 
     private void generalSetUp() throws ExecutionException {
