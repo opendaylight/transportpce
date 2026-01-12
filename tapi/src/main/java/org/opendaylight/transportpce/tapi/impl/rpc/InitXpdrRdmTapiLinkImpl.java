@@ -46,8 +46,8 @@ public class InitXpdrRdmTapiLinkImpl extends AbstractTapiNetworkUtil implements 
         Link link = this.tapiLink.createTapiLink(sourceNode, sourceTp, destNode, destTp,
             TapiConstants.OMS_XPDR_RDM_LINK, TapiConstants.OTSI, TapiConstants.PHTNC_MEDIA,
             TapiConstants.PHTNC_MEDIA_OTS, TapiConstants.PHTNC_MEDIA_OTS,
-            this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp),
-            this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp),
+            this.tapiLink.getAdminState(sourceNode, sourceTp, destNode, destTp, tapiTopoUuid),
+            this.tapiLink.getOperState(sourceNode, sourceTp, destNode, destTp, tapiTopoUuid),
             Set.of(LayerProtocolName.PHOTONICMEDIA), Set.of(LayerProtocolName.PHOTONICMEDIA.getName()),
             tapiTopoUuid);
         if (link == null) {
