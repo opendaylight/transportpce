@@ -23,7 +23,7 @@ public interface TapiLink {
     Link createTapiLink(String srcNodeid, String srcTpId, String dstNodeId, String dstTpId, String linkType,
             String srcNodeQual, String dstNodeQual, String srcTpQual, String dstTpQual,
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
-            Set<String> transLayerNameList, Uuid tapiTopoUuid);
+            Set<String> transLayerNameList, Uuid topoUuid);
 
     AdministrativeState setTapiAdminState(String adminState);
 
@@ -33,9 +33,9 @@ public interface TapiLink {
 
     OperationalState setTapiOperationalState(State operState1, State operState2);
 
-    String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId);
+    String getOperState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId, Uuid topoUuid);
 
-    String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId);
+    String getAdminState(String srcNodeId, String destNodeId, String sourceTpId, String destTpId, Uuid topoUuid);
 
     Map<Map<String, String>, ConnectionEndPoint> getCepMap();
 }
