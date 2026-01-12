@@ -832,7 +832,7 @@ public class PceTapiLinkTest  extends AbstractTest {
             return null;
         }
         TapiOpticalNode ton = new TapiOpticalNode(serviceType, node, version, anodeId, znodeId, aportId, zportId,
-                mcCapability);
+                mcCapability, topoUuid);
         return ton;
     }
 

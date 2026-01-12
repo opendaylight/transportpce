@@ -51,6 +51,7 @@ public class PceTapiOpticalNode implements PceNode {
     private boolean valid = true;
     private Node node;
     private Uuid nodeUuid;
+    private final Uuid topoUuid;
     //deviceNodeId is used to keep trace of original node before disaggregation
     private String deviceNodeId;
     private Name nodeName;
@@ -82,13 +83,16 @@ public class PceTapiOpticalNode implements PceNode {
      * @param nodeId        A Map of node name associated to its Uuid (Contains a single element).
      * @param deviceNodeId  The node name
      * @param mcCapability  Media Channel Capabilities as defined in portMapping (SlotWidth/CenterFrequency Granularity)
+     * @param topoUuid      Uuid of the topology the node belongs to.
      */
     public PceTapiOpticalNode(String serviceType, Node node, OpenroadmNodeType nodeType, String version,
-            List<BasePceNep> nepList, Map<Uuid, Name> nodeId, String deviceNodeId, McCapability mcCapability) {
+            List<BasePceNep> nepList, Map<Uuid, Name> nodeId, String deviceNodeId, McCapability mcCapability,
+            Uuid topoUuid) {
 
 
         this.serviceType = serviceType;
         this.node = node;
+        this.topoUuid = topoUuid;
         this.nodeName = nodeId.entrySet().iterator().next().getValue();
         this.nodeType = nodeType;
         this.nodeUuid = nodeId.entrySet().iterator().next().getKey();
@@ -585,12 +589,20 @@ public class PceTapiOpticalNode implements PceNode {
             .filter(elt -> tp.equals(elt.getKey())).findFirst().orElseThrow().getValue();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getXpdrAvailNW()
+    /**
+     * Provides the List of Uuid of the available Network Ports on the OpticalNode (for Xponders).
+     * @return  Uuid of the available network ports.
      */
     public List<String> getXpdrAvailNW() {
         return this.availableXpndrNWTps;
+    }
+
+    /**
+     * Provides the Uuid of the topology the node belongs to.
+     * @return  Uuid of the nodes's topology.
+     */
+    public Uuid getTopoUuid() {
+        return topoUuid;
     }
 
     /*

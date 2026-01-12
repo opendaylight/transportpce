@@ -8,9 +8,11 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.ContextBuilder;
@@ -71,6 +74,10 @@ public class TapiContext {
     public static final String TAPI_CONTEXT = "T-API context";
     public static final String NODE_NOT_PRESENT = "Node is not present in datastore";
     private final NetworkTransactionService networkTransactionService;
+
+    private static final List<Uuid> TOPO_UUID_LIST = new ArrayList<>(List.of(
+        StringConstants.T0_MULTILAYER_UUID, StringConstants.T0_FULL_MULTILAYER_UUID,
+        StringConstants.SBI_TAPI_TOPOLOGY_UUID, StringConstants.ALIEN_XPDR_TAPI_TOPOLOGY_UUID));
 
     @Activate
     public TapiContext(@Reference NetworkTransactionService networkTransactionService) {
@@ -425,6 +432,35 @@ public class TapiContext {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         return String.join(", ", nepNames);
+    }
+
+    public Uuid getTopoUuidFromNode(Uuid nodeUuid) {
+
+        for (Uuid topoUuid : TOPO_UUID_LIST) {
+            try {
+                Optional<Node> optNode =
+                    this.networkTransactionService.read(
+                            LogicalDatastoreType.OPERATIONAL,
+                            DataObjectIdentifier.builder(Context.class)
+                                .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                    .Context1.class)
+                                .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                        .context.TopologyContext.class)
+                                .child(Topology.class, new TopologyKey(topoUuid))
+                                .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+                                            .topology.Node.class,
+                                        new NodeKey(nodeUuid))
+                                .build())
+                        .get();
+                if (!optNode.isEmpty()) {
+                    return topoUuid;
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.info("GetTopoUuidFromNode in tapiContext: unable to retrieve topoUuid from Node {} raise exception",
+                    nodeUuid, e);
+            }
+        }
+        return null;
     }
 
     public Node getTapiNode(Uuid topoUuid, Uuid nodeUuid) {

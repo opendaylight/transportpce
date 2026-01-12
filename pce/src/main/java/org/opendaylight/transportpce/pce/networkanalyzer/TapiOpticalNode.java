@@ -166,9 +166,10 @@ public class TapiOpticalNode {
      * @param mcCapability             MediaChannel capability to be used when enforcing new Grid implementation
      */
     public TapiOpticalNode(String serviceType, Node node, String version, Uuid anodeId, Uuid znodeId, Uuid aportId,
-               Uuid zportId, McCapability mcCapability) {
+               Uuid zportId, McCapability mcCapability, Uuid topoUuid) {
         // For T-API topology, all nodes in the OLS do not have any portmapping which may be
-        // available only for OpenConfig Transponder : try to avoid relying on PortMapping
+        // available only for OpenConfig TranssetTopoUuidponder : try to avoid relying on PortMapping
+        this.topoUuid = topoUuid;
         String nodename = (node == null) ? "NULL" : node.getName().toString();
         if (serviceType == null || node == null) {
             LOG.debug("TapiOpticalNode: one of parameters is not populated : service type {} or node {}",
@@ -243,7 +244,7 @@ public class TapiOpticalNode {
                 Map<Uuid, Name> ilaNodeId = new HashMap<>();
                 ilaNodeId.put(nodeUuid, nodeName);
                 PceTapiOpticalNode inLineAmp = new PceTapiOpticalNode(serviceType, node, OpenroadmNodeType.ROADM,
-                    version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability);
+                    version, allOtsNep, ilaNodeId, deviceNodeId, mcCapability, topoUuid);
                 inLineAmp.setParentNodeUuid(nodeUuid);
                 // In case of ILA as this type of node is not defined at that time in OpenROADM, we use ORNodeType ROADM
                 this.pceNodeMap.put(nodeUuid, inLineAmp);
@@ -1268,7 +1269,7 @@ public class TapiOpticalNode {
                 .collect(Collectors.toList());
             LOG.debug("TON:splitDegNodes : Node {} create TapiOpticalNode {}", nodeName, nodeId);
             var degNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.DEGREE,
-                version, degXOtsNep, nodeId, nodeName.getValue(), mcCapability);
+                version, degXOtsNep, nodeId, nodeName.getValue(), mcCapability, topoUuid);
             degNode.setParentNodeUuid(this.node.getUuid());
             LOG.debug("TON:splitDegNodes : {} of class {} ", nodeId, degNode.getClass());
             Map<Uuid, Uuid> vnepToSubNode = new HashMap<>();
@@ -1339,7 +1340,7 @@ public class TapiOpticalNode {
             }
             // Creates a new PceTapiOpticalNode corresponding to the SRG defined by this VirtualNep
             var srgNode = new PceTapiOpticalNode(serviceType, this.node, OpenroadmNodeType.SRG,
-                version, srgXOtsNep, nodeId, nodeName.getValue(), mcCapability);
+                version, srgXOtsNep, nodeId, nodeName.getValue(), mcCapability, topoUuid);
             srgNode.setParentNodeUuid(this.node.getUuid());
             LOG.debug("TON:splitSrgNodes : new PceTapiON {}, list of nep is {}",
                 srgNode.getNodeId(),
@@ -1399,7 +1400,7 @@ public class TapiOpticalNode {
                     .findFirst().orElseThrow().getValue());
 
                 PceTapiOpticalNode xpdr = new PceTapiOpticalNode(serviceType, this.node,
-                    OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability);
+                    OpenroadmNodeType.XPONDER, version, allOtsNep, nodeId, deviceNodeId, mcCapability, topoUuid);
                 xpdr.setParentNodeUuid(node.getUuid());
                 for (Uuid invalidNepUuid : this.invalidNwNepList) {
                     xpdr.setUsedXpndrNWTps(List.of(invalidNepUuid.getValue()));
@@ -2630,14 +2631,6 @@ public class TapiOpticalNode {
      */
     public Uuid getTopoUuid() {
         return this.topoUuid;
-    }
-
-    /**
-     * Sets topology Uuid of the Tapi Optical Node.
-     * @param topologyUuid is the Uuid of the topology the Tapi Optical Node belongs to.
-     */
-    public void setTopoUuid(Uuid topologyUuid) {
-        this.topoUuid = topologyUuid;
     }
 
     /**
