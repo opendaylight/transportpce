@@ -157,70 +157,70 @@ public class TapiOpticalNodeTest extends AbstractTest {
         Node roadmA = tapiContext.augmentation(Context1.class)
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(roadmAId));
-        TapiOpticalNode ton = new TapiOpticalNode(servType, roadmA, null, null, null, null, null, null);
+        TapiOpticalNode ton = new TapiOpticalNode(servType, roadmA, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Rdm, ton.getCommonNodeType());
 
         Node roadmC = tapiContext.augmentation(Context1.class)
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(roadmCId));
-        ton = new TapiOpticalNode(servType, roadmC, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, roadmC, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Rdm, ton.getCommonNodeType());
 
         Node spdrAx2 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSA1xpdr2Id));
-        ton = new TapiOpticalNode(servType, spdrAx2, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrAx2, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node spdrCx2 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSC1xpdr2Id));
-        ton = new TapiOpticalNode(servType, spdrCx2, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrCx2, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node spdrAx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSA1xpdr1Id));
-        ton = new TapiOpticalNode(servType, spdrAx1, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrAx1, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node spdrCx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSC1xpdr1Id));
-        ton = new TapiOpticalNode(servType, spdrCx1, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrCx1, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node spdrAx3 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSA1xpdr3Id));
-        ton = new TapiOpticalNode(servType, spdrAx3, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrAx3, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node spdrCx3 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(spdrSC1xpdr3Id));
-        ton = new TapiOpticalNode(servType, spdrCx3, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, spdrCx3, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node xpdrAx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(xpdrA1xpdr1Id));
-        ton = new TapiOpticalNode(servType, xpdrAx1, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, xpdrAx1, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
 
         Node xpdrCx1 = Objects.requireNonNull(tapiContext.augmentation(Context1.class))
                 .getTopologyContext().getTopology().get(new TopologyKey(topoUuid))
                 .getNode().get(new NodeKey(xpdrC1xpdr1Id));
-        ton = new TapiOpticalNode(servType, xpdrCx1, null, null, null, null, null, null);
+        ton = new TapiOpticalNode(servType, xpdrCx1, null, null, null, null, null, null, topoUuid);
         ton.qualifyNode();
         assertEquals(NodeTypes.Xpdr, ton.getCommonNodeType());
     }
@@ -1007,7 +1007,8 @@ public class TapiOpticalNodeTest extends AbstractTest {
             return null;
         }
         LOG.info("getTapiOpticalNodeFromId: node is {}", node.getName());
-        return new TapiOpticalNode(serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability);
+        return new TapiOpticalNode(serviceType, node, version, anodeId, znodeId, aportId, zportId, mcCapability,
+            topoUuid);
     }
 
     private void generalSetUp() throws ExecutionException {
