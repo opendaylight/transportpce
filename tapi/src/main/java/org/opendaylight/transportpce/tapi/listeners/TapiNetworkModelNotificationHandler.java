@@ -460,7 +460,7 @@ public class TapiNetworkModelNotificationHandler {
                 }
                 DataObjectIdentifier<OwnedNodeEdgePoint> onepIID = DataObjectIdentifier.builder(Context.class)
                     .augmentation(Context1.class).child(TopologyContext.class)
-                    .child(Topology.class, new TopologyKey(tapiTopoUuid))
+                    .child(Topology.class, new TopologyKey(ocep.orElseThrow().getTopologyUuid()))
                     .child(Node.class, new NodeKey(ocep.orElseThrow().getNodeUuid()))
                     .child(OwnedNodeEdgePoint.class, new OwnedNodeEdgePointKey(connectionNep))
                     .build();
