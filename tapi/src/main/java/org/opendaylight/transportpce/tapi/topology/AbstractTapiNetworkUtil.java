@@ -38,15 +38,19 @@ public abstract class AbstractTapiNetworkUtil {
     }
 
     public boolean putLinkInTopology(Link tapLink) {
+        return putLinkInTopology(tapLink, tapiTopoUuid);
+    }
+
+    public boolean putLinkInTopology(Link tapLink, Uuid topoUuid) {
         // TODO is this merge correct? Should we just merge topology by changing the nodes map??
         // TODO: verify this is correct. Should we identify the context IID with the context UUID??
         LOG.info("Creating tapi node in TAPI topology context");
         DataObjectIdentifier<Topology> topoIID = DataObjectIdentifier.builder(Context.class)
             .augmentation(Context1.class).child(TopologyContext.class)
-            .child(Topology.class, new TopologyKey(tapiTopoUuid))
+            .child(Topology.class, new TopologyKey(topoUuid))
             .build();
 
-        Topology topology = new TopologyBuilder().setUuid(tapiTopoUuid)
+        Topology topology = new TopologyBuilder().setUuid(topoUuid)
             .setLink(Map.of(tapLink.key(), tapLink)).build();
 
         // merge in datastore
