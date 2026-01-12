@@ -981,6 +981,14 @@ public class PceTapiOtnNode implements PceNode {
         return null;
     }
 
+    /**
+     * Provides the Uuid of the topology the node belongs to.
+     * @return  Uuid of the nodes's topology.
+     */
+    public Uuid getTopoUuid() {
+        return topoUuid;
+    }
+
     @Override
     public boolean isContentionLessSrg() {
         return false;
