@@ -1050,7 +1050,8 @@ public class PceCalculation {
                     .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(6.25))))
                     .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(12.5))))
                     .setMaxSlots(Uint32.valueOf(768))
-                    .build()));
+                    .build()),
+                topoUuid);
         ton.initialize();
         Map<Uuid, PceTapiOpticalNode> ptonMap = new HashMap<>();
         if (ton.getPceNodeMap() == null || ton.getPceNodeMap().isEmpty()) {
@@ -1236,7 +1237,8 @@ public class PceCalculation {
                     .setCenterFreqGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
                     .setSlotWidthGranularity(new FrequencyGHz(Decimal64.valueOf(BigDecimal.valueOf(0.0))))
                     .setMaxSlots(Uint32.valueOf(768))
-                    .build()));
+                    .build()),
+                topoUuid);
         ton.initialize();
         PceTapiOtnNode otnNode = ton.getXpdrOtnNode();
         if (otnNode == null) {
