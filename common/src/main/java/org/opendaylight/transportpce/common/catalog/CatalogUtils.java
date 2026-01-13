@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.common.catalog;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.drop.parameters.drop.OpenroadmOperationalModeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.roadm.express.parameters.Express;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.OutputPowerRange;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.OutputPowerRangeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.Penalties;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.PenaltiesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.operational.mode.transponder.parameters.TXOOBOsnrKey;
@@ -43,6 +46,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.operational.mode.catalog.rev250110.power.mask.MaskPowerVsPinKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev250110.OperationalModeCatalog;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
+import org.opendaylight.yangtools.yang.common.Decimal64;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -844,13 +849,13 @@ public class CatalogUtils {
     }
 
     /**
-     * This method is to get central frequency granularity.
-     * @param operationalModeId
-     *            operational-mode-id of a specific-operational-mode
-     * @return String central frequency
+     * Returns specific operational mode from catalog based on the given operational mode.
+     *
+     * @param operationalModeId operational-mode-id of a specific-operational-mode
+     *
+     * @return specific operational mode
      */
-    public String getCFGranularity(String operationalModeId) {
-        FrequencyGHz centralFrequencyGranularity;
+    public Optional<SpecificOperationalMode> readOperationalModeFromCatalog(String operationalModeId) {
         DataObjectIdentifier<SpecificOperationalMode> omCatalogIid = DataObjectIdentifier
                 .builder(OperationalModeCatalog.class)
                 .child(SpecificOperationalModes.class)
@@ -859,20 +864,94 @@ public class CatalogUtils {
         try {
             var somOptional =
                     networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, omCatalogIid).get();
+
             if (somOptional.isEmpty()) {
-                LOG.error("readMdSal: Error reading Specific Operational Mode Catalog for operational-mode-id {}",
-                        operationalModeId);
-                return null;
+                LOG.error("Operational Mode '{}' not found in catalog", operationalModeId);
+                return Optional.empty();
             }
-            SpecificOperationalMode speTspOM = somOptional.orElseThrow();
-            centralFrequencyGranularity = FrequencyGHz.getDefaultInstance(speTspOM.getCentralFrequencyGranularity()
-                    .getValue().toString());
+
+            return somOptional;
 
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading Specific Operational Mode Catalog {} , Mode does not exist",
                     omCatalogIid);
             throw new RuntimeException("Operational mode not populated in Catalog : " + omCatalogIid + " :" + e);
         }
+    }
+
+
+    /**
+     * This method is to get central frequency granularity.
+     * @param operationalModeId
+     *            operational-mode-id of a specific-operational-mode
+     * @return String central frequency
+     */
+    public String getCFGranularity(String operationalModeId) {
+        FrequencyGHz centralFrequencyGranularity;
+        Optional<SpecificOperationalMode> somOptional = readOperationalModeFromCatalog(operationalModeId);
+
+        if (somOptional.isEmpty()) {
+            LOG.error("readMdSal: Error reading Specific Operational Mode Catalog for operational-mode-id {}",
+                    operationalModeId);
+            return null;
+        }
+
+        SpecificOperationalMode speTspOM = somOptional.orElseThrow();
+        centralFrequencyGranularity = FrequencyGHz.getDefaultInstance(
+                speTspOM.getCentralFrequencyGranularity().getValue().toString());
+
         return centralFrequencyGranularity.getValue().toString();
     }
+
+
+    /**
+     * This method computes the mix and max slots based on the given operational mode.
+     * @param operationalModeId
+     *              operational-mode-id of a specific-operational-mode
+     * @return min and max slots
+     */
+    public Map<String, Uint32> getMinMaxSlots(String operationalModeId) {
+        Optional<SpecificOperationalMode> somOptional = readOperationalModeFromCatalog(operationalModeId);
+
+        if (somOptional.isEmpty()) {
+            LOG.error("Operational mode {} not found in catalog", operationalModeId);
+            return Collections.emptyMap();
+        }
+
+        SpecificOperationalMode om = somOptional.orElseThrow();
+        Decimal64 minFreq = om.getMinCentralFrequency().getValue();
+        Decimal64 maxFreq = om.getMaxCentralFrequency().getValue();
+        Decimal64 centralFreqGranularity = om.getCentralFrequencyGranularity().getValue();
+        double maxSlotValue =
+                ((maxFreq.doubleValue() - minFreq.doubleValue()) / (centralFreqGranularity.doubleValue() * 2)) * 1000;
+        Map<String, Uint32> slotMap = new HashMap<>();
+        slotMap.put("min", Uint32.valueOf("1"));
+        slotMap.put("max", Uint32.valueOf(Math.round(maxSlotValue)));
+        return slotMap;
+    }
+
+    /**
+     * This method computes the mix and max power for give operational mode.
+     * @param operationalModeId operational-mode-id of a specific-operational-mode.
+     *
+     * @return min and max output power.
+     */
+    public Map<String, Double> getMinMaxOutputPower(String operationalModeId) {
+        Optional<SpecificOperationalMode> somOptional = readOperationalModeFromCatalog(operationalModeId);
+        if (somOptional.isEmpty()) {
+            LOG.error("Operational mode {} not found in catalog while getMinMaxOutputPower", operationalModeId);
+            return Collections.emptyMap();
+        }
+        SpecificOperationalMode om = somOptional.orElseThrow();
+        Map<OutputPowerRangeKey, OutputPowerRange> outputPowerRange = om.getOutputPowerRange();
+        OutputPowerRange range = outputPowerRange.values().stream().findFirst().orElse(null);
+        double minOutputPower = range != null ? range.getMinOutputPower().getValue().doubleValue() : -5.00;
+        double maxOutputPower = range != null ? range.getMaxOutputPower().getValue().doubleValue() : 0.00;
+
+        Map<String, Double> powerRangeMap = new HashMap<>();
+        powerRangeMap.put("MinTx", minOutputPower);
+        powerRangeMap.put("MaxTx", maxOutputPower);
+        return powerRangeMap;
+    }
+
 }

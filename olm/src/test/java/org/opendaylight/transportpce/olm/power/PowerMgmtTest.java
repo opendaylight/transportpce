@@ -35,6 +35,8 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -52,19 +54,23 @@ import org.opendaylight.yangtools.yang.common.Decimal64;
 
 class PowerMgmtTest {
     private OpenRoadmInterfaces openRoadmInterfaces;
+    private OpenConfigInterfaces openConfigInterfaces;
     private CrossConnect crossConnect;
     private DeviceTransactionManager deviceTransactionManager;
+    private NetworkTransactionService networkTransactionService;
     private PortMapping portMapping;
     private PowerMgmt powerMgmt;
 
     @BeforeEach
     void setUp() {
         this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
+        this.openConfigInterfaces = mock(OpenConfigInterfaces.class);
         this.crossConnect = mock((CrossConnectImpl.class));
         this.deviceTransactionManager = mock(DeviceTransactionManager.class);
+        this.networkTransactionService = mock(NetworkTransactionService.class);
         this.portMapping = mock(PortMapping.class);
-        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
-                this.deviceTransactionManager, this.portMapping, 1000, 1000);
+        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.openConfigInterfaces, this.crossConnect,
+                this.deviceTransactionManager, this.networkTransactionService, this.portMapping, 1000, 1000);
     }
 
     @Test

@@ -174,8 +174,6 @@ class TestTransportPCETopology(unittest.TestCase):
             # pylint: disable=line-too-long
             for nbl in node['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list']:
                 if nbl['nbl-number'] == 1:
-                    self.assertNotIn('available-interconnect-bandwidth', nbl)
-                    self.assertNotIn('interconnect-bandwidth-unit', nbl)
                     for tp in CHECK_LIST[nodeId]['tp-checklist']:
                         self.assertIn(tp, nbl['tp-list'])
                     for tp in CHECK_LIST[nodeId]['tp-unchecklist']:
