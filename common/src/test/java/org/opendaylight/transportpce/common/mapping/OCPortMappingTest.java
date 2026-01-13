@@ -85,37 +85,37 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALCHANNEL;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.OPTICALPORTTYPE;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TRIBUTARYPROTOCOLTYPE;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaData;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaDataBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.LineCardInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.LineCardInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.TransceiverInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.TransceiverInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCardBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCardKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SupportedPort;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SupportedPortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SupportedPortKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SwitchFabric;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SwitchFabricBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SwitchFabricKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.Transceiver;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.TransceiverBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.TransceiverKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.OperationalModes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.OperationalModesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalModeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalModeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequence;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaDataBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.LineCardInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.LineCardInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.TransceiverInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.TransceiverInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCardBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCardKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SupportedPort;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SupportedPortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SupportedPortKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SwitchFabric;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SwitchFabricBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SwitchFabricKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.Transceiver;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.TransceiverBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.TransceiverKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.OperationalModes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.OperationalModesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalModeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalModeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequence;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilitiesKey;
@@ -206,7 +206,7 @@ public class OCPortMappingTest {
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
         doNothing().when(ocPortMappingVersion190Test).createMcCapabilities(mcCapabilities, frequencyGHzSet,
-                "node1");
+                "node1", new ArrayList<>());
         assertTrue(ocPortMappingVersion190Test.createXpdrPortMapping("node123", componentList,
                 portMapList, mcCapabilities));
         List<Component>  componentListEmpty = new ArrayList<>();
@@ -221,6 +221,8 @@ public class OCPortMappingTest {
         List<Component>  componentList = new ArrayList<>();
         componentList.add(componentPort);
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
+        Set<String> operationalModes = new HashSet<>();
+        operationalModes.add("4308");
         supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
         ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
         List<Transceiver> transceiver = Objects.requireNonNull(getTestMetaData().getTransceiverInfo()
@@ -231,6 +233,7 @@ public class OCPortMappingTest {
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
         String rate = "";
+        doReturn(operationalModes).when(ocPortMappingVersion190Test).getSupportedOperationalModes(transceiver.get(0));
         doReturn(rate).when(ocPortMappingVersion190Test).getRate(transceiver.get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
         doNothing().when(ocPortMappingVersion190Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
@@ -239,7 +242,7 @@ public class OCPortMappingTest {
         Port1 augmentationPort = componentPort.getPort().augmentation(Port1.class);
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentPort, augmentationPort,
                 NETWORK_TOKEN, 1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, null, rate);
+                componentList, supportedIntf, null, rate, operationalModes);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         Map<String, Set<String>> lcpNamingMap = ocPortMappingVersion190Test.createNetworkLcpMapping("node1",
@@ -255,6 +258,8 @@ public class OCPortMappingTest {
         lcpSet.add("XPDR1-CLIENT1");
         lcpNamingMap.put("XPDR1-NETWORK1", lcpSet);
         Set<SupportedIfCapability> supportedIntf = new HashSet<>();
+        Set<String> operationalModes = new HashSet<>();
+        operationalModes.add("4308");
         supportedIntf.add(MappingUtilsImpl.ocConvertSupIfCapa("if-OTUCN-ODUCN"));
         ocPortMappingVersion190Test = spy(ocPortMappingVersion190Test);
         LogicalChannels logicalChannels = getLogicalChannelTestData();
@@ -277,6 +282,7 @@ public class OCPortMappingTest {
         doReturn(supportedIntf).when(ocPortMappingVersion190Test).createSupportedInterfaceCapability(transceiver
                 .get(0));
         String rate = "";
+        doReturn(operationalModes).when(ocPortMappingVersion190Test).getSupportedOperationalModes(transceiver.get(0));
         doReturn(rate).when(ocPortMappingVersion190Test).getRate(transceiver.get(0));
         Set<Float> frequencyGHzSet = new LinkedHashSet<>();
         doNothing().when(ocPortMappingVersion190Test).createCentralFrequency(transceiver.get(0), frequencyGHzSet);
@@ -285,7 +291,7 @@ public class OCPortMappingTest {
         Map<String, Mapping> mappingMap = new HashMap<>();
         doNothing().when(ocPortMappingVersion190Test).createLcpMapping("node1", componentList.get(0), augmentationPort,
                 CLIENT_TOKEN,1, lcpMap, mappingMap, LineCard.XpdrType.MPDR, 1,
-                componentList, supportedIntf, null, rate);
+                componentList, supportedIntf, null, rate, operationalModes);
         List<LineCard> lineCardInfo = Objects.requireNonNull(getTestMetaData().getLineCardInfo().getLineCard())
                 .values().stream().toList();
         ocPortMappingVersion190Test.createClientLcpMapping("node1", Arrays.asList(componentList.get(0)),
@@ -447,10 +453,10 @@ public class OCPortMappingTest {
         switchFabricMap.put(switchFabric.key(), switchFabric);
         SupportedPort supportedPort = new SupportedPortBuilder().setComponentName("cfp2-1")
                 .setId(Uint8.ONE)
-                .setType(getOpticalPorttype(TERMINALLINE)).build();
+                .setType(TERMINALLINE).build();
         SupportedPort supportedPortClient = new SupportedPortBuilder().setComponentName("qsfp-1")
                 .setId(Uint8.TWO)
-                .setType(getOpticalPorttype(TERMINALCLIENT)).build();
+                .setType(TERMINALCLIENT).build();
         Map<SupportedPortKey,SupportedPort> supportedPortMap = new HashMap<>();
         supportedPortMap.put(supportedPort.key(), supportedPort);
         supportedPortMap.put(supportedPortClient.key(), supportedPortClient);
@@ -468,7 +474,7 @@ public class OCPortMappingTest {
         OperationalModes operationalModes = new OperationalModesBuilder()
                 .setOperationalMode(operationalModeMap).build();
         InterfaceSequence interfaceSequence = new InterfaceSequenceBuilder()
-                .setInterfaceType(TRIBUTARYPROTOCOLTYPE.VALUE)
+                .setInterfaceType(TRIBUTARYPROTOCOLTYPE.VALUE.toString())
                 .setPosition(Uint8.ONE)
                 .setMaxInterfaces(Uint16.ONE).build();
         Map<InterfaceSequenceKey, InterfaceSequence> interfaceSequenceMap = new HashMap<>();

@@ -105,7 +105,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         self.assertTrue(response['output']['success'])
         self.assertIn(
             {'node-id': 'SPDR-SA1',
