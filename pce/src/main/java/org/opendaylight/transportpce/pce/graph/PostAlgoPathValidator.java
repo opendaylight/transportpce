@@ -211,6 +211,10 @@ public class PostAlgoPathValidator {
                     }
                 }
                 List<OpucnTribSlotDef> resultTribPortTribSlot = getMinMaxTpTs(tribPort, tribSlot);
+                if (resultTribPortTribSlot.isEmpty()) {
+                    pceResult.success();
+                    return pceResult;
+                }
                 if (resultTribPortTribSlot.get(0) != null && resultTribPortTribSlot.get(1) != null) {
                     pceResult.setResultTribPortTribSlot(resultTribPortTribSlot);
                     pceResult.success();
@@ -355,7 +359,7 @@ public class PostAlgoPathValidator {
             if (srcTpnPool == null || destTpnPool == null) {
                 LOG.warn("Analysing Edges, did not succeed retrieving Trib port Pool for either Src {} and/or Dest {}",
                     edge.link().getSourceId(), edge.link().getDestId());
-                return null;
+                return tribPortMap;
             }
             for (Uint16 srcTpn : srcTpnPool) {
                 if (destTpnPool.contains(srcTpn)) {
@@ -396,7 +400,7 @@ public class PostAlgoPathValidator {
             if (srcTsPool == null || destTsPool == null) {
                 LOG.warn("Analysing Edges, did not succeed retrieving Time Slot Pool for either Src {} and/or Dest {}",
                     edge.link().getSourceId(), edge.link().getDestId());
-                return null;
+                return tribSlotMap;
             }
             for (Uint16 integer : srcTsPool) {
                 if (destTsPool.contains(integer)) {
@@ -435,6 +439,9 @@ public class PostAlgoPathValidator {
     }
 
     private List<OpucnTribSlotDef> getMinMaxTpTs(Map<String, Uint16> tribPort, Map<String, List<Uint16>> tribSlot) {
+        if (tribPort == null || tribPort.isEmpty() || tribSlot == null || tribSlot.isEmpty()) {
+            return Collections.emptyList();
+        }
         String tribport = tribPort.values().toArray()[0].toString();
         @SuppressWarnings("unchecked") List<Uint16> tsList = (List<Uint16>) tribSlot.values().toArray()[0];
         return new ArrayList<>(List.of(

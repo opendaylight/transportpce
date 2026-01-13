@@ -45,12 +45,12 @@ def metadata_input():
                                 "interface-sequence": [
                                     {
                                         "position": 1,
-                                        "interface-type": "openconfig-transport-types:PROT_OTUCN",
+                                        "interface-type": "PROT_OTUCN",
                                         "max-interfaces": 1
                                     },
                                     {
                                         "position": 2,
-                                        "interface-type": "openconfig-transport-types:PROT_ODUCN",
+                                        "interface-type": "PROT_ODUCN",
                                         "max-interfaces": 1
                                     }
                                 ]
@@ -73,12 +73,12 @@ def metadata_input():
                                 "interface-sequence": [
                                     {
                                         "position": 1,
-                                        "interface-type": "openconfig-transport-types:PROT_100GE",
+                                        "interface-type": "PROT_100GE",
                                         "max-interfaces": 1
                                     },
                                     {
                                         "position": 2,
-                                        "interface-type": "openconfig-transport-types:PROT_ODU4",
+                                        "interface-type": "PROT_ODU4",
                                         "max-interfaces": 1
                                     }
                                 ]
@@ -96,27 +96,27 @@ def metadata_input():
                             {
                                 "id": 1,
                                 "component-name": "client-qsfp-1",
-                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                                "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 2,
                                 "component-name": "client-qsfp-2",
-                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                                "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 3,
                                 "component-name": "client-qsfp-3",
-                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                                "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 4,
                                 "component-name": "client-qsfp-4",
-                                "type": "openconfig-transport-types:TERMINAL_CLIENT"
+                                "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 5,
                                 "component-name": "line-cfp2-1",
-                                "type": "openconfig-transport-types:TERMINAL_LINE"
+                                "type": "TERMINAL_LINE"
                             }
                         ],
                         "switch-fabric": [
@@ -126,6 +126,8 @@ def metadata_input():
                                 "non-blocking-list": [
                                     {
                                         "nbl-id": 1,
+                                        "interconnect-bandwidth-unit":1000000000,
+                                        "interconnect-bandwidth":100,
                                         "connectable-port": [
                                             5,
                                             1
@@ -133,6 +135,8 @@ def metadata_input():
                                     },
                                     {
                                         "nbl-id": 2,
+                                        "interconnect-bandwidth-unit":1000000000,
+                                        "interconnect-bandwidth":100,
                                         "connectable-port": [
                                             5,
                                             2
@@ -140,6 +144,8 @@ def metadata_input():
                                     },
                                     {
                                         "nbl-id": 3,
+                                        "interconnect-bandwidth-unit":1000000000,
+                                        "interconnect-bandwidth":100,
                                         "connectable-port": [
                                             5,
                                             3
@@ -147,6 +153,8 @@ def metadata_input():
                                     },
                                     {
                                         "nbl-id": 4,
+                                        "interconnect-bandwidth-unit":1000000000,
+                                        "interconnect-bandwidth":100,
                                         "connectable-port": [
                                             5,
                                             4

@@ -87,7 +87,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         self.assertIn(
             {'node-id': 'XPDR-A2',
              'och-interface-id': ['XPDR2-NETWORK1-755:768', 'XPDR2-NETWORK1-OTSIGROUP-200G'],
@@ -460,7 +460,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         expected_subset_response = {
             'node-id': 'XPDR-A2',
             'otu-interface-id': ['XPDR2-NETWORK1-OTUC3']}
@@ -688,7 +688,7 @@ class TestTransportPCEOtnRenderer(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         expected_subset_response = {
             'node-id': 'XPDR-A2',
             'otu-interface-id': ['XPDR2-NETWORK1-OTUC4']}
