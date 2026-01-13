@@ -58,6 +58,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndown;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.get.pm.output.Measurements;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev210915.ServiceImplementationRequestInput;
@@ -155,6 +157,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 if (mappingNode != null && mappingNode.getDatamodelType() != null
                         && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
                     isOpenConfig = true;
+                    Map<MappingKey, Mapping> mapping = mappingNode.getMapping();
+                    Set<Map.Entry<MappingKey, Mapping>> entries = mapping.entrySet();
+                    entries.forEach(e -> e.getValue().getSupportedOperationalMode());
                 }
                 String serviceType = "";
                 //TODO: OpenConfig check can be removed if additional info is added in the OC
@@ -531,10 +536,10 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 this.executor.submit(
                     new OlmPowerSetupTask(rpcService.getRpc(ServicePowerSetup.class), powerSetupInputAtoZ));
 
-        LOG.info("Olm power setup Z-A powerSetUpInputAtoZ = {}", powerSetupInputZtoA);
+        LOG.info("Olm power setup Z-A powerSetUpInputZtoA = {}", powerSetupInputZtoA);
         sendNotifications(
                 ServicePathNotificationTypes.ServiceImplementationRequest,
-                powerSetupInputAtoZ.getServiceName(),
+                powerSetupInputZtoA.getServiceName(),
                 RpcStatusEx.Pending,
                 "Olm power setup Z-A");
         ListenableFuture<OLMRenderingResult> olmPowerSetupFutureZtoA =
@@ -681,22 +686,20 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         // TODO:The existing openconfig renderer support is for a back to back XPDR usecase and there were no specific
         //      power up/down sequence recommended by NEC documentation for enabling/disabling datapath for XPDRs.
         //      We can look at enhancing this in a future update.
-        if (!isOpenConfig) {
-            List<OLMRenderingResult> olmRenderingResults = olmPowerSetup(
-                    rollbackProcessor,
-                    //olmPowerSetupInputAtoZ,
-                    ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
-                    //olmPowerSetupInputZtoA
-                    ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input),
-                    isTempService);
-            if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
-                sendNotifications(
-                        ServicePathNotificationTypes.ServiceImplementationRequest,
-                        input.getServiceName(),
-                        RpcStatusEx.Failed,
-                        olmResultMessage(olmRenderingResults));
-                return false;
-            }
+        List<OLMRenderingResult> olmRenderingResults = olmPowerSetup(
+                rollbackProcessor,
+                //olmPowerSetupInputAtoZ,
+                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input),
+                //olmPowerSetupInputZtoA
+                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input),
+                isTempService);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
+            sendNotifications(
+                    ServicePathNotificationTypes.ServiceImplementationRequest,
+                    input.getServiceName(),
+                    RpcStatusEx.Failed,
+                    olmResultMessage(olmRenderingResults));
+            return false;
         }
         if (rollbackProcessor.rollbackAllIfNecessary() > 0 || renderingResults.isEmpty()) {
             sendNotifications(
@@ -789,8 +792,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 LOG.error("Error while turning down power!");
                 return false;
             }
+            LOG.info("OLM power successfully turned down!");
         }
-        LOG.info("OLM power successfully turned down!");
         // delete service path with renderer
         LOG.info("Deleting service path via renderer");
         sendNotifications(

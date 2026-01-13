@@ -247,7 +247,6 @@ public class OpenConfigInterface190 {
                 .terminal.optical.channel.top.optical.channel.ConfigBuilder configBuilder = new org.opendaylight
                 .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.optical
                 .channel.ConfigBuilder();
-        configBuilder.setTargetOutputPower(input.getTargetOutputPower());
         configBuilder.setOperationalMode(isAend
             ? Uint16.valueOf(input.getAendOperationalMode())
             : Uint16.valueOf(input.getZendOperationalMode()));

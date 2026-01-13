@@ -306,12 +306,12 @@ public class PceOtnNode implements PceNode {
                             && nbl.getTpList().contains(nwTp)) {
                         usableXpdrClientTps.add(clTp);
                         usableXpdrNWTps.add(nwTp);
-                    }
-                    if (usableXpdrClientTps.size() >= 1
-                            && usableXpdrNWTps.size() >= 1
-                            && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
-                        clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
-                        return true;
+                        if (usableXpdrClientTps.size() >= 1
+                                && usableXpdrNWTps.size() >= 1
+                                && (this.clientPort == null || this.clientPort.equals(clTp.getValue()))) {
+                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                            return true;
+                        }
                     }
                 }
             }
@@ -335,6 +335,10 @@ public class PceOtnNode implements PceNode {
 
     private boolean checkOdtuTTPforLoOduCreation(TerminationPoint1 ontTp1, int tsNb) {
         XpdrTpPortConnectionAttributes portConAttr = ontTp1.getXpdrTpPortConnectionAttributes();
+        //For OC NEs tsPool is null in port conn attributes.
+        if (portConAttr != null && portConAttr.getTsPool() == null) {
+            return true;
+        }
         if (portConAttr == null
                 || portConAttr.getTsPool() == null
                 || portConAttr.getTsPool().size() < tsNb
@@ -430,8 +434,9 @@ public class PceOtnNode implements PceNode {
                     .getTpType()
                     .equals(OpenroadmTpType.XPONDERNETWORK))
                 .collect(Collectors.toList())) {
-            XpdrTpPortConnectionAttributes portConAttr =
-                tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes();
+            XpdrTpPortConnectionAttributes portConAttr = tp.augmentation(TerminationPoint1.class) != null
+                    ? tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                    : null;
             if (portConAttr != null && portConAttr.getOdtuTpnPool() != null) {
                 OdtuTpnPool otPool = portConAttr.getOdtuTpnPool().values().stream().findFirst().orElseThrow();
                 if (checkFirstOdtuTpn(otPool)) {
@@ -458,8 +463,9 @@ public class PceOtnNode implements PceNode {
                 .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
             .collect(Collectors.toList())
         ) {
-            XpdrTpPortConnectionAttributes portConAttr =
-                tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes();
+            XpdrTpPortConnectionAttributes portConAttr = tp.augmentation(TerminationPoint1.class) != null
+                    ? tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                    : null;
             if (portConAttr != null && portConAttr.getTsPool() != null) {
                 tpAvailableTribSlot.put(tp.getTpId().getValue(), new ArrayList<>(portConAttr.getTsPool()));
             }
