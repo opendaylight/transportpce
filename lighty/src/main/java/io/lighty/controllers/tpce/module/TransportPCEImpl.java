@@ -34,6 +34,9 @@ import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl190;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
@@ -144,13 +147,16 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         MappingUtils mappingUtils = new MappingUtilsImpl(dataBroker);
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils, portMapping);
+        OpenConfigInterfaces openConfigInterfaces = initOpenConfigInterfaces();
         OlmPowerServiceRpcImpl olmPowerServiceRpc = new OlmPowerServiceRpcImpl(
             new OlmPowerServiceImpl(
                     dataBroker,
                     new PowerMgmtImpl(
                             openRoadmInterfaces,
+                            openConfigInterfaces,
                             crossConnect,
                             deviceTransactionManager,
+                            networkTransaction,
                             portMapping,
                             Long.valueOf(olmtimer1).longValue(),
                             Long.valueOf(olmtimer2).longValue()),
@@ -314,6 +320,12 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
             new OpenRoadmInterfacesImpl710(deviceTransactionManager, portMapping);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
                 openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
+    }
+
+    private OpenConfigInterfaces initOpenConfigInterfaces() {
+        OpenConfigInterfacesImpl190 openConfigInterfacesImpl190 =
+                new OpenConfigInterfacesImpl190(deviceTransactionManager);
+        return new OpenConfigInterfacesImpl(openConfigInterfacesImpl190);
     }
 
     private CrossConnect initCrossConnect(MappingUtils mappingUtils) {

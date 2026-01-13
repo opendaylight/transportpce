@@ -68,22 +68,22 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1Builder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TRIBUTARYPROTOCOLTYPE;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaData;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCard.XpdrType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.LineCardKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SupportedPort;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SupportedPortKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SwitchFabric;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card.SwitchFabricKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.Transceiver;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.TransceiverKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalMode;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequence;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard.XpdrType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCardKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SupportedPort;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SupportedPortKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SwitchFabric;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card.SwitchFabricKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.line.card._switch.fabric.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.Transceiver;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.TransceiverKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.operational.modes.OperationalMode;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequence;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.transceiver.info.transceiver.supported._interface.capability.InterfaceSequenceKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.NodeDatamodelType;
@@ -112,6 +112,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev1
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -307,7 +308,10 @@ public class OCPortMappingVersion190 {
             }
             xpdrIndex++;
         }
-        createMcCapabilities(mcCapabilities, frequencyGHzSet, nodeId);
+        List<Component> transceiverComponents = componentList.stream()
+                .filter(component -> checkComponentType(component, TRANSCEIVER))
+                .toList();
+        createMcCapabilities(mcCapabilities, frequencyGHzSet, nodeId, transceiverComponents);
         mappingMap.forEach((k, v) -> portMapList.add(v));
         return true;
     }
@@ -319,15 +323,23 @@ public class OCPortMappingVersion190 {
      *            mcCapabilities map
      * @param frequencyGHzSet - input
      *            frequency set
+     * @param nodeId - input
+     *              mcCapabilities of this nodeId is created
+     * @param transceiverComponents - input
+     *              list of transceiver components
      */
     protected void createMcCapabilities(Map<McCapabilitiesKey, McCapabilities> mcCapabilities,
-                                      Set<Float> frequencyGHzSet, String nodeId) {
+                                      Set<Float> frequencyGHzSet, String nodeId,
+                                        List<Component> transceiverComponents) {
         if (!frequencyGHzSet.isEmpty()) {
-            buildMcCapabilities(mcCapabilities, frequencyGHzSet.stream().toList().get(0), nodeId);
+            buildMcCapabilities(mcCapabilities, frequencyGHzSet.stream()
+                    .toList().get(0), nodeId, transceiverComponents);
             if (frequencyGHzSet.size() > 1) {
                 LOG.error("central-frequency-granularity is not the same for all operational-modes of the node");
             }
         }
+
+
     }
 
     /**
@@ -337,9 +349,13 @@ public class OCPortMappingVersion190 {
      *            mcCapabilities map
      * @param granularityFrequency - input
      *            granularity Frequency
+     * @param nodeId - input
+     *              mcCapabilities of this nodeId is build
+     * @param transceiverComponents - input
+     *              list of transceiver components of node
      */
     private void buildMcCapabilities(Map<McCapabilitiesKey, McCapabilities> mcCapabilities,
-                                     Float granularityFrequency, String nodeId) {
+                                     Float granularityFrequency, String nodeId, List<Component> transceiverComponents) {
         McCapabilitiesBuilder mcCapabilitiesBuilder =
                 new McCapabilitiesBuilder().withKey(new McCapabilitiesKey(XPDR_MCPROFILE))
                         .setMcNodeName(XPDR_MCPROFILE);
@@ -347,6 +363,51 @@ public class OCPortMappingVersion190 {
                 String.valueOf(granularityFrequency)));
         mcCapabilitiesBuilder.setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(
                 String.valueOf(granularityFrequency * 2)));
+        //To set the minimum and maximum slots for MC capability using values retrieved from transceiver metadata.
+        CatalogUtils catalogUtils = new CatalogUtils(networkTransactionService);
+        Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
+        boolean validSlotRangeFound = false;
+        for (Component transceiverComponent : transceiverComponents) {
+            String transceiverPartNo;
+            Optional<Transceiver> transceiverMetadata;
+            Transceiver metadata = null;
+            if (transceiverComponent.getState().getPartNo() != null
+                    && !transceiverComponent.getState().getPartNo().isEmpty()) {
+                transceiverPartNo = transceiverComponent.getState().getPartNo();
+            } else {
+                transceiverPartNo = transceiverComponent.getState().getDescription();
+            }
+            transceiverMetadata =
+                    Objects.requireNonNull(transceiverMetadataMap).values().stream().filter(transceiver
+                            -> transceiver.key().getPartNo().equalsIgnoreCase(transceiverPartNo))
+                            .findFirst();
+            if (transceiverMetadata.isPresent()) {
+                metadata = transceiverMetadata.orElseThrow();
+            }
+
+            if (metadata != null) {
+                Set<String> modes = getSupportedOperationalModes(metadata);
+                for (String modeId : modes) {
+                    Map<String, Uint32> catalogUtilsMinMaxSlots = catalogUtils.getMinMaxSlots(modeId);
+
+                    if (catalogUtilsMinMaxSlots != null && catalogUtilsMinMaxSlots.size() == 2) {
+                        LOG.info("Min/Max slots for mode {}: {}", modeId, catalogUtilsMinMaxSlots);
+                        mcCapabilitiesBuilder.setMinSlots(catalogUtilsMinMaxSlots.get("min"));
+                        mcCapabilitiesBuilder.setMaxSlots(catalogUtilsMinMaxSlots.get("max"));
+                        validSlotRangeFound = true;
+                        break;
+                    } else {
+                        LOG.warn("Min/Max slot data not found or incomplete for operational mode {}", modeId);
+                        // continue loop to next mode
+                    }
+                }
+                if (validSlotRangeFound) {
+                    break;
+                }
+            } else {
+                LOG.error("Transceiver metadata not found for device transceiver: {}", transceiverComponent.getName());
+            }
+        }
         mcCapabilities.put(mcCapabilitiesBuilder.key(), mcCapabilitiesBuilder.build());
         LOG.info("Finished building mc-capability profile for open config XPDR {}", nodeId);
     }
@@ -407,10 +468,12 @@ public class OCPortMappingVersion190 {
                     .getOpticalPortType().toString().contains(TERMINALLINE)) {
                 Transceiver transceiver = getTransceiverMetaData(componentsList, portComponent, transceiverMetadataMap);
                 Set<SupportedIfCapability> supportedIfCapabilities = null;
+                Set<String> operationalModeList = null;
                 String rate = "";
                 if (transceiver != null) {
                     supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                     createCentralFrequency(transceiver, frequencyGHzSet);
+                    operationalModeList = getSupportedOperationalModes(transceiver);
                     rate = getRate(transceiver);
                 } else {
                     LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
@@ -425,7 +488,7 @@ public class OCPortMappingVersion190 {
                     Uint8 networkPortId = supportedPort.orElseThrow().getId();
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.NETWORK_TOKEN,
                             networkPortId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
-                            supportedIfCapabilities, null, rate);
+                            supportedIfCapabilities, null, rate, operationalModeList);
                     network =
                             PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, networkPortId.intValue(),
                                     StringConstants.NETWORK_TOKEN);
@@ -469,6 +532,8 @@ public class OCPortMappingVersion190 {
                                 .switching.pool.lcp.switching.pool.lcp
                                 .NonBlockingList nonBlockingList = new NonBlockingListBuilder()
                                 .setNblNumber(Uint16.valueOf(entry.getKey().substring(2)))
+                                .setInterconnectBandwidthUnit(entry.getValue().getInterconnectBandwidthUnit())
+                                .setInterconnectBandwidth(entry.getValue().getInterconnectBandwidth())
                                 .setLcpList(entry.getValue().getLcpList())
                                 .build();
                         nonBlockingListMap.put(nonBlockingList.key(), nonBlockingList);
@@ -505,7 +570,7 @@ public class OCPortMappingVersion190 {
                 for (Map.Entry<InterfaceSequenceKey, InterfaceSequence> interfaceSequenceEntry :
                         interfaceSequenceMap.entrySet()) {
                     interfaceTypeList.add(MappingUtilsImpl.getInterfaceType(interfaceSequenceEntry.getValue()
-                            .getInterfaceType().toString()));
+                            .getInterfaceType()));
                 }
             }
             StringBuilder supportedIntfCapBuilder = new StringBuilder();
@@ -560,7 +625,7 @@ public class OCPortMappingVersion190 {
         for (Uint8 uint8 : connectablePorts) {
             var supportedPort =
                     supportedPortMap.values().stream().filter(clientPort -> clientPort.getId().equals(uint8)
-                                    && clientPort.getType().toString().contains(TERMINALCLIENT))
+                                    && clientPort.getType().contains(TERMINALCLIENT))
                             .findFirst();
             supportedClientPorts.add(supportedPort);
         }
@@ -600,6 +665,8 @@ public class OCPortMappingVersion190 {
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.switching.pool.lcp
                     .switching.pool.lcp.NonBlockingList nonBlockingList = new NonBlockingListBuilder()
                     .setNblNumber(nblVal.getNblId().toUint16())
+                    .setInterconnectBandwidth(nblVal.getInterconnectBandwidth())
+                    .setInterconnectBandwidthUnit(nblVal.getInterconnectBandwidthUnit())
                     .setLcpList(clientList)
                     .build();
             String key = null;
@@ -617,7 +684,7 @@ public class OCPortMappingVersion190 {
                 mappingMap.put(network, createXpdrMappingObject(null, null, null,
                         null, null, mapping, clientConnectionMapLcp,
                         null, null, null, null, null,
-                        null));
+                        null, null));
             }
         }
     }
@@ -678,7 +745,7 @@ public class OCPortMappingVersion190 {
                 List<SupportedPort> supportedPortList = supportedPortMap.values().stream().toList();
                 var supportedPortOptional =
                         supportedPortList.stream().filter(supportedPort -> supportedPort.getComponentName()
-                                        .equals(portName) && supportedPort.getType().toString()
+                                        .equals(portName) && supportedPort.getType()
                                         .contains(TERMINALCLIENT)).findFirst();
                 if (supportedPortOptional.isPresent()) {
                     Uint8 supportedId = supportedPortOptional.orElseThrow().getId();
@@ -686,17 +753,19 @@ public class OCPortMappingVersion190 {
                             PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, supportedId.intValue(),
                                     StringConstants.CLIENT_TOKEN);
                     Set<SupportedIfCapability> supportedIfCapabilities = null;
+                    Set<String> operationalModeList = null;
                     String rate = "";
                     if (transceiver != null) {
                         supportedIfCapabilities = createSupportedInterfaceCapability(transceiver);
                         createCentralFrequency(transceiver, frequencyGHzSet);
+                        operationalModeList = getSupportedOperationalModes(transceiver);
                         rate = getRate(transceiver);
                     } else {
                         LOG.warn("Transceiver meta data doesn't exist for port component {}", portName);
                     }
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.CLIENT_TOKEN,
                             supportedId.intValue(), lcpMap, mappingMap, xpdrType, xpdrIndex, componentsList,
-                            supportedIfCapabilities, logicalChannelList, rate);
+                            supportedIfCapabilities, logicalChannelList, rate, operationalModeList);
                     if (xpdrType.getName().equalsIgnoreCase(XpdrType.TPDR.getName())) {
                         String networkConnectionMapLcp = null;
                         for (Map.Entry<String, Set<String>> stringSetEntry : lcpNamingMap.entrySet()) {
@@ -711,7 +780,7 @@ public class OCPortMappingVersion190 {
                             mappingMap.put(clientLCPName, createXpdrMappingObject(null, null,
                                     null, null, null, mapping,
                                     networkConnectionMapLcp, null, null, null,
-                                    null, null, rate));
+                                    null, null, rate, operationalModeList));
                         }
                     }
                 }
@@ -744,12 +813,18 @@ public class OCPortMappingVersion190 {
      *          components List
      * @param supportedIfCapabilities - input
      *           supported if capabilities
+     * @param logicalChannelList - input
+     *           List of logical channels associated with the port
+     * @param rate - input
+     *           The rate of the port
+     * @param operationalModeList - input
+     *           Set of operational modes applicable to the port
      */
     protected void createLcpMapping(String nodeId, Component portComponent, Port1 augmentationPort, String token,
                                     int lcpValue, Map<String, String> lcpMap, Map<String, Mapping> mappingMap,
                                     XpdrType xpdrType, int xpdrIndex, List<Component> componentsList,
                                     Set<SupportedIfCapability> supportedIfCapabilities,
-                                    List<Channel> logicalChannelList, String rate) {
+                                    List<Channel> logicalChannelList, String rate, Set<String> operationalModeList) {
         String lcpName = PortMappingUtils.createXpdrLogicalConnectionPort(xpdrIndex, lcpValue, token);
         String supportingCircuitPackName = getSupportingCircuitPackName(componentsList, portComponent);
         Set<String> supportedInterfaceSet = null;
@@ -760,7 +835,7 @@ public class OCPortMappingVersion190 {
         Set<String> opticalChannels = getOpticalChannels(componentsList, supportingCircuitPackName);
         mappingMap.put(lcpName, createXpdrMappingObject(nodeId, portComponent, augmentationPort,
                 supportingCircuitPackName, lcpName, null, null, xpdrType,
-                supportedIfCapabilities, token, supportedInterfaceSet, opticalChannels, rate));
+                supportedIfCapabilities, token, supportedInterfaceSet, opticalChannels, rate, operationalModeList));
     }
 
     private static Set<String> getOpticalChannels(List<Component> componentsList, String supportingCircuitPackName) {
@@ -940,17 +1015,37 @@ public class OCPortMappingVersion190 {
         return false;
     }
 
+    /**
+     * Retrieves the highest rate supported by the given transceiver.
+     * The rate is determined by evaluating all operational modes of the transceiver
+     * and selecting the maximum rate value among them
+     *
+     * @param transceiver The transceiver device to query
+     * @return The highest supported rate as a String, or an empty string if no rates are found
+     */
     protected String getRate(Transceiver transceiver) {
         List<OperationalMode> operationalModes = getOperationalModes(transceiver);
-        String rate = "";
+        String maxRate = "";
+        int maxRateValue = 0;
         if (!operationalModes.isEmpty()) {
             for (OperationalMode operationalMode : operationalModes) {
-                rate = operationalMode.getRate();
+                String rateStr = operationalMode.getRate(); // rate as String, e.g., "400"
+                if (rateStr != null && !rateStr.isEmpty()) {
+                    try {
+                        int rateValue = Integer.parseInt(rateStr);
+                        if (rateValue > maxRateValue) {
+                            maxRateValue = rateValue;
+                            maxRate = rateStr;
+                        }
+                    } catch (NumberFormatException e) {
+                        LOG.warn("Invalid rate format: {}", rateStr, e);
+                    }
+                }
             }
         } else {
             LOG.error("Operational mode does not exist for Transceiver in metadata. Unable to get rate");
         }
-        return rate;
+        return maxRate;
     }
 
     /**
@@ -1016,20 +1111,29 @@ public class OCPortMappingVersion190 {
      *            supported interface capabilities
      * @param token - input
      *           token whether client/network
+     * @param logicalChannelSet - input
+     *              set of logical channels
+     * @param opticalChannels - input
+     *              set of supported optical channels
+     * @param rate - input
+     *              rate
+     * @param operationalModeList -input
+     *               operational mode
      * @return Mapping based on status of operation
      */
     private Mapping createXpdrMappingObject(String nodeId, Component portComponent, Port1 augmentationPort,
                                             String supportingCircuitPackName, String logicalConnectionPoint,
                                             Mapping mapping, String connectionMapLcp, XpdrType xpdrType,
                                             Set<SupportedIfCapability> supportedIfCapabilities, String token,
-                                            Set<String> logicalChannelSet, Set<String> opticalChannels, String rate) {
+                                            Set<String> logicalChannelSet, Set<String> opticalChannels,
+                                            String rate, Set<String> operationalModeList) {
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
         }
         return createNewXpdrMapping(nodeId, portComponent, augmentationPort,
                 supportingCircuitPackName, logicalConnectionPoint, xpdrType, supportedIfCapabilities,
-                token, logicalChannelSet, opticalChannels, rate);
+                token, logicalChannelSet, opticalChannels, rate, operationalModeList);
     }
 
     /**
@@ -1052,13 +1156,19 @@ public class OCPortMappingVersion190 {
      *          token whether client/network
      * @param supportedInterfaceSet - input
      *           supported interface set
+     * @param opticalChannels - input
+     *           set of supported optical channels
+     * @param rate - input
+     *            rate
+     * @param operationalModeList -input
+     *            operational mode
      * @return Mapping based on status of operation
      */
     private Mapping createNewXpdrMapping(String nodeId, Component portComponent, Port1 augmentationPort,
                                          String supportingCircuitPackName, String logicalConnectionPoint,
                                          XpdrType xpdrType, Set<SupportedIfCapability> supportedIfCapabilities,
                                          String token, Set<String> supportedInterfaceSet, Set<String> opticalChannels,
-                                         String rate) {
+                                         String rate, Set<String> operationalModeList) {
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
@@ -1066,7 +1176,8 @@ public class OCPortMappingVersion190 {
                 .setSupportingPort(portComponent.getName())
                 .setPortDirection(BIDIRECTIONAL)
                 .setLcpHashVal(PortMappingUtils.fnv1size64(nodeId + "-" + logicalConnectionPoint))
-                .setRate(rate);
+                .setRate(rate)
+                .setSupportedOperationalMode(operationalModeList);
         if (augmentationPort.getOpticalPort().getState().getAdminState() != null) {
             mpBldr.setPortAdminState(augmentationPort.getOpticalPort().getState().getAdminState().getName());
         } else if (augmentationPort.getOpticalPort().getConfig().getAdminState() != null) {
@@ -1246,5 +1357,28 @@ public class OCPortMappingVersion190 {
             mpBldr.setPortOperState(portComponent.getState().getOperStatus().implementedInterface().getSimpleName());
         }
         return mpBldr;
+    }
+
+    /**
+     * Returns operational modes supported by the given transceiver.
+     *
+     * @param transceiver transceivers supported operational mode to be retrieved.
+     *
+     * @return supported operational modes
+     */
+    public Set<String> getSupportedOperationalModes(Transceiver transceiver) {
+        List<OperationalMode> operationalModes = getOperationalModes(transceiver);
+        Set<String> supportedModes = new HashSet<>();
+        if (operationalModes != null && !operationalModes.isEmpty()) {
+            for (OperationalMode opMode : operationalModes) {
+                if (opMode.getCatalogId() != null && opMode.getModeId() != null) {
+                    String modeString = opMode.getCatalogId();
+                    supportedModes.add(modeString);
+                }
+            }
+        } else {
+            LOG.warn("No operational modes found for transceiver: {}", transceiver);
+        }
+        return supportedModes;
     }
 }

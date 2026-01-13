@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common.metadata;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev240124.OpenTerminalMetaData;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
 
 /**
  * This class related to read metadata from md sal for openconfig node.

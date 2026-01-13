@@ -336,9 +336,14 @@ public class PceCalculation {
         if (nw1 == null) {
             LOG.warn("PceCalculation:readMdSal no otn links in otn-topology");
         } else {
-            allLinks = nw1.nonnullLink().values().stream().sorted((l1, l2)
-                -> l1.getSource().getSourceTp().getValue().compareTo(l2.getSource().getSourceTp().getValue()))
-                    .collect(Collectors.toList());
+            allLinks = nw1.nonnullLink().values()
+                    .stream().sorted((l1, l2) -> {
+                        //for OC NEs, sourceTp is null.
+                        String val1 = l1.getSource() != null ? l1.getSource().getSourceTp().getValue() : "";
+                        String val2 = l2.getSource() != null ? l2.getSource().getSourceTp().getValue() : "";
+                        return val1.compareTo(val2);
+                    }).collect(Collectors.toList());
+            LOG.info("allLinks {}", allLinks);
         }
         if (allNodes == null || allNodes.isEmpty()) {
             LOG.error("PceCalculation:readMdSal: no nodes ");
@@ -803,11 +808,12 @@ public class PceCalculation {
     private boolean validateLink(Link link) {
         LOG.debug("validateLink: link {} ", link);
 
-        NodeId sourceId = link.getSource().getSourceNode();
-        NodeId destId = link.getDestination().getDestNode();
+        NodeId sourceId = link.getSource() != null ? link.getSource().getSourceNode() : null;
+        NodeId destId = link.getDestination() != null ? link.getDestination().getDestNode() : null;
         PceNode source = allPceNodes.get(sourceId);
         PceNode dest = allPceNodes.get(destId);
-        State state = link.augmentation(Link1.class).getOperationalState();
+        Link1 augmentation = link.augmentation(Link1.class);
+        State state = augmentation != null ? augmentation.getOperationalState() : null;
 
         if (source == null) {
             LOG.debug("PceCalculation:validateLink : Link ignored due source node is rejected by node validation - {}",
@@ -954,7 +960,6 @@ public class PceCalculation {
                 node1.getOperationalState().getName());
             return;
         }
-
         String deviceNodeId = MapUtils.getSupNetworkNode(node);
         // Should never happen but because of existing topology test files
         // we have to manage this case
@@ -995,8 +1000,9 @@ public class PceCalculation {
             if (this.aendPceNode == null && isAZendPceNode(this.serviceFormatA, pceNode, null, anodeId, "A")) {
                 // Added to ensure A-node has a addlink in the topology
                 List<Link> links = this.allLinks.stream()
-                    .filter(x -> x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
-                    .collect(Collectors.toList());
+                        .filter(x -> x.getSource() != null
+                                && x.getSource().getSourceNode().getValue().contains(pceNode.getNodeId().getValue()))
+                        .collect(Collectors.toList());
                 if (!links.isEmpty()) {
                     this.aendPceNode = pceNode;
                 }
@@ -1004,8 +1010,9 @@ public class PceCalculation {
             if (this.zendPceNode == null && isAZendPceNode(this.serviceFormatZ, pceNode, null, znodeId, "Z")) {
                 // Added to ensure Z-node has a droplink in the topology
                 List<Link> links = this.allLinks.stream()
-                    .filter(x -> x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
-                    .collect(Collectors.toList());
+                        .filter(x -> x.getDestination() != null
+                                && x.getDestination().getDestNode().getValue().contains(pceNode.getNodeId().getValue()))
+                        .collect(Collectors.toList());
                 if (!links.isEmpty()) {
                     this.zendPceNode = pceNode;
                 }

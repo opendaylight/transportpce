@@ -154,7 +154,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (!alarmSuppressionNodeRegistration(input)) {
             LOG.warn("Alarm suppresion node registration failed!!!!");
         }
-        AtomicBoolean isOpenConfig = new AtomicBoolean(false);
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         Map<NodeInterfaceKey, NodeInterface> nodeInterfaces = new ConcurrentHashMap<>();
         Set<String> nodesProvisioned = Sets.newConcurrentHashSet();
@@ -162,6 +161,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
+            boolean isOpenConfig = false;
             String nodeId = node.getNodeId();
             LOG.info("Starting provisioning for node : {}", nodeId);
             AEndApiInfo apiInfoA = null;
@@ -188,9 +188,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             .network.Nodes mappingNode = portMapping.getNode(nodeId);
                     if (mappingNode != null && mappingNode.getDatamodelType() != null
                             && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
-                        isOpenConfig.set(true);
+                        isOpenConfig = true;
                     }
-                    if (isOpenConfig.get()) {
+                    if (isOpenConfig) {
                         String destTp = node.getDestTp();
                         if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                             LOG.info("Configuring network admin state & optical channel in node {} and dest {}",
@@ -205,6 +205,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             nodesProvisioned.add(nodeId);
                             Mapping mapping = portMapping.getMapping(nodeId, destTp);
                             portMapping.updateMapping(nodeId, mapping);
+                            if (node.getSrcTp() == null) {
+                                otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
+                            }
                         } else {
                             LOG.error("Termination point should be a Network type");
                         }
@@ -372,7 +375,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder()
                     .withKey(new NodeInterfaceKey(nodeId))
                     .setNodeId(nodeId);
-            if (isOpenConfig.get()) {
+            if (isOpenConfig) {
                 nodeInterfaceBuilder.setPortId(portIds);
             } else {
                 nodeInterfaceBuilder.setConnectionId(createdConnections)
@@ -383,7 +386,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             NodeInterface nodeInterface = nodeInterfaceBuilder.build();
             nodeInterfaces.put(nodeInterface.key(), nodeInterface);
-
         }));
         try {
             forkJoinTask.get();
@@ -401,9 +403,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         forkJoinPool.shutdown();
 
         if (success.get()) {
-            String message = isOpenConfig.get()
-                    ? "Components configured successfully for nodes: "
-                    : "Interfaces created successfully for nodes: ";
+            String message = "Successfully configured nodes: ";
             results.add(message + String.join(", ", nodesProvisioned));
             LOG.info("Setup service path successful. {} {}", message, nodesProvisioned);
         }
@@ -446,7 +446,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (input.getNodes() != null) {
             nodes.addAll(input.getNodes());
         }
-        AtomicBoolean isOpenConfig = new AtomicBoolean(false);
         AtomicBoolean success = new AtomicBoolean(true);
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
         CopyOnWriteArrayList<LinkTp> otnLinkTps = new CopyOnWriteArrayList<>();
@@ -467,15 +466,19 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 return;
                 //TODO should deletion end here?
             }
+            boolean isOpenConfig = false;
             // if the node is currently mounted then proceed.
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905
                     .network.Nodes mappingNode = portMapping.getNode(nodeId);
             if (mappingNode != null && mappingNode.getDatamodelType() != null
                     && mappingNode.getDatamodelType().getName().equals("OPENCONFIG")) {
-                isOpenConfig.set(true);
+                isOpenConfig = true;
             }
-            if (isOpenConfig.get()) {
+            if (isOpenConfig) {
                 String destTp = node.getDestTp();
+                if (node.getSrcTp() == null) {
+                    otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
+                }
                 if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                     LOG.info("Configuring Admin state Disabled for node {} and dest {}", nodeId, destTp);
                     Set<String> portIds = null;
@@ -531,10 +534,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.error("Alarm suppresion node removal failed!!!!");
         }
         ServicePathOutputBuilder builder = new ServicePathOutputBuilder();
+        builder.setLinkTp(otnLinkTps);
         builder.setSuccess(success.get());
-        if (!isOpenConfig.get()) {
-            builder.setLinkTp(otnLinkTps);
-        }
         builder.setResult(
                 results.isEmpty()
                         ? "Request processed"
