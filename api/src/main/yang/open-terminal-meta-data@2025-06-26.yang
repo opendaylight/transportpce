@@ -2,9 +2,6 @@ module open-terminal-meta-data {
   yang-version 1;
   namespace "http://org/opendaylight/transportpce/open-terminal-meta-data";
   prefix "otmd";
-
-  import openconfig-transport-types { prefix oc-opt-types; }
-
   organization
     "transportPCE";
   contact
@@ -16,7 +13,10 @@ module open-terminal-meta-data {
     controller needs about the NE and its capabilities.
     authors: Roshan Joyce ( roshan.joyce@fujitsu.com )
     Olivier Renais ( olivier.renais@orange.com )";
-
+  revision 2025-06-26 {
+    description
+      "removed transport types and updated to simple types";
+  }
   revision 2024-01-24 {
     description
       "Initial version";
@@ -88,9 +88,7 @@ module open-terminal-meta-data {
             }
 
             leaf interface-type {
-              type identityref {
-                base oc-opt-types:TRIBUTARY_PROTOCOL_TYPE;
-              }
+              type string;
               description
                 "The type of the interface in this position.";
             }
@@ -147,9 +145,7 @@ module open-terminal-meta-data {
           }
 
           leaf type {
-            type identityref {
-              base oc-opt-types:OPTICAL_PORT_TYPE;
-            }
+            type string;
             description
               "The type of this port.";
           }
@@ -188,8 +184,21 @@ module open-terminal-meta-data {
             leaf nbl-id {
               type uint8;
             }
+          leaf interconnect-bandwidth-unit {
+            type uint32;
+            description
+              "Switch fabric interconnect bandwidth unit rate in bits per second.
+              Represents granularity of switch fabric";
+          }
+          leaf interconnect-bandwidth {
+            type uint32;
+            description
+              "Total interconnect bandwidth for a non-blocking element expressed as
+              number of inter-connect-bandwidth units : corresponds to capable-
+              inter-connect bandwidth";
+          }
 
-            leaf-list connectable-port {
+           leaf-list connectable-port {
               type leafref {
                 path "../../../supported-port/id";
               }

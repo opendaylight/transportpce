@@ -131,7 +131,7 @@ class TestTransportPCERendererRegenMode(unittest.TestCase):
                 "higher-spectral-slot-number": 595,
             })
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.assertIn("Interfaces created successfully for nodes: ", response["output"]["result"])
+        self.assertIn("Successfully configured nodes: ", response["output"]["result"])
 
         self.assertEqual(
             {"node-id": "XPDR-A2",

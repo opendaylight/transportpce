@@ -90,6 +90,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                 'openconfig-info': {
                     'supported-optical-channels': ['cfp2-opt-1-1']
                 },
+                'supported-operational-mode': ['4308'],
                 'supporting-circuit-pack-name': 'cfp2-transceiver-1',
                 'lcp-hash-val': 'AOVxBCXPOzbw',
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
@@ -112,6 +113,7 @@ class TestTransportPCEPortmapping(unittest.TestCase):
                 'supported-optical-channels': ['qsfp-opt-1-1', 'qsfp-opt-1-2', 'qsfp-opt-1-3', 'qsfp-opt-1-4'],
                 'supported-interfaces': ['logical-channel-23300101', 'logical-channel-24300101']
             },
+            'supported-operational-mode': ['4308'],
             'supporting-circuit-pack-name': 'qsfp-transceiver-1',
             'lcp-hash-val': 'ALoMFfw9DapP',
             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
@@ -135,7 +137,11 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         response_sorted = [
             test_utils.recursive_sort(item) for item in response['switching-pool-lcp'][0]['non-blocking-list']
         ]
-        expected_sorted = {'nbl-number': 2, 'lcp-list': ['XPDR1-CLIENT2', 'XPDR1-NETWORK5']}
+        expected_sorted = {
+            'nbl-number': 2,
+            'interconnect-bandwidth': 100,
+            'interconnect-bandwidth-unit': 1000000000,
+            'lcp-list': ['XPDR1-CLIENT2', 'XPDR1-NETWORK5']}
         self.assertIn(expected_sorted, response_sorted)
 
     def test_09_check_mccapprofile(self):

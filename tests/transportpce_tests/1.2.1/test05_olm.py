@@ -235,7 +235,7 @@ class TestTransportOlm(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         time.sleep(10)
 
     def test_18_servicePath_create_ZToA(self):
@@ -263,7 +263,7 @@ class TestTransportOlm(unittest.TestCase):
                 'higher-spectral-slot-number': 768
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes: ', response['output']['result'])
+        self.assertIn('Successfully configured nodes: ', response['output']['result'])
         time.sleep(10)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
@@ -520,7 +520,7 @@ class TestTransportOlm(unittest.TestCase):
                 'higher-spectral-slot-number': 760
             })
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Interfaces created successfully for nodes', response['output']['result'])
+        self.assertIn('Successfully configured nodes:', response['output']['result'])
         time.sleep(10)
 
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):

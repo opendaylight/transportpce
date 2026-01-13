@@ -1126,16 +1126,24 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             String tp = linkTp.getTpId();
             String nodeId = new StringBuilder(linkTp.getNodeId()).append("-")
                 .append(tp.split("-")[0]).toString();
-            Link slink = odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue()
-                .equals(nodeId) && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst().orElseThrow();
-            if (!links.contains(slink)) {
-                links.add(slink);
-            }
-            Link dlink = odu4links.stream().filter(lk -> lk.getDestination().getDestNode().getValue()
-                .equals(nodeId) && lk.getDestination().getDestTp().getValue().equals(tp)).findFirst().orElseThrow();
-            if (!links.contains(dlink)) {
-                links.add(dlink);
-            }
+            odu4links.stream().filter(lk -> lk.getSource().getSourceNode().getValue().equals(nodeId)
+                            && lk.getSource().getSourceTp().getValue().equals(tp)).findFirst()
+                    .ifPresent(lk -> {
+                        if (!links.contains(lk)) {
+                            links.add(lk);
+                        }
+                    });
+
+            odu4links.stream()
+                    .filter(lk -> lk.getDestination().getDestNode().getValue().equals(nodeId)
+                            && lk.getDestination().getDestTp().getValue().equals(tp))
+                    .findFirst()
+                    .ifPresent(lk -> {
+                        if (!links.contains(lk)) {
+                            links.add(lk);
+                        }
+                    });
+
         }
         LOG.debug("odu4oduC4links = {}", links);
         return links;

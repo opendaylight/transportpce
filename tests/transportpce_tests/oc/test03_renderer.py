@@ -84,6 +84,7 @@ class TestTransportPCERenderer(unittest.TestCase):
                 'openconfig-info': {
                     'supported-optical-channels': ['cfp2-opt-1-1']
                 },
+                'supported-operational-mode': ['4308'],
                 'supporting-circuit-pack-name': 'cfp2-transceiver-1',
                 'lcp-hash-val': 'AOVxBCXPOzbw',
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
@@ -101,13 +102,12 @@ class TestTransportPCERenderer(unittest.TestCase):
                 'operation': 'create',
                 'aend-operational-mode': 4308,
                 'zend-operational-mode': 4308,
-                'target-output-power': 0,
                 'center-freq': 194.1,
                 'nodes': [{'node-id': 'XPDR-OC', 'dest-tp': 'XPDR1-NETWORK5'}]
             }
         )
         self.assertEqual(response['status_code'], requests.codes.ok)
-        self.assertIn('Components configured successfully for nodes: XPDR-OC', response['output']['result'])
+        self.assertIn('Successfully configured nodes: XPDR-OC', response['output']['result'])
         self.assertTrue(response['output']['success'])
         self.assertIn({'node-id': 'XPDR-OC', 'port-id': ['line-cfp2-1']},
                       response['output']['node-interface'])
@@ -118,7 +118,6 @@ class TestTransportPCERenderer(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         optchannel = response['openconfig-terminal-device:optical-channel']
         expected_optchannel = {'frequency': '194100000',
-                               'target-output-power': '0.0',
                                'operational-mode': 4308
                                }
         self.assertDictEqual(
@@ -168,6 +167,7 @@ class TestTransportPCERenderer(unittest.TestCase):
                 'supported-optical-channels': ['qsfp-opt-1-1', 'qsfp-opt-1-2', 'qsfp-opt-1-3', 'qsfp-opt-1-4'],
                 'supported-interfaces': ['logical-channel-23300101', 'logical-channel-24300101']
             },
+            'supported-operational-mode': ['4308'],
             'supporting-circuit-pack-name': 'qsfp-transceiver-1',
             'lcp-hash-val': 'ALoMFfw9DapP',
             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
