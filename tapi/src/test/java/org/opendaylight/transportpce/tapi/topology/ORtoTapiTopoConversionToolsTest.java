@@ -25,6 +25,7 @@ import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.frequency.grid.Math;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
 import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev250110.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
@@ -66,7 +67,8 @@ class ORtoTapiTopoConversionToolsTest {
                         math
                 ),
                 new FrequencyRangeFactory(),
-                new TeraHertzFactory()
+                new TeraHertzFactory(),
+                new DefaultTapiSpectrumCapabilityPacFactory(new TeraHertzFactory())
         );
 
         byte[] availableFrequencyMap = new byte[96];
