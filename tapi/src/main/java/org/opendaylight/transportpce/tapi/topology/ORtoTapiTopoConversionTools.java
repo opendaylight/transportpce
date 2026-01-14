@@ -40,6 +40,8 @@ import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.frequency.range.RangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.SortedRange;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.TapiSpectrumCapabilityPacFactory;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengths;
@@ -203,6 +205,7 @@ public class ORtoTapiTopoConversionTools {
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
     private final RangeFactory rangeFactory;
     private final Factory frequencyFactory;
+    private final TapiSpectrumCapabilityPacFactory tapiSpectrumCapabilityPacFactory;
 
     static {
         OPMODE_LOOPRATE_MAP = new TreeMap<>(Comparator.reverseOrder());
@@ -291,7 +294,8 @@ public class ORtoTapiTopoConversionTools {
                         new FrequencyMath()
                 ),
                 new FrequencyRangeFactory(),
-                new TeraHertzFactory()
+                new TeraHertzFactory(),
+                new DefaultTapiSpectrumCapabilityPacFactory(new TeraHertzFactory())
         );
     }
 
@@ -300,10 +304,10 @@ public class ORtoTapiTopoConversionTools {
      * @param tapiTopoUuid Uuid of the generated topology used in Builders.
      * @param numericFrequency NumericFrequency instance facilitating the management of the flex grid.
      * @param rangeFactory Simplifies creation of frequency ranges.
-     * @param frequencyFactory Simplifies creation of Frequency objects.
+     * @param tapiSpectrumCapabilityPacFactory Simplifies creation of Spectrum Capability.
      */
     public ORtoTapiTopoConversionTools(Uuid tapiTopoUuid, Numeric numericFrequency, RangeFactory rangeFactory,
-            Factory frequencyFactory) {
+            Factory frequencyFactory, TapiSpectrumCapabilityPacFactory tapiSpectrumCapabilityPacFactory) {
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new HashMap<>();
         this.tapiLinks = new HashMap<>();
@@ -314,6 +318,7 @@ public class ORtoTapiTopoConversionTools {
         this.numericFrequency = numericFrequency;
         this.rangeFactory = rangeFactory;
         this.frequencyFactory = frequencyFactory;
+        this.tapiSpectrumCapabilityPacFactory = tapiSpectrumCapabilityPacFactory;
     }
 
     /**
@@ -1565,81 +1570,7 @@ public class ORtoTapiTopoConversionTools {
             Map<Frequency, Frequency> usedFreqMap,
             Map<Frequency, Frequency> availableFreqMap) {
 
-        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-        // If neither used nor available is present -> set default available spectrum
-        if ((usedFreqMap == null || usedFreqMap.isEmpty())
-                && (availableFreqMap == null || availableFreqMap.isEmpty())) {
-
-            AvailableSpectrum defaultAvailable = new AvailableSpectrumBuilder()
-                    .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
-                    .setUpperFrequency(frequencyFactory.frequency(
-                            GridConstant.START_EDGE_FREQUENCY_THZ,
-                            GridConstant.GRANULARITY,
-                            GridConstant.EFFECTIVE_BITS).hertz())
-                    .build();
-
-            spectrumPac.setAvailableSpectrum(Map.of(
-                    new AvailableSpectrumKey(
-                            defaultAvailable.getLowerFrequency(),
-                            defaultAvailable.getUpperFrequency()),
-                    defaultAvailable
-            ));
-        } else {
-            if (availableFreqMap != null && !availableFreqMap.isEmpty()) {
-                spectrumPac.setAvailableSpectrum(toAvailableSpectrumMap(availableFreqMap));
-            }
-            if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
-                spectrumPac.setOccupiedSpectrum(toOccupiedSpectrumMap(usedFreqMap));
-            }
-        }
-
-        // Always set supportable spectrum (same as before)
-        SupportableSpectrum supportable = new SupportableSpectrumBuilder()
-                .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
-                .setUpperFrequency(frequencyFactory.frequency(
-                        GridConstant.START_EDGE_FREQUENCY_THZ,
-                        GridConstant.GRANULARITY,
-                        GridConstant.EFFECTIVE_BITS).hertz())
-                .build();
-
-        spectrumPac.setSupportableSpectrum(Map.of(
-                new SupportableSpectrumKey(
-                        supportable.getLowerFrequency(),
-                        supportable.getUpperFrequency()),
-                supportable
-        ));
-
-        return spectrumPac.build();
-    }
-
-    private static Map<AvailableSpectrumKey, AvailableSpectrum> toAvailableSpectrumMap(
-            Map<Frequency, Frequency> availableFreqMap) {
-
-        Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
-        for (Map.Entry<Frequency, Frequency> e : availableFreqMap.entrySet()) {
-            AvailableSpectrum aspec = new AvailableSpectrumBuilder()
-                    .setLowerFrequency(e.getKey().hertz())
-                    .setUpperFrequency(e.getValue().hertz())
-                    .build();
-
-            aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(), aspec.getUpperFrequency()), aspec);
-        }
-        return aspecMap;
-    }
-
-    private static Map<OccupiedSpectrumKey, OccupiedSpectrum> toOccupiedSpectrumMap(
-            Map<Frequency, Frequency> usedFreqMap) {
-
-        Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
-        for (Map.Entry<Frequency, Frequency> e : usedFreqMap.entrySet()) {
-            OccupiedSpectrum ospec = new OccupiedSpectrumBuilder()
-                    .setLowerFrequency(e.getKey().hertz())
-                    .setUpperFrequency(e.getValue().hertz())
-                    .build();
-
-            ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec);
-        }
-        return ospecMap;
+        return  tapiSpectrumCapabilityPacFactory.create(usedFreqMap, availableFreqMap);
     }
 
     /**
