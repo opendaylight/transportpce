@@ -116,6 +116,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpec;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.PhotonicMediaNodeEdgePointSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.context.topology.context.topology.node.owned.node.edge.point.cep.list.connection.end.point.OtsMediaConnectionEndPointSpec;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPac;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.photonic.media.node.edge.point.spec.SpectrumCapabilityPacBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrum;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.spectrum.capability.pac.AvailableSpectrumBuilder;
@@ -1529,79 +1530,116 @@ public class ORtoTapiTopoConversionTools {
     public OwnedNodeEdgePointBuilder addPhotSpecToRoadmOnep(String nodeId,
             Map<Frequency, Frequency> usedFreqMap, Map<Frequency, Frequency> availableFreqMap,
             OwnedNodeEdgePointBuilder onepBldr, String keyword) {
-        LOG.debug("Entering Add PhotSpec to Roadm, ConvertToTopology LINE 1050 , availfreqmap is {} Used FreqMap {}",
-            availableFreqMap, usedFreqMap);
-        if (String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS).equals(keyword)
-                || String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OMS).equals(keyword)) {
-            // Creating OTS/OMS NEP specific attributes
-            SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
-            if ((usedFreqMap == null || usedFreqMap.isEmpty())
-                    && (availableFreqMap == null || availableFreqMap.isEmpty())) {
-                AvailableSpectrum  aspec = new AvailableSpectrumBuilder()
+
+        LOG.debug("Entering Add PhotSpec to Roadm, availfreqmap is {} Used FreqMap {}",
+                availableFreqMap, usedFreqMap);
+
+        boolean isOtsOrOms = String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OTS).equals(keyword)
+                || String.join("+", nodeId, TapiConstants.PHTNC_MEDIA_OMS).equals(keyword);
+
+        if (!isOtsOrOms) {
+            return onepBldr;
+        }
+
+        SpectrumCapabilityPac spectrumCapabilityPac = buildSpectrumCapabilityPac(usedFreqMap, availableFreqMap);
+
+        PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
+                .setSpectrumCapabilityPac(spectrumCapabilityPac)
+                .build();
+
+        var onep1 = new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
+                .OwnedNodeEdgePoint1Builder()
+                .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
+                .build();
+
+        onepBldr.addAugmentation(onep1);
+
+        LOG.debug("Added photonic NEP spec to {}. availableSpectrum={}",
+                onepBldr.getName(),
+                spectrumCapabilityPac.getAvailableSpectrum());
+
+        return onepBldr;
+    }
+
+    private SpectrumCapabilityPac buildSpectrumCapabilityPac(
+            Map<Frequency, Frequency> usedFreqMap,
+            Map<Frequency, Frequency> availableFreqMap) {
+
+        SpectrumCapabilityPacBuilder spectrumPac = new SpectrumCapabilityPacBuilder();
+        // If neither used nor available is present -> set default available spectrum
+        if ((usedFreqMap == null || usedFreqMap.isEmpty())
+                && (availableFreqMap == null || availableFreqMap.isEmpty())) {
+
+            AvailableSpectrum defaultAvailable = new AvailableSpectrumBuilder()
                     .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
-                    .setUpperFrequency(
-                            frequencyFactory.frequency(
-                                    GridConstant.START_EDGE_FREQUENCY_THZ,
-                                    GridConstant.GRANULARITY,
-                                    GridConstant.EFFECTIVE_BITS).hertz()
-                    ).build();
-                Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
-                aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
-                    aspec.getUpperFrequency()), aspec);
-                spectrumPac.setAvailableSpectrum(aspecMap);
-            } else {
-                if (availableFreqMap != null && !availableFreqMap.isEmpty()) {
-                    Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
-                    AvailableSpectrumBuilder  aspecBd = new AvailableSpectrumBuilder();
-                    for (Map.Entry<Frequency, Frequency> frequency : availableFreqMap.entrySet()) {
-                        aspecBd
-                            .setLowerFrequency(frequency.getKey().hertz())
-                            .setUpperFrequency(frequency.getValue().hertz());
-                        AvailableSpectrum aspec = aspecBd.build();
-                        aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(),
-                            aspec.getUpperFrequency()), aspec);
-                    }
-                    spectrumPac.setAvailableSpectrum(aspecMap);
-                }
-                if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
-                    Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
-                    OccupiedSpectrumBuilder ospecBd = new OccupiedSpectrumBuilder();
-                    for (Map.Entry<Frequency, Frequency> frequency : usedFreqMap.entrySet()) {
-                        ospecBd
-                            .setLowerFrequency(frequency.getKey().hertz())
-                            .setUpperFrequency(frequency.getValue().hertz());
-                        OccupiedSpectrum ospec = ospecBd.build();
-                        ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(),
-                            ospec.getUpperFrequency()), ospec);
-                    }
-                    spectrumPac.setOccupiedSpectrum(ospecMap);
-                }
+                    .setUpperFrequency(frequencyFactory.frequency(
+                            GridConstant.START_EDGE_FREQUENCY_THZ,
+                            GridConstant.GRANULARITY,
+                            GridConstant.EFFECTIVE_BITS).hertz())
+                    .build();
+
+            spectrumPac.setAvailableSpectrum(Map.of(
+                    new AvailableSpectrumKey(
+                            defaultAvailable.getLowerFrequency(),
+                            defaultAvailable.getUpperFrequency()),
+                    defaultAvailable
+            ));
+        } else {
+            if (availableFreqMap != null && !availableFreqMap.isEmpty()) {
+                spectrumPac.setAvailableSpectrum(toAvailableSpectrumMap(availableFreqMap));
             }
-            SupportableSpectrum  sspec = new SupportableSpectrumBuilder()
+            if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
+                spectrumPac.setOccupiedSpectrum(toOccupiedSpectrumMap(usedFreqMap));
+            }
+        }
+
+        // Always set supportable spectrum (same as before)
+        SupportableSpectrum supportable = new SupportableSpectrumBuilder()
                 .setLowerFrequency(new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ).hertz())
                 .setUpperFrequency(frequencyFactory.frequency(
                         GridConstant.START_EDGE_FREQUENCY_THZ,
                         GridConstant.GRANULARITY,
-                        GridConstant.EFFECTIVE_BITS).hertz()
-                ).build();
-            Map<SupportableSpectrumKey, SupportableSpectrum> sspecMap = new HashMap<>();
-            sspecMap.put(new SupportableSpectrumKey(sspec.getLowerFrequency(),
-                sspec.getUpperFrequency()), sspec);
-            spectrumPac.setSupportableSpectrum(sspecMap);
-            PhotonicMediaNodeEdgePointSpec pnepSpec = new PhotonicMediaNodeEdgePointSpecBuilder()
-                .setSpectrumCapabilityPac(spectrumPac.build())
+                        GridConstant.EFFECTIVE_BITS).hertz())
                 .build();
-            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121.OwnedNodeEdgePoint1 onep1 =
-                new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev221121
-                        .OwnedNodeEdgePoint1Builder()
-                    .setPhotonicMediaNodeEdgePointSpec(pnepSpec)
+
+        spectrumPac.setSupportableSpectrum(Map.of(
+                new SupportableSpectrumKey(
+                        supportable.getLowerFrequency(),
+                        supportable.getUpperFrequency()),
+                supportable
+        ));
+
+        return spectrumPac.build();
+    }
+
+    private static Map<AvailableSpectrumKey, AvailableSpectrum> toAvailableSpectrumMap(
+            Map<Frequency, Frequency> availableFreqMap) {
+
+        Map<AvailableSpectrumKey, AvailableSpectrum> aspecMap = new HashMap<>();
+        for (Map.Entry<Frequency, Frequency> e : availableFreqMap.entrySet()) {
+            AvailableSpectrum aspec = new AvailableSpectrumBuilder()
+                    .setLowerFrequency(e.getKey().hertz())
+                    .setUpperFrequency(e.getValue().hertz())
                     .build();
-            onepBldr.addAugmentation(onep1);
-            LOG.debug("Add Photonic Node Edge point Spec to {} including available Spectrum {} = ",
-                onepBldr.getName(),
-                onep1.getPhotonicMediaNodeEdgePointSpec().getSpectrumCapabilityPac().getAvailableSpectrum());
+
+            aspecMap.put(new AvailableSpectrumKey(aspec.getLowerFrequency(), aspec.getUpperFrequency()), aspec);
         }
-        return onepBldr;
+        return aspecMap;
+    }
+
+    private static Map<OccupiedSpectrumKey, OccupiedSpectrum> toOccupiedSpectrumMap(
+            Map<Frequency, Frequency> usedFreqMap) {
+
+        Map<OccupiedSpectrumKey, OccupiedSpectrum> ospecMap = new HashMap<>();
+        for (Map.Entry<Frequency, Frequency> e : usedFreqMap.entrySet()) {
+            OccupiedSpectrum ospec = new OccupiedSpectrumBuilder()
+                    .setLowerFrequency(e.getKey().hertz())
+                    .setUpperFrequency(e.getValue().hertz())
+                    .build();
+
+            ospecMap.put(new OccupiedSpectrumKey(ospec.getLowerFrequency(), ospec.getUpperFrequency()), ospec);
+        }
+        return ospecMap;
     }
 
     /**
