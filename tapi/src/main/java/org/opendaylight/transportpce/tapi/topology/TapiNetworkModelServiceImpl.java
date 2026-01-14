@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
@@ -37,6 +36,8 @@ import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
@@ -60,12 +61,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.x
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev250110.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev250110.xpdr.mode.attributes.supported.operational.modes.OperationalModeKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.AdministrativeState;
@@ -200,6 +196,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<ServiceInterfacePointKey, ServiceInterfacePoint> sipMap = new HashMap<>();
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
+    private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
 
     @Activate
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -212,6 +209,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.tapiFactory = new ORtoTapiTopoConversionTools(tapiTopoUuid);
         this.tapiLink = tapiLink;
         this.srgOtsCepMap = new HashMap<>();
+        openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
 
     }
 
@@ -2361,36 +2359,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint getNetworkTerminationPointFromDatastore(String nodeId, String tpId) {
-        DataObjectIdentifier<TerminationPoint> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.Node.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.NodeKey(new NodeId(nodeId)))
-            .augmentation(Node1.class)
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPoint.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPointKey(new TpId(tpId)))
-            .build();
-        try {
-            Optional<TerminationPoint> tpOptional =
-                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
-            if (tpOptional.isEmpty()) {
-                LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);
-                return null;
-            }
-            LOG.debug("TNMSI:getNetworkTerminationPointFromDatastore : SUCCES getting LCP TP for NodeId {} TpId {} "
-                + "while creating NEP in TapiNetworkModelServiceImpl", nodeId, tpId);
-            LOG.debug("TNMSI:getNetworkTerminationPointFromDatastore: Tp in Datastore is as follows {}", tpOptional);
-            return tpOptional.orElseThrow();
-        } catch (ExecutionException | InterruptedException e) {
-            LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
-            return null;
-        }
+        return openRoadmTerminationPointReader
+                .readTerminationPoint(new TopologyNodeId(nodeId), new TpId(tpId))
+                .orElse(null);
     }
 
     /**
@@ -2400,75 +2371,13 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @return network termination point, null otherwise
      */
     private TerminationPoint1 getNetworkTerminationPoint1FromDatastore(TopologyNodeId nodeId, String tpId) {
-        DataObjectIdentifier<TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.Node.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.NodeKey(new NodeId(nodeId.toString())))
-            .augmentation(Node1.class)
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPoint.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPointKey(new TpId(tpId)))
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110
-                .TerminationPoint1.class)
-            .build();
-        try {
-            Optional<TerminationPoint1> tpOptional =
-                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
-            if (tpOptional.isEmpty()) {
-                LOG.debug("readMdSal: Error reading tp {} , empty list",tpIID);
-                return null;
-            }
-            LOG.debug("TNMSI:getNetworkTerminationPoint1FromDatastore : SUCCESs getting LCP TP1 for NodeId {} TpId {} "
-                + "while creating NEP in TapiNetworkModelServiceImpl", nodeId, tpId);
-            LOG.debug("TNMSI:getNetworkTerminationPoint1FromDatastore: Tp in Datastore is as follows {}", tpOptional);
-            return tpOptional.orElseThrow();
-        } catch (ExecutionException | InterruptedException e) {
-            LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
-            return null;
-        }
+        return openRoadmTerminationPointReader.readCommonTerminationPoint1(nodeId, tpId).orElse(null);
     }
 
     private org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
             .TerminationPoint1 getNetworkTerminationPoint11FromDatastore(TopologyNodeId nodeId, String tpId) {
-        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
-                .TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.Node.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
-                    .networks.network.NodeKey(new NodeId(nodeId.toString())))
-            .augmentation(Node1.class)
-            .child(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPoint.class,
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
-                    .networks.network.node.TerminationPointKey(new TpId(tpId)))
-            .augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1.class)
-            .build();
-        try {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1>
-                tpOptional = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID).get();
-            if (tpOptional.isEmpty()) {
-                LOG.debug("TNMSI:getNetworkTerminationPoint11FromDatastore:readMdSal: Error reading tp {} , empty list",
-                    tpIID);
-                return null;
-            }
-            LOG.debug("TNMSI:getNetworkTerminationPoint11FromDatastore : SUCCESS getting LCP TP11 for NodeId {} TpId {}"
-                + " while creating NEP, The Tp in Datastore is as follows {}", nodeId, tpId, tpOptional);
-            return tpOptional.orElseThrow();
-        } catch (ExecutionException | InterruptedException e) {
-            LOG.warn("Exception while getting termination {} for node id {} point from {} topology",
-                    tpId, nodeId, StringConstants.OPENROADM_TOPOLOGY, e);
-            return null;
-        }
+
+        return openRoadmTerminationPointReader.readTopologyTerminationPoint1(nodeId, tpId).orElse(null);
     }
 
 }
