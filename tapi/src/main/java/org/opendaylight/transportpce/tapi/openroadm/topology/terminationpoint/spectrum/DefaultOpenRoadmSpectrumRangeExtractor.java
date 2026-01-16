@@ -8,9 +8,7 @@
 
 package org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -58,6 +56,8 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
 
     private final RangeFactory rangeFactory;
 
+    private static final AvailFreqMapsKey C_BAND_KEY = new AvailFreqMapsKey(GridConstant.C_BAND);
+
     /**
      * Creates a spectrum range extractor.
      *
@@ -81,36 +81,28 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
 
     @Override
     public Map<Frequency, Frequency> getPP11UsedFrequencies(TerminationPoint1 tp) {
-        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
-
-        Map<Double, Double> usedRanges = usedRanges(getPpAvailableFreqMaps(tp, cband));
+        Map<Double, Double> usedRanges = usedRanges(getPpAvailableFreqMaps(tp, C_BAND_KEY));
         return new SortedRange(usedRanges).ranges();
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<Frequency, Frequency> getPP11AvailableFrequencies(TerminationPoint1 tp) {
-        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
-
-        Map<Double, Double> availableRanges = availableRanges(getPpAvailableFreqMaps(tp, cband));
+        Map<Double, Double> availableRanges = availableRanges(getPpAvailableFreqMaps(tp, C_BAND_KEY));
         return new SortedRange(availableRanges).ranges();
     }
 
     /** {@inheritDoc} */
     @Override
     public Range getTTP11UsedFreqMap(TerminationPoint1 tp) {
-        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
-
-        Map<Double, Double> usedRanges = usedRanges(getTxTtpAvailableFreqMaps(tp, cband));
+        Map<Double, Double> usedRanges = usedRanges(getTxTtpAvailableFreqMaps(tp, C_BAND_KEY));
         return new SortedRange(usedRanges);
     }
 
     /** {@inheritDoc} */
     @Override
     public Range getTTP11AvailableFreqMap(TerminationPoint1 tp) {
-        AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
-
-        Map<Double, Double> availableRanges = availableRanges(getTxTtpAvailableFreqMaps(tp, cband));
+        Map<Double, Double> availableRanges = availableRanges(getTxTtpAvailableFreqMaps(tp, C_BAND_KEY));
         return new SortedRange(availableRanges);
     }
 
@@ -121,8 +113,7 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
                 .TerminationPoint1.class);
 
         if (!hasTxTtpUsedWavelengths(termPoint1)) {
-            AvailFreqMapsKey cband = new AvailFreqMapsKey(GridConstant.C_BAND);
-            AvailFreqMaps availFreqMaps = getTxTtpAvailableFreqMaps(termPoint1, cband);
+            AvailFreqMaps availFreqMaps = getTxTtpAvailableFreqMaps(termPoint1, C_BAND_KEY);
             Map<Double, Double> usedRanges = usedRanges(availFreqMaps);
             return new SortedRange(usedRanges);
         }
@@ -141,23 +132,23 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
     public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
         var tpAug = tp.augmentation(TerminationPoint1.class);
         if (tpAug == null) {
-            return new HashMap<>();
+            return Map.of();
         }
         XpdrNetworkAttributes xnatt = tpAug.getXpdrNetworkAttributes();
         if (xnatt == null) {
-            return new HashMap<>();
+            return Map.of();
         }
         var xnattWvlgth = xnatt.getWavelength();
         if (xnattWvlgth == null) {
-            return new HashMap<>();
+            return Map.of();
         }
         var freq = xnattWvlgth.getFrequency();
         if (freq == null) {
-            return new HashMap<>();
+            return Map.of();
         }
         var width = xnattWvlgth.getWidth();
         if (width == null) {
-            return new HashMap<>();
+            return Map.of();
         }
         Double centerFrequencyTHz = freq.getValue().doubleValue();
         Double widthGHz = width.getValue().doubleValue();
@@ -319,8 +310,7 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
      *
      * @return an empty {@link AvailFreqMaps}
      */
-    @VisibleForTesting
-    public AvailFreqMaps emptyFreqMap() {
+    private static AvailFreqMaps emptyFreqMap() {
         return new AvailFreqMapsBuilder()
                 .setFreqMap(new byte[0])
                 .setMapName("emptymap")
