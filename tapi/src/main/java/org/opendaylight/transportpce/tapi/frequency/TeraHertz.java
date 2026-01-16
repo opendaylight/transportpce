@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.tapi.frequency;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.opendaylight.yangtools.yang.common.Uint64;
@@ -51,7 +52,9 @@ public class TeraHertz implements Frequency {
 
     @Override
     public Uint64 hertz() {
-        return Uint64.valueOf(frequencyInTHz.multiply(BigDecimal.valueOf(1e12)).toBigInteger());
+        return Uint64.valueOf(frequencyInTHz.multiply(BigDecimal.valueOf(1e12))
+                        .setScale(0, RoundingMode.HALF_UP)
+                        .toBigInteger());
     }
 
     @Override
