@@ -16,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.transportpce.tapi.frequency.Factory;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
@@ -25,6 +26,7 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 class SortedRangeTest {
 
     @Test
+    @DisplayName("add(): returns true for a valid Frequency range")
     void addValidRangeReturnTrue() {
         Frequency lowerFrequency = new TeraHertz(191.35);
         Frequency upperFrequency = new TeraHertz(191.40);
@@ -34,7 +36,8 @@ class SortedRangeTest {
     }
 
     @Test
-    void addInValidRangeReturnFalse() {
+    @DisplayName("add(): throws InvalidFrequencyRangeException when lower > upper")
+    void addInValidRangeThrowsException() {
         Frequency lowerFrequency = new TeraHertz(191.40);
         Frequency upperFrequency = new TeraHertz(191.35);
         Range range = new SortedRange();
@@ -43,6 +46,7 @@ class SortedRangeTest {
     }
 
     @Test
+    @DisplayName("add(): returns true for a valid Double range")
     void addValidRangeInDoubleReturnTrue() {
         Range range = new SortedRange();
 
@@ -50,7 +54,8 @@ class SortedRangeTest {
     }
 
     @Test
-    void addNonOverlappingFrequencyRangeReturnTrue() {
+    @DisplayName("add(): merges adjacent ranges into one normalized range")
+    void addAdjacentRangesAreMerged() {
         Frequency lowerFrequency1 = new TeraHertz(191.35);
         Frequency upperFrequency1 = new TeraHertz(191.40);
 
@@ -65,11 +70,17 @@ class SortedRangeTest {
         assertTrue(range.add(lowerFrequency1, upperFrequency1));
         assertTrue(range.add(lowerFrequency2, upperFrequency2));
         assertTrue(range.add(lowerFrequency3, upperFrequency3));
+
+        Map<Frequency, Frequency> expected = Map.of(
+                new TeraHertz(191.30), new TeraHertz(191.50)
+        );
+        assertEquals(expected, range.ranges());
     }
 
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     @Test
-    void addOverlappingFrequencyRangeReturnFalse() {
+    @DisplayName("add(): merges overlapping ranges into one normalized range")
+    void addOverlappingRangesAreMerged() {
         Frequency lowerFrequency1 = new TeraHertz(191.35);
         Frequency upperFrequency1 = new TeraHertz(191.40);
 
@@ -79,22 +90,54 @@ class SortedRangeTest {
         Frequency lowerFrequency3 = new TeraHertz(191.34);
         Frequency upperFrequency3 = new TeraHertz(191.39);
 
-        Frequency lowerFrequency4 = new TeraHertz(191.34);
-        Frequency upperFrequency4 = new TeraHertz(191.41);
-
-        Frequency lowerFrequency5 = new TeraHertz(191.35);
-        Frequency upperFrequency5 = new TeraHertz(191.39);
+        Frequency lowerFrequency4 = new TeraHertz(191.35);
+        Frequency upperFrequency4 = new TeraHertz(191.39);
 
         Range range = new SortedRange();
 
         assertTrue(range.add(lowerFrequency1, upperFrequency1));
-        assertFalse(range.add(lowerFrequency2, upperFrequency2));
-        assertFalse(range.add(lowerFrequency3, upperFrequency3));
+        assertTrue(range.add(lowerFrequency2, upperFrequency2));
+        assertTrue(range.add(lowerFrequency3, upperFrequency3));
         assertFalse(range.add(lowerFrequency4, upperFrequency4));
-        assertFalse(range.add(lowerFrequency5, upperFrequency5));
+
+        Map<Frequency, Frequency> expected = Map.of(
+                new TeraHertz(191.34), new TeraHertz(191.41)
+        );
+        assertEquals(expected, range.ranges());
     }
 
     @Test
+    @DisplayName("add(): returns false when adding a range fully contained in an existing range")
+    void addContainedRangeReturnsFalse() {
+        Range range = new SortedRange();
+
+        Frequency lower = new TeraHertz(191.34);
+        Frequency upper = new TeraHertz(191.41);
+
+        Frequency containedLower = new TeraHertz(191.35);
+        Frequency containedUpper = new TeraHertz(191.39);
+
+        assertTrue(range.add(lower, upper));
+        assertFalse(range.add(containedLower, containedUpper));
+
+        Map<Frequency, Frequency> expected = Map.of(lower, upper);
+        assertEquals(expected, range.ranges());
+    }
+
+    @Test
+    @DisplayName("add(): returns false when adding an identical range twice")
+    void addExactSameRangeReturnsFalse() {
+        Range range = new SortedRange();
+
+        Frequency lower = new TeraHertz(191.35);
+        Frequency upper = new TeraHertz(191.40);
+
+        assertTrue(range.add(lower, upper));
+        assertFalse(range.add(lower, upper)); // exact duplicate -> no change
+    }
+
+    @Test
+    @DisplayName("add(center,width): adds range computed from Factory")
     void addRangeAsCenterFrequencyAndWidth() {
         Factory factory = mock(Factory.class);
         when(factory.lower(191.35, 50.0)).thenReturn(new TeraHertz(191.325));
@@ -110,6 +153,7 @@ class SortedRangeTest {
     }
 
     @Test
+    @DisplayName("add(Range): adds all ranges from another Range")
     void addRange() {
         Range range1 = new SortedRange();
         range1.add(191.325, 191.375);
@@ -117,14 +161,16 @@ class SortedRangeTest {
         Range range2 = new SortedRange();
         range2.add(range1);
 
-        Map<Frequency, Frequency> expected = Map.of(new TeraHertz(191.325), new TeraHertz(191.375));
+        Map<Frequency, Frequency> expected = Map.of(
+                new TeraHertz(191.325), new TeraHertz(191.375)
+        );
 
         assertEquals(expected, range2.ranges());
     }
 
-
     @Test
-    void asTeraHertz() {
+    @DisplayName("asTeraHertz(): returns normalized merged ranges")
+    void asTeraHertzMergesAdjacentRanges() {
         Frequency lowerFrequency1 = new TeraHertz(191.35);
         Frequency upperFrequency1 = new TeraHertz(191.40);
 
@@ -139,13 +185,14 @@ class SortedRangeTest {
         range.add(lowerFrequency2, upperFrequency2);
         range.add(lowerFrequency3, upperFrequency3);
 
-        Map<Double, Double> expected = Map.of(191.30, 191.35,191.35, 191.40, 191.40, 191.50);
+        Map<Double, Double> expected = Map.of(191.30, 191.50);
 
         assertEquals(expected, range.asTeraHertz());
     }
 
     @Test
-    void asHertz() {
+    @DisplayName("asHertz(): returns normalized merged ranges")
+    void asHertzMergesAdjacentRanges() {
         Frequency lowerFrequency1 = new TeraHertz(191.35);
         Frequency upperFrequency1 = new TeraHertz(191.40);
 
@@ -161,12 +208,9 @@ class SortedRangeTest {
         range.add(lowerFrequency3, upperFrequency3);
 
         Map<Uint64, Uint64> expected = Map.of(
-                Uint64.valueOf(191300000000000L), Uint64.valueOf(191350000000000L),
-                Uint64.valueOf(191350000000000L), Uint64.valueOf(191400000000000L),
-                Uint64.valueOf(191400000000000L), Uint64.valueOf(191500000000000L)
+                Uint64.valueOf(191300000000000L), Uint64.valueOf(191500000000000L)
         );
 
         assertEquals(expected, range.asHertz());
     }
-
 }

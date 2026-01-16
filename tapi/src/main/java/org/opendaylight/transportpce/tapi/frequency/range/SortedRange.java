@@ -9,8 +9,8 @@
 package org.opendaylight.transportpce.tapi.frequency.range;
 
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.tapi.frequency.Factory;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
@@ -22,17 +22,14 @@ import org.opendaylight.yangtools.yang.common.Uint64;
  * This implementation does not allow overlapping ranges or a range where
  * the lower frequency is greater than the upper frequency.
  *
- * <p>The frequency ranges are treated as exclusive, i.e. the lower and upper frequency is not included in the range.
- * These ranges are therefore treated as valid:
+ * <p>Ranges are stored in a normalized form: any overlapping or adjacent ranges are merged.
+ * For example, adding these will result in one single stored range:
  *    191.35 - 191.45
  *    191.45 - 191.55
- * These ranges will not be added, given the existing range 191.35 - 191.45:
- *    191.35 - 191.45
- *    191.35 - 191.39
  */
 public class SortedRange implements Range {
 
-    private final SortedMap<Frequency, Frequency> frequencyRanges = new TreeMap<>();
+    private final NavigableMap<Frequency, Frequency> frequencyRanges = new TreeMap<>();
 
     public SortedRange() {
     }
@@ -44,30 +41,56 @@ public class SortedRange implements Range {
     }
 
     @Override
-    public boolean add(Frequency lowerExclusive, Frequency upperExclusive) {
+    public boolean add(Frequency lowerBound, Frequency upperBound) {
 
-        if (lowerExclusive.compareTo(upperExclusive) > 0) {
+        if (lowerBound.compareTo(upperBound) > 0) {
             throw new InvalidFrequencyRangeException(
-                    String.format("Invalid frequency range: %s > %s", lowerExclusive, upperExclusive));
+                    String.format("Invalid frequency range: %s > %s", lowerBound, upperBound));
         }
 
-        for (Map.Entry<Frequency, Frequency> range : frequencyRanges.entrySet()) {
-            if (range.getKey().compareTo(upperExclusive) >= 0) {
-                break;
-            }
-            if (range.getValue().compareTo(lowerExclusive) > 0) {
-                return false;
-            }
+        // If the exact same single range already exists, adding changes nothing.
+        Frequency exact = frequencyRanges.get(lowerBound);
+        if (exact != null && exact.compareTo(upperBound) == 0) {
+            return false;
         }
 
-        frequencyRanges.put(lowerExclusive, upperExclusive);
+        Map.Entry<Frequency, Frequency> covering = frequencyRanges.floorEntry(lowerBound);
+        if (covering != null && covering.getValue().compareTo(upperBound) >= 0) {
+            // New range is fully contained in an existing range -> no change.
+            return false;
+        }
+
+        Frequency mergedLower = lowerBound;
+        Frequency mergedUpper = upperBound;
+
+        // Merge with the previous range if it overlaps or touches [mergedLower, mergedUpper].
+        Map.Entry<Frequency, Frequency> floor = frequencyRanges.floorEntry(mergedLower);
+        if (floor != null && floor.getValue().compareTo(mergedLower) >= 0) { // touches/overlaps
+            mergedLower = floor.getKey();
+            if (floor.getValue().compareTo(mergedUpper) > 0) {
+                mergedUpper = floor.getValue();
+            }
+            frequencyRanges.remove(floor.getKey());
+        }
+
+        // Merge any following ranges that overlap or touch the merged interval.
+        Map.Entry<Frequency, Frequency> next = frequencyRanges.ceilingEntry(mergedLower);
+        while (next != null && next.getKey().compareTo(mergedUpper) <= 0) { // touches/overlaps
+            if (next.getValue().compareTo(mergedUpper) > 0) {
+                mergedUpper = next.getValue();
+            }
+            frequencyRanges.remove(next.getKey());
+            next = frequencyRanges.ceilingEntry(mergedLower);
+        }
+
+        frequencyRanges.put(mergedLower, mergedUpper);
 
         return true;
     }
 
     @Override
-    public boolean add(Double lower, Double upper) {
-        return this.add(new TeraHertz(lower), new TeraHertz(upper));
+    public boolean add(Double lowerBound, Double upperBound) {
+        return this.add(new TeraHertz(lowerBound), new TeraHertz(upperBound));
     }
 
     @Override
