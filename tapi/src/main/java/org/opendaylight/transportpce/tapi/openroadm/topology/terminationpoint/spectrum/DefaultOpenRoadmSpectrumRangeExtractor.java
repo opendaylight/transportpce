@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.tapi.frequency.grid.Numeric;
 import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.frequency.range.RangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.SortedRange;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengths;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
@@ -34,19 +35,19 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 /**
  * Default implementation of {@link OpenRoadmSpectrumRangeExtractor}.
  *
- * <p>Extracts spectrum ranges from OpenROADM termination points and converts them into
- * numeric frequency ranges expressed as either:
+ * <p>This extractor decodes OpenROADM spectrum information from termination points and returns
+ * normalized frequency intervals. Depending on TP type, spectrum is derived from:
  * <ul>
- *   <li>{@code Map<Frequency, Frequency>} (lowerExclusive -&gt; upperExclusive), or</li>
- *   <li>{@link Range} instances, depending on caller needs.</li>
+ *   <li>frequency bitmaps (AvailFreqMaps), decoded via {@link Numeric}</li>
+ *   <li>used-wavelength lists (center frequency + width)</li>
+ *   <li>XPDR wavelength attributes (center frequency + width)</li>
  * </ul>
  *
- * <p>OpenROADM represents spectrum availability/occupation in different ways depending on the
- * termination point type, e.g. via frequency bitmaps (AvailFreqMaps) or via used-wavelength lists.
- * This component encapsulates those details and provides uniform range outputs for the caller.
+ * <p>Returned intervals are normalized (e.g. overlapping/adjacent segments may be merged by
+ * the {@link Range} implementation in use).
  *
- * <p>When required data is absent (missing augmentations/attributes/maps), methods return empty
- * ranges/maps rather than throwing.
+ * <p>If required data is absent (missing augmentations/attributes/maps), this implementation
+ * returns empty results rather than throwing.
  */
 public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrumRangeExtractor {
 
@@ -80,110 +81,112 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
     }
 
     @Override
+    @Deprecated
     public Map<Frequency, Frequency> getPP11UsedFrequencies(TerminationPoint1 tp) {
-        Map<Double, Double> usedRanges = usedRanges(getPpAvailableFreqMaps(tp, C_BAND_KEY));
-        return new SortedRange(usedRanges).ranges();
+        return ppOccupied(tp).ranges();
     }
 
-    /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Map<Frequency, Frequency> getPP11AvailableFrequencies(TerminationPoint1 tp) {
-        Map<Double, Double> availableRanges = availableRanges(getPpAvailableFreqMaps(tp, C_BAND_KEY));
-        return new SortedRange(availableRanges).ranges();
+        return ppAvailable(tp).ranges();
     }
 
-    /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Range getTTP11UsedFreqMap(TerminationPoint1 tp) {
-        Map<Double, Double> usedRanges = usedRanges(getTxTtpAvailableFreqMaps(tp, C_BAND_KEY));
-        return new SortedRange(usedRanges);
+        return ttpOccupied(tp);
     }
 
-    /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Range getTTP11AvailableFreqMap(TerminationPoint1 tp) {
-        Map<Double, Double> availableRanges = availableRanges(getTxTtpAvailableFreqMaps(tp, C_BAND_KEY));
-        return new SortedRange(availableRanges);
+        return ttpAvailable(tp);
     }
 
-    /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Range getTTPUsedFreqMap(TerminationPoint tp) {
-        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
+        var tp1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
                 .TerminationPoint1.class);
-
-        if (!hasTxTtpUsedWavelengths(termPoint1)) {
-            AvailFreqMaps availFreqMaps = getTxTtpAvailableFreqMaps(termPoint1, C_BAND_KEY);
-            Map<Double, Double> usedRanges = usedRanges(availFreqMaps);
-            return new SortedRange(usedRanges);
+        if (tp1 == null) {
+            return rangeFactory.empty();
         }
-        Range range = new SortedRange();
-        Map<UsedWavelengthsKey, UsedWavelengths> waveLengths = getTxTtpUsedWavelengths(termPoint1);
-        for (Map.Entry<UsedWavelengthsKey, UsedWavelengths> usedLambdas : waveLengths.entrySet()) {
-            Double centFreq = usedLambdas.getValue().getFrequency().getValue().doubleValue();
-            Double width = usedLambdas.getValue().getWidth().getValue().doubleValue();
-            range.add(centFreq, width, frequencyFactory);
-        }
-        return range;
+        return ttpOccupiedFromUsedWavelengthsOrBitmap(tp1);
     }
 
-    /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
-        var tpAug = tp.augmentation(TerminationPoint1.class);
-        if (tpAug == null) {
-            return Map.of();
-        }
-        XpdrNetworkAttributes xnatt = tpAug.getXpdrNetworkAttributes();
-        if (xnatt == null) {
-            return Map.of();
-        }
-        var xnattWvlgth = xnatt.getWavelength();
-        if (xnattWvlgth == null) {
-            return Map.of();
-        }
-        var freq = xnattWvlgth.getFrequency();
-        if (freq == null) {
-            return Map.of();
-        }
-        var width = xnattWvlgth.getWidth();
-        if (width == null) {
-            return Map.of();
-        }
-        Double centerFrequencyTHz = freq.getValue().doubleValue();
-        Double widthGHz = width.getValue().doubleValue();
-        return rangeFactory.range(centerFrequencyTHz, widthGHz).ranges();
+        return xpdrRanges(tp).occupied();
     }
 
     /**
-     * Decodes an OpenROADM frequency bitmap into numeric frequency ranges.
+     * Extract spectrum ranges from an OpenROADM TP augmentation.
      *
-     * <p>The bitmap is copied to a fixed length of {@link GridConstant#NB_OCTECTS} and decoded using the supplied
-     * {@code frequencyRange} function (e.g. available vs assigned).
+     * <p>Behavior depends on {@code tpId.openRoadmTpType()}:
+     * <ul>
+     *   <li>SRG-PP types: occupied/available decoded from PP attributes bitmap</li>
+     *   <li>DEG-TTP types: occupied derived from used-wavelength list when present,
+     *       otherwise derived from bitmap; available derived from bitmap</li>
+     *   <li>Other types: empty</li>
+     * </ul>
+     */
+    @Override
+    public SpectrumRanges extract(TerminationPointId tpId, TerminationPoint1 tp) {
+        if (tpId == null || tp == null) {
+            return SpectrumRanges.empty();
+        }
+
+        return switch (tpId.openRoadmTpType()) {
+            case SRGRXPP, SRGTXPP, SRGTXRXPP ->
+                fromRanges(ppOccupied(tp), ppAvailable(tp));
+
+            case DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP ->
+                fromRanges(ttpOccupiedFromUsedWavelengthsOrBitmap(tp), ttpAvailable(tp));
+            default -> SpectrumRanges.empty();
+        };
+    }
+
+    /**
+     * Extract spectrum ranges from an IETF TerminationPoint.
+     *
+     * <p>Behavior depends on {@code tpId.openRoadmTpType()}:
+     * <ul>
+     *   <li>XPDR types: occupied derived from XPDR wavelength (center frequency + width);
+     *       available is empty</li>
+     *   <li>Other types: empty</li>
+     * </ul>
+     */
+    @Override
+    public SpectrumRanges extract(TerminationPointId tpId, TerminationPoint tp) {
+        if (tpId == null || tp == null) {
+            return SpectrumRanges.empty();
+        }
+
+        return switch (tpId.openRoadmTpType()) {
+            case XPONDERCLIENT, XPONDERNETWORK, XPONDERPORT ->
+                xpdrRanges(tp);
+
+            default -> SpectrumRanges.empty();
+        };
+    }
+
+    /**
+     * Decodes an OpenROADM frequency bitmap into numeric frequency intervals.
+     *
+     * <p>The bitmap is copied/padded to {@link GridConstant#NB_OCTECTS} before decoding.
+     * The provided {@code frequencyRange} function selects which interpretation to apply
+     * (e.g. available vs assigned).
+     *
+     * @param afm OpenROADM bitmap container
+     * @param frequencyRange decoding function (e.g. {@link Numeric#availableFrequency} or
+     *        {@link Numeric#assignedFrequency})
+     * @return decoded numeric intervals as {@code lowerBound -> upperBound}; never {@code null}
      */
     private Map<Double, Double> ranges(AvailFreqMaps afm, Function<Available, Map<Double, Double>> frequencyRange) {
         byte[] freqByteSet = Arrays.copyOf(afm.getFreqMap(), GridConstant.NB_OCTECTS);
         return frequencyRange.apply(new AvailableGrid(freqByteSet));
-    }
-
-    /**
-     * Returns numeric ranges representing AVAILABLE spectrum decoded from a frequency bitmap.
-     *
-     * @param avlFreqMaps OpenROADM available frequency map container
-     * @return available spectrum ranges (lower -&gt; upper), never {@code null}
-     */
-    private Map<Double, Double> availableRanges(AvailFreqMaps avlFreqMaps) {
-        return ranges(avlFreqMaps, numericFrequency::availableFrequency);
-    }
-
-    /**
-     * Returns numeric ranges representing ASSIGNED/OCCUPIED spectrum decoded from a frequency bitmap.
-     *
-     * @param avlFreqMaps OpenROADM available frequency map container
-     * @return occupied spectrum ranges (lower -&gt; upper), never {@code null}
-     */
-    private Map<Double, Double> usedRanges(AvailFreqMaps avlFreqMaps) {
-        return ranges(avlFreqMaps, numericFrequency::assignedFrequency);
     }
 
     /**
@@ -275,7 +278,6 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
         }
     }
 
-
     /**
      * Checks if the supplied termination point contains a non-null TxTtpAttributes object.
      *
@@ -315,5 +317,90 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
                 .setFreqMap(new byte[0])
                 .setMapName("emptymap")
                 .build();
+    }
+
+    /**
+     * Computes occupied DEG-TTP spectrum.
+     *
+     * <p>If TxTtp {@code usedWavelengths} is present and non-empty, each entry (center + width)
+     * is converted into an interval and added to the occupied set. Otherwise, occupied spectrum
+     * is derived from the TxTtp bitmap (assigned frequency decoding).
+     */
+    private Range ttpOccupiedFromUsedWavelengthsOrBitmap(TerminationPoint1 tp) {
+        if (!hasTxTtpUsedWavelengths(tp)) {
+            return ttpOccupied(tp);
+        }
+
+        Range occupied = rangeFactory.empty();
+        for (UsedWavelengths wl : getTxTtpUsedWavelengths(tp).values()) {
+            Double centFreq = wl.getFrequency().getValue().doubleValue();
+            Double width = wl.getWidth().getValue().doubleValue();
+            occupied.add(centFreq, width, frequencyFactory);
+        }
+        return occupied;
+    }
+
+    /**
+     * Computes XPDR spectrum ranges from the XPDR wavelength attributes.
+     *
+     * <p>XPDRs provide an occupied wavelength (center + width). They typically do not expose an
+     * "available spectrum" bitmap in the same way, so available is returned empty.
+     */
+    private SpectrumRanges xpdrRanges(TerminationPoint tp) {
+        var tpAug = tp.augmentation(TerminationPoint1.class);
+        if (tpAug == null) {
+            return SpectrumRanges.empty();
+        }
+        XpdrNetworkAttributes xnatt = tpAug.getXpdrNetworkAttributes();
+        if (xnatt == null || xnatt.getWavelength() == null
+                || xnatt.getWavelength().getFrequency() == null
+                || xnatt.getWavelength().getWidth() == null) {
+            return SpectrumRanges.empty();
+        }
+
+        Double centerFrequencyTHz = xnatt.getWavelength().getFrequency().getValue().doubleValue();
+        Double widthGHz = xnatt.getWavelength().getWidth().getValue().doubleValue();
+
+        Range occupied = rangeFactory.range(centerFrequencyTHz, widthGHz);
+
+        return fromRanges(occupied, rangeFactory.empty());
+    }
+
+    private static SpectrumRanges fromRanges(Range occupied, Range available) {
+        return new SpectrumRanges(occupied.ranges(), available.ranges());
+    }
+
+    private Range decodeBitmap(
+            TerminationPoint1 tp,
+            Function<TerminationPoint1, AvailFreqMaps> selectMap,
+            Function<Available, Map<Double, Double>> decode) {
+
+        AvailFreqMaps afm = selectMap.apply(tp);
+        Map<Double, Double> decoded = ranges(afm, decode);
+        return new SortedRange(decoded);
+    }
+
+    private Range ppAvailable(TerminationPoint1 tp) {
+        return decodeBitmap(tp,
+                t -> getPpAvailableFreqMaps(t, C_BAND_KEY),
+                numericFrequency::availableFrequency);
+    }
+
+    private Range ppOccupied(TerminationPoint1 tp) {
+        return decodeBitmap(tp,
+                t -> getPpAvailableFreqMaps(t, C_BAND_KEY),
+                numericFrequency::assignedFrequency);
+    }
+
+    private Range ttpAvailable(TerminationPoint1 tp) {
+        return decodeBitmap(tp,
+                t -> getTxTtpAvailableFreqMaps(t, C_BAND_KEY),
+                numericFrequency::availableFrequency);
+    }
+
+    private Range ttpOccupied(TerminationPoint1 tp) {
+        return decodeBitmap(tp,
+                t -> getTxTtpAvailableFreqMaps(t, C_BAND_KEY),
+                numericFrequency::assignedFrequency);
     }
 }
