@@ -31,7 +31,6 @@ import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
 import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
 import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
-import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
@@ -1109,100 +1108,6 @@ public class ORtoTapiTopoConversionTools {
     }
 
     /**
-     * Retrieves from OpenROADM tp the information on the wavelength used (when a service is provisioned).
-     * Returns a Map of Min and Max Frequency corresponding to occupied-slot low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object).
-     */
-    public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
-        return openRoadmSpectrumRangeExtractor.getXpdrUsedWavelength(tp);
-    }
-
-    /**
-     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
-     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param terminationPoint OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Map<Frequency, Frequency> getPPUsedFrequencies(TerminationPoint terminationPoint) {
-        return getPP11UsedFrequencies(
-                terminationPoint.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                                .rev250110.TerminationPoint1.class
-                )
-        );
-    }
-
-
-    /**
-     * Retrieves from OpenROADM tp (ROADM DEG-TTP)the information on the wavelength provisioned in the MW interface.
-     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Range getTTPUsedFreqMap(TerminationPoint tp) {
-        return openRoadmSpectrumRangeExtractor.getTTPUsedFreqMap(tp);
-    }
-
-    /**
-     * Retrieves the BitMap containing the information on spectrum used on the ROADM-TTP MW interface from tp.
-     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Range getTTPAvailableFreqMap(TerminationPoint tp) {
-        var termPoint1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
-            .TerminationPoint1.class);
-
-        return openRoadmSpectrumRangeExtractor.getTTP11AvailableFreqMap(termPoint1);
-    }
-
-
-    /**
-     * Retrieves the BitMap containing the information on spectrum used on the ROADM-TTP MW interface.
-     * Done from TerminationPoint1 Augmentation.
-     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object)
-     */
-    public Range getTTP11AvailableFreqMap(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-
-        return openRoadmSpectrumRangeExtractor.getTTP11AvailableFreqMap(tp);
-    }
-
-    /**
-     * Retrieves from OpenROADM tp (ROADM SRG-PP) the information on the wavelength available on the tp.
-     * Done directly from TerminationPoint1 Augmentation.
-     * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Map<Frequency, Frequency> getPP11AvailableFrequencies(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-
-        return openRoadmSpectrumRangeExtractor.getPP11AvailableFrequencies(tp);
-    }
-
-    /**
-     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the wavelength used on the tp.
-     * Done directly from TerminationPoint1 Augmentation.
-     * Returns a map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Map<Frequency, Frequency> getPP11UsedFrequencies(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-
-        return openRoadmSpectrumRangeExtractor.getPP11UsedFrequencies(tp);
-    }
-
-    /**
-     * Retrieves from OpenROADM tp (ROADM SRG-PP)the information on the available spectrum (BitMap) on the tp.
-     * Done directly from TerminationPoint1 Augmentation.
-     * Returns a Map of Min and Max Frequency corresponding to the different occupied-slots low and high boundaries.
-     * @param tp OpenROADM Termination Point (ietf/openROADM topology Object),
-     */
-    public Range getTTP11UsedFreqMap(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1 tp) {
-
-        return openRoadmSpectrumRangeExtractor.getTTP11UsedFreqMap(tp);
-    }
-
-    /**
      * Creates an empty frequency maps.
      * @return an AvailFreqMaps object with only a name, and a freqMap with no bytes.
      */
@@ -2038,7 +1943,14 @@ public class ORtoTapiTopoConversionTools {
         }
         if (oorTpAug.getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
             onepBldr = addPayloadStructureAndPhotSpecToOnep(
-                this.ietfNodeId, rate, getXpdrUsedWavelength(oorTp), opModeList, sicColl, onepBldr, keyword);
+                    this.ietfNodeId,
+                    rate,
+                    openRoadmSpectrumRangeExtractor.extract(oorTp).occupied(),
+                    opModeList,
+                    sicColl,
+                    onepBldr,
+                    keyword);
+
         }
         if (keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             String nepId = nepNames.entrySet().stream()
