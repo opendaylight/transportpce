@@ -19,13 +19,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.TapiConstants;
-import org.opendaylight.transportpce.tapi.frequency.Factory;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
-import org.opendaylight.transportpce.tapi.frequency.TeraHertz;
-import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
@@ -100,6 +99,8 @@ public class ConvertTopoORtoTapiAtInit {
     private final TapiLink tapiLink;
     private static String topologicalMode = TapiProvider.TOPOLOGICAL_MODE;
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
+    private OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor =
+            DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance();
 
     /**
      * Instantiate an ConvertORToDSTapiTopo Object.
@@ -297,7 +298,7 @@ public class ConvertTopoORtoTapiAtInit {
                     LOG.info("Degree port List: {}", degPortList.toString());
                     // TODO: deg port could be sip. e.g. MDONS
                     oneplist.putAll(
-                        populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
+                         populateNepsForRdmNode(false, nodeId, degPortList, true, TapiConstants.PHTNC_MEDIA_OTS));
                     oneplist.putAll(
                         populateNepsForRdmNode(false, nodeId, degPortList, false, TapiConstants.PHTNC_MEDIA_OMS));
                     numNeps += degPortList.size() * 2;
@@ -592,44 +593,31 @@ public class ConvertTopoORtoTapiAtInit {
                 .setLifecycleState(LifecycleState.INSTALLED);
 
             ORtoTapiTopoConversionTools tapiFactory = new ORtoTapiTopoConversionTools(this.tapiTopoUuid);
-            Factory frequencyFactory = new TeraHertzFactory();
             if (!nepPhotonicSublayer.equals(TapiConstants.MC) && !nepPhotonicSublayer.equals(TapiConstants.OTSI_MC)) {
-                Map<Frequency, Frequency> usedFreqMap = new HashMap<>();
-                Map<Frequency, Frequency> availableFreqMap = new HashMap<>();
-                switch (tpType) {
-                    // Whatever is the TP and its type we consider that it is handled in a bidirectional way :
-                    // same wavelength(s) used in both direction.
-                    case SRGRXPP:
-                    case SRGTXPP:
-                    case SRGTXRXPP:
-                        usedFreqMap = tapiFactory.getPPUsedFrequencies(tp);
-                        logFrequency(nodeId, tpId, usedFreqMap, availableFreqMap);
-                        if (usedFreqMap == null || usedFreqMap.isEmpty()) {
-                            availableFreqMap.put(
-                                    new TeraHertz(GridConstant.START_EDGE_FREQUENCY_THZ),
-                                    frequencyFactory.frequency(
-                                            GridConstant.START_EDGE_FREQUENCY_THZ,
-                                            GridConstant.GRANULARITY,
-                                            GridConstant.EFFECTIVE_BITS)
-                            );
-                        } else {
-                            LOG.debug("EnteringLOOPcreateOTSiMC & MC with usedFreqMap non empty {} NEP {} for Node {}",
-                                usedFreqMap, String.join("+", this.ietfNodeId, nepPhotonicSublayer, tpId), nodeId);
-                            onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.MC));
-                            onepMap.putAll(populateNepsForRdmNode(srg,
-                                nodeId, new ArrayList<>(List.of(tp)), true, TapiConstants.OTSI_MC));
-                        }
-                        break;
-                    case DEGREERXTTP:
-                    case DEGREETXTTP:
-                    case DEGREETXRXTTP:
-                        usedFreqMap = tapiFactory.getTTPUsedFreqMap(tp).ranges();
-                        availableFreqMap = tapiFactory.getTTPAvailableFreqMap(tp).ranges();
-                        logFrequency(nodeId, tpId, usedFreqMap, availableFreqMap);
-                        break;
-                    default:
-                        break;
+                SpectrumRanges ranges = openRoadmSpectrumRangeExtractor.extract(tp);
+                Map<Frequency, Frequency> usedFreqMap = ranges.occupied();
+                Map<Frequency, Frequency> availableFreqMap = ranges.available();
+                logFrequency(nodeId, tpId, usedFreqMap, availableFreqMap);
+
+                if (tpType == OpenroadmTpType.SRGRXPP
+                        || tpType == OpenroadmTpType.SRGTXPP
+                        || tpType == OpenroadmTpType.SRGTXRXPP) {
+
+                    if (!usedFreqMap.isEmpty()) {
+                        onepMap.putAll(populateNepsForRdmNode(
+                                srg,
+                                nodeId,
+                                List.of(tp),
+                                true,
+                                TapiConstants.MC));
+
+                        onepMap.putAll(populateNepsForRdmNode(
+                                srg,
+                                nodeId,
+                                List.of(tp),
+                                true,
+                                TapiConstants.OTSI_MC));
+                    }
                 }
                 LOG.debug("calling add Photonic NEP spec for Roadm");
                 onepBdd = tapiFactory.addPhotSpecToRoadmOnep(
@@ -658,6 +646,8 @@ public class ConvertTopoORtoTapiAtInit {
                 CepList cepList = new CepListBuilder()
                     .setConnectionEndPoint(Map.of(cep.key(), cep)).build();
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
+                LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                        this.ietfNodeId, tpId, cep);
 
                 onepBdd.addAugmentation(onep1Bldr)
                         .build();
