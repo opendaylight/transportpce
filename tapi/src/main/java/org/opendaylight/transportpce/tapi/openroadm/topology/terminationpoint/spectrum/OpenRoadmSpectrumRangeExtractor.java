@@ -8,11 +8,9 @@
 
 package org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum;
 
-import java.util.Map;
-import org.opendaylight.transportpce.tapi.frequency.Frequency;
-import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 
 /**
@@ -59,85 +57,32 @@ public interface OpenRoadmSpectrumRangeExtractor {
      * directly on the IETF TP via OpenROADM augmentations (e.g. XPDR wavelength attributes).
      * For unsupported TP types or missing data, {@link SpectrumRanges#empty()} is returned.
      *
-     * @param tpId termination-point id/type metadata used to choose extraction strategy
      * @param tp IETF termination point
      * @return extracted occupied + available spectrum ranges; never {@code null}
      */
-    SpectrumRanges extract(TerminationPointId tpId, TerminationPoint tp);
+    SpectrumRanges extract(TerminationPoint tp);
 
     /**
-     * Extracts occupied (used) spectrum intervals for an SRG-PP termination point.
+     * Extracts spectrum ranges from an OpenROADM {@link TerminationPoint1} topology augmentation
+     * for ROADM termination point types (SRG-PP and DEG-TTP).
      *
-     * <p>The OpenROADM SRG-PP spectrum is derived from the PP attributes frequency bitmap (C-band).
+     * <p>This is a lower-level overload of {@link #extract(TerminationPointId, TerminationPoint1)}
+     * intended for cases where the OpenROADM TP type is already known and callers do not have (or
+     * do not need) a full {@link TerminationPointId}.
      *
-     * @param tp OpenROADM topology {@code TerminationPoint1} augmentation
-     * @return occupied spectrum intervals ({@code lowerBound -> upperBound}), never {@code null}
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint1)} instead
+     * <p>Supported extraction strategies are:
+     * <ul>
+     *   <li>SRG-PP: decode PP attributes frequency bitmap (e.g. C-band)</li>
+     *   <li>DEG-TTP: occupied derived from used-wavelength list when present, otherwise bitmap;
+     *       available derived from bitmap</li>
+     * </ul>
+     *
+     * <p>For unsupported TP types, {@link SpectrumRanges#empty()} is returned.
+     *
+     * @param openroadmTpType OpenROADM termination point type
+     * @param tp OpenROADM topology augmentation
+     * @return extracted occupied + available spectrum ranges; never {@code null}
      */
-    @Deprecated(forRemoval = true)
-    Map<Frequency, Frequency> getPP11UsedFrequencies(TerminationPoint1 tp);
+    SpectrumRanges extractRoadm(OpenroadmTpType openroadmTpType, TerminationPoint1 tp);
 
-    /**
-     * Extracts available spectrum intervals for an SRG-PP termination point.
-     *
-     * <p>The OpenROADM SRG-PP spectrum is derived from the PP attributes frequency bitmap (C-band).
-     *
-     * @param tp OpenROADM topology {@code TerminationPoint1} augmentation
-     * @return available spectrum intervals ({@code lowerBound -> upperBound}), never {@code null}
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint1)} instead
-     */
-    @Deprecated(forRemoval = true)
-    Map<Frequency, Frequency> getPP11AvailableFrequencies(TerminationPoint1 tp);
-
-    /**
-     * Extracts occupied (assigned) spectrum from a DEG-TTP termination point.
-     *
-     * <p>The OpenROADM DEG-TTP spectrum is derived from the TxTtp attributes frequency bitmap (C-band).
-     *
-     * @param tp OpenROADM topology {@code TerminationPoint1} augmentation
-     * @return occupied spectrum as a {@link Range}, never {@code null}
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint1)} instead
-     */
-    @Deprecated(forRemoval = true)
-    Range getTTP11UsedFreqMap(TerminationPoint1 tp);
-
-    /**
-     * Extracts available spectrum from a DEG-TTP termination point.
-     *
-     * <p>The OpenROADM DEG-TTP spectrum is derived from the TxTtp attributes frequency bitmap (C-band).
-     *
-     * @param tp OpenROADM topology {@code TerminationPoint1} augmentation
-     * @return available spectrum as a {@link Range}, never {@code null}
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint1)} instead
-     */
-    @Deprecated(forRemoval = true)
-    Range getTTP11AvailableFreqMap(TerminationPoint1 tp);
-
-    /**
-     * Extracts occupied (assigned) spectrum from a DEG-TTP termination point.
-     *
-     * <p>The OpenROADM DEG-TTP spectrum is derived from the TxTtp attributes (for example the frequency bitmap)
-     * and converted into a {@link Range}.
-     *
-     * @param tp OpenROADM termination point (IETF topology termination point)
-     * @return occupied spectrum as a {@link Range}, never {@code null}
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint)} instead
-     */
-    @Deprecated(forRemoval = true)
-    Range getTTPUsedFreqMap(TerminationPoint tp);
-
-    /**
-     * Extracts the provisioned/used wavelength for an XPDR termination point.
-     *
-     * <p>Reads the XPDR wavelength (center frequency + width) from the OpenROADM termination point
-     * augmentation and converts it into a frequency interval.
-     *
-     * <p>If the required augmentation or wavelength attributes are missing, an empty map is returned.
-     *
-     * @param tp OpenROADM termination point (IETF topology termination point)
-     * @return occupied wavelength interval ({@code lowerBound -> upperBound}), or empty
-     * @deprecated use {@link #extract(TerminationPointId, TerminationPoint)} instead
-     */
-    @Deprecated(forRemoval = true)
-    Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp);
 }

@@ -15,10 +15,13 @@ import java.util.function.Function;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.tapi.frequency.Factory;
-import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
 import org.opendaylight.transportpce.tapi.frequency.grid.Available;
 import org.opendaylight.transportpce.tapi.frequency.grid.AvailableGrid;
+import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
 import org.opendaylight.transportpce.tapi.frequency.grid.Numeric;
+import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.Range;
 import org.opendaylight.transportpce.tapi.frequency.range.RangeFactory;
 import org.opendaylight.transportpce.tapi.frequency.range.SortedRange;
@@ -27,6 +30,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.u
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev250110.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110.networks.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.available.freq.map.AvailFreqMapsKey;
@@ -80,94 +84,61 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
         this.rangeFactory = Objects.requireNonNull(rangeFactory);
     }
 
-    @Override
-    @Deprecated
-    public Map<Frequency, Frequency> getPP11UsedFrequencies(TerminationPoint1 tp) {
-        return ppOccupied(tp).ranges();
-    }
-
-    @Override
-    @Deprecated
-    public Map<Frequency, Frequency> getPP11AvailableFrequencies(TerminationPoint1 tp) {
-        return ppAvailable(tp).ranges();
-    }
-
-    @Override
-    @Deprecated
-    public Range getTTP11UsedFreqMap(TerminationPoint1 tp) {
-        return ttpOccupied(tp);
-    }
-
-    @Override
-    @Deprecated
-    public Range getTTP11AvailableFreqMap(TerminationPoint1 tp) {
-        return ttpAvailable(tp);
-    }
-
-    @Override
-    @Deprecated
-    public Range getTTPUsedFreqMap(TerminationPoint tp) {
-        var tp1 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev250110
-                .TerminationPoint1.class);
-        if (tp1 == null) {
-            return rangeFactory.empty();
-        }
-        return ttpOccupiedFromUsedWavelengthsOrBitmap(tp1);
-    }
-
-    @Override
-    @Deprecated
-    public Map<Frequency, Frequency> getXpdrUsedWavelength(TerminationPoint tp) {
-        return xpdrRanges(tp).occupied();
-    }
-
-    /**
-     * Extract spectrum ranges from an OpenROADM TP augmentation.
-     *
-     * <p>Behavior depends on {@code tpId.openRoadmTpType()}:
-     * <ul>
-     *   <li>SRG-PP types: occupied/available decoded from PP attributes bitmap</li>
-     *   <li>DEG-TTP types: occupied derived from used-wavelength list when present,
-     *       otherwise derived from bitmap; available derived from bitmap</li>
-     *   <li>Other types: empty</li>
-     * </ul>
-     */
+    /** {@inheritDoc} */
     @Override
     public SpectrumRanges extract(TerminationPointId tpId, TerminationPoint1 tp) {
         if (tpId == null || tp == null) {
             return SpectrumRanges.empty();
         }
 
-        return switch (tpId.openRoadmTpType()) {
-            case SRGRXPP, SRGTXPP, SRGTXRXPP ->
-                fromRanges(ppOccupied(tp), ppAvailable(tp));
+        return extractRoadm(tpId.openRoadmTpType(), tp);
+    }
 
-            case DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP ->
-                fromRanges(ttpOccupiedFromUsedWavelengthsOrBitmap(tp), ttpAvailable(tp));
+    /** {@inheritDoc} */
+    @Override
+    public SpectrumRanges extract(TerminationPoint tp) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1 commonTp1 =
+                tp.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1.class);
+
+        if (commonTp1 == null || commonTp1.getTpType() == null) {
+            return SpectrumRanges.empty();
+        }
+
+        return switch (commonTp1.getTpType()) {
+            case SRGRXPP, SRGTXPP, SRGTXRXPP -> {
+                TerminationPoint1 topologyTp1 = tp.augmentation(TerminationPoint1.class);
+                yield topologyTp1 == null
+                        ? SpectrumRanges.empty()
+                        : fromRanges(ppOccupied(topologyTp1), ppAvailable(topologyTp1));
+            }
+            case DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP -> {
+                TerminationPoint1 topologyTp1 = tp.augmentation(TerminationPoint1.class);
+                yield topologyTp1 == null
+                        ? SpectrumRanges.empty()
+                        : fromRanges(
+                        ttpOccupiedFromUsedWavelengthsOrBitmap(topologyTp1),
+                        ttpAvailable(topologyTp1));
+            }
+            case XPONDERCLIENT, XPONDERNETWORK, XPONDERPORT ->
+                xpdrRanges(tp);
+
             default -> SpectrumRanges.empty();
         };
     }
 
-    /**
-     * Extract spectrum ranges from an IETF TerminationPoint.
-     *
-     * <p>Behavior depends on {@code tpId.openRoadmTpType()}:
-     * <ul>
-     *   <li>XPDR types: occupied derived from XPDR wavelength (center frequency + width);
-     *       available is empty</li>
-     *   <li>Other types: empty</li>
-     * </ul>
-     */
+    /** {@inheritDoc} */
     @Override
-    public SpectrumRanges extract(TerminationPointId tpId, TerminationPoint tp) {
-        if (tpId == null || tp == null) {
+    public SpectrumRanges extractRoadm(OpenroadmTpType openroadmTpType, TerminationPoint1 tp) {
+        if (openroadmTpType == null || tp == null) {
             return SpectrumRanges.empty();
         }
 
-        return switch (tpId.openRoadmTpType()) {
-            case XPONDERCLIENT, XPONDERNETWORK, XPONDERPORT ->
-                xpdrRanges(tp);
-
+        return switch (openroadmTpType) {
+            case SRGRXPP, SRGTXPP, SRGTXRXPP ->
+                fromRanges(ppOccupied(tp), ppAvailable(tp));
+            case DEGREERXTTP, DEGREETXTTP, DEGREETXRXTTP ->
+                fromRanges(ttpOccupiedFromUsedWavelengthsOrBitmap(tp), ttpAvailable(tp));
             default -> SpectrumRanges.empty();
         };
     }
@@ -402,5 +373,24 @@ public class DefaultOpenRoadmSpectrumRangeExtractor implements OpenRoadmSpectrum
         return decodeBitmap(tp,
                 t -> getTxTtpAvailableFreqMaps(t, C_BAND_KEY),
                 numericFrequency::assignedFrequency);
+    }
+
+    public static OpenRoadmSpectrumRangeExtractor defaultInstance(double startEdgeFrequencyThz, int effectiveBits) {
+        return new DefaultOpenRoadmSpectrumRangeExtractor(
+                new NumericFrequency(
+                        startEdgeFrequencyThz,
+                        effectiveBits,
+                        new FrequencyMath()
+                ),
+                new TeraHertzFactory(),
+                new FrequencyRangeFactory()
+        );
+    }
+
+    public static OpenRoadmSpectrumRangeExtractor defaultInstance() {
+        return DefaultOpenRoadmSpectrumRangeExtractor.defaultInstance(
+                GridConstant.START_EDGE_FREQUENCY_THZ,
+                GridConstant.EFFECTIVE_BITS
+        );
     }
 }
