@@ -30,14 +30,22 @@ import java.util.stream.Stream;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.R2RTapiLinkDiscovery;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.frequency.Frequency;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
+import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
+import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
 import org.opendaylight.transportpce.tapi.impl.TapiProvider;
 import org.opendaylight.transportpce.tapi.openroadm.TopologyNodeId;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
 import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.OpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.SpectrumRanges;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
@@ -197,6 +205,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     private Map<Map<String, String>, ConnectionEndPoint> srgOtsCepMap;
     private Map<InterRuleGroupKey, InterRuleGroup> irgMap;
     private final OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
+    private final OpenRoadmSpectrumRangeExtractor openRoadmSpectrumRangeExtractor;
 
     @Activate
     public TapiNetworkModelServiceImpl(@Reference NetworkTransactionService networkTransactionService,
@@ -210,6 +219,15 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         this.tapiLink = tapiLink;
         this.srgOtsCepMap = new HashMap<>();
         openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
+        openRoadmSpectrumRangeExtractor = new DefaultOpenRoadmSpectrumRangeExtractor(
+                new NumericFrequency(
+                        GridConstant.START_EDGE_FREQUENCY_THZ,
+                        GridConstant.EFFECTIVE_BITS,
+                        new FrequencyMath()
+                ),
+                new TeraHertzFactory(),
+                new FrequencyRangeFactory()
+        );
 
     }
 
@@ -1458,7 +1476,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
         if (getNetworkTerminationPointFromDatastore(nodeId, tpid) == null) {
             LOG.error("CREATENEP, No Tp found in topology for LCP {}, of NodeId {} ", tpid, nodeId);
         } else {
-            freqWidthMap = tapiFactory.getXpdrUsedWavelength(getNetworkTerminationPointFromDatastore(nodeId, tpid));
+            freqWidthMap = openRoadmSpectrumRangeExtractor.extract(
+                    getNetworkTerminationPointFromDatastore(nodeId, tpid)
+            ).occupied();
         }
         if (keyword.contains(TapiConstants.PHTNC_MEDIA_OTS)) {
             ConnectionEndPoint otsCep = tapiFactory.createOTSCepXpdr(
@@ -2186,8 +2206,12 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 tp11 = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
                         if (tp11 != null) {
-                            usedFreqMap = tapiFactory.getPP11UsedFrequencies(tp11);
-                            availableFreqMap = tapiFactory.getPP11AvailableFrequencies(tp11);
+
+                            SpectrumRanges srgRanges = openRoadmSpectrumRangeExtractor.extractRoadm(
+                                    tp.getTpType(),
+                                    tp11);
+                            usedFreqMap = srgRanges.occupied();
+                            availableFreqMap = srgRanges.available();
 
                             if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
                                 LOG.debug("TNMSI:populateNepsForRdmNode : Entering LOOP creating OTSiMC & MC with "
@@ -2218,8 +2242,11 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                 usedTp = getNetworkTerminationPoint11FromDatastore(nodeIdInTopology, tpId);
 
                         if (usedTp != null) {
-                            usedFreqMap = tapiFactory.getTTP11UsedFreqMap(usedTp).ranges();
-                            availableFreqMap = tapiFactory.getTTP11AvailableFreqMap(usedTp).ranges();
+                            SpectrumRanges degRanges = openRoadmSpectrumRangeExtractor.extractRoadm(
+                                    tp.getTpType(),
+                                    usedTp);
+                            usedFreqMap = degRanges.occupied();
+                            availableFreqMap = degRanges.available();
                         }
                         break;
                     default:
