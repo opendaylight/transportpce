@@ -17,6 +17,7 @@ import static org.mockito.Mockito.mock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,25 @@ import org.mockito.Mock;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.frequency.TeraHertzFactory;
+import org.opendaylight.transportpce.tapi.frequency.grid.FrequencyMath;
+import org.opendaylight.transportpce.tapi.frequency.grid.NumericFrequency;
+import org.opendaylight.transportpce.tapi.frequency.range.FrequencyRangeFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.changes.TapiTopologyChangesExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.changes.TopologyChangesExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.NepPhotonicSublayer;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.OwnedNodeEdgePointName;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.OwnedNodeEdgePointSpectrumCapability;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointId;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TerminationPointMapping;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultOpenRoadmSpectrumRangeExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.DefaultTapiSpectrumCapabilityPacFactory;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
@@ -33,6 +51,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Direction;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LifecycleState;
@@ -77,13 +96,22 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
     @Mock
     private NotificationPublishService notificationPublishService;
 
+    @Mock
+    private TapiLink tapiLink;
+
     private TapiNetworkModelServiceImpl service;
+
+    private TopologyUtils topologyUtils;
+
+    private OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
 
     @BeforeEach
     public void setup() throws ExecutionException, InterruptedException {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 "src/test/resources/openroadm-topology.xml",
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
+
 
         NetworkTransactionService networkTransactionService = new NetworkTransactionImpl(getDataBroker());
 
@@ -92,6 +120,10 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
                 deviceTransactionManager,
                 mock(),
                 notificationPublishService);
+
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLink);
+
+        openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
     }
 
     @Test
@@ -406,6 +438,110 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
 
         return spectrumCapabilityPacBuilder
                 .setAvailableSpectrum(Map.of(availableSpectrum.key(), availableSpectrum))
+                .build();
+    }
+
+    @Test
+    public void testMe() {
+        TopologyChangesExtractor topologyChangesExtractor = new TapiTopologyChangesExtractor(
+                openRoadmTerminationPointReader,
+                new DefaultOpenRoadmSpectrumRangeExtractor(
+                        new NumericFrequency(
+                                GridConstant.START_EDGE_FREQUENCY_THZ,
+                                GridConstant.EFFECTIVE_BITS,
+                                new FrequencyMath()
+                        ),
+                        new TeraHertzFactory(),
+                        new FrequencyRangeFactory()
+                ),
+                new DefaultTapiSpectrumCapabilityPacFactory(new TeraHertzFactory())
+        );
+
+        Set<OwnedNodeEdgePointSpectrumCapability> ownedNodeEdgePointSpectrumCapabilities =
+                topologyChangesExtractor.spectrumCapabilityPacs(terminationPointMappings());
+    }
+
+    private Set<TerminationPointMapping> terminationPointMappings() {
+        return Set.of(
+                new TerminationPointMapping(
+                        new TerminationPointId("ROADM-C1", "ROADM-C1-SRG1", "SRG1-PP1-TXRX", OpenroadmTpType.SRGTXRXPP),
+                        Set.of(
+                                onep(
+                                        "ROADM-C1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX",
+                                        "PHOTONIC_MEDIA_OTSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OTS
+                                )
+                        )
+                ),
+                new TerminationPointMapping(
+                        new TerminationPointId("ROADM-A1", "ROADM-A1-DEG2", "DEG2-TTP-TXRX",
+                                OpenroadmTpType.DEGREETXRXTTP),
+                        Set.of(
+                                onep(
+                                        "ROADM-A1+PHOTONIC_MEDIA_OMS+DEG2-TTP-TXRX",
+                                        "PHOTONIC_MEDIA_OMSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OMS
+                                ),
+                                onep(
+                                        "ROADM-A1+PHOTONIC_MEDIA_OTS+DEG2-TTP-TXRX",
+                                        "PHOTONIC_MEDIA_OTSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OTS
+                                )
+                        )
+                ),
+                new TerminationPointMapping(
+                        new TerminationPointId("ROADM-A1", "ROADM-A1-SRG1", "SRG1-PP1-TXRX", OpenroadmTpType.SRGTXRXPP),
+                        Set.of(
+                                onep(
+                                        "ROADM-A1+PHOTONIC_MEDIA_OTS+SRG1-PP1-TXRX",
+                                        "PHOTONIC_MEDIA_OTSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OTS
+                                )
+                        )
+                ),
+                new TerminationPointMapping(
+                        new TerminationPointId("ROADM-C1", "ROADM-C1-DEG1", "DEG1-TTP-TXRX",
+                                OpenroadmTpType.DEGREETXRXTTP),
+                        Set.of(
+                                onep(
+                                        "ROADM-C1+PHOTONIC_MEDIA_OMS+DEG1-TTP-TXRX",
+                                        "PHOTONIC_MEDIA_OMSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OMS
+                                ),
+                                onep(
+                                        "ROADM-C1+PHOTONIC_MEDIA_OTS+DEG1-TTP-TXRX",
+                                        "PHOTONIC_MEDIA_OTSNodeEdgePoint",
+                                        NepPhotonicSublayer.PHTNC_MEDIA_OTS
+                                )
+                        )
+                )
+        );
+    }
+
+    private Network readOpenRoadmTopology() {
+        Network openroadmTopo;
+        try {
+            openroadmTopo = topologyUtils.readTopology(InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+        } catch (TapiTopologyException e) {
+            throw new IllegalStateException("Failed to read OpenROADM topology", e);
+        }
+
+        if (openroadmTopo == null) {
+            throw new IllegalStateException("OpenROADM topology could not be retrieved from datastore");
+        }
+
+        return openroadmTopo;
+    }
+
+    private OwnedNodeEdgePointName onep(String value, String valueName, NepPhotonicSublayer sublayer) {
+        return new OwnedNodeEdgePointName(nme(value, valueName), sublayer);
+    }
+
+
+    private static Name nme(String value, String valueName) {
+        return new NameBuilder()
+                .setValue(value)
+                .setValueName(valueName)
                 .build();
     }
 }
