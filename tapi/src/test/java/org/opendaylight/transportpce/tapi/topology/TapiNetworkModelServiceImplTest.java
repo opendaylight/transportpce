@@ -26,6 +26,9 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.OpenRoadmTerminationPointReader;
+import org.opendaylight.transportpce.tapi.utils.TapiLink;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.transportpce.test.utils.TopologyDataUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.TerminationPoint1;
@@ -77,13 +80,22 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
     @Mock
     private NotificationPublishService notificationPublishService;
 
+    @Mock
+    private TapiLink tapiLink;
+
     private TapiNetworkModelServiceImpl service;
+
+    private TopologyUtils topologyUtils;
+
+    private OpenRoadmTerminationPointReader openRoadmTerminationPointReader;
 
     @BeforeEach
     public void setup() throws ExecutionException, InterruptedException {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
                 "src/test/resources/openroadm-topology.xml",
                 InstanceIdentifiers.OPENROADM_TOPOLOGY_II);
+
+
 
         NetworkTransactionService networkTransactionService = new NetworkTransactionImpl(getDataBroker());
 
@@ -92,6 +104,10 @@ public class TapiNetworkModelServiceImplTest extends AbstractTest {
                 deviceTransactionManager,
                 mock(),
                 notificationPublishService);
+
+        topologyUtils = new TopologyUtils(networkTransactionService, getDataBroker(), tapiLink);
+
+        openRoadmTerminationPointReader = new MdSalOpenRoadmTerminationPointReader(networkTransactionService);
     }
 
     @Test

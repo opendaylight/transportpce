@@ -39,7 +39,16 @@ import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotification
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiServiceNotificationHandler;
+import org.opendaylight.transportpce.tapi.openroadm.OpenRoadmTopologyUpdate;
 import org.opendaylight.transportpce.tapi.openroadm.service.OpenRoadmServiceCopier;
+import org.opendaylight.transportpce.tapi.openroadm.topology.changes.TapiTopologyChangesExtractor;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOpenRoadmTopologyRepository;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.MdSalOwnedNodeEdgePointRepository;
+import org.opendaylight.transportpce.tapi.openroadm.topology.datastore.TapiIdentifierFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.DefaultTapiPhotonicSublayerMapper;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.OpenRoadmToTapiTerminationPointMappingFactory;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.mapping.TopologyTerminationPointTypeResolver;
+import org.opendaylight.transportpce.tapi.openroadm.topology.terminationpoint.spectrum.TapiSpectrumGridConfig;
 import org.opendaylight.transportpce.tapi.topology.TapiNetconfTopologyListener;
 import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.transportpce.tapi.topology.TapiOrLinkListener;
@@ -183,7 +192,20 @@ public class TapiProvider {
                         dataBroker,
                         networkTransactionService,
                         serviceDataStoreOperations,
-                        tapiContext)
+                        tapiContext),
+                new OpenRoadmTopologyUpdate(
+                        new MdSalOwnedNodeEdgePointRepository(networkTransactionService),
+                        new OpenRoadmToTapiTerminationPointMappingFactory(
+                            new TopologyTerminationPointTypeResolver(),
+                            new DefaultTapiPhotonicSublayerMapper()
+                        ),
+                        new MdSalOpenRoadmTopologyRepository(networkTransactionService),
+                        new TapiIdentifierFactory(),
+                        TapiTopologyChangesExtractor.create(
+                                networkTransactionService,
+                                TapiSpectrumGridConfig.defaults()
+                        )
+                )
         );
         servicehandlerlistenerRegistration = notificationService
             .registerCompositeListener(serviceHandlerListenerImpl.getCompositeListener());
