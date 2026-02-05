@@ -15,7 +15,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 public interface PowerMgmt {
 
     /**
-     * This methods measures power requirement for turning up a WL
+     * This method measures power requirement for turning up a WL
      * from the Spanloss at OTS transmit direction and update
      * roadm-connection target-output-power.
      *
@@ -27,7 +27,7 @@ public interface PowerMgmt {
     Boolean setPower(ServicePowerSetupInput input);
 
     /**
-     * This methods measures power requirement for turning up a WL
+     * This method measures power requirement for turning up a WL
      * from the Spanloss at OTS transmit direction and update
      * roadm-connection target-output-power.
      *
@@ -39,8 +39,7 @@ public interface PowerMgmt {
     Boolean setPower(ServicePowerSetupInput input, Subscriber errorSubscriber);
 
     /**
-     * This methods turns down power a WL by performing
-     * following steps:
+     * This method turns down power of a WL by performing following steps.
      *
      * <p>1. Pull interfaces used in service and change
      * status to outOfService
