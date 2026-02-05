@@ -20,7 +20,7 @@ import org.opendaylight.transportpce.inventory.listener.DeviceConfigListener;
 import org.opendaylight.transportpce.inventory.listener.DeviceListener;
 import org.opendaylight.transportpce.inventory.listener.OverlayNetworkChangeListener;
 import org.opendaylight.transportpce.inventory.listener.UnderlayNetworkChangeListener;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev240911.network.topology.topology.topology.types.TopologyNetconf;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev251103.network.topology.topology.topology.types.TopologyNetconf;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
