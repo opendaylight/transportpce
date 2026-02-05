@@ -439,9 +439,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     /**
-     * This method Sets Spanloss on A-End and Z-End OTS interface:
-     *
-     * <p>Steps:
+     * This method Sets Spanloss on A-End and Z-End OTS interface by following below steps.
      *
      * <p>1. Read existing interface details
      *
@@ -469,7 +467,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     }
 
     /**
-     * This method calculates Spanloss by TranmistPower - Receive Power Steps:
+     * This method calculates Spanloss by TranmistPower - Receive Power Steps.
      *
      * <p>1. Read PM measurement
      *
