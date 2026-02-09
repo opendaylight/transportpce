@@ -58,6 +58,7 @@ T0_FULL_MULTILAYER_TOPO = 'T0 - Full Multi-layer topology'
 T100GE_UUID = 'cf51c729-3699-308a-a7d0-594c6a62ebbb'
 T0_MULTILAYER_TOPO_UUID = '747c670e-7a07-3dab-b379-5b1cd17402a3'
 T0_FULL_MULTILAYER_TOPO_UUID = '393f09a4-0a0b-3d82-a4f6-1fbbc14ca1a7'
+SBI_TOPO_UUID = 'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
 
 SIM_LOG_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'log')
 
