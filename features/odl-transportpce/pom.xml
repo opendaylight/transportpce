@@ -53,6 +53,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>org.opendaylight.daexim</groupId>
+        <artifactId>daexim-artifacts</artifactId>
+        <version>1.18.0</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -117,6 +124,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.daexim</groupId>
+      <artifactId>daexim-features</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+      </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-topology</artifactId>
