@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.tapi.utils;
+package org.opendaylight.transportpce.tapi.listeners;
 
 import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,6 +15,7 @@ import org.opendaylight.mdsal.binding.api.DataObjectModified;
 import org.opendaylight.mdsal.binding.api.DataObjectWritten;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.transportpce.tapi.utils.MappingUtils;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.ServiceInterfacePoints;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev230728.service._interface.points.ServiceEndPoint;
 import org.slf4j.Logger;
