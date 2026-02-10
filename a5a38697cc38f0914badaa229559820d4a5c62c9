@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a47e23_6d526f52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "Could you please add a JIRA ticket ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 1,
+        "endLine": 12,
+        "endChar": 54
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a039dd_f5041d39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "Thank you so much Roshan for your change and I\u0027m really sorry for my late review. Please find my comments here.",
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d47d6c5_71eaf061",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "Maybe keep the same message as for getCFGranularity method ?",
+      "range": {
+        "startLine": 917,
+        "startChar": 22,
+        "endLine": 917,
+        "endChar": 84
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a696971_1d4a94fb",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "for a given",
+      "range": {
+        "startLine": 934,
+        "startChar": 50,
+        "endLine": 934,
+        "endChar": 59
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84086070_e2c1de1f",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/catalog/CatalogUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "same as above. Maybe standardize log messages in the same way",
+      "range": {
+        "startLine": 942,
+        "startChar": 22,
+        "endLine": 942,
+        "endChar": 91
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6aa0f26_87c2fa48",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "why did you remove identity ?",
+      "range": {
+        "startLine": 236,
+        "startChar": 20,
+        "endLine": 239,
+        "endChar": 56
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0897f1b5_e1d60d97",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/power/PowerMgmtTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2026-02-10T16:08:53Z",
+      "side": 1,
+      "message": "Could you add specific UT to cover new methods of PowerMgmt for openconfig ?",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
