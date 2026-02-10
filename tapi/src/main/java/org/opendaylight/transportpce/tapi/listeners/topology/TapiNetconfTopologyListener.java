@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 Nokia, Inc. and others.  All rights reserved.
+ * Copyright © 2026 Smartoptics and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.tapi.topology;
+package org.opendaylight.transportpce.tapi.listeners.topology;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.tapi.topology.TapiNetworkModelService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev251028.ConnectionOper.ConnectionStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.device.rev251028.connection.oper.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev251103.NetconfNodeAugment;
