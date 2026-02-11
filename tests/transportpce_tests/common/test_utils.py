@@ -546,6 +546,29 @@ def get_tapi_topology_node(topouuid: str, nodeuuid: str, onepuuid: str, content:
     return {'status_code': response.status_code,
             'onep': onep}
 
+
+def get_tapi_topology_link(topouuid: str, linkuuid: str, content: str):
+    # pylint: disable=line-too-long
+    url = {'rfc8040': '{}/data/tapi-common:context/tapi-topology:topology-context/topology={}/link={}?content={}',
+           'draft-bierman02': '{}/{}/tapi-common:context/topology-context/tapi-topology:topology/{}/link/{}'}
+    if RESTCONF_VERSION in ('rfc8040'):
+        format_args = ('{}', topouuid, linkuuid, content)
+    elif content == 'config':
+        format_args = ('{}', content, topouuid, linkuuid)
+    else:
+        format_args = ('{}', 'operational', topouuid, linkuuid)
+    response = get_request(url[RESTCONF_VERSION].format(*format_args))
+    if bool(response):
+        res = response.json()
+        # print('response in testUtils = {}', res)
+        return_key = {'rfc8040': 'tapi-topology:link',
+                      'draft-bierman02': 'tapi-topology:link'}
+        link = res[return_key[RESTCONF_VERSION]]
+    else:
+        link = None
+    return {'status_code': response.status_code,
+            'link': link}
+
 #
 # Topology operations
 #
