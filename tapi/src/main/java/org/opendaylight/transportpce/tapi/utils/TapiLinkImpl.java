@@ -232,6 +232,83 @@ public class TapiLinkImpl implements TapiLink {
             .build();
     }
 
+    public Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid) {
+
+        NodeEdgePoint sourceNep = new NodeEdgePointBuilder()
+            .setTopologyUuid(srcTapiTopoUuid)
+            .setNodeUuid(srcNodeUuid)
+            .setNodeEdgePointUuid(srcTpUuid)
+            .build();
+        NodeEdgePoint destNep = new NodeEdgePointBuilder()
+            .setTopologyUuid(dstTapiTopoUuid)
+            .setNodeUuid(dstNodeUuid)
+            .setNodeEdgePointUuid(dstTpUuid)
+            .build();
+
+        NameBuilder linkName = new NameBuilder();
+        linkName
+            .setValueName(TapiConstants.OTS_INTERDOMAIN_RDM_RDM_LINK)
+            .setValue(linkId);
+
+        // Todo: common aspects of links and set all attributes
+        CostCharacteristic costCharacteristic = new CostCharacteristicBuilder()
+            .setCostAlgorithm("Restricted Shortest Path - RSP")
+            .setCostName("HOP_COUNT")
+            .setCostValue(TapiConstants.COST_HOP_VALUE)
+            .build();
+        LatencyCharacteristic latencyCharacteristic = new LatencyCharacteristicBuilder()
+            .setFixedLatencyCharacteristic(TapiConstants.FIXED_LATENCY_VALUE)
+            .setQueuingLatencyCharacteristic(TapiConstants.QUEING_LATENCY_VALUE)
+            .setJitterCharacteristic(TapiConstants.JITTER_VALUE)
+            .setWanderCharacteristic(TapiConstants.WANDER_VALUE)
+            .setTrafficPropertyName("FIXED_LATENCY")
+            .build();
+        RiskCharacteristic riskCharacteristic = new RiskCharacteristicBuilder()
+            .setRiskCharacteristicName("risk characteristic")
+            .setRiskIdentifierList(Set.of("risk identifier1", "risk identifier2"))
+            .build();
+        ValidationMechanism validationMechanism = new ValidationMechanismBuilder()
+            .setValidationMechanism("validation mechanism")
+            .setValidationRobustness("validation robustness")
+            .setLayerProtocolAdjacencyValidated("layer protocol adjacency")
+            .build();
+        return new LinkBuilder()
+            .setUuid(new Uuid(UUID.nameUUIDFromBytes(linkId.getBytes(StandardCharsets.UTF_8)).toString()))
+            .setName(Map.of(linkName.build().key(), linkName.build()))
+            //Bug in TAPI : transitioned layer protocol name is mandatory (whether this concept has disappeared)
+            // Additionally, the grouping defining it requires at least 2 elements.
+            // Seems that yang tools check has been enforced and check this --> set translayerNameList arbitrary
+            .setTransitionedLayerProtocolName(Set.of(TapiConstants.PHTNC_MEDIA_OTS))
+            .setLayerProtocolName(Set.of(LayerProtocolName.PHOTONICMEDIA))
+            .setNodeEdgePoint(
+                new HashMap<>(Map.of(sourceNep.key(), sourceNep, destNep.key(), destNep)))
+            .setDirection(ForwardingDirection.UNIDIRECTIONAL)
+            .setAvailableCapacity(new AvailableCapacityBuilder().setTotalSize(
+                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
+                .build())
+            .setResilienceType(new ResilienceTypeBuilder().setProtectionType(ProtectionType.NOPROTECTION)
+                .setRestorationPolicy(RestorationPolicy.NA)
+                .build())
+            .setAdministrativeState(AdministrativeState.UNLOCKED)
+            .setOperationalState(OperationalState.ENABLED)
+            .setLifecycleState(LifecycleState.INSTALLED)
+            .setTotalPotentialCapacity(new TotalPotentialCapacityBuilder().setTotalSize(
+                    new TotalSizeBuilder().setUnit(CAPACITYUNITGBPS.VALUE).setValue(Decimal64.valueOf("100")).build())
+                .build())
+            .setCostCharacteristic(Map.of(costCharacteristic.key(), costCharacteristic))
+            .setLatencyCharacteristic(Map.of(latencyCharacteristic.key(), latencyCharacteristic))
+            .setRiskCharacteristic(Map.of(riskCharacteristic.key(), riskCharacteristic))
+            .setErrorCharacteristic("error")
+            .setLossCharacteristic("loss")
+            .setRepeatDeliveryCharacteristic("repeat delivery")
+            .setDeliveryOrderCharacteristic("delivery order")
+            .setUnavailableTimeCharacteristic("unavailable time")
+            .setServerIntegrityProcessCharacteristic("server integrity process")
+            .setValidationMechanism(Map.of(validationMechanism.key(), validationMechanism))
+            .build();
+    }
+
     public LinkId buildORLinkId(String srcNode, String srcTp, String destNode, String destTp) {
         LOG.info("InTapiLinkImpl, retrieves link ID {} from source and destination Nodes & tps",
             LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp));

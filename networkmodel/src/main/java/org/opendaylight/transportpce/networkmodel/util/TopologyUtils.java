@@ -106,6 +106,53 @@ public final class TopologyUtils {
     }
 
     /**
+     * Create an InterDomain {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
+     *      .rev180226.networks.network.LinkBuilder} object for a given source and destination.
+     *
+     * @param srcNode source node id
+     * @param dstNode destination node id
+     * @param srcTp source termination point
+     * @param destTp destination termination point
+     * @param otnPrefix OTN link type prefix
+     * @return {@link org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+     *          .network.LinkBuilder}
+     */
+    public static LinkBuilder createInterDomainLink(String srcNode, String dstNode, String srcTp, String destTp,
+        String skipSourceOrDest) {
+
+        // Create Destination for link
+        DestinationBuilder dstNodeBldr = new DestinationBuilder()
+            .setDestTp(new TpId(destTp))
+            .setDestNode(new NodeId(dstNode));
+
+        // Create Source for the link
+        SourceBuilder srcNodeBldr = new SourceBuilder()
+            .setSourceNode(new NodeId(srcNode))
+            .setSourceTp(new TpId(srcTp));
+
+        LinkId linkId;
+        LinkId oppositeLinkId;
+        if (skipSourceOrDest.equals("Source")) {
+            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(srcTp, dstNode, destTp);
+            oppositeLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(dstNode, destTp, srcTp);
+        } else {
+            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(srcNode, srcTp, destTp);
+            oppositeLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(destTp, srcNode, srcTp);
+        }
+        //set opposite link
+        Link1 lnk1 = new Link1Builder().setOppositeLink(oppositeLinkId).build();
+
+        // set link builder attribute
+        LinkBuilder lnkBldr = new LinkBuilder()
+            .setDestination(dstNodeBldr.build())
+            .setSource(srcNodeBldr.build())
+            .setLinkId(linkId)
+            .withKey(new LinkKey(linkId))
+            .addAugmentation(lnk1);
+        return lnkBldr;
+    }
+
+    /**
      * Delete a link specified by a given source and destination.
      *
      * @param srcNode source node id string
