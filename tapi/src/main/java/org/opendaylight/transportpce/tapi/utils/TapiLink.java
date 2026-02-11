@@ -140,6 +140,7 @@ public interface TapiLink {
      * @deprecated use {@link OpenRoadmLinkStateMapper#toTapiAdminState(String)} instead.
      */
     @Deprecated(forRemoval = true)
+
     AdministrativeState setTapiAdminState(String adminState);
 
     /**
@@ -211,4 +212,9 @@ public interface TapiLink {
      * @return a map containing generated CEPs
      */
     Map<Map<String, String>, ConnectionEndPoint> getCepMap();
+
+
+    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
+
 }

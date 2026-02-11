@@ -383,11 +383,13 @@ class TransportPCEtest(unittest.TestCase):
         self.assertEqual(response['output']['response-parameters']['path-description']['aToZ-direction']
                          ['modulation-format'], 'dp-qpsk')
         node_to_find = [self.s2Auuid, self.s2Cuuid, self.rSRG1Auuid, self.rDEG2Auuid, self.rSRG1Cuuid, self.rDEG1Cuuid]
-        link_to_find = ['79b23827-48eb-33ed-b110-fbeca32c4125', '7539f869-b93b-3371-8b5c-270717655db1',
-                        'de09187f-5991-39c5-a43c-0f0aa83dcb99', '4172e87e-e7a7-31c1-aeff-c3601433345f',
-                        '2f9d34e5-de00-3992-b6fd-6ba5c0e46bef', '0f58cca7-87ac-368e-a526-49e47227b917',
+        link_to_find = ['7539f869-b93b-3371-8b5c-270717655db1', '2f9d34e5-de00-3992-b6fd-6ba5c0e46bef',
+                        'de09187f-5991-39c5-a43c-0f0aa83dcb99',
+                        # Found sometime '99000caf-8388-3206-8529-c08a88403033', '506d5bbe-b143-3800-940a-adfc78d88806,
+                        # Initial '0f58cca7-87ac-368e-a526-49e47227b917', '79b23827-48eb-33ed-b110-fbeca32c4125',
+                        # Initial '4172e87e-e7a7-31c1-aeff-c3601433345f', '32a5955e-8d3e-3c37-a77a-2f6d8a1291e6',
                         'd5be9a99-6663-3894-b328-7e835cb2ba4f', '984c8390-962d-392f-9a3f-9d5da3d37666',
-                        'dabb9270-1855-3776-ae53-358f1ef085ef', '32a5955e-8d3e-3c37-a77a-2f6d8a1291e6']
+                        'dabb9270-1855-3776-ae53-358f1ef085ef']
         # in TP to find, include SGR1-PP4 of both ROADM A & C
         tp_to_find = [self.nAX2OTS2, self.nZX2OTS2, 'cd2619fb-1ae0-3785-a6fd-2b71f468cb6c',
                       'b2a2185e-1bd8-3fc1-8083-b50d08a1f21f']
