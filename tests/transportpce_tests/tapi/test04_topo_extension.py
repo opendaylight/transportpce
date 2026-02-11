@@ -42,90 +42,86 @@ class TestTransportPCETopoExtension(unittest.TestCase):
     uuid_services = UuidServices()
     CHECK_DICT_TAPINODES = {
         'node-id': 'TAPI-SBI-ABS-NODE',
-        'supporting-node': [
-            {
-                'network-ref': 'openroadm-network',
-                'node-ref': 'TAPI-SBI-ABS-NODE'
-            }
-        ],
         'transportpce-or-network-augmentation:yang-data-model': 'tapi-ext',
         'org-openroadm-common-network:operational-state': 'inService',
-        'org-openroadm-common-network:node-type': 'ROADM',
-        'org-openroadm-common-network:administrative-state': 'inService',
-        'org-openroadm-clli-network:clli': 'TAPI-SBI-ABS-NODE',
         'transportpce-or-network-augmentation:topology-uuid': 'Uuid{value=a21e4756-4d70-3d40-95b6-f7f630b4a13b}',
+        'supporting-node': [{'network-ref': 'openroadm-network', 'node-ref': 'TAPI-SBI-ABS-NODE'}],
+        'org-openroadm-clli-network:clli': 'TAPI-SBI-ABS-NODE',
+        'org-openroadm-common-network:administrative-state': 'inService',
+        'org-openroadm-common-network:node-type': 'ROADM',
         'ietf-network-topology:termination-point': [
             {
                 'tp-id': 'ROADM-TA1-SRG1-PP1-TXRX',
-                'transportpce-or-network-augmentation:supporting-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43',
-                'org-openroadm-common-network:operational-state': 'inService',
                 'transportpce-or-network-augmentation:tp-uuid': '3c3c3679-ccd7-3343-9f36-bdb7bea11a84',
+                'org-openroadm-common-network:operational-state': 'inService',
+                'org-openroadm-common-network:administrative-state': 'inService',
+                'transportpce-or-network-augmentation:supporting-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43',
                 'transportpce-or-network-augmentation:supporting-node-topology-uuid':
-                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                'org-openroadm-common-network:administrative-state': 'inService'
+                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             },
             {
                 'tp-id': 'ROADM-TA1-DEG2-TTP-TXRX',
-                'transportpce-or-network-augmentation:supporting-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43',
-                'org-openroadm-common-network:operational-state': 'inService',
                 'transportpce-or-network-augmentation:tp-uuid': 'd42ed13c-d81f-3136-a7d8-b283681031d4',
+                'org-openroadm-common-network:operational-state': 'inService',
+                'org-openroadm-common-network:administrative-state': 'inService',
+                'transportpce-or-network-augmentation:supporting-node-uuid': 'f929e2dc-3c08-32c3-985f-c126023efc43',
                 'transportpce-or-network-augmentation:supporting-node-topology-uuid':
-                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                'org-openroadm-common-network:administrative-state': 'inService'
+                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             },
             {
                 'tp-id': 'ROADM-TC1-SRG1-PP1-TXRX',
+                'transportpce-or-network-augmentation:tp-uuid':
+                'e5a9d17d-40cd-3733-b736-cc787a876195', 'org-openroadm-common-network:operational-state': 'inService',
+                'org-openroadm-common-network:administrative-state': 'inService',
                 'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
-                'org-openroadm-common-network:operational-state': 'inService',
-                'transportpce-or-network-augmentation:tp-uuid': 'e5a9d17d-40cd-3733-b736-cc787a876195',
                 'transportpce-or-network-augmentation:supporting-node-topology-uuid':
-                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                'org-openroadm-common-network:administrative-state': 'inService'
+                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             },
             {
                 'tp-id': 'ROADM-TC1-DEG1-TTP-TXRX',
-                'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
-                'org-openroadm-common-network:operational-state': 'inService',
                 'transportpce-or-network-augmentation:tp-uuid': 'fb3a00c1-342f-3cdc-b83d-2c257de298c1',
+                'org-openroadm-common-network:operational-state': 'inService',
+                'org-openroadm-common-network:administrative-state': 'inService',
+                'transportpce-or-network-augmentation:supporting-node-uuid': '7a44ea23-90d1-357d-8754-6e88d404b670',
                 'transportpce-or-network-augmentation:supporting-node-topology-uuid':
-                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b',
-                'org-openroadm-common-network:administrative-state': 'inService'
+                    'a21e4756-4d70-3d40-95b6-f7f630b4a13b'
             }
         ]
     }
+
     CHECK_DICT_INTERDOMAIN_LINK_8 = {
         'link-id': 'TAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX',
+        'org-openroadm-common-network:link-type': 'ROADM-TO-ROADM',
         'source': {
             'source-node': 'TAPI-SBI-ABS-NODE',
             'source-tp': 'ROADM-TC1-DEG1-TTP-TXRX'
         },
         'org-openroadm-common-network:operational-state': 'inService',
-        'org-openroadm-common-network:link-type': 'ROADM-TO-ROADM',
-        'org-openroadm-common-network:administrative-state': 'inService',
+        'org-openroadm-common-network:opposite-link':
+            'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRX',
         'destination': {
             'dest-tp': 'DEG2-TTP-TXRX',
             'dest-node': 'ROADM-C1-DEG2'
         },
-        'org-openroadm-common-network:opposite-link':
-            'ROADM-C1-DEG2-DEG2-TTP-TXRXtoTAPI-SBI-ABS-NODE-ROADM-TC1-DEG1-TTP-TXRX',
+        'org-openroadm-common-network:administrative-state': 'inService',
         'transportpce-or-network-augmentation:link-class': 'inter-domain'
     }
 
     CHECK_DICT_ALIEN_TO_TAPI_LINK_14 = {
         'link-id': 'SPDR-SC1-XPDR1-XPDR1-NETWORK1toTAPI-SBI-ABS-NODE-ROADM-TC1-SRG1-PP1-TXRX',
+        'org-openroadm-common-network:link-type': 'XPONDER-OUTPUT',
         'source': {
             'source-node': 'SPDR-SC1-XPDR1',
             'source-tp': 'XPDR1-NETWORK1'
         },
         'org-openroadm-common-network:operational-state': 'inService',
-        'org-openroadm-common-network:link-type': 'XPONDER-OUTPUT',
-        'org-openroadm-common-network:administrative-state': 'inService',
+        'org-openroadm-common-network:opposite-link':
+            'TAPI-SBI-ABS-NODE-ROADM-TC1-ROADM-TC1-SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
         'destination': {
             'dest-tp': 'ROADM-TC1-SRG1-PP1-TXRX',
             'dest-node': 'TAPI-SBI-ABS-NODE'
         },
-        'org-openroadm-common-network:opposite-link':
-            'ROADM-TC1-ROADM-TC1-SRG1-PP1-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+        'org-openroadm-common-network:administrative-state': 'inService',
         'transportpce-or-network-augmentation:link-class': 'alien-to-tapi'
     }
 

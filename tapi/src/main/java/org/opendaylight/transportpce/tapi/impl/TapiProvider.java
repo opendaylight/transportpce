@@ -35,6 +35,7 @@ import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointDetai
 import org.opendaylight.transportpce.tapi.impl.rpc.GetServiceInterfacePointListImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyDetailsImpl;
 import org.opendaylight.transportpce.tapi.impl.rpc.GetTopologyListImpl;
+import org.opendaylight.transportpce.tapi.listeners.SbiTapiTopoListener;
 import org.opendaylight.transportpce.tapi.listeners.TapiNetworkModelNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiPceNotificationHandler;
 import org.opendaylight.transportpce.tapi.listeners.TapiRendererNotificationHandler;
@@ -103,6 +104,18 @@ public class TapiProvider {
             .augmentation(Network1.class)
             .child(Link.class)
             .build();
+
+    private static final DataObjectReference<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121
+            .topology.context.Topology> TAPI_TOPO_SBI_II = DataObjectReference
+        .builder(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context.class)
+        .augmentation(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.Context1
+            .class)
+        .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.context.TopologyContext.class)
+        .child(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.context.Topology
+            .class, new org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology
+                .rev221121.topology.context.TopologyKey(new Uuid("a21e4756-4d70-3d40-95b6-f7f630b4a13b")))
+            .build();
+
     //TODO: When setting of TAPI Topology externalized, change setting to the value set at tapi feature install for the
     // 2 following constants
     public static final Uuid TAPI_TOPO_UUID = TapiConstants.T0_FULL_MULTILAYER_UUID;
@@ -117,6 +130,7 @@ public class TapiProvider {
     private Registration rendererlistenerRegistration;
     private Registration servicehandlerlistenerRegistration;
     private Registration tapinetworkmodellistenerRegistration;
+    private SbiTapiTopoListener sbiTapiTopoListener;
 
     @Activate
     public TapiProvider(@Reference DataBroker dataBroker,
@@ -135,6 +149,7 @@ public class TapiProvider {
         this.networkTransactionService = networkTransactionService;
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.netModServ = networkModelService;
+        this.sbiTapiTopoListener = new SbiTapiTopoListener(networkTransactionService);
         netModServ.createTapiExtNodeAtInit();
         LOG.info("TapiProvider Session Initiated");
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
@@ -150,6 +165,7 @@ public class TapiProvider {
         TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker, connectivityUtils);
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
+
 
         rpcRegistration = rpcProviderService.registerRpcImplementations(
                 new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils, pceListenerImpl,
@@ -180,6 +196,9 @@ public class TapiProvider {
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 DataObjectReference.builder(ServiceInterfacePoints.class).build(),
                 tapiListener));
+        listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, TAPI_TOPO_SBI_II,
+                sbiTapiTopoListener));
+
         // Notification Listener
         pcelistenerRegistration = notificationService.registerCompositeListener(pceListenerImpl.getCompositeListener());
         LOG.debug("Pce Listener Registration in TapiProvider : {}", pcelistenerRegistration);
