@@ -24,16 +24,23 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.tapi.TapiConstants;
 import org.opendaylight.transportpce.tapi.utils.TapiLink;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902.LinkClassEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev250110.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev250110.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Context;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.LayerProtocolName;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev221121.Uuid;
@@ -76,6 +83,14 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             if (link1 == null) {
                 LOG.error("No type in link. We cannot trigger the TAPI link creation");
                 return;
+            }
+            var tpceAugmLink1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                .transportpce.or.network.augmentation.rev250902.Link1.class);
+            if (tpceAugmLink1 != null && tpceAugmLink1.getLinkClass() != null
+                    && tpceAugmLink1.getLinkClass().equals(LinkClassEnum.InterDomain)) {
+                LOG.info("{} post InterdomainLink {} in TAPI topology Datastores",
+                    addInterdomainLinkToTapiTopologies(link) ? "Successfully" : "Did not succeed to", link.getLinkId());
+                continue;
             }
 
             if (!(link1.getLinkType().equals(OpenroadmLinkType.XPONDERINPUT)
@@ -193,6 +208,83 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
         return true;
     }
 
+    private boolean addInterdomainLinkToTapiTopologies(Link link) {
+        String tapiSBIend = "A";
+        TpId srcTpId = link.getSource().getSourceTp();
+        TpId dstTpId = link.getDestination().getDestTp();
+        NodeId srcNode = link.getSource().getSourceNode();
+        NodeId dstNode = link.getDestination().getDestNode();
+        String aendName = String.join("+", srcNode.getValue(), srcTpId.getValue());
+        String zendName = String.join("+", dstNode.getValue(), dstTpId.getValue());
+
+        if (dstNode.getValue().equals("TAPI-SBI-ABS-NODE")) {
+            tapiSBIend = "Z";
+            zendName = dstTpId.getValue();
+        } else {
+            aendName = srcTpId.getValue();
+        }
+        DataObjectIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation
+                .rev250902.TerminationPoint1> tpIID = DataObjectIdentifier.builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
+            .child(Node.class, new NodeKey(tapiSBIend.equals("A") ? srcNode : dstNode))
+            .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .Node1.class)
+            .child(TerminationPoint.class, new TerminationPointKey(
+                new TpId(tapiSBIend.equals("A") ? srcTpId : dstTpId)))
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.opendaylight
+                .transportpce.or.network.augmentation.rev250902.TerminationPoint1.class)
+            .build();
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902
+            .TerminationPoint1 tapiTp = null;
+        try {
+            Optional<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.or.network.augmentation.rev250902
+                .TerminationPoint1> optTp = networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, tpIID)
+                    .get();
+            if (optTp.isPresent()) {
+                tapiTp = optTp.orElseThrow();
+                LOG.debug("TapiORLinListener optTp.isPresent = true {}", tapiTp);
+            } else {
+                return false;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("TapiORLinListener: Error retrieving Tp {} from InterdomainLink {}", tpIID, link.getLinkId(), e);
+            return false;
+        }
+        Uuid srcTpUuid;
+        Uuid srcNodeUuid;
+        Uuid dstTpUuid;
+        Uuid dstNodeUuid;
+        Uuid srcTopoUuid;
+        Uuid dstTopoUuid;
+        if (tapiSBIend.equals("Z")) {
+            srcTpUuid = new Uuid(
+                UUID.nameUUIDFromBytes(srcTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            srcNodeUuid = new Uuid(
+                UUID.nameUUIDFromBytes(srcNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            srcTopoUuid = this.tapiTopoUuid;
+            dstTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
+            dstTpUuid = new Uuid(tapiTp.getTpUuid());
+            dstNodeUuid = new Uuid(tapiTp.getSupportingNodeUuid());
+        } else {
+            dstTpUuid = new Uuid(
+                UUID.nameUUIDFromBytes(dstTpId.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            dstNodeUuid = new Uuid(
+                UUID.nameUUIDFromBytes(dstNode.getValue().getBytes(StandardCharsets.UTF_8)).toString());
+            dstTopoUuid = this.tapiTopoUuid;
+            srcTopoUuid = new Uuid(StringConstants.SBI_TAPI_TOPOLOGY_UUID);
+            srcTpUuid = new Uuid(tapiTp.getTpUuid());
+            srcNodeUuid = new Uuid(tapiTp.getSupportingNodeUuid());
+        }
+        return
+                putTapiInterDomainLinkInTopology(StringConstants.SBI_TAPI_TOPOLOGY_UUID,
+                    this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
+                        srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid))
+                &&
+                putTapiInterDomainLinkInTopology(StringConstants.T0_FULL_MULTILAYER_UUID,
+                    this.tapiLink.createInterDomainTapiLink(String.join("to", aendName, zendName),
+                        srcNodeUuid, srcTpUuid, dstNodeUuid, dstTpUuid, srcTopoUuid, dstTopoUuid));
+    }
+
     private void putTapiLinkInTopology(
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link tapiXpdrLink) {
         LOG.info("Creating tapi link in TAPI topology context");
@@ -213,6 +305,30 @@ public class TapiOrLinkListener implements DataTreeChangeListener<Link> {
             LOG.error("Error populating TAPI topology: ", e);
         }
         LOG.info("TAPI Link added succesfully.");
+    }
+
+    private boolean putTapiInterDomainLinkInTopology(Uuid topoUuid,
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev221121.topology.Link link) {
+        LOG.info("Creating tapi link {} in TAPI topology context", link.getName());
+        // merge in datastore
+        this.networkTransactionService.merge(
+            LogicalDatastoreType.OPERATIONAL,
+            DataObjectIdentifier.builder(Context.class)
+                .augmentation(Context1.class).child(TopologyContext.class)
+                .child(Topology.class, new TopologyKey(topoUuid))
+                .build(),
+            new TopologyBuilder()
+                .setUuid(topoUuid)
+                .setLink(Map.of(link.key(), link))
+                .build());
+        try {
+            this.networkTransactionService.commit().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error populating TAPI topology with InterdomainLink {}: ", link.getName(), e);
+            return false;
+        }
+        LOG.info("TAPI InterdomainLink {} added succesfully in Topology {}.", link.getName(), topoUuid);
+        return true;
     }
 
     private String getQual(String node) {

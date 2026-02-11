@@ -123,6 +123,7 @@ final class OrdLink {
      */
     public static boolean createInterDomainLinks(InitInterDomainLinksInput input, DataBroker dataBroker) {
         // Determination of the node that belongs to the TAPI domain
+        LOG.info("Entering create InterdomainLink with input: {} ", input);
         String tapiDomainNode = "A";
         String aendUuid = input.getAEnd().getRdmTopologyUuid();
         String zendUuid = input.getZEnd().getRdmTopologyUuid();
@@ -154,6 +155,8 @@ final class OrdLink {
             orTpState = rdmSrcTp.augmentation(TerminationPoint1.class).getOperationalState();
             addTpsToTapiExtNode(destTp, input.getZEnd().getRdmNepUuid(), input.getZEnd().getRdmNode(),
                 input.getZEnd().getRdmNodeUuid(), input.getZEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
+//            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(srcNode, srcTp, destTp);
+//            oppLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(destTp, srcNode, srcTp);
         } else {
             destNode = new StringBuilder(input.getZEnd().getRdmNode()).append("-DEG")
                 .append(input.getZEnd().getDegNum()).toString();
@@ -166,9 +169,17 @@ final class OrdLink {
             orTpState = rdmDestTp.augmentation(TerminationPoint1.class).getOperationalState();
             addTpsToTapiExtNode(srcTp, input.getAEnd().getRdmNepUuid(), input.getAEnd().getRdmNode(),
                 input.getAEnd().getRdmNodeUuid(), input.getAEnd().getRdmTopologyUuid(), linkId.getValue(), dataBroker);
+//            linkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsSource(srcTp, destNode, destTp);
+//            oppLinkId = LinkIdUtil.buildInterDomainLinkIdwABSnodeAsDest(destNode, destTp, srcTp);
         }
+        LOG.info("Handling InterdomainLink with linkId: {} ", linkId);
         // IETF link builder
+
         LinkBuilder linkBuilderFW = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null);
+//        LinkBuilder linkBuilderFW = TopologyUtils.createInterDomainLink(srcNode, destNode, srcTp, destTp,
+//            tapiDomainNode.equals("Z") ? "Dest" : "Source");
+        LOG.info("Creating InterdomainLink with linkId: {} through TopologyUtils", linkId);
+        LOG.info("InterdomainLink {} has LinkBuilder processed by TopologyUtils.createLink: {}", linkId, linkBuilderFW);
         linkBuilderFW.addAugmentation(
                 new Link1Builder()
                     .setOppositeLink(oppLinkId)
@@ -186,6 +197,8 @@ final class OrdLink {
         linkBuilderFW.addAugmentation(tpceAugmLink11Bd.build());
 
         LinkBuilder linkBuilderBW = TopologyUtils.createLink(destNode, srcNode, destTp, srcTp, null);
+        // LinkBuilder linkBuilderBW = TopologyUtils.createInterDomainLink(destNode, srcNode, destTp, srcTp,
+        //    tapiDomainNode.equals("Z") ? "Source" : "Dest");
         linkBuilderBW.addAugmentation(
                 new Link1Builder()
                     .setOppositeLink(linkId)
@@ -198,6 +211,7 @@ final class OrdLink {
         linkBuilderBW.addAugmentation(tpceAugmLink11Bd.build());
 
         // Building link instance identifier
+        LOG.info("Building DataObjectIdentifier for InterdomainLink with linkId: {} through TopologyUtils", linkId);
         DataObjectIdentifier<Link> linkIIDFW = DataObjectIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(StringConstants.OPENROADM_TOPOLOGY)))
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
