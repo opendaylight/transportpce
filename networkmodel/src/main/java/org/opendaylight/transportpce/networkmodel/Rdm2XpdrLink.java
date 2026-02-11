@@ -202,7 +202,9 @@ final class Rdm2XpdrLink {
         } else {
             nodeBldr.setNodeId(new NodeId(srcNode));
         }
-        LinkId oppositeLinkId = isRdmTapiNode ? LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp)
+        LinkId oppositeLinkId = isRdmTapiNode
+            // ? LinkIdUtil.buildLinkId(destNode, destTp, srcNode, srcTp)
+            ? LinkIdUtil.buildLinkId("TAPI-SBI-ABS-NODE-" + destNode, destTp, srcNode, srcTp)
             : LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp);
         Link1Builder lnk2bldr
             = new Link1Builder()

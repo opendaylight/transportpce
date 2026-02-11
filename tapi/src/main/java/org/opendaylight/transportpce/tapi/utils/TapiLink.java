@@ -25,6 +25,9 @@ public interface TapiLink {
             String adminState, String operState, Set<LayerProtocolName> layerProtoNameList,
             Set<String> transLayerNameList, Uuid tapiTopoUuid);
 
+    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+        Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
+
     AdministrativeState setTapiAdminState(String adminState);
 
     AdministrativeState setTapiAdminState(AdminStates adminState1, AdminStates adminState2);
