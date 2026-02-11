@@ -21,6 +21,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b579c6fe_2f45cdf7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-11T14:12:05Z",
+      "side": 1,
+      "message": "This line is redundant with intrinsic implementation of the Java record. The record constructor has already this check in case the parameter is null.",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbf4f4d_a653e23f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-11T14:12:05Z",
+      "side": 1,
+      "message": "If an understand correctly, this method is designed for use when we have the nodeId and the tpId as they appear in the portmapping (as an example : ROADM-A2 / SRG1-PP2-TXRX), and you want to build the nodeId as in the openroadm-topology : ROADM-A2-SRG1.\nIt would therefore be very useful to explain this in the javadoc to avoid any confusion with the previous constructor.",
+      "range": {
+        "startLine": 26,
+        "startChar": 33,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d3885eb_ce54c78e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-11T14:12:05Z",
+      "side": 1,
+      "message": "If you want to explicit the exception message, you should use a more explicit message as for example:\n\"The \u0027nodeId\u0027 must not be null\".\nIdem for tpId.",
+      "range": {
+        "startLine": 27,
+        "startChar": 39,
+        "endLine": 27,
+        "endChar": 47
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4544f2b_095e2ea9",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
         "patchSetId": 1
