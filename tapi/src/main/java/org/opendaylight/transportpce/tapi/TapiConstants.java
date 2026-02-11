@@ -23,6 +23,7 @@ public final class TapiConstants {
 
     public static final String TRANSITIONAL_LINK = "tapi-transitional-link";
     public static final String OMS_RDM_RDM_LINK = "tapi-rdm-rdm-link";
+    public static final String OTS_INTERDOMAIN_RDM_RDM_LINK = "tapi-interdomain-link";
     public static final String OMS_XPDR_RDM_LINK = "tapi-xpdr-rdm-link";
     public static final String OTN_XPDR_XPDR_LINK = "tapi-otn-xpdr-xpdr-link";
     public static final String VALUE_NAME_OTN_XPDR_XPDR_LINK = "otn link name";
