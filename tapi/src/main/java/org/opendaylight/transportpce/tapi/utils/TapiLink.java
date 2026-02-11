@@ -211,4 +211,20 @@ public interface TapiLink {
      * @return a map containing generated CEPs
      */
     Map<Map<String, String>, ConnectionEndPoint> getCepMap();
+
+    /**
+     * Builds and return returns an inter-domain TAPI Unidirectional link from input parameters.
+     *
+     * @param linkId The link Id used as the name value of Tapi Link Name (value-name = "tapi-interdomain-link")
+     * @param srcNodeUuid Uuid of source node
+     * @param srcTpUuid source termination point Uuid
+     * @param dstNodeUuid Uuid of destination node
+     * @param dstTpUuid destination termination point Uuid
+     * @param srcTapiTopoUuid UUID of the TAPI topology containing the source NEP
+     * @param dstTapiTopoUuid UUID of the TAPI topology containing the destination NEP
+     * @return a Tapi interdomain Link
+     */
+    Link createInterDomainTapiLink(String linkId, Uuid srcNodeUuid, Uuid srcTpUuid,
+            Uuid dstNodeUuid, Uuid dstTpUuid, Uuid srcTapiTopoUuid, Uuid dstTapiTopoUuid);
+
 }
