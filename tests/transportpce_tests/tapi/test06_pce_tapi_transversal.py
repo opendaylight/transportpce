@@ -188,41 +188,7 @@ class TransportPCEtest(unittest.TestCase):
         print("TIME TO UPLOAD FULL OpenROADMTOPOLOGY")
         time.sleep(2)
 
-
-<< << << < HEAD
-   # def test_02_load_sbi_topology(self):
-   #     # pylint: disable=too-many-branches
-   #     # pylint: disable=too-many-statements
-   #     response = test_utils.transportpce_api_rpc_request(
-   #         'transportpce-networkutils', 'init-inter-domain-links', self.rpc_interdomain_TA1DEG1_to_A1DEG1_input)
-   #
-   #     if (response['status_code'] != requests.codes.ok
-   #             or 'Unidirectional Roadm-to-Roadm Inter-Domain Link created successfully'
-   #                 not in response["output"]["result"]):
-   #         print("interdomain Link creation from ROADMA1 to ROADMTA1 failed")
-   #     else:
-   #         print("interdomain Link creation from ROADMA1 to ROADMTA1 succeeded")
-   #
-   #     # Config ROADMA1-ROADMTA oms-attributes
-   #     data = {"span": {
-   #         "auto-spanloss": "true",
-   #         "spanloss-base": 11.0,
-   #         "spanloss-current": 12,
-   #         "engineered-spanloss": 12.2,
-   #         "link-concatenation": [{
-   #             "SRLG-Id": 0,
-   #             "fiber-type": "smf",
-   #             "SRLG-length": 1000,
-   #             "pmd": 0.01}]}}
-   #     response = test_utils.add_oms_attr_request(
-   #         "ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-TA1-DEG1-DEG1-TTP-TXRX", data)
-   #     if response.status_code != requests.codes.created:
-   #         print("OMS attributes add on link ROADMA1-ROADMTA1 failed")
-   #     else:
-   #         print("OMS attributes added on link ROADMA1-ROADMTA1")
-   #     print("TIME TO UPLOAD FULL TOPOLOGY with Interdomain link")
-== == == =
-   def test_02_check_tapi_sbi_abs_node_otn_layer(self):
+    def test_02_check_tapi_sbi_abs_node_otn_layer(self):
         response = test_utils. get_ietf_network_node_request('otn-topology', 'TAPI-SBI-ABS-NODE', 'config')
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual(response['node']['node-id'], "TAPI-SBI-ABS-NODE", 'TAPI SBI ABS Node shall be there')
@@ -258,7 +224,7 @@ class TransportPCEtest(unittest.TestCase):
         # TAPI SBI ABS shall have 2(SPDR-STA1/STC1)x6(XPDR1(1)/2(4)/3(1) OTS Network ports
         # + 2 (ROADM-TA1/RTC1) x 2 (DEG1+2) TTP OTS ports + 4x2(ROADM TAI SRG1/3) + 4 (ROADM TCI SRG1) OTS PP Ports
         self.assertEqual(len(response['node']['ietf-network-topology:termination-point']), 28,
-                         'TAPI SBI ABS shall have a total of 28 OTS ports (SPDR Network ports & ROADM PP and TTP ports')
+             'TAPI SBI ABS shall have a total of 28 OTS ports (SPDR Network ports & ROADM PP and TTP ports')
 
     def test_04_load_sbi_topology(self):
         # pylint: disable=too-many-branches
@@ -267,13 +233,13 @@ class TransportPCEtest(unittest.TestCase):
             'transportpce-networkutils', 'init-inter-domain-links', self.rpc_interdomain_TA1DEG1_to_A1DEG1_input)
         print("TIME TO CHECK LINK")
         time.sleep(50)
-        if (response['status_code'] != requests.codes.ok
+        if (response['status_code'] != requests.codes.ok 
                 or 'Unidirectional Roadm-to-Roadm Inter-Domain Link created successfully'
-            not in response["output"]["result"]):
+                    not in response["output"]["result"]):
             print("interdomain Link creation from ROADMA1 to ROADMTA1 failed")
         else:
             print("interdomain Link creation from ROADMA1 to ROADMTA1 succeeded")
-
+    
         # Config ROADMA1-ROADMTA oms-attributes
         data = {"span": {
             "auto-spanloss": "true",
@@ -292,8 +258,7 @@ class TransportPCEtest(unittest.TestCase):
         else:
             print("OMS attributes added on link ROADMA1-ROADMTA1")
         print("TIME TO UPLOAD FULL TOPOLOGY with Interdomain link")
->>>>>> > 7db564a9c... SBI tapi topology Listener
-   #     time.sleep(25)
+    #     time.sleep(25)
 
 
 if __name__ == "__main__":
