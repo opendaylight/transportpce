@@ -42,6 +42,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "507823da_c7c4867f",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-02-12T12:58:39Z",
+      "side": 1,
+      "message": "Well, not quite. I thought so too initially, but that\u0027s not really the case. There is a subtle difference at play here. Removing `Objects.requireNonNull(value, \"value\");` will cause `value.isBlank()` to produce a NPE instead.\n\n## Example 1\n\nThis... \n```\npublic TopologyNodeId {\n    Objects.requireNonNull(value, \"value\");\n    if (value.isBlank()) {\n        throw new IllegalArgumentException(\"TopologyNodeId must not be blank\");\n    }\n}\n\nTopologyNodeId topologyNodeId \u003d new TopologyNodeId(null);\n```\n\n... will produce: `java.lang.NullPointerException: value`.\n\n## Example 2\n\nThis... \n\n```\npublic TopologyNodeId {\n    if (value.isBlank()) {\n        throw new IllegalArgumentException(\"TopologyNodeId must not be blank\");\n    }\n}\n\nTopologyNodeId topologyNodeId \u003d new TopologyNodeId(null);\n```\n\n... will produce:\n\n```\njava.lang.NullPointerException:\nCannot invoke \"String.isBlank()\" because \"value\" is null\n```\n\n## Suggestion\n\nNow, as I put these two error messages against each other, I have to say my solution produced a less informative message (Example 1). I suggest changing `Objects.requireNonNull(value, \"value\");` to `Objects.requireNonNull(value, \"TopologyNodeId must not be null\");` That would produce this error message:\n\n```\n`java.lang.NullPointerException: TopologyNodeId must not be null`.\n```",
+      "parentUuid": "b579c6fe_2f45cdf7",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cbf4f4d_a653e23f",
@@ -55,6 +79,30 @@
       "writtenOn": "2026-02-11T14:12:05Z",
       "side": 1,
       "message": "If an understand correctly, this method is designed for use when we have the nodeId and the tpId as they appear in the portmapping (as an example : ROADM-A2 / SRG1-PP2-TXRX), and you want to build the nodeId as in the openroadm-topology : ROADM-A2-SRG1.\nIt would therefore be very useful to explain this in the javadoc to avoid any confusion with the previous constructor.",
+      "range": {
+        "startLine": 26,
+        "startChar": 33,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ddea82_a87150a1",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-02-12T12:58:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5cbf4f4d_a653e23f",
       "range": {
         "startLine": 26,
         "startChar": 33,
@@ -88,6 +136,30 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1135c94_5149027d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/openroadm/TopologyNodeId.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-02-12T12:58:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6d3885eb_ce54c78e",
+      "range": {
+        "startLine": 27,
+        "startChar": 39,
+        "endLine": 27,
+        "endChar": 47
+      },
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4544f2b_095e2ea9",
@@ -101,6 +173,24 @@
       "writtenOn": "2025-12-08T08:16:13Z",
       "side": 1,
       "message": "Question: would it be a good idea to add a `.toNodeId()` method to the TopologyNodeId?\nThis way we git rid of `new NodeId(nodeid.toString())` and just replace it with `nodeId.toNodeId()`\n\nAlso, since we seem to have a NodeId class, maybe not name the TopologyNodeId variable to NodeId? Maybe these are just nitpicks?",
+      "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "307be1a9_599b1b45",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiNetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-02-12T12:58:39Z",
+      "side": 1,
+      "message": "I thought about that too. It might be. My only concern is instantiating the NodeId object. I believe there are a ton of different NodeId versions and I\u0027m hesitant making the class dependent on the OpenROADM model.",
+      "parentUuid": "d4544f2b_095e2ea9",
       "revId": "128c7ef750642556bc634dcf42cf2a9b886717e7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
