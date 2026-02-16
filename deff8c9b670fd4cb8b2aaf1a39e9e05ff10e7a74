@@ -17,6 +17,23 @@
       "message": "Thx Gilles!",
       "revId": "deff8c9b670fd4cb8b2aaf1a39e9e05ff10e7a74",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7723c8a_9972077e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-16T16:43:28Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "deff8c9b670fd4cb8b2aaf1a39e9e05ff10e7a74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
