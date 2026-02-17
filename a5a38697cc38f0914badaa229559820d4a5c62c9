@@ -106,6 +106,24 @@
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "982a25fd_e0a80eb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-02-17T05:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb775f84_6593012f",
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d47d6c5_71eaf061",
@@ -356,6 +374,30 @@
       "side": 1,
       "message": "This was to keep this class independent of OC yang modules specific revisions of OC modules. I think it is better to retain this independence even though we support only one version of OC. So, can we retain this change?",
       "parentUuid": "d6aa0f26_87c2fa48",
+      "range": {
+        "startLine": 236,
+        "startChar": 20,
+        "endLine": 239,
+        "endChar": 56
+      },
+      "revId": "a5a38697cc38f0914badaa229559820d4a5c62c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58e737e0_8a86dbf5",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-02-17T05:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71c02e7b_968e0a4a",
       "range": {
         "startLine": 236,
         "startChar": 20,
