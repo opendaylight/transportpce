@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb516bba_d007d353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-02-18T08:07:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this small change to the test.\n\nWhat is happening here?",
+      "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62a30b36_96d9cc01",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionToolsTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 9387
+      },
+      "writtenOn": "2026-02-18T08:07:51Z",
+      "side": 1,
+      "message": "The same test twice in a row?\nAlso, the expected.equals() method is now not tested?\nThis doesnt look right to me.",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 8
+      },
+      "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
