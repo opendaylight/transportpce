@@ -39,6 +39,30 @@
       },
       "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48adf8ba_17895d09",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionToolsTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-18T09:12:47Z",
+      "side": 1,
+      "message": "Yes, you\u0027re right, I was a bit hasty. The same test appears twice, in both PS15 and PS16, so we can remove line 197.",
+      "parentUuid": "62a30b36_96d9cc01",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 8
+      },
+      "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
