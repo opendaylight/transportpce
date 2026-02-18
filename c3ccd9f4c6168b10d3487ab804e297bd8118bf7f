@@ -63,6 +63,30 @@
       },
       "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "678f2790_94f47181",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionToolsTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 9231
+      },
+      "writtenOn": "2026-02-18T09:28:53Z",
+      "side": 1,
+      "message": "Personally, I feel changing this line doesn\u0027t belong in this commit. Unless I\u0027m mistaken, this test is unrelated and doesn\u0027t fall under the scope of the change. Therefore, it should\u0027ve been in a separate commit, imho.\n\nOther than that, yes, this line should be removed, since it\u0027s superfluous.",
+      "parentUuid": "48adf8ba_17895d09",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 8
+      },
+      "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
