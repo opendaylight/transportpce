@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f5ed11_8cc59df6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 9118
+      },
+      "writtenOn": "2026-02-19T06:43:54Z",
+      "side": 1,
+      "message": "Pushing netconf-proxy tool in Java.",
+      "revId": "26412c1b0f3879a9cbfae1fa12821d2d08dd12da",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    }
+  ]
+}
