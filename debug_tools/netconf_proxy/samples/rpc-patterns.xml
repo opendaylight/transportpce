@@ -1,0 +1,101 @@
+<rpc-patterns>
+    <!--
+    <pattern>
+        <nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <nc:get>
+                <nc:filter nc:type="subtree">
+                    <system xmlns="http://openconfig.net/yang/system">
+                        <config>
+                            <hostname/>
+                        </config>
+                    </system>
+                    <components xmlns="http://openconfig.net/yang/platform">
+                        <component>
+                            <name/>
+                            <state>
+                                <description/>
+                                <software-version/>
+                            </state>
+                        </component>
+                    </components>
+                </nc:filter>
+            </nc:get>
+        </nc:rpc>
+        <rpc-transformer>
+            <xslt-file></xslt-file>
+        </rpc-transformer>
+        <reply-transformer>
+            <xslt-file></xslt-file>
+        </reply-transformer>
+    </pattern>
+    <pattern>
+        <nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <ncn:create-subscription xmlns:ncn="urn:ietf:params:xml:ns:netconf:notification:1.0">
+                <ncn:stream>NETCONF</ncn:stream>
+            </ncn:create-subscription>
+        </nc:rpc>
+        <rpc-transformer>
+            <xslt-file></xslt-file>
+        </rpc-transformer>
+        <reply-transformer>
+            <xslt-file></xslt-file>
+        </reply-transformer>
+    </pattern>
+    <pattern>
+        <nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <nc:get>
+                <nc:filter nc:type="subtree">
+                    <system xmlns="http://openconfig.net/yang/system">
+                        <config>
+                            <hostname/>
+                        </config>
+                    </system>
+                    <components xmlns="http://openconfig.net/yang/platform">
+                        <component>
+                            <name>CHASSIS-1</name>
+                            <state>
+                                <description/>
+                                <software-version/>
+                            </state>
+                        </component>
+                    </components>
+                </nc:filter>
+            </nc:get>
+        </nc:rpc>
+        <rpc-transformer>
+            <xslt-file></xslt-file>
+        </rpc-transformer>
+        <reply-transformer>
+            <xslt-file></xslt-file>
+        </reply-transformer>
+    </pattern>
+    <pattern>
+        <nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <nc:get>
+                <nc:filter type="subtree">
+                    <system xmlns="http://openconfig.net/yang/system">
+                        <config/>        <state/>        <clock/>      </system>
+                </nc:filter>
+            </nc:get>
+        </nc:rpc>
+        <rpc-transformer>
+            <xslt-file></xslt-file>
+        </rpc-transformer>
+        <reply-transformer>
+            <xslt-file>add-ne-type.xslt</xslt-file>
+        </reply-transformer>
+    </pattern>
+    -->
+    <pattern>
+        <nc:rpc xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <nc:get>
+                <nc:filter nc:type="subtree">
+                    <netconf-state xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">
+                        <schemas/>
+                    </netconf-state>
+                </nc:filter>
+            </nc:get>
+        </nc:rpc>
+        <response-file>./netconf-monitoring-schemas-response.xml</response-file>
+    </pattern>
+</rpc-patterns>

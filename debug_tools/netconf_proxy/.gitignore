@@ -1,0 +1,34 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Logs
+logs/
+*.log
+
+# SSH keys
+*.ser
+*.pem
+hostkey.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application
+application-local.conf
