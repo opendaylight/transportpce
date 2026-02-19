@@ -156,20 +156,17 @@ public final class ModelMappingUtils {
                 scale = GridConstant.FLEX_GRID_FREQUENCY_PRECISION;
             }
         }
-        if (!isOpenConfig) {
-            if (atoZDirection.getAToZMinFrequency() != null) {
-                servicePathInputBuilder.setMinFreq(new FrequencyTHz(atoZDirection.getAToZMinFrequency().getValue()));
-                servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
-            }
-            if (atoZDirection.getAToZMaxFrequency() != null) {
-                servicePathInputBuilder.setMaxFreq(new FrequencyTHz(atoZDirection.getAToZMaxFrequency().getValue()));
-                servicePathInputBuilder.setHigherSpectralSlotNumber(
-                        Uint32.valueOf(GridUtils
-                                .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
-            }
-
+        if (atoZDirection.getAToZMinFrequency() != null) {
+            servicePathInputBuilder.setMinFreq(new FrequencyTHz(atoZDirection.getAToZMinFrequency().getValue()));
+            servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
+                    .valueOf(GridUtils
+                            .getLowerSpectralIndexFromFrequency(atoZDirection.getAToZMinFrequency().getValue())));
+        }
+        if (atoZDirection.getAToZMaxFrequency() != null) {
+            servicePathInputBuilder.setMaxFreq(new FrequencyTHz(atoZDirection.getAToZMaxFrequency().getValue()));
+            servicePathInputBuilder.setHigherSpectralSlotNumber(
+                    Uint32.valueOf(GridUtils
+                            .getHigherSpectralIndexFromFrequency(atoZDirection.getAToZMaxFrequency().getValue())));
         }
         if (atoZDirection.getAToZMinFrequency() != null && atoZDirection.getAToZMaxFrequency() != null) {
             servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
@@ -233,19 +230,19 @@ public final class ModelMappingUtils {
                 scale = GridConstant.FLEX_GRID_FREQUENCY_PRECISION;
             }
         }
+        if (ztoADirection.getZToAMinFrequency() != null) {
+            servicePathInputBuilder.setMinFreq(new FrequencyTHz(ztoADirection.getZToAMinFrequency().getValue()));
+            servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
+                    .valueOf(GridUtils
+                            .getLowerSpectralIndexFromFrequency(ztoADirection.getZToAMinFrequency().getValue())));
+        }
+        if (ztoADirection.getZToAMaxFrequency() != null) {
+            servicePathInputBuilder.setMaxFreq(new FrequencyTHz(ztoADirection.getZToAMaxFrequency().getValue()));
+            servicePathInputBuilder.setHigherSpectralSlotNumber(
+                    Uint32.valueOf(GridUtils
+                            .getHigherSpectralIndexFromFrequency(ztoADirection.getZToAMaxFrequency().getValue())));
+        }
         if (!isOpenConfig) {
-            if (ztoADirection.getZToAMinFrequency() != null) {
-                servicePathInputBuilder.setMinFreq(new FrequencyTHz(ztoADirection.getZToAMinFrequency().getValue()));
-                servicePathInputBuilder.setLowerSpectralSlotNumber(Uint32
-                        .valueOf(GridUtils
-                                .getLowerSpectralIndexFromFrequency(ztoADirection.getZToAMinFrequency().getValue())));
-            }
-            if (ztoADirection.getZToAMaxFrequency() != null) {
-                servicePathInputBuilder.setMaxFreq(new FrequencyTHz(ztoADirection.getZToAMaxFrequency().getValue()));
-                servicePathInputBuilder.setHigherSpectralSlotNumber(
-                        Uint32.valueOf(GridUtils
-                                .getHigherSpectralIndexFromFrequency(ztoADirection.getZToAMaxFrequency().getValue())));
-            }
             if (ztoADirection.getZToAMinFrequency() != null && ztoADirection.getZToAMaxFrequency() != null) {
                 servicePathInputBuilder.setCenterFreq(GridUtils.getCentralFrequencyWithPrecision(
                         ztoADirection.getZToAMinFrequency().getValue().decimalValue(),

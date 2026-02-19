@@ -286,8 +286,8 @@ public final class OpenRoadmTopology {
                 // Add openroadm-common tp augmentations
                 .addAugmentation(ocnTp1Bldr.build());
 
-            if (m.getPortQual().equals("xpdr-network") && m.getSupportedOperationalMode() != null
-                    && !m.getSupportedOperationalMode().isEmpty()) {
+            if ((m.getPortQual().equals("xpdr-network") || m.getPortQual().equals("switch-network"))
+                    && m.getSupportedOperationalMode() != null && !m.getSupportedOperationalMode().isEmpty()) {
 
                 Map<OperationalModeKey, OperationalMode> mapSopm = new HashMap<>();
                 for (String opMode : m.getSupportedOperationalMode()) {

@@ -19,6 +19,8 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenconfigNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mc.capabilities.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.NodesKey;
@@ -231,14 +233,10 @@ public final class MappingUtilsImpl implements MappingUtils {
 
     private static final ImmutableMap<String, String> OC_CAP_MAP =
             ImmutableMap.<String, String>builder()
-                    .put("PROT100GE{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_100GE}",
-                            "100GE")
-                    .put("PROTODU4{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_ODU4}",
-                            "ODU4")
-                    .put("PROTOTUCN{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_OTUCN}",
-                            "OTUCN")
-                    .put("PROTODUCN{qname=(http://openconfig.net/yang/transport-types?revision=2021-07-29)PROT_ODUCN}",
-                            "ODUCN").build();
+                    .put("PROT_100GE", "100GE")
+                    .put("PROT_ODU4", "ODU4")
+                    .put("PROT_OTUCN", "OTUCN")
+                    .put("PROT_ODUCN", "ODUCN").build();
     private final DataBroker dataBroker;
 
     @Activate
@@ -258,7 +256,12 @@ public final class MappingUtilsImpl implements MappingUtils {
                     readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.orElseThrow();
-                switch (nodInfo.getOpenroadmVersion()) {
+                OpenroadmNodeVersion version = nodInfo.getOpenroadmVersion();
+                if (version == null) {
+                    LOG.warn("OpenRoadm version is null for nodeId {}", nodeId);
+                    return null;
+                }
+                switch (version) {
                     case _71:
                         return StringConstants.OPENROADM_DEVICE_VERSION_7_1;
                     case _221:
@@ -277,6 +280,17 @@ public final class MappingUtilsImpl implements MappingUtils {
         return null;
     }
 
+    /**
+     * Retrieves the OpenConfig version string for the specified node ID.
+     * This method reads the NodeInfo data from the configuration datastore
+     * using the given nodeId, then checks the OpenConfig version.
+     * It returns a corresponding version string constant if recognized.
+     * If the OpenConfig version is unknown, or the node info is not found,
+     * it logs warnings. In case of read failures, it logs errors.
+     *
+     * @param nodeId the identifier of the node to query
+     * @return a string representing the OpenConfig device version if found; otherwise null
+     */
     public String getOpenConfigVersion(String nodeId) {
         /*
          * Getting physical mapping corresponding to logical connection point
@@ -289,18 +303,23 @@ public final class MappingUtilsImpl implements MappingUtils {
                     readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.orElseThrow();
-                switch (nodInfo.getOpenconfigVersion()) {
+                OpenconfigNodeVersion version = nodInfo.getOpenconfigVersion();
+                if (version == null) {
+                    LOG.warn("OpenConfig version is null for nodeId {}", nodeId);
+                    return null;
+                }
+                switch (version) {
                     case _190:
                         return StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
                     case PROTOTYPE:
                     default:
-                        LOG.warn("unknown openCONFIG device version");
+                        LOG.warn("unknown openConfig device version");
                 }
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
             }
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);
+            LOG.error("Unable to read mapping for nodeId {}", nodeId, ex);
         }
         return null;
     }

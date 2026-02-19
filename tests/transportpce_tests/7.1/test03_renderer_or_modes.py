@@ -122,7 +122,7 @@ class TestTransportPCERendererOrModes(unittest.TestCase):
                 "higher-spectral-slot-number": 272,
             })
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.assertIn("Interfaces created successfully for nodes: ", response["output"]["result"])
+        self.assertIn("Successfully configured nodes: ", response["output"]["result"])
         # node-interface is list which does not preserve the order
         a_side = "XPDR-A2"
         z_side = "XPDR-C2"
@@ -583,7 +583,7 @@ class TestTransportPCERendererOrModes(unittest.TestCase):
                 "higher-spectral-slot-number": 272,
             })
         self.assertEqual(response["status_code"], requests.codes.ok)
-        self.assertIn("Interfaces created successfully for nodes: ", response["output"]["result"])
+        self.assertIn("Successfully configured nodes: ", response["output"]["result"])
         # node-interface is list which does not preserve the order
         a_side = "XPDR-A2"
         z_side = "XPDR-C2"

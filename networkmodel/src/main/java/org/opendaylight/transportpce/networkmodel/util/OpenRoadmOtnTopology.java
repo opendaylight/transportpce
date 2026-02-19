@@ -524,23 +524,27 @@ public final class OpenRoadmOtnTopology {
         XpdrTpPortConnectionAttributesBuilder xtpcaBldr =
             new XpdrTpPortConnectionAttributesBuilder(
                 tpBldr.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes());
-        Set<Uint16> tsPool = new HashSet<>(xtpcaBldr.getTsPool());
-        if (isDeletion) {
-            for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
-                tsPool.add(Uint16.valueOf(i));
+        //adding this check as tspool will be null for OC devices.
+        if (xtpcaBldr.getTsPool() != null) {
+            Set<Uint16> tsPool = new HashSet<>(xtpcaBldr.getTsPool());
+            if (isDeletion) {
+                for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
+                    tsPool.add(Uint16.valueOf(i));
+                }
+            } else {
+                for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
+                    tsPool.remove(Uint16.valueOf(i));
+                }
             }
-        } else {
-            for (int i = minTribSlotNb; i <= maxTribSlotNb; i++) {
-                tsPool.remove(Uint16.valueOf(i));
-            }
+            xtpcaBldr.setTsPool(tsPool);
         }
-        xtpcaBldr.setTsPool(tsPool);
-        Set<Uint16> tpnPool;
-        List<OdtuTpnPool> odtuTpnPoolValues = new ArrayList<>(xtpcaBldr.getOdtuTpnPool().values());
-        if (odtuTpnPoolValues.get(0).getTpnPool() == null) {
-            tpnPool = new HashSet<>();
-        } else {
-            tpnPool = new HashSet<>(odtuTpnPoolValues.get(0).getTpnPool());
+        Set<Uint16> tpnPool = new HashSet<>();
+        if (xtpcaBldr.getOdtuTpnPool() != null && !xtpcaBldr.getOdtuTpnPool().isEmpty()) {
+            List<OdtuTpnPool> odtuTpnPoolValues = new ArrayList<>(xtpcaBldr.getOdtuTpnPool().values());
+            Set<Uint16> existingTpnPool = odtuTpnPoolValues.get(0).getTpnPool();
+            if (existingTpnPool != null) {
+                tpnPool.addAll(existingTpnPool);
+            }
             if (isDeletion) {
                 tpnPool.add(Uint16.valueOf(tribPortNb));
             } else {

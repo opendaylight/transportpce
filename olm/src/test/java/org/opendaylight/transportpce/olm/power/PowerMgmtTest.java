@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.matches;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -25,9 +26,11 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -35,12 +38,19 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenconfigNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.mapping.OpenconfigInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
@@ -52,19 +62,23 @@ import org.opendaylight.yangtools.yang.common.Decimal64;
 
 class PowerMgmtTest {
     private OpenRoadmInterfaces openRoadmInterfaces;
+    private OpenConfigInterfaces openConfigInterfaces;
     private CrossConnect crossConnect;
     private DeviceTransactionManager deviceTransactionManager;
+    private NetworkTransactionService networkTransactionService;
     private PortMapping portMapping;
     private PowerMgmt powerMgmt;
 
     @BeforeEach
     void setUp() {
         this.openRoadmInterfaces = mock(OpenRoadmInterfaces.class);
+        this.openConfigInterfaces = mock(OpenConfigInterfaces.class);
         this.crossConnect = mock((CrossConnectImpl.class));
         this.deviceTransactionManager = mock(DeviceTransactionManager.class);
+        this.networkTransactionService = mock(NetworkTransactionService.class);
         this.portMapping = mock(PortMapping.class);
-        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.crossConnect,
-                this.deviceTransactionManager, this.portMapping, 1000, 1000);
+        this.powerMgmt = new PowerMgmtImpl(this.openRoadmInterfaces, this.openConfigInterfaces, this.crossConnect,
+                this.deviceTransactionManager, this.networkTransactionService, this.portMapping, 1000, 1000);
     }
 
     @Test
@@ -363,5 +377,129 @@ class PowerMgmtTest {
         assertFalse(result);
     }
 
+    @Test
+    void testSetPowerForOpenConfigTransponderAEnd() throws OpenConfigInterfacesException {
+        Set<String> opticalChannels = new HashSet<>();
+        opticalChannels.add("qsfp-opt-1-1");
+        Set<String> operationalModes = new HashSet<>();
+        operationalModes.add("4308");
+
+        when(this.portMapping.getNode("xpdr-OC"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
+                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    opticalChannels, operationalModes));
+        when(this.portMapping.getNode("next-node"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
+                    OpenroadmNodeVersion._121, List.of("srg1")));
+
+        Mapping portMap = new MappingBuilder()
+                .setLogicalConnectionPoint("network-OC")
+                .setSupportingCircuitPackName("circuit pack")
+                .setSupportingPort("port")
+                .setOpenconfigInfo(new OpenconfigInfoBuilder()
+                        .setSupportedOpticalChannels(opticalChannels)
+                        .build())
+                .build();
+        when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
+
+        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
+                mockStatic(PowerMgmtVersionOC190.class)) {
+            pmvOC190.when(() -> PowerMgmtVersionOC190
+                    .getXponderPowerRange(anyString(), any()))
+                    .thenReturn(new HashMap<>());
+
+            doNothing().when(this.openConfigInterfaces)
+                    .configureComponent(anyString(), any());
+
+            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                    .getServicePowerSetupInputForOpenConfigTransponder();
+            boolean result = this.powerMgmt.setPower(input);
+            assertTrue(result);
+
+            pmvOC190.verify(() -> PowerMgmtVersionOC190
+                    .getXponderPowerRange(anyString(), any()), times(1));
+            verify(this.openConfigInterfaces, times(1))
+                    .configureComponent(matches("xpdr-OC"), any());
+        }
+    }
+
+    @Test
+    void testSetPowerForOpenConfigTransponderWithNullPowerRange() {
+        Set<String> opticalChannels = new HashSet<>();
+        opticalChannels.add("qsfp-opt-1-1");
+        Set<String> operationalModes = new HashSet<>();
+        operationalModes.add("4308");
+
+        when(this.portMapping.getNode("xpdr-OC"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
+                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    opticalChannels, operationalModes));
+        when(this.portMapping.getNode("next-node"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
+                    OpenroadmNodeVersion._121, List.of("srg1")));
+
+        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
+                mockStatic(PowerMgmtVersionOC190.class)) {
+            pmvOC190.when(() -> PowerMgmtVersionOC190
+                    .getXponderPowerRange(anyString(), any()))
+                    .thenReturn(null);
+
+            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                    .getServicePowerSetupInputForOpenConfigTransponder();
+            boolean result = this.powerMgmt.setPower(input);
+            assertFalse(result);
+
+            pmvOC190.verify(() -> PowerMgmtVersionOC190
+                    .getXponderPowerRange(anyString(), any()), times(1));
+            verifyNoInteractions(this.openConfigInterfaces);
+        }
+    }
+
+    @Test
+    void testSetPowerForOpenConfigTransponderConfigureComponentFailure()
+            throws OpenConfigInterfacesException {
+        Set<String> opticalChannels = new HashSet<>();
+        opticalChannels.add("qsfp-opt-1-1");
+        Set<String> operationalModes = new HashSet<>();
+        operationalModes.add("4308");
+
+        when(this.portMapping.getNode("xpdr-OC"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
+                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    opticalChannels, operationalModes));
+        when(this.portMapping.getNode("next-node"))
+            .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
+                    OpenroadmNodeVersion._121, List.of("srg1")));
+
+        Mapping portMap = new MappingBuilder()
+                .setLogicalConnectionPoint("network-OC")
+                .setSupportingCircuitPackName("circuit pack")
+                .setSupportingPort("port")
+                .setOpenconfigInfo(new OpenconfigInfoBuilder()
+                        .setSupportedOpticalChannels(opticalChannels)
+                        .build())
+                .build();
+        when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
+
+        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
+                mockStatic(PowerMgmtVersionOC190.class)) {
+            pmvOC190.when(() -> PowerMgmtVersionOC190
+                    .getXponderPowerRange(anyString(), any()))
+                    .thenReturn(new HashMap<>());
+
+            org.mockito.Mockito.doThrow(
+                    new OpenConfigInterfacesException("Configuration failed"))
+                    .when(this.openConfigInterfaces)
+                    .configureComponent(anyString(), any());
+
+            ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil
+                    .getServicePowerSetupInputForOpenConfigTransponder();
+            boolean result = this.powerMgmt.setPower(input);
+            assertTrue(result);
+
+            verify(this.openConfigInterfaces, times(1))
+                    .configureComponent(matches("xpdr-OC"), any());
+        }
+    }
 
 }

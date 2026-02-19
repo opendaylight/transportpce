@@ -217,12 +217,16 @@ public final class TopologyUtils {
         List<TerminationPoint> topoTps = new ArrayList<>();
         TerminationPoint tp = nodes.get(new NodeKey(new NodeId(abstractNodeid))).augmentation(Node1.class)
             .getTerminationPoint().get(new TerminationPointKey(new TpId(mapping.getLogicalConnectionPoint())));
+        if (tp == null) {
+            LOG.error("Util TopologyUtils: TP is null while updating openroadm topology..");
+            return new TopologyShard(null, null, topoTps);
+        }
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder(tp.augmentation(TerminationPoint1.class));
         if (!tp1Bldr.getAdministrativeState().getName().equals(mapping.getPortAdminState())) {
-            tp1Bldr.setAdministrativeState(AdminStates.valueOf(mapping.getPortAdminState()));
+            tp1Bldr.setAdministrativeState(setNetworkAdminState(mapping.getPortAdminState()));
         }
         if (!tp1Bldr.getOperationalState().getName().equals(mapping.getPortOperState())) {
-            tp1Bldr.setOperationalState(State.valueOf(mapping.getPortOperState()));
+            tp1Bldr.setOperationalState(setNetworkOperState(mapping.getPortOperState()));
         }
         TerminationPointBuilder tpBldr = new TerminationPointBuilder(tp).addAugmentation(tp1Bldr.build());
         topoTps.add(tpBldr.build());

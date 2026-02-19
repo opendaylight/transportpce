@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.CalculateSpanlossBaseInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.GetPmInput;
@@ -22,10 +23,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev21
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev210618.ServicePowerTurndownInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.NodeDatamodelType;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenconfigNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.OpenroadmNodeVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.mapping.OpenconfigInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
@@ -265,6 +269,52 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerResetInput input = new ServicePowerResetInputBuilder()
             .setServiceName("service 1").build();
         return input;
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network
+            .Nodes getMappingNodeTpdrOpenConfig(String nodeId, OpenconfigNodeVersion nodeVersion, List<String> lcps,
+                    Set<String> opticalChannels, Set<String> operationalModes) {
+        Map<MappingKey, Mapping> mappings = new HashMap<>();
+        for (String lcp : lcps) {
+            OpenconfigInfoBuilder openconfigInfoBuilder = new OpenconfigInfoBuilder();
+            if (opticalChannels != null && !opticalChannels.isEmpty()) {
+                openconfigInfoBuilder.setSupportedOpticalChannels(opticalChannels);
+            }
+            MappingBuilder mappingBuilder = new MappingBuilder()
+                    .setLogicalConnectionPoint(lcp)
+                    .setSupportingCircuitPackName("circuit pack")
+                    .setSupportingPort("port")
+                    .setOpenconfigInfo(openconfigInfoBuilder.build());
+            if (operationalModes != null && !operationalModes.isEmpty()) {
+                mappingBuilder.setSupportedOperationalMode(operationalModes);
+            }
+            Mapping mapping = mappingBuilder.build();
+            mappings.put(mapping.key(), mapping);
+        }
+        return new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.network
+                .NodesBuilder()
+            .setNodeId(nodeId)
+            .setDatamodelType(NodeDatamodelType.OPENCONFIG)
+            .setNodeInfo(new NodeInfoBuilder()
+                .setNodeType(NodeTypes.Xpdr)
+                .setOpenconfigVersion(nodeVersion)
+                .build())
+            .setMapping(mappings)
+            .build();
+    }
+
+    public static ServicePowerSetupInput getServicePowerSetupInputForOpenConfigTransponder() {
+        return new ServicePowerSetupInputBuilder()
+                .setNodes(List.of(
+                        new NodesBuilder().setNodeId("xpdr-OC").setSrcTp("client-OC")
+                                .setDestTp("network-OC").build(),
+                        new NodesBuilder().setNodeId("next-node").setSrcTp("srg1")
+                                .setDestTp("deg1").build()))
+                .setServiceName("service OC")
+                .setWaveNumber(Uint32.valueOf("1"))
+                .setLowerSpectralSlotNumber(Uint32.valueOf(761))
+                .setHigherSpectralSlotNumber(Uint32.valueOf(768))
+                .build();
     }
 }
 

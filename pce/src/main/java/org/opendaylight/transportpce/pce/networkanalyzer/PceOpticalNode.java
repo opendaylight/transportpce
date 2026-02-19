@@ -421,12 +421,16 @@ public class PceOpticalNode implements PceNode {
         }
         for (Map.Entry<OperationalModeKey, OperationalMode> mode : tp.getSupportedOperationalModes()
                 .getOperationalMode().entrySet()) {
-            if (mode.getKey().toString().contains(StringConstants.SERVICE_TYPE_RATE
-                    .get(this.serviceType).toCanonicalString())) {
-                LOG.info("PceOpticalNode:getOperationalMode: NetworkPort {}  has {} operational mode declared", tp,
-                    mode.getKey().toString());
-                return mode.getKey().toString();
+            String modeId = mode.getValue().getModeId();
+            if (modeId.startsWith("OR")) {
+                if (mode.getKey().toString().contains(StringConstants.SERVICE_TYPE_RATE
+                        .get(this.serviceType).toCanonicalString())) {
+                    LOG.info("getOperationalMode: NetworkPort {}  has {} operational mode declared", tp,
+                            mode.getKey().toString());
+                    return modeId;
+                }
             }
+            return modeId;
         }
         LOG.warn("PceOpticalNode:getOperationalMode: NetworkPort {}  has no operational mode declared compatible"
             + " with service type", tp);
