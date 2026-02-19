@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.tapi.topology;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -194,6 +193,5 @@ class ORtoTapiTopoConversionToolsTest {
                 new TeraHertz(195.925), new TeraHertz(195.975)
         );
         assertEquals(expected, convertORToTapiTopology.getPP11UsedFrequencies(tp));
-        assertTrue(expected.equals(convertORToTapiTopology.getPP11UsedFrequencies(tp)));
     }
 }
