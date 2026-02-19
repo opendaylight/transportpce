@@ -111,6 +111,30 @@
       },
       "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a03725_824036c2",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/ORtoTapiTopoConversionToolsTest.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2026-02-19T10:02:07Z",
+      "side": 1,
+      "message": "You\u0027re absolutely right, but I would have preferred to avoid restarting the whole relation-chain. Anyway, let\u0027s be thorough, as it should be.",
+      "parentUuid": "678f2790_94f47181",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 8
+      },
+      "revId": "c3ccd9f4c6168b10d3487ab804e297bd8118bf7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
