@@ -18,27 +18,27 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.OpenconfigInterfacesData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.Interfaces;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.Interface;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.OpenconfigPlatformData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.Components;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.Component;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.OpenconfigInterfacesData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.Interfaces;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.Interface;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.OpenconfigPlatformData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.Components;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.Component;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentKey;
 import org.opendaylight.yangtools.binding.DataObjectIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OpenConfigInterfacesImpl190 {
+public class OpenConfigInterfacesImpl200 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl190.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl200.class);
 
     private final DeviceTransactionManager deviceTransactionManager;
 
-    public OpenConfigInterfacesImpl190(DeviceTransactionManager deviceTransactionManager) {
+    public OpenConfigInterfacesImpl200(DeviceTransactionManager deviceTransactionManager) {
         this.deviceTransactionManager = deviceTransactionManager;
     }
 
