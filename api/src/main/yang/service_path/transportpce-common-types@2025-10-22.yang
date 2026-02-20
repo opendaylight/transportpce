@@ -650,6 +650,9 @@ module transportpce-common-types {
       leaf-list interface-id {
         type string;
       }
+      leaf-list transceiver-id {
+        type string;
+      }
     }
   }
 
