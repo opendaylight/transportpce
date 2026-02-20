@@ -11,19 +11,26 @@ package org.opendaylight.transportpce.renderer.openconfiginterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.PlatformComponentPropertiesConfig;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.anchors.top.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.PropertiesBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.properties.Property;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.properties.PropertyBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top.properties.PropertyKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.PlatformComponentPropertiesConfig;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.anchors.top.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.properties.top.PropertiesBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.properties.top.properties.Property;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.properties.top.properties.PropertyBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.properties.top.properties.PropertyKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210.physical.channel.top.PhysicalChannelsBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210.physical.channel.top.physical.channels.Channel;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210.physical.channel.top.physical.channels.ChannelBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210.physical.channel.top.physical.channels.ChannelKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210.port.transceiver.top.TransceiverBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.Component1Builder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannel;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannelBuilder;
@@ -32,19 +39,23 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.comm
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.OpticalPortBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.optical.port.Config;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.transport.line.common.port.top.optical.port.ConfigBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.FrequencyType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.FrequencyType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev250905.mapping.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev230126.EthernetCsmacd;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class OpenConfigInterface190 {
+public class OpenConfigInterface200 {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterface200.class);
 
     private final PortMapping portMapping;
     private final OpenConfigInterfaces openConfigInterfaces;
 
-    public OpenConfigInterface190(PortMapping portMapping, OpenConfigInterfaces openConfigInterfaces) {
+    public OpenConfigInterface200(PortMapping portMapping, OpenConfigInterfaces openConfigInterfaces) {
         this.portMapping = portMapping;
         this.openConfigInterfaces = openConfigInterfaces;
     }
@@ -62,6 +73,7 @@ public class OpenConfigInterface190 {
 
     public Set<String> configurePortAdminState(String nodeId, String logicalConnPoint, AdminStateType adminStateType)
             throws OpenConfigInterfacesException {
+        LOG.info("Configuring OpenConfig port admin state to {} on node {}", adminStateType.name(), nodeId);
         Set<String> portIds = new HashSet<>();
         try {
             Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -69,6 +81,8 @@ public class OpenConfigInterface190 {
                     createPortComponentBuilder(mapping.getSupportingPort(), adminStateType);
             openConfigInterfaces.configureComponent(nodeId, portComponentBuilder);
             portIds.add(portComponentBuilder.getName());
+            LOG.info("Successfully updated port admin state to {} at port {} on node {}",
+                    adminStateType.name(), mapping.getSupportingPort(), nodeId);
         } catch (OpenConfigInterfacesException e) {
             throw new OpenConfigInterfacesException(portIds, e);
         }
@@ -87,10 +101,13 @@ public class OpenConfigInterface190 {
 
     public Set<String> disablePortAdminState(String nodeId, String supportingPort) throws
             OpenConfigInterfacesException {
+        LOG.info("Disabling OpenConfig port admin state at port {} on node {}", supportingPort, nodeId);
         Set<String> portIds = new HashSet<>();
         ComponentBuilder portComponentBuilder = createPortComponentBuilder(supportingPort, AdminStateType.DISABLED);
         openConfigInterfaces.configureComponent(nodeId, portComponentBuilder);
         portIds.add(portComponentBuilder.getName());
+        LOG.info("Successfully updated port admin state to {} at port {} on node {} ",
+                AdminStateType.DISABLED.getName(), supportingPort, nodeId);
         return portIds;
     }
 
@@ -158,9 +175,9 @@ public class OpenConfigInterface190 {
 
     private List<ComponentBuilder> getClientOpticalChannelBuilders(Set<String> supportedOpticalChannels,
                                                                    String componentProperty) {
-        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.properties.top
+        org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.properties.top
                 .properties.property.ConfigBuilder configBuilder = new org.opendaylight.yang.gen.v1.http.openconfig
-                .net.yang.platform.rev220610.platform.component.properties.top.properties.property.ConfigBuilder();
+                .net.yang.platform.rev221220.platform.component.properties.top.properties.property.ConfigBuilder();
         configBuilder.setName("tx-dis");
         configBuilder.setValue(new PlatformComponentPropertiesConfig.Value(componentProperty));
 
@@ -204,15 +221,61 @@ public class OpenConfigInterface190 {
         if (input.getAEndApiInfo() != null && input.getAEndApiInfo().getNodeId() != null) {
             isAend = input.getAEndApiInfo().getNodeId().equals(nodeId);
         }
+        LOG.info("Configuring operational mode and central frequency for {} on node {}",
+                mapping.getSupportingPort(), nodeId);
         List<ComponentBuilder> opticalChannelBuilders = createOpticalChannelComponentBuilder(mapping, input, isAend);
         StringBuilder opticalChannelComponentNames = new StringBuilder();
         for (ComponentBuilder opticalChannelBuilder : opticalChannelBuilders) {
             openConfigInterfaces.configureComponent(nodeId, opticalChannelBuilder);
             opticalChannelComponentNames.append(opticalChannelBuilder.getName()).append(" ");
         }
+        LOG.info("Successfully configured operational mode and central frequency for {} on node {}",
+                opticalChannelComponentNames, nodeId);
         return opticalChannelComponentNames.toString();
     }
 
+    public String configureTransceiversTxLaser(String nodeId, String logicalConnPoint,
+                    List<Integer> channelIndexes, boolean isTxLaserEnabled) throws OpenConfigInterfacesException {
+        Mapping mapping = portMapping.getMapping(nodeId, logicalConnPoint);
+        LOG.info("Configuring OpenConfig tx-laser as {} on the channels {} for transceiver {} on node {}",
+                isTxLaserEnabled, channelIndexes.toString(), mapping.getSupportingCircuitPackName(), nodeId);
+        ComponentBuilder lineTransceiverComponentBuilder = createTransceiverComponentBuilder(
+                mapping.getSupportingCircuitPackName(), channelIndexes, isTxLaserEnabled);
+        openConfigInterfaces.configureComponent(nodeId, lineTransceiverComponentBuilder);
+        LOG.info("Successfully configured OpenConfig tx-laser for transceiver {} on node {}",
+                mapping.getSupportingCircuitPackName(), nodeId);
+        return lineTransceiverComponentBuilder.getName();
+    }
+
+    public String disableTxLaser(String nodeId, String transceiver) throws OpenConfigInterfacesException {
+        LOG.info("Disabling tx-laser for transceiver {} on node {}", transceiver, nodeId);
+        ComponentBuilder lineTransceiverComponentBuilder =
+                createTransceiverComponentBuilder(transceiver, List.of(1), false);
+        openConfigInterfaces.configureComponent(nodeId, lineTransceiverComponentBuilder);
+        LOG.info("Successfully disabled tx-laser for transceiver {} on node: {}", transceiver, nodeId);
+        return lineTransceiverComponentBuilder.getName();
+    }
+
+    private ComponentBuilder createTransceiverComponentBuilder(String componentName, List<Integer> channelIndexes,
+                    boolean txLaserEnabled) {
+
+        Map<ChannelKey, Channel> channelMap = new LinkedHashMap<>();
+        for (Integer index : channelIndexes) {
+            var channelConfig = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210
+                    .physical.channel.top.physical.channels.channel.ConfigBuilder()
+                    .setTxLaser(txLaserEnabled)
+                    .build();
+            var channel = new ChannelBuilder()
+                    .setIndex(Uint16.valueOf(index))
+                    .setConfig(channelConfig).build();
+            channelMap.put(channel.key(), channel);
+        }
+        var physicalChannels = new PhysicalChannelsBuilder().setChannel(channelMap).build();
+        var transceiver = new TransceiverBuilder().setPhysicalChannels(physicalChannels).build();
+        var transceiverAug = new org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.transceiver.rev230210
+                .Component1Builder().setTransceiver(transceiver).build();
+        return new ComponentBuilder().setName(componentName).addAugmentation(transceiverAug);
+    }
     /**
      * This method is used to generate ComponentBuilder for configuring port admin state.
      *
@@ -247,13 +310,19 @@ public class OpenConfigInterface190 {
                 .terminal.optical.channel.top.optical.channel.ConfigBuilder configBuilder = new org.opendaylight
                 .yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.optical
                 .channel.ConfigBuilder();
-        configBuilder.setOperationalMode(isAend
+        Uint16 operationalMode = isAend
             ? Uint16.valueOf(input.getAendOperationalMode())
-            : Uint16.valueOf(input.getZendOperationalMode()));
+            : Uint16.valueOf(input.getZendOperationalMode());
+        configBuilder.setOperationalMode(operationalMode);
+        LOG.debug("Configuring OpenConfig network optical channel with operational mode {} at port {}",
+                operationalMode.intValue(), portMap.getSupportingPort());
         if (input.getCenterFreq() != null) { //input.getCenterFreq().getValue().intValue()
-            configBuilder.setFrequency(FrequencyType
+            FrequencyType frequency = FrequencyType
                     .getDefaultInstance(String.valueOf((long) (input.getCenterFreq().getValue()
-                            .doubleValue() * 1_000_000))));
+                            .doubleValue() * 1_000_000)));
+            configBuilder.setFrequency(frequency);
+            LOG.debug("Configuring OpenConfig network optical channel with central frequency {} MHz at port {}",
+                    frequency.getValue(), portMap.getSupportingPort());
         }
         OpticalChannel opticalChannel = new OpticalChannelBuilder().setConfig(configBuilder.build()).build();
         Component1Builder component1Builder = new Component1Builder().setOpticalChannel(opticalChannel);
@@ -334,9 +403,9 @@ public class OpenConfigInterface190 {
             for (String supportedInterface : supportedInterfaces) {
                 InterfaceBuilder interfaceBuilder = new InterfaceBuilder();
                 interfaceBuilder.setName(supportedInterface);
-                org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces
+                org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces
                         ._interface.ConfigBuilder configBuilder = new org.opendaylight.yang.gen.v1.http.openconfig.net
-                        .yang.interfaces.rev210406.interfaces.top.interfaces._interface.ConfigBuilder();
+                        .yang.interfaces.rev221025.interfaces.top.interfaces._interface.ConfigBuilder();
                 configBuilder.setName(supportedInterface);
                 configBuilder.setType(EthernetCsmacd.VALUE);//mandatory parameter
                 configBuilder.setEnabled(enableState);

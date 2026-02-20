@@ -32,4 +32,9 @@ public interface Delete {
      * Disable admin-state of line-port component.
      */
     boolean disablePort(String nodeId, String portId);
+
+    /**
+     * Disable tx-laser of line transceiver component.
+     */
+    boolean disableTransceiversTxLaser(String nodeId, String transceiver);
 }

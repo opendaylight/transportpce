@@ -33,7 +33,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.renderer.openconfiginterface.OpenConfigInterfaceFactory;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.OtnServicePathOutputBuilder;
@@ -198,12 +198,11 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 if ((clientTp != null) && clientTp.contains(StringConstants.CLIENT_TOKEN)) {
                     NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder();
                     nodeInterfaceBuilder.withKey(new NodeInterfaceKey(node.getNodeId())).setNodeId(node.getNodeId());
-                    LOG.info("Configuring client admin state, optical channels & interfaces in node {} and dest "
-                            + "{} ", nodeId, clientTp);
+                    LOG.info("Starting OpenConfig client service configuration for node {} at destination {}",
+                            nodeId, clientTp);
                     try {
                         configPortAdminState(nodeId, clientTp, nodeInterfaceBuilder);
-                        configClientOptiChannel(nodeId, clientTp, nodeInterfaceBuilder);
-                        configClientInterface(nodeId, clientTp, nodeInterfaceBuilder);
+                        configureClientTransceiver(nodeId, clientTp, nodeInterfaceBuilder);
                     } catch (OpenConfigInterfacesException e) {
                         nodeInterfaces.add(nodeInterfaceBuilder.build());
                         throw new OpenConfigInterfacesException(e.getMessage(), e);
@@ -219,47 +218,14 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         return nodeInterfaces;
     }
 
-    private void configClientInterface(String nodeId, String clientTp, NodeInterfaceBuilder nodeInterfaceBuilder)
-            throws OpenConfigInterfacesException {
-        try {
-            Set<String> clientInterface = this.openConfigInterfaceFactory
-                    .configureClientInterface(nodeId, clientTp, true);
-            LOG.info("Client interfaces configured for {} ", clientInterface);
-            nodeInterfaceBuilder.setInterfaceId(clientInterface);
-        } catch (OpenConfigInterfacesException e) {
-            nodeInterfaceBuilder.setInterfaceId(e.getSuccessfulEntities());
-            String error =
-                   "Error while provisioning service path for node " + nodeId + " and dest " + clientTp;
-            LOG.error(error);
-            throw new OpenConfigInterfacesException(error, e);
-        }
-    }
-
     private void configPortAdminState(String nodeId, String clientTp, NodeInterfaceBuilder nodeInterfaceBuilder)
             throws OpenConfigInterfacesException {
         try {
             Set<String> nodeName = this.openConfigInterfaceFactory
                     .configurePortAdminState(nodeId, clientTp, AdminStateType.ENABLED);
-            LOG.info("Admin state configured for  {} ", nodeName);
             nodeInterfaceBuilder.setPortId(nodeName);
         } catch (OpenConfigInterfacesException e) {
             nodeInterfaceBuilder.setPortId(e.getSuccessfulEntities());
-            String error =
-                   "Error while provisioning service path for node " + nodeId + " and dest " + clientTp;
-            LOG.error(error);
-            throw new OpenConfigInterfacesException(error, e);
-        }
-    }
-
-    private void configClientOptiChannel(String nodeId, String clientTp, NodeInterfaceBuilder nodeInterfaceBuilder)
-            throws OpenConfigInterfacesException {
-        try {
-            Set<String> opticalChannels = this.openConfigInterfaceFactory
-                    .configureClientOpticalChannel(nodeId, clientTp, "FALSE");
-            LOG.info("Client optical channel configured for {} ", opticalChannels);
-            nodeInterfaceBuilder.setOpticalChannelId(opticalChannels);
-        } catch (OpenConfigInterfacesException e) {
-            nodeInterfaceBuilder.setOpticalChannelId(e.getSuccessfulEntities());
             String error =
                    "Error while provisioning service path for node " + nodeId + " and dest " + clientTp;
             LOG.error(error);
@@ -306,7 +272,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             }
             if (isOpenConfig) {
                 if (serviceType.equals(StringConstants.SERVICE_TYPE_100GE_M)) {
-                    LOG.info("disabling entities in openconfig  device for  node-id {}", node.getNodeId());
+                    LOG.info("Starting OpenConfig client service deletion on node {}", nodeId);
                     LinkTp linkTp = disableOpenConfigClient(node, success, results);
                     if (linkTp != null) {
                         otnLinkTps.add(linkTp);
@@ -454,12 +420,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
         String clientTp = node.getClientTp();
         if ((clientTp != null) && clientTp.contains(StringConstants.CLIENT_TOKEN)) {
             try {
-                LOG.info("disabling client admin state, optical channels & interfaces in node {} and dest "
-                        +  "{}", node.getNodeId(), clientTp);
-                Set<String> nodeName = this.openConfigInterfaceFactory.configurePortAdminState(node.getNodeId(),
-                        clientTp, AdminStateType.DISABLED);
-                LOG.info("Admin state disabled for  {} ", nodeName);
-                Set<String> opticalChannels = this.openConfigInterfaceFactory
+                this.openConfigInterfaceFactory.configurePortAdminState(node.getNodeId(), clientTp,
+                        AdminStateType.DISABLED);
+                /*Set<String> opticalChannels = this.openConfigInterfaceFactory
                         .configureClientOpticalChannel(node.getNodeId(), clientTp, "TRUE");
                 LOG.info("Client optical channel disabled for {} ", opticalChannels);
                 try {
@@ -468,7 +431,9 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                     LOG.info("Client interfaces disabled for {} ", clientInterface);
                 } catch (OpenConfigInterfacesException ex) {
                     LOG.error("Failed to disable Client interfaces for node id {}", node.getNodeId());
-                }
+                }*/
+                this.openConfigInterfaceFactory.configureTransceiversTxLaser(node.getNodeId(), clientTp,
+                        List.of(1, 2, 3, 4), false);
                 Mapping mapping = portMapping.getMapping(node.getNodeId(), clientTp);
                 portMapping.updateMapping(node.getNodeId(), mapping);
                 linkTp = new LinkTpBuilder()
@@ -760,4 +725,22 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             linkTpList.add(new LinkTpBuilder().setNodeId(node.getNodeId()).setTpId(node.getNetworkTp()).build());
         }
     }
+
+    private void configureClientTransceiver(String nodeId, String clientTp, NodeInterfaceBuilder nodeInterfaceBuilder)
+            throws OpenConfigInterfacesException {
+        try {
+            String transceiver = this.openConfigInterfaceFactory
+                    .configureTransceiversTxLaser(nodeId, clientTp, List.of(1, 2, 3, 4), true);
+            nodeInterfaceBuilder.setTransceiverId(Set.of(transceiver));
+        } catch (OpenConfigInterfacesException e) {
+            nodeInterfaceBuilder.setTransceiverId(e.getSuccessfulEntities());
+            String error =
+                    "Error while provisioning service path for node " + nodeId + " and dest " + clientTp;
+            LOG.error(error);
+            throw new OpenConfigInterfacesException(error, e);
+        }
+    }
+
+
+
 }

@@ -91,4 +91,26 @@ public class DeleteService implements Delete {
         }
     }
 
+    /**
+     * Disable the tx-laser of a network/client transceiver during rollback operation.
+     *
+     * @param nodeId nodeId in which port is to be disabled.
+     * @param transceiver tx-laser to set false for the transceiver
+     * @return true/false
+     */
+
+    @Override
+    public boolean disableTransceiversTxLaser(String nodeId, String transceiver) {
+        try {
+            openConfigInterfaceFactory.disableTxLaser(nodeId, transceiver);
+            LOG.info("Successfully disabled tx-laser for {} on node {}", transceiver, nodeId);
+            subscriber.result(true, nodeId, transceiver);
+            return true;
+        } catch (OpenConfigInterfacesException e) {
+            LOG.error("Failed rolling back tx-laser for {} on node {}", transceiver, nodeId, e);
+            subscriber.result(false, nodeId, transceiver);
+            return false;
+        }
+    }
+
 }

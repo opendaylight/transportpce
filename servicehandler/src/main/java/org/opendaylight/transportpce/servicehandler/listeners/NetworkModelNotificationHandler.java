@@ -278,6 +278,7 @@ public class NetworkModelNotificationHandler implements NetworkListener {
 
     private boolean compareTopologyUpdateResult(TopologyUpdateResult notification) {
         return topologyUpdateResult != null
+                && topologyUpdateResult.getTopologyChanges() != null
                 && topologyUpdateResult.getTopologyChanges().equals(notification.getTopologyChanges());
     }
 

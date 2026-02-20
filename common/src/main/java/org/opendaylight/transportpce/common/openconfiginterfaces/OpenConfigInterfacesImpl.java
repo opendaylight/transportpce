@@ -9,8 +9,8 @@
 package org.opendaylight.transportpce.common.openconfiginterfaces;
 
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev221025.interfaces.top.interfaces.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -22,28 +22,28 @@ public class OpenConfigInterfacesImpl implements OpenConfigInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenConfigInterfacesImpl.class);
 
-    OpenConfigInterfacesImpl190 openConfigInterfacesImpl190;
+    OpenConfigInterfacesImpl200 openConfigInterfacesImpl200;
 
     @Activate
     public OpenConfigInterfacesImpl(@Reference DeviceTransactionManager deviceTransactionManager) {
-        this(new OpenConfigInterfacesImpl190(deviceTransactionManager));
+        this(new OpenConfigInterfacesImpl200(deviceTransactionManager));
     }
 
-    public OpenConfigInterfacesImpl(OpenConfigInterfacesImpl190 openConfigInterfacesImpl190) {
-        this.openConfigInterfacesImpl190 = openConfigInterfacesImpl190;
+    public OpenConfigInterfacesImpl(OpenConfigInterfacesImpl200 openConfigInterfacesImpl200) {
+        this.openConfigInterfacesImpl200 = openConfigInterfacesImpl200;
     }
 
     @Override
     public <T> void configureComponent(String nodeId, T componentBuilder) throws OpenConfigInterfacesException {
         ComponentBuilder compBuilder = convertInstanceOfInterface(componentBuilder, ComponentBuilder.class);
-        openConfigInterfacesImpl190.configureComponents(nodeId, compBuilder);
+        openConfigInterfacesImpl200.configureComponents(nodeId, compBuilder);
 
     }
 
     @Override
     public <T> void configureInterface(String nodeId, T interfaceBuilder) throws OpenConfigInterfacesException {
         InterfaceBuilder interfBuilder = convertInstanceOfInterface(interfaceBuilder, InterfaceBuilder.class);
-        openConfigInterfacesImpl190.configureInterface(nodeId, interfBuilder);
+        openConfigInterfacesImpl200.configureInterface(nodeId, interfBuilder);
     }
 
     private <T> T convertInstanceOfInterface(Object object, Class<T> classToCast) {

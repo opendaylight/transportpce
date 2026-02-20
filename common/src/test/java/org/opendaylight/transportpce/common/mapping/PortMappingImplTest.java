@@ -45,7 +45,7 @@ public class PortMappingImplTest {
     private PortMappingVersion221 portMappingVersion221;
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
-    private OCPortMappingVersion190 ocPortMappingVersion190;
+    private OCPortMappingVersion200 ocPortMappingVersion200;
 
     @BeforeEach
     void setUp() {
@@ -54,9 +54,9 @@ public class PortMappingImplTest {
         portMappingVersion710 = mock(PortMappingVersion710.class);
         portMappingVersion221 = mock(PortMappingVersion221.class);
         portMappingVersion121 = mock(PortMappingVersion121.class);
-        ocPortMappingVersion190 = mock(OCPortMappingVersion190.class);
+        ocPortMappingVersion200 = mock(OCPortMappingVersion200.class);
         portMapping = new PortMappingImpl(dataBroker, portMappingVersion710,
-            portMappingVersion221, portMappingVersion121, ocPortMappingVersion190);
+            portMappingVersion221, portMappingVersion121, ocPortMappingVersion200);
     }
 
     @Test

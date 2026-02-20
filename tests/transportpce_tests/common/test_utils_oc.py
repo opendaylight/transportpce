@@ -172,6 +172,245 @@ def metadata_input():
     return response
 
 
+def metadata_input_oc200():
+    url = {'rfc8040': '{}/data/open-terminal-meta-data:open-terminal-meta-data',
+           'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
+    body = {
+        "open-terminal-meta-data:open-terminal-meta-data": {
+            "transceiver-info": {
+                "transceiver": [
+                    {
+                        "part-no": "OD-PPAC48D10001",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308",
+                                    "rate": "400"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "PROT_OTUCN",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "PROT_ODUCN",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "part-no": "Line transceiver (Linecard 1, CFP2 transceiver 1)",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308",
+                                    "rate": "400"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "PROT_OTUCN",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "PROT_ODUCN",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "part-no": "Client transceiver (Linecard 1, QSFP28 transceiver 1)",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308",
+                                    "rate": "100"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "PROT_100GE",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "PROT_ODU4",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "line-card-info": {
+                "line-card": [
+                    {
+                        "part-no": "Line card component 1",
+                        "xpdr-type": "MPDR",
+                        "supported-port": [
+                            {
+                                "id": 1,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-1",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 2,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-2",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 3,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-3",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 4,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-4",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 5,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-5",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 6,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-6",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 7,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-7",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 8,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-8",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 9,
+                                "component-name": "linecard-[0-9]{1,2}-line-port-1",
+                                "type": "TERMINAL_LINE"
+                            },
+                            {
+                                "id": 10,
+                                "component-name": "linecard-[0-9]{1,2}-line-port-2",
+                                "type": "TERMINAL_LINE"
+                            }
+                        ],
+                        "switch-fabric": [
+                            {
+                                "switch-fabric-id": 1,
+                                "switch-fabric-type": "Blocking",
+                                "non-blocking-list": [
+                                    {
+                                        "nbl-id": 1,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            9,
+                                            1
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 2,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            9,
+                                            2
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 3,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            9,
+                                            3
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 4,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            9,
+                                            4
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 5,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            5
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 6,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            6
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 7,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            7
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 8,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            8
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+    response = test_utils.put_request(url[test_utils.RESTCONF_VERSION], body)
+    return response
+
+
 def catlog_input():
     url = {'rfc8040': '{}/operations/org-openroadm-service:add-specific-operational-modes-to-catalog',
            'draft-bierman02': '{}/config/operations/org-openroadm-service:add-specific-operational-modes-to-catalog'}
@@ -300,9 +539,11 @@ def check_node_attribute2_request(node: str, attribute: str, attribute_value: st
     # pylint: disable=line-too-long
     url = {'rfc8040': '{}/data/network-topology:network-topology/topology=topology-netconf/node={}/yang-ext:mount/openconfig-platform:components/{}={}/{}?content=nonconfig',  # nopep8
            'draft-bierman02': '{}/operational/network-topology:network-topology/topology/topology-netconf/node/{}/yang-ext:mount/openconfig-platform:components/{}/{}/{}'}  # nopep8
+    print("---------------check_node_attribute2_request-----------------")
     response = test_utils.get_request(url[test_utils.RESTCONF_VERSION].format(
         '{}', node, attribute, attribute_value, attribute2))
     res = response.json()
+    print(res)
     if attribute2 in res.keys():
         response_attribute = res[attribute2]
     else:

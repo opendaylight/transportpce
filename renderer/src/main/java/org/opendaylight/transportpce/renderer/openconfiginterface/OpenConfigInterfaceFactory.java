@@ -9,19 +9,20 @@
 package org.opendaylight.transportpce.renderer.openconfiginterface;
 
 
+import java.util.List;
 import java.util.Set;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev251001.ServicePathInput;
 
 public class OpenConfigInterfaceFactory {
 
-    private final OpenConfigInterface190 openConfigInterface190;
+    private final OpenConfigInterface200 openConfigInterface200;
 
     public OpenConfigInterfaceFactory(PortMapping portMapping, OpenConfigInterfaces openConfigInterfaces) {
-        this.openConfigInterface190 = new OpenConfigInterface190(portMapping, openConfigInterfaces);
+        this.openConfigInterface200 = new OpenConfigInterface200(portMapping, openConfigInterfaces);
     }
 
     /**
@@ -29,7 +30,7 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> configurePortAdminState(String nodeId, String logicalConnPoint, AdminStateType adminStateType)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.configurePortAdminState(nodeId, logicalConnPoint, adminStateType);
+        return openConfigInterface200.configurePortAdminState(nodeId, logicalConnPoint, adminStateType);
     }
 
     /**
@@ -38,7 +39,7 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> disablePortAdminState(String nodeId, String supportingPort)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.disablePortAdminState(nodeId, supportingPort);
+        return openConfigInterface200.disablePortAdminState(nodeId, supportingPort);
     }
 
     /**
@@ -46,7 +47,7 @@ public class OpenConfigInterfaceFactory {
      */
     public String configureNetworkOpticalChannel(String nodeId, String logicalConnPoint, ServicePathInput input)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.configureNetworkOpticalChannel(nodeId, logicalConnPoint, input);
+        return openConfigInterface200.configureNetworkOpticalChannel(nodeId, logicalConnPoint, input);
     }
 
     /**
@@ -54,7 +55,7 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> configureClientOpticalChannel(String nodeId, String logicalConnPoint, String componentProperty)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.configureClientOpticalChannel(nodeId, logicalConnPoint, componentProperty);
+        return openConfigInterface200.configureClientOpticalChannel(nodeId, logicalConnPoint, componentProperty);
     }
 
     /**
@@ -62,7 +63,7 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> configureClientOpticalChannel(String nodeId, Set<String> opticalChannelIds,
                                                      String componentProperty) throws OpenConfigInterfacesException {
-        return openConfigInterface190.configureClientOpticalChannel(nodeId, opticalChannelIds, componentProperty);
+        return openConfigInterface200.configureClientOpticalChannel(nodeId, opticalChannelIds, componentProperty);
     }
 
     /**
@@ -70,7 +71,7 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> configureClientInterface(String nodeId, String logicalConnPoint, boolean enableState)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.configureInterface(nodeId, logicalConnPoint, enableState);
+        return openConfigInterface200.configureInterface(nodeId, logicalConnPoint, enableState);
     }
 
     /**
@@ -78,6 +79,17 @@ public class OpenConfigInterfaceFactory {
      */
     public Set<String> configureClientInterface(String nodeId, Set<String> interfaceIds, boolean enableState)
             throws OpenConfigInterfacesException {
-        return openConfigInterface190.configureInterface(nodeId, interfaceIds, enableState);
+        return openConfigInterface200.configureInterface(nodeId, interfaceIds, enableState);
+    }
+
+    public String configureTransceiversTxLaser(String nodeId, String logicalConnPoint,
+                    List<Integer> channelIndexes, boolean isTxLaserEnabled)
+            throws OpenConfigInterfacesException {
+        return openConfigInterface200.configureTransceiversTxLaser(nodeId, logicalConnPoint, channelIndexes,
+                isTxLaserEnabled);
+    }
+
+    public String disableTxLaser(String nodeId, String transceiver) throws OpenConfigInterfacesException {
+        return openConfigInterface200.disableTxLaser(nodeId, transceiver);
     }
 }

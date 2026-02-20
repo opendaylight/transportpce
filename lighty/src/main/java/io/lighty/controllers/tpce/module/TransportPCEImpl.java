@@ -24,7 +24,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl710;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
-import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion190;
+import org.opendaylight.transportpce.common.mapping.OCPortMappingVersion200;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
@@ -36,7 +36,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfaces;
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl;
-import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl190;
+import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesImpl200;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
@@ -305,10 +305,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(dataBroker, deviceTransactionManager);
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(dataBroker, deviceTransactionManager);
         PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(dataBroker, deviceTransactionManager);
-        OCPortMappingVersion190 ocPortMappingVersion190 = new OCPortMappingVersion190(dataBroker,
+        OCPortMappingVersion200 ocPortMappingVersion200 = new OCPortMappingVersion200(dataBroker,
                 deviceTransactionManager, ocMetaDataTransaction, networkTransaction);
         return new PortMappingImpl(dataBroker, portMappingVersion710, portMappingVersion221, portMappingVersion121,
-                ocPortMappingVersion190);
+                ocPortMappingVersion200);
     }
 
     private OpenRoadmInterfaces initOpenRoadmInterfaces(MappingUtils mappingUtils, PortMapping portMapping) {
@@ -323,9 +323,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
     }
 
     private OpenConfigInterfaces initOpenConfigInterfaces() {
-        OpenConfigInterfacesImpl190 openConfigInterfacesImpl190 =
-                new OpenConfigInterfacesImpl190(deviceTransactionManager);
-        return new OpenConfigInterfacesImpl(openConfigInterfacesImpl190);
+        OpenConfigInterfacesImpl200 openConfigInterfacesImpl200 =
+                new OpenConfigInterfacesImpl200(deviceTransactionManager);
+        return new OpenConfigInterfacesImpl(openConfigInterfacesImpl200);
     }
 
     private CrossConnect initCrossConnect(MappingUtils mappingUtils) {
