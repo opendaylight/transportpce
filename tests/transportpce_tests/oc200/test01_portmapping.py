@@ -22,12 +22,12 @@ import test_utils_oc  # nopep8
 
 class TestTransportPCEPortmapping(unittest.TestCase):
     processes = None
-    NODE_VERSION = 'oc'
+    NODE_VERSION = 'oc200'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('oc-mpdra', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('mpdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
@@ -44,18 +44,18 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         time.sleep(1)
 
     def test_01_meta_data_insertion(self):
-        response = test_utils_oc.metadata_input()
+        response = test_utils_oc.metadata_input_oc200()
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
-    def test_02_catlog_input_insertion(self):
-        response = test_utils_oc.catlog_input()
+    def test_02_catalog_input_insertion(self):
+        response = test_utils_oc.catalog_input_oc200()
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
     def test_03_xpdr_device_connection(self):
         response = test_utils.mount_device("XPDR-OC",
-                                           ('oc-mpdra', self.NODE_VERSION))
+                                           ('mpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
@@ -71,32 +71,31 @@ class TestTransportPCEPortmapping(unittest.TestCase):
             {'node-type': 'xpdr',
              'node-ip-address': '127.0.0.1',
              'node-clli': '1',
-             'openconfig-version': '1.9.0',
+             'openconfig-version': '2.0.0',
              'node-vendor': 'vendor1',
-             'node-model': 'Chassis component',
-             'sw-version': 'platform-OS-1.0'},
+             'node-model': 'Chassis component'},
             response['node-info'])
 
     def test_06_mpdr_portmapping_NETWORK5(self):
-        response = test_utils.get_portmapping_node_attr("XPDR-OC", "mapping", "XPDR1-NETWORK5")
+        response = test_utils.get_portmapping_node_attr("XPDR-OC", "mapping", "XPDR1-NETWORK9")
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertIn(
             {
-                'logical-connection-point': 'XPDR1-NETWORK5',
+                'logical-connection-point': 'XPDR1-NETWORK9',
                 'port-qual': 'switch-network',
                 'port-oper-state': 'ACTIVE',
                 "rate": "400",
                 'xpdr-type': 'mpdr',
                 'openconfig-info': {
-                    'supported-optical-channels': ['cfp2-opt-1-1']
+                    'supported-optical-channels': ['linecard-1-line-opt-1-1']
                 },
                 'supported-operational-mode': ['4308'],
-                'supporting-circuit-pack-name': 'cfp2-transceiver-1',
-                'lcp-hash-val': 'AOVxBCXPOzbw',
+                'supporting-circuit-pack-name': 'linecard-1-line-transceiver-1',
+                'lcp-hash-val': 'AOVxBCXPOzb8',
                 'supported-interface-capability': ['org-openroadm-port-types:if-OTUCn-ODUCn'],
                 'port-direction': 'bidirectional',
-                'port-admin-state': 'DISABLED',
-                'supporting-port': 'line-cfp2-1'
+                'port-admin-state': 'ENABLED',
+                'supporting-port': 'linecard-1-line-port-1'
             },
             response['mapping'])
 
@@ -106,20 +105,16 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         expected = {
             'logical-connection-point': 'XPDR1-CLIENT1',
             'port-qual': 'switch-client',
-            'port-oper-state': 'ACTIVE',
+            'port-oper-state': 'INACTIVE',
             'rate': '100',
             'xpdr-type': 'mpdr',
-            'openconfig-info': {
-                'supported-optical-channels': ['qsfp-opt-1-1', 'qsfp-opt-1-2', 'qsfp-opt-1-3', 'qsfp-opt-1-4'],
-                'supported-interfaces': ['logical-channel-23300101', 'logical-channel-24300101']
-            },
             'supported-operational-mode': ['4308'],
-            'supporting-circuit-pack-name': 'qsfp-transceiver-1',
+            'supporting-circuit-pack-name': 'linecard-1-client-transceiver-1',
             'lcp-hash-val': 'ALoMFfw9DapP',
             'supported-interface-capability': ['org-openroadm-port-types:if-100GE-ODU4'],
             'port-direction': 'bidirectional',
-            'port-admin-state': 'ENABLED',
-            'supporting-port': 'client-qsfp-1'
+            'port-admin-state': 'DISABLED',
+            'supporting-port': 'linecard-1-client-port-1'
         }
         expected_sorted = test_utils.recursive_sort(expected)
         response_sorted = [
@@ -132,24 +127,24 @@ class TestTransportPCEPortmapping(unittest.TestCase):
         self.assertEqual(response['status_code'], requests.codes.ok)
         self.assertEqual("blocking",
                          response['switching-pool-lcp'][0]['switching-pool-type'])
-        self.assertEqual(4,
+        self.assertEqual(8,
                          len(response['switching-pool-lcp'][0]['non-blocking-list']))
         response_sorted = [
             test_utils.recursive_sort(item) for item in response['switching-pool-lcp'][0]['non-blocking-list']
         ]
         expected_sorted = {
-            'nbl-number': 2,
             'interconnect-bandwidth': 100,
             'interconnect-bandwidth-unit': 1000000000,
-            'lcp-list': ['XPDR1-CLIENT2', 'XPDR1-NETWORK5']}
+            'lcp-list': ['XPDR1-CLIENT1', 'XPDR1-NETWORK9'],
+            'nbl-number': 1}
         self.assertIn(expected_sorted, response_sorted)
 
     def test_09_check_mccapprofile(self):
         res = test_utils.get_portmapping_node_attr("XPDR-OC", "mc-capabilities", "XPDR-mcprofile")
         self.assertEqual(res['status_code'], requests.codes.ok)
         self.assertEqual(res['mc-capabilities'][0]['mc-node-name'], 'XPDR-mcprofile')
-        self.assertEqual(float(res['mc-capabilities'][0]['center-freq-granularity']), 12.5)
-        self.assertEqual(float(res['mc-capabilities'][0]['slot-width-granularity']), 25.0)
+        self.assertEqual(float(res['mc-capabilities'][0]['center-freq-granularity']), 6.25)
+        self.assertEqual(float(res['mc-capabilities'][0]['slot-width-granularity']), 12.5)
 
     def test_10_xpdr_device_disconnection(self):
         response = test_utils.unmount_device("XPDR-OC")
