@@ -24,16 +24,17 @@ import test_utils_oc  # nopep8
 class TestTransportPCETopology(unittest.TestCase):
 
     processes = None
-    NODE_VERSION = 'oc'
+    NODE_VERSION = 'oc200'
 
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
-        cls.processes = test_utils.start_sims([('oc-mpdra', cls.NODE_VERSION)])
+        cls.processes = test_utils.start_sims([('mpdra', cls.NODE_VERSION)])
 
     @classmethod
     def tearDownClass(cls):
         # pylint: disable=not-an-iterable
+        test_utils_oc.del_metadata()
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -43,18 +44,18 @@ class TestTransportPCETopology(unittest.TestCase):
         time.sleep(2)
 
     def test_01_meta_data_insertion(self):
-        response = test_utils_oc.metadata_input()
+        response = test_utils_oc.metadata_input_oc200()
         self.assertEqual(response.status_code, requests.codes.created,
                          test_utils.CODE_SHOULD_BE_201)
 
-    def test_02_catlog_input_insertion(self):
-        response = test_utils_oc.catlog_input()
+    def test_02_catalog_input_insertion(self):
+        response = test_utils_oc.catalog_input_oc200()
         self.assertEqual(response.status_code, requests.codes.ok,
                          test_utils.CODE_SHOULD_BE_200)
 
     def test_03_connect_mpdr(self):
         response = test_utils.mount_device("XPDR-OC",
-                                           ('oc-mpdra', self.NODE_VERSION))
+                                           ('mpdra', self.NODE_VERSION))
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(3)
 
@@ -114,7 +115,7 @@ class TestTransportPCETopology(unittest.TestCase):
                 elif tpType == 'XPONDER-NETWORK':
                     network += 1
             self.assertTrue(client == 0)
-            self.assertTrue(network == 1)
+            self.assertTrue(network == 2)
             listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
@@ -133,9 +134,9 @@ class TestTransportPCETopology(unittest.TestCase):
             'XPDR-OC-XPDR1': {
                 'node-type': 'MUXPDR',
                 'xpdr-number': 1,
-                'network_nb': 1,
-                'nbl_nb': 4,
-                'tp-checklist': ['XPDR1-NETWORK5', 'XPDR1-CLIENT1'],
+                'network_nb': 2,
+                'nbl_nb': 8,
+                'tp-checklist': ['XPDR1-NETWORK9', 'XPDR1-CLIENT1'],
                 'tp-unchecklist': ['XPDR1-CLIENT2']
             }
         }
@@ -159,13 +160,10 @@ class TestTransportPCETopology(unittest.TestCase):
                     client += 1
                 elif tpType == 'XPONDER-NETWORK':
                     network += 1
-                    self.assertEqual((tp['org-openroadm-otn-network-topology:tp-supported-interfaces']
-                                      ['supported-interface-capability'][0]['if-cap-type']),
-                                     'org-openroadm-port-types:if-OTUCn-ODUCn')
                     self.assertEqual((tp['supporting-termination-point'][0]['network-ref']), 'openroadm-topology')
                     self.assertEqual((tp['supporting-termination-point'][0]['node-ref']), nodeId)
                     self.assertEqual((tp['supporting-termination-point'][0]['tp-ref']), tpId)
-            self.assertTrue(client == 4)
+            self.assertTrue(client == 8)
             self.assertTrue(network == CHECK_LIST[nodeId]['network_nb'])
             self.assertEqual(
                 len(node['org-openroadm-otn-network-topology:switching-pools']

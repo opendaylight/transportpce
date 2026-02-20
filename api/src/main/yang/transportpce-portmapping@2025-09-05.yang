@@ -168,10 +168,10 @@ module transportpce-portmapping {
         description
           "Version that indicates a prototype implementation";
       }
-      enum 1.9.0 {
+      enum 2.0.0 {
         value 2;
         description
-          "Version 1.9.0 of Open Config";
+          "Version 2.0.0 of Open Config";
       }
     }
     description

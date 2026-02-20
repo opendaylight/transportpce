@@ -177,10 +177,11 @@ def start_lightynode(log_file: str, sim):
                                     '..', '..', 'sample_configs', 'openroadm', sim[1])
     if os.path.isfile(executable):
         with open(log_file, 'w', encoding='utf-8') as outfile:
-            if sim[1] == 'oc' or sim[1] == 'OC':
+            if sim[1] == 'oc200':
                 version = 'OC'
                 sample_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                '..', '..', 'sample_configs', 'openconfig', '240119')
+                                                '..', '..', 'sample_configs', 'openconfig', '251203')
+
             else:
                 version = sim[1]
             return subprocess.Popen(
