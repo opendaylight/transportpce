@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.DELETE;
 import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.SUBTREE_MODIFIED;
 import static org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType.WRITE;
-import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
+import static org.opendaylight.transportpce.common.StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.ArrayList;
@@ -117,7 +117,7 @@ public class NetConfTopologyListenerTest {
         when(ch.getRootNode()).thenReturn(node);
 
         final Node netconfNode = getNetconfNode("netconfNode1", ConnectionStatus.Connecting,
-                OPENCONFIG_DEVICE_VERSION_1_9_0);
+                OPENCONFIG_DEVICE_VERSION_2_0_0);
         when(node.modificationType()).thenReturn(DELETE);
         when(node.dataBefore()).thenReturn(netconfNode);
         when(portMapping.getNode("netconfNode1")).thenReturn(nodes);
