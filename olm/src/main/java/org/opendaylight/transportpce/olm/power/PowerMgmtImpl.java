@@ -32,7 +32,7 @@ import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInter
 import org.opendaylight.transportpce.common.openconfiginterfaces.OpenConfigInterfacesException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentBuilder;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentBuilder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.Component1Builder;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannel;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.optical.channel.top.OpticalChannelBuilder;
@@ -353,7 +353,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                 .orElseThrow(() -> new IllegalStateException("No supported operational mode found"));
         switch (openConfigVersion.getIntValue()) {
             case 2:
-                return PowerMgmtVersionOC190.getXponderPowerRange(opmode, networkTransactionService);
+                return PowerMgmtVersionOC200.getXponderPowerRange(opmode, networkTransactionService);
             default:
                 LOG.error("Unrecognized OpenConfig version");
                 return new HashMap<>();
@@ -488,20 +488,21 @@ public class PowerMgmtImpl implements PowerMgmt {
             return powerVal;
         }
 
-        Map<String, Double> rxSRGPowerRangeMap = getSRGRxPowerRangeMap(srgId, nextNodeId);
-        if (rxSRGPowerRangeMap == null) {
-            return null;
-            // return null here means return false in setPower()
-            // TODO empty txPowerRangeMap + null rxSRGPowerRangeMap is allowed
-            // => confirm this behavior is OK
+        if (!isOpenConfig) {
+            Map<String, Double> rxSRGPowerRangeMap = getSRGRxPowerRangeMap(srgId, nextNodeId);
+            if (rxSRGPowerRangeMap == null) {
+                return null;
+                // return null here means return false in setPower()
+                // TODO empty txPowerRangeMap + null rxSRGPowerRangeMap is allowed
+                // => confirm this behavior is OK
+            }
+            if (rxSRGPowerRangeMap.isEmpty()) {
+                LOG.info("SRG Power Range not found, setting the Transponder range to default");
+                return powerVal;
+            }
+            powerVal = new BigDecimal(txPowerRangeMap.get("MaxTx"))
+                .min(new BigDecimal(rxSRGPowerRangeMap.get("MaxRx")));
         }
-        if (rxSRGPowerRangeMap.isEmpty()) {
-            LOG.info("SRG Power Range not found, setting the Transponder range to default");
-            return powerVal;
-        }
-
-        powerVal = new BigDecimal(txPowerRangeMap.get("MaxTx"))
-            .min(new BigDecimal(rxSRGPowerRangeMap.get("MaxRx")));
         LOG.info("Calculated Transponder Power value is {}" , powerVal);
         return powerVal;
     }
