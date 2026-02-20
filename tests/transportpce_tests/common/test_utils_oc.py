@@ -21,8 +21,7 @@ import test_utils  # nopep8
 # Basic NetCONF device operations for openconfig
 #
 
-
-def metadata_input():
+def metadata_input_oc200():
     url = {'rfc8040': '{}/data/open-terminal-meta-data:open-terminal-meta-data',
            'draft-bierman02': '{}/config/data/open-terminal-meta-data:open-terminal-meta-data'}
     body = {
@@ -30,7 +29,7 @@ def metadata_input():
             "transceiver-info": {
                 "transceiver": [
                     {
-                        "part-no": "Transceiver-part-1",
+                        "part-no": "OD-PPAC48D10001",
                         "operational-modes": {
                             "operational-mode": [
                                 {
@@ -58,7 +57,35 @@ def metadata_input():
                         ]
                     },
                     {
-                        "part-no": "Transceiver-client-part-1",
+                        "part-no": "Line transceiver (Linecard 1, CFP2 transceiver 1)",
+                        "operational-modes": {
+                            "operational-mode": [
+                                {
+                                    "mode-id": 1,
+                                    "catalog-id": "4308",
+                                    "rate": "400"
+                                }
+                            ]
+                        },
+                        "supported-interface-capability": [
+                            {
+                                "interface-sequence": [
+                                    {
+                                        "position": 1,
+                                        "interface-type": "PROT_OTUCN",
+                                        "max-interfaces": 1
+                                    },
+                                    {
+                                        "position": 2,
+                                        "interface-type": "PROT_ODUCN",
+                                        "max-interfaces": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "part-no": "Client transceiver (Linecard 1, QSFP28 transceiver 1)",
                         "operational-modes": {
                             "operational-mode": [
                                 {
@@ -90,32 +117,57 @@ def metadata_input():
             "line-card-info": {
                 "line-card": [
                     {
-                        "part-no": "Linecard component (4 x 400G CFP2-DC + 4 x 100GbE QSFP28 Ports)",
+                        "part-no": "Line card component 1",
                         "xpdr-type": "MPDR",
                         "supported-port": [
                             {
                                 "id": 1,
-                                "component-name": "client-qsfp-1",
+                                "component-name": "linecard-[0-9]{1,2}-client-port-1",
                                 "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 2,
-                                "component-name": "client-qsfp-2",
+                                "component-name": "linecard-[0-9]{1,2}-client-port-2",
                                 "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 3,
-                                "component-name": "client-qsfp-3",
+                                "component-name": "linecard-[0-9]{1,2}-client-port-3",
                                 "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 4,
-                                "component-name": "client-qsfp-4",
+                                "component-name": "linecard-[0-9]{1,2}-client-port-4",
                                 "type": "TERMINAL_CLIENT"
                             },
                             {
                                 "id": 5,
-                                "component-name": "line-cfp2-1",
+                                "component-name": "linecard-[0-9]{1,2}-client-port-5",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 6,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-6",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 7,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-7",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 8,
+                                "component-name": "linecard-[0-9]{1,2}-client-port-8",
+                                "type": "TERMINAL_CLIENT"
+                            },
+                            {
+                                "id": 9,
+                                "component-name": "linecard-[0-9]{1,2}-line-port-1",
+                                "type": "TERMINAL_LINE"
+                            },
+                            {
+                                "id": 10,
+                                "component-name": "linecard-[0-9]{1,2}-line-port-2",
                                 "type": "TERMINAL_LINE"
                             }
                         ],
@@ -129,7 +181,7 @@ def metadata_input():
                                         "interconnect-bandwidth-unit": 1000000000,
                                         "interconnect-bandwidth": 100,
                                         "connectable-port": [
-                                            5,
+                                            9,
                                             1
                                         ]
                                     },
@@ -138,7 +190,7 @@ def metadata_input():
                                         "interconnect-bandwidth-unit": 1000000000,
                                         "interconnect-bandwidth": 100,
                                         "connectable-port": [
-                                            5,
+                                            9,
                                             2
                                         ]
                                     },
@@ -147,7 +199,7 @@ def metadata_input():
                                         "interconnect-bandwidth-unit": 1000000000,
                                         "interconnect-bandwidth": 100,
                                         "connectable-port": [
-                                            5,
+                                            9,
                                             3
                                         ]
                                     },
@@ -156,8 +208,44 @@ def metadata_input():
                                         "interconnect-bandwidth-unit": 1000000000,
                                         "interconnect-bandwidth": 100,
                                         "connectable-port": [
-                                            5,
+                                            9,
                                             4
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 5,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            5
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 6,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            6
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 7,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            7
+                                        ]
+                                    },
+                                    {
+                                        "nbl-id": 8,
+                                        "interconnect-bandwidth-unit": 1000000000,
+                                        "interconnect-bandwidth": 100,
+                                        "connectable-port": [
+                                            10,
+                                            8
                                         ]
                                     }
                                 ]
