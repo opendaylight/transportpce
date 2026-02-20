@@ -14,10 +14,10 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class PowerMgmtVersionOC190 {
-    private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtVersionOC190.class);
+public final class PowerMgmtVersionOC200 {
+    private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtVersionOC200.class);
 
-    private PowerMgmtVersionOC190() {
+    private PowerMgmtVersionOC200() {
     }
 
     /**
