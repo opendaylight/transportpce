@@ -309,8 +309,8 @@ public final class MappingUtilsImpl implements MappingUtils {
                     return null;
                 }
                 switch (version) {
-                    case _190:
-                        return StringConstants.OPENCONFIG_DEVICE_VERSION_1_9_0;
+                    case _200:
+                        return StringConstants.OPENCONFIG_DEVICE_VERSION_2_0_0;
                     case PROTOTYPE:
                     default:
                         LOG.warn("unknown openConfig device version");

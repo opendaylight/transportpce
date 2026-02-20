@@ -38,6 +38,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -50,16 +52,16 @@ import org.opendaylight.transportpce.common.catalog.CatalogUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.metadata.OCMetaDataTransaction;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.OpenconfigPlatformData;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.PlatformComponentState;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.anchors.top.Port;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.Components;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.Component;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.ComponentKey;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.component.top.components.component.State;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.Subcomponents;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.Subcomponent;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev220610.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.OpenconfigPlatformData;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.PlatformComponentState;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.anchors.top.Port;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.Components;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.Component;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.ComponentKey;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.component.top.components.component.State;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.subcomponent.ref.top.Subcomponents;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.subcomponent.ref.top.subcomponents.Subcomponent;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.platform.rev221220.platform.subcomponent.ref.top.subcomponents.SubcomponentKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.OpenconfigTerminalDeviceData;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.device.top.TerminalDevice;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.ingress.top.Ingress;
@@ -67,7 +69,7 @@ import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.terminal.device.rev210729.terminal.logical.channel.top.logical.channels.ChannelKey;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.line.common.rev190603.Port1Builder;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.TRIBUTARYPROTOCOLTYPE;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.TRIBUTARYPROTOCOLTYPE;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.OpenTerminalMetaData;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.open.terminal.meta.data.rev250626.open.terminal.meta.data.line.card.info.LineCard.XpdrType;
@@ -121,9 +123,9 @@ import org.slf4j.LoggerFactory;
  * This class related to  port mapping  operations for openConfig node.
  * Based on terminal device reference 1.9.0.
  */
-public class OCPortMappingVersion190 {
+public class OCPortMappingVersion200 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OCPortMappingVersion190.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OCPortMappingVersion200.class);
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -132,13 +134,13 @@ public class OCPortMappingVersion190 {
 
 
     /**
-     * constructor of OCPortMappingVersion190.
+     * constructor of OCPortMappingVersion200.
      * @param dataBroker
      *            data broker
      * @param deviceTransactionManager
      *            deviceTransactionManager
      */
-    public OCPortMappingVersion190(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
+    public OCPortMappingVersion200(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
                                    OCMetaDataTransaction ocMetaDataTransaction,
                                    NetworkTransactionService networkTransactionService) {
         this.dataBroker = dataBroker;
@@ -157,7 +159,7 @@ public class OCPortMappingVersion190 {
      * @return true/false based on status of operation
      */
     public boolean createMappingData(String nodeId, IpAddress ipAddress) {
-        LOG.info(PortMappingUtils.CREATE_OC_MAPPING_DATA_LOGMSG, nodeId, "1.9.0");
+        LOG.info(PortMappingUtils.CREATE_OC_MAPPING_DATA_LOGMSG, nodeId, "2.0.0");
         NodeInfo nodeInfo = null;
         List<Mapping> portMapList = new ArrayList<>();
         Map<McCapabilitiesKey, McCapabilities> mcCapabilities = new HashMap<>();
@@ -219,7 +221,7 @@ public class OCPortMappingVersion190 {
      */
     private NodeInfo createNodeInfo(IpAddress ipAddress, State state, String softwareVersion) {
         NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder()
-                .setOpenconfigVersion(OpenconfigNodeVersion._190)
+                .setOpenconfigVersion(OpenconfigNodeVersion._200)
                 .setNodeType(NodeTypes.Xpdr);
         if (ipAddress != null) {
             nodeInfoBldr.setNodeIpAddress(ipAddress);
@@ -461,6 +463,10 @@ public class OCPortMappingVersion190 {
         Map<TransceiverKey, Transceiver> transceiverMetadataMap = getTransceiversListMetaData();
         for (Component portComponent : portComponentList) {
             Port portData = portComponent.getPort();
+            if (portData == null) {
+                LOG.warn("Port data is null for component {}", portComponent.getName());
+                continue;
+            }
             Port1 augmentationPort = portData.augmentation(Port1.class);
             String portName = portComponent.getName();
             if (augmentationPort != null
@@ -482,8 +488,15 @@ public class OCPortMappingVersion190 {
                 Map<SupportedPortKey, SupportedPort> supportedPortMap = lineCardMetaData.getSupportedPort();
                 XpdrType xpdrType = lineCardMetaData.getXpdrType();
                 var supportedPort =
-                        supportedPortMap.values().stream().toList().stream().filter(supportPort
-                                -> supportPort.getComponentName().equalsIgnoreCase(portName)).findFirst();
+                        supportedPortMap.values().stream().toList().stream().filter(supportPort -> {
+                            try {
+                                return Pattern.matches(supportPort.getComponentName(), portName);
+                            } catch (PatternSyntaxException e) {
+                                LOG.warn("Invalid regex pattern in metadata component-name: {}",
+                                        supportPort.getComponentName(), e);
+                                return false;
+                            }
+                        }).findFirst();
                 if (supportedPort.isPresent()) {
                     Uint8 networkPortId = supportedPort.orElseThrow().getId();
                     createLcpMapping(nodeId, portComponent, augmentationPort, StringConstants.NETWORK_TOKEN,
@@ -599,8 +612,14 @@ public class OCPortMappingVersion190 {
         for (var supportedPort : supportedClientPorts) {
             String clientPortName = supportedPort.orElseThrow().getComponentName();
             var subComp =
-                    lineCardComponentSubcomponents.stream().filter(subcomponent -> subcomponent.getName()
-                            .equals(clientPortName)).findFirst();
+                    lineCardComponentSubcomponents.stream().filter(subcomponent -> {
+                        try {
+                            return Pattern.matches(clientPortName, String.valueOf(subcomponent.getName()));
+                        } catch (PatternSyntaxException e) {
+                            LOG.warn("Invalid regex pattern in metadata component-name: {}", clientPortName, e);
+                            return false;
+                        }
+                    }).findFirst();
             if (subComp.isPresent()) {
                 clientIds.add(supportedPort.orElseThrow().getId());
             } else {
@@ -734,6 +753,10 @@ public class OCPortMappingVersion190 {
         }
         for (Component portComponent : portComponentList) {
             Port portData = portComponent.getPort();
+            if (portData == null) {
+                LOG.warn("Port data is null for component {}", portComponent.getName());
+                continue;
+            }
             Port1 augmentationPort = portData.augmentation(Port1.class);
             String portName = portComponent.getName();
             if (augmentationPort != null
@@ -744,9 +767,16 @@ public class OCPortMappingVersion190 {
                 Map<SupportedPortKey, SupportedPort>  supportedPortMap = lineCardMetaData.getSupportedPort();
                 List<SupportedPort> supportedPortList = supportedPortMap.values().stream().toList();
                 var supportedPortOptional =
-                        supportedPortList.stream().filter(supportedPort -> supportedPort.getComponentName()
-                                        .equals(portName) && supportedPort.getType()
-                                        .contains(TERMINALCLIENT)).findFirst();
+                        supportedPortList.stream().filter(supportedPort -> {
+                            try {
+                                return Pattern.matches(supportedPort.getComponentName(), portName)
+                                        && supportedPort.getType().contains(TERMINALCLIENT);
+                            } catch (PatternSyntaxException e) {
+                                LOG.warn("Invalid regex pattern in metadata component-name: {}",
+                                        supportedPort.getComponentName(), e);
+                                return false;
+                            }
+                        }).findFirst();
                 if (supportedPortOptional.isPresent()) {
                     Uint8 supportedId = supportedPortOptional.orElseThrow().getId();
                     String clientLCPName =
