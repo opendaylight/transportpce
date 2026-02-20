@@ -903,7 +903,7 @@ public class ORtoTapiTopoConversionTools {
      */
     public ConnectionEndPoint createCepRoadm(int lowerFreqIndex, int higherFreqIndex, String id, String qualifier,
         OtsMediaConnectionEndPointSpec omCepSpec, boolean srg) {
-        LOG.info("Create CEP for id {}, Lower/Higher freq index: {}-{})", id, lowerFreqIndex, higherFreqIndex);
+        LOG.info("Creating CEP for id {}, Lower/Higher freq index: {}-{})", id, lowerFreqIndex, higherFreqIndex);
 
         String nepId = String.join("+", id.split("\\+")[0], qualifier, id.split("\\+")[1]);
         String nodeNepId = String.join("+",id.split("\\+")[0], TapiConstants.PHTNC_MEDIA);
@@ -991,9 +991,13 @@ public class ORtoTapiTopoConversionTools {
                 break;
         }
 
-        return TapiConstants.OTSI_MC.equals(qualifier)
-            ? cepBldr.build()
-            : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+        ConnectionEndPoint connectionEndPoint = TapiConstants.OTSI_MC.equals(qualifier)
+                ? cepBldr.build()
+                : cepBldr.setClientNodeEdgePoint(Map.of(cnep.key(), cnep)).build();
+
+        LOG.info("Created Connection End Point: {}", cepName.getValue());
+
+        return connectionEndPoint;
     }
 
     /**
