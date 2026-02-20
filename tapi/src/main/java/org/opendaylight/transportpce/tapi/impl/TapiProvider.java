@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.impl;
 
+import com.google.common.base.Stopwatch;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,7 +137,7 @@ public class TapiProvider {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.netModServ = networkModelService;
         netModServ.createTapiExtNodeAtInit();
-        LOG.info("TapiProvider Session Initiated");
+        LOG.info("Init START.");
         LOG.info("Empty TAPI context created: {}", tapiContext.getTapiContext());
         TopologyUtils topologyUtils = new TopologyUtils(this.networkTransactionService, this.dataBroker, tapiLink);
         ConnectivityUtils connectivityUtils = new ConnectivityUtils(this.serviceDataStoreOperations, new HashMap<>(),
@@ -145,12 +146,14 @@ public class TapiProvider {
         tapiTopoContextInit.initializeTopoContext();
         TapiInitialORMapping tapiInitialORMapping = new TapiInitialORMapping(topologyUtils, connectivityUtils,
                 tapiContext, this.serviceDataStoreOperations);
-        tapiInitialORMapping.performTopoInitialMapping();
-        tapiInitialORMapping.performServInitialMapping();
+
+        initTapi(tapiInitialORMapping);
+
         TapiPceNotificationHandler pceListenerImpl = new TapiPceNotificationHandler(dataBroker, connectivityUtils);
         TapiRendererNotificationHandler rendererListenerImpl = new TapiRendererNotificationHandler(dataBroker,
                 notificationPublishService);
 
+        LOG.info("RPC registration.");
         rpcRegistration = rpcProviderService.registerRpcImplementations(
                 new CreateConnectivityServiceImpl(rpcService, tapiContext, connectivityUtils, pceListenerImpl,
                         rendererListenerImpl),
@@ -166,26 +169,39 @@ public class TapiProvider {
                 new GetServiceInterfacePointDetailsImpl(tapiContext),
                 new GetServiceInterfacePointListImpl(tapiContext));
 
+        LOG.info("Initializing and registering listeners...");
         this.listeners = new ArrayList<>();
-        TapiNetconfTopologyListener topologyListener = new TapiNetconfTopologyListener(tapiNetworkModelServiceImpl);
+
+        LOG.debug("Registering data tree change listener on OpenROADM links");
         TapiOrLinkListener orLinkListener = new TapiOrLinkListener(tapiLink, networkTransactionService);
-        TapiPortMappingListener tapiPortMappingListener = new TapiPortMappingListener(tapiNetworkModelServiceImpl);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION, LINK_II,
                 orLinkListener));
+
+        LOG.debug("Registering data tree change listener on OpenROADM topology nodes");
+        TapiNetconfTopologyListener topologyListener = new TapiNetconfTopologyListener(tapiNetworkModelServiceImpl);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.OPERATIONAL, NETCONF_NODE_II,
                 topologyListener));
+
+        LOG.debug("Registering data tree change listener on transportpce portmapping nodes");
+        TapiPortMappingListener tapiPortMappingListener = new TapiPortMappingListener(tapiNetworkModelServiceImpl);
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 InstanceIdentifiers.PORTMAPPING_NODE_II, tapiPortMappingListener));
+
+        LOG.debug("Registering TAPI data tree change listener on Service Interface Points");
         TapiListener tapiListener = new TapiListener();
         listeners.add(dataBroker.registerTreeChangeListener(LogicalDatastoreType.CONFIGURATION,
                 DataObjectReference.builder(ServiceInterfacePoints.class).build(),
                 tapiListener));
+
         // Notification Listener
+        LOG.debug("Registering TAPI listener on TransportPCE service path results events (service-path-rpc-result)");
         pcelistenerRegistration = notificationService.registerCompositeListener(pceListenerImpl.getCompositeListener());
-        LOG.debug("Pce Listener Registration in TapiProvider : {}", pcelistenerRegistration);
+
+        LOG.debug("Registering TAPI listener on TransportPCE renderer results events (renderer-rpc-result-sp)");
         rendererlistenerRegistration = notificationService
             .registerCompositeListener(rendererListenerImpl.getCompositeListener());
-        LOG.debug("Renderer Listener Registration in TapiProvider : {}", rendererlistenerRegistration);
+
+        LOG.debug("Registering TAPI listener on TransportPCE service create events (service-rpc-result-sh)");
         TapiServiceNotificationHandler serviceHandlerListenerImpl = new TapiServiceNotificationHandler(
                 dataBroker,
                 new OpenRoadmServiceCopier(
@@ -213,6 +229,33 @@ public class TapiProvider {
         tapinetworkmodellistenerRegistration = notificationService
             .registerCompositeListener(tapiNetworkModelNotificationHandler.getCompositeListener());
         LOG.debug("Network Model Listener Registration in TapiProvider : {}", tapinetworkmodellistenerRegistration);
+
+        LOG.info("Init COMPLETE.");
+    }
+
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    private void initTapi(TapiInitialORMapping tapiInitialORMapping) {
+        final Stopwatch totalStopwatch = Stopwatch.createStarted();
+
+        LOG.info("Initial copy from OpenROADM - START");
+        try {
+            LOG.info("Initial topology mapping: OpenROADM -> TAPI topology - START");
+            final Stopwatch topoStopwatch = Stopwatch.createStarted();
+            tapiInitialORMapping.performTopoInitialMapping();
+            LOG.info("Initial topology mapping: OpenROADM -> TAPI topology - DONE ({})",
+                    topoStopwatch);
+
+            LOG.info("Initial service mapping: OpenROADM services -> TAPI - START");
+            final Stopwatch serviceStopwatch = Stopwatch.createStarted();
+            tapiInitialORMapping.performServInitialMapping();
+            LOG.info("Initial service mapping: OpenROADM services -> TAPI - DONE ({})",
+                    serviceStopwatch);
+
+            LOG.info("Initial copy from OpenROADM - DONE ({})", totalStopwatch);
+        } catch (RuntimeException e) {
+            LOG.error("Initial copy from OpenROADM - FAILED after {}", totalStopwatch, e);
+            throw e;
+        }
     }
 
     /**
