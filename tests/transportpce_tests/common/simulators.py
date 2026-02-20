@@ -33,5 +33,7 @@ SIMS = {
     ('xpdrc', '7.1'): {'port': '17854', 'configfile': 'oper-XPDRC.xml', 'logfile': 'xpdrc-71.log', 'restconf_baseurl': 'http://127.0.0.1:8154/restconf'},
     ('xpdra2', '7.1'): {'port': '17857', 'configfile': 'oper-XPDRA2.xml', 'logfile': 'xpdra2-71.log', 'restconf_baseurl': 'http://127.0.0.1:8157/restconf'},
     ('xpdrc2', '7.1'): {'port': '17858', 'configfile': 'oper-XPDRC2.xml', 'logfile': 'xpdrc2-71.log', 'restconf_baseurl': 'http://127.0.0.1:8158/restconf'},
-    ('oc-mpdr', 'oc'): {'port': '19840', 'configfile': 'sample-openconfig-mpdr.xml', 'logfile': 'sample-openconfig-mpdr.log', 'restconf_baseurl': 'http://127.0.0.1:8159/restconf'}
+    ('oc-mpdr', 'oc'): {'port': '19840', 'configfile': 'sample-openconfig-mpdr.xml', 'logfile': 'sample-openconfig-mpdr.log', 'restconf_baseurl': 'http://127.0.0.1:8159/restconf'},
+    ('oc200-mpdr', 'oc200'): {'port': '19841', 'configfile': 'sample-openconfig200-mpdr.xml', 'logfile': 'sample-openconfig200-mpdr.log', 'restconf_baseurl': 'http://127.0.0.1:8160/restconf'}
+
 }
