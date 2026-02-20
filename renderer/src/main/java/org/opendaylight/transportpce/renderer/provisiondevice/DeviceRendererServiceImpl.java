@@ -55,6 +55,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.Servic
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.Connection;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.DeviceInterface;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.DevicePort;
+import org.opendaylight.transportpce.renderer.provisiondevice.transaction.DeviceTransceiver;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.DeleteService;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.DeleteSubscriber;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.FailedRollbackResult;
@@ -62,7 +63,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.delete.Subscriber;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.History;
 import org.opendaylight.transportpce.renderer.provisiondevice.transaction.history.NonStickHistoryMemory;
-import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev210729.AdminStateType;
+import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.transport.types.rev230208.AdminStateType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.NodelistBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.NodelistKey;
@@ -180,6 +181,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             int crossConnectFlag = 0;
 
             Set<String> portIds = new HashSet<>();
+            String transceiver = "";
 
             try {
                 // if the node is currently mounted then proceed
@@ -193,15 +195,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     if (isOpenConfig) {
                         String destTp = node.getDestTp();
                         if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
-                            LOG.info("Configuring network admin state & optical channel in node {} and dest {}",
+                            LOG.info("Starting OpenConfig network service configuration for node {} on destination {}",
                                     nodeId, destTp);
                             String configOpticalChannel = this.openConfigInterfaceFactory
                                     .configureNetworkOpticalChannel(nodeId, destTp, input);
-                            LOG.info("Optical channel configured for {}", configOpticalChannel);
                             portIds = this.openConfigInterfaceFactory
                                     .configurePortAdminState(nodeId, destTp, AdminStateType.ENABLED);
-                            LOG.info("Admin state configured for  node {} and port {} ", nodeId, portIds);
+                            transceiver = this.openConfigInterfaceFactory.configureTransceiversTxLaser(nodeId,
+                                    destTp, List.of(1), true);
                             transactionHistory.add(new DevicePort(nodeId, portIds.stream().findFirst().orElseThrow()));
+                            transactionHistory.add(new DeviceTransceiver(nodeId, transceiver));
                             nodesProvisioned.add(nodeId);
                             Mapping mapping = portMapping.getMapping(nodeId, destTp);
                             portMapping.updateMapping(nodeId, mapping);
@@ -377,6 +380,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     .setNodeId(nodeId);
             if (isOpenConfig) {
                 nodeInterfaceBuilder.setPortId(portIds);
+                nodeInterfaceBuilder.setTransceiverId(Set.of(transceiver));
             } else {
                 nodeInterfaceBuilder.setConnectionId(createdConnections)
                         .setEthInterfaceId(createdEthInterfaces)
@@ -480,19 +484,23 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     otnLinkTps.add(new LinkTpBuilder().setNodeId(nodeId).setTpId(destTp).build());
                 }
                 if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
-                    LOG.info("Configuring Admin state Disabled for node {} and dest {}", nodeId, destTp);
+                    LOG.info("Starting OpenConfig network service deletion for node {} at destination {}",
+                            nodeId, destTp);
                     Set<String> portIds = null;
                     try {
                         portIds = this.openConfigInterfaceFactory
                                 .configurePortAdminState(nodeId, destTp, AdminStateType.DISABLED);
+                        ArrayList<Integer> channelIndex = new ArrayList<>(List.of(1));
+                        String transceiver = this.openConfigInterfaceFactory.configureTransceiversTxLaser(nodeId,
+                                destTp, channelIndex, false);
                         Mapping mapping = portMapping.getMapping(nodeId, destTp);
                         portMapping.updateMapping(nodeId, mapping);
+                        LOG.info("Successfully deleted OpenConfig network service configuration for node {}", nodeId);
                     } catch (OpenConfigInterfacesException ex) {
                         processErrorMessage("Setup service path failed! Exception:"
                                 + ex.toString(), forkJoinPool, results);
                         success.set(false);
                     }
-                    LOG.info("Admin state Disabled for  {} ", portIds);
                 } else {
                     LOG.error("Termination point should be a Network type");
                 }
@@ -661,33 +669,23 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 isOpenConfig.set(true);
             }
             if (isOpenConfig.get()) {
-                if (nodeInterfaces.getInterfaceId() != null) {
-                    try {
-                        Set<String> clientInterface = this.openConfigInterfaceFactory.configureClientInterface(nodeId,
-                                nodeInterfaces.getInterfaceId(), false);
-                        LOG.info("Client interfaces de-provisioned for {} on node {} ", clientInterface, nodeId);
-                    } catch (OpenConfigInterfacesException e) {
-                        LOG.error("Error while de-provisioning client interfaces on node {} ", nodeId);
-                    }
-                }
-                if (nodeInterfaces.getOpticalChannelId() != null) {
-                    try {
-                        Set<String> opticalChannels = this.openConfigInterfaceFactory.configureClientOpticalChannel(
-                                nodeId, nodeInterfaces.getOpticalChannelId(), "TRUE");
-                        LOG.info("Client optical channel de-provisioned for {} on node {} ", opticalChannels, nodeId);
-                    } catch (OpenConfigInterfacesException e) {
-                        LOG.error("Error while de-provisioning client optical channels on node {} ", nodeId);
-                    }
-                }
                 if (nodeInterfaces.getPortId() != null) {
                     for (String portId : nodeInterfaces.getPortId()) {
                         try {
-                            Set<String> port = this.openConfigInterfaceFactory.disablePortAdminState(nodeId,
-                                    portId);
-                            LOG.info("Admin state disabled for {} on node {} ", port, nodeId);
+                            this.openConfigInterfaceFactory.disablePortAdminState(nodeId, portId);
                         } catch (OpenConfigInterfacesException e) {
                             LOG.error("Error while disabling admin state on node {} and supporting port {} ", nodeId,
                                     portId);
+                        }
+                    }
+                }
+                if (nodeInterfaces.getTransceiverId() != null) {
+                    for (String transceiver : nodeInterfaces.getTransceiverId()) {
+                        try {
+                            this.openConfigInterfaceFactory.disableTxLaser(nodeId, transceiver);
+                        } catch (OpenConfigInterfacesException e) {
+                            LOG.error("Error while disabling tx-laser for transceiver {} on node {} ", transceiver,
+                                    nodeId);
                         }
                     }
                 }
