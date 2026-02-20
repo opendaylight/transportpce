@@ -44,6 +44,13 @@
         <group>sudo</group>
       </user>
     </users>
+    <mc-capability-profile>
+      <profile-name>mc-profile</profile-name>
+      <slot-width-granularity>12.5</slot-width-granularity>
+      <center-freq-granularity>6.25</center-freq-granularity>
+      <min-slots>3</min-slots>
+      <max-slots>384</max-slots>
+    </mc-capability-profile>
     <circuit-packs>
       <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>1/0</circuit-pack-name>
@@ -654,6 +661,7 @@
         <circuit-pack-name>1/0</circuit-pack-name>
         <port-name>L1</port-name>
       </connection-ports>
+      <mc-capability-profile-name>mc-profile</mc-capability-profile-name>
     </degree>
     <degree>
       <degree-number>2</degree-number>
@@ -671,6 +679,7 @@
         <circuit-pack-name>2/0</circuit-pack-name>
         <port-name>L1</port-name>
       </connection-ports>
+      <mc-capability-profile-name>mc-profile</mc-capability-profile-name>
     </degree>
     <shared-risk-group>
       <srg-number>1</srg-number>
@@ -681,6 +690,7 @@
         <circuit-pack-name>3/0</circuit-pack-name>
       </circuit-packs>
       <current-provisioned-add-drop-ports>4</current-provisioned-add-drop-ports>
+      <mc-capability-profile-name>mc-profile</mc-capability-profile-name>
     </shared-risk-group>
   </org-openroadm-device>
 
