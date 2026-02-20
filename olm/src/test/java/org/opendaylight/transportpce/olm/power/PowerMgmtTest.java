@@ -386,7 +386,7 @@ class PowerMgmtTest {
 
         when(this.portMapping.getNode("xpdr-OC"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
-                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    OpenconfigNodeVersion._200, List.of("network-OC"),
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
@@ -402,9 +402,9 @@ class PowerMgmtTest {
                 .build();
         when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
 
-        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
-                mockStatic(PowerMgmtVersionOC190.class)) {
-            pmvOC190.when(() -> PowerMgmtVersionOC190
+        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
+                mockStatic(PowerMgmtVersionOC200.class)) {
+            pmvOC200.when(() -> PowerMgmtVersionOC200
                     .getXponderPowerRange(anyString(), any()))
                     .thenReturn(new HashMap<>());
 
@@ -416,7 +416,7 @@ class PowerMgmtTest {
             boolean result = this.powerMgmt.setPower(input);
             assertTrue(result);
 
-            pmvOC190.verify(() -> PowerMgmtVersionOC190
+            pmvOC200.verify(() -> PowerMgmtVersionOC200
                     .getXponderPowerRange(anyString(), any()), times(1));
             verify(this.openConfigInterfaces, times(1))
                     .configureComponent(matches("xpdr-OC"), any());
@@ -432,15 +432,15 @@ class PowerMgmtTest {
 
         when(this.portMapping.getNode("xpdr-OC"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
-                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    OpenconfigNodeVersion._200, List.of("network-OC"),
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
                     OpenroadmNodeVersion._121, List.of("srg1")));
 
-        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
-                mockStatic(PowerMgmtVersionOC190.class)) {
-            pmvOC190.when(() -> PowerMgmtVersionOC190
+        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
+                mockStatic(PowerMgmtVersionOC200.class)) {
+            pmvOC200.when(() -> PowerMgmtVersionOC200
                     .getXponderPowerRange(anyString(), any()))
                     .thenReturn(null);
 
@@ -449,7 +449,7 @@ class PowerMgmtTest {
             boolean result = this.powerMgmt.setPower(input);
             assertFalse(result);
 
-            pmvOC190.verify(() -> PowerMgmtVersionOC190
+            pmvOC200.verify(() -> PowerMgmtVersionOC200
                     .getXponderPowerRange(anyString(), any()), times(1));
             verifyNoInteractions(this.openConfigInterfaces);
         }
@@ -465,7 +465,7 @@ class PowerMgmtTest {
 
         when(this.portMapping.getNode("xpdr-OC"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeTpdrOpenConfig("xpdr-OC",
-                    OpenconfigNodeVersion._190, List.of("network-OC"),
+                    OpenconfigNodeVersion._200, List.of("network-OC"),
                     opticalChannels, operationalModes));
         when(this.portMapping.getNode("next-node"))
             .thenReturn(OlmPowerServiceRpcImplUtil.getMappingNodeRdm("next-node",
@@ -481,9 +481,9 @@ class PowerMgmtTest {
                 .build();
         when(this.portMapping.getMapping("xpdr-OC", "network-OC")).thenReturn(portMap);
 
-        try (MockedStatic<PowerMgmtVersionOC190> pmvOC190 =
-                mockStatic(PowerMgmtVersionOC190.class)) {
-            pmvOC190.when(() -> PowerMgmtVersionOC190
+        try (MockedStatic<PowerMgmtVersionOC200> pmvOC200 =
+                mockStatic(PowerMgmtVersionOC200.class)) {
+            pmvOC200.when(() -> PowerMgmtVersionOC200
                     .getXponderPowerRange(anyString(), any()))
                     .thenReturn(new HashMap<>());
 
