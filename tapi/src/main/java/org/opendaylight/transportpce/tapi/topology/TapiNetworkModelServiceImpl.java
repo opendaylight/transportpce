@@ -2113,6 +2113,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     /**
      * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
      *
+     * @see #populateNepsForRdmNode(boolean, String, Map, boolean, String, int)
+     */
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+            boolean srg,
+            String nodeId,
+            Map<String, TerminationPoint1> tpMap,
+            boolean withSip,
+            String nepPhotonicSublayer) {
+
+        return populateNepsForRdmNode(srg, nodeId, tpMap, withSip, nepPhotonicSublayer, 0);
+    }
+
+    /**
+     * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
+     *
      * <p>For each {@link TerminationPoint1} entry in {@code tpMap}, this method:
      * <ul>
      *   <li>Builds a Photonic Media NEP with a deterministic UUID derived from
@@ -2143,6 +2158,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param nepPhotonicSublayer
      *     The photonic sublayer to build NEPs for (e.g. {@code PHTNC_MEDIA_OTS}, {@code PHTNC_MEDIA_OMS},
      *     {@code MC}, {@code OTSI_MC}). Affects qualifiers and whether photonic specs are added.
+     * @param depth
+     *     Indicates the current recursion level of the method.
+     *     {@code 0} represents the top-level call; higher values indicate
+     *     nested recursive invocations.
      * @return
      *     A map keyed by {@link OwnedNodeEdgePointKey} containing the constructed {@link OwnedNodeEdgePoint}s.
      */
@@ -2151,18 +2170,24 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String nodeId,
             Map<String, TerminationPoint1> tpMap,
             boolean withSip,
-            String nepPhotonicSublayer) {
+            String nepPhotonicSublayer,
+            int depth) {
 
+        LOG.info("Populating NEPs for ROADM node {} from {} TPs", nodeId, tpMap.size());
         // Create NEPs for MC and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-
+        int tpCounter = 0;
         for (Map.Entry<String, TerminationPoint1> entry : tpMap.entrySet()) {
             final String tpId = entry.getKey();
             final TerminationPoint1 tp = entry.getValue();
 
             // PHOTONIC MEDIA NEP
             final String nepNameValue = String.join("+", nodeId, nepPhotonicSublayer, tpId);
-            LOG.debug("TNMSI:populateNepsForRdmNode : PHOTO NEP = {}", nepNameValue);
+            LOG.info("[depth={}] Photonic Media NEP name = {} (TP {} of {})",
+                    depth,
+                    nepNameValue,
+                    tpCounter++,
+                    tpMap.size());
 
             SupportedCepLayerProtocolQualifierInstancesBuilder sclpqiBd =
                     new SupportedCepLayerProtocolQualifierInstancesBuilder()
@@ -2214,8 +2239,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                             availableFreqMap = srgRanges.available();
 
                             if (usedFreqMap != null && !usedFreqMap.isEmpty()) {
-                                LOG.debug("TNMSI:populateNepsForRdmNode : Entering LOOP creating OTSiMC & MC with "
-                                        + "usedFreqMap non empty {} for Node {}, tp {}", usedFreqMap, nodeId, tpMap);
+                                LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : Entering LOOP creating OTSiMC & MC"
+                                        + " with usedFreqMap non empty {} for Node {}, tp {}", usedFreqMap, nodeId,
+                                        tpMap, depth);
 
                                 onepMap.putAll(
                                         populateNepsForRdmNode(
@@ -2223,7 +2249,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                                 nodeId,
                                                 new HashMap<>(Map.of(tpId, tp)),
                                                 true,
-                                                TapiConstants.MC));
+                                                TapiConstants.MC,
+                                                depth + 1));
 
                                 onepMap.putAll(
                                         populateNepsForRdmNode(
@@ -2231,7 +2258,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                                 nodeId,
                                                 new HashMap<>(Map.of(tpId, tp)),
                                                 true,
-                                                TapiConstants.OTSI_MC));
+                                                TapiConstants.OTSI_MC,
+                                                depth + 1));
                             }
                         }
                         break;
@@ -2253,7 +2281,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         break;
                 }
 
-                LOG.debug("TNMSI:populateNepsForRdmNode : calling add Photonic NEP spec for Roadm");
+                LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : calling add Photonic NEP spec for Roadm", depth);
                 onepBd = tapiFactory.addPhotSpecToRoadmOnep(
                         nodeId,
                         usedFreqMap,
@@ -2295,7 +2323,7 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                         null,
                         srg);
 
-                LOG.debug("TNMSI:populateNepsForRdmNode : TopoInitialMapping, creating CEP for SRG");
+                LOG.debug("[depth={}] TNMSI:populateNepsForRdmNode : TopoInitialMapping, creating CEP for SRG", depth);
 
                 Map<String, String> uuidMap = Map.of(
                         new Uuid(nameUuid("CEP", nodeId, nepPhotonicSublayer, tpId)).toString(),
@@ -2308,19 +2336,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
 
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
 
-                logCep(nodeId, tpId, cep);
+                logCep(nodeId, tpId, cep, depth);
 
                 onepBd.addAugmentation(onep1Bldr);
             }
 
             OwnedNodeEdgePoint onep = onepBd.build();
 
-            logOnep(onep, nodeId);
+            logOnep(onep, nodeId, depth);
 
             onepMap.put(onep.key(), onep);
         }
 
-        LOG.info("Done populating ROADM NEP for Node {}", nodeId);
+        LOG.info("[depth={}] Done populating ROADM NEP: node={} sublayer={} tps={} withSip={} producedNeps={}",
+                depth, nodeId, nepPhotonicSublayer, tpMap.size(), withSip, onepMap.size());
         return onepMap;
     }
 
@@ -2331,8 +2360,9 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param ownedNodeEdgePoint the owned node edge point to log
      * @param nodeId the ROADM node identifier
      */
-    private void logOnep(OwnedNodeEdgePoint ownedNodeEdgePoint, String nodeId) {
-        LOG.info("NEP {} for ROADM node {}.",
+    private void logOnep(OwnedNodeEdgePoint ownedNodeEdgePoint, String nodeId, int depth) {
+        LOG.info("[depth={}] NEP {} for ROADM node {}.",
+                depth,
                 Optional.ofNullable(ownedNodeEdgePoint.getName())
                         .flatMap(m -> m.values().stream().findFirst())
                         .map(Name::getValue)
@@ -2349,19 +2379,20 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param tpId the termination point identifier
      * @param cep the connection end point associated with the TP
      */
-    private void logCep(String nodeId, String tpId, ConnectionEndPoint cep) {
+    private void logCep(String nodeId, String tpId, ConnectionEndPoint cep, int depth) {
         String name = Optional
                 .ofNullable(cep.getName())
                 .flatMap(m -> m.values().stream().findFirst())
                 .map(Name::getValue)
                 .orElse("<unnamed>");
 
-        LOG.info("Populate ONEP for ROADM node {} tp {} containing Cep with name {}.",
+        LOG.info("[depth={}] Populate ONEP for ROADM node {} tp {} containing Cep with name {}.",
+                depth,
                 nodeId,
                 tpId,
                 name);
 
-        LOG.debug("CEP {}", cep);
+        LOG.debug("[depth={}] CEP {}", depth, cep);
     }
 
     /**
