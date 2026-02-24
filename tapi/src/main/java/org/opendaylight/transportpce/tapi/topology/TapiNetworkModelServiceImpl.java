@@ -2113,6 +2113,21 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
     /**
      * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
      *
+     * @see #populateNepsForRdmNode(boolean, String, Map, boolean, String, int)
+     */
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(
+            boolean srg,
+            String nodeId,
+            Map<String, TerminationPoint1> tpMap,
+            boolean withSip,
+            String nepPhotonicSublayer) {
+
+        return populateNepsForRdmNode(srg, nodeId, tpMap, withSip, nepPhotonicSublayer, 0);
+    }
+
+    /**
+     * Populates (builds) and returns a map of TAPI {@link OwnedNodeEdgePoint}s (NEPs) for a given ROADM node.
+     *
      * <p>For each {@link TerminationPoint1} entry in {@code tpMap}, this method:
      * <ul>
      *   <li>Builds a Photonic Media NEP with a deterministic UUID derived from
@@ -2143,6 +2158,10 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
      * @param nepPhotonicSublayer
      *     The photonic sublayer to build NEPs for (e.g. {@code PHTNC_MEDIA_OTS}, {@code PHTNC_MEDIA_OMS},
      *     {@code MC}, {@code OTSI_MC}). Affects qualifiers and whether photonic specs are added.
+     * @param depth
+     *     Indicates the current recursion level of the method.
+     *     {@code 0} represents the top-level call; higher values indicate
+     *     nested recursive invocations.
      * @return
      *     A map keyed by {@link OwnedNodeEdgePointKey} containing the constructed {@link OwnedNodeEdgePoint}s.
      */
@@ -2151,7 +2170,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             String nodeId,
             Map<String, TerminationPoint1> tpMap,
             boolean withSip,
-            String nepPhotonicSublayer) {
+            String nepPhotonicSublayer,
+            int depth) {
 
         // Create NEPs for MC and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
@@ -2223,7 +2243,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                                 nodeId,
                                                 new HashMap<>(Map.of(tpId, tp)),
                                                 true,
-                                                TapiConstants.MC));
+                                                TapiConstants.MC,
+                                                depth + 1));
 
                                 onepMap.putAll(
                                         populateNepsForRdmNode(
@@ -2231,7 +2252,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
                                                 nodeId,
                                                 new HashMap<>(Map.of(tpId, tp)),
                                                 true,
-                                                TapiConstants.OTSI_MC));
+                                                TapiConstants.OTSI_MC,
+                                                depth + 1));
                             }
                         }
                         break;
@@ -2320,7 +2342,8 @@ public class TapiNetworkModelServiceImpl implements TapiNetworkModelService {
             onepMap.put(onep.key(), onep);
         }
 
-        LOG.info("Done populating ROADM NEP for Node {}", nodeId);
+        LOG.info("[depth={}] Done populating ROADM NEP: node={} sublayer={} tps={} withSip={} producedNeps={}",
+                depth, nodeId, nepPhotonicSublayer, tpMap.size(), withSip, onepMap.size());
         return onepMap;
     }
 

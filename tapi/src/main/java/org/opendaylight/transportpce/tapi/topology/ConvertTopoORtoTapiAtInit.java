@@ -536,17 +536,46 @@ public class ConvertTopoORtoTapiAtInit {
 
     /**
      * Provides a Map of Owned Node Edge Point supported by a ROADM node of the Tapi Topology.
+     *
+     * @see #populateNepsForRdmNode(boolean, String, List, boolean, String, int)
+     */
+    public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
+            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
+
+        LOG.info("Calling populateNepsForRdmNode srg {}, nodeId {}, tpList {}, withSip {}, netPhotonicSublayer {}",
+                srg,
+                nodeId,
+                tpList.stream().map(e -> e.getTpId().getValue()).collect(Collectors.toSet()),
+                withSip,
+                nepPhotonicSublayer);
+
+        return populateNepsForRdmNode(
+                srg,
+                nodeId,
+                tpList,
+                withSip,
+                nepPhotonicSublayer,
+                0
+        );
+    }
+
+    /**
+     * Provides a Map of Owned Node Edge Point supported by a ROADM node of the Tapi Topology.
      * @param nodeId OpenROADM nodeId converted to a string,
      * @param tpList List of tps in OpenROADM topology,
      * @param withSip Boolean conditioning the creation of Service Interface Point and Connection End Points,
      * @param nepPhotonicSublayer The CEP layer protocol qualifier associated with the NEP's client CEP,
+     * @param depth Indicates the current recursion level of the method.
+     *              {@code 0} represents the top-level call; higher values indicate
+     *              nested recursive invocations.
      */
     public Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> populateNepsForRdmNode(boolean srg,
-            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer) {
+            String nodeId, List<TerminationPoint> tpList, boolean withSip, String nepPhotonicSublayer,
+            int depth) {
         // create neps for MC and and Photonic Media OTS/OMS
         Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepMap = new HashMap<>();
-        LOG.info("Populating NEPs for ROADM node {} (ietf node id: {}), ", nodeId, this.ietfNodeId);
-        LOG.info("ROADM {} has {} termination points", nodeId, tpList.size());
+        LOG.info("[depth={}] Populating NEPs for ROADM node {} (ietf node id: {}), ", depth, nodeId, this.ietfNodeId);
+        LOG.info("[depth={}] ROADM {} has {} termination points", depth, nodeId, tpList.size());
         for (TerminationPoint tp:tpList) {
             String tpId = tp.getTpId().getValue();
             // Admin and oper state common for all tps
@@ -609,14 +638,16 @@ public class ConvertTopoORtoTapiAtInit {
                                 nodeId,
                                 List.of(tp),
                                 true,
-                                TapiConstants.MC));
+                                TapiConstants.MC,
+                                depth + 1));
 
                         onepMap.putAll(populateNepsForRdmNode(
                                 srg,
                                 nodeId,
                                 List.of(tp),
                                 true,
-                                TapiConstants.OTSI_MC));
+                                TapiConstants.OTSI_MC,
+                                depth + 1));
                     }
                 }
                 LOG.debug("calling add Photonic NEP spec for Roadm");
@@ -632,6 +663,7 @@ public class ConvertTopoORtoTapiAtInit {
                 //This affection would be done in the switch case on nepPhotonicSublayer
                 int highFrequencyIndex = 0;
                 int lowFrequencyIndex = 0;
+                LOG.info("[depth={}] JT #2 Calling createCepRoadm", depth);
                 var cep = tapiFactory.createCepRoadm(lowFrequencyIndex, highFrequencyIndex,
                     String.join("+", this.ietfNodeId, tpId), nepPhotonicSublayer, null, srg);
                 LOG.debug("Populate NEPs for ROADM node {}: creating CEP for SRG ({})", nodeId, srg);
@@ -648,6 +680,8 @@ public class ConvertTopoORtoTapiAtInit {
                 OwnedNodeEdgePoint1 onep1Bldr = new OwnedNodeEdgePoint1Builder().setCepList(cepList).build();
                 LOG.info("TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
                         this.ietfNodeId, tpId, cep);
+                LOG.info("[depth={}] TopoInitialMapping, Node {} SRG tp {}, building Cep for corresponding NEP {}",
+                        depth, this.ietfNodeId, tpId, cep);
 
                 onepBdd.addAugmentation(onep1Bldr)
                         .build();
@@ -658,6 +692,7 @@ public class ConvertTopoORtoTapiAtInit {
 
             onepMap.put(onep.key(), onep);
         }
+        LOG.info("[depth={}] Done populating NEPS for ROADM {}", depth, nodeId);
         return onepMap;
     }
 
