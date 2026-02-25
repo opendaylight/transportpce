@@ -17,6 +17,24 @@
       "message": "Just wondering: would it make sense to take advantage of https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/Range.html ?",
       "revId": "181e5d9cb68f1780b581609a87d694b4e10f2927",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76360274_19223529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2026-02-25T18:33:42Z",
+      "side": 1,
+      "message": "sorry, meant to point to https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/package-summary.html#ranges-heading",
+      "parentUuid": "12d77abe_0e9d6026",
+      "revId": "181e5d9cb68f1780b581609a87d694b4e10f2927",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81"
     }
   ]
 }
